@@ -3,7 +3,7 @@ integrate into current C and Java projects. It will feature a command-line and
 a GUI ala Smalltak/Tunes Slate.
 
 Other Software Required:
-antlr 
-kaffe
-python
-c-compiler
+..*antlr 
+..*kaffe
+..*python
+..*c-compiler
