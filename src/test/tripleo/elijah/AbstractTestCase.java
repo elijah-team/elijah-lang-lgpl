@@ -1,4 +1,4 @@
-package tripleo.oscript;
+package tripleo.elijah;
 
 import java.io.File;
 
@@ -37,4 +37,3 @@ public abstract class AbstractTestCase
         return new File(basedir,path).getAbsolutePath();
     }
 }
-
