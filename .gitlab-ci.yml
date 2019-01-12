@@ -1,11 +1,13 @@
-image: java:8
+#image: java:8
+image: maven:latest
 
 stages:
   - build
+  - test
   - deploy
 
-build:
-  stage: build
+xbuild:
+  stage: xbuild
   script: ./mvnw package
   artifacts:
     paths:
@@ -15,7 +17,23 @@ production:
   stage: deploy
   script:
   - curl --location "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar zx
-  - ./cf login -u $CF_USERNAME -p $CF_PASSWORD -a api.run.pivotal.io
+  - ./cf login -u $CF_USERNAME -p $CF_PASSWORD -a 'api.run.pivotal.io
   - ./cf push
   only:
   - master
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS compile
+
+test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+
+deploy:
+  stage: deploy
+  script:
+    - mvn $MAVEN_CLI_OPTS deploy
+  only:
+    - master
