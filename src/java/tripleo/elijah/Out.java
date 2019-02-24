@@ -100,6 +100,9 @@ public class Out {
 				.toString());
 	}
 
+	//
+	// print functions
+	//
 	private void print(String s) {
 		System.out.print(s);
 	}
@@ -133,7 +136,10 @@ public class Out {
 	private ParserClosure pc;
 
 	public ParserClosure closure() {
-		return pc=new ParserClosure();
+		if (pc==null) 
+		    pc=new ParserClosure();
+	
+	    return pc;
 	}
 
 }
