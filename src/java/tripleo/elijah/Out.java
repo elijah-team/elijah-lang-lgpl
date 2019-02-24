@@ -1,12 +1,7 @@
 package tripleo.elijah;
- 
-// Decompiled by Jad v1.5.8e. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.geocities.com/kpdus/jad.html
-// Decompiler options: packimports(3) 
-// Source File Name:   Out.java
+
 
 import java.io.*;
-
 
 import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.lang.*;
@@ -78,6 +73,8 @@ public class Out {
 	}
 
 	public void beginProcCall() {
+	    //c=new ProcCall();
+	    //pccs.push(c);
 	}
 
 	public void endProcCall() {
@@ -133,6 +130,9 @@ public class Out {
 		System.out.println(')');
 	}
 
+	//
+	// parser closure. soon to die!
+	//
 	private ParserClosure pc;
 
 	public ParserClosure closure() {
