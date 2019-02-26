@@ -1,7 +1,0 @@
-package tripleo.elijah.lang;
-
-public enum TypeModifiers {
-NORMAL,CONST,GC,TAGGED,POOLED,MANUAL,
-LOCAL,ONCE,PROCEDURE,FUNTION,REFPAR,GENERIC, FUNCTION;
-}
-
