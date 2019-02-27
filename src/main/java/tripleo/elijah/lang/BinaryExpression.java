@@ -7,6 +7,7 @@ import tripleo.elijah.lang.*;
 
 class BinaryExpression extends AbstractExpression {
 
+	@Deprecated
 	public BinaryExpression(IExpression aLast_exp, ExpressionType aType,
 			String aSide) {
 		left = aLast_exp;
@@ -15,5 +16,12 @@ class BinaryExpression extends AbstractExpression {
 		right = se;
 	}
 
+    public BinaryExpression(IExpression aleft,
+                            ExpressionType atype,
+                            IExpression aright) {
+        left=aleft;
+        type=atype;
+        right=aright;
+    }
 }
 
