@@ -1,10 +1,5 @@
 package tripleo.elijah.lang;
 
-
-// Referenced classes of package pak2:
-//			BinaryExpression, StatementClosure, ClassStatement, ImportStatement, 
-//			ExpressionType
-
 public class ParserClosure {
 
 	public ParserClosure() {
