@@ -8,9 +8,7 @@ package tripleo.elijah.lang;
 
 import java.io.IOException;
 import java.util.*;
-
-
-import tripleo.elijah.gen.java.JavaCodeGen;
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
 
 public class OS_Module implements OS_Element {
@@ -44,7 +42,7 @@ public class OS_Module implements OS_Element {
 
 	public String moduleName="default";
 
-	public void visitGen(JavaCodeGen visit) {
+	public void visitGen(ICodeGen visit) {
 		visit.addModule(this);
 	}
 }

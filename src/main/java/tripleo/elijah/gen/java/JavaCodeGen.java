@@ -67,6 +67,8 @@ public class JavaCodeGen implements ICodeGen {
 		} else if (element instanceof ImportStatement) {
 			ImportStatement imp = (ImportStatement) element;
 			addImport(imp);
+		} else {
+			throw new NotImplementedException();
 		}
 		// if (elementDone(element)) {
 		// try {
@@ -118,9 +120,9 @@ public class JavaCodeGen implements ICodeGen {
 			if (elementDone(element)) {
 				throw new NotImplementedException();
 			} else {
-				// element.visit(this);
+				// element.visit(this);  // todo 11 why is this wrong?
 			}
-			System.out.print(element);
+			System.out.print("TODO: implement this "+element);
 
 		}
 	}

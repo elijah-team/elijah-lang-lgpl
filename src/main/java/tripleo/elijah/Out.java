@@ -2,7 +2,7 @@ package tripleo.elijah;
 
 import java.io.*;
 
-
+import tripleo.elijah.gen.*;
 import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.TabbedOutputStream;
