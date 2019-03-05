@@ -4,9 +4,10 @@ import java.util.*;
 
 import javassist.*;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.gen.*;
 import tripleo.elijah.util.NotImplementedException;
 
-public class JavaCodeGen {
+public class JavaCodeGen implements ICodeGen {
 
 	final ClassPool cp = new ClassPool();
 
