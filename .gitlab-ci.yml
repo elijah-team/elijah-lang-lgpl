@@ -19,7 +19,7 @@ production:
 build:
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS compile
+    - mvn $MAVEN_CLI_OPTS -X compile
 
 test:
   stage: test
