@@ -32,14 +32,16 @@ public class Main {
 	}
 
 	public static void doFile(File f) throws Exception {
+		var EXTENSION = ".elijah";
+		
 		if (f.isDirectory()) {
 			String files[] = f.list();
 			for (int i = 0; i < files.length; i++)
 				doFile(new File(f, files[i]));
 
-		} else if (f.getName().length() > 3
-				&& f.getName().substring(f.getName().length() - 3)
-						.equals(".os")) {
+		} else if (f.getName().length() > EXTENSION.length()
+				&& f.getName().substring(f.getName().length() - EXTENSION.length())
+						.equals(EXTENSION)) {
 			System.out.println((new StringBuilder("   ")).append(
 					f.getAbsolutePath()).toString());
 			parseFile(f.getName(), new FileInputStream(f));
