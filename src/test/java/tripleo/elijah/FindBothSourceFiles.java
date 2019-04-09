@@ -16,15 +16,24 @@ import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.MethHeaderNode;
+import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.nodes.BreakInCaseStatementNode;
+import tripleo.elijah.gen.nodes.CaseChoiceNode;
+import tripleo.elijah.gen.nodes.CaseDefaultNode;
+import tripleo.elijah.gen.nodes.CaseHdrNode;
 import tripleo.elijah.gen.nodes.CaseNode;
+import tripleo.elijah.gen.nodes.ChoiceOptions;
+import tripleo.elijah.gen.nodes.CloseCaseChoiceNode;
+import tripleo.elijah.gen.nodes.CloseCaseNode;
 import tripleo.elijah.gen.nodes.CloseTmpCtxNode;
+import tripleo.elijah.gen.nodes.ExpressionOperators;
 import tripleo.elijah.gen.nodes.ImportNode;
 import tripleo.elijah.gen.nodes.LocalAgnMathNode;
 import tripleo.elijah.gen.nodes.LocalAgnTmpNode;
 import tripleo.elijah.gen.nodes.LocalValAgnFnCallNode;
 import tripleo.elijah.gen.nodes.MethHdrNode;
+import tripleo.elijah.gen.nodes.ReturnAgnNode;
 import tripleo.elijah.gen.nodes.ReturnAgnSimpleIntNode;
 import tripleo.elijah.gen.nodes.SwitchNode;
 import tripleo.elijah.gen.nodes.TmpSSACtxNode;
@@ -34,10 +43,10 @@ import tripleo.elijah.lang.ExpressionBuilder;
  * @author SBUSER
  *
  */
-public class FindBothSourceFiles extends TestCase {
+public class FindBothSourceFiles /* extends TestCase */{
 
 	public FindBothSourceFiles(String name) {
-		super(name);
+//		super(name);
 	}
 
 	/**
@@ -58,18 +67,21 @@ public class FindBothSourceFiles extends TestCase {
 	 * Test method for {@link tripleo.elijah.Main#parseFile(java.lang.String, java.io.InputStream)}.
 	 */
 	public final void testParseFile() {
-		List<String> args = List.of(".", "main2", "-sE");
-		ErrSink eee = JMock.of(ErrSink.class);
+		List<String> args = List.of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
+//		ErrSink eee = JMock.of(ErrSink.class);
+		ErrSink eee = new StdErrSink();
 		var c = new Compilation(eee, new IO() {
 			public CharSource openRead(Path p) {
-				record(FileOption.READ, p);				
+				record(FileOption.READ, p);
+				return null;
 			}
 			public CharSink openWrite(Path p) {
 				record(FileOption.WRITE, p);				
+				return null;
 			}
 			private void record(FileOption read, Path p) {
 				// TODO Auto-generated method stub
-				Map<FileOption, File> options11 = new HashMap();
+				Map<FileOption, File> options11 = new HashMap<FileOption, File>();
 				options11.put(read, p.toFile());
 			}
 			// exists, delete, isType ....
@@ -77,8 +89,8 @@ public class FindBothSourceFiles extends TestCase {
 		c.feedCmdLine(args);
 		
 		//fail("Not yet implemented"); // TODO
-		Assert.isTrue(c.io.recordedRead(new File(".", "factdemo.elijah")));
-		Assert.isTrue(c.io.recordedRead(new File(new File(".", "main2"), "main2.elijah")));
+		Assert.assertTrue(c.getIO().recordedRead(new File(".", "factdemo.elijah")));
+		Assert.assertTrue(c.getIO().recordedRead(new File(new File(".", "main2"), "main2.elijah")));
 //		fail("Not yet implemented"); // TODO
 	}
 
@@ -91,53 +103,113 @@ public class FindBothSourceFiles extends TestCase {
 		
 	}
 	
+	
 	void factorial_r(CompilerContext cctx, GenBuffer gbn) {
-		MethHdrNode mhn=new MethHdrNode(); // todo	 
+		MethHdrNode mhn=new MethHdrNode(ExpressionBuilder.ident("u64"), "factorial_r", 
+				List.of(ExpressionBuilder.ident("u64")));	 
 		GenMethHdr(cctx, mhn, gbn);
 		BeginMeth(cctx, mhn, gbn);
 		
-		SwitchNode shn=new SwitchNode();
-		BeginSwitchStatement(cctx, shn, gbn);
+//		SwitchNode shn=new SwitchNode();
+//		BeginSwitchStatement(cctx, shn, gbn);
 		
-		CaseNode csn=new CaseNode();
-		BeginCaseStatement(cctx, csn, gbn);
+		CaseHdrNode shn=new CaseHdrNode(ExpressionBuilder.varref("i"));
+		BeginCaseStatement(cctx, shn, gbn);
 		
-		ReturnAgnSimpleIntNode rasin=new ReturnAgnSimpleIntNode(); 
+		CaseChoiceNode csn=new CaseChoiceNode(ExpressionBuilder.integer(0));
+		BeginCaseChoice(cctx, csn, gbn);
+		
+		ReturnAgnSimpleIntNode rasin=new ReturnAgnSimpleIntNode(ExpressionBuilder.integer(1)); 
 		GenReturnAgnSimpleInt(cctx, rasin, gbn);
 		
-		BreakInCaseStatementNode bicsn=new BreakInCaseStatementNode();
-		BreakInCaseStatement(cctx, bicsn, gbn);
+//		BreakInCaseStatementNode bicsn=new BreakInCaseStatementNode();
+//		BreakInCaseStatement(cctx, bicsn, gbn);
 		
-		CaseNode csn2 = new CaseNode(); 
+		CloseCaseNode cccn1 = new CloseCaseNode(csn, ChoiceOptions.BREAK); 
+		CloseCaseChoice(cctx, cccn1, gbn);
+
+		CaseDefaultNode csn2 = new CaseDefaultNode(cctx, ExpressionBuilder.varref("n")); 
 		BeginDefaultCaseStatement(cctx, csn2, gbn);
 		
 		TmpSSACtxNode tccssan = new TmpSSACtxNode();   
+		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionBuilder.binex(
+				ExpressionBuilder.varref("n"), ExpressionOperators.OP_MINUS, ExpressionBuilder.integer(1)));
 		BeginTmpSSACtx(cctx, tccssan, gbn);
 		
-		LocalAgnMathNode lamn=new LocalAgnMathNode();
-		GenLocalAgnMath(cctx, lamn, gbn);
+		TmpSSACtxNode tccssan2 = new TmpSSACtxNode();
+		LocalAgnTmpNode latn2=new LocalAgnTmpNode(tccssan2, ExpressionBuilder.fncall(
+				"factorial_r", List.of(lamn)));
+		GenLocalAgn(cctx, latn2, gbn);
 		
-		LocalValAgnFnCallNode lvafcn = new LocalValAgnFnCallNode();
-		GenLocalValAgnFnCall(cctx, lvafcn, gbn);
+		TmpSSACtxNode tccssan3 = new TmpSSACtxNode();
+		LocalAgnTmpNode latn3=new LocalAgnTmpNode(tccssan3, ExpressionBuilder.binex(
+				ExpressionBuilder.varref("n"), ExpressionOperators.OP_MULT, tccssan2));
+		GenLocalAgn(cctx, latn3, gbn);
 		
-		LocalAgnMathNode lamn2=new LocalAgnMathNode();
-		GenLocalAgnMath(cctx, lamn2, gbn);
+//		ReturnAgnSimpleIntNode rsin=new ReturnAgnSimpleIntNode(latn3); // TODO Not a simple int
+		ReturnAgnNode rsin=new ReturnAgnNode(latn3); // TODO Not an expression!!!
+		GenReturnAgn(cctx, rsin, gbn);
 		
-		ReturnAgnSimpleIntNode rsin=new ReturnAgnSimpleIntNode(); 
-		GenReturnAgnSimpleInt(cctx, rsin, gbn);
+		// TODO look at this
+//		CloseTmpCtx(cctx, tccssan3, gbn);
+//		CloseTmpCtx(cctx, tccssan2, gbn);
+//		CloseTmpCtx(cctx, tccssan, gbn);
+		CloseTmpCtx(cctx, latn3, gbn);
+		CloseTmpCtx(cctx, latn2, gbn);
+		CloseTmpCtx(cctx, lamn, gbn);
+
+//		CloseCaseChoiceNode cccn2=new CloseCaseChoiceNode(csn2, ChoiceOptions.BREAK);
+		CloseCaseNode cccn2=new CloseCaseNode(csn2, ChoiceOptions.BREAK);
+		CloseCaseChoice(cctx, cccn2, gbn);
 		
-		CloseTmpCtxNode tmpctxn =  new CloseTmpCtxNode();
-		CloseTmpCtx(cctx, tmpctxn, gbn);
-		
-		BreakInCaseStatementNode biccsn2 = new BreakInCaseStatementNode();
-		BreakInCaseStatement(cctx, biccsn2, gbn);
-		
+		EndCaseStatement(cctx, shn, gbn);
 		EndMeth(cctx, mhn, gbn);
 
-		LocalAgnTmpNode latn1=new LocalAgnTmpNode (tccssan, ExpressionBuilder.bin_expr(
-		 ExpressionBuilder.varref(n), OP_MINUS, ExpressionBuilder.integer(1)));
+//		LocalAgnTmpNode latn1=new LocalAgnTmpNode (tccssan, ExpressionBuilder.bin_expr(
+//		 ExpressionBuilder.varref(n), ExpressionOperators.OP_MINUS, ExpressionBuilder.integer(1)));
 
 	}
+	
+	private void EndCaseStatement(CompilerContext cctx, CaseHdrNode shn, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void GenReturnAgn(CompilerContext cctx, ReturnAgnNode rsin, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void CloseTmpCtx(CompilerContext cctx, LocalAgnTmpNode lamn, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void GenLocalAgn(CompilerContext cctx, LocalAgnTmpNode latn2, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseDefaultNode csn2, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void CloseCaseChoice(CompilerContext cctx, CloseCaseNode cccn1, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void BeginCaseChoice(CompilerContext cctx, CaseChoiceNode csn, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void BeginCaseChoice(CompilerContext cctx, CaseHdrNode csn, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void EndMeth(CompilerContext cctx, MethHdrNode mhn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
@@ -178,7 +250,7 @@ public class FindBothSourceFiles extends TestCase {
 		
 	}
 
-	private void BeginCaseStatement(CompilerContext cctx, CaseNode csn, GenBuffer gbn) {
+	private void BeginCaseStatement(CompilerContext cctx, CaseHdrNode caseHdrNode, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -197,15 +269,6 @@ public class FindBothSourceFiles extends TestCase {
 		
 	}
 }
-
-enum FileOption  { READ, WRITE };
-
-public class IO {
-
-	public Object recordedRead(File file) {
-		// TODO Auto-generated method stub
-		return null;
-	}}
 
 //
 //
