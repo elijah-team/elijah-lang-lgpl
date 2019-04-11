@@ -28,11 +28,21 @@ public interface IExpression {
 	void set(ExpressionType aIncrement);
 
 	IExpression getLeft();
+
 	void setLeft(IExpression iexpression);
 
 	String repr_();
 
 	IExpression UNASSIGNED = new AbstractBinaryExpression() {
 	};
+
+	default boolean is_simple() {
+		switch(getType()) {
+		case STRING_LITERAL:
+			return true;
+		default:
+			return false;
+		}
+	}
 
 }
