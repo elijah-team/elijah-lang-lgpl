@@ -18,6 +18,8 @@ import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.MethHeaderNode;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.gen.CompilerContext;
+import tripleo.elijah.gen.java.JavaCodeGen;
+import tripleo.elijah.gen.nodes.ArgumentNode;
 import tripleo.elijah.gen.nodes.BreakInCaseStatementNode;
 import tripleo.elijah.gen.nodes.CaseChoiceNode;
 import tripleo.elijah.gen.nodes.CaseDefaultNode;
@@ -38,12 +40,18 @@ import tripleo.elijah.gen.nodes.ReturnAgnSimpleIntNode;
 import tripleo.elijah.gen.nodes.SwitchNode;
 import tripleo.elijah.gen.nodes.TmpSSACtxNode;
 import tripleo.elijah.lang.ExpressionBuilder;
+import tripleo.util.buffer.Buffer;
+import tripleo.util.buffer.BufferSequenceBuilder;
+import tripleo.util.buffer.EnclosedBuffer;
 
 /**
  * @author SBUSER
  *
  */
 public class FindBothSourceFiles /* extends TestCase */{
+
+	private static final String SPACE = " ";
+	private static final String RPAREN = ")";
 
 	public FindBothSourceFiles(String name) {
 //		super(name);
@@ -172,101 +180,156 @@ public class FindBothSourceFiles /* extends TestCase */{
 	
 	private void EndCaseStatement(CompilerContext cctx, CaseHdrNode shn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
-	private void GenReturnAgn(CompilerContext cctx, ReturnAgnNode rsin, GenBuffer gbn) {
+	private void GenReturnAgn(CompilerContext cctx, ReturnAgnNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
+		buf.append("vsr =");
+		buf.append(node.genText);
+		buf.append_ln(";");
+		// if(node.usesRetKW()) {buf.append ("return vsr;");}
 	}
 
 	private void CloseTmpCtx(CompilerContext cctx, LocalAgnTmpNode lamn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
+		buf.append_cb (""); // close-brace
 	}
 
 	private void GenLocalAgn(CompilerContext cctx, LocalAgnTmpNode latn2, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseDefaultNode csn2, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
-	private void CloseCaseChoice(CompilerContext cctx, CloseCaseNode cccn1, GenBuffer gbn) {
+	private void CloseCaseChoice(CompilerContext cctx, CloseCaseNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		
+		Buffer buf = gbn.moduleBufHdr(cctx.module());
+		buf.decr_i();
+		buf.append_nl("} // close select ("+node.hdr_node.expr.genName+")");
 	}
 
 	private void BeginCaseChoice(CompilerContext cctx, CaseChoiceNode csn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void BeginCaseChoice(CompilerContext cctx, CaseHdrNode csn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void EndMeth(CompilerContext cctx, MethHdrNode mhn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void CloseTmpCtx(CompilerContext cctx, CloseTmpCtxNode tmpctxn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void GenLocalValAgnFnCall(CompilerContext cctx, LocalValAgnFnCallNode lvafcn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void GenLocalAgnMath(CompilerContext cctx, LocalAgnMathNode lamn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void BeginTmpSSACtx(CompilerContext cctx, TmpSSACtxNode tccssan, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseNode csn2, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void BreakInCaseStatement(CompilerContext cctx, BreakInCaseStatementNode bicsn, GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
+		buf.append_ln("break; }");
 	}
 
 	private void GenReturnAgnSimpleInt(CompilerContext cctx, ReturnAgnSimpleIntNode rasin, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
 	private void BeginCaseStatement(CompilerContext cctx, CaseHdrNode caseHdrNode, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		
 	}
 
-	private void BeginSwitchStatement(CompilerContext cctx, SwitchNode shn, GenBuffer gbn) {
+	private void BeginSwitchStatement(CompilerContext cctx, SwitchNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
+		Buffer buf = gbn.moduleBufHdr(cctx.module());
+		boolean is_simple = node.expr.is_simple();
+		buf.append_s("switch (");
+		if (is_simple) {
+			buf.append_nl_i(") {");
+		} else {
+			//////
+		}
 		
 	}
 
-	private void BeginMeth(CompilerContext cctx, MethHdrNode mhn, GenBuffer gbn) {
+	private void BeginMeth(CompilerContext cctx, MethHdrNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
+		var sb = new BufferSequenceBuilder(4).
+				named("type").named("name").named("args").semieol();
+		sb.set("type", node.returnType.genType, SPACE);
+		sb.set("name", node.methName.genName);
+		var sb2 = new EnclosedBuffer("(", RPAREN);
+		var transform1 = new Transform1();
+		var sb3 = new BufferSequenceBuilder(node.argCount,
+				node.ArgumentsIterator(), transform1, COMMA);
+		sb2.setPayload(sb3);
+		sb.set("args", sb2);
+		var gbm = (JavaCodeGen)gbn; // TODO should be CSimpleGen
+		gbm.appendHeader(cctx.module(), sb.build());
 	}
 
-	public void GenMethHdr(CompilerContext cctx, MethHdrNode mhn, GenBuffer gbn) {
-		
+	public void GenMethHdr(CompilerContext cctx, MethHdrNode node, GenBuffer gbn) {
+		Buffer buf = gbn.moduleBufHdr(cctx.module());
+		buf.append_s(node.returnType.genType);
+		buf.append(node.methName.genName);
+		buf.append("(");
+		for (int c=0;c<node.argCount;c++) {
+			buf.append_s(node.argument(c).genType);
+			buf.append(node.argument(c).genName);
+			if (c<node.argCount-1) {buf.append(",");}
+		}
+	}
+}
+class Transform1 {
+	public void transform(ArgumentNode na, Bufbldr bufbldr) {
+		bufbldr.append_s(na.genType, SPACE);
+		bufbldr.append(na.genName);
 	}
 }
 
