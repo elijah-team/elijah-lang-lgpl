@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.FileWriter;
 
 /**Generate MyParser.cpp, MyParser.hpp, MyLexer.cpp, MyLexer.hpp and MyParserTokenTypes.hpp */
+@SuppressWarnings("rawtypes")
 public class CppCodeGenerator extends CodeGenerator {
 	// non-zero if inside syntactic predicate generation
 	protected int syntacticPredLevel = 0;
