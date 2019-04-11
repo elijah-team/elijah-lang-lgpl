@@ -22,12 +22,16 @@ public class CloseCaseNode {
 //		// TODO Auto-generated constructor stub
 //	}
 
+	public CaseChoiceNode hdr_node;
+
 	public CloseCaseNode(CaseChoiceNode csn, ChoiceOptions break1) {
 		// TODO Auto-generated constructor stub
+		hdr_node=csn;
 	}
 
 	public CloseCaseNode(CaseDefaultNode csn2, ChoiceOptions break1) {
 		// TODO Auto-generated constructor stub
+//		hdr_node=csn2;
 	}
 
 }
