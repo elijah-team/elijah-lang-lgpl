@@ -22,4 +22,9 @@ public class OS_Ident {
 		name = aa;
 	}
 
+	public String getText() {
+		// TODO Auto-generated method stub
+		return name;
+	}
+
 }
