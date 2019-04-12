@@ -3,6 +3,8 @@
  */
 package tripleo.util.buffer;
 
+import tripleo.elijah.XX;
+
 /**
  * @author olu
  *
@@ -17,6 +19,11 @@ public class EnclosedBuffer extends DefaultBuffer {
 		// TODO Auto-generated constructor stub
 		_left=left;
 		_right=right;
+	}
+
+	public EnclosedBuffer(String left, XX right) {
+		_left=left;
+		_right=right.getText();
 	}
 
 	public void setPayload(BufferSequenceBuilder sb3) {

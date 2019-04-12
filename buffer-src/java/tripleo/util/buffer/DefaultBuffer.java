@@ -11,6 +11,10 @@ import tripleo.elijah.util.NotImplementedException;
  */
 public class DefaultBuffer implements Buffer {
 
+	public DefaultBuffer(String string) {
+		append(string);
+	}
+
 	/* (non-Javadoc)
 	 * @see tripleo.util.buffer.IBuffer#append(java.lang.String)
 	 */
@@ -71,5 +75,22 @@ public class DefaultBuffer implements Buffer {
 	public void append_nl(String string) {
 		text.append(string);
 		text.append("\n");
+	}
+
+	public void append_s(String genType, XX space) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void append_ln(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getText() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -22,6 +22,8 @@ import tripleo.elijah.util.NotImplementedException;
  */
 public class ReturnAgnNode {
 
+	public ExpressionNode expr;
+
 	public ReturnAgnNode(IExpression latn3) {
 		// TODO Auto-generated constructor stub
 		throw new NotImplementedException();

@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class FileBackedBuffer implements Buffer {
 
-	Buffer backing=new DefaultBuffer();
+	Buffer backing=new DefaultBuffer(""); // TODO bad api
 	private String fn;
 
 	public void finalize() {
@@ -71,5 +71,17 @@ public class FileBackedBuffer implements Buffer {
 	public void append_nl(String string) {
 		// TODO Auto-generated method stub
 		backing.append_nl(string);
+	}
+
+	@Override
+	public void append_ln(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getText() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
