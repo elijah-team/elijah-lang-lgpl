@@ -2753,14 +2753,14 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 
 	public final void simpleTypeName_xx(TypeName tn) throws RecognitionException, TokenStreamException {
 
-		Qualident xy;
+		Qualident xyz;
 		
 		fireEnterRule(36, 0);
 		try { // debugging
 
-			xy = qualident();
+			xyz = qualident();
 			if (inputState.guessing == 0) {
-				tn.typeName(xy);
+				tn.typeName(xyz);
 			}
 		} finally { // debugging
 			fireExitRule(36, 0);
