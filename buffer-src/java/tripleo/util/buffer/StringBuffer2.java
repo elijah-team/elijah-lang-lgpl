@@ -72,4 +72,10 @@ public class StringBuffer2 implements Buffer {
 
 	}
 
+	@Override
+	public String getText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
