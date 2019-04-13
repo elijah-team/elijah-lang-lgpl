@@ -19,9 +19,9 @@ public class MethHdrNode {
 	public int argCount;
 	final public MethNameNode methName;
 	public TypeNameNode returnType;
-	private List<OS_Ident> argument_types;
+	private List<ArgumentNode> argument_types;
 
-	public MethHdrNode(@NonNull OS_Ident return_type, String method_name, List<OS_Ident> argument_types) {
+	public MethHdrNode(@NonNull OS_Ident return_type, String method_name, List<ArgumentNode> argument_types) {
 		// TODO Auto-generated constructor stub
 		methName = new MethNameNode(method_name);
 		argCount = argument_types.size();
@@ -32,27 +32,33 @@ public class MethHdrNode {
 	public ArgumentNode argument(int c) {
 		// TODO Auto-generated method stub
 //		if (c>=argument_types.size()) return null;
-		return new ArgumentNode(argument_types.get(c));
+		return (argument_types.get(c));
 	}
 
-	public Iterator<ArgumentNode> ArgumentsIterator() {
+	public Iterable<ArgumentNode> ArgumentsIterator() {
 		// TODO Auto-generated method stub
-		return new Iterator<ArgumentNode>() {
+		return new Iterable<ArgumentNode>() {
 			
-			private int c = 0;
-
 			@Override
-			public boolean hasNext() {
-				var node=MethHdrNode.this;
-				return c<node.argCount;
-			}
-
-			@Override
-			public ArgumentNode next() {
-				var node=MethHdrNode.this;
-				return node.argument(c++);
-			}
+			public Iterator<ArgumentNode> iterator() {
 			
+				return new Iterator<ArgumentNode>() {		
+				
+					private int c = 0;
+		
+					@Override
+					public boolean hasNext() {
+						var node=MethHdrNode.this;
+						return c<node.argCount;
+					}
+		
+					@Override
+					public ArgumentNode next() {
+						var node=MethHdrNode.this;
+						return node.argument(c++);
+					}
+				};
+			};
 		};
 	}
 
