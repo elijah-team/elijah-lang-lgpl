@@ -15,11 +15,13 @@ import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.nodes.ImportNode;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.buffer.Buffer;
+import tripleo.util.buffer.CodeGen;
 import tripleo.util.buffer.FileBackedBuffer;
 
 public class GenBuffer {
 
 	private Map<String, Buffer> hdr_bufs = new HashMap<String, Buffer>();
+	private Map<String, Buffer> reg_bufs = new HashMap<String, Buffer>();
 
 	public void GenImportStmt(CompilerContext cctx, ImportNode impn) {
 		// TODO Auto-generated method stub
@@ -43,7 +45,21 @@ public class GenBuffer {
 	public Buffer moduleBufImpl(String module) {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
-		return null;
+		Buffer buf = reg_bufs.getOrDefault(module, new FileBackedBuffer(module+".c"));
+		return buf;
+	}
+
+	public CodeGen getCodeGen() {
+		// TODO Auto-generated method stub
+		return new CodeGen() {
+
+			@Override
+			public void appendHeader(String module, String build) {
+				// TODO Auto-generated method stub
+				super.appendHeader(module, build);
+			}
+			
+		};
 	}
 
 }
