@@ -3,8 +3,6 @@
  */
 package tripleo.util.buffer;
 
-import tripleo.elijah.XX;
-
 /**
  * @author olu
  *
@@ -16,12 +14,14 @@ public class EnclosedBuffer extends DefaultBuffer {
 	private String _left;
 
 	public EnclosedBuffer(String left, String right) {
+		super("");
 		// TODO Auto-generated constructor stub
 		_left=left;
 		_right=right;
 	}
 
 	public EnclosedBuffer(String left, XX right) {
+		super("");
 		_left=left;
 		_right=right.getText();
 	}
