@@ -14,7 +14,7 @@
  */
 package tripleo.elijah.lang;
 
-public class OS_Integer {
+public class OS_Integer extends AbstractBinaryExpression {
 
 	private int i;
 
