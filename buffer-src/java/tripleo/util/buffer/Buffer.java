@@ -1,7 +1,5 @@
 package tripleo.util.buffer;
 
-import java.util.function.BiFunction;
-
 public interface Buffer {
 
 	void append(String string);
