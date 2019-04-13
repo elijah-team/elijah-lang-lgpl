@@ -10,15 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.comp.IO;
-import tripleo.elijah.comp.MethHeaderNode;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.gen.CompilerContext;
-import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.gen.nodes.ArgumentNode;
 import tripleo.elijah.gen.nodes.BreakInCaseStatementNode;
 import tripleo.elijah.gen.nodes.CaseChoiceNode;
@@ -26,7 +23,6 @@ import tripleo.elijah.gen.nodes.CaseDefaultNode;
 import tripleo.elijah.gen.nodes.CaseHdrNode;
 import tripleo.elijah.gen.nodes.CaseNode;
 import tripleo.elijah.gen.nodes.ChoiceOptions;
-import tripleo.elijah.gen.nodes.CloseCaseChoiceNode;
 import tripleo.elijah.gen.nodes.CloseCaseNode;
 import tripleo.elijah.gen.nodes.CloseTmpCtxNode;
 import tripleo.elijah.gen.nodes.ExpressionOperators;
@@ -42,16 +38,16 @@ import tripleo.elijah.gen.nodes.TmpSSACtxNode;
 import tripleo.elijah.lang.ExpressionBuilder;
 import tripleo.util.buffer.Buffer;
 import tripleo.util.buffer.BufferSequenceBuilder;
+import tripleo.util.buffer.DefaultBuffer;
 import tripleo.util.buffer.EnclosedBuffer;
+import tripleo.util.buffer.Transform;
+import tripleo.util.buffer.XX;
 
 /**
  * @author SBUSER
  *
  */
-public class FindBothSourceFiles /* extends TestCase */{
-
-	private static final String SPACE = " ";
-	private static final String RPAREN = ")";
+public class FindBothSourceFiles /* extends TestCase */ {
 
 	public FindBothSourceFiles(String name) {
 //		super(name);
@@ -114,7 +110,7 @@ public class FindBothSourceFiles /* extends TestCase */{
 	
 	void factorial_r(CompilerContext cctx, GenBuffer gbn) {
 		MethHdrNode mhn=new MethHdrNode(ExpressionBuilder.ident("u64"), "factorial_r", 
-				List.of(ExpressionBuilder.ident("u64")));	 
+				List.of(new ArgumentNode("i","u64")));	 
 		GenMethHdr(cctx, mhn, gbn);
 		BeginMeth(cctx, mhn, gbn);
 		
@@ -178,17 +174,18 @@ public class FindBothSourceFiles /* extends TestCase */{
 
 	}
 	
-	private void EndCaseStatement(CompilerContext cctx, CaseHdrNode shn, GenBuffer gbn) {
+	private void EndCaseStatement(CompilerContext cctx, CaseHdrNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		
+		buf.decr_i();
+		buf.append_nl("} // close select "+node.getExpr().genText+"");
 	}
 
 	private void GenReturnAgn(CompilerContext cctx, ReturnAgnNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.append("vsr =");
-		buf.append(node.genText);
+		buf.append(node.expr.genText);
 		buf.append_ln(";");
 		// if(node.usesRetKW()) {buf.append ("return vsr;");}
 	}
@@ -199,10 +196,16 @@ public class FindBothSourceFiles /* extends TestCase */{
 		buf.append_cb (""); // close-brace
 	}
 
-	private void GenLocalAgn(CompilerContext cctx, LocalAgnTmpNode latn2, GenBuffer gbn) {
+	private void GenLocalAgn(CompilerContext cctx, LocalAgnTmpNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		
+		if (node instanceof LocalAgnTmpNode) {
+			BufferSequenceBuilder sb=new BufferSequenceBuilder(6).
+					named("open").named("type").named("name").
+					named("equality").named("value").semieol();
+			sb.set("open", "{", XX.INDENT);
+			sb.set("type", node.right.genType, XX.SPACE);
+		}
 	}
 
 	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseDefaultNode csn2, GenBuffer gbn) {
@@ -215,13 +218,22 @@ public class FindBothSourceFiles /* extends TestCase */{
 		// TODO Auto-generated method stub
 		Buffer buf = gbn.moduleBufHdr(cctx.module());
 		buf.decr_i();
-		buf.append_nl("} // close select ("+node.hdr_node.expr.genName+")");
+		buf.append_nl("} // close select ("+node.hdr_node.left.genName+")"); // TODO left was expr
 	}
 
-	private void BeginCaseChoice(CompilerContext cctx, CaseChoiceNode csn, GenBuffer gbn) {
+	private void BeginCaseChoice(CompilerContext cctx, CaseChoiceNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		
+		boolean is_simple = node.left.is_const_expr();
+		boolean is_default = node.left.is_underscore() ||
+				(node.left.is_var_ref() && node.left.ref_==null);
+		if (is_simple ){
+			buf.append("case "+node.left.genText);
+			buf.append_s(": ");	
+		}
+		if (is_default) {
+			buf.append_nl("default:");
+		}
 	}
 
 	private void BeginCaseChoice(CompilerContext cctx, CaseHdrNode csn, GenBuffer gbn) {
@@ -297,20 +309,31 @@ public class FindBothSourceFiles /* extends TestCase */{
 		
 	}
 
+	public class Transform1 implements Transform {
+		/* (non-Javadoc)
+		 * @see tripleo.util.buffer.Transform#transform(tripleo.elijah.gen.nodes.ArgumentNode, tripleo.util.buffer.DefaultBuffer)
+		 */
+		@Override
+		public void transform(ArgumentNode na, DefaultBuffer bufbldr) {
+			bufbldr.append_s(na.genType, XX.SPACE);
+			bufbldr.append(na.genName);
+		}
+	}
+
 	private void BeginMeth(CompilerContext cctx, MethHdrNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		var sb = new BufferSequenceBuilder(4).
 				named("type").named("name").named("args").semieol();
-		sb.set("type", node.returnType.genType, SPACE);
+		sb.set("type", node.returnType.genType, XX.SPACE);
 		sb.set("name", node.methName.genName);
-		var sb2 = new EnclosedBuffer("(", RPAREN);
+		var sb2 = new EnclosedBuffer("(", XX.RPAREN);
 		var transform1 = new Transform1();
 		var sb3 = new BufferSequenceBuilder(node.argCount,
-				node.ArgumentsIterator(), transform1, COMMA);
+				node.ArgumentsIterator(), transform1, XX.COMMA, gbn);
 		sb2.setPayload(sb3);
 		sb.set("args", sb2);
-		var gbm = (JavaCodeGen)gbn; // TODO should be CSimpleGen
+		var gbm = gbn.getCodeGen(); // TODO should be CSimpleGen
 		gbm.appendHeader(cctx.module(), sb.build());
 	}
 
@@ -324,15 +347,10 @@ public class FindBothSourceFiles /* extends TestCase */{
 			buf.append(node.argument(c).genName);
 			if (c<node.argCount-1) {buf.append(",");}
 		}
+		buf.append(");");
 	}
 }
-class Transform1 {
-	public void transform(ArgumentNode na, Bufbldr bufbldr) {
-		bufbldr.append_s(na.genType, SPACE);
-		bufbldr.append(na.genName);
-	}
-}
-
+	
 //
 //
 //
