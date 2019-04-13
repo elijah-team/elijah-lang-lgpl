@@ -16,9 +16,12 @@ package tripleo.elijah.lang;
 
 import java.util.List;
 
+import antlr.Token;
+import tripleo.elijah.Qualident;
 import tripleo.elijah.gen.nodes.ExpressionOperators;
 import tripleo.elijah.gen.nodes.LocalAgnTmpNode;
 import tripleo.elijah.gen.nodes.TmpSSACtxNode;
+import tripleo.elijah.util.NotImplementedException;
 
 public class ExpressionBuilder {
 
@@ -51,14 +54,27 @@ public class ExpressionBuilder {
 		return new VariableReference(string);
 	}
 
-	public static IExpression binex(VariableReference varref, ExpressionOperators opMinus, OS_Integer integer) {
+	public static IExpression binex(VariableReference left, ExpressionOperators middle, IExpression right) {
 		// TODO Auto-generated method stub
-		return null;
+		ExpressionType middle1;
+		switch (middle) {
+		case OP_MINUS: middle1 = ExpressionType.SUBTRACTION; break;
+		case OP_MULT:  middle1 = ExpressionType.MULTIPLY; break;
+		default: throw new NotImplementedException();
+		}
+		return new AbstractBinaryExpression(left, middle1, right);
 	}
 
 	public static IExpression fncall(String string, List<LocalAgnTmpNode> of) { // todo wrong
 		// TODO Auto-generated method stub
-		return null;
+		final ProcedureCallExpression pce = new ProcedureCallExpression();
+		final Qualident xyz = new Qualident();
+		final Token t = new Token();
+		t.setText(string);
+		xyz.append(t);
+		pce.identifier(xyz);
+//		pce.setArgs(of);
+		return pce;
 	}
 
 	public static IExpression binex(VariableReference varref, ExpressionOperators opMult, TmpSSACtxNode tccssan2) { // todo wrong again
