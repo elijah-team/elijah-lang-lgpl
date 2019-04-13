@@ -3,8 +3,6 @@
  */
 package tripleo.util.buffer;
 
-import tripleo.elijah.util.NotImplementedException;
-
 /**
  * @author olu
  *
@@ -77,20 +75,20 @@ public class DefaultBuffer implements Buffer {
 		text.append("\n");
 	}
 
-	public void append_s(String genType, XX space) {
-		// TODO Auto-generated method stub
-		
+	public void append_s(String string, XX sep) {
+		text.append(string);
+		text.append(sep.getText());
 	}
 
 	@Override
 	public void append_ln(String string) {
-		// TODO Auto-generated method stub
-		
+		text.append(string);
+		text.append("\n");
 	}
 
 	@Override
 	public String getText() {
 		// TODO Auto-generated method stub
-		return null;
+		return text.toString();
 	}
 }
