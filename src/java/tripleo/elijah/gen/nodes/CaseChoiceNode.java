@@ -4,11 +4,19 @@ import tripleo.elijah.lang.OS_Integer;
 
 public class CaseChoiceNode {
 
-	public ExpressionNode expr;
+	public ExpressionNode left;
+	public ExpressionNode right;
 
 	public CaseChoiceNode(OS_Integer expr1) {
 		// TODO Auto-generated constructor stub
-		expr=new ExpressionNode(expr1);
+		left=new ExpressionNode(expr1);
+		right=null;
+	}
+
+	public CaseChoiceNode(ExpressionNode left, ExpressionNode right) {
+		super();
+		this.right = right;
+		this.left = left;
 	}
 
 }

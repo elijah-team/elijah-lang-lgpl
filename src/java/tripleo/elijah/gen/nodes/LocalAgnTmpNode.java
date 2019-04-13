@@ -13,11 +13,14 @@ public class LocalAgnTmpNode {
 
 	private IExpression expr;
 	private TmpSSACtxNode tmp;
+	public ExpressionNode right;
 
 	public LocalAgnTmpNode(TmpSSACtxNode tccssan, IExpression binex) {
 		// TODO Auto-generated constructor stub
 		this.tmp = tccssan;
 		this.expr = binex;
+		//
+		right=new ExpressionNode(binex);
 	}
 
 }
