@@ -18,7 +18,7 @@ import tripleo.elijah.util.TabbedOutputStream;
 // Referenced classes of package pak2:
 //			ParserClosure, ExpressionList
 
-public class ProcedureCallExpression implements StatementItem, FunctionItem, IExpression {
+public class ProcedureCallExpression implements StatementItem, FunctionItem, IBinaryExpression {
 
 	public void identifier(Qualident xyz) {
 		target=xyz;
@@ -46,7 +46,7 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 	@Override
 	public ExpressionType getType() {
 		// TODO Auto-generated method stub
-		return null;
+		return ExpressionType.PROCEDURE_CALL;
 	}
 
 	@Override
@@ -58,18 +58,42 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 	@Override
 	public IExpression getLeft() {
 		// TODO Auto-generated method stub
-		return null;
+		return target;
 	}
 
 	@Override
 	public void setLeft(IExpression iexpression) {
 		// TODO Auto-generated method stub
-		
+		target = iexpression;
 	}
 
 	@Override
 	public String repr_() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public IExpression getRight() {
+		// TODO Auto-generated method stub
+		return args;
+	}
+
+	@Override
+	public void setRight(IExpression iexpression) {
+		// TODO Auto-generated method stub
+		args = iexpression;
+	}
+
+	@Override
+	public void shift(ExpressionType aType) {
+		// TODO Auto-generated method stub
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void set(IBinaryExpression aEx) {
+		// TODO Auto-generated method stub
+		throw new NotImplementedException();
 	}
 }
