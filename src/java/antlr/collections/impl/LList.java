@@ -1,5 +1,8 @@
 package antlr.collections.impl;
 
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -9,9 +12,6 @@ package antlr.collections.impl;
 
 import antlr.collections.List;
 import antlr.collections.Stack;
-import java.util.Enumeration;
-import java.util.NoSuchElementException;
-import antlr.collections.impl.LLCell;
 
 /**A Linked List Implementation (not thread-safe for simplicity)
  * (adds to the tail) (has an enumeration)

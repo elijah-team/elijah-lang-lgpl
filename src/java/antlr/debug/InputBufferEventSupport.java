@@ -1,8 +1,6 @@
 package antlr.debug;
 
 import java.util.Vector;
-import antlr.collections.impl.BitSet;
-import antlr.RecognitionException;
 
 public class InputBufferEventSupport {
 	private Object source;

@@ -1,5 +1,9 @@
 package antlr;
 
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.StringTokenizer;
+
 /**
  * ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
@@ -14,9 +18,6 @@ package antlr;
  */
 
 import java.util.Vector;
-import java.util.Enumeration;
-import java.io.PrintWriter;
-import java.util.StringTokenizer;
 
 public class NameSpace
 {

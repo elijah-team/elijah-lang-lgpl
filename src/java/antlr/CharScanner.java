@@ -8,8 +8,8 @@ package antlr;
  */
 
 import java.util.Hashtable;
+
 import antlr.collections.impl.BitSet;
-import java.io.IOException;
 public abstract class CharScanner implements TokenStream {
     static final char NO_CHAR = 0;
     public static final char EOF_CHAR = (char) - 1;

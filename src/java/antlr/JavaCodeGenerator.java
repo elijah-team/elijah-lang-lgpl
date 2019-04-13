@@ -18,6 +18,7 @@ import antlr.collections.impl.BitSet;
 import antlr.collections.impl.Vector;
 
 /**Generate MyParser.java, MyLexer.java and MyParserTokenTypes.java */
+@SuppressWarnings("rawtypes")
 public class JavaCodeGenerator extends CodeGenerator {
     // non-zero if inside syntactic predicate generation
     protected int syntacticPredLevel = 0;

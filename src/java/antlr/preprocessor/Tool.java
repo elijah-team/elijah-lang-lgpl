@@ -11,9 +11,12 @@ package antlr.preprocessor;
  * Tester for the preprocessor
  * 
  */
-import java.io.*;
-import antlr.collections.impl.Vector;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Enumeration;
+
+import antlr.collections.impl.Vector;
 
 public class Tool {
     protected Hierarchy theHierarchy;

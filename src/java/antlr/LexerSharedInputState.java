@@ -1,5 +1,7 @@
 package antlr;
 
+import java.io.InputStream;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -8,7 +10,6 @@ package antlr;
  */
 
 import java.io.Reader;
-import java.io.InputStream;
 
 /** This object contains the data associated with an
  *  input stream of characters.  Multiple lexers

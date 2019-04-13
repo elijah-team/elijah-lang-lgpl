@@ -9,7 +9,6 @@ package antlr.collections.impl;
 
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-import antlr.collections.Enumerator;
 
 // based on java.lang.Vector; returns any null indices between non-null ones.
 class VectorEnumeration implements Enumeration {

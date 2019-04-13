@@ -1,21 +1,5 @@
 package antlr;
 
-/*
- * ANTLR-generated file resulting from grammar tokdef.g
- * 
- * Terence Parr, MageLang Institute
- * ANTLR Version 2.7.0a2; 1989-1999
- */
-import antlr.TokenStreamException;
-import antlr.TokenBuffer;
-import antlr.LLkParser;
-import antlr.Token;
-import antlr.TokenStream;
-import antlr.RecognitionException;
-import antlr.NoViableAltException;
-import antlr.MismatchedTokenException;
-import antlr.SemanticException;
-import antlr.ParserSharedInputState;
 import antlr.collections.impl.BitSet;
 public class ANTLRTokdefParser extends antlr.LLkParser
 	   implements ANTLRTokdefParserTokenTypes

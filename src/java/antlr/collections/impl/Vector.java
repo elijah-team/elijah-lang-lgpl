@@ -8,8 +8,6 @@ package antlr.collections.impl;
  */
 
 import java.util.Enumeration;
-import java.util.NoSuchElementException;
-import antlr.collections.Enumerator;
 
 public class Vector implements Cloneable {
 	protected Object[] data;

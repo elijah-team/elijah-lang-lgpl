@@ -1,10 +1,10 @@
 package antlr.debug;
 
-import java.util.Vector;
-import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
 import antlr.collections.impl.BitSet;
-import antlr.RecognitionException;
 
 
 /** A class to assist in firing parser events

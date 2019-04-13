@@ -1,5 +1,9 @@
 package antlr.preprocessor;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -8,8 +12,6 @@ package antlr.preprocessor;
  */
 
 import antlr.collections.impl.IndexedVector;
-import java.util.Enumeration;
-import java.io.*;
 
 /** Stores header action, grammar preamble, file options, and
  *  list of grammars in the file

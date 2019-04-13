@@ -1,29 +1,5 @@
 package antlr;
 
-/* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/TokenBuffer.java#1 $
- */
-
-/**A Stream of Token objects fed to the parser from a Tokenizer that can
- * be rewound via mark()/rewind() methods.
- * <p>
- * A dynamic array is used to buffer up all the input tokens.  Normally,
- * "k" tokens are stored in the buffer.  More tokens may be stored during
- * guess mode (testing syntactic predicate), or when LT(i>k) is referenced.
- * Consumption of tokens is deferred.  In other words, reading the next
- * token is not done by conume(), but deferred until needed by LA or LT.
- * <p>
- *
- * @see antlr.Token
- * @see antlr.Tokenizer
- * @see antlr.TokenQueue
- */
- 
-import java.io.IOException;
-
 public class TokenBuffer {
 
 	// Token source

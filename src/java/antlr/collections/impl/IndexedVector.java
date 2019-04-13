@@ -1,5 +1,7 @@
 package antlr.collections.impl;
 
+import java.util.Enumeration;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -8,8 +10,6 @@ package antlr.collections.impl;
  */
 
 import java.util.Hashtable;
-import java.util.Enumeration;
-import antlr.collections.impl.Vector;
 
 /**
  * A simple indexed vector: a normal vector except that you must

@@ -1,5 +1,7 @@
 package antlr;
 
+import java.util.Hashtable;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -8,7 +10,6 @@ package antlr;
  */
 
 import antlr.collections.impl.Vector;
-import java.util.Hashtable;
 
 /**A list of alternatives and info contained in
  * the rule definition.

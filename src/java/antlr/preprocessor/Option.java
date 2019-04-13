@@ -1,14 +1,5 @@
 package antlr.preprocessor;
 
-/* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/preprocessor/Option.java#1 $
- */
-
-import antlr.collections.impl.Vector;
-
 class Option {
 	protected String name;
 	protected String rhs;

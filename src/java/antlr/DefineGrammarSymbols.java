@@ -8,6 +8,7 @@ package antlr;
  */
 
 import java.util.Hashtable;
+
 import antlr.collections.impl.BitSet;
 
 /**DefineGrammarSymbols is a behavior for the ANTLRParser that adds all

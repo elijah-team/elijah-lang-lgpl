@@ -1,5 +1,7 @@
 package antlr;
 
+import java.io.IOException;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -21,7 +23,6 @@ package antlr;
  */
 
 import java.io.Reader; // SAS: changed to properly read text files
-import java.io.IOException;
 
 // SAS: Move most functionality into InputBuffer -- just the file-specific
 //      stuff is in here

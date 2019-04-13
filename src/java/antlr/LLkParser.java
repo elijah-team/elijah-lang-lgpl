@@ -1,14 +1,5 @@
 package antlr;
 
-/* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/LLkParser.java#1 $
- */
-
-import java.io.IOException;
-
 /**An LL(k) parser.
  *
  * @see antlr.Token
