@@ -20,4 +20,14 @@ public class ArgumentNode {
 		this.ident = ident;
 	}
 
+	/**
+	 * @param genName
+	 * @param genType
+	 */
+	public ArgumentNode(String genName, String genType) {
+		super();
+		this.genName = genName;
+		this.genType = genType;
+	}
+
 }
