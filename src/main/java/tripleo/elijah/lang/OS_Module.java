@@ -19,17 +19,15 @@
  */
 package tripleo.elijah.lang;
 
+import antlr.Token;
+import tripleo.elijah.Qualident;
+import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.TabbedOutputStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import antlr.Token;
-import tripleo.elijah.Qualident;
-import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.gen.java.JavaCodeGen;
-import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
 public class OS_Module implements OS_Element {
 
@@ -73,7 +71,7 @@ public class OS_Module implements OS_Element {
 
 	public List<ModuleItem> items=new ArrayList<ModuleItem>();
 	public List<IndexingItem> indexingItems=new ArrayList<IndexingItem>();
-	public String packageName;
+//	public String packageName;
 	public String moduleName="default";
 
 	@Override

@@ -115,7 +115,8 @@ public class JavaCodeGen implements ICodeGen {
 				// TODO Will eventually have to move this
 				String theType;
 				if (ii.typeName().isNull()) {
-					theType = "int"; // Z0*
+//					theType = "int"; // Z0*
+					theType = ii.initialValueType();
 				} else{
 					theType = ii.typeName().getName();
 				}

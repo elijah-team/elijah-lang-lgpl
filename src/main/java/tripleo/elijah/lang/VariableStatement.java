@@ -90,5 +90,20 @@ public class VariableStatement {
 	public TypeName typeName() {
 		return typeName;
 	}
+	
+	public IExpression initialValue() {
+		return initialValue;
+	}
+	
+	public String initialValueType() {
+		if (initialValue instanceof NumericExpression)
+			return "int";
+		else
+			return "Z0*";
+	}
 
 }
+
+//
+//
+//
