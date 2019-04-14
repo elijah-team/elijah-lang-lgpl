@@ -144,7 +144,7 @@ public void set(TypeModifiers aModifiers) {
 
 @Override
 public void addGenericPart(TypeName tn2) {
-	// TODO Auto-generated method stub
+	// TODO Should this be TypeNameList?
 	NotImplementedException.raise();
 
 }

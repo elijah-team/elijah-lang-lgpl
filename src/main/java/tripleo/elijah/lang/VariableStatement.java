@@ -25,9 +25,9 @@ public class VariableStatement {
 		return name;
 	}
 
-	public String getTypeString() {
-		return typeRef.getTypeString();
-	}
+//	public String getTypeString() {
+//		return typeRef.getTypeString();
+//	}
 
 	public void initial(IExpression aExpr) {
 		initialValue=aExpr;
@@ -39,6 +39,7 @@ public class VariableStatement {
 		tos.put_string("name = \"");
 		tos.put_string(getName());
 		tos.put_string_ln("\"");
+/*
 		if (typeRef != null) {
 			tos.incr_tabs();
 			tos.put_string_ln("type = {");
@@ -47,6 +48,7 @@ public class VariableStatement {
 			tos.dec_tabs();
 			tos.put_string_ln("} // type = ...");
 		}
+*/
 		tos.put_string_ln("} // VariableDeclaration");
 	}
 
@@ -54,7 +56,7 @@ public class VariableStatement {
 		System.out.print("** Declare Variable: ");
 		System.out.print(name);
 		System.out.print(" as ");
-		System.out.print(getTypeString());
+//		System.out.print(getTypeString());
 		System.out.println(" (agn not shown at all) **");
 	}
 
@@ -62,17 +64,17 @@ public class VariableStatement {
 		type = y;
 	}
 
-	public void setInitialValue(IExpression e) {
-		initialValue = e;
-	}
+//	public void setInitialValue(IExpression e) {
+//		initialValue = e;
+//	}
 
 	public void setName(String s) {
 		name = s;
 	}
 
-	public void setTypeObject(TypeRef t) {
-		typeRef = t;
-	}
+//	public void setTypeObject(TypeRef t) {
+//		typeRef = t;
+//	}
 
 	public TypeName typeName() {
 		return typeName;
@@ -83,6 +85,6 @@ public class VariableStatement {
 	private final VariableSequence parent;
 	TypeModifiers type;
 	TypeName typeName = new VariableTypeName();
-	TypeRef typeRef;
+//	TypeRef typeRef;
 
 }
