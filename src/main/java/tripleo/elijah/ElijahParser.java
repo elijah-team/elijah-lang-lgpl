@@ -2280,7 +2280,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 
 			switch (LA(1)) {
 			case LITERAL_namespace: {
-				namespaceStatement(pc.namespaceSatatement());
+				namespaceStatement(pc.namespaceStatement());
 //				match(LITERAL_namespace);
 //				{
 //					switch (LA(1)) {
