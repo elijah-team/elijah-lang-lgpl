@@ -41,26 +41,28 @@ public class OS_Module implements OS_Element {
 		tos.close();
 	}
 
+/*
 	public String packageName() {
 		if (packageName != null)
 			return packageName;
 		StringBuffer pn = new StringBuffer();
-		for (Qualident t : packageNames_q) {
-			pn .append(t.toString());
-			pn .append( '.');
-		}
-		packageName = pn.toString();
+//		for (Qualident t : packageNames_q) {
+//			pn .append(t.toString());
+//			pn .append( '.');
+//		}
+		packageName = packageNames_q.peek().toString();
 		return packageName;
 	}
+*/
 	
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		System.out.println("Module print_osi");
-		if (packageName != null) {
-			tos.put_string("package ");
-			tos.put_string_ln(packageName);
-			tos.put_string_ln("");
-		}
+//		if (packageName != null) {
+//			tos.put_string("package ");
+//			tos.put_string_ln(packageName);
+//			tos.put_string_ln("");
+//		}
 		tos.put_string_ln("//");
 		synchronized (items) {
 			for (ModuleItem element : items)
@@ -95,10 +97,10 @@ public class OS_Module implements OS_Element {
 		packageNames_q.push(xyz);
 	}
 
-	public void visitGen(JavaCodeGen visit) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
-	}
+//	public void visitGen(JavaCodeGen visit) {
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
+//	}
 }
 
 //
