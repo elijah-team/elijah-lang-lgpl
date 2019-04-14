@@ -1,5 +1,9 @@
 package antlr.debug.misc;
 
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -8,9 +12,6 @@ package antlr.debug.misc;
  */
 
 import antlr.collections.AST;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
 
 public class JTreeASTModel implements TreeModel {
 

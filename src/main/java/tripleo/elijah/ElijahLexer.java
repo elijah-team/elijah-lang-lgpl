@@ -1,3 +1,11 @@
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ * 
+ * The contents of this library are released under the LGPL licence v3, 
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ * 
+ */
 package tripleo.elijah;
 
 // $ANTLR 2.7.1: "osc.g" -> "elijahLexer.java"$
@@ -8,6 +16,7 @@ import java.util.Hashtable;
 import antlr.*;
 import antlr.collections.impl.BitSet;
 
+@SuppressWarnings("unused")
 public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 		ElijahTokenTypes, TokenStream {
 	public ElijahLexer(InputStream in) {
@@ -24,12 +33,13 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 						ib)));
 	}
 
+	@SuppressWarnings("deprecation")
 	public ElijahLexer(LexerSharedInputState state) {
 		super(state);
 		ruleNames = _ruleNames;
 		semPredNames = _semPredNames;
 		setupDebugging();
-		literals = new Hashtable();
+		literals = new Hashtable<ANTLRHashString, Integer>();
 		literals.put(new ANTLRHashString("block", this), new Integer(96));
 		literals.put(new ANTLRHashString("class", this), new Integer(16));
 		literals.put(new ANTLRHashString("procedure", this), new Integer(55));
@@ -89,6 +99,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 			"mSTRING_LITERAL", "mHEX_DIGIT", "mIDENT", "mQIDENT", "mNUM_INT",
 			"mEXPONENT", "mFLOAT_SUFFIX", };
 
+	@Override
 	public Token nextToken() throws TokenStreamException {
 		Token theRetToken = null;
 		tryAgain: for (;;) {
@@ -363,7 +374,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 								_returnToken = makeToken(Token.EOF_TYPE);
 							} else {
 								throw new NoViableAltForCharException(
-										(char) LA(1), getFilename(), getLine());
+										LA(1), getFilename(), getLine());
 							}
 						}
 					}
@@ -445,7 +456,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 						} else if ((LA(1) == '\n')) {
 							match('\n');
 						} else {
-							throw new NoViableAltForCharException((char) LA(1),
+							throw new NoViableAltForCharException(LA(1),
 									getFilename(), getLine());
 						}
 
@@ -454,7 +465,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 					break;
 				}
 				default: {
-					throw new NoViableAltForCharException((char) LA(1),
+					throw new NoViableAltForCharException(LA(1),
 							getFilename(), getLine());
 				}
 				}
@@ -1572,7 +1583,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 							break;
 						}
 						default: {
-							throw new NoViableAltForCharException((char) LA(1),
+							throw new NoViableAltForCharException(LA(1),
 									getFilename(), getLine());
 						}
 						}
@@ -1580,7 +1591,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 					break;
 				}
 				default: {
-					throw new NoViableAltForCharException((char) LA(1),
+					throw new NoViableAltForCharException(LA(1),
 							getFilename(), getLine());
 				}
 				}
@@ -1615,7 +1626,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 					break;
 				}
 				default: {
-					throw new NoViableAltForCharException((char) LA(1),
+					throw new NoViableAltForCharException(LA(1),
 							getFilename(), getLine());
 				}
 				}
@@ -1711,7 +1722,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 				} else if ((_tokenSet_4.member(LA(1)))) {
 					matchNot('\'');
 				} else {
-					throw new NoViableAltForCharException((char) LA(1),
+					throw new NoViableAltForCharException(LA(1),
 							getFilename(), getLine());
 				}
 
@@ -1786,7 +1797,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 									break _loop257;
 								} else {
 									throw new NoViableAltForCharException(
-											(char) LA(1), getFilename(),
+											LA(1), getFilename(),
 											getLine());
 								}
 							}
@@ -1822,14 +1833,14 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 								} else if (((LA(1) >= '\u0003' && LA(1) <= '\u00ff')) && (true) && (true) && (true)) {
 								} else {
 									throw new NoViableAltForCharException(
-											(char) LA(1), getFilename(),
+											LA(1), getFilename(),
 											getLine());
 								}
 
 							}
 						} else if (((LA(1) >= '\u0003' && LA(1) <= '\u00ff')) && (true) && (true) && (true)) {
 						} else {
-							throw new NoViableAltForCharException((char) LA(1),
+							throw new NoViableAltForCharException(LA(1),
 									getFilename(), getLine());
 						}
 
@@ -1852,7 +1863,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 							}
 						} else if (((LA(1) >= '\u0003' && LA(1) <= '\u00ff')) && (true) && (true) && (true)) {
 						} else {
-							throw new NoViableAltForCharException((char) LA(1),
+							throw new NoViableAltForCharException(LA(1),
 									getFilename(), getLine());
 						}
 
@@ -1860,7 +1871,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 					break;
 				}
 				default: {
-					throw new NoViableAltForCharException((char) LA(1),
+					throw new NoViableAltForCharException(LA(1),
 							getFilename(), getLine());
 				}
 				}
@@ -1985,7 +1996,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 					break;
 				}
 				default: {
-					throw new NoViableAltForCharException((char) LA(1),
+					throw new NoViableAltForCharException(LA(1),
 							getFilename(), getLine());
 				}
 				}
@@ -2081,7 +2092,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 					break;
 				}
 				default: {
-					throw new NoViableAltForCharException((char) LA(1),
+					throw new NoViableAltForCharException(LA(1),
 							getFilename(), getLine());
 				}
 				}
@@ -2236,7 +2247,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 										break _loop275;
 									} else {
 										throw new NoViableAltForCharException(
-												(char) LA(1), getFilename(),
+												LA(1), getFilename(),
 												getLine());
 									}
 								}
@@ -2296,7 +2307,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 									}
 									default: {
 										throw new NoViableAltForCharException(
-												(char) LA(1), getFilename(),
+												LA(1), getFilename(),
 												getLine());
 									}
 									}
@@ -2311,7 +2322,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 												break _loop282;
 											} else {
 												throw new NoViableAltForCharException(
-														(char) LA(1),
+														LA(1),
 														getFilename(),
 														getLine());
 											}
@@ -2340,7 +2351,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 												break _loop284;
 											} else {
 												throw new NoViableAltForCharException(
-														(char) LA(1),
+														LA(1),
 														getFilename(),
 														getLine());
 											}
@@ -2383,7 +2394,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 						break;
 					}
 					default: {
-						throw new NoViableAltForCharException((char) LA(1),
+						throw new NoViableAltForCharException(LA(1),
 								getFilename(), getLine());
 					}
 					}
@@ -2402,7 +2413,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 							}
 							default: {
 								throw new NoViableAltForCharException(
-										(char) LA(1), getFilename(), getLine());
+										LA(1), getFilename(), getLine());
 							}
 							}
 						}
@@ -2461,7 +2472,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 							}
 							default: {
 								throw new NoViableAltForCharException(
-										(char) LA(1), getFilename(), getLine());
+										LA(1), getFilename(), getLine());
 							}
 							}
 						}
@@ -2473,7 +2484,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 				break;
 			}
 			default: {
-				throw new NoViableAltForCharException((char) LA(1),
+				throw new NoViableAltForCharException(LA(1),
 						getFilename(), getLine());
 			}
 			}
@@ -2511,7 +2522,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 					break;
 				}
 				default: {
-					throw new NoViableAltForCharException((char) LA(1),
+					throw new NoViableAltForCharException(LA(1),
 							getFilename(), getLine());
 				}
 				}
@@ -2539,7 +2550,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 					break;
 				}
 				default: {
-					throw new NoViableAltForCharException((char) LA(1),
+					throw new NoViableAltForCharException(LA(1),
 							getFilename(), getLine());
 				}
 				}
@@ -2553,7 +2564,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 						if (_cnt300 >= 1) {
 							break _loop300;
 						} else {
-							throw new NoViableAltForCharException((char) LA(1),
+							throw new NoViableAltForCharException(LA(1),
 									getFilename(), getLine());
 						}
 					}
@@ -2602,7 +2613,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 				break;
 			}
 			default: {
-				throw new NoViableAltForCharException((char) LA(1),
+				throw new NoViableAltForCharException(LA(1),
 						getFilename(), getLine());
 			}
 			}

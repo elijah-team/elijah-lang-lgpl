@@ -1,16 +1,8 @@
 package antlr.collections.impl;
 
-/* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/collections/impl/ASTEnumerator.java#1 $
- */
-
-import antlr.collections.impl.Vector;
-import antlr.collections.ASTEnumeration;
-import antlr.collections.AST;
 import java.util.NoSuchElementException;
+
+import antlr.collections.AST;
 
 public class ASTEnumerator implements antlr.collections.ASTEnumeration {
 	/** The list of root nodes for subtrees that match */

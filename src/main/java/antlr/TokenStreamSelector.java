@@ -8,9 +8,9 @@ package antlr;
  */
 
 import java.util.Hashtable;
-import antlr.collections.impl.LList;
+
 import antlr.collections.Stack;
-import java.io.IOException;
+import antlr.collections.impl.LList;
 
 /** A token stream MUX (multiplexor) knows about n token streams
  *  and can multiplex them onto the same channel for use by token

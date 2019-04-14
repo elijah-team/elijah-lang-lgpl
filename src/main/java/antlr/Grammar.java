@@ -1,5 +1,8 @@
 package antlr;
 
+import java.io.IOException;
+import java.util.Enumeration;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -8,15 +11,14 @@ package antlr;
  */
 
 import java.util.Hashtable;
-import java.util.Enumeration;
-import java.io.IOException;
-import antlr.collections.impl.BitSet;
+
 import antlr.collections.impl.Vector;
 
 /**A Grammar holds a set of rules (which are stored
  * in a symbol table).  Most of the time a grammar
  * needs a code generator and an LLkAnalyzer too.
  */
+@SuppressWarnings("rawtypes")
 public abstract class Grammar {
     protected Tool tool;
     protected CodeGenerator generator;

@@ -6,11 +6,9 @@ package antlr;
  *
  * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/ImportVocabTokenManager.java#1 $
  */
-
-import java.io.*;
-import java.util.Hashtable;
-import java.util.Enumeration;
-import antlr.collections.impl.Vector;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 /** Static implementation of the TokenManager, used for importVocab option  */
 class ImportVocabTokenManager extends SimpleTokenManager implements Cloneable {

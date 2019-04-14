@@ -1,20 +1,5 @@
 package antlr;
 
-/* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/InputBuffer.java#1 $
- */
-
-// SAS: Added this class to genericise the input buffers for scanners
-//      This allows a scanner to use a binary (FileInputStream) or
-//      text (FileReader) stream of data; the generated scanner
-//      subclass will define the input stream
-//      There are two subclasses to this: CharBuffer and ByteBuffer
-
-import java.io.IOException;
-
 /**A Stream of characters fed to the lexer from a InputStream that can
  * be rewound via mark()/rewind() methods.
  * <p>

@@ -1,19 +1,25 @@
 package antlr.debug.misc;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JFrame;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
  *
  * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/debug/misc/ASTFrame.java#1 $
  */
-
-import antlr.*;
+import antlr.ASTFactory;
+import antlr.CommonAST;
 import antlr.collections.AST;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
 
 public class ASTFrame extends JFrame {
   // The initial width and height of the frame

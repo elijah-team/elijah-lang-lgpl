@@ -1,44 +1,79 @@
 /*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ * 
+ * The contents of this library are released under the LGPL licence v3, 
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ * 
+ */
+/*
  * Created on Sep 1, 2005 4:55:12 PM
  * 
  * $Id$
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.Qualident;
+import tripleo.elijah.util.NotImplementedException;
 
 public class VariableTypeName extends AbstractTypeName implements TypeName {
 
+	@Override
 	public TypeName typeName(String aS) {
 		// TODO Auto-generated method stub
+		NotImplementedException.raise();
 		return null;
 	}
 
+	@Override
 	public TypeName typeof(String aS) {
 		// TODO Auto-generated method stub
+		NotImplementedException.raise();
 		return null;
 	}
 
+	@Override
 	public TypeName returnValue() {
 		// TODO Auto-generated method stub
+		NotImplementedException.raise();
 		return null;
 	}
 
 	public void type(int aI) {
 		// TODO Auto-generated method stub
-
+		NotImplementedException.raise();
 	}
 
+	@Override
 	public TypeNameList argList() {
 		// TODO Auto-generated method stub
+		NotImplementedException.raise();
 		return null;
 	}
 
+	@Override
 	public void set(TypeModifiers aModifiers) {
 		// TODO Auto-generated method stub
-		
+		NotImplementedException.raise();
+	}
+
+	@Override
+	public void addGenericPart(TypeName tn2) {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
+	}
+
+	@Override
+	public void typeName(Qualident xy) {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
+	}
+
+	@Override
+	public void typeof(Qualident xyz) {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
 	}
 
 }

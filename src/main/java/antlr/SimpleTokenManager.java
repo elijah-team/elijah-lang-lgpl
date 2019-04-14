@@ -1,15 +1,8 @@
 package antlr;
 
-/* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/SimpleTokenManager.java#1 $
- */
-
-import java.io.*;
-import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Hashtable;
+
 import antlr.collections.impl.Vector;
 class SimpleTokenManager implements TokenManager, Cloneable {
 	protected int maxToken = Token.MIN_USER_TYPE;

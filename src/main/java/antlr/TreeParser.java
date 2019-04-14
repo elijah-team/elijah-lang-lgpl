@@ -1,13 +1,5 @@
 package antlr;
 
-/* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/TreeParser.java#1 $
- */
-
-import java.util.NoSuchElementException;
 import antlr.collections.AST;
 import antlr.collections.impl.BitSet;
 

@@ -2,28 +2,10 @@
 
 package antlr;
 
-import antlr.TokenBuffer;
-import antlr.TokenStreamException;
-import antlr.TokenStreamIOException;
-import antlr.ANTLRException;
-import antlr.LLkParser;
-import antlr.Token;
-import antlr.TokenStream;
-import antlr.RecognitionException;
-import antlr.NoViableAltException;
-import antlr.MismatchedTokenException;
-import antlr.SemanticException;
-import antlr.ParserSharedInputState;
 import antlr.collections.impl.BitSet;
-import antlr.collections.AST;
-import antlr.ASTPair;
-import antlr.collections.impl.ASTArray;
 
-import java.util.Enumeration;
-import java.io.DataInputStream;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+//import org.eclipse.jdt.annotation.NonNull;
+
 
 public class ANTLRParser extends antlr.LLkParser
        implements ANTLRTokenTypes
@@ -1035,7 +1017,8 @@ public ANTLRParser(ParserSharedInputState state) {
 	}
 	
 	public final  BitSet  setBlockElement() throws RecognitionException, TokenStreamException {
-		 BitSet b ;
+//		 @NonNull
+		BitSet b ;
 		
 		Token  c1 = null;
 		Token  c2 = null;

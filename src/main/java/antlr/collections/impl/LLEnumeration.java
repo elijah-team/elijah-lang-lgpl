@@ -1,17 +1,7 @@
 package antlr.collections.impl;
 
-/* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/collections/impl/LLEnumeration.java#1 $
- */
-
-import antlr.collections.List;
-import antlr.collections.Stack;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-import antlr.collections.impl.LLCell;
 
 /**An enumeration of a LList.  Maintains a cursor through the list.
  * bad things would happen if the list changed via another thread

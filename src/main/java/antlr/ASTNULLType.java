@@ -9,7 +9,6 @@ package antlr;
 
 import antlr.collections.AST;
 import antlr.collections.ASTEnumeration;
-import antlr.Token;
 
 /** There is only one instance of this class **/
 public class ASTNULLType implements AST {

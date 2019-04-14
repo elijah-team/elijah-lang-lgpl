@@ -8,23 +8,8 @@ package antlr;
  */
  import java.io.InputStream;
 import java.io.Reader;
-import antlr.TokenStreamException;
-import antlr.TokenStreamIOException;
-import antlr.CharStreamException;
-import antlr.CharStreamIOException;
 import java.util.Hashtable;
-import antlr.CharScanner;
-import antlr.InputBuffer;
-import antlr.ByteBuffer;
-import antlr.CharBuffer;
-import antlr.Token;
-import antlr.CommonToken;
-import antlr.RecognitionException;
-import antlr.NoViableAltForCharException;
-import antlr.MismatchedCharException;
-import antlr.TokenStream;
-import antlr.ANTLRHashString;
-import antlr.LexerSharedInputState;
+
 import antlr.collections.impl.BitSet;
 public class ANTLRTokdefLexer extends antlr.CharScanner implements ANTLRTokdefParserTokenTypes, TokenStream
  {

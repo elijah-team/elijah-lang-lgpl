@@ -6,8 +6,15 @@ package antlr;
  *
  * $Id: //depot/code/org.antlr/release/antlr-2.7.1/antlr/Tool.java#2 $
  */
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
 
-import java.io.*;
 import antlr.collections.impl.BitSet;
 import antlr.collections.impl.Vector;
 public class Tool {

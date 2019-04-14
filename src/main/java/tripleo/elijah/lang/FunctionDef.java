@@ -1,4 +1,12 @@
 /*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ * 
+ * The contents of this library are released under the LGPL licence v3, 
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ * 
+ */
+/*
  * Created on Aug 30, 2005 8:43:27 PM
  * 
  * $Id$
@@ -6,11 +14,12 @@
 package tripleo.elijah.lang;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.java.JavaCodeGen;
-import tripleo.elijah.util.*;
+import tripleo.elijah.util.TabbedOutputStream;
 
 public class FunctionDef implements ClassItem {
 	static class StatementWrapper implements StatementItem, FunctionItem {
@@ -21,7 +30,14 @@ public class FunctionDef implements ClassItem {
 			expr = aexpr;
 		}
 
+		@Override
 		public void print_osi(TabbedOutputStream aTos) throws IOException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void visitGen(ICodeGen visit) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -29,26 +45,33 @@ public class FunctionDef implements ClassItem {
 	
 	private final class FunctionDefScope implements Scope {
 
+		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
+
+		@Override
 		public void add(StatementItem aItem) {
 			if (aItem instanceof FunctionItem)
 				items.add((FunctionItem) aItem);
 			else
-				System.err.println("adding false StatementItem "
-						+ aItem.getClass().getName());
+				System.err.println(String.format("adding false StatementItem %s",
+					aItem.getClass().getName()));
 		}
 
+		@Override
 		public void addDocString(String aS) {
 			docstrings.add(aS);
 		}
 
+		@Override
 		public BlockStatement blockStatement() {
 			return new BlockStatement(this);
 		}
 
+		@Override
 		public StatementClosure statementClosure() {
-			return new AbstractStatementClosure(this);
+			return asc;
 		}
 
+		@Override
 		public void statementWrapper(IExpression aExpr) {
 			add(new StatementWrapper(aExpr));
 //			throw new NotImplementedException(); // TODO
@@ -59,8 +82,9 @@ public class FunctionDef implements ClassItem {
 	public String funName;
 	List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
-	private FunctionDefScope mScope;
+//	private FunctionDefScope mScope;
 	private ClassStatement parent;
+	private final FunctionDefScope mScope2 = new FunctionDefScope();
 
 	public FunctionDef(ClassStatement aStatement) {
 		parent = aStatement;
@@ -71,6 +95,7 @@ public class FunctionDef implements ClassItem {
 		return mFal;
 	}
 
+	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		System.out.println("Klass print_osi");
 		tos.incr_tabs();
@@ -86,9 +111,8 @@ public class FunctionDef implements ClassItem {
 	}
 
 	public Scope scope() {
-		assert mScope == null;
-		mScope = new FunctionDefScope();
-		return mScope;
+		//assert mScope == null;
+		return mScope2;
 	}
 
 	public void setName(String aText) {
@@ -99,5 +123,11 @@ public class FunctionDef implements ClassItem {
 		// TODO Auto-generated method stub
 		for (FunctionItem element : items)
 			gen.addFunctionItem(element);
+	}
+
+	@Override
+	public void visitGen(ICodeGen visit) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,19 +1,13 @@
 package antlr.debug;
 
-import antlr.ParserSharedInputState;
-import antlr.TokenStreamException;
 import antlr.LLkParser;
+import antlr.MismatchedTokenException;
+import antlr.ParserSharedInputState;
+import antlr.RecognitionException;
 import antlr.TokenBuffer;
 import antlr.TokenStream;
-import antlr.MismatchedTokenException;
-import antlr.RecognitionException;
-import antlr.collections.impl.BitSet;
-import java.io.IOException;
 import antlr.TokenStreamException;
-
-import antlr.debug.ParserEventSupport;
-
-import java.lang.reflect.Constructor;
+import antlr.collections.impl.BitSet;
 
 public class LLkDebuggingParser extends LLkParser implements DebuggingParser {
 	protected ParserEventSupport parserEventSupport = new ParserEventSupport(this);

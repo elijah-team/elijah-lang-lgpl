@@ -4,17 +4,16 @@ import java.util.*;
 
 import javassist.*;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.gen.*;
 import tripleo.elijah.util.NotImplementedException;
 
-public class JavaCodeGen implements ICodeGen {
+public class JavaCodeGen {
 
 	final ClassPool cp = new ClassPool();
 
 	private List<OS_Element> finished = new ArrayList<OS_Element>();;
 
 	public void addClass(ClassStatement klass) {
-		String pn = klass.parent.packageName;
+		String pn = ((OS_Module)klass.parent).packageName;
 		if (pn != null)
 			System.out.print("package " + pn + ";");
 		System.out.print("class " + klass.clsName + "{\n");
@@ -67,8 +66,6 @@ public class JavaCodeGen implements ICodeGen {
 		} else if (element instanceof ImportStatement) {
 			ImportStatement imp = (ImportStatement) element;
 			addImport(imp);
-		} else {
-			throw new NotImplementedException();
 		}
 		// if (elementDone(element)) {
 		// try {
@@ -102,10 +99,11 @@ public class JavaCodeGen implements ICodeGen {
 			if (element instanceof FunctionDef) {
 				FunctionDef fd = (FunctionDef) element;
 				System.out.print("void " + fd.funName + "(){\n");
-				element.visit(this);
+				((FunctionDef) element).visit(this);
 				System.out.print("}\n\n");
-			} else
-				element.visit(this);
+			} else if (element instanceof ClassStatement) {
+				((ClassStatement) element).visit(this);
+			}
 		}
 	}
 
@@ -120,9 +118,9 @@ public class JavaCodeGen implements ICodeGen {
 			if (elementDone(element)) {
 				throw new NotImplementedException();
 			} else {
-				// element.visit(this);  // todo 11 why is this wrong?
+				// element.visit(this);
 			}
-			System.out.print("TODO: implement this "+element);
+			System.out.print(element);
 
 		}
 	}

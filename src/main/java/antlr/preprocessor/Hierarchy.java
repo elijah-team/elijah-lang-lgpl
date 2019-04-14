@@ -1,5 +1,13 @@
 package antlr.preprocessor;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import antlr.ANTLRException;
+import antlr.TokenStreamException;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -8,11 +16,6 @@ package antlr.preprocessor;
  */
 
 import antlr.collections.impl.IndexedVector;
-import java.util.Hashtable;
-import java.util.Enumeration;
-import java.io.*;
-import antlr.*;
-import antlr.preprocessor.Grammar;
 
 public class Hierarchy {
 	protected static Grammar LexerRoot = new Grammar("Lexer", null, null);

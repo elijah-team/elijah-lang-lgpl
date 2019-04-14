@@ -1,5 +1,7 @@
 package antlr;
 
+import java.io.IOException;
+
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/RIGHTS.html
@@ -12,13 +14,14 @@ package antlr;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+
+//import org.eclipse.jdt.annotation.NonNull;
+
 import antlr.collections.impl.BitSet;
 import antlr.collections.impl.Vector;
-import java.io.PrintWriter; //SAS: changed for proper text file io
-import java.io.IOException;
-import java.io.FileWriter;
 
 /**Generate MyParser.cpp, MyParser.hpp, MyLexer.cpp, MyLexer.hpp and MyParserTokenTypes.hpp */
+@SuppressWarnings("rawtypes")
 public class CppCodeGenerator extends CodeGenerator {
 	// non-zero if inside syntactic predicate generation
 	protected int syntacticPredLevel = 0;
@@ -2025,6 +2028,7 @@ public class CppCodeGenerator extends CodeGenerator {
 		if ( grammar instanceof LexerGrammar ) {
 			r = CodeGenerator.lexerRuleName(el.enclosingRuleName);
 		}
+//		@NonNull
 		RuleSymbol rs = (RuleSymbol)grammar.getSymbol(r);
 		if (rs == null) {
 			tool.panic("Enclosing rule not found!");
@@ -2082,6 +2086,7 @@ public class CppCodeGenerator extends CodeGenerator {
 		if ( grammar instanceof LexerGrammar ) {
 			r = CodeGenerator.lexerRuleName(el.enclosingRuleName);
 		}
+//		@NonNull
 		RuleSymbol rs = (RuleSymbol)grammar.getSymbol(r);
 		if (rs == null) {
 			tool.panic("Enclosing rule not found!");

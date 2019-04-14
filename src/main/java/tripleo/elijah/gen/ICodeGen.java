@@ -1,9 +1,8 @@
 package tripleo.elijah.gen;
 
-import java.util.*;
-
-import tripleo.elijah.lang.*;
-import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.FunctionItem;
+import tripleo.elijah.lang.OS_Module;
 
 public interface ICodeGen {
 

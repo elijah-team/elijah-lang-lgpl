@@ -1,9 +1,12 @@
 package antlr.debug;
 
-import antlr.*;
-import antlr.collections.*;
-import antlr.collections.impl.*;
-import java.io.*;
+import antlr.CharScanner;
+import antlr.CharStreamException;
+import antlr.InputBuffer;
+import antlr.LexerSharedInputState;
+import antlr.MismatchedCharException;
+import antlr.Token;
+import antlr.collections.impl.BitSet;
 
 public abstract class DebuggingCharScanner extends CharScanner implements DebuggingParser {
 	private ParserEventSupport parserEventSupport = new ParserEventSupport(this);
