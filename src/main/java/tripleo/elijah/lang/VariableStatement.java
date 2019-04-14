@@ -17,17 +17,38 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 public class VariableStatement {
 
+	private final VariableSequence parent;
+	public String name;
+
+	IExpression initialValue = IExpression.UNASSIGNED;
+	TypeModifiers type;
+	private TypeName typeName = new VariableTypeName();
+
 	public VariableStatement(VariableSequence aSequence) {
 		parent = aSequence;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 //	public String getTypeString() {
 //		return typeRef.getTypeString();
 //	}
+
+//	public void setInitialValue(IExpression e) {
+//		initialValue = e;
+//	}
+
+//	public void setTypeObject(TypeRef t) {
+//		typeRef = t;
+//	}
+
+//	TypeRef typeRef;
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String s) {
+		name = s;
+	}
 
 	public void initial(IExpression aExpr) {
 		initialValue=aExpr;
@@ -52,6 +73,7 @@ public class VariableStatement {
 		tos.put_string_ln("} // VariableDeclaration");
 	}
 
+/*
 	public void printDeclare() {
 		System.out.print("** Declare Variable: ");
 		System.out.print(name);
@@ -59,32 +81,14 @@ public class VariableStatement {
 //		System.out.print(getTypeString());
 		System.out.println(" (agn not shown at all) **");
 	}
+*/
 
 	public void set(TypeModifiers y) {
 		type = y;
 	}
 
-//	public void setInitialValue(IExpression e) {
-//		initialValue = e;
-//	}
-
-	public void setName(String s) {
-		name = s;
-	}
-
-//	public void setTypeObject(TypeRef t) {
-//		typeRef = t;
-//	}
-
 	public TypeName typeName() {
 		return typeName;
 	}
-
-	IExpression initialValue = IExpression.UNASSIGNED;
-	public String name;
-	private final VariableSequence parent;
-	TypeModifiers type;
-	TypeName typeName = new VariableTypeName();
-//	TypeRef typeRef;
 
 }
