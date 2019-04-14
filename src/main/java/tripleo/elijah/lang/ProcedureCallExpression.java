@@ -28,25 +28,21 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 		return args;
 	}
 	
-	Qualident target;
-	ExpressionList args=new ExpressionList();
+	private Qualident target;
+	private ExpressionList args=new ExpressionList();
 	
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		// TODO Auto-generated method stub
-		try {
-			tos.incr_tabs();
-			tos.put_string_ln("ProcedureCall {");
-			tos.put_string("name = ");
-//			target.print_osi(tos);
-			tos.put_string(target.toString());
-			args.print_osi(tos);
-			tos.put_string("name = ");
-			tos.dec_tabs();
-			tos.put_string_ln("}");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		tos.incr_tabs();
+		tos.put_string_ln("ProcedureCall {");
+		tos.put_string("name = ");
+//		target.print_osi(tos);
+		tos.put_string(target.toString());
+		tos.put_string("args = ");
+		args.print_osi(tos);
+		tos.dec_tabs();
+		tos.put_string_ln("}");
 	}
 
 	@Override
