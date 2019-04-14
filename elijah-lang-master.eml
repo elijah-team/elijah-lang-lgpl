@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inheritJdk="true">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="javassist.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/javassist-3.1/javassist.jar!/"/>
+	</lib>
+	<lib name="org.eclipse.jdt.annotation_2.2.200.v20180921-1416.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/org.eclipse.jdt.annotation_2.2.200.v20180921-1416.jar!/"/>
+	</lib>
+</component>
