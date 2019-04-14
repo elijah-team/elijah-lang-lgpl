@@ -78,9 +78,9 @@ public class FunctionDef implements ClassItem {
 		}
 	}
 
-	public List<String> docstrings = new ArrayList<String>();
+	private List<String> docstrings = new ArrayList<String>();
 	public String funName;
-	List<FunctionItem> items = new ArrayList<FunctionItem>();
+	private List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
 //	private FunctionDefScope mScope;
 	private ClassStatement parent;
