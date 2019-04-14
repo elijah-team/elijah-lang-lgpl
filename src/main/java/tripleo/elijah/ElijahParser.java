@@ -1387,6 +1387,13 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				fd.setName(i1.getText());
 			}
 			opfal(fd.fal());
+			switch (LA(1)) {
+			case TOK_ARROW: 
+			{
+				match (TOK_ARROW);
+				typeName(fd.returnType());
+			}
+			}
 			scope(fd.scope());
 		} finally { // debugging
 			fireExitRule(11, 0);

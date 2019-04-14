@@ -85,6 +85,7 @@ public class FunctionDef implements ClassItem {
 //	private FunctionDefScope mScope;
 	private ClassStatement parent;
 	private final FunctionDefScope mScope2 = new FunctionDefScope();
+	private TypeName _returnType = new RegularTypeName();
 
 	public FunctionDef(ClassStatement aStatement) {
 		parent = aStatement;
@@ -129,5 +130,10 @@ public class FunctionDef implements ClassItem {
 	public void visitGen(ICodeGen visit) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public TypeName returnType() {
+		// TODO Auto-generated method stub
+		return _returnType ;
 	}
 }
