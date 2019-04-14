@@ -3,7 +3,7 @@ package wprust.demo.fact
 class Main {
   main() {
     const kl = 3
-    val f1 = factorial(k1)
+    const f1 = factorial(k1)
     println(f1)
   }
   factorial(i: u64) -> u64 {
