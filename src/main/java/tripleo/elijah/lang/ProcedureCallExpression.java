@@ -32,9 +32,21 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 	ExpressionList args=new ExpressionList();
 	
 	@Override
-	public void print_osi(TabbedOutputStream aTos) throws IOException {
+	public void print_osi(TabbedOutputStream tos) throws IOException {
 		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+		try {
+			tos.incr_tabs();
+			tos.put_string_ln("ProcedureCall {");
+			tos.put_string("name = ");
+//			target.print_osi(tos);
+			tos.put_string(target.toString());
+			args.print_osi(tos);
+			tos.put_string("name = ");
+			tos.dec_tabs();
+			tos.put_string_ln("}");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
