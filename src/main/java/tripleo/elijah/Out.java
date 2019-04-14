@@ -24,7 +24,7 @@ public class Out {
 		tos = null;
 		try {
 			tos = new TabbedOutputStream(new FileOutputStream("oscc.out"));
-//			pc.module.print_osi(tos);
+			pc.module.print_osi(tos);
 			pc.module.finish(tos);
 			//
 			final JavaCodeGen visit = new JavaCodeGen();
@@ -37,65 +37,35 @@ public class Out {
 		return;
 	}
 
-//	public ProcedureCall popProcCall() {
-//		return null;
+//	private void print(String s) {
+//		System.out.print(s);
 //	}
 //
-//	public void beginProcCallEx2() {
+//	private void println(int s) {
+//		System.out.println(s);
 //	}
-//
-//	public void beginProcCall() {
-//	}
-//
-//	public void endProcCall() {
-//	}
-//
-//
-//	public void pushString(String s) {
-//		println((new StringBuilder("** Pushing Ident ")).append(s).toString());
-//	}
-//
-//	public void pushCharLit(String s) {
-//	}
-//
-//	public void pushMultiply() {
-//	}
-//
-//
-//	public void pushTypeRef(TypeRef tr) {
-//		println((new StringBuilder("** pushing typeref ")).append(tr.repr_())
-//				.toString());
-//	}
-
-	private void print(String s) {
-		System.out.print(s);
-	}
-
-	private void println(int s) {
-		System.out.println(s);
-	}
 
 	public void println(String s) {
 		System.out.println(s);
 	}
 
-	private void print3(String s1, String s2, String s3) {
-		System.out.print(s1);
-		System.out.print(s2);
-		System.out.print(s3);
-	}
-
-	private void println(String s1, String s2) {
-		System.out.print(s1);
-		System.out.println(s2);
-	}
-
-	private void printpln(String s1, String s2) {
-		System.out.print(s1);
-		System.out.print('(');
-		System.out.print(s2);
-		System.out.println(')');
-	}
+//	private void print3(String s1, String s2, String s3) {
+//		System.out.print(s1);
+//		System.out.print(s2);
+//		System.out.print(s3);
+//	}
+//
+//	private void println(String s1, String s2) {
+//		System.out.print(s1);
+//		System.out.println(s2);
+//	}
+//
+//	private void printpln(String s1, String s2) {
+//		System.out.print(s1);
+//		System.out.print('(');
+//		System.out.print(s2);
+//		System.out.println(')');
+//	}
 
 	private ParserClosure pc=new ParserClosure();
 
