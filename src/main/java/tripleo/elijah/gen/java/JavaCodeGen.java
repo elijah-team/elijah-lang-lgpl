@@ -3,10 +3,11 @@ package tripleo.elijah.gen.java;
 import java.util.*;
 
 import javassist.*;
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
-public class JavaCodeGen {
+public class JavaCodeGen implements ICodeGen {
 
 	final ClassPool cp = new ClassPool();
 
@@ -111,7 +112,14 @@ public class JavaCodeGen {
 		// TODO Auto-generated method stub
 		if (element instanceof VariableSequence)
 			for (VariableStatement ii : ((VariableSequence) element).items()) {
-				System.out.print("int vv" + ii.name + ";");
+				// TODO Will eventually have to move this
+				String theType;
+				if (ii.typeName().isNull()) {
+					theType = "int"; // Z0*
+				} else{
+					theType = ii.typeName().getName();
+				}
+				System.out.print(String.format("%s vv%s;", theType, ii.name));
 
 			}
 		else {
