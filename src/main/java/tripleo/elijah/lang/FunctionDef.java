@@ -33,7 +33,7 @@ public class FunctionDef implements ClassItem {
 		@Override
 		public void print_osi(TabbedOutputStream aTos) throws IOException {
 			// TODO Auto-generated method stub
-			
+			int y=2;
 		}
 
 		@Override
@@ -98,12 +98,12 @@ public class FunctionDef implements ClassItem {
 
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
-		System.out.println("Klass print_osi");
-		tos.incr_tabs();
-		tos.put_string("Class (");
+		System.out.println("Function print_osi");
+		tos.put_string("Function (");
 		tos.put_string(funName);
 		tos.put_string_ln(") {");
 		tos.put_string_ln("//");
+		tos.incr_tabs();
 		for (FunctionItem item : items) {
 			item.print_osi(tos);
 		}
