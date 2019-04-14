@@ -37,14 +37,14 @@ public class ParserClosure {
 		return module;
 	}
 
-	public void packageName(String aXy) {
-		assert module.packageName ==null;
-		module.packageName = aXy;
-	}
+//	public void packageName(String aXy) {
+//		assert module.packageName ==null;
+//		module.packageName = aXy;
+//	}
 
 	public final OS_Module module;
 
-	public NamespaceStatement namespaceSatatement() {
+	public NamespaceStatement namespaceStatement() {
 		// TODO Auto-generated method stub
 		return new NamespaceStatement(module());
 	}
