@@ -8,11 +8,16 @@
  */
 package tripleo.elijah.lang;
 
+import java.io.IOException;
+
+import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
 
 // Referenced classes of package pak2:
 //			Statement, LoopTypes, Scope
 
-public class Loop implements Statement, LoopTypes, StatementItem {
+public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem {
 
 	public Loop() {
 	}
@@ -53,4 +58,16 @@ IExpression frompart;
 	public final int ITER_TYPE = 86;
 
 	public final int EXPR_TYPE = 83;
+
+	@Override
+	public void print_osi(TabbedOutputStream aTos) throws IOException {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
+	}
+
+	@Override
+	public void visitGen(ICodeGen visit) {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
+	}
 }
