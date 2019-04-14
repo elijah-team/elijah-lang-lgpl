@@ -45,11 +45,13 @@ public class VariableReference extends AbstractBinaryExpression implements OS_Ex
 		parts.add(new VR_IdentPart(s));
 	}
 
+/*
 	public void addProcCallPart(ProcedureCall p) {
 //		System.out.println("~~ VarRef addProcCallPart");
 		NotImplementedException.raise();
 		parts.add(new VR_ProcCallPart(p));
 	}
+*/
 
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
@@ -107,16 +109,20 @@ public class VariableReference extends AbstractBinaryExpression implements OS_Ex
 	}
 
 	class VR_ProcCallPart implements VR_Parts {
-
-		@NonNull 
-		private ProcedureCall p;
-
-		public VR_ProcCallPart(ProcedureCall p) {
-			// TODO Auto-generated constructor stub
-			NotImplementedException.raise();
-			this.p=p;
-		}
 		
+		@NonNull private final ProcedureCallExpression pp;
+//		@NonNull
+//		private ProcedureCall p;
+//
+//		public VR_ProcCallPart(ProcedureCall p) {
+//			// TODO Auto-generated constructor stub
+//			NotImplementedException.raise();
+//			this.p=p;
+//		}
+		
+		public VR_ProcCallPart(ProcedureCallExpression pce1) {
+			this.pp=pce1;
+		}
 	}
 
 	class VR_IdentPart implements VR_Parts {
@@ -148,7 +154,7 @@ public class VariableReference extends AbstractBinaryExpression implements OS_Ex
 	public void addProcCallPart(ProcedureCallExpression pce1) {
 		// TODO Auto-generated method stub
 //		NotImplementedException.raise();
-		parts.add(new VR_ProcCallPart(null));
+		parts.add(new VR_ProcCallPart(pce1));
 	}
 
 	public ProcedureCallExpression procCallPart() {
