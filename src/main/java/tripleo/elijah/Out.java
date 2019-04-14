@@ -21,7 +21,7 @@ public class Out {
 	public void FinishModule() {
 		TabbedOutputStream tos;
 		println("** FinishModule");
-		tos = null;
+//		tos = null;
 		try {
 			tos = new TabbedOutputStream(new FileOutputStream("oscc.out"));
 			pc.module.print_osi(tos);
@@ -34,7 +34,7 @@ public class Out {
 		} catch (IOException ioe) {
 			println("&& IOException");
 		}
-		return;
+//		return;
 	}
 
 //	private void print(String s) {
