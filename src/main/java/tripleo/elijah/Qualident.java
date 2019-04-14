@@ -32,4 +32,14 @@ public class Qualident {
 	
 	List<Token> parts = new ArrayList<Token>();
 
+	public String toString() {
+		StringBuilder sb=new StringBuilder();
+		for (Token part : parts) {
+			sb.append(part.getText());
+			sb.append('.');
+		}
+		String s = sb.toString();
+		String substring = s.substring(0, s.length() - 1);
+		return substring;
+	}
 }
