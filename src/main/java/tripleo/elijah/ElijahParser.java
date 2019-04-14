@@ -584,7 +584,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 		fireEnterRule(8, 0);
 		try { // debugging
 			
-			do {
+			_loop3001: do {
 
 			switch (LA(1)) {
 			case LITERAL_constructor:
@@ -655,6 +655,9 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				typeAlias();
 				break;
 			}
+				case RCURLY: {
+					break _loop3001;
+				}
 			default: {
 				throw new NoViableAltException(LT(1), getFilename());
 			}
