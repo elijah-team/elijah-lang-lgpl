@@ -13,7 +13,7 @@ public class JavaCodeGen {
 	private List<OS_Element> finished = new ArrayList<OS_Element>();;
 
 	public void addClass(ClassStatement klass) {
-		String pn = ((OS_Module)klass.parent).packageName;
+		String pn = ((OS_Module)klass.parent).packageName();
 		if (pn != null)
 			System.out.print("package " + pn + ";");
 		System.out.print("class " + klass.clsName + "{\n");

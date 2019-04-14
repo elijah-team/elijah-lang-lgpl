@@ -41,6 +41,18 @@ public class OS_Module implements OS_Element {
 		tos.close();
 	}
 
+	public String packageName() {
+		if (packageName != null)
+			return packageName;
+		StringBuffer pn = new StringBuffer();
+		for (Qualident t : packageNames_q) {
+			pn .append(t.toString());
+			pn .append( '.');
+		}
+		packageName = pn.toString();
+		return packageName;
+	}
+	
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		System.out.println("Module print_osi");
