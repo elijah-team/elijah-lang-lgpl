@@ -1,8 +1,11 @@
-// Decompiled by Jad v1.5.8e. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.geocities.com/kpdus/jad.html
-// Decompiler options: packimports(3) 
-// Source File Name:   TabbedOutputStream.java
-
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ *
+ * The contents of this library are released under the LGPL licence v3,
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ *
+ */
 package tripleo.elijah.util;
 
 import java.io.*;
@@ -19,7 +22,7 @@ public class TabbedOutputStream
 		throws IOException
 	{
 		for(int i = 0; i < tabwidth; i++)
-			myStream.write(9);
+			myStream.write('\t');
 
 	}
 
@@ -37,8 +40,12 @@ public class TabbedOutputStream
 	public void put_string_ln(String s)
 		throws IOException
 	{
+		if(!is_connected())
+			throw new InvalidObjectException("is_connected assertion failed");
+		
 		myStream.write(s);
-		myStream.write(10);
+		myStream.write('\n');
+		put_newline();
 	}
 
 	public void put_newline()
@@ -51,18 +58,17 @@ public class TabbedOutputStream
 		throws InvalidObjectException, IOException
 	{
 		if(!is_connected())
-		{
 			throw new InvalidObjectException("is_connected assertion failed");
-		} else
-		{
-			myStream.write(s);
-			return;
-		}
+		
+		myStream.write(s);
 	}
 
 	public void quote_string(String s)
 		throws IOException
 	{
+		if(!is_connected())
+			throw new InvalidObjectException("is_connected assertion failed");
+		
 		myStream.write(34);
 		myStream.write(s);
 		myStream.write(34);
@@ -71,14 +77,11 @@ public class TabbedOutputStream
 	public void close()
 		throws IOException
 	{
-		if(myStream != null)
-		{
-			myStream.close();
-			myStream = null;
-		} else
-		{
-			System.out.println("closing twice");
-		}
+		if(!is_connected())
+			throw new InvalidObjectException("is_connected assertion failed; closinf twice");
+		
+		myStream.close();
+		myStream = null;
 	}
 
 	public void incr_tabs()
@@ -100,7 +103,7 @@ public class TabbedOutputStream
 		{
 			for(; i < 10; i++)
 			{
-				tos.put_string_ln((new Integer(i)).toString());
+				tos.put_string_ln((Integer.valueOf(i)).toString());
 				tos.incr_tabs();
 			}
 
