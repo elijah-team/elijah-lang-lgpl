@@ -52,19 +52,19 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 	@Override
 	public void set(ExpressionType aIncrement) {
 		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException();
 	}
 
 	@Override
 	public IExpression getLeft() {
-		// TODO Auto-generated method stub
-		return target;
+		// TODO fix this
+		return /* target */null;
 	}
 
 	@Override
 	public void setLeft(IExpression iexpression) {
-		// TODO Auto-generated method stub
-		target = iexpression;
+		// TODO fix this
+//		target = iexpression;
 	}
 
 	@Override
@@ -75,14 +75,14 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 
 	@Override
 	public IExpression getRight() {
-		// TODO Auto-generated method stub
-		return args;
+		// TODO fix this
+		return /* args */null;
 	}
 
 	@Override
 	public void setRight(IExpression iexpression) {
-		// TODO Auto-generated method stub
-		args = iexpression;
+		// TODO fix this
+//		args = iexpression;
 	}
 
 	@Override
