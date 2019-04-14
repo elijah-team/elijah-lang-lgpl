@@ -83,7 +83,7 @@ IExpression frompart;
 
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
-		// TODO Auto-generated method stub
+		// TODO this is not implementeed
 		NotImplementedException.raise();
 	}
 
@@ -125,7 +125,7 @@ IExpression frompart;
 		@Override
 		public void statementWrapper(IExpression aExpr) {
 			add(new StatementWrapper(aExpr));
-			throw new NotImplementedException(); // TODO
+//			throw new NotImplementedException(); // TODO
 		}
 	}
 }
