@@ -36,16 +36,16 @@ public PreprocessorLexer(InputBuffer ib) {
 public PreprocessorLexer(LexerSharedInputState state) {
 	super(state);
 	literals = new Hashtable();
-	literals.put(new ANTLRHashString("catch", this), new Integer(25));
-	literals.put(new ANTLRHashString("exception", this), new Integer(24));
-	literals.put(new ANTLRHashString("class", this), new Integer(7));
-	literals.put(new ANTLRHashString("public", this), new Integer(17));
-	literals.put(new ANTLRHashString("tokens", this), new Integer(4));
-	literals.put(new ANTLRHashString("returns", this), new Integer(20));
-	literals.put(new ANTLRHashString("private", this), new Integer(16));
-	literals.put(new ANTLRHashString("protected", this), new Integer(15));
-	literals.put(new ANTLRHashString("throws", this), new Integer(22));
-	literals.put(new ANTLRHashString("extends", this), new Integer(9));
+	literals.put(new ANTLRHashString("catch", this), Integer.valueOf(25));
+	literals.put(new ANTLRHashString("exception", this), Integer.valueOf(24));
+	literals.put(new ANTLRHashString("class", this), Integer.valueOf(7));
+	literals.put(new ANTLRHashString("public", this), Integer.valueOf(17));
+	literals.put(new ANTLRHashString("tokens", this), Integer.valueOf(4));
+	literals.put(new ANTLRHashString("returns", this), Integer.valueOf(20));
+	literals.put(new ANTLRHashString("private", this), Integer.valueOf(16));
+	literals.put(new ANTLRHashString("protected", this), Integer.valueOf(15));
+	literals.put(new ANTLRHashString("throws", this), Integer.valueOf(22));
+	literals.put(new ANTLRHashString("extends", this), Integer.valueOf(9));
 caseSensitiveLiterals = true;
 setCaseSensitive(true);
 }
