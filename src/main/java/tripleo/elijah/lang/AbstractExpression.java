@@ -16,13 +16,9 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.util.TabbedOutputStream;
-
 import java.io.IOException;
 
-// Referenced classes of package pak:
-//			IExpression, ScopeElement
-
-public class AbstractExpression implements IExpression, ScopeElement {
+public abstract class AbstractExpression implements IExpression, ScopeElement {
 
 	public AbstractExpression() {
 		left  = null;
@@ -80,3 +76,7 @@ public class AbstractExpression implements IExpression, ScopeElement {
 		type=aIncrement;
 	}
 }
+
+//
+//
+//
