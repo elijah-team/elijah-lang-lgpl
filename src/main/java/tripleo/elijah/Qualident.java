@@ -50,7 +50,7 @@ public class Qualident  implements IExpression {
 	
 	@Override
 	public void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException {
-		NotImplementedException.raise();
+		tabbedoutputstream.put_string_ln(String.format("Qualident (%s)", toString()));
 	}
 	
 	@Override
