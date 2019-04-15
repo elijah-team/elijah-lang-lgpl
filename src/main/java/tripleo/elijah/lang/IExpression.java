@@ -31,7 +31,7 @@ public interface IExpression {
 
 	void setLeft(IExpression iexpression);
 
-	String repr_();
+	@Deprecated String repr_();
 
 	IExpression UNASSIGNED = new AbstractBinaryExpression() {
 	};
