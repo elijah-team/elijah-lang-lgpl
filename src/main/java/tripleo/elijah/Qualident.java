@@ -60,21 +60,22 @@ public class Qualident  implements IExpression {
 	
 	@Override
 	public void set(ExpressionType aIncrement) {
-	
+		throw new IllegalArgumentException(); // TODO is this right?
 	}
 	
 	@Override
 	public IExpression getLeft() {
-		return null;
+		return this;
 	}
 	
+	/** Not sure what this should do */
 	@Override
 	public void setLeft(IExpression iexpression) {
-	
+		throw new IllegalArgumentException(); // TODO is this right?
 	}
 	
 	@Override
 	public String repr_() {
-		return null;
+		return String.format("Qualident (%s)", toString());
 	}
 }
