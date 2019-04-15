@@ -123,7 +123,11 @@ public class JavaCodeGen implements ICodeGen {
 				System.out.print(String.format("%s vv%s;", theType, ii.name));
 
 			}
-		else {
+		else if (element instanceof ProcedureCallExpression) {
+			ProcedureCallExpression pce = (ProcedureCallExpression) element;
+			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.args));
+			
+		} else {
 			if (elementDone(element)) {
 				throw new NotImplementedException();
 			} else {

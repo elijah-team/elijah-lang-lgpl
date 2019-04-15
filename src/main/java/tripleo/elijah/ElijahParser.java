@@ -3223,6 +3223,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 								vr.procCallPart();
 						procCallEx(pce1);
 						if (inputState.guessing == 0) {
+							pce1.setLeft(rr);
 							vr.addProcCallPart(pce1);
 						}
 						rr=pce1;

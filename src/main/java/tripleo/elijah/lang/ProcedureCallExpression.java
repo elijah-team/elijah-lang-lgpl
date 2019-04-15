@@ -19,17 +19,20 @@ import tripleo.elijah.util.TabbedOutputStream;
 //			ParserClosure, ExpressionList
 
 public class ProcedureCallExpression implements StatementItem, FunctionItem, IBinaryExpression {
-
+	
+	private IExpression _left;
+	
 	public void identifier(Qualident xyz) {
-		target=xyz;
+//		target=xyz;
+		setLeft(xyz);
 	}
 
 	public ExpressionList exprList() {
 		return args;
 	}
 	
-	private Qualident target;
-	private ExpressionList args=new ExpressionList();
+//	public Qualident target;
+	public ExpressionList args=new ExpressionList();
 	
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
@@ -38,7 +41,8 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 		tos.put_string_ln("ProcedureCall {");
 		tos.put_string("name = ");
 //		target.print_osi(tos);
-		tos.put_string(target.toString());
+		getLeft().print_osi(tos);
+//		tos.put_string(target.toString());
 		tos.put_string("args = ");
 		args.print_osi(tos);
 		tos.dec_tabs();
@@ -66,19 +70,20 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 	@Override
 	public IExpression getLeft() {
 		// TODO fix this
-		return /* target */null;
+		return _left;
 	}
 
 	@Override
 	public void setLeft(IExpression iexpression) {
 		// TODO fix this
 //		target = iexpression;
+		_left = iexpression;
 	}
 
 	@Override
 	public String repr_() {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO garbage method
+		return String.format("%s %s", getLeft(), getRight());
 	}
 
 	@Override
