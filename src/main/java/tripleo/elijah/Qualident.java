@@ -12,16 +12,21 @@
  */
 package tripleo.elijah;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import antlr.Token;
+import tripleo.elijah.lang.ExpressionType;
+import tripleo.elijah.lang.IExpression;
+import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
 
 /**
  * @author SBUSER
  *
  */
-public class Qualident {
+public class Qualident  implements IExpression {
 
 	public void append(Token r1) {
 		parts.add(r1);		
@@ -41,5 +46,35 @@ public class Qualident {
 		String s = sb.toString();
 		String substring = s.substring(0, s.length() - 1);
 		return substring;
+	}
+	
+	@Override
+	public void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException {
+		NotImplementedException.raise();
+	}
+	
+	@Override
+	public ExpressionType getType() {
+		return ExpressionType.QUALIDENT;
+	}
+	
+	@Override
+	public void set(ExpressionType aIncrement) {
+	
+	}
+	
+	@Override
+	public IExpression getLeft() {
+		return null;
+	}
+	
+	@Override
+	public void setLeft(IExpression iexpression) {
+	
+	}
+	
+	@Override
+	public String repr_() {
+		return null;
 	}
 }
