@@ -14,9 +14,9 @@ public class JavaCodeGen implements ICodeGen {
 	private List<OS_Element> finished = new ArrayList<OS_Element>();;
 
 	public void addClass(ClassStatement klass) {
-		String pn = ((OS_Module)klass.parent).packageName();
-		if (pn != null)
-			System.out.print("package " + pn + ";");
+//		String pn = ((OS_Module)klass.parent).packageName();
+//		if (pn != null)
+//			System.out.print("package " + pn + ";");
 		System.out.print("class " + klass.clsName + "{\n");
 		if (elementDone(klass))
 			try {
@@ -120,7 +120,7 @@ public class JavaCodeGen implements ICodeGen {
 				} else{
 					theType = ii.typeName().getName();
 				}
-				System.out.print(String.format("%s vv%s;", theType, ii.name));
+				System.out.println(String.format("%s vv%s;", theType, ii.name));
 
 			}
 		else if (element instanceof ProcedureCallExpression) {
