@@ -72,7 +72,7 @@ public class Compilation {
 	}
 
 	public static void doFile(File f) throws Exception {
-		var EXTENSION = ".elijah";
+		final String EXTENSION = ".elijah";
 		
 		if (f.isDirectory()) {
 			String files[] = f.list();
@@ -81,8 +81,9 @@ public class Compilation {
 
 		} else {
 			final String file_name = f.getName();
-			if (file_name.length() > EXTENSION.length()
-					&& file_name.substring(file_name.length() - EXTENSION.length())
+			int fnl = file_name.length();
+			if (fnl > EXTENSION.length()
+					&& file_name.substring(fnl - EXTENSION.length())
 							.equals(EXTENSION)) {
 				System.out.println((new StringBuilder("   ")).append(
 						f.getAbsolutePath()).toString());
