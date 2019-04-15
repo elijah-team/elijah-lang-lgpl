@@ -25,20 +25,20 @@ public class ImportStatement implements ModuleItem {
 		parent = aParent;
 		parent.add(this);
 		//
-		importList=new IdentList();
+		importList=new QualidentList();
 	}
 
 	public void importRoot(Qualident xyz) {
 		root = xyz;
 	}
 
-	public IdentList importList() {
+	public QualidentList importList() {
 		//assert importList==null; // TODO??
 		return importList;
 	}
 
 	private Qualident root;
-	private IdentList importList;
+	private QualidentList importList;
 
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {

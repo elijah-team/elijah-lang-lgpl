@@ -1816,7 +1816,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				}
 			}
 			match(LITERAL_import);
-			identList(pc.importList());
+			qualidentList(pc.importList());
 		} finally { // debugging
 			fireExitRule(5, 0);
 		}
