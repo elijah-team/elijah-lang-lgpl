@@ -19,7 +19,7 @@ public abstract class AbstractTypeName implements TypeName {
 	@Override
 	public boolean isNull() {
 		return !pr_constant && !pr_reference && !pr_out && !pr_in
-				&& pr_name == "";
+				&& (pr_name == null);
 	}
 
 	@Override
@@ -71,9 +71,7 @@ public abstract class AbstractTypeName implements TypeName {
 	public void setName(String s) {
 		pr_name = s;
 	}
-
-	private TypeModifiers tm;
-
+	
 	@Override
 	public void type(TypeModifiers atm) {
 tm=atm;		
@@ -82,15 +80,13 @@ tm=atm;
 	public void set(int aType) {
 		type = aType;
 	}
-
+	
+	private TypeModifiers tm;
+	
 	protected boolean pr_constant;
-
 	protected boolean pr_reference;
-
 	protected boolean pr_out;
-
 	protected boolean pr_in;
-
 	protected String pr_name;
 
 	int type;
