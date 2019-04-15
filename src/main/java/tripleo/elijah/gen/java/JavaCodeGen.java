@@ -101,9 +101,9 @@ public class JavaCodeGen implements ICodeGen {
 				FunctionDef fd = (FunctionDef) element;
 				System.out.print("void " + fd.funName + "(){\n");
 				((FunctionDef) element).visit(this);
-				System.out.print("}\n\n");
+				System.out.print("\n}\n\n");
 			} else if (element instanceof ClassStatement) {
-				((ClassStatement) element).visit(this);
+				((ClassStatement) element).visitGen(this);
 			}
 		}
 	}

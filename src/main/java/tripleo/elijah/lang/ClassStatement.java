@@ -98,17 +98,17 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 		return new AbstractStatementClosure(this);
 	}
 
-	public IExpression statementWrapper() {
-		IExpression R = new ExpressionWrapper();
-		mExprs.add(R);
-		return R;
-	}
+//	public IExpression statementWrapper() {
+//		IExpression R = new ExpressionWrapper();
+//		mExprs.add(R);
+//		return R;
+//	}
 
 	@Override
 	public void statementWrapper(IExpression aExpr) {
 		// TODO Auto-generated method stub
-		throw new NotImplementedException();
-		
+		mExprs.add(aExpr);
+//		throw new NotImplementedException();
 	}
 
 	public String clsName;
@@ -134,9 +134,9 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 //		gen.addClass(this);
 //	}
 
-	public void visit(JavaCodeGen javaCodeGen) {
-		// TODO remove remove
-		javaCodeGen.addClass(this);
-		
-	}
+//	public void visit(JavaCodeGen javaCodeGen) {
+//		// TODO remove remove
+//		javaCodeGen.addClass(this);
+//
+//	}
 }
