@@ -10,7 +10,6 @@ package tripleo.elijah.lang;
 
 import java.io.IOException;
 
-import tripleo.elijah.Qualident;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;

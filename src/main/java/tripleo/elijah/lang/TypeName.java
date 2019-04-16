@@ -8,8 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.Qualident;
-
 // Referenced classes of package pak2:
 //			TypeNameList
 

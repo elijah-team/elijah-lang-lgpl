@@ -11,8 +11,6 @@ package tripleo.elijah.lang;
 import java.util.ArrayList;
 import java.util.List;
 
-import tripleo.elijah.Qualident;
-
 public class QualidentList {
 
 	public QualidentList() {

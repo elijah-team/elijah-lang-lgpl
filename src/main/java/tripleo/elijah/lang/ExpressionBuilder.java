@@ -17,7 +17,6 @@ package tripleo.elijah.lang;
 import java.util.List;
 
 import antlr.Token;
-import tripleo.elijah.Qualident;
 import tripleo.elijah.gen.nodes.ExpressionOperators;
 import tripleo.elijah.gen.nodes.LocalAgnTmpNode;
 import tripleo.elijah.gen.nodes.TmpSSACtxNode;

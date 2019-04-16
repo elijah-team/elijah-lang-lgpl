@@ -9,7 +9,6 @@
 
 package tripleo.elijah.lang;
 
-import tripleo.elijah.Qualident;
 import tripleo.elijah.util.NotImplementedException;
 
 public class FunctionParameter extends AbstractTypeName implements TypeName {

@@ -12,8 +12,6 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.Qualident;
-
 /**
  * @author SBUSER
  *

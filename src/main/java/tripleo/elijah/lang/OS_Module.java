@@ -20,7 +20,6 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
-import tripleo.elijah.Qualident;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
 
