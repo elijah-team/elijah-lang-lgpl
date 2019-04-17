@@ -51,8 +51,7 @@ public class NumericExpression implements IExpression {
 
 	@Override
 	public String repr_() {
-		throw new NotImplementedException(); // TODO
-//		return null;
+		return toString();
 	}
 
 	@Override
@@ -64,5 +63,9 @@ public class NumericExpression implements IExpression {
 	public void set(ExpressionType aIncrement) {
 		throw new NotImplementedException(); // TODO
 	}
-
+	
+	@Override
+	public String toString() {
+		return "NumericExpression ("+carrier+")";
+	}
 }
