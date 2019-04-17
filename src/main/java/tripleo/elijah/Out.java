@@ -28,7 +28,7 @@ public class Out {
 		println("** FinishModule");
 //		tos = null;
 		try {
-			final String filename = String.format("oscc-%d-%d-%d.out",
+			final String filename = String.format("eljc-%d-%d-%d.out",
 					Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
 					Calendar.getInstance().get(Calendar.MINUTE),
 					Calendar.getInstance().get(Calendar.SECOND));
