@@ -117,4 +117,8 @@ public class TabbedOutputStream
 
 	int tabwidth;
 	Writer myStream;
+	
+	public void flush() throws IOException {
+		myStream.flush();
+	}
 }
