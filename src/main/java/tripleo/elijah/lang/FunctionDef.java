@@ -34,6 +34,17 @@ public class FunctionDef implements ClassItem {
 		public void print_osi(TabbedOutputStream aTos) throws IOException {
 			// TODO Auto-generated method stub
 			int y=2;
+			if (expr instanceof AbstractBinaryExpression) {
+				AbstractBinaryExpression abe = (AbstractBinaryExpression)expr;
+				if (abe.getType() == ExpressionType.ASSIGNMENT) {
+					aTos.put_string_ln("Assignment {");
+					aTos.incr_tabs();
+					aTos.put_string_ln(abe.getLeft().toString());
+					aTos.put_string_ln(abe.getRight().toString());
+					aTos.dec_tabs();
+					aTos.put_string_ln("}");
+				}
+			}
 		}
 
 		@Override
@@ -108,7 +119,7 @@ public class FunctionDef implements ClassItem {
 			item.print_osi(tos);
 		}
 		tos.dec_tabs();
-		tos.put_string_ln((("} // class ")) + (funName));
+		tos.put_string_ln((String.format("} // function %s",  funName)));
 	}
 
 	public Scope scope() {
