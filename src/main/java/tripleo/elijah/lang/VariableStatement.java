@@ -70,6 +70,7 @@ public class VariableStatement {
 			tos.put_string_ln("} // type = ...");
 		}
 */
+		tos.dec_tabs();
 		tos.put_string_ln("} // VariableDeclaration");
 	}
 

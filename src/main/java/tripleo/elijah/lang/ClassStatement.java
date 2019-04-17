@@ -85,8 +85,8 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 			item.print_osi(tos);
 		}
 		tos.dec_tabs();
-		tos.put_string_ln((new StringBuilder("} // class ")).append(clsName)
-				.toString());
+		tos.put_string_ln(String.format("} // class %s ", clsName));
+		tos.flush();
 	}
 
 	public void setName(String aText) {

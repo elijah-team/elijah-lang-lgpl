@@ -99,7 +99,7 @@ public class JavaCodeGen implements ICodeGen {
 		} else {
 			if (element instanceof FunctionDef) {
 				FunctionDef fd = (FunctionDef) element;
-				System.out.print("void " + fd.funName + "(){\n");
+				System.out.print("void " + fd.funName + "(){\n");  // TODO: _returnType and mFal
 				((FunctionDef) element).visit(this);
 				System.out.print("\n}\n\n");
 			} else if (element instanceof ClassStatement) {
@@ -133,7 +133,7 @@ public class JavaCodeGen implements ICodeGen {
 			} else {
 				// element.visit(this);
 			}
-			System.out.print(element);
+			System.out.println(element);
 
 		}
 	}

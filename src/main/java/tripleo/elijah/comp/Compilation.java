@@ -97,7 +97,7 @@ public class Compilation {
 			ElijahLexer lexer = new ElijahLexer(s);
 			lexer.setFilename(f);
 			ElijahParser parser = new ElijahParser(lexer);
-			parser.out = new Out(fn);
+			parser.out = new Out(f);
 			parser.setFilename(f);
 			parser.program();
 		} catch (ANTLRException e) {

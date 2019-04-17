@@ -19,43 +19,7 @@ import antlr.TokenStream;
 import antlr.TokenStreamException;
 import antlr.collections.impl.BitSet;
 // $ANTLR 2.7.1: "osc.g" -> "OScriptParser.java"$
-import tripleo.elijah.lang.BlockStatement;
-import tripleo.elijah.lang.CharLitExpression;
-import tripleo.elijah.lang.ClassInheritance;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.ExpressionBuilder;
-import tripleo.elijah.lang.ExpressionList;
-import tripleo.elijah.lang.ExpressionType;
-import tripleo.elijah.lang.FormalArgList;
-import tripleo.elijah.lang.FormalArgListItem;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.IBinaryExpression;
-import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.lang.IdentExpression;
-import tripleo.elijah.lang.IdentList;
-import tripleo.elijah.lang.IfExpression;
-import tripleo.elijah.lang.ImportStatement;
-import tripleo.elijah.lang.ListExpression;
-import tripleo.elijah.lang.Loop;
-import tripleo.elijah.lang.LoopTypes;
-import tripleo.elijah.lang.NamespaceStatement;
-import tripleo.elijah.lang.NumericExpression;
-import tripleo.elijah.lang.ParserClosure;
-import tripleo.elijah.lang.ProcedureCallExpression;
-import tripleo.elijah.lang.QualidentList;
-import tripleo.elijah.lang.RegularTypeName;
-import tripleo.elijah.lang.Scope;
-import tripleo.elijah.lang.StatementClosure;
-import tripleo.elijah.lang.StringExpression;
-import tripleo.elijah.lang.SubExpression;
-import tripleo.elijah.lang.TypeAliasExpression;
-import tripleo.elijah.lang.TypeModifiers;
-import tripleo.elijah.lang.TypeName;
-import tripleo.elijah.lang.TypeNameExpression;
-import tripleo.elijah.lang.TypeNameList;
-import tripleo.elijah.lang.VariableReference;
-import tripleo.elijah.lang.VariableSequence;
-import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.lang.*;
 
 public class ElijahParser extends antlr.debug.LLkDebuggingParser implements ElijahTokenTypes {
 	private static final String _ruleNames[] = { "program", "constantValue", "qualident", "programStatement",

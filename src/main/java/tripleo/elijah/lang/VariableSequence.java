@@ -42,7 +42,7 @@ public class VariableSequence implements BlockMember, StatementItem, FunctionIte
 
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
-		NotImplementedException.raise();
+//		NotImplementedException.raise();
 		//
 		aTos.incr_tabs();
 		aTos.put_string_ln("var");
