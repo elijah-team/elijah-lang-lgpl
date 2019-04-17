@@ -21,8 +21,9 @@ package tripleo.elijah.lang;
 
 public class ParserClosure {
 
-	public ParserClosure() {
+	public ParserClosure(String fn) {
 		module = new OS_Module();
+		module.setFileName(fn);
 	}
 
 	public ClassStatement classStatement() {

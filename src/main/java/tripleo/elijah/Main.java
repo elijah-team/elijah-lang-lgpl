@@ -56,7 +56,7 @@ public class Main {
 			ElijahLexer lexer = new ElijahLexer(s);
 			lexer.setFilename(f);
 			ElijahParser parser = new ElijahParser(lexer);
-			parser.out = new Out();
+			parser.out = new Out(f);  // TODO can we grab this f from parser? DRY...
 			parser.setFilename(f);
 			parser.program();
 		} catch (ANTLRException e) {

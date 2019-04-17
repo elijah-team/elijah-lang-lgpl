@@ -29,7 +29,9 @@ import java.util.List;
 import java.util.Stack;
 
 public class OS_Module implements OS_Element {
-
+	
+	private String _fileName;
+	
 	public void add(ModuleItem aStatement) {
 		items.add(aStatement);
 	}
@@ -93,11 +95,15 @@ public class OS_Module implements OS_Element {
 	public void pushPackageName(Qualident xyz) {
 		packageNames_q.push(xyz);
 	}
+	
+	public String getFileName() {
+		return _fileName;
+	}
+	
+	public void setFileName(String fileName) {
+		this._fileName = fileName;
+	}
 
-//	public void visitGen(JavaCodeGen visit) {
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-//	}
 }
 
 //

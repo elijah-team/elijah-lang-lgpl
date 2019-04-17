@@ -11,13 +11,18 @@ package tripleo.elijah;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.lang.ParserClosure;
 import tripleo.elijah.util.TabbedOutputStream;
 
 public class Out {
-
+	
+	public Out(String fn) {
+		pc = new ParserClosure(fn);
+	}
+	
 	public void FinishModule() {
 		TabbedOutputStream tos;
 		println("** FinishModule");
