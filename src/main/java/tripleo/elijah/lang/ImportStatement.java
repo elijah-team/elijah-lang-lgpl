@@ -18,26 +18,33 @@ import tripleo.elijah.util.TabbedOutputStream;
  * 
  */
 public class ImportStatement implements ModuleItem {
-	final OS_Module parent;
+	final OS_Element parent;
+	/** Used in from syntax
+	 * @category from
+	 */
+	private Qualident root;
+	private QualidentList importList;
 
-	public ImportStatement(OS_Module aParent) {
+	public ImportStatement(OS_Element aParent) {
 		parent = aParent;
-		parent.add(this);
+		if (parent instanceof OS_Module)
+			((OS_Module) parent).add(this);
+		else
+			throw new NotImplementedException();
 		//
 		importList=new QualidentList();
 	}
 
+	/** Used in from syntax
+	 * @category from
+	 */
 	public void importRoot(Qualident xyz) {
 		root = xyz;
 	}
 
 	public QualidentList importList() {
-		//assert importList==null; // TODO??
 		return importList;
 	}
-
-	private Qualident root;
-	private QualidentList importList;
 
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
