@@ -28,7 +28,12 @@ public class Out {
 		println("** FinishModule");
 //		tos = null;
 		try {
-			tos = new TabbedOutputStream(new FileOutputStream("oscc.out"));
+			final String filename = String.format("oscc-%d-%d-%d.out",
+					Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+					Calendar.getInstance().get(Calendar.MINUTE),
+					Calendar.getInstance().get(Calendar.SECOND));
+			tos = new TabbedOutputStream(new FileOutputStream(filename));
+			tos.put_string_ln(pc.module.getFileName());
 			pc.module.print_osi(tos);
 			pc.module.finish(tos);
 			//
@@ -72,7 +77,7 @@ public class Out {
 //		System.out.println(')');
 //	}
 
-	private ParserClosure pc=new ParserClosure();
+	private ParserClosure pc;
 
 	public ParserClosure closure() {
 		return pc;
