@@ -90,7 +90,7 @@ public class OS_Module implements OS_Element {
 //	}
 //	
 //	Stack<String> packageNames = new Stack<String>();
-	Stack<Qualident> packageNames_q = new Stack<Qualident>();
+	private Stack<Qualident> packageNames_q = new Stack<Qualident>();
 
 	public void pushPackageName(Qualident xyz) {
 		packageNames_q.push(xyz);
