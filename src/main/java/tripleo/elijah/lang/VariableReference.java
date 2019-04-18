@@ -20,7 +20,7 @@ import tripleo.elijah.util.TabbedOutputStream;
 // Referenced classes of package pak:
 //			AbstractExpression, ProcedureCall, IExpression
 
-public class VariableReference extends AbstractBinaryExpression implements OS_Expression {
+public class VariableReference extends AbstractExpression implements OS_Expression {
 
 	/** Called from ElijahParser.variableReference.  Will `setMain' later */
 	public VariableReference() {
