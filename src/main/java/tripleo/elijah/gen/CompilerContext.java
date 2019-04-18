@@ -11,7 +11,7 @@ public class CompilerContext {
 	}
 	public String module() {
 		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+//		NotImplementedException.raise();
 		return _module;
 	}
 

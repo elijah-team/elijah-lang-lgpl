@@ -44,7 +44,7 @@ public class GenBuffer {
 
 	public Buffer moduleBufImpl(String module) {
 		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+//		NotImplementedException.raise();
 		Buffer buf = reg_bufs.getOrDefault(module, new FileBackedBuffer(module+".c"));
 		return buf;
 	}
