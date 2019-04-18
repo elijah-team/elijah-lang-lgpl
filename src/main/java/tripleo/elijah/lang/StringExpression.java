@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import tripleo.elijah.util.TabbedOutputStream;
 
-public class StringExpression extends AbstractBinaryExpression {
+public class StringExpression extends AbstractExpression {
 
 public StringExpression(String g) {
 set(g);
@@ -26,24 +26,13 @@ set(g);
 
 	@Override
 	public  IExpression getLeft() {
-		assert false;
-		return null;
+//		assert false;
+		return this;
 	}
 
 	@Override
 	public void setLeft(IExpression iexpression) {
-		assert false;
-	}
-
-	@Override
-	public  IExpression getRight() {
-		assert false;
-		return null;
-	}
-
-	@Override
-	public  void setRight(IExpression iexpression){
-		assert false;
+		throw new IllegalArgumentException("Should use set()");
 	}
 
 	@Override
@@ -52,3 +41,7 @@ set(g);
 	public void set(String g) {repr_ = g;}
 	String repr_;
 }
+
+//
+//
+//
