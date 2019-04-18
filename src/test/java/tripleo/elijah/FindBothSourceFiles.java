@@ -223,7 +223,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		boolean is_default = node.left.is_underscore() ||
 				(node.left.is_var_ref() && node.left.ref_==null);
 		if (is_simple ){
-			buf.append("case "+node.left.genText);
+			buf.append("case "+node.left.genText(cctx));
 			buf.append_s(": ");	
 		}
 		if (is_default) {
@@ -282,26 +282,21 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	private void GenReturnAgnSimpleInt(CompilerContext cctx, ReturnAgnSimpleIntNode rasin, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		
+		buf.append("vsr = ");
+		buf.append(((Integer)rasin.getValue()).toString());
+		buf.append_nl(")");
 	}
 
-	private void BeginCaseStatement(CompilerContext cctx, CaseHdrNode caseHdrNode, GenBuffer gbn) {
-		// TODO Auto-generated method stub
-		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		
-	}
-
-	private void BeginSwitchStatement(CompilerContext cctx, SwitchNode node, GenBuffer gbn) {
-		// TODO Auto-generated method stub
+	private void BeginCaseStatement(CompilerContext cctx, CaseHdrNode node, GenBuffer gbn) {
 		Buffer buf = gbn.moduleBufHdr(cctx.module());
-		boolean is_simple = node.expr.is_simple();
+		boolean is_simple = node.getExpr().is_simple();
 		buf.append_s("switch (");
 		if (is_simple) {
-			buf.append_nl_i(") {");
+			buf.append(node.getExpr().genText(cctx));
 		} else {
-			//////
+			// TODO implement complex part
 		}
-		
+		buf.append_nl_i(") {");
 	}
 
 	public class Transform1 implements Transform {
@@ -317,7 +312,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 
 	private void BeginMeth(CompilerContext cctx, MethHdrNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		Buffer buf=gbn.moduleBufImpl(cctx.module());
+//		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		BufferSequenceBuilder sb = new BufferSequenceBuilder(4).
 				named("type").named("name").named("args").semieol();
 		sb.set("type", node.returnType.genType, XX.SPACE);
