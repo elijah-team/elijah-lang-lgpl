@@ -19,29 +19,15 @@ public class VariableStatement {
 
 	private final VariableSequence parent;
 	public String name;
-
-	IExpression initialValue = IExpression.UNASSIGNED;
-	TypeModifiers type;
+	
+	private IExpression initialValue = IExpression.UNASSIGNED;
+	private TypeModifiers type;
 	private TypeName typeName = new VariableTypeName();
 
 	public VariableStatement(VariableSequence aSequence) {
 		parent = aSequence;
 	}
 
-//	public String getTypeString() {
-//		return typeRef.getTypeString();
-//	}
-
-//	public void setInitialValue(IExpression e) {
-//		initialValue = e;
-//	}
-
-//	public void setTypeObject(TypeRef t) {
-//		typeRef = t;
-//	}
-
-//	TypeRef typeRef;
-	
 	public String getName() {
 		return name;
 	}
