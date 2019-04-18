@@ -17,5 +17,8 @@ public class ReturnAgnSimpleIntNode {
 		// TODO Auto-generated constructor stub
 		this.integer=integer;
 	}
-
+	
+	public int getValue() {
+		return integer.getValue();
+	}
 }
