@@ -37,7 +37,7 @@ public class GenBuffer {
 
 	public Buffer moduleBufHdr(String module) {
 		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+//		NotImplementedException.raise();
 		Buffer buf = hdr_bufs.getOrDefault(module, new FileBackedBuffer(module+".h"));
 		return buf;
 	}
