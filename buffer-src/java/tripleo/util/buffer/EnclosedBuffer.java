@@ -26,9 +26,15 @@ public class EnclosedBuffer extends DefaultBuffer {
 		_right=right.getText();
 	}
 
-	public void setPayload(BufferSequenceBuilder sb3) {
+	public void setPayload(BufferSequenceBuilder sequence) {
 		// TODO Auto-generated method stub
-		_payload = sb3.build(); // TODO lazy or not?
+		_payload = sequence.build(); // TODO lazy or not?
 	}
-
+	
+	@Override
+	public String getText() {
+		// TODO Auto-generated method stub
+		return //super.toString();
+			String.format("%s%s%s", _left, _payload, _right);
+	}
 }
