@@ -17,9 +17,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
-// Referenced classes of package pak:
-//			AbstractExpression, ProcedureCall, IExpression
-
 public class VariableReference extends AbstractExpression implements OS_Expression {
 
 	String main;
