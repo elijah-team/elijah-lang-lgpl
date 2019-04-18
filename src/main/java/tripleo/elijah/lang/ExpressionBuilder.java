@@ -76,9 +76,15 @@ public class ExpressionBuilder {
 		return pce;
 	}
 
-	public static IExpression binex(VariableReference varref, ExpressionOperators opMult, TmpSSACtxNode tccssan2) { // todo wrong again
+	public static IExpression binex(VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
-		return null;
+		ExpressionType middle1;
+		switch (middle) {
+		case OP_MINUS: middle1 = ExpressionType.SUBTRACTION; break;
+		case OP_MULT:  middle1 = ExpressionType.MULTIPLY; break;
+		default: throw new NotImplementedException();
+		}
+		return new AbstractBinaryExpression(left, middle1, new StringExpression(right.text())); // TODO !!!
 	}
 
 }
