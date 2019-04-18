@@ -22,6 +22,9 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 public class VariableReference extends AbstractExpression implements OS_Expression {
 
+	String main;
+	List<VR_Parts> parts = new ArrayList<VR_Parts>();
+
 	/** Called from ElijahParser.variableReference.  Will `setMain' later */
 	public VariableReference() {
 		//NotImplementedException.raise();
@@ -31,6 +34,14 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		NotImplementedException.raise();
 		setMain(m);
 	}
+
+/*
+	public void addProcCallPart(ProcedureCall p) {
+//		System.out.println("~~ VarRef addProcCallPart");
+		NotImplementedException.raise();
+		parts.add(new VR_ProcCallPart(p));
+	}
+*/
 
 	public void addArrayPart(IExpression p) {
 //		System.out.println("~~ VarRef addArrayPart");
@@ -45,14 +56,6 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		parts.add(new VR_IdentPart(s));
 	}
 
-/*
-	public void addProcCallPart(ProcedureCall p) {
-//		System.out.println("~~ VarRef addProcCallPart");
-		NotImplementedException.raise();
-		parts.add(new VR_ProcCallPart(p));
-	}
-*/
-
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		tos.put_string_ln(
@@ -61,7 +64,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 					.append("\"}")
 					.toString());
 	}
-
+	
 	@Override
 	public String repr_() {
 		return (new StringBuilder("VariableReference (")).append(main).append(
@@ -73,13 +76,23 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		System.out.println(repr_());
 	}
 
+	/**
+	 * * no parts, just an ident '
+	 * * qualident not implemented
+	 * * all parts is dotpart array can be simple too, depending and so can proccall
+	 *
+	 * @return if no parts specified
+	 */
+	@Override
+	public boolean is_simple() {
+		return parts.size() == 0; // TODO
+	}
+
 	@Override
 	public String toString() {
 		return repr_();
 	}
-
-	String main;
-
+	
 	public void addColonIdentPart(String aText) {
 //		StringBuilder ss = new StringBuilder("~~ VarRef addColonIdentPart (");
 //		ss.append(aText);
@@ -89,10 +102,25 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		parts.add(new VR_ColonIdentPart(aText));
 	}
 	
-	List<VR_Parts> parts = new ArrayList<VR_Parts>();
+	public String getName() {
+		if (parts.size() >0) throw new IllegalStateException();
+		return main;
+	}
 	
+	public void addProcCallPart(ProcedureCallExpression pce1) {
+		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
+		parts.add(new VR_ProcCallPart(pce1));
+	}
+
+	public ProcedureCallExpression procCallPart() {
+		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
+		return new ProcedureCallExpression();
+	}
+
 	interface VR_Parts {
-		
+	
 	}
 
 	class VR_ArrayPart implements VR_Parts {
@@ -107,7 +135,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		}
 		
 	}
-
+	
 	class VR_ProcCallPart implements VR_Parts {
 		
 		@NonNull private final ProcedureCallExpression pp;
@@ -127,7 +155,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 
 	class VR_IdentPart implements VR_Parts {
 
-		@NonNull 
+		@NonNull
 		private String s;
 
 		public VR_IdentPart(String s) {
@@ -137,7 +165,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		}
 		
 	}
-	
+
 	class VR_ColonIdentPart implements VR_Parts {
 
 		@NonNull
@@ -149,18 +177,6 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 			this.text=aText;
 		}
 		
-	}
-
-	public void addProcCallPart(ProcedureCallExpression pce1) {
-		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-		parts.add(new VR_ProcCallPart(pce1));
-	}
-
-	public ProcedureCallExpression procCallPart() {
-		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-		return new ProcedureCallExpression();
 	}
 }
 
