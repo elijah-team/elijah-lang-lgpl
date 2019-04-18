@@ -14,7 +14,7 @@
  */
 package tripleo.elijah.lang;
 
-public class OS_Integer extends AbstractBinaryExpression {
+public class OS_Integer extends AbstractExpression {
 
 	private int i;
 
@@ -22,5 +22,8 @@ public class OS_Integer extends AbstractBinaryExpression {
 		// TODO Auto-generated constructor stub
 		this.i = i;
 	}
-
+	
+	public int getValue() {
+		return i;
+	}
 }
