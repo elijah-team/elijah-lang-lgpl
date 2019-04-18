@@ -75,7 +75,7 @@ public class Compilation {
 		final String EXTENSION = ".elijah";
 		
 		if (f.isDirectory()) {
-			String files[] = f.list();
+			String[] files = f.list();
 			for (int i = 0; i < files.length; i++)
 				doFile(new File(f, files[i]));
 

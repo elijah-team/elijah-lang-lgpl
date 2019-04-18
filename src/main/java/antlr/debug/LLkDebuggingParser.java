@@ -13,8 +13,8 @@ public class LLkDebuggingParser extends LLkParser implements DebuggingParser {
 	protected ParserEventSupport parserEventSupport = new ParserEventSupport(this);
 
 	private boolean _notDebugMode = false;
-	protected String ruleNames[];
-	protected String semPredNames[];
+	protected String[] ruleNames;
+	protected String[] semPredNames;
 
 
 	public LLkDebuggingParser(int k_) {

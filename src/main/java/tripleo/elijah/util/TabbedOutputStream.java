@@ -94,7 +94,7 @@ public class TabbedOutputStream
 		tabwidth--;
 	}
 
-	public static void main(String args[])
+	public static void main(String[] args)
 	{
 		TabbedOutputStream tos = new TabbedOutputStream(System.out);
 		int i = 0;

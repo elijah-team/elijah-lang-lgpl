@@ -22,7 +22,7 @@ import antlr.collections.impl.BitSet;
 import tripleo.elijah.lang.*;
 
 public class ElijahParser extends antlr.debug.LLkDebuggingParser implements ElijahTokenTypes {
-	private static final String _ruleNames[] = { "program", "constantValue", "qualident", "programStatement",
+	private static final String[] _ruleNames = {"program", "constantValue", "qualident", "programStatement",
 			"classStatement", "importStatement", "classInheritance", "docstrings", "classScope", "typeName", "scope",
 			"functionDef", "varStmt", "typeAlias", "opfal", "baseStatement", "statement", "identList", "expression",
 			"functionScope", "functionStatement", "block", "formalArgList", "procedureCallExpression", "ifConditional",
@@ -34,7 +34,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			"exclusiveOrExpression", "andExpression", "equalityExpression", "relationalExpression", "shiftExpression",
 			"additiveExpression", "multiplicativeExpression", "qidentExpression", "unaryExpression",
 			"unaryExpressionNotPlusMinus", "postfixExpression_priv", "primitiveElement", "variableReference",
-			"procCallEx2", };
+			"procCallEx2",};
 
 	public static final String[] _tokenNames = { "<0>", "EOF", "<2>", "NULL_TREE_LOOKAHEAD", "PROCEDURE_CALL",
 			"EXPR_LIST", "NUM_FLOAT", "\"indexing\"", "IDENT", "TOK_COLON", "\"package\"", "SEMI", "\"namespace\"",
@@ -50,82 +50,82 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			"LNOT", "CHAR_LITERAL", "NUM_INT", "\"block\"", "\"closure\"", "\"type\"", "\"alias\"", "\"struct\"",
 			"VOCAB", "WS_", "TIMES", "SL_COMMENT", "ML_COMMENT", "TQUOT", "ESC", "HEX_DIGIT", "EXPONENT",
 			"FLOAT_SUFFIX" };
-	private static final long _tokenSet_0_data_[] = { 100765696L, 0L };
+	private static final long[] _tokenSet_0_data_ = {100765696L, 0L};
 	public static final BitSet _tokenSet_0 = new BitSet(_tokenSet_0_data_);
-
-	private static final long _tokenSet_1_data_[] = { 46303767540793600L, 0L };
+	
+	private static final long[] _tokenSet_1_data_ = {46303767540793600L, 0L};
 
 	public static final BitSet _tokenSet_1 = new BitSet(_tokenSet_1_data_);
-
-	private static final long _tokenSet_2_data_[] = { 2251992985772288L, 94425317376L, 0L, 0L };
+	
+	private static final long[] _tokenSet_2_data_ = {2251992985772288L, 94425317376L, 0L, 0L};
 
 	public static final BitSet _tokenSet_2 = new BitSet(_tokenSet_2_data_);
-
-	private static final long _tokenSet_3_data_[] = { 1267771266564352L, 0L };
+	
+	private static final long[] _tokenSet_3_data_ = {1267771266564352L, 0L};
 
 	public static final BitSet _tokenSet_3 = new BitSet(_tokenSet_3_data_);
-
-	private static final long _tokenSet_4_data_[] = { -18998186670658816L, 8525975551L, 0L, 0L };
+	
+	private static final long[] _tokenSet_4_data_ = {-18998186670658816L, 8525975551L, 0L, 0L};
 
 	public static final BitSet _tokenSet_4 = new BitSet(_tokenSet_4_data_);
-
-	private static final long _tokenSet_5_data_[] = { 2251992954315008L, 4231004160L, 0L, 0L };
+	
+	private static final long[] _tokenSet_5_data_ = {2251992954315008L, 4231004160L, 0L, 0L};
 
 	public static final BitSet _tokenSet_5 = new BitSet(_tokenSet_5_data_);
-
-	private static final long _tokenSet_6_data_[] = { -69804703401760000L, 8589934591L, 0L, 0L };
+	
+	private static final long[] _tokenSet_6_data_ = {-69804703401760000L, 8589934591L, 0L, 0L};
 
 	public static final BitSet _tokenSet_6 = new BitSet(_tokenSet_6_data_);
-
-	private static final long _tokenSet_7_data_[] = { 193139310848L, 0L };
+	
+	private static final long[] _tokenSet_7_data_ = {193139310848L, 0L};
 
 	public static final BitSet _tokenSet_7 = new BitSet(_tokenSet_7_data_);
-
-	private static final long _tokenSet_8_data_[] = { 74309398181323008L, 4231004160L, 0L, 0L };
+	
+	private static final long[] _tokenSet_8_data_ = {74309398181323008L, 4231004160L, 0L, 0L};
 
 	public static final BitSet _tokenSet_8 = new BitSet(_tokenSet_8_data_);
-
-	private static final long _tokenSet_9_data_[] = { 2251799814742272L, 4231004160L, 0L, 0L };
+	
+	private static final long[] _tokenSet_9_data_ = {2251799814742272L, 4231004160L, 0L, 0L};
 
 	public static final BitSet _tokenSet_9 = new BitSet(_tokenSet_9_data_);
-
-	private static final long _tokenSet_10_data_[] = { -69805532364135680L, 4294967295L, 0L, 0L };
+	
+	private static final long[] _tokenSet_10_data_ = {-69805532364135680L, 4294967295L, 0L, 0L};
 
 	public static final BitSet _tokenSet_10 = new BitSet(_tokenSet_10_data_);
-
-	private static final long _tokenSet_11_data_[] = { 193139310848L, 4294967296L, 0L, 0L };
+	
+	private static final long[] _tokenSet_11_data_ = {193139310848L, 4294967296L, 0L, 0L};
 
 	public static final BitSet _tokenSet_11 = new BitSet(_tokenSet_11_data_);
-
-	private static final long _tokenSet_12_data_[] = { 46303767540269312L, 0L };
+	
+	private static final long[] _tokenSet_12_data_ = {46303767540269312L, 0L};
 
 	public static final BitSet _tokenSet_12 = new BitSet(_tokenSet_12_data_);
-
-	private static final long _tokenSet_13_data_[] = { -91055780708586752L, 8525975551L, 0L, 0L };
+	
+	private static final long[] _tokenSet_13_data_ = {-91055780708586752L, 8525975551L, 0L, 0L};
 
 	public static final BitSet _tokenSet_13 = new BitSet(_tokenSet_13_data_);
-
-	private static final long _tokenSet_14_data_[] = { -138538496557310L, 17179869183L, 0L, 0L };
+	
+	private static final long[] _tokenSet_14_data_ = {-138538496557310L, 17179869183L, 0L, 0L};
 
 	public static final BitSet _tokenSet_14 = new BitSet(_tokenSet_14_data_);
-
-	private static final long _tokenSet_15_data_[] = { 46303767540285696L, 0L };
+	
+	private static final long[] _tokenSet_15_data_ = {46303767540285696L, 0L};
 
 	public static final BitSet _tokenSet_15 = new BitSet(_tokenSet_15_data_);
-
-	private static final long _tokenSet_16_data_[] = { -73041382199104768L, 8525975551L, 0L, 0L };
+	
+	private static final long[] _tokenSet_16_data_ = {-73041382199104768L, 8525975551L, 0L, 0L};
 
 	public static final BitSet _tokenSet_16 = new BitSet(_tokenSet_16_data_);
-
-	private static final long _tokenSet_17_data_[] = { -137359513889117440L, 8589934591L, 0L, 0L };
+	
+	private static final long[] _tokenSet_17_data_ = {-137359513889117440L, 8589934591L, 0L, 0L};
 
 	public static final BitSet _tokenSet_17 = new BitSet(_tokenSet_17_data_);
-
-	private static final long _tokenSet_18_data_[] = { -18997361936171262L, 17179869183L, 0L, 0L };
+	
+	private static final long[] _tokenSet_18_data_ = {-18997361936171262L, 17179869183L, 0L, 0L};
 
 	public static final BitSet _tokenSet_18 = new BitSet(_tokenSet_18_data_);
-
-	private static final long _tokenSet_19_data_[] = { 2251799814758656L, 4231004160L, 0L, 0L };
+	
+	private static final long[] _tokenSet_19_data_ = {2251799814758656L, 4231004160L, 0L, 0L};
 
 	public static final BitSet _tokenSet_19 = new BitSet(_tokenSet_19_data_);
 
@@ -135,8 +135,8 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 
 	private IExpression expr;
 //	public final static Object null/*fixme*/=null;
-
-	private String _semPredNames[] = {};
+	
+	private String[] _semPredNames = {};
 
 	public ElijahParser(ParserSharedInputState state) {
 		super(state, 2);

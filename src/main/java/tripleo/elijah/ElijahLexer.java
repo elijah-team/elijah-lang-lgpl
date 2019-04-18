@@ -85,8 +85,8 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 		caseSensitiveLiterals = true;
 		setCaseSensitive(true);
 	}
-
-	private static final String _ruleNames[] = { "mVOCAB", "mWS_",
+	
+	private static final String[] _ruleNames = {"mVOCAB", "mWS_",
 			"mTOK_ARROW", "mLPAREN", "mRPAREN", "mLBRACK", "mRBRACK",
 			"mLCURLY", "mRCURLY", "mPLUS", "mMINUS", "mEQUALITY",
 			"mNOT_EQUALS", "mBECOMES", "mGT", "mLT_", "mGTE", "mLTE", "mTIMES",
@@ -97,7 +97,7 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 			"mBXOR_ASSIGN", "mBOR", "mBOR_ASSIGN", "mBAND", "mBAND_ASSIGN",
 			"mSL_COMMENT", "mML_COMMENT", "mCHAR_LITERAL", "mESC", "mTQUOT",
 			"mSTRING_LITERAL", "mHEX_DIGIT", "mIDENT", "mQIDENT", "mNUM_INT",
-			"mEXPONENT", "mFLOAT_SUFFIX", };
+			"mEXPONENT", "mFLOAT_SUFFIX",};
 
 	@Override
 	public Token nextToken() throws TokenStreamException {
@@ -2628,51 +2628,51 @@ public class ElijahLexer extends antlr.debug.DebuggingCharScanner implements
 			fireExitRule(58, _ttype);
 		}
 	}
-
-	private String _semPredNames[] = { " LA(2)!='/' ", "isDecimal", };
-
-	private static final long _tokenSet_0_data_[] = { -4402341478920L, -1L,
-			-1L, -1L, 0L, 0L, 0L, 0L };
+	
+	private String[] _semPredNames = {" LA(2)!='/' ", "isDecimal",};
+	
+	private static final long[] _tokenSet_0_data_ = {-4402341478920L, -1L,
+			-1L, -1L, 0L, 0L, 0L, 0L};
 
 	public static final BitSet _tokenSet_0 = new BitSet(_tokenSet_0_data_);
-
-	private static final long _tokenSet_1_data_[] = { 288019269919178752L, 0L,
-			0L, 0L, 0L };
+	
+	private static final long[] _tokenSet_1_data_ = {288019269919178752L, 0L,
+			0L, 0L, 0L};
 
 	public static final BitSet _tokenSet_1 = new BitSet(_tokenSet_1_data_);
-
-	private static final long _tokenSet_2_data_[] = { -9224L, -1L, -1L, -1L,
-			0L, 0L, 0L, 0L };
+	
+	private static final long[] _tokenSet_2_data_ = {-9224L, -1L, -1L, -1L,
+			0L, 0L, 0L, 0L};
 
 	public static final BitSet _tokenSet_2 = new BitSet(_tokenSet_2_data_);
-
-	private static final long _tokenSet_3_data_[] = { -4398046520328L, -1L,
-			-1L, -1L, 0L, 0L, 0L, 0L };
+	
+	private static final long[] _tokenSet_3_data_ = {-4398046520328L, -1L,
+			-1L, -1L, 0L, 0L, 0L, 0L};
 
 	public static final BitSet _tokenSet_3 = new BitSet(_tokenSet_3_data_);
-
-	private static final long _tokenSet_4_data_[] = { -549755813896L,
-			-268435457L, -1L, -1L, 0L, 0L, 0L, 0L };
+	
+	private static final long[] _tokenSet_4_data_ = {-549755813896L,
+			-268435457L, -1L, -1L, 0L, 0L, 0L, 0L};
 
 	public static final BitSet _tokenSet_4 = new BitSet(_tokenSet_4_data_);
-
-	private static final long _tokenSet_5_data_[] = { -17179869192L,
-			-268435457L, -1L, -1L, 0L, 0L, 0L, 0L };
+	
+	private static final long[] _tokenSet_5_data_ = {-17179869192L,
+			-268435457L, -1L, -1L, 0L, 0L, 0L, 0L};
 
 	public static final BitSet _tokenSet_5 = new BitSet(_tokenSet_5_data_);
-
-	private static final long _tokenSet_6_data_[] = { 0L, 343597383760L, 0L,
-			0L, 0L };
+	
+	private static final long[] _tokenSet_6_data_ = {0L, 343597383760L, 0L,
+			0L, 0L};
 
 	public static final BitSet _tokenSet_6 = new BitSet(_tokenSet_6_data_);
-
-	private static final long _tokenSet_7_data_[] = { 287948901175001088L,
-			541165879422L, 0L, 0L, 0L };
+	
+	private static final long[] _tokenSet_7_data_ = {287948901175001088L,
+			541165879422L, 0L, 0L, 0L};
 
 	public static final BitSet _tokenSet_7 = new BitSet(_tokenSet_7_data_);
-
-	private static final long _tokenSet_8_data_[] = { 70368744177664L,
-			481036337264L, 0L, 0L, 0L };
+	
+	private static final long[] _tokenSet_8_data_ = {70368744177664L,
+			481036337264L, 0L, 0L, 0L};
 
 	public static final BitSet _tokenSet_8 = new BitSet(_tokenSet_8_data_);
 

@@ -14,7 +14,7 @@ import antlr.ANTLRException;
 
 public class Main {
 
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		try {
 			if (args.length > 0) {
 				for (int i = 0; i < args.length; i++)
@@ -38,7 +38,7 @@ public class Main {
 		var EXTENSION = ".elijah";
 		
 		if (f.isDirectory()) {
-			String files[] = f.list();
+			String[] files = f.list();
 			for (int i = 0; i < files.length; i++)
 				doFile(new File(f, files[i]));
 

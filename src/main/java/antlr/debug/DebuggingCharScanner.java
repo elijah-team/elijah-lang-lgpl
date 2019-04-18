@@ -11,8 +11,8 @@ import antlr.collections.impl.BitSet;
 public abstract class DebuggingCharScanner extends CharScanner implements DebuggingParser {
 	private ParserEventSupport parserEventSupport = new ParserEventSupport(this);
 	private boolean _notDebugMode = false;
-	protected String ruleNames[];
-	protected String semPredNames[];
+	protected String[] ruleNames;
+	protected String[] semPredNames;
 
 
 	public DebuggingCharScanner(InputBuffer cb) {
