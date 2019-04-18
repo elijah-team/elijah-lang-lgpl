@@ -23,7 +23,7 @@ public enum ExpressionType {
 	AUG_BAND,
 	AUG_BXOR,
 	AUG_BOR,
-	IS_A, xy,
+	IS_A, //xy,
 	QIDENT,
 	INCREMENT,
 	DECREMENT,
@@ -40,4 +40,5 @@ public enum ExpressionType {
 	, MULTIPLY, MODULO, DIVIDE, STRING_LITERAL, PROCEDURE_CALL,
 	
 	QUALIDENT
+	,VARREF;
 }

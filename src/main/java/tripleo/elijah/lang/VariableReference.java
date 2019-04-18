@@ -25,11 +25,17 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	/** Called from ElijahParser.variableReference.  Will `setMain' later */
 	public VariableReference() {
 		//NotImplementedException.raise();
+		setLeft(this); // TODO is this better left null?
+						// no contract specifies NotNull...
+		set(ExpressionType.VARREF);
 	}
 
 	public VariableReference(String m) {
 		NotImplementedException.raise();
 		setMain(m);
+		setLeft(this); // TODO is this better left null?
+						// no contract specifies NotNull...
+		set(ExpressionType.VARREF);
 	}
 
 /*
