@@ -33,7 +33,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	public IExpression constructExpression() {
 		ctex=new ConstructExpression(this.parent); 
 		add(ctex);
-		return null;
+		return ctex;
 	}
 	@Override
 	public void constructExpression(IExpression aExpr) {
@@ -75,6 +75,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		add((StatementItem) aExpr);
 	}
 
+//	@org.jetbrains.annotations.Contract("_ -> param1")
 	private StatementItem add(StatementItem aItem) {
 		parent.add(aItem);
 		return aItem;
