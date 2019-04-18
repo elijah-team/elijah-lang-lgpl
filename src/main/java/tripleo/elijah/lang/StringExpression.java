@@ -26,7 +26,7 @@ set(g);
 
 	@Override
 	public  IExpression getLeft() {
-//		assert false;
+		assert false;
 		return this;
 	}
 
@@ -41,7 +41,3 @@ set(g);
 	public void set(String g) {repr_ = g;}
 	String repr_;
 }
-
-//
-//
-//
