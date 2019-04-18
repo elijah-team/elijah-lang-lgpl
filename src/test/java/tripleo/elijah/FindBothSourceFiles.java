@@ -323,17 +323,17 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	private void BeginMeth(CompilerContext cctx, MethHdrNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		var sb = new BufferSequenceBuilder(4).
+		BufferSequenceBuilder sb = new BufferSequenceBuilder(4).
 				named("type").named("name").named("args").semieol();
 		sb.set("type", node.returnType.genType, XX.SPACE);
 		sb.set("name", node.methName.genName);
-		var sb2 = new EnclosedBuffer("(", XX.RPAREN);
-		var transform1 = new Transform1();
-		var sb3 = new BufferSequenceBuilder(node.argCount,
+		EnclosedBuffer sb2 = new EnclosedBuffer("(", XX.RPAREN);
+		Transform1 transform1 = new Transform1();
+		BufferSequenceBuilder sb3 = new BufferSequenceBuilder(node.argCount,
 				node.ArgumentsIterator(), transform1, XX.COMMA, gbn);
 		sb2.setPayload(sb3);
 		sb.set("args", sb2);
-		var gbm = gbn.getCodeGen(); // TODO should be CSimpleGen
+		CodeGen gbm = gbn.getCodeGen(); // TODO should be CSimpleGen
 		gbm.appendHeader(cctx.module(), sb.build());
 	}
 
