@@ -24,11 +24,11 @@ public class ExpressionNode {
 	private IExpression iex;
 	
 	public ExpressionNode(OS_Integer expr1) {
-		// TODO Auto-generated constructor stub
 		// TODO should  be interface
-		genName=expr1.toString(); // TODO likely wrong
+		genName=((Integer)expr1.getValue()).toString(); // TODO likely wrong
 		genText=expr1.toString(); // TODO likely wrong
 		_is_const_expr = true;
+		iex = expr1;
 	}
 
 	public ExpressionNode(IExpression expr1) {
