@@ -14,7 +14,8 @@ import tripleo.elijah.gen.nodes.ArgumentNode;
  *
  */
 public class BufferSequenceBuilder {
-
+	
+	private String _built;
 	private Map<String, Buffer> parts;
 	private Map<Integer, String> part_names;
 
@@ -30,10 +31,12 @@ public class BufferSequenceBuilder {
 		parts = new HashMap<String, Buffer>(i);
 		part_names = new HashMap<Integer, String>(i);
 		//
+		Bufbldr bb=new Bufbldr(gbn);
 		for (ArgumentNode an : argumentsIterator) {
-			Bufbldr bb=new Bufbldr(gbn);
 			transform1.transform(an, bb);
+			bb.append(comma.getText());
 		}
+		_built = bb.getText();
 	}
 
 	public BufferSequenceBuilder named(String string) {
@@ -62,6 +65,9 @@ public class BufferSequenceBuilder {
 
 	public String build() {
 		// TODO Auto-generated method stub
+		if (_built != null)
+			return _built;
+		//
 		StringBuffer sb = new StringBuffer();
 		for (Buffer element : parts.values()) {
 			sb.append(element.getText());

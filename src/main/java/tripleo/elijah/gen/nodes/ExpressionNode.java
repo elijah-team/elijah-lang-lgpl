@@ -3,11 +3,8 @@
  */
 package tripleo.elijah.gen.nodes;
 
-import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.OS_Integer;
-import tripleo.elijah.lang.StringExpression;
-import tripleo.elijah.lang.VariableReference;
+import tripleo.elijah.gen.CompilerContext;
+import tripleo.elijah.lang.*;
 
 /**
  * @author olu
@@ -35,7 +32,8 @@ public class ExpressionNode {
 		// TODO Auto-generated constructor stub
 		genName=expr1.toString(); // TODO likely wrong
 		genText=expr1.toString(); // TODO likely wrong
-		_is_const_expr = expr1.getLeft()  instanceof StringExpression; // TODO more
+		_is_const_expr = expr1.getLeft()  instanceof StringExpression
+						|| expr1.getLeft()  instanceof NumericExpression; // TODO more
 		iex = expr1;
 	}
 
@@ -45,11 +43,28 @@ public class ExpressionNode {
 
 	public boolean is_underscore() {
 		// TODO Auto-generated method stub
+		if (iex !=null && iex instanceof VariableReference) {
+			return ((VariableReference) iex).getName().equals("_");
+		}
 		return false;
 	}
 
 	public boolean is_var_ref() {
 		return (iex !=null && iex instanceof VariableReference);
 	}
-
+	
+	public boolean is_simple() {
+		if (iex !=null && iex instanceof VariableReference) {
+			return ((VariableReference) iex).is_simple();
+		}
+		return is_const_expr() || is_underscore();
+	}
+	
+	public String genText(CompilerContext cctx) {
+		if (iex instanceof OS_Integer){
+			final int value = ((OS_Integer) iex).getValue();
+			return ((Integer)value).toString();
+		}
+		return "vai"; // TODO hardcoded
+	}
 }
