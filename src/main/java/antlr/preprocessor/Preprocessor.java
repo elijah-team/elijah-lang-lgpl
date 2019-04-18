@@ -711,21 +711,21 @@ public Preprocessor(ParserSharedInputState state) {
 		"XDIGIT"
 	};
 	
-	private static final long _tokenSet_0_data_[] = { 2L, 0L };
+	 private static final long[] _tokenSet_0_data_ = {2L, 0L};
 	public static final BitSet _tokenSet_0 = new BitSet(_tokenSet_0_data_);
-	private static final long _tokenSet_1_data_[] = { 2329026L, 0L };
+	 private static final long[] _tokenSet_1_data_ = {2329026L, 0L};
 	public static final BitSet _tokenSet_1 = new BitSet(_tokenSet_1_data_);
-	private static final long _tokenSet_2_data_[] = { 229632L, 0L };
+	 private static final long[] _tokenSet_2_data_ = {229632L, 0L};
 	public static final BitSet _tokenSet_2 = new BitSet(_tokenSet_2_data_);
-	private static final long _tokenSet_3_data_[] = { 194L, 0L };
+	 private static final long[] _tokenSet_3_data_ = {194L, 0L};
 	public static final BitSet _tokenSet_3 = new BitSet(_tokenSet_3_data_);
-	private static final long _tokenSet_4_data_[] = { 229826L, 0L };
+	 private static final long[] _tokenSet_4_data_ = {229826L, 0L};
 	public static final BitSet _tokenSet_4 = new BitSet(_tokenSet_4_data_);
-	private static final long _tokenSet_5_data_[] = { 2101312L, 0L };
+	 private static final long[] _tokenSet_5_data_ = {2101312L, 0L};
 	public static final BitSet _tokenSet_5 = new BitSet(_tokenSet_5_data_);
-	private static final long _tokenSet_6_data_[] = { 17007042L, 0L };
+	 private static final long[] _tokenSet_6_data_ = {17007042L, 0L};
 	public static final BitSet _tokenSet_6 = new BitSet(_tokenSet_6_data_);
-	private static final long _tokenSet_7_data_[] = { 50561474L, 0L };
+	 private static final long[] _tokenSet_7_data_ = {50561474L, 0L};
 	public static final BitSet _tokenSet_7 = new BitSet(_tokenSet_7_data_);
 	
 	}

@@ -167,7 +167,7 @@ class AlternativeBlock extends AlternativeElement {
 	}
 	for (int i=0; i<alternatives.size(); i++) {
 	    Alternative alt = getAlternativeAt(i);
-	    Lookahead cache[] = alt.cache;
+		Lookahead[] cache = alt.cache;
 	    int k = alt.lookaheadDepth;
 	    // dump lookahead set
 	    if ( k==GrammarAnalyzer.LOOKAHEAD_DEPTH_INIT ) {

@@ -35,9 +35,11 @@ public class BitSet implements Cloneable {
      * precomputed mod mask to do the mod instead.
      */
     protected final static int MOD_MASK = BITS-1;
-
-    /** The actual data bits */
-    protected long bits[];
+	
+	/**
+	 * The actual data bits
+	 */
+	protected long[] bits;
 
     /** Construct a bitset of size one word (64 bits) */
     public BitSet() {
@@ -202,7 +204,7 @@ public class BitSet implements Cloneable {
      */
     public void growToInclude(int bit) {
 	int newSize = Math.max(bits.length<<1, numWordsToHold(bit));
-	long newbits[] = new long[newSize];
+	    long[] newbits = new long[newSize];
 	System.arraycopy(bits, 0, newbits, 0, bits.length);
 	bits = newbits;
     }
@@ -289,7 +291,7 @@ public class BitSet implements Cloneable {
      * @param nwords how many words the new set should be
      */
     private void setSize(int nwords) {
-	long newbits[] = new long[nwords];
+	    long[] newbits = new long[nwords];
 	int n = Math.min(nwords, bits.length);
 	System.arraycopy(bits, 0, newbits, 0, n);
 	bits = newbits;

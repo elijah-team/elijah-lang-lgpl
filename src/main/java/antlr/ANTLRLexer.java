@@ -1608,11 +1608,11 @@ tryAgain:
 	}
 	
 	
-	private static final long _tokenSet_0_data_[] = { -9224L, 9223372036854775807L, 0L, 0L };
+	 private static final long[] _tokenSet_0_data_ = {-9224L, 9223372036854775807L, 0L, 0L};
 	public static final BitSet _tokenSet_0 = new BitSet(_tokenSet_0_data_);
-	private static final long _tokenSet_1_data_[] = { -549755813896L, 9223372036854775807L, 0L, 0L };
+	 private static final long[] _tokenSet_1_data_ = {-549755813896L, 9223372036854775807L, 0L, 0L};
 	public static final BitSet _tokenSet_1 = new BitSet(_tokenSet_1_data_);
-	private static final long _tokenSet_2_data_[] = { 4294977024L, 0L, 0L };
+	 private static final long[] _tokenSet_2_data_ = {4294977024L, 0L, 0L};
 	public static final BitSet _tokenSet_2 = new BitSet(_tokenSet_2_data_);
 	
 	}

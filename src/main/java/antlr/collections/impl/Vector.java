@@ -62,7 +62,7 @@ public class Vector implements Cloneable {
 	}
 	public synchronized void ensureCapacity(int minIndex) {
 		if ( minIndex+1 > data.length ) {
-			Object oldData[] = data;
+			Object[] oldData = data;
 			int n = data.length * 2;
 			if ( minIndex+1 > n ) {
 				n = minIndex+1;

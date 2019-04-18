@@ -13,9 +13,9 @@ import java.util.Hashtable;
 import antlr.collections.impl.BitSet;
 public class ANTLRTokdefLexer extends antlr.CharScanner implements ANTLRTokdefParserTokenTypes, TokenStream
  {
-	private static final long _tokenSet_0_data_[] = { -9224L, 9223372036854775807L, 0L, 0L };
+	 private static final long[] _tokenSet_0_data_ = {-9224L, 9223372036854775807L, 0L, 0L};
 	public static final BitSet _tokenSet_0 = new BitSet(_tokenSet_0_data_);
-	private static final long _tokenSet_1_data_[] = { -140737488355336L, 9223372036854775807L, 0L, 0L };
+	 private static final long[] _tokenSet_1_data_ = {-140737488355336L, 9223372036854775807L, 0L, 0L};
 	public static final BitSet _tokenSet_1 = new BitSet(_tokenSet_1_data_);
 	
 	

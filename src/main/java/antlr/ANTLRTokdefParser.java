@@ -25,9 +25,9 @@ public class ANTLRTokdefParser extends antlr.LLkParser
 		"VOCAB"
 	};
 	
-	private static final long _tokenSet_0_data_[] = { 2L, 0L };
+	 private static final long[] _tokenSet_0_data_ = {2L, 0L};
 	public static final BitSet _tokenSet_0 = new BitSet(_tokenSet_0_data_);
-	private static final long _tokenSet_1_data_[] = { 50L, 0L };
+	 private static final long[] _tokenSet_1_data_ = {50L, 0L};
 	public static final BitSet _tokenSet_1 = new BitSet(_tokenSet_1_data_);
 	
 	
