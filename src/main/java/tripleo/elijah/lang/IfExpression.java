@@ -8,21 +8,33 @@
  */
 package tripleo.elijah.lang;
 
-// Referenced classes of package pak2:
-//			Scope
+import java.util.ArrayList;
+import java.util.List;
 
 public class IfExpression implements StatementItem {
-
+	
+	private final IfExpression sibling;
+	private List<IfExpression> parts = new ArrayList<IfExpression>();
+	
 	public IfExpression(Scope aClosure) {
 		this.parent = aClosure;
+		this.sibling = null; // top
 	}
-
+	
+	public IfExpression(IfExpression ifExpression) {
+		this.sibling = ifExpression;
+	}
+	
 	public IfExpression else_() {
-		return null;
+		IfExpression elsepart = new IfExpression(this);
+		parts.add(elsepart);
+		return elsepart;
 	}
 
 	public IfExpression elseif() {
-		return null;
+		IfExpression elseifpart = new IfExpression(this);
+		parts.add(elseifpart);
+		return elseifpart;
 	}
 
 	public void expr(IExpression expr) {
@@ -30,11 +42,38 @@ public class IfExpression implements StatementItem {
 	}
 
 	public Scope scope() {
-		return null;
+		return new IfExpressionScope();
 	}
 
 	private IExpression expr;
 	private Scope parent;
+	
+	private class IfExpressionScope implements Scope {
+		@Override
+		public void statementWrapper(IExpression aExpr) {
+			parent.add(new FunctionDef.StatementWrapper(aExpr));
+		}
+		
+		@Override
+		public void addDocString(String s) {
+			parent.addDocString(s);
+		}
+		
+		@Override
+		public StatementClosure statementClosure() {
+			return new AbstractStatementClosure(this); // TODO
+		}
+		
+		@Override
+		public BlockStatement blockStatement() {
+			return parent.blockStatement(); // TODO
+		}
+		
+		@Override
+		public void add(StatementItem aItem) {
+			parent.add(aItem);
+		}
+	}
 }
 
 //
