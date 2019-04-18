@@ -12,15 +12,22 @@ import tripleo.elijah.lang.IExpression;
 public class LocalAgnTmpNode {
 
 	private IExpression expr;
-	private TmpSSACtxNode tmp;
-	public ExpressionNode right;
+	private TmpSSACtxNode agnTo;
+	private ExpressionNode agnWhat;
 
 	public LocalAgnTmpNode(TmpSSACtxNode tccssan, IExpression binex) {
 		// TODO Auto-generated constructor stub
-		this.tmp = tccssan;
+		this.agnTo = tccssan;
 		this.expr = binex;
 		//
-		right=new ExpressionNode(binex);
+		setRight(new ExpressionNode(binex));
 	}
-
+	
+	public ExpressionNode getRight() {
+		return agnWhat;
+	}
+	
+	public void setRight(ExpressionNode agnWhat) {
+		this.agnWhat = agnWhat;
+	}
 }

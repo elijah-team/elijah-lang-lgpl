@@ -36,12 +36,7 @@ import tripleo.elijah.gen.nodes.ReturnAgnSimpleIntNode;
 import tripleo.elijah.gen.nodes.SwitchNode;
 import tripleo.elijah.gen.nodes.TmpSSACtxNode;
 import tripleo.elijah.lang.ExpressionBuilder;
-import tripleo.util.buffer.Buffer;
-import tripleo.util.buffer.BufferSequenceBuilder;
-import tripleo.util.buffer.DefaultBuffer;
-import tripleo.util.buffer.EnclosedBuffer;
-import tripleo.util.buffer.Transform;
-import tripleo.util.buffer.XX;
+import tripleo.util.buffer.*;
 
 /**
  * @author SBUSER
@@ -204,7 +199,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 					named("open").named("type").named("name").
 					named("equality").named("value").semieol();
 			sb.set("open", "{", XX.INDENT);
-			sb.set("type", node.right.genType, XX.SPACE);
+			sb.set("type", node.getRight().genType, XX.SPACE);
 		}
 	}
 
