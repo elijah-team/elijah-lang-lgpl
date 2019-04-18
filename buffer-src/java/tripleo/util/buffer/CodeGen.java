@@ -21,7 +21,7 @@ public class CodeGen {
 		FileOutputStream fileOutputStream = null;
 		try {
 			try {
-				fileOutputStream = new FileOutputStream(module + ".h");
+				fileOutputStream = new FileOutputStream(module + ".h", true); // append
 				fileOutputStream.write(build.toString().getBytes());
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
