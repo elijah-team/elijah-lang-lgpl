@@ -5,7 +5,7 @@ import tripleo.elijah.lang.OS_Integer;
 public class CaseChoiceNode {
 
 	public ExpressionNode left;
-	public ExpressionNode right;
+	public ScopeNode right;
 
 	public CaseChoiceNode(OS_Integer expr1) {
 		// TODO Auto-generated constructor stub
@@ -13,7 +13,7 @@ public class CaseChoiceNode {
 		right=null;
 	}
 
-	public CaseChoiceNode(ExpressionNode left, ExpressionNode right) {
+	public CaseChoiceNode(ExpressionNode left, ScopeNode right) {
 		super();
 		this.right = right;
 		this.left = left;

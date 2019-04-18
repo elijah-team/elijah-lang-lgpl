@@ -18,5 +18,6 @@ package tripleo.elijah.gen.nodes;
  *
  */
 public class CloseCaseChoiceNode {
-
+	public CaseHdrNode companion;
+	public boolean fallthru;
 }

@@ -9,6 +9,8 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import tripleo.elijah.lang.OS_Ident;
+import tripleo.elijah.lang.TypeModifiers;
+import tripleo.elijah.util.NotImplementedException;
 
 /**
  * @author SBUSER
@@ -34,7 +36,15 @@ public class MethHdrNode {
 //		if (c>=argument_types.size()) return null;
 		return (argument_types.get(c));
 	}
-
+	
+	public void addAnnotation(AnnotationNode node) {
+		NotImplementedException.raise();
+	}
+	
+	public void addModifier(TypeModifiers mod) {
+		NotImplementedException.raise();
+	}
+	
 	public Iterable<ArgumentNode> ArgumentsIterator() {
 		// TODO Auto-generated method stub
 		return new Iterable<ArgumentNode>() {

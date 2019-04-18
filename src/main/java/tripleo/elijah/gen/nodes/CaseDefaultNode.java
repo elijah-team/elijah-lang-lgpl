@@ -8,6 +8,8 @@ import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.lang.VariableReference;
 
 /**
+ * same as case choice node
+ *
  * @author SBUSER
  *
  */
