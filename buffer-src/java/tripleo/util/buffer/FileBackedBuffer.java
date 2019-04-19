@@ -28,7 +28,9 @@ public class FileBackedBuffer implements Buffer {
 	
 	public void dispose() {
 		try {
-			new FileOutputStream(fn).write(backing.toString().getBytes());
+			final FileOutputStream fileOutputStream = new FileOutputStream(fn);
+			fileOutputStream.write(backing.toString().getBytes());
+			fileOutputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
