@@ -14,8 +14,6 @@ import java.util.Collection;
 import java.util.List;
 
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.gen.java.JavaCodeGen;
-import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 // Referenced classes of package pak2:
