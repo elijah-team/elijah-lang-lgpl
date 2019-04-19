@@ -36,17 +36,26 @@ public class GenBuffer {
 	}
 
 	public Buffer moduleBufHdr(String module) {
-		// TODO Auto-generated method stub
 //		NotImplementedException.raise();
-		Buffer buf = hdr_bufs.getOrDefault(module, new FileBackedBuffer(module+".h"));
-		return buf;
+		if (hdr_bufs.containsKey(module)) {
+			return hdr_bufs.get(module);
+		} else {
+			Buffer buf = new FileBackedBuffer(module + ".h");
+			hdr_bufs.put(module, buf);
+			return buf;
+		}
 	}
 
 	public Buffer moduleBufImpl(String module) {
 		// TODO Auto-generated method stub
 //		NotImplementedException.raise();
-		Buffer buf = reg_bufs.getOrDefault(module, new FileBackedBuffer(module+".c"));
-		return buf;
+		if (reg_bufs.containsKey(module)) {
+			return reg_bufs.get(module);
+		} else {
+			Buffer buf = new FileBackedBuffer(module + ".c");
+			reg_bufs.put(module, buf);
+			return buf;
+		}
 	}
 
 	public CodeGen getCodeGen() {
