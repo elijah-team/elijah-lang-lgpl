@@ -70,8 +70,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	
 	@Override
 	public String repr_() {
-		return (new StringBuilder("VariableReference (")).append(main).append(
-				")").toString();
+		return String.format("VariableReference (%s)", main);
 	}
 
 	public void setMain(String s) {
