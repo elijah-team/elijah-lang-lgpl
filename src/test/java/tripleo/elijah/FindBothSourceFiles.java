@@ -127,7 +127,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		CloseCaseNode cccn1 = new CloseCaseNode(csn, ChoiceOptions.BREAK); 
 		CloseCaseChoice(cctx, cccn1, gbn);
 
-		CaseDefaultNode csn2 = new CaseDefaultNode(cctx, ExpressionBuilder.varref("n")); 
+		CaseChoiceNode csn2 = new CaseChoiceNode(cctx, ExpressionBuilder.varref("n"));
 		BeginDefaultCaseStatement(cctx, csn2, gbn);
 		
 		TmpSSACtxNode tccssan = new TmpSSACtxNode();   
@@ -203,10 +203,14 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		}
 	}
 
-	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseDefaultNode csn2, GenBuffer gbn) {
+	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseChoiceNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		
+		buf.append_ln("default: {");
+		buf.incr_i();
+		if (node.is_default()) {
+			buf.append(node.varref().getType().getText());
+		}
 	}
 
 	private void CloseCaseChoice(CompilerContext cctx, CloseCaseNode node, GenBuffer gbn) {
@@ -220,8 +224,11 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		boolean is_simple = node.left.is_const_expr();
-		boolean is_default = node.left.is_underscore() ||
-				(node.left.is_var_ref() && node.left.ref_==null);
+		boolean is_default = node.is_simple();
+		if (is_default) {
+			assert node.left.is_underscore() ||
+					(node.left.is_var_ref() && node.left.ref_ == null);
+		}
 		if (is_simple ){
 			buf.append("case "+node.left.genText(cctx));
 			buf.append_s(": ");	
