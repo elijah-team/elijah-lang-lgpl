@@ -19,7 +19,6 @@ import java.util.List;
 import antlr.Token;
 import tripleo.elijah.lang.ExpressionType;
 import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 /**
@@ -37,14 +36,15 @@ public class Qualident  implements IExpression {
 	
 	List<Token> parts = new ArrayList<Token>();
 
+	@Override
 	public String toString() {
-		StringBuilder sb=new StringBuilder();
+		final StringBuilder sb=new StringBuilder();
 		for (Token part : parts) {
 			sb.append(part.getText());
 			sb.append('.');
 		}
-		String s = sb.toString();
-		String substring = s.substring(0, s.length() - 1);
+		final String s = sb.toString();
+		final String substring = s.substring(0, s.length() - 1);
 		return substring;
 	}
 	
