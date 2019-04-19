@@ -1,5 +1,10 @@
-/**
- * 
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ *
+ * The contents of this library are released under the LGPL licence v3,
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ *
  */
 package tripleo.util.buffer;
 
@@ -16,6 +21,7 @@ public class FileBackedBuffer implements Buffer {
 	Buffer backing=new DefaultBuffer(""); // TODO bad api
 	private String fn;
 
+	@Override
 	public void finalize() {
 		dispose();
 	}
@@ -33,34 +39,34 @@ public class FileBackedBuffer implements Buffer {
 	}
 	
 	public FileBackedBuffer(String fn) {
-		// TODO Auto-generated constructor stub
 		this.fn=fn;
 	}
 
 	@Override
 	public void append(String string) {
-		// TODO Auto-generated method stub
 		backing.append(string);
 	}
 
 	@Override
 	public void append_s(String string) {
-		// TODO Auto-generated method stub
 		backing.append_s(string);
 	}
 
 	@Override
 	public void append_cb(String string) {
-		// TODO Auto-generated method stub
 		backing.append_cb(string);
 	}
 
 	@Override
 	public void decr_i() {
-		// TODO Auto-generated method stub
 		backing.decr_i();
 	}
-
+	
+	@Override
+	public void incr_i() {
+		backing.incr_i();
+	}
+	
 	@Override
 	public void append_nl_i(String string) {
 		// TODO Auto-generated method stub

@@ -9,7 +9,9 @@ public interface Buffer {
 	void append_cb(String string);
 
 	void decr_i();
-
+	
+	void incr_i();
+	
 	void append_nl_i(String string);
 
 	void append_nl(String string);
