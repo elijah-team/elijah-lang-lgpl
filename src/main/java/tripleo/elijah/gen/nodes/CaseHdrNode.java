@@ -15,6 +15,7 @@
 package tripleo.elijah.gen.nodes;
 
 import tripleo.elijah.lang.VariableReference;
+import tripleo.elijah.util.NotImplementedException;
 
 public class CaseHdrNode {
 
@@ -33,6 +34,13 @@ public class CaseHdrNode {
 		this.expr = new ExpressionNode(varref);
 	}
 	
+	public String simpleGenText() {
+		if (expr.getExpr() instanceof VariableReference) {
+			return ((VariableReference) expr.getExpr()).getName();
+		}
+		NotImplementedException.raise();
+		return null;
+	}
 }
 
 //
