@@ -16,6 +16,7 @@ package tripleo.elijah.lang;
 
 import java.util.List;
 
+import antlr.CommonToken;
 import antlr.Token;
 import tripleo.elijah.gen.nodes.ExpressionOperators;
 import tripleo.elijah.gen.nodes.LocalAgnTmpNode;
@@ -50,7 +51,7 @@ public class ExpressionBuilder {
 
 	public static VariableReference varref(String string) {
 		// TODO Auto-generated method stub
-		return new VariableReference(string);
+ 		return new VariableReference(string);
 	}
 
 	public static IExpression binex(VariableReference left, ExpressionOperators middle, IExpression right) {
@@ -68,7 +69,7 @@ public class ExpressionBuilder {
 		// TODO Auto-generated method stub
 		final ProcedureCallExpression pce = new ProcedureCallExpression();
 		final Qualident xyz = new Qualident();
-		final Token t = new Token();
+		final Token t = new CommonToken();
 		t.setText(string);
 		xyz.append(t);
 		pce.identifier(xyz);
