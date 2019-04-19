@@ -88,7 +88,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	 */
 	@Override
 	public boolean is_simple() {
-		return parts.size() == 0; // TODO
+		return parts.size() == 0; // TODO ; || type==VARREF_SIMPLE??
 	}
 
 	@Override
