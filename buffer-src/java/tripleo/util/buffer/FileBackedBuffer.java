@@ -84,7 +84,7 @@ public class FileBackedBuffer implements Buffer {
 	@Override
 	public void append_ln(String string) {
 		// TODO Auto-generated method stub
-		
+		backing.append_ln(string);
 	}
 
 	@Override
