@@ -12,13 +12,14 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
 // Referenced classes of package pak2:
 //			AbstractExpression
 
-public class ExpressionList {
+public class ExpressionList implements Iterable<IExpression> {
 
 	public IExpression next(IExpression aExpr) {
 		assert aExpr != null;
@@ -36,5 +37,10 @@ public class ExpressionList {
 		for (IExpression expr : exprs) {
 			tos.put_string_ln(expr.repr_());
 		}
+	}
+
+	@Override
+	public Iterator<IExpression> iterator() {
+		return exprs.iterator();
 	}
 }
