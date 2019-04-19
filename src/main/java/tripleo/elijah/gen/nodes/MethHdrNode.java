@@ -58,13 +58,13 @@ public class MethHdrNode {
 		
 					@Override
 					public boolean hasNext() {
-						var node=MethHdrNode.this;
+						MethHdrNode node=MethHdrNode.this;
 						return c<node.argCount;
 					}
 		
 					@Override
 					public ArgumentNode next() {
-						var node=MethHdrNode.this;
+						MethHdrNode node=MethHdrNode.this;
 						return node.argument(c++);
 					}
 				};
