@@ -11,14 +11,36 @@
  */
 package tripleo.elijah.gen.nodes;
 
+import tripleo.elijah.gen.CompilerContext;
+import tripleo.elijah.lang.IExpression;
+
 /**
  * @author SBUSER
  *
  */
 public class TmpSSACtxNode {
+	
+	public IExpression __expr;
+	private final CompilerContext _ctx;
+	
+	public TmpSSACtxNode(CompilerContext cctx) {
+		// TODO Auto-generated constructor stub
+		this._ctx=cctx;
+	}
 
 	public String text() {
 		return "--------------------"; // TODO hardcoded
 	}
+	
+	public ExpressionNode getType() {
+		return new ExpressionNode(__expr);
+	}
 
+	public CompilerContext getCtx() {
+		return _ctx;
+	}
 }
+
+//
+//
+//
