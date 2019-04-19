@@ -1,5 +1,10 @@
-/**
- * 
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ *
+ * The contents of this library are released under the LGPL licence v3,
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ *
  */
 package tripleo.elijah.gen.nodes;
 
@@ -18,6 +23,11 @@ public class ExpressionNode {
     
 	public boolean _is_const_expr;
 	public OS_Element ref_;
+	
+	public IExpression getExpr() {
+		return iex;
+	}
+	
 	private IExpression iex;
 	
 	public ExpressionNode(OS_Integer expr1) {
@@ -61,10 +71,50 @@ public class ExpressionNode {
 	}
 	
 	public String genText(CompilerContext cctx) {
-		if (iex instanceof OS_Integer){
+		if (iex instanceof OS_Integer) {
 			final int value = ((OS_Integer) iex).getValue();
-			return ((Integer)value).toString();
+			return ((Integer) value).toString();
+		}
+		if (iex instanceof AbstractBinaryExpression) {
+			if (iex.getLeft() instanceof VariableReference) {
+
+				final AbstractBinaryExpression abstractBinaryExpression = (AbstractBinaryExpression) this.iex;
+				if (abstractBinaryExpression.getRight() instanceof OS_Integer) {
+					if (abstractBinaryExpression.type == ExpressionType.SUBTRACTION) {
+						String s = String.format("%s - %d",
+								((VariableReference) this.iex.getLeft()).getName(),
+								((OS_Integer) abstractBinaryExpression.getRight()).getValue());
+						return s;
+					}
+				}
+				
+				return "---------------2";
+
+			}
+		}
+		if (iex instanceof OS_Integer) {
+			final int value = ((OS_Integer) iex).getValue();
+			return ((Integer) value).toString();
+		}
+		if (iex instanceof ProcedureCallExpression) {
+			final StringBuilder sb=new StringBuilder();
+			sb.append("z__");
+			sb.append(iex.getLeft().toString());
+			sb.append("(");
+			for (IExpression e : ((ProcedureCallExpression) iex).exprList()) {
+			
+			}
+			sb.append(")");
+			return "-------------------3";
 		}
 		return "vai"; // TODO hardcoded
 	}
+	
+	public String genType() {
+		return "u64";  // TODO harcoded
+	}
 }
+
+//
+//
+//
