@@ -21,14 +21,16 @@ import tripleo.elijah.lang.VariableReference;
 
 public class CaseChoiceNode {
 	
-	private final VariableReference _varref;
+	private final VariableReferenceNode _varref;
 	public ExpressionNode left;
 	public ScopeNode right;
+	public final CaseHdrNode header;
 	private String _defaultName;
 	
-	public CaseChoiceNode(OS_Integer expr1) {
+	public CaseChoiceNode(OS_Integer expr1, CaseHdrNode header) {
 		// TODO Auto-generated constructor stub
 		left=new ExpressionNode(expr1);
+		this.header = header;
 		right=null;
 		_defaultName = null;
 		_varref = null;
@@ -40,12 +42,14 @@ public class CaseChoiceNode {
 	 *
 	 * @param cctx      unused
 	 * @param varref    the name specified
+	 * @param header
 	 */
-	public CaseChoiceNode(CompilerContext cctx, VariableReference varref) {
+	public CaseChoiceNode(CompilerContext cctx, VariableReference varref, CaseHdrNode header) {
+		this.header = header;
 		left  = null;
 		right = null;
 		setDefaultName(varref.getName());
-		_varref = varref;
+		_varref = new VariableReferenceNode(cctx, varref);
 	}
 	
 	public String getDefaultName() {
@@ -56,10 +60,11 @@ public class CaseChoiceNode {
 		this._defaultName = _defaultName;
 	}
 	
-	public CaseChoiceNode(ExpressionNode left, ScopeNode right) {
+	public CaseChoiceNode(ExpressionNode left, ScopeNode right, CaseHdrNode header) {
 		super();
 		this.right = right;
 		this.left = left;
+		this.header = header;
 		_defaultName =null;
 		_varref = null;
 	}
