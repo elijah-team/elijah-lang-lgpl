@@ -15,7 +15,17 @@
 package tripleo.elijah.lang;
 
 public class OS_Integer extends AbstractExpression {
-
+	
+	@Override
+	public String repr_() {
+		return String.format("Integer (%d)", getValue());
+	}
+	
+	@Override
+	public String toString() {
+		return repr_();
+	}
+	
 	private int i;
 
 	public OS_Integer(int i) {
