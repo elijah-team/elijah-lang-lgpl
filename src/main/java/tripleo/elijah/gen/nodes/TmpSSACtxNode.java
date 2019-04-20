@@ -13,6 +13,7 @@ package tripleo.elijah.gen.nodes;
 
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.lang.IExpression;
+import tripleo.elijah.lang.ProcedureCallExpression;
 
 /**
  * @author SBUSER
@@ -29,7 +30,8 @@ public class TmpSSACtxNode {
 	}
 
 	public String text() {
-		return "--------------------"; // TODO hardcoded
+		return ExpressionNode.getStringPCE((ProcedureCallExpression) __expr);
+		//"--------------------"; // TODO hardcoded
 	}
 	
 	public ExpressionNode getType() {

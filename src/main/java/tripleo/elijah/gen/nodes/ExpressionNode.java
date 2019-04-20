@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.gen.nodes;
 
+import org.eclipse.jdt.annotation.NonNull;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.lang.*;
 
@@ -24,13 +25,26 @@ public class ExpressionNode {
 	public boolean _is_const_expr;
 	public OS_Element ref_;
 	
+	private IExpression iex;
+	
+	/**
+	 * For {@link VariableReferenceNode2}
+	 */
+	public ExpressionNode() {
+		genName = null;
+		genText = null;
+		genType = null;
+		_is_const_expr = false;
+		ref_ = null;
+		iex = null;
+	}
+	
 	public IExpression getExpr() {
 		return iex;
 	}
 	
-	private IExpression iex;
 	
-	public ExpressionNode(OS_Integer expr1) {
+	public ExpressionNode(@NonNull  OS_Integer expr1) {
 		// TODO should  be interface
 		genName=((Integer)expr1.getValue()).toString(); // TODO likely wrong
 		genText=expr1.toString(); // TODO likely wrong
@@ -38,7 +52,7 @@ public class ExpressionNode {
 		iex = expr1;
 	}
 
-	public ExpressionNode(IExpression expr1) {
+	public ExpressionNode(@NonNull IExpression expr1) {
 		// TODO Auto-generated constructor stub
 		genName=expr1.toString(); // TODO likely wrong
 		genText=expr1.toString(); // TODO likely wrong
@@ -78,18 +92,24 @@ public class ExpressionNode {
 		if (iex instanceof AbstractBinaryExpression) {
 			if (iex.getLeft() instanceof VariableReference) {
 
-				final AbstractBinaryExpression abstractBinaryExpression = (AbstractBinaryExpression) this.iex;
-				if (abstractBinaryExpression.getRight() instanceof OS_Integer) {
-					if (abstractBinaryExpression.type == ExpressionType.SUBTRACTION) {
-						String s = String.format("%s - %d",
-								((VariableReference) this.iex.getLeft()).getName(),
-								((OS_Integer) abstractBinaryExpression.getRight()).getValue());
-						return s;
-					}
+				final String left_side = ((VariableReference) this.iex.getLeft()).getName();
+				String right_side = null;
+				
+				final AbstractBinaryExpression abe = (AbstractBinaryExpression) this.iex;
+				if (abe.getRight() instanceof OS_Integer) {
+					right_side = ""+((OS_Integer) abe.getRight()).getValue();
+				}
+				if (abe.type == ExpressionType.SUBTRACTION) {
+					String s = String.format("%s - %s", left_side,	right_side);
+					return s;
+				}
+				if (abe.type == ExpressionType.MULTIPLY) {
+					String s = String.format("%s * %s", left_side, right_side);
+					//((OS_Integer) abe.getRight()).getValue()*;
+					return s;
 				}
 				
 				return "---------------2";
-
 			}
 		}
 		if (iex instanceof OS_Integer) {
@@ -97,17 +117,29 @@ public class ExpressionNode {
 			return ((Integer) value).toString();
 		}
 		if (iex instanceof ProcedureCallExpression) {
-			final StringBuilder sb=new StringBuilder();
-			sb.append("z__");
-			sb.append(iex.getLeft().toString());
-			sb.append("(");
-			for (IExpression e : ((ProcedureCallExpression) iex).exprList()) {
-			
-			}
-			sb.append(")");
-			return "-------------------3";
+			return getStringPCE((ProcedureCallExpression) iex);
 		}
+//		if (iex instanceof VariableReference) {
 		return "vai"; // TODO hardcoded
+	}
+	
+	public static String getStringPCE(ProcedureCallExpression expr) {
+		final StringBuilder sb=new StringBuilder();
+		sb.append("z__");
+		sb.append(expr.getLeft().toString());
+		sb.append("(");
+		boolean x=false;
+		for (IExpression e : expr.exprList()) {
+			sb.append(e.toString());
+			sb.append(", ");
+			x=true;
+		}
+		if (x==true) {
+			sb.deleteCharAt(sb.length());
+			sb.deleteCharAt(sb.length());
+		}
+		sb.append(")");
+		return sb.toString();
 	}
 	
 	public String genType() {
