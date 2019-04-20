@@ -66,6 +66,9 @@ public class IdentExpression implements IExpression {
 		return null;
 	}
 
+	public String getText() {
+		return text.getText();
+	}
 }
 
 //
