@@ -8,5 +8,31 @@
  */
 package tripleo.elijah.gen.nodes;
 
+import tripleo.elijah.gen.CompilerContext;
+import tripleo.elijah.lang.VariableReference;
+import tripleo.elijah.util.NotImplementedException;
+
 public class VariableReferenceNode {
+	private final CompilerContext _cctx;
+	private final VariableReference _varref;
+	
+	public VariableReferenceNode(CompilerContext cctx, VariableReference varref) {
+		NotImplementedException.raise();
+		this._cctx=cctx;
+		this._varref=varref;
+	}
+	
+	public TypeNameNode getType() {
+		NotImplementedException.raise();
+		return null;
+	}
+	
+	public String genText() {
+		NotImplementedException.raise();
+		return "vtn"; // TODO hardcoded
+	}
 }
+
+//
+//
+//
