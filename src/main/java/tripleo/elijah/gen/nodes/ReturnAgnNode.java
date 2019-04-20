@@ -21,17 +21,25 @@ import tripleo.elijah.util.NotImplementedException;
  *
  */
 public class ReturnAgnNode {
-
+	
+	private final LocalAgnTmpNode _latn;
 	public ExpressionNode expr;
 
-	public ReturnAgnNode(IExpression latn3) {
-		// TODO Auto-generated constructor stub
-		throw new NotImplementedException();
-	}
+//	public ReturnAgnNode(IExpression latn3) {
+//		// TODO Auto-generated constructor stub
+//		throw new NotImplementedException();
+//	}
 
 	public ReturnAgnNode(LocalAgnTmpNode latn3) {
 		// TODO might be wrong
-		throw new NotImplementedException();
+//		throw new NotImplementedException();
+		this._latn = latn3;
 	}
-
+	
+	public ExpressionNode getExpr() {
+		return _latn.getRight();//.getExpr();
+//		return new ExpressionNode(){
+//
+//		};
+	}
 }
