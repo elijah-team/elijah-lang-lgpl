@@ -44,7 +44,7 @@ public class LocalAgnTmpNode {
 	}
 	
 	public ExpressionNode getLeft() {
-		return agnWhat;
+		return new VariableReferenceNode2(declared, "Z0*", false); // TODO semi-hardcoded
 	}
 }
 
