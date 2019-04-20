@@ -31,7 +31,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	}
 
 	public VariableReference(String m) {
-		NotImplementedException.raise();
+//		NotImplementedException.raise();
 		setMain(m);
 		setLeft(this); // TODO is this better left null?
 						// no contract specifies NotNull...
