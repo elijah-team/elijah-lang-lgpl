@@ -8,6 +8,9 @@
  */
 package tripleo.elijah.comp;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,5 +73,18 @@ public class GenBuffer {
 			
 		};
 	}
-
+	
+	public void writeBuffers() throws IOException {
+		for (Map.Entry<String, Buffer> entry : reg_bufs.entrySet()) {
+			final String module = entry.getKey();
+			final Buffer build  = entry.getValue();
+			//
+			FileOutputStream fileOutputStream;
+			fileOutputStream = new FileOutputStream(module + ".c", true); // append
+			final String buildText = build.getText();
+			fileOutputStream.write(buildText.getBytes());
+			fileOutputStream.close();
+			
+		}
+	}
 }
