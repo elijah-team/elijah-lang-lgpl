@@ -12,7 +12,15 @@
  */
 package tripleo.elijah.gen.nodes;
 
+import tripleo.elijah.comp.GenBuffer;
+import tripleo.elijah.gen.CompilerContext;
+import tripleo.elijah.util.NotImplementedException;
+
 /**
+ * To be used with {@link tripleo.elijah.FindBothSourceFiles#CloseCaseChoice(CompilerContext, CloseCaseNode, GenBuffer)}
+ *
+ * generates <code>break;}</code>
+ *
  * @author SBUSER
  *
  */
@@ -29,9 +37,14 @@ public class CloseCaseNode {
 		hdr_node=csn;
 	}
 
-	public CloseCaseNode(CaseDefaultNode csn2, ChoiceOptions break1) {
-		// TODO Auto-generated constructor stub
-//		hdr_node=csn2;
+//	public CloseCaseNode(CaseDefaultNode csn2, ChoiceOptions break1) {
+//		// TODO Auto-generated constructor stub
+//		NotImplementedException.raise();
+////		hdr_node=csn2;
+//	}
+	
+	public CloseCaseNode(CaseChoiceNode csn2, ChoiceOptions aBreak, boolean b) {
+		assert b==true; // means default
+		NotImplementedException.raise();
 	}
-
 }
