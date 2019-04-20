@@ -38,13 +38,12 @@ public class DefaultBuffer implements Buffer {
 	}
 
 	/**
-	 * Appemd string with closing brace
+	 * Append string with closing brace
 	 * 
 	 * @see tripleo.util.buffer.IBuffer#append_cb(java.lang.String)
 	 */
 	@Override
 	public void append_cb(String string) {
-		// TODO Auto-generated method stub
 		text.append(string);
 		text.append("}");
 	}
@@ -67,13 +66,17 @@ public class DefaultBuffer implements Buffer {
 		// TODO Auto-generated method stub
 		text.append(string);
 		text.append("\n");
+		doIndent();
+	}
+	
+	private void doIndent() {
 		text.append(new_String('\t', incr));
 	}
-
+	
 	private String new_String(char c, int incr2) {
 		// TODO Auto-generated method stub
 		StringBuilder s=new StringBuilder(incr2);
-		while (incr2-->0) s.append(('\t'));
+		while (incr2-->0) s.append(c/*('\t')*/);
 		return s.toString();
 	}
 
@@ -81,6 +84,7 @@ public class DefaultBuffer implements Buffer {
 	public void append_nl(String string) {
 		text.append(string);
 		text.append("\n");
+		doIndent();
 	}
 
 	public void append_s(String string, XX sep) {
@@ -92,6 +96,7 @@ public class DefaultBuffer implements Buffer {
 	public void append_ln(String string) {
 		text.append(string);
 		text.append("\n");
+		doIndent();
 	}
 
 	@Override
