@@ -19,5 +19,8 @@ public class TypeNameNode {
 	}
 
 	public String genType;
-
+	
+	public String getText() {
+		return null;
+	}
 }
