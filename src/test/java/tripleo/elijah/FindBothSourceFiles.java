@@ -33,7 +33,7 @@ import tripleo.elijah.gen.nodes.MethHdrNode;
 import tripleo.elijah.gen.nodes.ReturnAgnNode;
 import tripleo.elijah.gen.nodes.ReturnAgnSimpleIntNode;
 import tripleo.elijah.gen.nodes.TmpSSACtxNode;
-import tripleo.elijah.lang.ExpressionBuilder;
+import tripleo.elijah.gen.nodes.ExpressionNodeBuilder;
 import tripleo.util.buffer.*;
 
 /**
@@ -102,7 +102,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	
 	
 	void factorial_r(CompilerContext cctx, GenBuffer gbn) {
-		MethHdrNode mhn=new MethHdrNode(ExpressionBuilder.ident("u64"), "factorial_r", 
+		MethHdrNode mhn=new MethHdrNode(ExpressionNodeBuilder.ident("u64"), "factorial_r", 
 				List.of(new ArgumentNode("i","u64")));	 
 		GenMethHdr(cctx, mhn, gbn);
 		BeginMeth(cctx, mhn, gbn);
@@ -110,13 +110,13 @@ public class FindBothSourceFiles /* extends TestCase */ {
 //		SwitchNode shn=new SwitchNode();
 //		BeginSwitchStatement(cctx, shn, gbn);
 		
-		CaseHdrNode shn=new CaseHdrNode(ExpressionBuilder.varref("i"));
+		CaseHdrNode shn=new CaseHdrNode(ExpressionNodeBuilder.varref("i"));
 		BeginCaseStatement(cctx, shn, gbn);
 		
-		CaseChoiceNode csn=new CaseChoiceNode(ExpressionBuilder.integer(0), shn);
+		CaseChoiceNode csn=new CaseChoiceNode(ExpressionNodeBuilder.integer(0), shn);
 		BeginCaseChoice(cctx, csn, gbn);
 		
-		ReturnAgnSimpleIntNode rasin=new ReturnAgnSimpleIntNode(ExpressionBuilder.integer(1)); 
+		ReturnAgnSimpleIntNode rasin=new ReturnAgnSimpleIntNode(ExpressionNodeBuilder.integer(1)); 
 		GenReturnAgnSimpleInt(cctx, rasin, gbn);
 		
 //		BreakInCaseStatementNode bicsn=new BreakInCaseStatementNode();
@@ -125,22 +125,22 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		CloseCaseNode cccn1 = new CloseCaseNode(csn, ChoiceOptions.BREAK); 
 		CloseCaseChoice(cctx, cccn1, gbn);
 
-		CaseChoiceNode csn2 = new CaseChoiceNode(cctx, ExpressionBuilder.varref("n"), shn);
+		CaseChoiceNode csn2 = new CaseChoiceNode(cctx, ExpressionNodeBuilder.varref("n"), shn);
 		BeginDefaultCaseStatement(cctx, csn2, gbn);
 		
 		TmpSSACtxNode tccssan = new TmpSSACtxNode(cctx);   
-		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionBuilder.binex(
-				ExpressionBuilder.varref("n"), ExpressionOperators.OP_MINUS, ExpressionBuilder.integer(1)));
+		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(
+				ExpressionNodeBuilder.varref("n"), ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
 		BeginTmpSSACtx(cctx, tccssan, gbn);
 		
 		TmpSSACtxNode tccssan2 = new TmpSSACtxNode(cctx);
-		LocalAgnTmpNode latn2=new LocalAgnTmpNode(tccssan2, ExpressionBuilder.fncall(
+		LocalAgnTmpNode latn2=new LocalAgnTmpNode(tccssan2, ExpressionNodeBuilder.fncall(
 				"factorial_r", List.of(lamn)));
 		GenLocalAgn(cctx, latn2, gbn);
 		
 		TmpSSACtxNode tccssan3 = new TmpSSACtxNode(cctx);
-		LocalAgnTmpNode latn3=new LocalAgnTmpNode(tccssan3, ExpressionBuilder.binex(
-				ExpressionBuilder.varref("n"), ExpressionOperators.OP_MULT, tccssan2));
+		LocalAgnTmpNode latn3=new LocalAgnTmpNode(tccssan3, ExpressionNodeBuilder.binex(
+				ExpressionNodeBuilder.varref("n"), ExpressionOperators.OP_MULT, tccssan2));
 		GenLocalAgn(cctx, latn3, gbn);
 		
 //		ReturnAgnSimpleIntNode rsin=new ReturnAgnSimpleIntNode(latn3); // TODO Not a simple int
@@ -162,8 +162,8 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		EndCaseStatement(cctx, shn, gbn);
 		EndMeth(cctx, mhn, gbn);
 
-//		LocalAgnTmpNode latn1=new LocalAgnTmpNode (tccssan, ExpressionBuilder.bin_expr(
-//		 ExpressionBuilder.varref(n), ExpressionOperators.OP_MINUS, ExpressionBuilder.integer(1)));
+//		LocalAgnTmpNode latn1=new LocalAgnTmpNode (tccssan, ExpressionNodeBuilder.bin_expr(
+//		 ExpressionNodeBuilder.varref(n), ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
 
 	}
 	
