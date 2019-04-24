@@ -19,9 +19,17 @@ import tripleo.elijah.util.NotImplementedException;
 
 public class CaseHdrNode {
 
-	private ExpressionNode expr;
-
-	public ExpressionNode getExpr() {
+	private IExpressionNode expr;
+	
+	public CaseHdrNode(VariableReferenceNode2 varref) {
+		this.expr = varref;
+	}
+	
+	public CaseHdrNode(VariableReference vr) {
+		NotImplementedException.raise();
+	}
+	
+	public IExpressionNode getExpr() {
 		return expr;
 	}
 
@@ -29,9 +37,9 @@ public class CaseHdrNode {
 		this.expr = expr;
 	}
 
-	public CaseHdrNode(VariableReference varref) {
+	public CaseHdrNode(VariableReferenceNode3 varref) {
 		// TODO Auto-generated constructor stub
-		this.expr = new ExpressionNode(varref);
+		this.expr = /*new ExpressionNode*/(varref);
 	}
 	
 	public String simpleGenText() {

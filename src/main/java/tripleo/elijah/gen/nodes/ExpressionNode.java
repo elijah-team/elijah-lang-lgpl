@@ -16,7 +16,7 @@ import tripleo.elijah.lang.*;
  * @author olu
  *
  */
-public class ExpressionNode {
+public class ExpressionNode implements IExpressionNode {
 
 	public String genName;  // TODO since when does expression have a name?
 	public String genText;
@@ -39,6 +39,7 @@ public class ExpressionNode {
 		iex = null;
 	}
 	
+	@Override
 	public IExpression getExpr() {
 		return iex;
 	}
@@ -54,17 +55,21 @@ public class ExpressionNode {
 
 	public ExpressionNode(@NonNull IExpression expr1) {
 		// TODO Auto-generated constructor stub
-		genName=expr1.toString(); // TODO likely wrong
-		genText=expr1.toString(); // TODO likely wrong
-		_is_const_expr = expr1.getLeft()  instanceof StringExpression
-						|| expr1.getLeft()  instanceof NumericExpression; // TODO more
-		iex = expr1;
+		if (expr1 != null) {
+			genName=expr1.toString(); // TODO likely wrong
+			genText=expr1.toString(); // TODO likely wrong
+			_is_const_expr = expr1.getLeft()  instanceof StringExpression
+							|| expr1.getLeft()  instanceof NumericExpression; // TODO more
+			iex = expr1;
+		}
 	}
 
+	@Override
 	public boolean is_const_expr() {
 		return _is_const_expr;
 	}
 
+	@Override
 	public boolean is_underscore() {
 		// TODO Auto-generated method stub
 		if (iex !=null && iex instanceof VariableReference) {
@@ -73,10 +78,12 @@ public class ExpressionNode {
 		return false;
 	}
 
+	@Override
 	public boolean is_var_ref() {
 		return (iex !=null && iex instanceof VariableReference);
 	}
 	
+	@Override
 	public boolean is_simple() {
 		if (iex !=null && iex instanceof VariableReference) {
 			return ((VariableReference) iex).is_simple();
@@ -84,6 +91,7 @@ public class ExpressionNode {
 		return is_const_expr() || is_underscore();
 	}
 	
+	@Override
 	public String genText(CompilerContext cctx) {
 		if (iex instanceof OS_Integer) {
 			final int value = ((OS_Integer) iex).getValue();
@@ -123,7 +131,7 @@ public class ExpressionNode {
 		return "vai"; // TODO hardcoded
 	}
 	
-	public static String getStringPCE(ProcedureCallExpression expr) {
+	static String getStringPCE(ProcedureCallExpression expr) {
 		final StringBuilder sb=new StringBuilder();
 		sb.append("z__");
 		sb.append(expr.getLeft().toString());
@@ -142,8 +150,14 @@ public class ExpressionNode {
 		return sb.toString();
 	}
 	
+	@Override
 	public String genType() {
 		return "u64";  // TODO harcoded
+	}
+	
+	@Override
+	public String genText() {
+		return null;
 	}
 }
 

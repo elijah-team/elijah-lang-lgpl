@@ -21,19 +21,9 @@ import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.gen.CompilerContext;
-import tripleo.elijah.gen.nodes.ArgumentNode;
-import tripleo.elijah.gen.nodes.CaseChoiceNode;
-import tripleo.elijah.gen.nodes.CaseHdrNode;
-import tripleo.elijah.gen.nodes.ChoiceOptions;
-import tripleo.elijah.gen.nodes.CloseCaseNode;
-import tripleo.elijah.gen.nodes.ExpressionOperators;
-import tripleo.elijah.gen.nodes.ImportNode;
-import tripleo.elijah.gen.nodes.LocalAgnTmpNode;
-import tripleo.elijah.gen.nodes.MethHdrNode;
-import tripleo.elijah.gen.nodes.ReturnAgnNode;
-import tripleo.elijah.gen.nodes.ReturnAgnSimpleIntNode;
-import tripleo.elijah.gen.nodes.TmpSSACtxNode;
-import tripleo.elijah.gen.nodes.ExpressionNodeBuilder;
+import tripleo.elijah.gen.ModuleRef;
+import tripleo.elijah.gen.TypeRef;
+import tripleo.elijah.gen.nodes.*;
 import tripleo.util.buffer.*;
 
 /**
@@ -102,15 +92,18 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	
 	
 	void factorial_r(CompilerContext cctx, GenBuffer gbn) {
-		MethHdrNode mhn=new MethHdrNode(ExpressionNodeBuilder.ident("u64"), "factorial_r", 
-				List.of(new ArgumentNode("i","u64")));	 
+		ModuleRef prelude = new ModuleRef(null, -1);
+		TypeRef   u64     = new TypeRef(prelude, prelude, "u64", 81);
+		ModuleRef main_m  = new ModuleRef("fact.elijah", -2);
+		TypeRef   main_k  = new TypeRef(main_m, main_m, "Main", 100);
+		
+		
+		MethHdrNode mhn=new MethHdrNode(u64, main_k, "factorial_r",
+				List.of(new ArgumentNode("i", u64)), 1000);
 		GenMethHdr(cctx, mhn, gbn);
 		BeginMeth(cctx, mhn, gbn);
 		
-//		SwitchNode shn=new SwitchNode();
-//		BeginSwitchStatement(cctx, shn, gbn);
-		
-		CaseHdrNode shn=new CaseHdrNode(ExpressionNodeBuilder.varref("i"));
+		CaseHdrNode shn=new CaseHdrNode(ExpressionNodeBuilder.varref("i", mhn, u64));
 		BeginCaseStatement(cctx, shn, gbn);
 		
 		CaseChoiceNode csn=new CaseChoiceNode(ExpressionNodeBuilder.integer(0), shn);
@@ -125,12 +118,12 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		CloseCaseNode cccn1 = new CloseCaseNode(csn, ChoiceOptions.BREAK); 
 		CloseCaseChoice(cctx, cccn1, gbn);
 
-		CaseChoiceNode csn2 = new CaseChoiceNode(cctx, ExpressionNodeBuilder.varref("n"), shn);
+		CaseChoiceNode csn2 = new CaseChoiceNode(cctx, ExpressionNodeBuilder.varref("n", mhn, u64), shn);
 		BeginDefaultCaseStatement(cctx, csn2, gbn);
 		
 		TmpSSACtxNode tccssan = new TmpSSACtxNode(cctx);   
 		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(
-				ExpressionNodeBuilder.varref("n"), ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
+				ExpressionNodeBuilder.varref("n", mhn, u64), ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
 		BeginTmpSSACtx(cctx, tccssan, gbn);
 		
 		TmpSSACtxNode tccssan2 = new TmpSSACtxNode(cctx);
@@ -140,30 +133,24 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		
 		TmpSSACtxNode tccssan3 = new TmpSSACtxNode(cctx);
 		LocalAgnTmpNode latn3=new LocalAgnTmpNode(tccssan3, ExpressionNodeBuilder.binex(
-				ExpressionNodeBuilder.varref("n"), ExpressionOperators.OP_MULT, tccssan2));
+				ExpressionNodeBuilder.varref("n", mhn, u64), ExpressionOperators.OP_MULT, tccssan2));
 		GenLocalAgn(cctx, latn3, gbn);
 		
 //		ReturnAgnSimpleIntNode rsin=new ReturnAgnSimpleIntNode(latn3); // TODO Not a simple int
 		ReturnAgnNode rsin=new ReturnAgnNode(latn3); // TODO Not an expression!!!
 		GenReturnAgn(cctx, rsin, gbn);
 		
-		// TODO look at this
-//		CloseTmpCtx(cctx, tccssan3, gbn);
-//		CloseTmpCtx(cctx, tccssan2, gbn);
-//		CloseTmpCtx(cctx, tccssan, gbn);
 		CloseTmpCtx(cctx, latn3, gbn);
+/*
 		CloseTmpCtx(cctx, latn2, gbn);
 		CloseTmpCtx(cctx, lamn, gbn);
+*/
 
-//		CloseCaseChoiceNode cccn2=new CloseCaseChoiceNode(csn2, ChoiceOptions.BREAK);
 		CloseCaseNode cccn2=new CloseCaseNode(csn2, ChoiceOptions.BREAK, true);
 		CloseCaseChoice(cctx, cccn2, gbn);
 		
 		EndCaseStatement(cctx, shn, gbn);
 		EndMeth(cctx, mhn, gbn);
-
-//		LocalAgnTmpNode latn1=new LocalAgnTmpNode (tccssan, ExpressionNodeBuilder.bin_expr(
-//		 ExpressionNodeBuilder.varref(n), ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
 
 	}
 	
@@ -171,7 +158,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.decr_i();
-		buf.append_nl("} // close select "+node.getExpr().genText+"");
+		buf.append_nl("} // close select "+node.getExpr().genText()+"");
 	}
 
 	private void GenReturnAgn(CompilerContext cctx, ReturnAgnNode node, GenBuffer gbn) {
@@ -210,9 +197,16 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.incr_i();
 		buf.append_ln("default: {");
-		if (node.is_default()) {
+		if (node.is_default()) { // TODO duh
 			buf.append_s(node.header.getExpr().genType());//varref().getType().getText());
-			buf.append_s(node.varref().genText());
+			final VariableReferenceNode varref = node.varref();
+			String string;
+			if (varref != null) {
+				string = varref.genText();
+			} else {
+				string = "----------------------6";
+			}
+			buf.append_s(string);
 			buf.append(" = ");
 			buf.append(node.header.simpleGenText());
 			buf.append_ln(";");
@@ -325,8 +319,8 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		 */
 		@Override
 		public void transform(ArgumentNode na, DefaultBuffer bufbldr) {
-			bufbldr.append_s(na.genType, XX.SPACE);
-			bufbldr.append(na.genName);
+			bufbldr.append_s(na.getGenType(), XX.SPACE);
+			bufbldr.append(na.getVarName());
 		}
 	}
 
@@ -347,12 +341,12 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		CodeGen gbm = gbn.getCodeGen(); // TODO should be CSimpleGen
 		gbm.appendHeader(cctx.module(), sb.build());
 */
-		buf.append_s(node.returnType.genType);
-		buf.append(node.methName.genName);
+		buf.append_s(node.returnType().genType());
+		buf.append(node.genName());
 		buf.append("(");
 		for (int c=0;c<node.argCount;c++) {
-			buf.append_s(node.argument(c).genType);
-			buf.append(node.argument(c).genName);
+			buf.append_s(node.argument(c).getGenType());
+			buf.append(node.argument(c).getGenName());
 			if (c<node.argCount-1) {buf.append(",");}
 		}
 		buf.append_ln(") {");
@@ -361,12 +355,12 @@ public class FindBothSourceFiles /* extends TestCase */ {
 
 	public void GenMethHdr(CompilerContext cctx, MethHdrNode node, GenBuffer gbn) {
 		Buffer buf = gbn.moduleBufHdr(cctx.module());
-		buf.append_s(node.returnType.genType);
-		buf.append(node.methName.genName);
+		buf.append_s(node.returnType().genType());
+		buf.append(node.genName());
 		buf.append("(");
 		for (int c=0;c<node.argCount;c++) {
-			buf.append_s(node.argument(c).genType);
-			buf.append(node.argument(c).genName);
+			buf.append_s(node.argument(c).getGenType());
+			buf.append(node.argument(c).getGenName());
 			if (c<node.argCount-1) {buf.append(",");}
 		}
 		buf.append(");");

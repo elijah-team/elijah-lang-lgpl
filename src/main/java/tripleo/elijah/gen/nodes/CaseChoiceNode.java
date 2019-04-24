@@ -36,20 +36,28 @@ public class CaseChoiceNode {
 		_varref = null;
 	}
 	
-	/**
-	 * Used for defaults where there is a varname
-	 * Also can be used for _, tho not designed at this point.
-	 *
-	 * @param cctx      unused
-	 * @param varref    the name specified
-	 * @param header
-	 */
-	public CaseChoiceNode(CompilerContext cctx, VariableReference varref, CaseHdrNode header) {
+//	/**
+//	 * Used for defaults where there is a varname
+//	 * Also can be used for _, tho not designed at this point.
+//	 *
+//	 * @param cctx      unused
+//	 * @param varref    the name specified
+//	 * @param header
+//	 */
+//	public CaseChoiceNode(CompilerContext cctx, VariableReference varref, CaseHdrNode header) {
+//		this.header = header;
+//		left  = null;
+//		right = null;
+//		setDefaultName(varref.getName());
+//		_varref = new VariableReferenceNode(cctx, varref);
+//	}
+	
+	public CaseChoiceNode(CompilerContext cctx, VariableReferenceNode3 varref, CaseHdrNode header) {
 		this.header = header;
 		left  = null;
 		right = null;
-		setDefaultName(varref.getName());
-		_varref = new VariableReferenceNode(cctx, varref);
+		setDefaultName("----------FOO------------" /*varref.getName()*/);
+		_varref = null/*varref*/; //new VariableReferenceNode3(cctx, varref);
 	}
 	
 	public String getDefaultName() {

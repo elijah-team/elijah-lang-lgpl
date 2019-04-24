@@ -18,9 +18,10 @@ import java.util.List;
 
 import antlr.CommonToken;
 import antlr.Token;
-import tripleo.elijah.gen.nodes.ExpressionOperators;
-import tripleo.elijah.gen.nodes.LocalAgnTmpNode;
-import tripleo.elijah.gen.nodes.TmpSSACtxNode;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.gen.Node;
+import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -36,9 +37,8 @@ public class ExpressionNodeBuilder {
 		return new OS_Integer(i);
 	}
 
-	public static VariableReference varref(String string) {
-		// TODO Auto-generated method stub
- 		return new VariableReference(string);
+	public static VariableReferenceNode3 varref(String string, Node container, TypeRef typeRef) {
+ 		return new VariableReferenceNode3(string, container, typeRef);
 	}
 
 	public static IExpression binex(VariableReference left, ExpressionOperators middle, IExpression right) {
@@ -64,6 +64,8 @@ public class ExpressionNodeBuilder {
 		return pce;
 	}
 
+	@NotNull
+	@Contract("_, _, _ -> new")
 	public static IExpression binex(VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
 		ExpressionType middle1;
@@ -74,7 +76,14 @@ public class ExpressionNodeBuilder {
 		}
 		return new AbstractBinaryExpression(left, middle1, new StringExpression(right.text())); // TODO !!!
 	}
-
+	
+	public static IExpression binex(VariableReferenceNode3 n, ExpressionOperators opMinus, OS_Integer integer) {
+		return null;
+	}
+	
+	public static IExpression binex(VariableReferenceNode3 varref, ExpressionOperators operators, TmpSSACtxNode node) {
+		return null;
+	}
 }
 
 //
