@@ -18,7 +18,7 @@ public class LocalAgnTmpNode {
 
 //	private IExpression expr;
 	private TmpSSACtxNode agnTo;
-	private ExpressionNode agnWhat;
+	private IExpressionNode agnWhat;
 	private int n;
 	private String declared = null;
 
@@ -35,11 +35,24 @@ public class LocalAgnTmpNode {
 		this.declared ="vt"+n;
 	}
 	
-	public ExpressionNode getRight() {
+	public LocalAgnTmpNode(TmpSSACtxNode tmpSSACtxNode, IExpressionNode node) {
+		// TODO Auto-generated constructor stub
+		this.agnTo = tmpSSACtxNode;
+//		this.expr = expression;
+		//
+		setRight(node);
+		//
+		agnTo.__expr = null/*node*/;
+		//
+		n=tmpSSACtxNode.getCtx().nextTmp();
+		this.declared ="vt"+n;
+	}
+	
+	public IExpressionNode getRight() {
 		return agnWhat;
 	}
 	
-	public void setRight(ExpressionNode agnWhat) {
+	public void setRight(IExpressionNode agnWhat) {
 		this.agnWhat = agnWhat;
 	}
 	

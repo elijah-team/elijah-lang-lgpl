@@ -36,7 +36,7 @@ public class ReturnAgnNode {
 		this._latn = latn3;
 	}
 	
-	public ExpressionNode getExpr() {
+	public IExpressionNode getExpr() {
 		return _latn.getRight();//.getExpr();
 //		return new ExpressionNode(){
 //

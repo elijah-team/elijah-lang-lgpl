@@ -20,6 +20,7 @@ import antlr.CommonToken;
 import antlr.Token;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.Node;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.*;
@@ -88,12 +89,92 @@ public class ExpressionNodeBuilder {
 		return new AbstractBinaryExpression(left, middle1, new StringExpression(right.text())); // TODO !!!
 	}
 	
-	public static IExpression binex(VariableReferenceNode3 n, ExpressionOperators opMinus, OS_Integer integer) {
-		return null;
+	public static IExpressionNode binex(VariableReferenceNode3 n, ExpressionOperators opMinus, OS_Integer integer) {
+		return new IExpressionNode() {
+			@Override
+			public IExpression getExpr() {
+				return null;
+			}
+			
+			@Override
+			public boolean is_const_expr() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_underscore() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_var_ref() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_simple() {
+				return false;
+			}
+			
+			@Override
+			public String genText(CompilerContext cctx) {
+				return null;
+			}
+			
+			@Override
+			public String genType() {
+				return null;
+			}
+			
+			@Override
+			public String genText() {
+				return null;
+			}
+		};
 	}
 	
-	public static IExpression binex(VariableReferenceNode3 varref, ExpressionOperators operators, TmpSSACtxNode node) {
-		return null;
+	public static IExpressionNode binex(VariableReferenceNode3 varref, ExpressionOperators operators, TmpSSACtxNode node) {
+		return new IExpressionNode() {
+			@Override
+			public IExpression getExpr() {
+				return null;
+			}
+			
+			@Override
+			public boolean is_const_expr() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_underscore() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_var_ref() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_simple() {
+				return false;
+			}
+			
+			@Override
+			public String genText(CompilerContext cctx) {
+				return null;
+			}
+			
+			@Override
+			public String genType() {
+				return null;
+			}
+			
+			@Override
+			public String genText() {
+				return null;
+			}
+		};
 	}
 }
 
