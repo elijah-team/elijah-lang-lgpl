@@ -112,10 +112,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		ReturnAgnSimpleIntNode rasin=new ReturnAgnSimpleIntNode(ExpressionNodeBuilder.integer(1)); 
 		GenReturnAgnSimpleInt(cctx, rasin, gbn);
 		
-//		BreakInCaseStatementNode bicsn=new BreakInCaseStatementNode();
-//		BreakInCaseStatement(cctx, bicsn, gbn);
-		
-		CloseCaseNode cccn1 = new CloseCaseNode(csn, ChoiceOptions.BREAK); 
+		CloseCaseNode cccn1 = new CloseCaseNode(csn, ChoiceOptions.BREAK);
 		CloseCaseChoice(cctx, cccn1, gbn);
 
 		CaseChoiceNode csn2 = new CaseChoiceNode(cctx, ExpressionNodeBuilder.varref("n", shn, u64), shn);
@@ -288,18 +285,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.append(node.getType().genText(cctx));
 		buf.append(" ");
 	}
-
-//	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseNode csn2, GenBuffer gbn) {
-//		// TODO Auto-generated method stub
-//		Buffer buf=gbn.moduleBufImpl(cctx.module());
-//		
-//	}
-
-//	private void BreakInCaseStatement(CompilerContext cctx, BreakInCaseStatementNode bicsn, GenBuffer gbn) {
-//		// TODO Auto-generated method stub
-//		Buffer buf=gbn.moduleBufImpl(cctx.module());
-//		buf.append_ln("break; }");
-//	}
 
 	private void GenReturnAgnSimpleInt(CompilerContext cctx, ReturnAgnSimpleIntNode rasin, GenBuffer gbn) {
 		// TODO Auto-generated method stub
