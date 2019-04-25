@@ -31,16 +31,27 @@ public class ExpressionNodeBuilder {
 		// TODO Auto-generated method stub
 		return new OS_Ident(string);
 	}
-
+	
+	/**
+	 * Return a parser-level OS_ELement for std integer {@param i}
+	 *
+	 * @param i integer in question
+	 * @return OS_Integer
+	 */
+	@NotNull
+	@Contract("_ -> new")
 	public static OS_Integer integer(int i) {
-		// TODO Auto-generated method stub
 		return new OS_Integer(i);
 	}
 
+	@NotNull
+	@Contract("_, _, _ -> new")
 	public static VariableReferenceNode3 varref(String string, Node container, TypeRef typeRef) {
  		return new VariableReferenceNode3(string, container, typeRef);
 	}
 
+	@NotNull
+	@Contract("_, _, _ -> new")
 	public static IExpression binex(VariableReference left, ExpressionOperators middle, IExpression right) {
 		// TODO Auto-generated method stub
 		ExpressionType middle1;
