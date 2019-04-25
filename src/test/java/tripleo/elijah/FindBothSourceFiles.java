@@ -198,18 +198,27 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.incr_i();
 		buf.append_ln("default: {");
 		if (node.is_default()) { // TODO duh
-			buf.append_s(node.header.getExpr().genType());//varref().getType().getText());
 			final VariableReferenceNode varref = node.varref();
-			String string;
 			if (varref != null) {
-				string = varref.genText();
+				buf.append_s(node.header.getExpr().genType());//varref().getType().getText());
+				String string;
+				if (varref != null) {
+					string = varref.genText();
+				} else {
+					string = "----------------------6";
+				}
+				buf.append_s(string);
+				buf.append(" = ");
+				buf.append(node.header.simpleGenText());
+				buf.append_ln(";");
 			} else {
-				string = "----------------------6";
+				final VariableReferenceNode3 vr3 = node.varref3();
+				buf.append_s(vr3.getType().genType());
+				buf.append(vr3.genText());
+				buf.append(" = ");
+				buf.append(node.header.simpleGenText());
+				buf.append_ln(";");
 			}
-			buf.append_s(string);
-			buf.append(" = ");
-			buf.append(node.header.simpleGenText());
-			buf.append_ln(";");
 		}
 	}
 
