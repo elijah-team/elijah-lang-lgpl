@@ -22,6 +22,7 @@ import tripleo.elijah.lang.VariableReference;
 public class CaseChoiceNode {
 	
 	private final VariableReferenceNode _varref;
+	private final VariableReferenceNode3 varref3;
 	public ExpressionNode left;
 	public ScopeNode right;
 	public final CaseHdrNode header;
@@ -34,6 +35,7 @@ public class CaseChoiceNode {
 		right=null;
 		_defaultName = null;
 		_varref = null;
+		varref3 = null;
 	}
 	
 //	/**
@@ -58,6 +60,7 @@ public class CaseChoiceNode {
 		right = null;
 		setDefaultName("----------FOO------------" /*varref.getName()*/);
 		_varref = null/*varref*/; //new VariableReferenceNode3(cctx, varref);
+		varref3 = varref;
 	}
 	
 	public String getDefaultName() {
@@ -75,6 +78,7 @@ public class CaseChoiceNode {
 		this.header = header;
 		_defaultName =null;
 		_varref = null;
+		varref3 = null;
 	}
 	
 	public boolean is_simple() {
@@ -88,4 +92,12 @@ public class CaseChoiceNode {
 	public VariableReferenceNode varref() {
 		return _varref;
 	}
+	
+	public VariableReferenceNode3 varref3() {
+		return varref3;
+	}
 }
+
+//
+//
+//
