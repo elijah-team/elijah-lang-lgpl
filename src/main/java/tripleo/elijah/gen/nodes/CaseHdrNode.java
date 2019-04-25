@@ -14,10 +14,11 @@
  */
 package tripleo.elijah.gen.nodes;
 
+import tripleo.elijah.gen.Node;
 import tripleo.elijah.lang.VariableReference;
 import tripleo.elijah.util.NotImplementedException;
 
-public class CaseHdrNode {
+public class CaseHdrNode implements Node {
 
 	private IExpressionNode expr;
 	
@@ -43,11 +44,24 @@ public class CaseHdrNode {
 	}
 	
 	public String simpleGenText() {
+		if (expr instanceof VariableReferenceNode3) {
+			return expr.genText();
+		}
 		if (expr.getExpr() instanceof VariableReference) {
 			return ((VariableReference) expr.getExpr()).getName();
 		}
 		NotImplementedException.raise();
 		return null;
+	}
+	
+	/**
+	 * do not call
+	 *
+	 * @return
+	 */
+	@Override
+	public int getCode() {
+		return -1;
 	}
 }
 
