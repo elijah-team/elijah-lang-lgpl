@@ -28,7 +28,7 @@ public class VariableReferenceNode3 implements IExpressionNode {
 	}
 	
 	public TypeRef getType() {
-		NotImplementedException.raise();
+//		NotImplementedException.raise();
 		return _typeRef;
 	}
 	
@@ -40,12 +40,16 @@ public class VariableReferenceNode3 implements IExpressionNode {
 	
 	
 	public String genText() {
-		NotImplementedException.raise();
+//		NotImplementedException.raise();
 		return String.format("v%c%s", a(), _name);
 	}
 	
 	@Contract(pure = true)
 	private char a() {
+		if (_container instanceof MethHdrNode)
+			return 'a';
+		if (_container instanceof CaseHdrNode)
+			return 't';
 		return 'v';
 	}
 	

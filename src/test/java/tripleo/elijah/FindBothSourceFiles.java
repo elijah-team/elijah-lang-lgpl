@@ -118,12 +118,12 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		CloseCaseNode cccn1 = new CloseCaseNode(csn, ChoiceOptions.BREAK); 
 		CloseCaseChoice(cctx, cccn1, gbn);
 
-		CaseChoiceNode csn2 = new CaseChoiceNode(cctx, ExpressionNodeBuilder.varref("n", mhn, u64), shn);
+		CaseChoiceNode csn2 = new CaseChoiceNode(cctx, ExpressionNodeBuilder.varref("n", shn, u64), shn);
 		BeginDefaultCaseStatement(cctx, csn2, gbn);
 		
 		TmpSSACtxNode tccssan = new TmpSSACtxNode(cctx);   
 		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(
-				ExpressionNodeBuilder.varref("n", mhn, u64), ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
+				ExpressionNodeBuilder.varref("n", shn, u64), ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
 		BeginTmpSSACtx(cctx, tccssan, gbn);
 		
 		TmpSSACtxNode tccssan2 = new TmpSSACtxNode(cctx);
