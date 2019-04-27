@@ -24,6 +24,7 @@ import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.ModuleRef;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.gen.nodes.*;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.buffer.*;
 
 /**
@@ -280,9 +281,13 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	private void BeginTmpSSACtx(CompilerContext cctx, TmpSSACtxNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		buf.append_ln("{");
 		buf.incr_i();
-		buf.append(node.getType().genText(cctx));
+		buf.append_ln("{");
+		if (node._tmp != null) {
+			NotImplementedException.raise();
+		}else {
+			buf.append(node.getType().genText(cctx));
+		}
 		buf.append(" ");
 	}
 

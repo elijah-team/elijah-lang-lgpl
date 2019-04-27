@@ -15,13 +15,13 @@ public class FindBothSourceFilesTest {
 	@Test
 	public void factorial_r() {
 		ModuleRef prelude = new ModuleRef(null, -1);
-		TypeRef u64     = new TypeRef(prelude, prelude, "u64", 81);
+		TypeRef   u64     = new TypeRef(prelude, prelude, "u64", 81);
 		ModuleRef main_m  = new ModuleRef("fact.elijah", -2);
 		TypeRef   main_k  = new TypeRef(main_m, main_m, "Main", 100);
 		
 		
 		final ArgumentNode argumentNode = new ArgumentNode("i", u64);
-		Assert.assertEquals(argumentNode.getGenName(), "vai");
+		Assert.assertEquals("vai", argumentNode.getGenName());
 		
 		MethHdrNode mhn=new MethHdrNode(u64, main_k, "factorial_r",
 				List.of(argumentNode), 1000);
@@ -48,7 +48,14 @@ public class FindBothSourceFilesTest {
 //		BeginTmpSSACtx(cctx, tccssan, gbn);
 		
 		String s = tccssan.getType().genText(cctx);
-		Assert.assertEquals(s, "898989");
+		Assert.assertEquals("vtn - 1", s);
+		
+		String s1 = (lamn.getLeft().genText(cctx));
+		Assert.assertEquals("vt1", s1); // TODO no idea if this is right
+		
+		String s2 = (lamn.getRight().genText(cctx));
+		Assert.assertEquals("vtn - 1", s2); // TODO no idea if this is right
+		
 		
 	}
 }

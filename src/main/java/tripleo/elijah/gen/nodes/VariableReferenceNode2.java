@@ -10,6 +10,7 @@ package tripleo.elijah.gen.nodes;
 
 import antlr.CommonToken;
 import antlr.Token;
+import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.Node;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.util.NotImplementedException;
@@ -19,19 +20,16 @@ public class VariableReferenceNode2 extends ExpressionNode {
 	private final String _type;
 	private  boolean _perm;
 	
-//	private final CompilerContext _cctx;
-//	private final VariableReference _varref;
-	
-//	/**
-//	 * Do not call this
-//	 * @param string
-//	 * @param container
-//	 */
-//	public VariableReferenceNode2(String string, Node container) {
-//		this._declared = string;
-//		this._perm =
-//		throw new IllegalStateException();
-//	}
+	@Override
+	public String genText(CompilerContext cctx) {
+		if (getExpr()/*iex*/ == null) {
+			return _declared;
+		} else {
+			NotImplementedException.raise();
+//			return super.genText(cctx);
+		}
+		return super.genText(cctx);
+	}
 	
 	public VariableReferenceNode2(String declared, String t, boolean b) {
 		super();
@@ -48,12 +46,6 @@ public class VariableReferenceNode2 extends ExpressionNode {
 		_declared = identExpression.getText();
 		_perm = true;
 	}
-	
-//	public VariableReferenceNode(CompilerContext cctx, VariableReference varref) {
-//		NotImplementedException.raise();
-//		this._cctx=cctx;
-//		this._varref=varref;
-//	}
 	
 	public TypeNameNode getType() {
 		NotImplementedException.raise();

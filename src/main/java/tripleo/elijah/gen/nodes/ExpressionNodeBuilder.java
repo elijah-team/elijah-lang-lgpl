@@ -90,47 +90,7 @@ public class ExpressionNodeBuilder {
 	}
 	
 	public static IExpressionNode binex(VariableReferenceNode3 n, ExpressionOperators opMinus, OS_Integer integer) {
-		return new IExpressionNode() {
-			@Override
-			public IExpression getExpr() {
-				return null;
-			}
-			
-			@Override
-			public boolean is_const_expr() {
-				return false;
-			}
-			
-			@Override
-			public boolean is_underscore() {
-				return false;
-			}
-			
-			@Override
-			public boolean is_var_ref() {
-				return false;
-			}
-			
-			@Override
-			public boolean is_simple() {
-				return false;
-			}
-			
-			@Override
-			public String genText(CompilerContext cctx) {
-				return null;
-			}
-			
-			@Override
-			public String genType() {
-				return null;
-			}
-			
-			@Override
-			public String genText() {
-				return null;
-			}
-		};
+		return new MyIExpressionNode1(n, opMinus, integer);
 	}
 	
 	public static IExpressionNode binex(VariableReferenceNode3 varref, ExpressionOperators operators, TmpSSACtxNode node) {
@@ -175,6 +135,73 @@ public class ExpressionNodeBuilder {
 				return null;
 			}
 		};
+	}
+	
+	private static class MyIExpressionNode1 implements IExpressionNode {
+		private final VariableReferenceNode3 _left;
+		private final IExpression _right;
+		private final ExpressionOperators _middle;
+		
+		public MyIExpressionNode1(VariableReferenceNode3 left, ExpressionOperators middle, IExpression right) {
+			_left = left;
+			_middle = middle;
+			_right = right;
+		}
+		
+		@Override
+		public IExpression getExpr() {
+			return null;
+		}
+		
+		@Override
+		public boolean is_const_expr() {
+			return false;
+		}
+		
+		@Override
+		public boolean is_underscore() {
+			return false;
+		}
+		
+		@Override
+		public boolean is_var_ref() {
+			return false;
+		}
+		
+		@Override
+		public boolean is_simple() {
+			return false;
+		}
+		
+		@Override
+		public String genText(CompilerContext cctx) {
+			String middle1;
+			switch (_middle) {
+				case OP_MINUS: middle1 = "-"; break;
+				case OP_MULT:  middle1 = "*"; break;
+				default: throw new NotImplementedException();
+			}
+			
+			return String.format("%s %s %s", _left.genText(), middle1,
+					printableExpression(_right));
+		}
+		
+		static String printableExpression(@NotNull IExpression expression) {
+			if (expression instanceof OS_Integer) {
+				return Integer.toString(((OS_Integer) expression).getValue());
+			}
+			return "-------------7";
+		}
+		
+		@Override
+		public String genType() {
+			return null;
+		}
+		
+		@Override
+		public String genText() {
+			return null;
+		}
 	}
 }
 

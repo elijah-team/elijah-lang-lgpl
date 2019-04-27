@@ -29,7 +29,7 @@ public class LocalAgnTmpNode {
 		//
 		setRight(new ExpressionNode(expression));
 		//
-		agnTo.__expr = expression;
+		agnTo.setExprType(expression);
 		//
 		n=tccssan.getCtx().nextTmp();
 		this.declared ="vt"+n;
@@ -42,10 +42,12 @@ public class LocalAgnTmpNode {
 		//
 		setRight(node);
 		//
-		agnTo.__expr = null/*node*/;
+		agnTo.setExprType(node);
 		//
 		n=tmpSSACtxNode.getCtx().nextTmp();
 		this.declared ="vt"+n;
+		//
+		tmpSSACtxNode._tmp = this;
 	}
 	
 	public IExpressionNode getRight() {

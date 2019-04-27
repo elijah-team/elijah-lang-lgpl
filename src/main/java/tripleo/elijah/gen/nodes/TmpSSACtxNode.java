@@ -21,8 +21,10 @@ import tripleo.elijah.lang.ProcedureCallExpression;
  */
 public class TmpSSACtxNode {
 	
-	public IExpression __expr;
+	public LocalAgnTmpNode _tmp = null;
+	private IExpression __expr;
 	private final CompilerContext _ctx;
+	private IExpressionNode _node;
 	
 	public TmpSSACtxNode(CompilerContext cctx) {
 		// TODO Auto-generated constructor stub
@@ -30,16 +32,30 @@ public class TmpSSACtxNode {
 	}
 
 	public String text() {
-		return ExpressionNode.getStringPCE((ProcedureCallExpression) __expr);
+		return ExpressionNode.getStringPCE((ProcedureCallExpression) getExprType());
 		//"--------------------"; // TODO hardcoded
 	}
 	
-	public ExpressionNode getType() {
-		return new ExpressionNode(__expr);
+	public IExpressionNode getType() {
+		if (_node != null)
+			return _node;
+		return new ExpressionNode(getExprType());
 	}
 
 	public CompilerContext getCtx() {
 		return _ctx;
+	}
+	
+	public IExpression getExprType() {
+		return __expr;
+	}
+	
+	public void setExprType(IExpression __expr) {
+		this.__expr = __expr;
+	}
+	
+	public void setExprType(IExpressionNode node) {
+		this._node = node;
 	}
 }
 
