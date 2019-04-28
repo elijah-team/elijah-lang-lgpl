@@ -100,7 +100,7 @@ public class JavaCodeGen implements ICodeGen {
 			if (element instanceof FunctionDef) {
 				FunctionDef fd = (FunctionDef) element;
 				System.out.print("void " + fd.funName + "(){\n");  // TODO: _returnType and mFal
-				((FunctionDef) element).visit(this);
+				fd.visit(this);
 				System.out.print("\n}\n\n");
 			} else if (element instanceof ClassStatement) {
 				((ClassStatement) element).visitGen(this);
