@@ -38,7 +38,7 @@ public class VariableReferenceNode2 extends ExpressionNode {
 		this._declared = declared;
 		this._perm = b;
 		this._type = t;
-		setText(new IdentExpression(ct)); // TODO
+		setText(new IdentExpression(ct)); // TODO why call this?
 	}
 	
 	private void setText(IdentExpression identExpression) {
