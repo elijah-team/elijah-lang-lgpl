@@ -175,15 +175,11 @@ public class ExpressionNodeBuilder {
 		
 		@Override
 		public String genText(CompilerContext cctx) {
-			String middle1;
-			switch (_middle) {
-				case OP_MINUS: middle1 = "-"; break;
-				case OP_MULT:  middle1 = "*"; break;
-				default: throw new NotImplementedException();
-			}
+			String left = _left.genText();
+			String middle1 = _middle.getSymbol();
+			String right = printableExpression(_right);
 			
-			return String.format("%s %s %s", _left.genText(), middle1,
-					printableExpression(_right));
+			return String.format("%s %s %s", left, middle1, right);
 		}
 		
 		static String printableExpression(@NotNull IExpression expression) {
