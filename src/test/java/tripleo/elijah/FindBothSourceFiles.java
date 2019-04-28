@@ -14,7 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.GenBuffer;
@@ -33,7 +34,7 @@ import tripleo.util.buffer.*;
  */
 public class FindBothSourceFiles /* extends TestCase */ {
 
-	public FindBothSourceFiles(String name) {
+	public FindBothSourceFiles(/*String name*/) {
 //		super(name);
 	}
 
@@ -54,11 +55,12 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	 * 
 	 * Test method for {@link tripleo.elijah.Main#parseFile(java.lang.String, java.io.InputStream)}.
 	 */
+	@Test
 	public final void testParseFile() {
 		List<String> args = List.of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
 //		ErrSink eee = JMock.of(ErrSink.class);
 		ErrSink eee = new StdErrSink();
-		var c = new Compilation(eee, new IO() {
+		Compilation c = new Compilation(eee, new IO() {
 			public CharSource openRead(Path p) {
 				record(FileOption.READ, p);
 				return null;

@@ -15,7 +15,7 @@ import tripleo.elijah.gen.CompilerContext;
 public class FindBothSourceFilesMain {
 
 	public static void main(String[] args) {
-		FindBothSourceFiles f=new FindBothSourceFiles("xx");
+		FindBothSourceFiles f=new FindBothSourceFiles(/*"xx"*/);
 		try {
 //			f.testParseFile();
 		} catch (Exception e) {
