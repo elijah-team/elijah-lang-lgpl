@@ -29,10 +29,14 @@ import tripleo.elijah.util.TabbedOutputStream;
  * 
  */
 public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element {
-
+	
+	public ClassStatement() {
+	}
+	
 	public ClassStatement(OS_Element aElement) {
-		parent = aElement;
-		((OS_Module) aElement).add(this);
+		parent = aElement; // setParent
+		if (aElement instanceof  OS_Module)
+			((OS_Module) aElement).add(this);
 	}
 
 	public void add(ClassItem aDef) {
@@ -44,7 +48,8 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 		if (aItem instanceof ClassItem) {
 			ClassItem new_name = (ClassItem) aItem;
 			items.add (new_name);
-		} else assert false;
+		} else
+			throw new IllegalArgumentException(""+aItem.getClass().getName()+" cannot be added to class");
 	}
 
 	@Override
@@ -61,11 +66,11 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 		return new ClassInheritance(this);
 	}
 
-	public IExpression fixme_expr() {
-		IExpression R = new ExpressionWrapper();
-		mExprs.add(R);
-		return R;
-	}
+//	public IExpression fixme_expr() {
+//		IExpression R = new ExpressionWrapper();
+//		mExprs.add(R);
+//		return R;
+//	}
 
 	public FunctionDef funcDef() {
 		return new FunctionDef(this);
@@ -86,7 +91,23 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 		tos.put_string_ln(String.format("} // class %s ", clsName));
 		tos.flush();
 	}
-
+	
+	public String getName() {
+		return clsName;
+	}
+	
+	public List<ClassItem> getItems() {
+		return items;
+	}
+	
+	public ArrayList<String> getDocstrings() {
+		return mDocs;
+	}
+	
+	public OS_Element getParent() {
+		return parent;
+	}
+	
 	public void setName(String aText) {
 		clsName=aText;
 	}
@@ -105,6 +126,7 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 	@Override
 	public void statementWrapper(IExpression aExpr) {
 		// TODO Auto-generated method stub
+		System.err.println("** adding "+aExpr.repr_()+"to class");
 		mExprs.add(aExpr);
 //		throw new NotImplementedException();
 	}
@@ -115,7 +137,7 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 	private final ArrayList<String> mDocs = new ArrayList<String>();
 	private final ArrayList<IExpression> mExprs = new ArrayList<IExpression>();
 
-	public final OS_Element parent;
+	public /*final*/ OS_Element parent;
 
 	public synchronized Collection<ClassItem> items() {
 		return items;
@@ -126,15 +148,8 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 		visit.addClass(this);
 	}
 
-//	@Override
-//	public void visit(ICodeGen gen) {
-//		// TODO Auto-generated method stub
-//		gen.addClass(this);
-//	}
-
-//	public void visit(JavaCodeGen javaCodeGen) {
-//		// TODO remove remove
-//		javaCodeGen.addClass(this);
-//
-//	}
 }
+
+//
+//
+//
