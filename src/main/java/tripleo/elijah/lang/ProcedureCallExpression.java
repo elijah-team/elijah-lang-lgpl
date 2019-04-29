@@ -14,24 +14,19 @@ import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
-// Referenced classes of package pak2:
-//			ParserClosure, ExpressionList
-
+// TODO is ExpressionList an IExpression?
 public class ProcedureCallExpression implements StatementItem, FunctionItem, IBinaryExpression {
 	
 	private IExpression _left;
-	
+	private ExpressionList args=new ExpressionList();
+
 	public void identifier(Qualident xyz) {
-//		target=xyz;
 		setLeft(xyz);
 	}
-
+	
 	public ExpressionList exprList() {
 		return args;
 	}
-	
-//	public Qualident target;
-	public ExpressionList args=new ExpressionList();
 	
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
@@ -68,21 +63,18 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 
 	@Override
 	public IExpression getLeft() {
-		// TODO fix this
 		return _left;
 	}
 
 	@Override
 	public void setLeft(IExpression iexpression) {
-		// TODO fix this
-//		target = iexpression;
 		_left = iexpression;
 	}
 
 	@Override
 	public String repr_() {
 		// TODO garbage method
-		return String.format("%s %s", getLeft(), getRight());
+		return String.format("ProcedureCallExpression{%s %s}", getLeft(), getRight());
 	}
 
 	@Override
@@ -108,4 +100,16 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
+	
+	public String getReturnTypeString() {
+		return "int"; // TODO hardcoded
+	}
+	
+	public OS_Element getParent() {
+		return null;
+	}
 }
+
+//
+//
+//

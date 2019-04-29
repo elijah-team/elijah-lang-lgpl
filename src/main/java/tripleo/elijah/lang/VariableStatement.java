@@ -85,6 +85,27 @@ public class VariableStatement {
 	public String initialValueType() {
 		if (initialValue instanceof NumericExpression)
 			return "int";
+		else if (initialValue instanceof ProcedureCallExpression)
+			return ((ProcedureCallExpression) initialValue).getReturnTypeString();
+		else if (initialValue instanceof CharLitExpression)
+			return "char";
+		else if (initialValue instanceof StringExpression)
+			return "char*";
+		else if (initialValue instanceof IdentExpression)
+			return "---------------10";
+		else if (initialValue instanceof Qualident)
+			return "---------------8";
+//		else if (initialValue instanceof AbstractExpression)
+//			return "---------------9";
+		else if (initialValue instanceof VariableReference)
+			return "---------------11";
+		else if (initialValue instanceof OS_Integer)
+			return "int";
+		else if (initialValue instanceof ExpressionWrapper)
+			return "---------------12";
+		else if (initialValue instanceof ListExpression)
+			return "void*"; // TODO
+		
 		else
 			return "Z0*";
 	}

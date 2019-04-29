@@ -125,7 +125,7 @@ public class JavaCodeGen implements ICodeGen {
 			}
 		else if (element instanceof ProcedureCallExpression) {
 			ProcedureCallExpression pce = (ProcedureCallExpression) element;
-			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.args));
+			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
 			
 		} else {
 			if (elementDone(element)) {
