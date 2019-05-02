@@ -2119,16 +2119,15 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 		}
 	}
 
-	public final void procedureCallExpression(ProcedureCallExpression pce/*StatementClosure pc*/) throws RecognitionException, TokenStreamException {
+	public final void procedureCallExpression(StatementClosure pc) throws RecognitionException, TokenStreamException {
 
 		fireEnterRule(23, 0);
 		try { // debugging
-//			ProcedureCallExpression pce = pc.procedureCallExpression();
+			ProcedureCallExpression pce = pc.procedureCallExpression();
 
-//			Qualident xyz = qualident();
-			IExpression xyz = variableReference();
+			Qualident xyz = qualident();
 			if (inputState.guessing == 0) {
-				pce.setLeft(xyz);
+				pce.identifier(xyz);
 			}
 			procCallEx(pce);
 		} finally { // debugging
@@ -2777,7 +2776,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			{
 				switch (LA(1)) {
 				case IDENT: {
-					procedureCallExpression(/*pc.procCallExpr()*/pc.procedureCallExpression());
+					procedureCallExpression(pc.procCallExpr());
 					break;
 				}
 				case LITERAL_if: {
