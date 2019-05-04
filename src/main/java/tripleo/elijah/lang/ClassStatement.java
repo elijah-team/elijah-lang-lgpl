@@ -30,13 +30,23 @@ import tripleo.elijah.util.TabbedOutputStream;
  */
 public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element {
 	
+	private OS_Package _packageName;
+	
+	/**
+	 * For XMLBeans. Must use setParent.
+	 */
 	public ClassStatement() {
 	}
 	
 	public ClassStatement(OS_Element aElement) {
 		parent = aElement; // setParent
-		if (aElement instanceof  OS_Module)
-			((OS_Module) aElement).add(this);
+		if (aElement instanceof  OS_Module) {
+			final OS_Module module;
+			module = (OS_Module) aElement;
+			//
+			this.setPackageName(module.pullPackageName());
+			module.add(this);
+		}
 	}
 
 	public void add(ClassItem aDef) {
@@ -147,7 +157,14 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 	public void visitGen(ICodeGen visit) {
 		visit.addClass(this);
 	}
-
+	
+	public void setPackageName(OS_Package aPackageName) {
+		_packageName = aPackageName;
+	}
+	
+	public OS_Package getPackageName() {
+		return _packageName;
+	}
 }
 
 //

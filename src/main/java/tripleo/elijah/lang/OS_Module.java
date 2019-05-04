@@ -32,28 +32,16 @@ public class OS_Module implements OS_Element {
 	
 	private String _fileName;
 	
-	public void add(ModuleItem aStatement) {
-		items.add(aStatement);
+	public void add(ModuleItem aItem) {
+//		if (aItem instanceof ClassStatement)
+//			((ClassStatement)aItem).setPackageName(packageNames_q.peek());
+		items.add(aItem);
 	}
 	
 	public void finish(TabbedOutputStream tos) throws IOException {
 		tos.close();
 	}
 
-/*
-	public String packageName() {
-		if (packageName != null)
-			return packageName;
-		StringBuffer pn = new StringBuffer();
-//		for (Qualident t : packageNames_q) {
-//			pn .append(t.toString());
-//			pn .append( '.');
-//		}
-		packageName = packageNames_q.peek().toString();
-		return packageName;
-	}
-*/
-	
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		System.out.println("Module print_osi");
@@ -103,7 +91,18 @@ public class OS_Module implements OS_Element {
 	public void setFileName(String fileName) {
 		this._fileName = fileName;
 	}
-
+	
+	/**
+	 * The last package name declared in the source file
+	 *
+	 * @return null or a OS_Package instance
+	 */
+	// TODO make class OS_Package
+	public OS_Package pullPackageName() {
+		if (packageNames_q.empty())
+			return OS_Package.default_package;
+		return new OS_Package(packageNames_q.peek(), packageNames_q.size(); // TODO
+	}
 }
 
 //
