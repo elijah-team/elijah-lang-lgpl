@@ -15,88 +15,25 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
 
-public class RegularTypeName implements TypeName {
-
-@Override
-public boolean isNull() {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return false;
-}
-
-@Override
-public boolean getConstant() {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return false;
-}
-
-@Override
-public void setConstant(boolean aFlag) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
+public class RegularTypeName extends AbstractTypeName2 implements TypeName {
 	
-}
+	public String getName() {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
+		return null;
+	}
 
-@Override
-public boolean getReference() {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return false;
-}
+	public void setName(String aS) {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
+	}
 
-@Override
-public void setReference(boolean aFlag) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	
-}
-
-@Override
-public boolean getOut() {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return false;
-}
-
-@Override
-public void setOut(boolean aFlag) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	
-}
-
-@Override
-public boolean getIn() {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return false;
-}
-
-@Override
-public void setIn(boolean aFlag) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-}
-
-@Override
-public String getName() {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return null;
-}
-
-@Override
-public void setName(String aS) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-}
-
-public void set(int aI) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-}
+	public void set(int aI) {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
+	}
 
 @Override
 public TypeName typeName(String aS) {
@@ -118,15 +55,13 @@ public TypeName returnValue() {
 	NotImplementedException.raise();
 	return null;
 }
-
-
-private TypeModifiers tm;
-private Qualident typeName;
-
+	
+	
 @Override
 public void type(TypeModifiers atm) {
 tm=atm;		
 }
+
 @Override
 public TypeNameList argList() {
 	// TODO Auto-generated method stub
@@ -162,5 +97,15 @@ public void typeof(Qualident xyz) {
 	NotImplementedException.raise();
 	
 }
+	
+//	@Override
+	public String getTypeName() {
+		return this.typeName.toString();
+	}  // TODO is this right?
+	
+//	@Override
+	public void print_osi(TabbedOutputStream aTos) {
+		NotImplementedException.raise();
+	}
 }
 
