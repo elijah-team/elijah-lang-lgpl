@@ -101,7 +101,7 @@ public class OS_Module implements OS_Element {
 	public OS_Package pullPackageName() {
 		if (packageNames_q.empty())
 			return OS_Package.default_package;
-		return new OS_Package(packageNames_q.peek(), packageNames_q.size(); // TODO
+		return new OS_Package(packageNames_q.peek(), packageNames_q.size()); // TODO
 	}
 }
 
