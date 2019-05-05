@@ -18,12 +18,6 @@ public StringExpression(String g) {
 set(g);
 }
 
-	/*@Override*/
-	public  IExpression getLeft() {
-		assert false;
-		return this;
-	}
-
 	public boolean is_simple() {
 		return true;
 	}
