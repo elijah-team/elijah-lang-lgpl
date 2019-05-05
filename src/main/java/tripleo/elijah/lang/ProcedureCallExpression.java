@@ -108,6 +108,10 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 	public OS_Element getParent() {
 		return null;
 	}
+
+	public boolean is_simple() {
+		return false; // TODO is this correct?
+	}
 }
 
 //
