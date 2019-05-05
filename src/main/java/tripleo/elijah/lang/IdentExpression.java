@@ -69,6 +69,10 @@ public class IdentExpression implements IExpression {
 	public String getText() {
 		return text.getText();
 	}
+
+	public boolean is_simple() {
+		return true;
+	}
 }
 
 //

@@ -36,4 +36,8 @@ public class OS_Integer extends AbstractExpression {
 	public int getValue() {
 		return i;
 	}
+
+	public boolean is_simple() {
+		return true;
+	}
 }

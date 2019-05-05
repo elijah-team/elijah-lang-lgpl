@@ -92,4 +92,9 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 	public void set(ExpressionType aIncrement) {
 		type=aIncrement;
 	}
+
+	public boolean is_simple() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

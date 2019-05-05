@@ -68,4 +68,8 @@ public class NumericExpression implements IExpression {
 	public String toString() {
 		return "NumericExpression ("+carrier+")";
 	}
+
+	public boolean is_simple() {
+		return true;
+	}
 }

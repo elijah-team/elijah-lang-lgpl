@@ -36,13 +36,14 @@ public interface IExpression {
 	IExpression UNASSIGNED = new AbstractBinaryExpression() {
 	};
 
-	default boolean is_simple() {
-		switch(getType()) {
-		case STRING_LITERAL:
-			return true;
-		default:
-			return false;
-		}
-	}
+//	default boolean is_simple() {
+//		switch(getType()) {
+//		case STRING_LITERAL:
+//			return true;
+//		default:
+//			return false;
+//		}
+//	}
 
+	boolean is_simple();
 }

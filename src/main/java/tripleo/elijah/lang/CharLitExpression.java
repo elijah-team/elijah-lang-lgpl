@@ -84,6 +84,10 @@ public class CharLitExpression implements IExpression {
 		return null;
 	}
 
+	public boolean is_simple() {
+		return true;
+	}
+
 }
 
 //
