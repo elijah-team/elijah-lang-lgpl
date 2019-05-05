@@ -1,62 +1,62 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>tripleo.elijah</groupId>
-    <artifactId>elijah-v1</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0</version>
-    <name>eljc-v1</name>
-    <url>http://gitlab.com/elijah-team/elijah-lang/</url>
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
-    <dependencies>
-        <!--
-            <dependency>
-              <groupId>junit</groupId>
-              <artifactId>junit</artifactId>
-              <version>3.8.1</version>
-              <scope>test</scope>
-            </dependency> -->
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>tripleo.elijah</groupId>
+  <artifactId>elijah-v1</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0</version>
+  <name>eljc-v1</name>
+  <url>http://gitlab.com/elijah-team/elijah-lang/</url>
+  <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+  </properties>
+  <dependencies>
+    <!--
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.7</version>
-            <scope>test</scope>
-        </dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>3.8.1</version>
+          <scope>test</scope>
+        </dependency> -->
+    <!-- https://mvnrepository.com/artifact/junit/junit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
 
-        <!-- https://mvnrepository.com/artifact/javassist/javassist -->
-        <dependency>
-            <groupId>javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.1</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/antlr/antlr -->
-        <dependency>
-            <groupId>antlr</groupId>
-            <artifactId>antlr</artifactId>
-            <version>2.7.5</version>
-        </dependency>
+    <!-- https://mvnrepository.com/artifact/javassist/javassist -->
+    <dependency>
+      <groupId>javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/antlr/antlr -->
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.5</version>
+    </dependency>
 
-    </dependencies>
-    <build>
-        <!--
-        <plugins>
-        <plugin>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-maven-plugin</artifactId>
-            <version>4.7.1</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>antlr4</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-        </plugins>
-        -->
-    </build>
+  </dependencies>
+  <build>
+    <!--
+    <plugins>
+    <plugin>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr4-maven-plugin</artifactId>
+        <version>4.7.1</version>
+        <executions>
+            <execution>
+                <goals>
+                    <goal>antlr4</goal>
+                </goals>
+            </execution>
+        </executions>
+    </plugin>
+    </plugins>
+    -->
+  </build>
 </project>
