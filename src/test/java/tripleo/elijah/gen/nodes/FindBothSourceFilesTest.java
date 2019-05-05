@@ -25,7 +25,7 @@ public class FindBothSourceFilesTest {
 		
 		MethHdrNode mhn=new MethHdrNode(u64, main_k, "factorial_r",
 				List.of(argumentNode), 1000);
-		Assert.assertEquals(mhn.genName(), "z100factorial_r");
+		Assert.assertEquals("z100factorial_r", mhn.genName());
 	}
 	
 	@Test
@@ -44,7 +44,9 @@ public class FindBothSourceFilesTest {
 
 		TmpSSACtxNode tccssan = new TmpSSACtxNode(cctx);
 		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(
-				ExpressionNodeBuilder.varref("n", shn, u64), ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
+				ExpressionNodeBuilder.varref("n", shn, u64),
+											ExpressionOperators.OP_MINUS,
+											ExpressionNodeBuilder.integer(1)));
 //		BeginTmpSSACtx(cctx, tccssan, gbn);
 		
 		String s = tccssan.getType().genText(cctx);
