@@ -10,6 +10,7 @@ package tripleo.elijah;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	 */
 	@Test
 	public final void testParseFile() {
-		List<String> args = List.of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
+		List<String> args = List_of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
 //		ErrSink eee = JMock.of(ErrSink.class);
 		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO() {
@@ -102,7 +103,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		
 		
 		MethHdrNode mhn=new MethHdrNode(u64, main_k, "factorial_r",
-				List.of(new ArgumentNode("i", u64)), 1000);
+				List_of(new ArgumentNode("i", u64)), 1000);
 		GenMethHdr(cctx, mhn, gbn);
 		BeginMeth(cctx, mhn, gbn);
 		
@@ -128,7 +129,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		
 		TmpSSACtxNode tccssan2 = new TmpSSACtxNode(cctx);
 		LocalAgnTmpNode latn2=new LocalAgnTmpNode(tccssan2, ExpressionNodeBuilder.fncall(
-				"factorial_r", List.of(lamn)));
+				"factorial_r", List_of(lamn)));
 		GenLocalAgn(cctx, latn2, gbn);
 		
 		TmpSSACtxNode tccssan3 = new TmpSSACtxNode(cctx);
@@ -366,6 +367,35 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		}
 		buf.append(");");
 	}
+	
+	/**
+	 * Returns an unmodifiable list containing one element.
+	 *
+	 * See <a href="#unmodifiable">Unmodifiable Lists</a> for details.
+	 *
+	 * @param <E> the {@code List}'s element type
+	 * @param e1 the single element
+	 * @return a {@code List} containing the specified element
+	 * @throws NullPointerException if the element is {@code null}
+	 *
+	 * @since 9
+	 */
+	public static <E> List<E> List_of(E e1) {
+		List<E> r = new ArrayList<E>();
+		r.add(e1);
+		return r;
+//        return new ImmutableCollections.List12<E>(e1);
+	}
+	
+	public static List<String> List_of(String string, String string2, String string3) {
+		List<String> r = new ArrayList<String>();
+		r.add(string);
+		r.add(string2);
+		r.add(string3);
+		return r;
+	}
+	
+	
 }
 	
 //
