@@ -113,10 +113,10 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		CaseChoiceNode csn=new CaseChoiceNode(ExpressionNodeBuilder.integer(0), shn);
 		BeginCaseChoice(cctx, csn, gbn);
 		
-		ReturnAgnSimpleIntNode rasin=new ReturnAgnSimpleIntNode(ExpressionNodeBuilder.integer(1));
-//		ReturnAgnNode rasin=new ReturnAgnNode(ExpressionNodeBuilder.integer(1));
-		GenReturnAgnSimpleInt(cctx, rasin, gbn);
-//		GenReturnAgn(cctx, rasin, gbn);
+//		ReturnAgnSimpleIntNode rasin=new ReturnAgnSimpleIntNode(ExpressionNodeBuilder.integer(1));
+		ReturnAgnNode rasin=new ReturnAgnNode(ExpressionNodeBuilder.integer(1));
+//		GenReturnAgnSimpleInt(cctx, rasin, gbn);
+		GenReturnAgn(cctx, rasin, gbn);
 		
 		CloseCaseNode cccn1 = new CloseCaseNode(csn, ChoiceOptions.BREAK);
 		CloseCaseChoice(cctx, cccn1, gbn);

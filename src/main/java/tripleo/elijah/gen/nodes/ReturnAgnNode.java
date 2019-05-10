@@ -14,7 +14,6 @@
 package tripleo.elijah.gen.nodes;
 
 import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.util.NotImplementedException;
 
 /**
  * @author SBUSER
@@ -42,3 +41,7 @@ public class ReturnAgnNode {
 		return _latn.getRight();//.getExpr();
 	}
 }
+
+//
+//
+//
