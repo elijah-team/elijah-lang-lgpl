@@ -122,7 +122,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		CaseChoiceNode csn2 = new CaseChoiceNode(cctx, ExpressionNodeBuilder.varref("n", shn, u64), shn);
 		BeginDefaultCaseStatement(cctx, csn2, gbn);
 		
-		TmpSSACtxNode tccssan = new TmpSSACtxNode(cctx);   
+		TmpSSACtxNode tccssan = new TmpSSACtxNode(cctx);
 		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(
 				ExpressionNodeBuilder.varref("n", shn, u64), ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
 		BeginTmpSSACtx(cctx, tccssan, gbn);
@@ -155,13 +155,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 
 	}
 	
-	private void EndCaseStatement(CompilerContext cctx, CaseHdrNode node, GenBuffer gbn) {
-		// TODO Auto-generated method stub
-		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		buf.decr_i();
-		buf.append_nl("} // close select "+node.getExpr().genText()+"");
-	}
-
 	private void GenReturnAgn(CompilerContext cctx, ReturnAgnNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
@@ -170,11 +163,13 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.append_ln(";");
 		// if(node.usesRetKW()) {buf.append ("return vsr;");}
 	}
-
-	private void CloseTmpCtx(CompilerContext cctx, LocalAgnTmpNode lamn, GenBuffer gbn) {
+	
+	@Deprecated private void GenReturnAgnSimpleInt(CompilerContext cctx, ReturnAgnSimpleIntNode rasin, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		buf.append_cb (""); // close-brace
+		buf.append("vsr = ");
+		buf.append(((Integer)rasin.getValue()).toString());
+		buf.append_nl(";");
 	}
 	
 	public static Buffer GenLocalAgn(CompilerContext cctx, LocalAgnTmpNode node, GenBuffer gbn) {
@@ -193,7 +188,13 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.append_ln(";");
 		return buf;
 	}
-
+	
+	private void CloseTmpCtx(CompilerContext cctx, LocalAgnTmpNode lamn, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
+		buf.append_cb (""); // close-brace
+	}
+	
 	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseChoiceNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
@@ -224,14 +225,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		}
 	}
 
-	private void CloseCaseChoice(CompilerContext cctx, CloseCaseNode node, GenBuffer gbn) {
-		// TODO Auto-generated method stub
-		Buffer buf = gbn.moduleBufImpl(cctx.module());
-		buf.decr_i();
-		buf.append_ln("break; }");
-//		buf.append_nl("} // close select ("+node.hdr_node.left.genName+")"); // TODO left was expr
-	}
-
 	private void BeginCaseChoice(CompilerContext cctx, CaseChoiceNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
@@ -249,19 +242,13 @@ public class FindBothSourceFiles /* extends TestCase */ {
 			buf.append_nl("default:");
 		}
 	}
-
-//	private void BeginCaseChoice(CompilerContext cctx, CaseHdrNode csn, GenBuffer gbn) {
-//		// TODO Auto-generated method stub
-//		Buffer buf=gbn.moduleBufImpl(cctx.module());
-//		
-//	}
-
-	private void EndMeth(CompilerContext cctx, MethHdrNode mhn, GenBuffer gbn) {
+	
+	private void CloseCaseChoice(CompilerContext cctx, CloseCaseNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		buf.append_ln("return vsr;");
+		Buffer buf = gbn.moduleBufImpl(cctx.module());
 		buf.decr_i();
-		buf.append_ln("}");
+		buf.append_ln("break; }");
+//		buf.append_nl("} // close select ("+node.hdr_node.left.genName+")"); // TODO left was expr
 	}
 	
 	public static Buffer BeginTmpSSACtx(CompilerContext cctx, TmpSSACtxNode node, GenBuffer gbn) {
@@ -270,20 +257,13 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.incr_i();
 		buf.append_ln("{");
 		if (node._tmp != null) {
-			NotImplementedException.raise();
+//			NotImplementedException.raise();
+			buf.append(node._tmp.genName());
 		}else {
 			buf.append(node.getType().genText(cctx));
 		}
 		buf.append(" ");
 		return buf;
-	}
-
-	private void GenReturnAgnSimpleInt(CompilerContext cctx, ReturnAgnSimpleIntNode rasin, GenBuffer gbn) {
-		// TODO Auto-generated method stub
-		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		buf.append("vsr = ");
-		buf.append(((Integer)rasin.getValue()).toString());
-		buf.append_nl(";");
 	}
 
 	private void BeginCaseStatement(CompilerContext cctx, CaseHdrNode node, GenBuffer gbn) {
@@ -298,7 +278,14 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.append_nl_i(") {");
 		buf.incr_i();
 	}
-
+	
+	private void EndCaseStatement(CompilerContext cctx, CaseHdrNode node, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
+		buf.decr_i();
+		buf.append_nl("} // close select "+node.getExpr().genText()+"");
+	}
+	
 	public class Transform1 implements Transform {
 		/* (non-Javadoc)
 		 * @see tripleo.util.buffer.Transform#transform(tripleo.elijah.gen.nodes.ArgumentNode, tripleo.util.buffer.DefaultBuffer)
@@ -338,7 +325,15 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.append_ln(") {");
 		buf.incr_i();
 		}
-
+	
+	private void EndMeth(CompilerContext cctx, MethHdrNode mhn, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		Buffer buf=gbn.moduleBufImpl(cctx.module());
+		buf.append_ln("return vsr;");
+		buf.decr_i();
+		buf.append_ln("}");
+	}
+	
 	public void GenMethHdr(CompilerContext cctx, MethHdrNode node, GenBuffer gbn) {
 		Buffer buf = gbn.moduleBufHdr(cctx.module());
 		buf.append_s(node.returnType().genType());
