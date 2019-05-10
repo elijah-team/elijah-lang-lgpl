@@ -20,6 +20,11 @@ public class LocalAgnTmpNode {
 	private TmpSSACtxNode agnTo;
 	private IExpressionNode agnWhat;
 	private int n;
+	
+	public String genName() {
+		return declared;
+	}
+	
 	private String declared = null;
 
 	public LocalAgnTmpNode(TmpSSACtxNode tccssan, IExpression expression) {
