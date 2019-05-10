@@ -176,8 +176,8 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.append_cb (""); // close-brace
 	}
-
-	private void GenLocalAgn(CompilerContext cctx, LocalAgnTmpNode node, GenBuffer gbn) {
+	
+	public static Buffer GenLocalAgn(CompilerContext cctx, LocalAgnTmpNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 //		if (node instanceof LocalAgnTmpNode) {
@@ -191,6 +191,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.append(" = ");
 		buf.append(node.getRight().genText(cctx));
 		buf.append_ln(";");
+		return buf;
 	}
 
 	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseChoiceNode node, GenBuffer gbn) {
@@ -262,26 +263,8 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.decr_i();
 		buf.append_ln("}");
 	}
-
-//	private void CloseTmpCtx(CompilerContext cctx, CloseTmpCtxNode tmpctxn, GenBuffer gbn) {
-//		// TODO Auto-generated method stub
-//		Buffer buf=gbn.moduleBufImpl(cctx.module());
-//		
-//	}
-
-//	private void GenLocalValAgnFnCall(CompilerContext cctx, LocalValAgnFnCallNode lvafcn, GenBuffer gbn) {
-//		// TODO Auto-generated method stub
-//		Buffer buf=gbn.moduleBufImpl(cctx.module());
-//		
-//	}
-
-//	private void GenLocalAgnMath(CompilerContext cctx, LocalAgnMathNode lamn, GenBuffer gbn) {
-//		// TODO Auto-generated method stub
-//		Buffer buf=gbn.moduleBufImpl(cctx.module());
-//		
-//	}
-
-	private void BeginTmpSSACtx(CompilerContext cctx, TmpSSACtxNode node, GenBuffer gbn) {
+	
+	public static Buffer BeginTmpSSACtx(CompilerContext cctx, TmpSSACtxNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.incr_i();
@@ -292,6 +275,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 			buf.append(node.getType().genText(cctx));
 		}
 		buf.append(" ");
+		return buf;
 	}
 
 	private void GenReturnAgnSimpleInt(CompilerContext cctx, ReturnAgnSimpleIntNode rasin, GenBuffer gbn) {
