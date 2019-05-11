@@ -8,9 +8,16 @@
   <name>eljc-v1</name>
   <url>http://gitlab.com/elijah-team/elijah-lang/</url>
   <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
   </properties>
+  <!--
+    <repository>
+      <id>ProjectRepo</id>
+      <name>ProjectRepo</name>
+      <url>file://${project.basedir}/libs</url>
+    </repository>
+    -->
   <dependencies>
     <!--
         <dependency>
@@ -19,6 +26,21 @@
           <version>3.8.1</version>
           <scope>test</scope>
         </dependency> -->
+
+    <!-- https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.annotation -->
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
+      <version>2.2.200</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>16.0.2</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/junit/junit -->
     <dependency>
       <groupId>junit</groupId>
@@ -39,6 +61,18 @@
       <artifactId>antlr</artifactId>
       <version>2.7.5</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+    <dependency>
+      <groupId>com.thoughtworks.xstream</groupId>
+      <artifactId>xstream</artifactId>
+      <version>1.4.11.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.bcel/bcel -->
+    <dependency>
+      <groupId>org.apache.bcel</groupId>
+      <artifactId>bcel</artifactId>
+      <version>6.3.1</version>
+    </dependency>
 
   </dependencies>
   <build>
@@ -58,5 +92,28 @@
     </plugin>
     </plugins>
     -->
+
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>buffer-src/java/</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
   </build>
 </project>
