@@ -35,7 +35,7 @@ public class Main {
 	}
 
 	public static void doFile(File f) throws Exception {
-		var EXTENSION = ".elijah";
+		String EXTENSION = ".elijah";
 		
 		if (f.isDirectory()) {
 			String[] files = f.list();
