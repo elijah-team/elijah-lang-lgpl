@@ -19,6 +19,8 @@ See [Language Overview](elijjah.md) for more details on the language.
 
 All of this is a wwork in progress and your support would be appreciated.
 
-tripleo+elijah<at>gmail.com
-<google group>
-<reddit post>
+tripleo+elijah (at) gmail.com
+
+((google group))
+
+((reddit post))
