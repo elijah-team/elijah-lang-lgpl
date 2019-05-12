@@ -159,7 +159,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	}
 	
 	private void GenReturnAgn(CompilerContext cctx, ReturnAgnNode node, GenBuffer gbn) {
-		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.append("vsr =");
 		buf.append(node.getExpr().genText(cctx));
@@ -168,7 +167,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	}
 	
 	@Deprecated private void GenReturnAgnSimpleInt(CompilerContext cctx, ReturnAgnSimpleIntNode rasin, GenBuffer gbn) {
-		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.append("vsr = ");
 		buf.append(((Integer)rasin.getValue()).toString());
@@ -193,9 +191,8 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	}
 	
 	private void CloseTmpCtx(CompilerContext cctx, LocalAgnTmpNode lamn, GenBuffer gbn) {
-		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
-		buf.append_cb (""); // close-brace
+		buf.append_cb(""); // close-brace
 	}
 	
 	private void BeginDefaultCaseStatement(CompilerContext cctx, CaseChoiceNode node, GenBuffer gbn) {
@@ -203,28 +200,29 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.incr_i();
 		buf.append_ln("default: {");
-		if (node.is_default()) { // TODO duh
-			final VariableReferenceNode varref = node.varref();
+		if (!node.is_default())
+			throw new IllegalStateException("node is not default");
+		//
+		final VariableReferenceNode varref = node.varref();
+		if (varref != null) {
+			buf.append_s(node.header.getExpr().genType());//varref().getType().getText());
+			String string;
 			if (varref != null) {
-				buf.append_s(node.header.getExpr().genType());//varref().getType().getText());
-				String string;
-				if (varref != null) {
-					string = varref.genText();
-				} else {
-					string = "----------------------6";
-				}
-				buf.append_s(string);
-				buf.append(" = ");
-				buf.append(node.header.simpleGenText());
-				buf.append_ln(";");
+				string = varref.genText();
 			} else {
-				final VariableReferenceNode3 vr3 = node.varref3();
-				buf.append_s(vr3.getType().genType());
-				buf.append(vr3.genText());
-				buf.append(" = ");
-				buf.append(node.header.simpleGenText());
-				buf.append_ln(";");
+				string = "----------------------6";
 			}
+			buf.append_s(string);
+			buf.append(" = ");
+			buf.append(node.header.simpleGenText());
+			buf.append_ln(";");
+		} else {
+			final VariableReferenceNode3 vr3 = node.varref3();
+			buf.append_s(vr3.getType().genType());
+			buf.append(vr3.genText());
+			buf.append(" = ");
+			buf.append(node.header.simpleGenText());
+			buf.append_ln(";");
 		}
 	}
 
@@ -330,7 +328,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		}
 	
 	private void EndMeth(CompilerContext cctx, MethHdrNode mhn, GenBuffer gbn) {
-		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.append_ln("return vsr;");
 		buf.decr_i();
@@ -366,7 +363,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		List<E> r = new ArrayList<E>();
 		r.add(e1);
 		return r;
-//        return new ImmutableCollections.List12<E>(e1);
+//      return new ImmutableCollections.List12<E>(e1);
 	}
 	
 	public static List<String> List_of(String string, String string2, String string3) {
