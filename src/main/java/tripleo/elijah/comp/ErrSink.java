@@ -8,8 +8,10 @@
  */
 package tripleo.elijah.comp;
 
-public class ErrSink {
-
+public interface ErrSink {
+	
+	void exception(Exception exception);
+	
 }
 
 //
