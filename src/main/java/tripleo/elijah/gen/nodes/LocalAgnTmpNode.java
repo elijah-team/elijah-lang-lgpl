@@ -27,18 +27,18 @@ public class LocalAgnTmpNode {
 	
 	private String declared = null;
 
-	public LocalAgnTmpNode(TmpSSACtxNode tccssan, IExpression expression) {
-		// TODO Auto-generated constructor stub
-		this.agnTo = tccssan;
-//		this.expr = expression;
-		//
-		setRight(new ExpressionNode(expression));
-		//
-		agnTo.setExprType(expression);
-		//
-		n=tccssan.getCtx().nextTmp();
-		this.declared ="vt"+n;
-	}
+//	public LocalAgnTmpNode(TmpSSACtxNode tccssan, IExpression expression) {
+//		// TODO Auto-generated constructor stub
+//		this.agnTo = tccssan;
+////		this.expr = expression;
+//		//
+//		setRight(new ExpressionNode(expression));
+//		//
+//		agnTo.setExprType(expression);
+//		//
+//		n=tccssan.getCtx().nextTmp();
+//		this.declared ="vt"+n;
+//	}
 	
 	public LocalAgnTmpNode(TmpSSACtxNode tmpSSACtxNode, IExpressionNode node) {
 		// TODO Auto-generated constructor stub
@@ -49,10 +49,15 @@ public class LocalAgnTmpNode {
 		//
 		agnTo.setExprType(node);
 		//
+		// set ctx_node name (vt1, vt2, etc)
+		//
 		n=tmpSSACtxNode.getCtx().nextTmp();
 		this.declared ="vt"+n;
 		//
 		tmpSSACtxNode._tmp = this;
+		//
+		// TODO extract type from getRight()
+		//
 	}
 	
 	public IExpressionNode getRight() {
