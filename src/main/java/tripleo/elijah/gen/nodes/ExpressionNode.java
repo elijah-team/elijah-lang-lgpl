@@ -10,6 +10,7 @@ package tripleo.elijah.gen.nodes;
 
 import org.eclipse.jdt.annotation.NonNull;
 import tripleo.elijah.gen.CompilerContext;
+import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.*;
 
 /**
@@ -157,6 +158,11 @@ public class ExpressionNode implements IExpressionNode {
 	
 	@Override
 	public String genText() {
+		return null;
+	}
+	
+	@Override
+	public TypeRef getType() {
 		return null;
 	}
 }
