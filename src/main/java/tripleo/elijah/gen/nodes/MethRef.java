@@ -35,4 +35,16 @@ public class MethRef {
 	public void setReturnType(TypeRef return_type) {
 		NotImplementedException.raise();
 	}
+	
+	public int getCode() {
+		return _code;
+	}
+	
+	public TypeRef getParent() {
+		return _parent;
+	}
+	
+	public String getTitle() {
+		return _title;
+	}
 }
