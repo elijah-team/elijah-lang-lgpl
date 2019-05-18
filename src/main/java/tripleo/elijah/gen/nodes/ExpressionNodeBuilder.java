@@ -63,19 +63,166 @@ public class ExpressionNodeBuilder {
 		}
 		return new AbstractBinaryExpression(left, middle1, right);
 	}
-
-	public static IExpression fncall(String string, List<LocalAgnTmpNode> of) { // todo wrong
+	
+//	public static IExpression fncall(String string, List<LocalAgnTmpNode> of) { // todo wrong
+//		// TODO Auto-generated method stub
+//		final ProcedureCallExpression pce = new ProcedureCallExpression();
+//		final Qualident xyz = new Qualident();
+//		final Token t = new CommonToken();
+//		t.setText(string);
+//		xyz.append(t);
+//		pce.identifier(xyz);
+////		pce.setArgs(of);
+//		return pce;
+//	}
+	
+	public static IExpressionNode fncall(String string, List<LocalAgnTmpNode> of) { // todo wrong
 		// TODO Auto-generated method stub
-		final ProcedureCallExpression pce = new ProcedureCallExpression();
+		final ProcedureCallExpression pce1 = new ProcedureCallExpression();
 		final Qualident xyz = new Qualident();
 		final Token t = new CommonToken();
 		t.setText(string);
 		xyz.append(t);
-		pce.identifier(xyz);
+		pce1.identifier(xyz);
 //		pce.setArgs(of);
-		return pce;
+		return new IExpressionNode() {
+			@Override
+			public IExpression getExpr() {
+				return pce1;
+			}
+			
+			@Override
+			public boolean is_const_expr() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_underscore() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_var_ref() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_simple() {
+				return false;
+			}
+			
+			@Override
+			public String genText(CompilerContext cctx) {
+				NotImplementedException.raise();
+				return null;
+			}
+			
+			@Override
+			public String genType() {
+				NotImplementedException.raise();
+				return null;
+			}
+			
+			@Override
+			public String genText() {
+				NotImplementedException.raise();
+				return null;
+			}
+			
+			@Override
+			public TypeRef getType() {
+				return null;
+			}
+		};
 	}
-
+	
+	public static IExpressionNode fncall(final MethRef aMeth, List<LocalAgnTmpNode> of) { // TODO no so wrong anymore
+		// TODO Auto-generated method stub
+		final ProcedureCallExpression pce1 = new ProcedureCallExpression();
+		final Qualident xyz = new Qualident();
+		final Token t = new CommonToken();
+		t.setText(aMeth.getTitle());
+		xyz.append(t);
+		pce1.identifier(xyz);
+		//
+		//
+		ExpressionList expl = new ExpressionList();
+		for (LocalAgnTmpNode node : of) {
+			VariableReference vr = new VariableReference();
+			vr.setMain(node.genName());
+			expl.add(vr);
+//			NotImplementedException.raise();
+		}
+		pce1.setArgs(expl);
+		//
+		//
+		return new IExpressionNode() {
+			@Override
+			public IExpression getExpr() {
+				return pce1;
+			}
+			
+			@Override
+			public boolean is_const_expr() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_underscore() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_var_ref() {
+				return false;
+			}
+			
+			@Override
+			public boolean is_simple() {
+				return false;
+			}
+			
+			@Override
+			public String genText(CompilerContext cctx) {
+				TypeRef p = aMeth.getParent();
+				int code = p.getCode();
+				
+				String s = String.format("z%d%s", code, pce1.getLeft().toString());
+				StringBuilder sb = new StringBuilder();
+				sb.append('(');
+				for (IExpression arg : pce1.getArgs()) {
+					String s2;
+					if (arg instanceof VariableReference)
+						s2 = ((VariableReference) arg).getName();
+					else
+						s2 = (arg.toString());
+					sb.append(s2);
+					sb.append(',');
+				}
+				sb.append(')');
+//				NotImplementedException.raise();
+				return s;
+			}
+			
+			@Override
+			public String genType() {
+				NotImplementedException.raise();
+				return null;
+			}
+			
+			@Override
+			public String genText() {
+				NotImplementedException.raise();
+				return null;
+			}
+			
+			@Override
+			public TypeRef getType() {
+				return null;
+			}
+		};
+	}
+	
 	@NotNull
 	@Contract("_, _, _ -> new")
 	public static IExpression binex(VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
@@ -89,10 +236,15 @@ public class ExpressionNodeBuilder {
 		return new AbstractBinaryExpression(left, middle1, new StringExpression(right.text())); // TODO !!!
 	}
 	
+	@NotNull
 	public static IExpressionNode binex(VariableReferenceNode3 n, ExpressionOperators opMinus, OS_Integer integer) {
-		return new MyIExpressionNode1(n, opMinus, integer);
+		TypeRef typeRef = new TypeRef(null, null,"int", 80);  // TODO smells
+		//
+		return new MyIExpressionNode1(n, opMinus, new IntegerNode(integer, typeRef));
 	}
 	
+	@NotNull
+	@Contract(value = "_, _, _ -> new", pure = true)
 	public static IExpressionNode binex(VariableReferenceNode3 varref, ExpressionOperators operators, TmpSSACtxNode node) {
 		return new IExpressionNode() {
 			@Override
@@ -134,15 +286,20 @@ public class ExpressionNodeBuilder {
 			public String genText() {
 				return null;
 			}
+			
+			@Override
+			public TypeRef getType() {
+				return null;
+			}
 		};
 	}
 	
 	private static class MyIExpressionNode1 implements IExpressionNode {
 		private final VariableReferenceNode3 _left;
-		private final IExpression _right;
+		private final IExpressionNode _right;
 		private final ExpressionOperators _middle;
 		
-		public MyIExpressionNode1(VariableReferenceNode3 left, ExpressionOperators middle, IExpression right) {
+		public MyIExpressionNode1(VariableReferenceNode3 left, ExpressionOperators middle, IExpressionNode right) {
 			_left = left;
 			_middle = middle;
 			_right = right;
@@ -177,7 +334,7 @@ public class ExpressionNodeBuilder {
 		public String genText(CompilerContext cctx) {
 			String left = _left.genText();
 			String middle1 = _middle.getSymbol();
-			String right = printableExpression(_right);
+			String right = printableExpression(_right.getExpr());
 			
 			return String.format("%s %s %s", left, middle1, right);
 		}
@@ -191,6 +348,14 @@ public class ExpressionNodeBuilder {
 		
 		@Override
 		public String genType() {
+			// TODO need lookup somewhere, prolly not here tho...
+			if (_middle == ExpressionOperators.OP_MINUS) {
+				if (_left.getType().getCode() == CODE_U64 &&
+						(_right.getType().getCode() == CODE_U64
+						|| _right.getType().getCode() == CODE_SYS_INT)) {
+					return _left.getType().getName();//"u64";
+				}
+			}
 			return null;
 		}
 		
@@ -198,7 +363,15 @@ public class ExpressionNodeBuilder {
 		public String genText() {
 			return null;
 		}
+		
+		@Override
+		public TypeRef getType() {
+			return null;
+		}
 	}
+	
+	private static final int CODE_SYS_INT = 80;
+	static final int CODE_U64 = 81;
 }
 
 //
