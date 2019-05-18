@@ -51,7 +51,6 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 
 	@Override
 	public ExpressionType getType() {
-		// TODO Auto-generated method stub
 		return ExpressionType.PROCEDURE_CALL;
 	}
 
@@ -76,14 +75,25 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 		// TODO garbage method
 		return String.format("ProcedureCallExpression{%s %s}", getLeft(), args.toString()/*getRight()*/);
 	}
-
+	
+	/**
+	 * do not call
+	 *
+	 * @return NotImplementedException
+	 */
 	@Override
 	public IExpression getRight() {
 		// TODO fix this
 		throw new NotImplementedException();
 //		return /* args */null;
 	}
-
+	
+	/**
+	 * do not call
+	 *
+	 * @param iexpression
+	 * @throws NotImplementedException always
+	 */
 	@Override
 	public void setRight(IExpression iexpression) {
 		// TODO fix this
@@ -100,6 +110,11 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 		args = ael;
 	}
 	
+	/**
+	 * change then argument list all at once
+	 *
+	 * @param ael the new value
+	 */
 	public void setArgs(ExpressionList ael) {
 		args = ael;
 	}
