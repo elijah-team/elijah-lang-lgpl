@@ -26,6 +26,8 @@ import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
+import static tripleo.elijah.gen.TypeRef.*;
+
 /**
  * Please consider that there is no such thing as an ExpressionNode
  */
@@ -69,7 +71,7 @@ public class ExpressionNodeBuilder {
 	@Contract("_, _, _ -> new")
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, IExpression right) {
 		// TODO Auto-generated method stub
-		ExpressionType middle1 = ExpressionOperatorToExpressionType(middle);
+		ExpressionType middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
 		return new AbstractBinaryExpression(left, middle1, right);
 	}
 	
@@ -82,7 +84,7 @@ public class ExpressionNodeBuilder {
 		xyz.append(t);
 		pce1.identifier(xyz);
 		//
-		final ExpressionList expl = LocalAgnTmpNodeToListVarRef(of);
+		final ExpressionList expl = Helpers.LocalAgnTmpNodeToListVarRef(of);
 		pce1.setArgs(expl);
 		//
 		return new IExpressionNode() {
@@ -146,7 +148,7 @@ public class ExpressionNodeBuilder {
 		pce1.identifier(xyz);
 		//
 		//
-		ExpressionList expl = LocalAgnTmpNodeToListVarRef(of);
+		ExpressionList expl = Helpers.LocalAgnTmpNodeToListVarRef(of);
 		pce1.setArgs(expl);
 		//
 		//
@@ -218,39 +220,11 @@ public class ExpressionNodeBuilder {
 	}
 	
 	@NotNull
-	private static ExpressionList LocalAgnTmpNodeToListVarRef(List<LocalAgnTmpNode> of) {
-		ExpressionList expl = new ExpressionList();
-		for (LocalAgnTmpNode node : of) {
-			VariableReference vr = new VariableReference();
-			vr.setMain(node.genName());
-			expl.add(vr);
-//			NotImplementedException.raise();
-		}
-		return expl;
-	}
-	
-	@NotNull
 	@Contract("_, _, _ -> new")
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
-		ExpressionType middle1 = ExpressionOperatorToExpressionType(middle);
+		ExpressionType middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
 		return new AbstractBinaryExpression(left, middle1, new StringExpression(right.text())); // TODO !!!
-	}
-	
-	@NotNull
-	private static ExpressionType ExpressionOperatorToExpressionType(ExpressionOperators middle) {
-		ExpressionType middle1;
-		switch (middle) {
-			case OP_MINUS:
-				middle1 = ExpressionType.SUBTRACTION;
-				break;
-			case OP_MULT:
-				middle1 = ExpressionType.MULTIPLY;
-				break;
-			default:
-				throw new NotImplementedException();
-		}
-		return middle1;
 	}
 	
 	@NotNull
