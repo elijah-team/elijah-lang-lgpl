@@ -38,7 +38,7 @@ public class VariableReferenceNode2 extends ExpressionNode {
 		this._declared = declared;
 		this._perm = b;
 		this._type = t;
-		setText(new IdentExpression(ct)); // TODO why call this?
+//		setText(new IdentExpression(ct)); // TODO why call this?
 	}
 	
 	private void setText(IdentExpression identExpression) {
@@ -47,10 +47,10 @@ public class VariableReferenceNode2 extends ExpressionNode {
 		_perm = true;
 	}
 	
-	public TypeNameNode getType() {
-		NotImplementedException.raise();
-		return null;
-	}
+//	public TypeNameNode getType() {
+//		NotImplementedException.raise();
+//		return null;
+//	}
 	
 	public String genText() {
 		if (_perm) return _declared;
