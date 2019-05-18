@@ -53,23 +53,11 @@ public class ExpressionNodeBuilder {
 
 	@NotNull
 	@Contract("_, _, _ -> new")
-	public static IExpression binex(VariableReference left, ExpressionOperators middle, IExpression right) {
+	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, IExpression right) {
 		// TODO Auto-generated method stub
 		ExpressionType middle1 = ExpressionOperatorToExpressionType(middle);
 		return new AbstractBinaryExpression(left, middle1, right);
 	}
-	
-//	public static IExpression fncall(String string, List<LocalAgnTmpNode> of) { // todo wrong
-//		// TODO Auto-generated method stub
-//		final ProcedureCallExpression pce = new ProcedureCallExpression();
-//		final Qualident xyz = new Qualident();
-//		final Token t = new CommonToken();
-//		t.setText(string);
-//		xyz.append(t);
-//		pce.identifier(xyz);
-////		pce.setArgs(of);
-//		return pce;
-//	}
 	
 	public static IExpressionNode fncall(String string, List<LocalAgnTmpNode> of) { // todo wrong
 		// TODO Auto-generated method stub
@@ -220,7 +208,7 @@ public class ExpressionNodeBuilder {
 	
 	@NotNull
 	@Contract("_, _, _ -> new")
-	public static IExpression binex(VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
+	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
 		ExpressionType middle1 = ExpressionOperatorToExpressionType(middle);
 		return new AbstractBinaryExpression(left, middle1, new StringExpression(right.text())); // TODO !!!
@@ -243,7 +231,7 @@ public class ExpressionNodeBuilder {
 	}
 	
 	@NotNull
-	public static IExpressionNode binex(VariableReferenceNode3 n, ExpressionOperators opMinus, OS_Integer integer) {
+	public static IExpressionNode binex(TypeRef rt, VariableReferenceNode3 n, ExpressionOperators opMinus, OS_Integer integer) {
 		TypeRef typeRef = new TypeRef(null, null,"int", 80);  // TODO smells
 		//
 		return new MyIExpressionNode1(n, opMinus, new IntegerNode(integer, typeRef));
@@ -251,7 +239,7 @@ public class ExpressionNodeBuilder {
 	
 	@NotNull
 	@Contract(value = "_, _, _ -> new", pure = true)
-	public static IExpressionNode binex(VariableReferenceNode3 varref, ExpressionOperators operators, TmpSSACtxNode node) {
+	public static IExpressionNode binex(final TypeRef rt, VariableReferenceNode3 varref, ExpressionOperators operators, TmpSSACtxNode node) {
 		return new IExpressionNode() {
 			@Override
 			public IExpression getExpr() {
@@ -295,7 +283,7 @@ public class ExpressionNodeBuilder {
 			
 			@Override
 			public TypeRef getType() {
-				return null;
+				return rt;
 			}
 		};
 	}

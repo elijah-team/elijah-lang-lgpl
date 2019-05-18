@@ -125,7 +125,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		BeginDefaultCaseStatement(cctx, csn2, gbn);
 		
 		TmpSSACtxNode tccssan = new TmpSSACtxNode(cctx);
-		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(
+		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(u64,
 				ExpressionNodeBuilder.varref("n", shn, u64),
 				ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
 		BeginTmpSSACtx(cctx, tccssan, gbn);
@@ -136,7 +136,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		GenLocalAgn(cctx, latn2, gbn);
 		
 		TmpSSACtxNode tccssan3 = new TmpSSACtxNode(cctx);
-		LocalAgnTmpNode latn3=new LocalAgnTmpNode(tccssan3, ExpressionNodeBuilder.binex(
+		LocalAgnTmpNode latn3=new LocalAgnTmpNode(tccssan3, ExpressionNodeBuilder.binex(u64,
 				ExpressionNodeBuilder.varref("n", mhn, u64), ExpressionOperators.OP_MULT, tccssan2));
 		GenLocalAgn(cctx, latn3, gbn);
 		

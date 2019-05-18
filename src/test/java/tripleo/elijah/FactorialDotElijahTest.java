@@ -47,7 +47,7 @@ public class FactorialDotElijahTest {
 
 
 		TmpSSACtxNode tccssan = new TmpSSACtxNode(cctx);
-		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(
+		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(u64,
 				ExpressionNodeBuilder.varref("n", shn, u64),
 											ExpressionOperators.OP_MINUS,
 											ExpressionNodeBuilder.integer(1)));
@@ -83,7 +83,7 @@ public class FactorialDotElijahTest {
 		CaseHdrNode shn=new CaseHdrNode(ExpressionNodeBuilder.varref("i", mhn, u64));
 
 		TmpSSACtxNode tccssan = new TmpSSACtxNode(cctx);
-		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(
+		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(u64,
 				ExpressionNodeBuilder.varref("n", shn, u64),
 				ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
 		Buffer b1 = FindBothSourceFiles.BeginTmpSSACtx(cctx, tccssan, gbn);
