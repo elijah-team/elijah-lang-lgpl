@@ -55,12 +55,7 @@ public class ExpressionNodeBuilder {
 	@Contract("_, _, _ -> new")
 	public static IExpression binex(VariableReference left, ExpressionOperators middle, IExpression right) {
 		// TODO Auto-generated method stub
-		ExpressionType middle1;
-		switch (middle) {
-		case OP_MINUS: middle1 = ExpressionType.SUBTRACTION; break;
-		case OP_MULT:  middle1 = ExpressionType.MULTIPLY; break;
-		default: throw new NotImplementedException();
-		}
+		ExpressionType middle1 = ExpressionOperatorToExpressionType(middle);
 		return new AbstractBinaryExpression(left, middle1, right);
 	}
 	
@@ -227,13 +222,24 @@ public class ExpressionNodeBuilder {
 	@Contract("_, _, _ -> new")
 	public static IExpression binex(VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
+		ExpressionType middle1 = ExpressionOperatorToExpressionType(middle);
+		return new AbstractBinaryExpression(left, middle1, new StringExpression(right.text())); // TODO !!!
+	}
+	
+	@NotNull
+	private static ExpressionType ExpressionOperatorToExpressionType(ExpressionOperators middle) {
 		ExpressionType middle1;
 		switch (middle) {
-		case OP_MINUS: middle1 = ExpressionType.SUBTRACTION; break;
-		case OP_MULT:  middle1 = ExpressionType.MULTIPLY; break;
-		default: throw new NotImplementedException();
+			case OP_MINUS:
+				middle1 = ExpressionType.SUBTRACTION;
+				break;
+			case OP_MULT:
+				middle1 = ExpressionType.MULTIPLY;
+				break;
+			default:
+				throw new NotImplementedException();
 		}
-		return new AbstractBinaryExpression(left, middle1, new StringExpression(right.text())); // TODO !!!
+		return middle1;
 	}
 	
 	@NotNull
