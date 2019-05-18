@@ -361,8 +361,6 @@ public class ExpressionNodeBuilder {
 		}
 	}
 	
-	private static final int CODE_SYS_INT = 80;
-	static final int CODE_U64 = 81;
 }
 
 //
