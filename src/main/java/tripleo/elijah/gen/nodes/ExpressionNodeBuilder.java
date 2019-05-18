@@ -133,11 +133,13 @@ public class ExpressionNodeBuilder {
 			
 			@Override
 			public TypeRef getType() {
+				NotImplementedException.raise();
 				return null;
 			}
 		};
 	}
 	
+	@NotNull
 	public static IExpressionNode fncall(final MethRef aMeth, List<LocalAgnTmpNode> of) { // TODO no so wrong anymore
 		// TODO Auto-generated method stub
 		final ProcedureCallExpression pce1 = new ProcedureCallExpression();
@@ -180,24 +182,28 @@ public class ExpressionNodeBuilder {
 			
 			@Override
 			public String genText(CompilerContext cctx) {
-				TypeRef p = aMeth.getParent();
-				int code = p.getCode();
+				final TypeRef p = aMeth.getParent();
+				final int code = p.getCode();
+				final String s = String.format("z%d%s", code, pce1.getLeft().toString());
+				final StringBuilder sb = new StringBuilder();
 				
-				String s = String.format("z%d%s", code, pce1.getLeft().toString());
-				StringBuilder sb = new StringBuilder();
+				sb.append(s);
 				sb.append('(');
+				
 				for (IExpression arg : pce1.getArgs()) {
 					String s2;
-					if (arg instanceof VariableReference)
+					if (arg instanceof VariableReference) {
 						s2 = ((VariableReference) arg).getName();
-					else
+					} else {
 						s2 = (arg.toString());
+					}
 					sb.append(s2);
 					sb.append(',');
 				}
+				
 				sb.append(')');
-//				NotImplementedException.raise();
-				return s;
+				final String s2 = sb.toString();
+				return s2;
 			}
 			
 			@Override
@@ -214,6 +220,7 @@ public class ExpressionNodeBuilder {
 			
 			@Override
 			public TypeRef getType() {
+				NotImplementedException.raise();
 				return null;
 			}
 		};
@@ -342,9 +349,8 @@ public class ExpressionNodeBuilder {
 			// TODO need lookup somewhere, prolly not here tho...
 			if (_middle == ExpressionOperators.OP_MINUS) {
 				if (_left.getType().getCode() == CODE_U64 &&
-						(_right.getType().getCode() == CODE_U64
-						|| _right.getType().getCode() == CODE_SYS_INT)) {
-					return _left.getType().getName();//"u64";
+						is_integer_code(_right.getType().getCode())) {
+					return _left.getType().genName();
 				}
 			}
 			return null;
