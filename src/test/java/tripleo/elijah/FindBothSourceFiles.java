@@ -259,7 +259,8 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.append_ln("{");
 		if (node._tmp != null) {
 //			NotImplementedException.raise();
-			buf.append(node._tmp.genName());
+//			buf.append(node._tmp.genName());
+			buf.append(node._tmp.getRight().genType());
 		}else {
 			buf.append(node.getType().genText(cctx));
 		}
