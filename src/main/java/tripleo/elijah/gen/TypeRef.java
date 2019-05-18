@@ -35,4 +35,15 @@ public class TypeRef  implements Node {
 	public int getCode() {
 		return _code;
 	}
+	
+	/**
+	 * Returns the type name
+	 *
+	 * @see #genType()
+	 *
+	 * @return the type name as referenced in the code
+	 */
+	public String getName() {
+		return _name;
+	}
 }
