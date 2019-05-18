@@ -26,10 +26,22 @@ import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
+/**
+ * Please consider that there is no such thing as an ExpressionNode
+ */
 public class ExpressionNodeBuilder {
-
+	
+	/**
+	 * Return a parser-level OS_ELement for std integer {@param i}
+	 *
+	 * @param string string in question
+	 * @return OS_Ident
+	 */
+	@NotNull
+	@Contract("_ -> new")
 	public static OS_Ident ident(String string) {
-		// TODO Auto-generated method stub
+		// TODO Parser level elements should not be used here
+		// TODO consider IdentExpression anyway
 		return new OS_Ident(string);
 	}
 	
@@ -42,6 +54,8 @@ public class ExpressionNodeBuilder {
 	@NotNull
 	@Contract("_ -> new")
 	public static OS_Integer integer(int i) {
+		// TODO Parser level elements should not be used here
+		// TODO consider IdentExpression anyway
 		return new OS_Integer(i);
 	}
 
@@ -67,7 +81,10 @@ public class ExpressionNodeBuilder {
 		t.setText(string);
 		xyz.append(t);
 		pce1.identifier(xyz);
-//		pce.setArgs(of);
+		//
+		final ExpressionList expl = LocalAgnTmpNodeToListVarRef(of);
+		pce1.setArgs(expl);
+		//
 		return new IExpressionNode() {
 			@Override
 			public IExpression getExpr() {
@@ -129,13 +146,7 @@ public class ExpressionNodeBuilder {
 		pce1.identifier(xyz);
 		//
 		//
-		ExpressionList expl = new ExpressionList();
-		for (LocalAgnTmpNode node : of) {
-			VariableReference vr = new VariableReference();
-			vr.setMain(node.genName());
-			expl.add(vr);
-//			NotImplementedException.raise();
-		}
+		ExpressionList expl = LocalAgnTmpNodeToListVarRef(of);
 		pce1.setArgs(expl);
 		//
 		//
@@ -207,6 +218,18 @@ public class ExpressionNodeBuilder {
 	}
 	
 	@NotNull
+	private static ExpressionList LocalAgnTmpNodeToListVarRef(List<LocalAgnTmpNode> of) {
+		ExpressionList expl = new ExpressionList();
+		for (LocalAgnTmpNode node : of) {
+			VariableReference vr = new VariableReference();
+			vr.setMain(node.genName());
+			expl.add(vr);
+//			NotImplementedException.raise();
+		}
+		return expl;
+	}
+	
+	@NotNull
 	@Contract("_, _, _ -> new")
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
@@ -273,7 +296,7 @@ public class ExpressionNodeBuilder {
 			
 			@Override
 			public String genType() {
-				return null;
+				return null; //rt.getName(); // TODO
 			}
 			
 			@Override
