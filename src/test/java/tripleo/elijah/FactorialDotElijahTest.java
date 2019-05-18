@@ -1,3 +1,11 @@
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ *
+ * The contents of this library are released under the LGPL licence v3,
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ *
+ */
 package tripleo.elijah;
 
 import org.junit.Assert;
@@ -87,8 +95,8 @@ public class FactorialDotElijahTest {
 				ExpressionNodeBuilder.varref("n", shn, u64),
 				ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
 		Buffer b1 = FindBothSourceFiles.BeginTmpSSACtx(cctx, tccssan, gbn);
-		Assert.assertEquals("{\n\tu64 ", b1.getText()); // TODO kludge. wrong.
-//		Assert.assertEquals("{\n\tZ81 ", b1.getText());
+//		Assert.assertEquals("{\n\tu64 ", b1.getText()); // TODO maybe this wll be right in the future.
+		Assert.assertEquals("{\n\tZ81 ", b1.getText());
 		
 		TmpSSACtxNode tccssan2 = new TmpSSACtxNode(cctx);
 		LocalAgnTmpNode latn2=new LocalAgnTmpNode(tccssan2, ExpressionNodeBuilder.fncall(
@@ -97,7 +105,10 @@ public class FactorialDotElijahTest {
 		Assert.assertEquals("{\n" +
 				"\tZ81 vt2 = z100factorial_r(vt1);\n" +
 				"\t", b2.getText());
-		
-		
 	}
+
 }
+
+//
+//
+//
