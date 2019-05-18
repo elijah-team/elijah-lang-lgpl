@@ -16,14 +16,16 @@ import java.util.Iterator;
 import java.util.List;
 
 
-// Referenced classes of package pak2:
-//			AbstractExpression
-
+/**
+ * Curiously, not an expression
+ */
 public class ExpressionList implements Iterable<IExpression> {
 
 	public IExpression next(IExpression aExpr) {
-		assert aExpr != null;
-		exprs.add(aExpr);
+//		assert aExpr != null;
+		if (aExpr == null) throw new IllegalArgumentException("expression cannot be null");
+		//
+		/*exprs.*/add(aExpr);
 		return aExpr;
 	}
 
@@ -43,4 +45,12 @@ public class ExpressionList implements Iterable<IExpression> {
 	public Iterator<IExpression> iterator() {
 		return exprs.iterator();
 	}
+	
+	public void add(IExpression aExpr) {
+		exprs.add(aExpr);
+	}
 }
+
+//
+//
+//
