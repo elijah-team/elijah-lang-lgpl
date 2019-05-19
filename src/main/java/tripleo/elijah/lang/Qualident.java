@@ -55,7 +55,7 @@ public class Qualident  implements IExpression {
 	
 	@Override
 	public ExpressionType getType() {
-		return ExpressionType.QUALIDENT;
+		return ExpressionType.QIDENT;
 	}
 	
 	@Override
