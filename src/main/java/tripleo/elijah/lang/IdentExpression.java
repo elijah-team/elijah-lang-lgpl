@@ -15,6 +15,7 @@ package tripleo.elijah.lang;
 import java.io.IOException;
 
 import antlr.Token;
+import com.thoughtworks.xstream.XStream;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
@@ -35,7 +36,7 @@ public class IdentExpression implements IExpression {
 	public void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException {
 		// TODO Auto-generated method stub
 		XStream x = new XStream(); // TODO context.comp.xstream??
-		x.toXML(this, tabbedoutputstream);
+		x.toXML(this, tabbedoutputstream.getStream());
 	}
 
 	@Override
