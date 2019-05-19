@@ -11,5 +11,14 @@
     <orderEntry type="module" module-name="buffer-src" />
     <orderEntry type="library" name="org.eclipse.jdt.annotation_2.2.200.v20180921-1416" level="project" />
     <orderEntry type="library" name="annotations-16.0.2" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/com/thoughtworks/xstream/xstream/1.4.11.1/xstream-1.4.11.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
