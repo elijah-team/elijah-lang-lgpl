@@ -16,7 +16,7 @@ import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.ProcedureCallExpression;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class TmpSSACtxNode {

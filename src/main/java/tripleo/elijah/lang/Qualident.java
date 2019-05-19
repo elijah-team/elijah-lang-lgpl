@@ -22,7 +22,7 @@ import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.util.TabbedOutputStream;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class Qualident  implements IExpression {

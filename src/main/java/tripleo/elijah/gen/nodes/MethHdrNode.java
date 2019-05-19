@@ -23,7 +23,7 @@ import tripleo.elijah.lang.TypeModifiers;
 import tripleo.elijah.util.NotImplementedException;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class MethHdrNode implements Node {

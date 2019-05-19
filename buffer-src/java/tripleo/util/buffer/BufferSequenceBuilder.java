@@ -18,7 +18,7 @@ import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.gen.nodes.ArgumentNode;
 
 /**
- * @author olu
+ * @author Tripleo(ecl)
  *
  */
 public class BufferSequenceBuilder {

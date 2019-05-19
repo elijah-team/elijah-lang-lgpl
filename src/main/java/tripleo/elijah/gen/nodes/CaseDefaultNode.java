@@ -10,7 +10,7 @@
 ///**
 // * same as case choice node
 // *
-// * @author SBUSER
+// * @author Tripleo(sb)
 // *
 // */
 //public class CaseDefaultNode {

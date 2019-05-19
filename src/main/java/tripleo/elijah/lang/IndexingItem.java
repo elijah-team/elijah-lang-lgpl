@@ -15,7 +15,7 @@ package tripleo.elijah.lang;
 import antlr.Token;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class IndexingItem {

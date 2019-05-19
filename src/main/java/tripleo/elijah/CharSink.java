@@ -12,7 +12,7 @@
 package tripleo.elijah;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class CharSink {

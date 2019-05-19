@@ -6,7 +6,7 @@ package tripleo.util.buffer;
 import tripleo.elijah.comp.GenBuffer;
 
 /**
- * @author olu
+ * @author Tripleo(ecl)
  *
  */
 public class Bufbldr extends DefaultBuffer {

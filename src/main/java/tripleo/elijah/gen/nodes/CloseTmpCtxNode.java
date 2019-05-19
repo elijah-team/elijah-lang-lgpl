@@ -14,7 +14,7 @@ package tripleo.elijah.gen.nodes;
 import tripleo.elijah.gen.CompilerContext;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class CloseTmpCtxNode {

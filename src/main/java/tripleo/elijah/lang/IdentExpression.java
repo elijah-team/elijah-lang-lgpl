@@ -19,7 +19,7 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class IdentExpression implements IExpression {

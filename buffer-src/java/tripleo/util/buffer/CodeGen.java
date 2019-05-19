@@ -10,7 +10,7 @@ import java.io.IOException;
 import tripleo.elijah.util.NotImplementedException;
 
 /**
- * @author olu
+ * @author Tripleo(ecl)
  *
  */
 public class CodeGen {

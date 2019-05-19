@@ -15,7 +15,7 @@ package tripleo.elijah.gen.nodes;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public enum ExpressionOperators {

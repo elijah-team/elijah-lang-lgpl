@@ -18,7 +18,7 @@ import antlr.Token;
 import tripleo.elijah.util.TabbedOutputStream;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class CharLitExpression implements IExpression {

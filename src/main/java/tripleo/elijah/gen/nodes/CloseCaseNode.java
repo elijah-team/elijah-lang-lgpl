@@ -21,7 +21,7 @@ import tripleo.elijah.util.NotImplementedException;
  *
  * generates <code>break;}</code>
  *
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class CloseCaseNode {

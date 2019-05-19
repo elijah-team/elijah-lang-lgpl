@@ -12,7 +12,7 @@
 package tripleo.elijah.gen.nodes;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class LocalAgnMathNode {

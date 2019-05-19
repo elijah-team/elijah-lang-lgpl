@@ -16,7 +16,7 @@ package tripleo.elijah.gen.nodes;
 import tripleo.elijah.lang.IExpression;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class ReturnAgnNode {

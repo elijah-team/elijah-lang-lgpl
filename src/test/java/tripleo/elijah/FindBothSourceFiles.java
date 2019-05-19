@@ -30,7 +30,7 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.buffer.*;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class FindBothSourceFiles /* extends TestCase */ {

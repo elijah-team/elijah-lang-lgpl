@@ -18,7 +18,7 @@
 package tripleo.elijah.lang;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class OS_Type {

@@ -11,7 +11,7 @@ package tripleo.elijah.gen.nodes;
 import tripleo.elijah.lang.OS_Integer;
 
 /**
- * @author SBUSER
+ * @author Tripleo(sb)
  *
  */
 public class ReturnAgnSimpleIntNode {
