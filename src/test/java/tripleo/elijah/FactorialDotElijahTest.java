@@ -18,8 +18,6 @@ import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.gen.nodes.*;
 import tripleo.util.buffer.Buffer;
 
-import java.util.List;
-
 import static tripleo.elijah.FindBothSourceFiles.List_of;
 
 public class FactorialDotElijahTest {
@@ -36,7 +34,7 @@ public class FactorialDotElijahTest {
 		Assert.assertEquals("vai", argumentNode.getGenName());
 		
 		MethHdrNode mhn=new MethHdrNode(u64, main_k, "factorial_r",
-				List.of(argumentNode), 1000);
+				List_of(argumentNode), 1000);
 		Assert.assertEquals("z100factorial_r", mhn.genName());
 	}
 	
@@ -50,7 +48,7 @@ public class FactorialDotElijahTest {
 		
 		
 		MethHdrNode mhn=new MethHdrNode(u64, main_k, "factorial_r",
-				List.of(new ArgumentNode("i", u64)), 1000);
+				List_of(new ArgumentNode("i", u64)), 1000);
 		CaseHdrNode shn=new CaseHdrNode(ExpressionNodeBuilder.varref("i", mhn, u64));
 
 

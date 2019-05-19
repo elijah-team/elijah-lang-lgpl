@@ -25,7 +25,7 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 		_type  = null;
 	}
 
-	public AbstractExpression(IExpression aLeft, ExpressionType aType, IExpression aRight) {
+	public AbstractExpression(IExpression aLeft, ExpressionType aType) {
 		left = aLeft;
 		_type = aType;
 	}

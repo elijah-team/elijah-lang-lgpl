@@ -46,7 +46,8 @@ public class NumericExpression implements IExpression {
 
 	@Override
 	public void print_osi(TabbedOutputStream aTabbedoutputstream) throws IOException {
-		throw new NotImplementedException(); // TODO
+		XStream x = new XStream(); // TODO context.comp.xstream??
+		x.toXML(this, aTabbedoutputstream);
 	}
 
 	@Override
@@ -56,20 +57,25 @@ public class NumericExpression implements IExpression {
 
 	@Override
 	public ExpressionType getType() {
-		return ExpressionType.SIMPLE; // TODO
+		return ExpressionType.NUMERIC; // TODO
 	}
 
 	@Override
-	public void set(ExpressionType aIncrement) {
-		throw new NotImplementedException(); // TODO
+	public void set(ExpressionType aType) {
+		// log and ignore
+		System.err.println("Trying to set ExpressionType of NumericExpression to "+aType.toString());
 	}
 	
 	@Override
 	public String toString() {
-		return "NumericExpression ("+carrier+")";
+		return String.format("NumericExpression (%dd)", carrier);
 	}
 
 	public boolean is_simple() {
 		return true;
 	}
 }
+
+//
+//
+//

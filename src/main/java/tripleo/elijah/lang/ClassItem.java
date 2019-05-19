@@ -8,10 +8,15 @@
  */
 package tripleo.elijah.lang;
 
+/**
+ * Marker interface to represent elements that can be added to a class
+ *
+ * @see {@link ClassStatement#add(ClassItem) }
+ */
 public interface ClassItem extends OS_Element {
 
-//	void print_osi(TabbedOutputStream aTos) throws IOException;
-//
-//	void visit(JavaCodeGen gen);
-
 }
+
+//
+//
+//

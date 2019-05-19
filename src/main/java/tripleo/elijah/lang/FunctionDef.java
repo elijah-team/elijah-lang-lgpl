@@ -101,13 +101,17 @@ public class FunctionDef implements ClassItem {
 	private List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
 //	private FunctionDefScope mScope;
-	private ClassStatement parent;
+	private OS_Element/*ClassStatement*/ parent;
 	private final FunctionDefScope mScope2 = new FunctionDefScope();
 	private TypeName _returnType = new RegularTypeName();
 
-	public FunctionDef(ClassStatement aStatement) {
+	public FunctionDef(OS_Element aStatement) {
 		parent = aStatement;
-		parent.add(this);
+		if (aStatement instanceof ClassStatement) {
+			((ClassStatement)parent).add(this);
+		} else {
+			System.err.println("adding FunctionDef to "+aStatement.getClass().getName());
+		}
 	}
 
 	public FormalArgList fal() {

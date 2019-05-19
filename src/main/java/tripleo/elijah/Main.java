@@ -21,16 +21,16 @@ public class Main {
 		try {
 			//
 			if (args.length > 0) {
-				for (int i = 0; i < args.length; i++)
-					if (args[i].equals("-showtree"))
+				for (int i = 0; i < args.length; i++) {
+					if (args[i].equals("-showtree")) {
 						showTree = true;
-					else {
+					} else {
 						doFile(new File(args[i]), errSink);
 					}
+				}
 
 			} else {
-				System.err
-						.println("Usage: java Main [-showtree] <directory or file name>");
+				System.err.println("Usage: eljc [-showtree] <directory or file name>");
 			}
 		} catch (Exception e) {
 			errSink.exception(e);

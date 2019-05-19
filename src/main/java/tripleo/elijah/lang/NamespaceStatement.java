@@ -18,10 +18,11 @@ import antlr.Token;
  * @author Tripleo(sb)
  *
  */
-public class NamespaceStatement implements Scope {
+public class NamespaceStatement implements Scope { // TODO why implement Scope?
 
 	private Token name;
 	private OS_Module parent;
+	private NamespaceTypes type; // TODO implement setter
 
 	public NamespaceStatement(OS_Module module) {
 		this.parent = module;

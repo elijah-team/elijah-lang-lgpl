@@ -8,6 +8,11 @@
  */
 package tripleo.elijah.lang;
 
+/**
+ * Marker interface to represent elements that can be added to a function
+ *
+ * @see {@link FunctionDef.FunctionDefScope#add(StatementItem)}
+ */
 public interface FunctionItem extends OS_Element {
 
 }

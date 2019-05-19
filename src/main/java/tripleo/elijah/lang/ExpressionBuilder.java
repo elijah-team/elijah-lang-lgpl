@@ -14,29 +14,25 @@
  */
 package tripleo.elijah.lang;
 
-import java.util.List;
-
-import antlr.CommonToken;
-import antlr.Token;
-import tripleo.elijah.gen.nodes.ExpressionOperators;
-import tripleo.elijah.gen.nodes.LocalAgnTmpNode;
-import tripleo.elijah.gen.nodes.TmpSSACtxNode;
-import tripleo.elijah.util.NotImplementedException;
-
 public class ExpressionBuilder {
 
-	public static IBinaryExpression buildPartial(IExpression aE, ExpressionType aAssignment) {
+	public static IBinaryExpression buildPartial(IExpression aE, ExpressionType aType) {
 		// TODO Auto-generated method stub
-		return new AbstractBinaryExpression(aE, aAssignment, null);
+		return new AbstractBinaryExpression(aE, aType, null);
 	}
 
-	public static IBinaryExpression build(IExpression aE, ExpressionType aIs_a, IExpression aExpression) {
-		return new AbstractBinaryExpression(aE, aIs_a, aExpression);
+	public static IBinaryExpression build(IExpression aE, ExpressionType aType, IExpression aExpression) {
+		return new AbstractBinaryExpression(aE, aType, aExpression);
 	}
 
-	public static IExpression build(IExpression aE, ExpressionType aPost_decrement) {
+	public static IExpression build(IExpression aE, ExpressionType aType) {
 		// TODO Auto-generated method stub
-		return null;
+		return new AbstractExpression(aE, aType) {
+			@Override
+			public boolean is_simple() {
+				return false; // TODO whoa
+			}
+		};
 	}
 	
 }

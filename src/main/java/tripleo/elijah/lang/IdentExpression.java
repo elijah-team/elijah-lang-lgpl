@@ -25,6 +25,7 @@ import tripleo.elijah.util.TabbedOutputStream;
 public class IdentExpression implements IExpression {
 
 	private Token text;
+	public  Attached _a;
 
 	public IdentExpression(Token r1) {
 		this.text = r1;
@@ -33,37 +34,39 @@ public class IdentExpression implements IExpression {
 	@Override
 	public void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException {
 		// TODO Auto-generated method stub
-		
+		XStream x = new XStream(); // TODO context.comp.xstream??
+		x.toXML(this, tabbedoutputstream);
 	}
 
 	@Override
 	public ExpressionType getType() {
-		// TODO is this right?
-		return ExpressionType.STRING_LITERAL;
+		return ExpressionType.IDENT;
 	}
 
 	@Override
 	public void set(ExpressionType aIncrement) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		// log and ignore
+		System.err.println("Trying to set ExpressionType of IdentExpression to "+aIncrement.toString());
 	}
 
 	@Override
 	public IExpression getLeft() {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	@Override
 	public void setLeft(IExpression iexpression) {
-		// TODO Auto-generated method stub
-		
+		if (iexpression instanceof IdentExpression) {
+			text = ((IdentExpression) iexpression).text;
+		} else {
+			// NOTE was System.err.println
+			throw new IllegalArgumentException("Trying to set left-side of IdentExpression to " + iexpression.toString());
+		}
 	}
 
 	@Override
 	public String repr_() {
-		// TODO Auto-generated method stub
-		return null;
+		return String.format("IdentExpression(%s %d)", text.getText(), _a.getCode());
 	}
 
 	public String getText() {

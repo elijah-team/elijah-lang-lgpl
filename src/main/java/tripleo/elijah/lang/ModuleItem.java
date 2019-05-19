@@ -8,6 +8,11 @@
  */
 package tripleo.elijah.lang;
 
+/**
+ * Marker interface to represent elements that can be added to a OS_Module
+ *
+ * @see {@link OS_Module#add(ModuleItem) }
+ */
 public interface ModuleItem extends OS_Element {
 
 }

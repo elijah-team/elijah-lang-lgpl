@@ -14,7 +14,7 @@ package tripleo.elijah.lang;
 public class FormalArgListItem {
 	
 	String name;
-	TypeName tn=new RegularTypeName();
+	TypeName tn=new RegularTypeName(); // TODO why make the choice for the program?
 
 	public TypeName typeName() {
 		return tn;

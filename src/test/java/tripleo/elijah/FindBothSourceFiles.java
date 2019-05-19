@@ -82,7 +82,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		//fail("Not yet implemented"); // TODO
 		Assert.assertTrue(c.getIO().recordedRead(new File(".", "factdemo.elijah")));
 		Assert.assertTrue(c.getIO().recordedRead(new File(new File(".", "main2"), "main2.elijah")));
-//		fail("Not yet implemented"); // TODO
 	}
 
 	void main2_el(CompilerContext cctx, GenBuffer gbn) {
@@ -204,18 +203,23 @@ public class FindBothSourceFiles /* extends TestCase */ {
 			throw new IllegalStateException("node is not default");
 		//
 		final VariableReferenceNode varref = node.varref();
-		if (varref != null) {
+		if (varref == null)
+			throw new IllegalStateException("varref is null");
+		
+		{
 			buf.append_s(node.header.getExpr().genType());//varref().getType().getText());
 			String string;
 			if (varref != null) {
 				string = varref.genText();
 			} else {
+				System.err.println("reached no mans land #6");
 				string = "----------------------6";
 			}
 			buf.append_s(string);
 			buf.append(" = ");
 			buf.append(node.header.simpleGenText());
 			buf.append_ln(";");
+/*
 		} else {
 			final VariableReferenceNode3 vr3 = node.varref3();
 			buf.append_s(vr3.getType().genType());
@@ -223,6 +227,8 @@ public class FindBothSourceFiles /* extends TestCase */ {
 			buf.append(" = ");
 			buf.append(node.header.simpleGenText());
 			buf.append_ln(";");
+		}
+*/
 		}
 	}
 
