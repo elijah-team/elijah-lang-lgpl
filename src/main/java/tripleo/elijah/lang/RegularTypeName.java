@@ -25,7 +25,7 @@ public class RegularTypeName extends AbstractTypeName2 implements TypeName {
 		return null;
 	}
 
-	public void setName(String aS) {
+	public void setName(Qualident aS) {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
 	}
