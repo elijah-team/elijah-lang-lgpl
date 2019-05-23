@@ -13,7 +13,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import antlr.Token;
+import com.thoughtworks.xstream.XStream;
+import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 // Referenced classes of package pak2:
@@ -63,8 +67,8 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 	}
 
 	@Override
-	public void addDocString(String aText) {
-		mDocs.add(aText);
+	public void addDocString(Token aText) {
+		mDocs.add(aText.getText());
 	}
 
 	@Override
@@ -118,8 +122,8 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 		return parent;
 	}
 	
-	public void setName(String aText) {
-		clsName=aText;
+	public void setName(Token aText) {
+		clsName=aText.getText();
 	}
 
 	@Override

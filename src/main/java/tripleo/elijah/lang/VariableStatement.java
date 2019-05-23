@@ -10,6 +10,7 @@ package tripleo.elijah.lang;
 
 import java.io.IOException;
 
+import antlr.Token;
 import tripleo.elijah.util.TabbedOutputStream;
 
 // Referenced classes of package pak:
@@ -32,8 +33,8 @@ public class VariableStatement {
 		return name;
 	}
 	
-	public void setName(String s) {
-		name = s;
+	public void setName(Token s) {
+		name = s.getText();
 	}
 
 	public void initial(IExpression aExpr) {

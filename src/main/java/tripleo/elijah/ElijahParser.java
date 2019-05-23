@@ -725,7 +725,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			i1 = LT(1);
 			match(IDENT);
 			if (inputState.guessing == 0) {
-				cls.setName(i1.getText());
+				cls.setName(i1);
 			}
 			{
 				switch (LA(1)) {
@@ -913,7 +913,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				s = LT(1);
 				match(STRING_LITERAL);
 				if (inputState.guessing == 0) {
-					e = new StringExpression(s.getText());
+					e = new StringExpression(s);
 				}
 				break;
 			}
@@ -971,7 +971,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 						s1 = LT(1);
 						match(STRING_LITERAL);
 						if (inputState.guessing == 0) {
-							sc.addDocString(s1.getText());
+							sc.addDocString(s1);
 						}
 					} else {
 						if (_cnt25 >= 1) {
@@ -1324,7 +1324,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 					i1 = LT(1);
 					match(IDENT);
 					if (inputState.guessing == 0) {
-						loop.iterName(i1.getText());
+						loop.iterName(i1);
 					}
 					break;
 				}
@@ -1351,7 +1351,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			i1 = LT(1);
 			match(IDENT);
 			if (inputState.guessing == 0) {
-				fd.setName(i1.getText());
+				fd.setName(i1);
 			}
 			opfal(fd.fal());
 			switch (LA(1)) {
@@ -2801,7 +2801,8 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 					match(LITERAL_construct);
 					expr = expression();
 					if (inputState.guessing == 0) {
-						pc.constructExpression(expr);
+						FormalArgList o = null;
+						pc.constructExpression(expr, o);
 					}
 					break;
 				}
@@ -3258,7 +3259,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			i = LT(1);
 			match(IDENT);
 			if (inputState.guessing == 0) {
-				vs.setName(i.getText());
+				vs.setName(i);
 			}
 			{
 				switch (LA(1)) {

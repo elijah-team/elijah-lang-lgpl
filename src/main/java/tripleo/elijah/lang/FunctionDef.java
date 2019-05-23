@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
@@ -138,8 +139,8 @@ public class FunctionDef implements ClassItem {
 		return mScope2;
 	}
 
-	public void setName(String aText) {
-		funName = aText;
+	public void setName(Token aText) {
+		funName = aText.getText();
 	}
 
 	public void visit(JavaCodeGen gen) {

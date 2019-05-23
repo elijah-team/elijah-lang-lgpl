@@ -10,12 +10,13 @@ package tripleo.elijah.lang;
 
 import java.io.IOException;
 
+import antlr.Token;
 import tripleo.elijah.util.TabbedOutputStream;
 
 public class StringExpression extends AbstractExpression {
 
-public StringExpression(String g) {
-set(g);
+public StringExpression(Token g) {
+set(g.getText());
 }
 
 	public boolean is_simple() {

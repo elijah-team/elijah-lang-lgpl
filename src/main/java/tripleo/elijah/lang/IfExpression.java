@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.lang;
 
+import antlr.Token;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +57,7 @@ public class IfExpression implements StatementItem {
 		}
 		
 		@Override
-		public void addDocString(String s) {
+		public void addDocString(Token s) {
 			parent.addDocString(s);
 		}
 		

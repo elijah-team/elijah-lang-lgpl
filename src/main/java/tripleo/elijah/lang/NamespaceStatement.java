@@ -40,7 +40,7 @@ public class NamespaceStatement implements Scope { // TODO why implement Scope?
 	}
 
 	@Override
-	public void addDocString(String s) {
+	public void addDocString(Token s) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -67,7 +67,6 @@ public class NamespaceStatement implements Scope { // TODO why implement Scope?
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
 
 //

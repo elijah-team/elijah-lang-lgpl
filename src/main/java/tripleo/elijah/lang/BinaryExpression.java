@@ -10,10 +10,11 @@
 // Referenced classes of package pak2:
 //			AbstractExpression, ExpressionType
 
+import antlr.Token;
+
 class BinaryExpression extends AbstractBinaryExpression {
 
-	public BinaryExpression(IExpression aLast_exp, ExpressionType aType,
-			String aSide) {
+	public BinaryExpression(IExpression aLast_exp, ExpressionType aType, Token aSide) {
 		left = aLast_exp;
 		type = aType;
 		StringExpression se=new StringExpression(aSide);

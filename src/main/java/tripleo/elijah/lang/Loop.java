@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.lang.FunctionDef.StatementWrapper;
 import tripleo.elijah.util.NotImplementedException;
@@ -49,9 +50,9 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem {
 		frompart=aExpr;
 	}
 
-	public void iterName(String s) {
+	public void iterName(Token s) {
 //		assert type == ITER_TYPE;
-		iterName=s;
+		iterName=s.getText();
 	}
 
 	String iterName;
