@@ -75,6 +75,16 @@ public class IfExpression implements StatementItem {
 		public void add(StatementItem aItem) {
 			parent.add(aItem);
 		}
+		
+		@Override
+		public TypeAliasExpression typeAlias() {
+			return null;
+		}
+		
+		@Override
+		public InvariantStatement invariantStatement() {
+			return null;
+		}
 	}
 }
 
