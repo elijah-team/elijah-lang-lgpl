@@ -14,6 +14,7 @@
  */
 package tripleo.elijah.gen.nodes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import antlr.CommonToken;
@@ -190,6 +191,7 @@ public class ExpressionNodeBuilder {
 				sb.append(s);
 				sb.append('(');
 				
+				List<String> sl = new ArrayList<String>();
 				for (IExpression arg : pce1.getArgs()) {
 					String s2;
 					if (arg instanceof VariableReference) {
@@ -197,13 +199,13 @@ public class ExpressionNodeBuilder {
 					} else {
 						s2 = (arg.toString());
 					}
-					sb.append(s2);
-					sb.append(',');
+					sl.add(s2);
+//					sb.append(',');
 				}
-				
+				sb.append(String.join(",", sl));
 				sb.append(')');
-				final String s2 = sb.toString();
-				return s2;
+				final String s3 = sb.toString();
+				return s3;
 			}
 			
 			@Override
@@ -231,7 +233,13 @@ public class ExpressionNodeBuilder {
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
 		ExpressionType middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
-		return new AbstractBinaryExpression(left, middle1, new StringExpression(right.text())); // TODO !!!
+		return new AbstractBinaryExpression(left, middle1, new StringExpression(makeToken(right.text()))); // TODO !!!
+	}
+	
+	private static Token makeToken(String aText) {
+		CommonToken t = new CommonToken();
+		t.setText(aText);
+		return t;
 	}
 	
 	@NotNull
