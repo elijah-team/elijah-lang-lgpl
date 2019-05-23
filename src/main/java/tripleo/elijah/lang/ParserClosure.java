@@ -19,7 +19,9 @@ package tripleo.elijah.lang;
 //			BinaryExpression, StatementClosure, ClassStatement, ImportStatement, 
 //			ExpressionType
 
-public class ParserClosure {
+import tripleo.elijah.ProgramClosure;
+
+public class ParserClosure extends ProgramClosure {
 
 	public ParserClosure(String fn) {
 		module = new OS_Module();
@@ -38,10 +40,10 @@ public class ParserClosure {
 		return module;
 	}
 
-//	public void packageName(String aXy) {
-//		assert module.packageName ==null;
-//		module.packageName = aXy;
-//	}
+	public void packageName(Qualident aXy) {
+		//assert module.packageName ==null;
+		module.pushPackageName(aXy);
+	}
 
 	public final OS_Module module;
 
