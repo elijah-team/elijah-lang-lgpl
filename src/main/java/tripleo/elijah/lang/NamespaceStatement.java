@@ -13,6 +13,8 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.ProgramClosure;
+import tripleo.elijah.util.NotImplementedException;
 
 /**
  * @author Tripleo(sb)
@@ -62,9 +64,25 @@ public class NamespaceStatement implements Scope { // TODO why implement Scope?
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	@Override
+	public TypeAliasExpression typeAlias() {
+		return null;
+	}
+	
+	@Override
+	public InvariantStatement invariantStatement() {
+		return null;
+	}
+	
 	public FunctionDef funcDef() {
 		// TODO Auto-generated method stub
+		NotImplementedException.raise();
+		return null;
+	}
+	
+	public ProgramClosure XXX() {
+		NotImplementedException.raise();
 		return null;
 	}
 }
