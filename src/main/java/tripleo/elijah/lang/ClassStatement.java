@@ -92,6 +92,9 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
+		XStream x= new XStream();
+		x.toXML(this, tos.getStream());
+		//
 		System.out.println("Klass print_osi");
 		tos.incr_tabs();
 		tos.put_string("Class (");
@@ -168,6 +171,30 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 	
 	public OS_Package getPackageName() {
 		return _packageName;
+	}
+	
+	public Scope addCtor(Token aX1) {
+		NotImplementedException.raise();
+		return null;
+	}
+	
+	public Scope addDtor() {
+		NotImplementedException.raise();
+		return null;
+	}
+	
+	public TypeAliasExpression typeAlias() {
+		NotImplementedException.raise();
+		return null;
+	}
+	
+	public InvariantStatement invariantStatement() {
+		NotImplementedException.raise();
+		return null;
+	}
+	
+	public ProgramClosure XXX() {
+		return null;
 	}
 }
 
