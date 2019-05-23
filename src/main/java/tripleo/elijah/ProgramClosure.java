@@ -13,6 +13,7 @@ import tripleo.elijah.lang.ImportStatement;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.util.NotImplementedException;
 
 public class ProgramClosure {
 	public ClassStatement classStatement(OS_Element aParent) {
@@ -30,6 +31,10 @@ public class ProgramClosure {
 		return namespaceStatement;
 	}
 	
+	public ProgramClosure aliasStatement() {
+		NotImplementedException.raise();
+		return null;
+	}
 }
 
 //
