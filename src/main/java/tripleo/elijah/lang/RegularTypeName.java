@@ -98,7 +98,12 @@ public void typeof(Qualident xyz) {
 	
 }
 	
-//	@Override
+	@Override
+	public void setGeneric(boolean value) {
+	
+	}
+	
+	//	@Override
 	public String getTypeName() {
 		return this.typeName.toString();
 	}  // TODO is this right?

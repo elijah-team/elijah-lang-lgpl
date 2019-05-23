@@ -74,6 +74,11 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
 	}
-
+	
+	@Override
+	public void setGeneric(boolean value) {
+		NotImplementedException.raise();
+	}
+	
 }
 
