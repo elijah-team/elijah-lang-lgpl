@@ -74,10 +74,20 @@ public class FunctionDef implements ClassItem {
 				System.err.println(String.format("adding false StatementItem %s",
 					aItem.getClass().getName()));
 		}
-
+		
 		@Override
-		public void addDocString(String aS) {
-			docstrings.add(aS);
+		public TypeAliasExpression typeAlias() {
+			return null;
+		}
+		
+		@Override
+		public InvariantStatement invariantStatement() {
+			return null;
+		}
+		
+		@Override
+		public void addDocString(Token aS) {
+			docstrings.add(aS.getText());
 		}
 
 		@Override
