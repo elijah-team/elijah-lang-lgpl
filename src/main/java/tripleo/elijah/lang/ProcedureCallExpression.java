@@ -10,16 +10,27 @@ package tripleo.elijah.lang;
 
 import java.io.IOException;
 
+import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 // TODO is ExpressionList an IExpression?
-public class ProcedureCallExpression implements StatementItem, FunctionItem, IBinaryExpression {
+public class ProcedureCallExpression implements StatementItem, FunctionItem, IExpression {
 	
 	private IExpression _left;
 	private ExpressionList args=new ExpressionList();
-
+	
+	public ProcedureCallExpression(Token aToken, ExpressionList aExpressionList, Token aToken1) {
+		throw new NotImplementedException();
+		
+	}
+	
+	public ProcedureCallExpression() {
+		NotImplementedException.raise();
+		
+	}
+	
 	public void identifier(Qualident xyz) {
 		setLeft(xyz);
 	}
@@ -76,39 +87,39 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 		return String.format("ProcedureCallExpression{%s %s}", getLeft(), args.toString()/*getRight()*/);
 	}
 	
-	/**
-	 * do not call
-	 *
-	 * @return NotImplementedException
-	 */
-	@Override
-	public IExpression getRight() {
-		// TODO fix this
-		throw new NotImplementedException();
-//		return /* args */null;
-	}
+//	/**
+//	 * do not call
+//	 *
+//	 * @return NotImplementedException
+//	 */
+//	@Override
+//	public IExpression getRight() {
+//		// TODO fix this
+//		throw new NotImplementedException();
+////		return /* args */null;
+//	}
+//
+//	/**
+//	 * do not call
+//	 *
+//	 * @param iexpression
+//	 * @throws NotImplementedException always
+//	 */
+//	@Override
+//	public void setRight(IExpression iexpression) {
+//		// TODO fix this
+////		args = iexpression;
+//		throw new NotImplementedException();
+//	}
 	
-	/**
-	 * do not call
-	 *
-	 * @param iexpression
-	 * @throws NotImplementedException always
-	 */
-	@Override
-	public void setRight(IExpression iexpression) {
-		// TODO fix this
-//		args = iexpression;
-		throw new NotImplementedException();
-	}
-	
-	/**
-	 * same as setArgs(ExpressionList)
-	 *
-	 * @param ael the new value
-	 */
-	public void setRight(ExpressionList ael) {
-		args = ael;
-	}
+//	/**
+//	 * same as setArgs(ExpressionList)
+//	 *
+//	 * @param ael the new value
+//	 */
+//	public void setRight(ExpressionList ael) {
+//		args = ael;
+//	}
 	
 	/**
 	 * change then argument list all at once
@@ -119,17 +130,17 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IBi
 		args = ael;
 	}
 	
-	@Override
-	public void shift(ExpressionType aType) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
-	}
-
-	@Override
-	public void set(IBinaryExpression aEx) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
-	}
+//	@Override
+//	public void shift(ExpressionType aType) {
+//		// TODO Auto-generated method stub
+//		throw new NotImplementedException();
+//	}
+//
+//	@Override
+//	public void set(IBinaryExpression aEx) {
+//		// TODO Auto-generated method stub
+//		throw new NotImplementedException();
+//	}
 	
 	public String getReturnTypeString() {
 		return "int"; // TODO hardcoded
