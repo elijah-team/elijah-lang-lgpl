@@ -59,28 +59,33 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem {
 	/**
 	 * @category type
 	 */
-	int type;
-IExpression topart,expr; 
-IExpression frompart;
+	private int type;
+private IExpression topart,frompart;
+private IExpression expr;
 
 	/**
 	 * @category type
 	 */
-	public final int FROM_TO_TYPE = 82;
+	public static final int FROM_TO_TYPE = 82;
 
 	/**
 	 * @category type
 	 */
-	public final int TO_TYPE = 81;
+	public static final int TO_TYPE = 81;
+	
+	public List<StatementItem> getItems() {
+		return items;
+	}
+	
 	/**
 	 * @category type
 	 */
-	public final int ITER_TYPE = 86;
+	public static final int ITER_TYPE = 86;
 
 	/**
 	 * @category type
 	 */
-	public final int EXPR_TYPE = 83;
+	public static final int EXPR_TYPE = 83;
 
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
@@ -93,7 +98,27 @@ IExpression frompart;
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
 	}
-
+	
+	public String getIterName() {
+		return iterName;
+	}
+	
+	public int getType() {
+		return type;
+	}
+	
+	public IExpression getToPart() {
+		return topart;
+	}
+	
+	public IExpression getExpr() {
+		return expr;
+	}
+	
+	public IExpression getFromPart() {
+		return frompart;
+	}
+	
 	private final class LoopScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
@@ -107,10 +132,20 @@ IExpression frompart;
 //					aItem.getClass().getName()));
 			items.add(aItem);
 		}
-
+		
 		@Override
-		public void addDocString(String aS) {
-			docstrings.add(aS);
+		public TypeAliasExpression typeAlias() {
+			return null;
+		}
+		
+		@Override
+		public InvariantStatement invariantStatement() {
+			return null;
+		}
+		
+		@Override
+		public void addDocString(Token aS) {
+			docstrings.add(aS.getText());
 		}
 
 		@Override
