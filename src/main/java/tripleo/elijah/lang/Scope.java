@@ -11,15 +11,21 @@ package tripleo.elijah.lang;
 // Referenced classes of package pak2:
 //			StatementClosure, BlockStatement
 
+import antlr.Token;
+
 public interface Scope {
 
-	public abstract void statementWrapper(IExpression aExpr);
+	void statementWrapper(IExpression aExpr);
 
-	public abstract void addDocString(String s);
+	void addDocString(Token s);
 
-	public abstract StatementClosure statementClosure();
+	StatementClosure statementClosure();
 
-	public abstract BlockStatement blockStatement();
+	BlockStatement blockStatement();
 
-	public abstract void add(StatementItem aItem);
+	void add(StatementItem aItem);
+	
+	TypeAliasExpression typeAlias();
+	
+	InvariantStatement invariantStatement();
 }
