@@ -14,19 +14,22 @@ package tripleo.elijah.lang;
 
 public interface StatementClosure {
 
-	public abstract VariableSequence varSeq();
+	VariableSequence varSeq();
 
-	public abstract ProcedureCallExpression procedureCallExpression();
+	ProcedureCallExpression procedureCallExpression();
 
-	public abstract Loop loop();
+	Loop loop();
 
-	public abstract StatementClosure procCallExpr();
+	StatementClosure procCallExpr();
 
-	public abstract void constructExpression(IExpression aExpr);
+	void constructExpression(IExpression aExpr, FormalArgList aO);
 
-	public abstract void yield(IExpression aExpr);
+	void yield(IExpression aExpr);
 
-	public abstract IfExpression ifExpression();
+	IfExpression ifExpression();
 
-	public abstract BlockStatement blockClosure();
+	BlockStatement blockClosure();
+	
+	// TODO new
+	//IdentList identList();
 }
