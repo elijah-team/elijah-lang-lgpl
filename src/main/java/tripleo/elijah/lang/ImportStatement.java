@@ -10,6 +10,7 @@ package tripleo.elijah.lang;
 
 import java.io.IOException;
 
+import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
@@ -56,6 +57,20 @@ public class ImportStatement implements ModuleItem {
 	public void visitGen(ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
+	}
+	
+	public void addAssigningPart(Token aToken, Qualident aQualident) {
+		throw new NotImplementedException();
+	}
+	
+	public IdentList addSelectivePart(Qualident aQualident) {
+		throw new NotImplementedException();
+//		return null;
+	}
+	
+	public void addNormalPart(Qualident aQualident) {
+		throw new NotImplementedException();
+		
 	}
 }
 
