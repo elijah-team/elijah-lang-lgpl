@@ -36,7 +36,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		return ctex;
 	}
 	@Override
-	public void constructExpression(IExpression aExpr) {
+	public void constructExpression(IExpression aExpr, FormalArgList aO) {
 		add((StatementItem) aExpr);
 	}
 	@Override
