@@ -9,6 +9,9 @@
 package tripleo.elijah;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
@@ -18,25 +21,29 @@ public class Main {
 
 	public static void main(String[] args) {
 		StdErrSink errSink = new StdErrSink();
-		try {
-			//
-			if (args.length > 0) {
-				for (int i = 0; i < args.length; i++) {
-					if (args[i].equals("-showtree")) {
-						showTree = true;
-					} else {
-						doFile(new File(args[i]), errSink);
-					}
-				}
-
-			} else {
-				System.err.println("Usage: eljc [-showtree] <directory or file name>");
-			}
-		} catch (Exception e) {
-			errSink.exception(e);
-		}
+		Compilation cc = new Compilation(errSink, new IO());
+		List<String> ls = new ArrayList<String>();
+		ls.addAll(Arrays.asList(args));
+		cc.main(ls);
+//		try {
+//			//
+//			if (args.length > 0) {
+//				for (int i = 0; i < args.length; i++) {
+//					if (args[i].equals("-showtree")) {
+//						showTree = true;
+//					} else {
+//						doFile(new File(args[i]), errSink);
+//					}
+//				}
+//
+//			} else {
+//				System.err.println("Usage: eljc [-showtree] <directory or file name>");
+//			}
+//		} catch (Exception e) {
+//			errSink.exception(e);
+//		}
 	}
-
+/*
 	public static void doFile(File f, StdErrSink aErrSink) throws Exception {
 		Compilation c = new Compilation(aErrSink, new IO());
 		c.doFile(f);
@@ -71,7 +78,7 @@ public class Main {
 //	}
 
 	static boolean showTree = false;
-
+*/
 }
 
 //
