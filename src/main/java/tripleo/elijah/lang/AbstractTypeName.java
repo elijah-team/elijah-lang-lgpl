@@ -64,11 +64,11 @@ public abstract class AbstractTypeName implements TypeName {
 
 	@Override
 	public String getName() {
-		return pr_name;
+		return pr_name.toString();
 	}
 
 	@Override
-	public void setName(String s) {
+	public void setName(Qualident s) {
 		pr_name = s;
 	}
 	
@@ -87,7 +87,7 @@ tm=atm;
 	protected boolean pr_reference;
 	protected boolean pr_out;
 	protected boolean pr_in;
-	protected String pr_name;
+	protected Qualident pr_name;
 
 	int type;
 }
