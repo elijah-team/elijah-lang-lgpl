@@ -32,17 +32,38 @@ public class OS_Module implements OS_Element {
 	
 	private String _fileName;
 	
+	public List<ModuleItem> items=new ArrayList<ModuleItem>();
+	
+	public List<IndexingItem> indexingItems=new ArrayList<IndexingItem>();
+
+	//	public String packageName;
+	public String moduleName="default";
+
+	//	public void pushPackageName(String xy) {
+//		// TODO Auto-generated method stub
+//		packageNames.push(xy);
+//	}
+//	
+//	Stack<String> packageNames = new Stack<String>();
+	private Stack<Qualident> packageNames_q = new Stack<Qualident>();
 	public void add(ModuleItem aItem) {
 //		if (aItem instanceof ClassStatement)
 //			((ClassStatement)aItem).setPackageName(packageNames_q.peek());
 		items.add(aItem);
 	}
-	
+public void addIndexingItem(Token i1, IExpression c1) {
+		indexingItems.add(new IndexingItem(i1, c1));
+	}
+
 	public void finish(TabbedOutputStream tos) throws IOException {
 		tos.close();
 	}
 
-	@Override
+	public String getFileName() {
+		return _fileName;
+	}
+
+@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		System.out.println("Module print_osi");
 //		if (packageName != null) {
@@ -58,40 +79,6 @@ public class OS_Module implements OS_Element {
 		}
 	}
 
-	public List<ModuleItem> items=new ArrayList<ModuleItem>();
-	public List<IndexingItem> indexingItems=new ArrayList<IndexingItem>();
-//	public String packageName;
-	public String moduleName="default";
-
-	@Override
-	public void visitGen(ICodeGen visit) {
-		visit.addModule(this);
-	}
-
-	public void addIndexingItem(Token i1, IExpression c1) {
-		indexingItems.add(new IndexingItem(i1, c1));
-	}
-
-//	public void pushPackageName(String xy) {
-//		// TODO Auto-generated method stub
-//		packageNames.push(xy);
-//	}
-//	
-//	Stack<String> packageNames = new Stack<String>();
-	private Stack<Qualident> packageNames_q = new Stack<Qualident>();
-
-	public void pushPackageName(Qualident xyz) {
-		packageNames_q.push(xyz);
-	}
-	
-	public String getFileName() {
-		return _fileName;
-	}
-	
-	public void setFileName(String fileName) {
-		this._fileName = fileName;
-	}
-	
 	/**
 	 * The last package name declared in the source file
 	 *
@@ -102,6 +89,19 @@ public class OS_Module implements OS_Element {
 		if (packageNames_q.empty())
 			return OS_Package.default_package;
 		return new OS_Package(packageNames_q.peek(), packageNames_q.size()); // TODO
+	}
+	
+	public void pushPackageName(Qualident xyz) {
+		packageNames_q.push(xyz);
+	}
+	
+	public void setFileName(String fileName) {
+		this._fileName = fileName;
+	}
+	
+	@Override
+	public void visitGen(ICodeGen visit) {
+		visit.addModule(this);
 	}
 }
 
