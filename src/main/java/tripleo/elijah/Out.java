@@ -13,7 +13,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 
+import com.thoughtworks.xstream.XStream;
 import tripleo.elijah.gen.java.JavaCodeGen;
+import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.ParserClosure;
 import tripleo.elijah.util.TabbedOutputStream;
 
@@ -37,6 +39,9 @@ public class Out {
 			pc.module.print_osi(tos);
 			pc.module.finish(tos);
 			//
+			XStream x = new XStream();
+			x.toXML(pc.module, tos.getStream());
+			//
 			final JavaCodeGen visit = new JavaCodeGen();
 			pc.module.visitGen(visit);
 		} catch (FileNotFoundException fnfe) {
@@ -47,35 +52,9 @@ public class Out {
 //		return;
 	}
 
-//	private void print(String s) {
-//		System.out.print(s);
-//	}
-//
-//	private void println(int s) {
-//		System.out.println(s);
-//	}
-
 	public void println(String s) {
 		System.out.println(s);
 	}
-
-//	private void print3(String s1, String s2, String s3) {
-//		System.out.print(s1);
-//		System.out.print(s2);
-//		System.out.print(s3);
-//	}
-//
-//	private void println(String s1, String s2) {
-//		System.out.print(s1);
-//		System.out.println(s2);
-//	}
-//
-//	private void printpln(String s1, String s2) {
-//		System.out.print(s1);
-//		System.out.print('(');
-//		System.out.print(s2);
-//		System.out.println(')');
-//	}
 
 	private ParserClosure pc;
 
@@ -83,4 +62,7 @@ public class Out {
 		return pc;
 	}
 
+	public OS_Module module() {
+		return pc.module;
+	}
 }
