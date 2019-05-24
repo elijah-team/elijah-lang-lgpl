@@ -22,4 +22,8 @@ public class ListExpression extends AbstractBinaryExpression {
 	}
 
 	ExpressionList contents=new ExpressionList();
+	
+	public void setContents(ExpressionList aList) {
+		contents = aList;
+	}
 }
