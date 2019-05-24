@@ -126,7 +126,18 @@ public class JavaCodeGen implements ICodeGen {
 		else if (element instanceof ProcedureCallExpression) {
 			ProcedureCallExpression pce = (ProcedureCallExpression) element;
 			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
-			
+		} else if (element instanceof Loop) {
+			Loop loop = (Loop)element;
+			if (loop.getType() == Loop.FROM_TO_TYPE) {
+				String varname="vt"+loop.getIterName();
+				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
+						varname, ((OS_Integer)loop.getFromPart()).getValue(),
+						varname, ((OS_Integer)loop.getToPart()).getValue(),  varname));
+				for (StatementItem item : loop.getItems()) {
+					System.out.println("\t"+item);
+				}
+				System.out.println("}");
+			} else throw new NotImplementedException();
 		} else {
 			if (elementDone(element)) {
 				throw new NotImplementedException();
