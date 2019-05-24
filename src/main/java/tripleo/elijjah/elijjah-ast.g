@@ -4,6 +4,7 @@ header {
 
 {
 import tripleo.elijah.lang.*;
+import tripleo.elijah.*;
 }
 
 class ElijjahParser extends Parser;
@@ -18,165 +19,18 @@ tokens {
     "tokens";
 }
 
-
-/*
-grammarFile[Hierarchy hier, String file]
 {
-	Grammar gr;
-	IndexedVector opt=null;
+Qualident xy;
+Out out;
+IExpression expr;
 }
-	:	( hdr:HEADER_ACTION { hier.getFile(file).addHeaderAction(hdr.getText()); } )*
-		( opt=optionSpec[null] )?
-		(	gr=class_def[file, hier]
-			{
-			if ( gr!=null && opt!=null ) {
-				hier.getFile(file).setOptions(opt);
-			}
-			if ( gr!=null ) {
-				gr.setFileName(file);
-				hier.addGrammar(gr);
-			}
-			}
-		)*
-		EOF
-	;
-
-class_def[String file, Hierarchy hier] returns [Grammar gr]
-{
-	gr=null;
-	IndexedVector rules = new IndexedVector(100);
-	IndexedVector classOptions = null;
-}
-	:	( preamble:ACTION )?
-		"class" sub:ID "extends" sup:ID SEMI
-		{
-			gr = (Grammar)hier.getGrammar(sub.getText());
-			if ( gr!=null ) {
-//				antlr.Tool.toolError("redefinition of grammar "+gr.getName()+" ignored");
-				gr=null;
-				throw new SemanticException("redefinition of grammar "+sub.getText(), file, sub.getLine());
-			}
-			else {
-				gr = new Grammar(sub.getText(), sup.getText(), rules);
-				if ( preamble!=null ) {
-					gr.setPreambleAction(preamble.getText());
-				}
-			}
-		}
-		( classOptions = optionSpec[gr] )?
-		{
-		if ( gr!=null ) {
-			gr.setOptions(classOptions);
-		}
-		}
-		( tk:TOKENS_SPEC {gr.setTokenSection(tk.getText());} )?
-		( memberA:ACTION {gr.setMemberAction(memberA.getText());} )?
-		( rule[gr] )+
-	;
-
-optionSpec[Grammar gr] returns [IndexedVector options]
-{
-	options = new IndexedVector();
-}
-	:	OPTIONS_START
-			(	op:ID rhs:ASSIGN_RHS
-				{
-				Option newOp = new Option(op.getText(),rhs.getText(),gr);
-				options.appendElement(newOp.getName(),newOp);
-				if ( gr!=null && op.getText().equals("importVocab") ) {
-					gr.specifiedVocabulary = true;
-					gr.importVocab = rhs.getText();
-				}
-				else if ( gr!=null && op.getText().equals("exportVocab") ) {
-					// don't want ';' included in outputVocab.
-					// This is heinously inconsistent!  Ugh.
-					gr.exportVocab = rhs.getText().substring(0,rhs.getText().length()-1);
-				}
-				}
-			)*
-//		{gr.fixupVocabOptionsForInheritance();}
-		RCURLY
-	;
-
-rule[Grammar gr]
-{
-	IndexedVector o = null;	// options for rule
-	String vis = null;
-	boolean bang=false;
-	String eg=null, thr="";
-}
-	:	(	"protected"	{vis="protected";}
-		|	"private"	{vis="private";}
-		|	"public"	{vis="public";}
-		)?
-		r:ID*/
-		/*( BANG {bang=true;} )?
-		( arg:ARG_ACTION )?
-		( "returns" ret:ARG_ACTION )?
-		( thr=throwsSpec )?
-		( o = optionSpec[null] )?
-		( init:ACTION )?
-		blk:RULE_BLOCK
-		eg=exceptionGroup*/
-/*		{
-		String rtext = blk.getText()+eg;
-		Rule ppr = new Rule(r.getText(),rtext,o,gr);
-		ppr.setThrowsSpec(thr);
-		if ( arg!=null ) {
-			ppr.setArgs(arg.getText());
-		}
-		if ( ret!=null ) {
-			ppr.setReturnValue(ret.getText());
-		}
-		if ( init!=null ) {
-			ppr.setInitAction(init.getText());
-		}
-		if ( bang ) {
-			ppr.setBang();
-		}
-		ppr.setVisibility(vis);
-		if ( gr!=null ) {
-			gr.addRule(ppr);
-		}
-		}*/
-	//;
-
-throwsSpec returns [String t]
-{t="throws ";}
-	:	"throws" a:ID {t+=a.getText();}
-		( COMMA b:ID {t+=","+b.getText();} )*
-	;
-
-exceptionGroup returns [String g]
-{String e=null; g="";}
-	:	( e=exceptionSpec {g += e;} )*
-	;
-
-exceptionSpec returns [String es]
-{ String h=null;
-  es = System.getProperty("line.separator")+"exception ";
-}
-	:	"exception"
-		( aa:ARG_ACTION {es += aa.getText();} )?
-		( h=exceptionHandler {es += h;} )*
-	;
-
-exceptionHandler returns [String h]
-{h=null;}
-	:	"catch" a1:ARG_ACTION a2:ACTION
-		{h = System.getProperty("line.separator")+
-			 "catch "+a1.getText()+" "+a2.getText();}
-	;
-
-
 
 program
-    {String xx=null;ExpressionList el;}
-    :
-	( "indexing" (IDENT TOK_COLON {el=new ExpressionList();} expressionList[el])*
-	|"package" xy=qualident {pc.packageName(xy);}
-	|programStatement[pc])*
-	EOF {out.FinishModule();}
+        {String xx=null; ExpressionList el;	ParserClosure pc = out.closure();}
+    : ( "indexing" (IDENT TOK_COLON {el=new ExpressionList();} expressionList[el])*
+	  |"package" xy=qualident {pc.packageName(xy);}
+	  |programStatement[pc])*
+	  EOF {out.FinishModule();}
 	;
 constantValue returns [IExpression e]
 	: {e=null;}
@@ -192,8 +46,9 @@ primitiveExpression  returns [IExpression e]
 	    expressionList[el]  {((ListExpression)e).setContents(el);}
 	  RBRACK
 	;
-qualident returns [Qualident q]:
+qualident returns [Qualident q]
     {q=new Qualident();}
+	:
      r1:IDENT /*ident2 */ {q.append(r1);}
       (d1:DOT r2:IDENT {q.appendDot(d1); q.append(r2);})*
     ;
@@ -220,8 +75,9 @@ importStatement [ImportStatement pc]:
     // next?
     ;
 importPart [ImportStatement cr] //current rule
+		{Qualident q1,q2,q3;}
     : i1:IDENT BECOMES q1=qualident {cr.addAssigningPart(i1,q1);}
-    | /*{qualident LCURLY}=>*/
+    | (qualident LCURLY) =>
         q3=qualident LCURLY {IdentList il=cr.addSelectivePart(q3);} identList[il] RCURLY
     | q2=qualident {cr.addNormalPart(q2);}
     ;
@@ -258,8 +114,8 @@ namespaceScope[NamespaceStatement cr]
     | accessNotation)*
     ;
 inhTypeName[TypeName tn]:
-    (("const")? specifiedGenericTypeName_xx[tn]
-    | "typeof" qualident)
+    (("const" {tn.set(TypeModifiers.CONST);})? specifiedGenericTypeName_xx[tn]
+    | "typeof" xy=qualident {tn.typeof(xy);})
     ;
 typeName[TypeName cr]:
       structTypeName[cr]
@@ -292,15 +148,21 @@ varStmt[StatementClosure cr]
     : ("var" {vsq=cr.varSeq();}
     | ("const"|"val") {vsq=cr.varSeq();vsq.defaultModifiers(TypeModifiers.CONST);})
     ( varStmt_i[vsq.next()] (COMMA varStmt_i[vsq.next()])*
-      LPAREN identList RPAREN BECOMES expression
+      LPAREN identList[cr.identList()] RPAREN BECOMES eee=expression // TODO what is this?
     )
     ;
-typeAlias:
-	"type" "alias" i=ident2 BECOMES q=qualident
-	| "struct" name:IDENT opfal[null] scope[null]
+typeAlias[TypeAlias cr]
+	:
+	"type" "alias" i=ident2 {cr.setIdent(i);}
+		BECOMES q=qualident {cr.setBecomes(q);}
+	| "struct" name:IDENT opfal[null] scope[null] // TODO shouldnt be here
 	;
 opfal[FormalArgList fal]:
 	LPAREN formalArgList[fal] RPAREN
+	;
+opfal2 returns [FormalArgList fal]
+		{fal=new FormalargList();}
+	: LPAREN formalArgList[fal] RPAREN
 	;
 statement[StatementClosure cr]:
 	(procedureCallStatement[cr.procCallStmt()]
@@ -308,15 +170,15 @@ statement[StatementClosure cr]:
 	| varStmt[cr]
 	| whileLoop[cr]
 	| frobeIteration[cr]
-	| "construct" q=qualident o=opfal {cr.constructExpression(q,o);}
+	| "construct" q=qualident o=opfal2 {cr.constructExpression(q,o);}
 	| "yield" expr=expression {cr.yield(expr);}
 	) opt_semi
 	;
 opt_semi: (SEMI|);
 identList[IdentList ail]
-		{String s=null;}
-	: s=ident2 {ail.push(s);}
-	(COMMA s=ident2 {ail.push(s);})*
+		//{String s=null;}
+	: s:IDENT {ail.push(new IdentExpression(s));}
+	(COMMA s2:IDENT {ail.push(new IdentExpression(s2));})*
 	;
 expression returns [IExpression ee]
 	: ee=assignmentExpression
@@ -356,8 +218,12 @@ ident returns [IdentExpression id]
 expressionList[ExpressionList el]
 	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
 	;
+expressionList2 returns [ExpressionList el]
+		{el = new ExpressionList();}
+	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
+	;
 variableReference returns [IExpression ee]
-		{VariableReference vr=new VariableReference();}
+		{VariableReference vr=new VariableReference();ProcedureCallExpression pcx;}
 	: r1:IDENT  {vr.setMain(r1);}
 	( DOT r2:IDENT {vr.addIdentPart(r2);}
 	| LBRACK expr=expression RBRACK {vr.addArrayPart(expr);}
@@ -365,9 +231,9 @@ variableReference returns [IExpression ee]
 	)
 	;
 procCallEx2 returns [ProcedureCallExpression pce]
-	: lp:LPAREN el=expressionList rp:RPAREN {pce=new ProcedureCallExpression(lp,el,rp);}
+	: lp:LPAREN el=expressionList2 rp:RPAREN {pce=new ProcedureCallExpression(lp,el,rp);}
 	;
-invariantStatement
+invariantStatement[InvariantStatement cr]
 	: "invariant"
 	;
 accessNotation
@@ -562,7 +428,7 @@ postfixExpression
 				| "this"
 				| "class"
 //				| newExpression
-				| "super" LPAREN ( expressionList )? RPAREN
+//				| "inherit" LPAREN ( expressionList2 )? RPAREN
 				)
 			// the above line needs a semantic check to make sure "class"
 			//   is the _last_ qualifier.
@@ -572,7 +438,7 @@ postfixExpression
 			DOT^ "class"
 
 			// an array indexing operation
-		|	lb:LBRACK^ {#lb.setType(INDEX_OP);} expression RBRACK!
+		|	lb:LBRACK^ {#lb.setType(INDEX_OP);} expr=expression RBRACK!
 
 			// method invocation
 			// The next line is not strictly proper; it allows x(3)(4) or
@@ -581,7 +447,7 @@ postfixExpression
 			//   this rule would get really ugly...
 		|	lp:LPAREN^ {#lp.setType(METHOD_CALL);}
 /////////////////////////////////////////////////////////////////				argList
-expressionList
+expressionList2 ////////////////
 			RPAREN!
 		)*
 
@@ -602,8 +468,8 @@ expressionList
 primaryExpression
 	:	IDENT
 //	|	newExpression
-	|	constantValue
-	|	"super"
+	|	expr=constantValue
+//	|	"super"
 	|	"true"
 	|	"false"
 	|	"this"
@@ -720,8 +586,8 @@ formalArgTypeName[TypeName tn]
 simpleTypeName_xx[TypeName tn]
 	: xy=qualident  {tn.typename(xy);}
 	;
-defFunctionDef[FunctionDef fd]
-	: "def" i1:IDENT opfal[fd.fal()]  BECOMES expr=expression
+defFunctionDef[DefFunctionDef fd]
+	: "def" i1:IDENT op=opfal2/*[fd.fal()]*/  BECOMES expr=expression
 	   {fd.setType(DEF_FUN); fd.setName(i1); fd.setOpfal(op); fd.setExpr(expr); }
 	;
 funcTypeExpr[TypeName pc]
