@@ -50,7 +50,8 @@ public class Compilation {
 	//
 	//
 	
-	void main(List<String> args) {
+	public void main(List<String> args) {
+		StdErrSink errSink = new StdErrSink();
 		try {
 			if (args.size() > 0) {
 				for (int i = 0; i < args.size(); i++)
@@ -62,12 +63,10 @@ public class Compilation {
 						doFile(new File(args.get(i)));
 					}
 			} else {
-				System.err.println("Usage: java Main [-showtree] <directory or file name>");
+				System.err.println("Usage: eljc [-showtree] <directory or file name>");
 			}
 		} catch (Exception e) {
-			System.err.println((new StringBuilder("exception: ")).append(e)
-					.toString());
-			e.printStackTrace(System.err);
+			errSink.exception(e);
 		}
 	}
 
