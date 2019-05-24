@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import antlr.Token;
 import org.eclipse.jdt.annotation.NonNull;
 
 import tripleo.elijah.util.NotImplementedException;
@@ -51,14 +52,22 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		NotImplementedException.raise();
 		parts.add(new VR_ArrayPart(p));
 	}
-
+	
 	public void addIdentPart(String s) {
 //		System.out.println((new StringBuilder("~~ VarRef addIdentPart ("))
 //				.append(s).append(")").toString());
 		NotImplementedException.raise();
 		parts.add(new VR_IdentPart(s));
 	}
-
+	
+	public void addIdentPart(Token t) {
+//		System.out.println((new StringBuilder("~~ VarRef addIdentPart ("))
+//				.append(s).append(")").toString());
+		NotImplementedException.raise();
+		String s = t.getText();
+		parts.add(new VR_IdentPart(s));
+	}
+	
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		tos.put_string_ln(
@@ -72,12 +81,18 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	public String repr_() {
 		return String.format("VariableReference (%s)", main);
 	}
-
+	
 	public void setMain(String s) {
 		main = s;
 		System.out.println(repr_());
 	}
-
+	
+	public void setMain(Token t) {
+		String s = t.getText();
+		main = s;
+		System.out.println(repr_());
+	}
+	
 	/**
 	 * * no parts, just an ident '
 	 * * qualident not implemented
