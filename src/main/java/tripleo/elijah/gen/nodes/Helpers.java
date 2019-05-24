@@ -1,11 +1,10 @@
 package tripleo.elijah.gen.nodes;
 
 import org.jetbrains.annotations.NotNull;
-import tripleo.elijah.lang.ExpressionList;
-import tripleo.elijah.lang.ExpressionType;
-import tripleo.elijah.lang.VariableReference;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -41,5 +40,33 @@ public class Helpers {
 				throw new NotImplementedException();
 		}
 		return middle1;
+	}
+	
+	@NotNull
+	public static String getFunctionName(int code, String aStr, ExpressionList expressionList) {
+		final StringBuilder sb=new StringBuilder();
+		sb.append("z");
+		sb.append(code);
+		sb.append(aStr);
+		sb.append("(");
+/*
+		boolean x=false;
+		for (IExpression e : expr.exprList()) {
+			sb.append(e.toString());
+			sb.append(", ");
+			x=true;
+		}
+		if (x==true) {
+			sb.deleteCharAt(sb.length());
+			sb.deleteCharAt(sb.length());
+		}
+*/
+		List<String> ls = new ArrayList<String>();
+		for (IExpression e : expressionList) {
+			ls.add(e.toString());
+		}
+		sb.append(String.join(", ", ls));
+		sb.append(")");
+		return sb.toString();
 	}
 }

@@ -22,25 +22,26 @@ public class CaseHdrNode implements Node {
 
 	private IExpressionNode expr;
 	
-	public CaseHdrNode(VariableReferenceNode2 varref) {
-		this.expr = varref;
-	}
+//	public CaseHdrNode(VariableReferenceNode2 varref) {
+//		this.expr = varref;
+//	}
+//
+//	public CaseHdrNode(VariableReference vr) {
+////		NotImplementedException.raise();
+//		this.expr = new VariableReferenceNode2(vr.getName(),  null, false);
+//	}
 	
-	public CaseHdrNode(VariableReference vr) {
-		NotImplementedException.raise();
+	public CaseHdrNode(VariableReferenceNode3 varref) {
+		// TODO Auto-generated constructor stub
+		this.expr = /*new ExpressionNode*/(varref);
 	}
-	
+
 	public IExpressionNode getExpr() {
 		return expr;
 	}
 
 	public void setExpr(ExpressionNode expr) {
 		this.expr = expr;
-	}
-
-	public CaseHdrNode(VariableReferenceNode3 varref) {
-		// TODO Auto-generated constructor stub
-		this.expr = /*new ExpressionNode*/(varref);
 	}
 	
 	public String simpleGenText() {
@@ -50,8 +51,12 @@ public class CaseHdrNode implements Node {
 		if (expr.getExpr() instanceof VariableReference) {
 			return ((VariableReference) expr.getExpr()).getName();
 		}
-		NotImplementedException.raise();
-		return null;
+		if (expr/*.getExpr()*/ instanceof VariableReferenceNode2) {
+			return ((VariableReferenceNode2) expr).genText();
+		}
+		throw new IllegalStateException("no implementation");
+//		NotImplementedException.raise();
+//		return null;
 	}
 	
 	/**

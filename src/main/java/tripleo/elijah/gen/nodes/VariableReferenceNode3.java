@@ -46,10 +46,15 @@ public class VariableReferenceNode3 implements IExpressionNode {
 	
 	@Contract(pure = true)
 	private char a() {
+		if (_container == null) throw new IllegalStateException("null _container in VarRefNode3");
+		//
 		if (_container instanceof MethHdrNode)
 			return 'a';
 		if (_container instanceof CaseHdrNode)
 			return 't';
+		if (_container instanceof ScopeNode)
+			return 'v';
+		// TODO should not have this fallback
 		return 'v';
 	}
 	

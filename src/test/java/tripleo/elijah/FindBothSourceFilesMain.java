@@ -25,7 +25,7 @@ public class FindBothSourceFilesMain {
 	public static void main(String[] args) {
 		FindBothSourceFiles f=new FindBothSourceFiles(/*"xx"*/);
 		try {
-//			f.testParseFile();
+			f.testParseFile();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

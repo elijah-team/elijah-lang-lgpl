@@ -10,10 +10,10 @@ public class CaseHdrNodeTest {
 	
 	@Test
 	public void simpleGenText() {
-		VariableReference vr = new VariableReference();
-		vr.setMain("the");
+		VariableReferenceNode3 vr = new VariableReferenceNode3("the", new ScopeNode(), null);
 		CaseHdrNode chn = new CaseHdrNode(vr);
-		Assert.assertEquals("the", chn.simpleGenText());
+		String actual = chn.simpleGenText();
+		Assert.assertEquals("vvthe", actual);
 	}
 	@Test
 	public void setExpr() {

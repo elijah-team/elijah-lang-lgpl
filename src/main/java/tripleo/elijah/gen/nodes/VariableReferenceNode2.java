@@ -8,17 +8,24 @@
  */
 package tripleo.elijah.gen.nodes;
 
-import antlr.CommonToken;
-import antlr.Token;
 import tripleo.elijah.gen.CompilerContext;
-import tripleo.elijah.gen.Node;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.util.NotImplementedException;
 
 public class VariableReferenceNode2 extends ExpressionNode {
-	private  String _declared;
 	private final String _type;
+	private  String _declared;
 	private  boolean _perm;
+	
+	public VariableReferenceNode2(String declared, String t, boolean b) {
+		super();
+		this._declared = declared;
+		this._perm = b;
+		this._type = t;
+//		final Token ct = new CommonToken();
+//		ct.setText(declared);
+//		setText(new IdentExpression(ct)); // TODO why call this?
+	}
 	
 	@Override
 	public String genText(CompilerContext cctx) {
@@ -29,16 +36,6 @@ public class VariableReferenceNode2 extends ExpressionNode {
 //			return super.genText(cctx);
 		}
 		return super.genText(cctx);
-	}
-	
-	public VariableReferenceNode2(String declared, String t, boolean b) {
-		super();
-		final Token ct = new CommonToken();
-		ct.setText(declared);
-		this._declared = declared;
-		this._perm = b;
-		this._type = t;
-//		setText(new IdentExpression(ct)); // TODO why call this?
 	}
 	
 	private void setText(IdentExpression identExpression) {

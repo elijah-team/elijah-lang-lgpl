@@ -8,7 +8,15 @@
  */
 package tripleo.elijah.gen.nodes;
 
-public class ScopeNode {
+import tripleo.elijah.gen.Node;
+import tripleo.elijah.util.NotImplementedException;
+
+public class ScopeNode implements Node {
+	@Override
+	public int getCode() {
+		NotImplementedException.raise();
+		return 0;
+	}
 }
 
 //

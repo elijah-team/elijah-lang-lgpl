@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.util.NotImplementedException;
 
 /**
  * @author olu
@@ -40,12 +41,6 @@ public class ExpressionNode implements IExpressionNode {
 		iex = null;
 	}
 	
-	@Override
-	public IExpression getExpr() {
-		return iex;
-	}
-	
-	
 	public ExpressionNode(@NonNull  OS_Integer expr1) {
 		// TODO should  be interface
 		genName=((Integer)expr1.getValue()).toString(); // TODO likely wrong
@@ -53,7 +48,8 @@ public class ExpressionNode implements IExpressionNode {
 		_is_const_expr = true;
 		iex = expr1;
 	}
-
+	
+	
 	public ExpressionNode(@NonNull IExpression expr1) {
 		// TODO Auto-generated constructor stub
 		if (expr1 != null) {
@@ -63,6 +59,16 @@ public class ExpressionNode implements IExpressionNode {
 							|| expr1.getLeft()  instanceof NumericExpression; // TODO more
 			iex = expr1;
 		}
+	}
+
+	static String getStringPCE(ProcedureCallExpression expr) {
+		final int code = 1000; // TODO hardcoded
+		return Helpers.getFunctionName(code, expr.getLeft().toString(), expr.exprList());
+	}
+
+	@Override
+	public IExpression getExpr() {
+		return iex;
 	}
 
 	@Override
@@ -78,7 +84,7 @@ public class ExpressionNode implements IExpressionNode {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public boolean is_var_ref() {
 		return (iex !=null && iex instanceof VariableReference);
@@ -114,7 +120,6 @@ public class ExpressionNode implements IExpressionNode {
 				}
 				if (abe.type == ExpressionType.MULTIPLY) {
 					String s = String.format("%s * %s", left_side, right_side);
-					//((OS_Integer) abe.getRight()).getValue()*;
 					return s;
 				}
 				
@@ -129,26 +134,8 @@ public class ExpressionNode implements IExpressionNode {
 			return getStringPCE((ProcedureCallExpression) iex);
 		}
 //		if (iex instanceof VariableReference) {
+		NotImplementedException.raise();
 		return "vai"; // TODO hardcoded
-	}
-	
-	static String getStringPCE(ProcedureCallExpression expr) {
-		final StringBuilder sb=new StringBuilder();
-		sb.append("z__");
-		sb.append(expr.getLeft().toString());
-		sb.append("(");
-		boolean x=false;
-		for (IExpression e : expr.exprList()) {
-			sb.append(e.toString());
-			sb.append(", ");
-			x=true;
-		}
-		if (x==true) {
-			sb.deleteCharAt(sb.length());
-			sb.deleteCharAt(sb.length());
-		}
-		sb.append(")");
-		return sb.toString();
 	}
 	
 	@Override
@@ -158,7 +145,7 @@ public class ExpressionNode implements IExpressionNode {
 	
 	@Override
 	public String genText() {
-		return null;
+		return genText(null);
 	}
 	
 	@Override
