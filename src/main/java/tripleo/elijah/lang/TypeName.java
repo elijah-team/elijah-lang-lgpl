@@ -28,7 +28,7 @@ public interface TypeName {
 	void setIn(boolean flag);
 
 	String getName();
-	void setName(String s);
+	void setName(Qualident s);
 
 	void set(TypeModifiers aModifiers);
 
@@ -50,6 +50,8 @@ public interface TypeName {
 
 	// TODO new
 	void typeof(Qualident xyz);
+	
+	void setGeneric(boolean value);
 
 //	public static final int NORMAL = 0;
 //	public static final int CONST = 1;
