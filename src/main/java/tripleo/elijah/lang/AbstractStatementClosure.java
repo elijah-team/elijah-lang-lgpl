@@ -24,6 +24,12 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		parent = aParent;
 	}
 
+	public AbstractStatementClosure(ClassStatement classStatement) {
+		// TODO check final member
+//		parent = classStatement;
+		parent = null;
+	}
+
 	@Override
 	public BlockStatement blockClosure() {
 		bs=new BlockStatement(this.parent);
@@ -72,10 +78,10 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	@Override
 	public void yield(IExpression aExpr) {
-		add((StatementItem) aExpr);
+		add(new YieldExpression(aExpr));
 	}
 
-//	@org.jetbrains.annotations.Contract("_ -> param1")
+	@org.jetbrains.annotations.Contract("_ -> param1")
 	private StatementItem add(StatementItem aItem) {
 		parent.add(aItem);
 		return aItem;
