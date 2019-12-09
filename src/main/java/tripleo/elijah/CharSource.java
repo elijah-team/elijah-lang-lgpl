@@ -15,6 +15,11 @@ package tripleo.elijah;
  * @author Tripleo(sb)
  *
  */
-public class CharSource {
-
+public interface CharSource {
+	public int available();
+	public String get(int n);
 }
+
+//
+//
+//
