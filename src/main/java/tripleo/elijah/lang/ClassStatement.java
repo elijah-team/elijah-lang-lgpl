@@ -32,15 +32,15 @@ import tripleo.elijah.util.TabbedOutputStream;
  * variables
  * 
  */
-public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element {
+public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, OS_Element {
 	
 	private OS_Package _packageName;
 	
-	/**
-	 * For XMLBeans. Must use setParent.
-	 */
-	public ClassStatement() {
-	}
+//	/**
+//	 * For XMLBeans. Must use setParent.
+//	 */
+//	public ClassStatement() {
+//	}
 	
 	public ClassStatement(OS_Element aElement) {
 		parent = aElement; // setParent
@@ -57,34 +57,29 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 		items.add (aDef);
 	}
 
-	@Override
-	public void add(StatementItem aItem) {
-		if (aItem instanceof ClassItem) {
-			ClassItem new_name = (ClassItem) aItem;
-			items.add (new_name);
-		} else
-			throw new IllegalArgumentException(""+aItem.getClass().getName()+" cannot be added to class");
-	}
+//	@Override
+//	public void add(StatementItem aItem) {
+//		if (aItem instanceof ClassItem) {
+//			ClassItem new_name = (ClassItem) aItem;
+//			items.add (new_name);
+//		} else
+//			throw new IllegalArgumentException(""+aItem.getClass().getName()+" cannot be added to class");
+//	}
 
-	@Override
+//	@Override
 	public void addDocString(Token aText) {
 		mDocs.add(aText.getText());
 	}
 
-	@Override
-	public BlockStatement blockStatement() {
-		return null;
-	}
+//	@Override
+//	public BlockStatement blockStatement() {
+//		return null;
+//	}
 
 	public ClassInheritance classInheritance() {
+		// TODO once
 		return new ClassInheritance(this);
 	}
-
-//	public IExpression fixme_expr() {
-//		IExpression R = new ExpressionWrapper();
-//		mExprs.add(R);
-//		return R;
-//	}
 
 	public FunctionDef funcDef() {
 		return new FunctionDef(this);
@@ -97,9 +92,7 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 		//
 		System.out.println("Klass print_osi");
 		tos.incr_tabs();
-		tos.put_string("Class (");
-		tos.put_string(clsName);
-		tos.put_string_ln(") {");
+		tos.put_string_ln(String.format("Class (%s) {", clsName));
 		tos.put_string_ln("//");
 		for (ClassItem item : items) {
 			item.print_osi(tos);
@@ -129,7 +122,7 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 		clsName=aText.getText();
 	}
 
-	@Override
+//	@Override
 	public StatementClosure statementClosure() {
 		return new AbstractStatementClosure(this);
 	}
@@ -140,7 +133,7 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 //		return R;
 //	}
 
-	@Override
+//	@Override
 	public void statementWrapper(IExpression aExpr) {
 		// TODO Auto-generated method stub
 		System.err.println("** adding "+aExpr.repr_()+"to class");
@@ -194,6 +187,12 @@ public class ClassStatement implements ClassItem, Scope, ModuleItem, OS_Element 
 	}
 	
 	public ProgramClosure XXX() {
+		return null;
+	}
+
+	@Override
+	public String name() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
