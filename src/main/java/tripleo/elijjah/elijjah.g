@@ -396,7 +396,7 @@ relationalExpression returns [IExpression ee]
 shiftExpression returns [IExpression ee]
 		{ee=null;ExpressionType e2=null;
 		IExpression e3=null;}
-	:	additiveExpression
+	:	ee=additiveExpression
 	((SL/*^*/ {e2=ExpressionType.LSHIFT;}
 	 | SR/*^*/ {e2=ExpressionType.RSHIFT;}
 	 | BSR/*^*/ {e2=ExpressionType.BSHIFTR;}
@@ -408,11 +408,11 @@ shiftExpression returns [IExpression ee]
 additiveExpression returns [IExpression ee]
 		{ee=null;ExpressionType e2=null;
 		IExpression e3=null;}
-	:	multiplicativeExpression 
+	:	ee=multiplicativeExpression 
 	(
 		( PLUS/*^*/  {e2=ExpressionType.ADDITION;}
 		| MINUS/*^*/ {e2=ExpressionType.SUBTRACTION;}) 
-		multiplicativeExpression {ee = ExpressionBuilder.build(ee, e2, e3);})*
+		e3=multiplicativeExpression {ee = ExpressionBuilder.build(ee, e2, e3);})*
 	;
 
 
