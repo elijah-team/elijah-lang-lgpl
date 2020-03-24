@@ -9,6 +9,7 @@
 package tripleo.elijah.gen.nodes;
 
 import tripleo.elijah.lang.IExpression;
+import tripleo.elijah.util.NotImplementedException;
 
 /**
  * @author Tripleo(sb)
@@ -60,6 +61,11 @@ public class LocalAgnTmpNode {
 		//
 	}
 	
+	public LocalAgnTmpNode(String string) {
+		// TODO Auto-generated constructor stub
+		NotImplementedException.raise();
+	}
+
 	public IExpressionNode getRight() {
 		return agnWhat;
 	}

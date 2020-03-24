@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
@@ -26,6 +27,8 @@ import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.ModuleRef;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.gen.nodes.*;
+import tripleo.elijah.lang.NumericExpression;
+import tripleo.elijah.lang.OS_Integer;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.buffer.*;
 
@@ -85,15 +88,70 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	}
 
 	void main2_el(CompilerContext cctx, GenBuffer gbn) {
+		ModuleRef prelude = new ModuleRef(null, -1);
+		TypeRef   sys_int = new TypeRef(prelude, prelude, "SystemInteger", 80);
+		ModuleRef main2   = new ModuleRef("main2/main2.elijjah", 10000);
+		TypeRef   main    = new TypeRef(main2, main2, "Main", 100);
+				
 		gbn.InitMod(cctx, "main2/main2.elijjah");
 		ImportNode impn = new ImportNode("wprust.demo.fact");
 		gbn.GenImportStmt(cctx, impn);
 		
+		ClassDeclNode cdn = new ClassDeclNode("Main", null, 
+				List_of(new Inherited("Arguments", false))); // gen inh code 
+		cdn.GenClassDecl(cctx, gbn);
 		
+		MethHdrNode mhn = new MethHdrNode(null, cdn.type(), "main", null, 1000);
+		mhn.GenMethHdr(cctx, gbn);
+		mhn.BeginMeth(cctx, gbn);
+		
+		LocalDeclAgnNode ldan1 = new LocalDeclAgnNode("b1", ExpressionNodeBuilder.integer(3));
+		gbn.GenLocalDeclAgn(cctx, ldan1);
+		
+		LocalDeclAgnNode ldan_a1 = new LocalDeclAgnNode("a1", sys_int, 
+				ExpressionNodeBuilder.fncall("argument", 
+						convertToLocalAgnTmpNode(List_of(ExpressionNodeBuilder.integer(1)))));
+		gbn.GenLocalDeclAgn(cctx, ldan_a1);
+		
+		TmpSSACtxNode latn = new TmpSSACtxNode(cctx);
+		latn.GenLocalAgn(cctx, gbn);
+		
+		IfNode ifn = new IfNode(latn);
+		ifn.BeginIfCtx(cctx, gbn);
+		
+		LocalAgnNode lan_b1 = new LocalAgnNode(
+				ExpressionNodeBuilder.fncall("a1.toInt", null));
+		lan_b1.GenLocalAgn(cctx, gbn);
+		ifn.CloseIfCtx(cctx, gbn);
+		
+		LocalDeclAgnNode ldan_f1 = new LocalDeclAgnNode("f1", 
+				convertToLocalAgnTmpNode2(ExpressionNodeBuilder.fncall("factorial",  List_of(new LocalAgnTmpNode("b1")))));
+		gbn.GenLocalAgn(cctx, ldan_f1);
+		
+		SimpleFnCall sfc = new SimpleFnCall("print", List_of("f1"));
+		sfc.GenFnCall(cctx, gbn);
+		mhn.EndMeth(cctx, gbn);
+		cdn.CloseClassDecl(cctx, gbn);
 		
 	}
 	
 	
+	private @NotNull OS_Integer convertToLocalAgnTmpNode2(IExpressionNode fncall) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private List<LocalAgnTmpNode> convertToLocalAgnTmpNode(List<@NotNull NumericExpression> list_of) {
+		// TODO Auto-generated method stub
+		List<LocalAgnTmpNode> r = null;
+		return r;
+	}
+
+//	private List List_of(Inherited e1) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
 	void factorial_r(CompilerContext cctx, GenBuffer gbn) {
 		ModuleRef prelude = new ModuleRef(null, -1);
 		TypeRef   u64     = new TypeRef(prelude, prelude, "u64", 81);
@@ -354,23 +412,13 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.append(");");
 	}
 	
-	/**
-	 * Returns an unmodifiable list containing one element.
-	 *
-	 * See <a href="#unmodifiable">Unmodifiable Lists</a> for details.
-	 *
-	 * @param <E> the {@code List}'s element type
-	 * @param e1 the single element
-	 * @return a {@code List} containing the specified element
-	 * @throws NullPointerException if the element is {@code null}
-	 *
-	 * @since 9
-	 */
-	public static <E> List<E> List_of(E e1) {
+
+	public static <E> List<E> List_of(E... e1) {
 		List<E> r = new ArrayList<E>();
-		r.add(e1);
+		for (E e : e1) {
+			r.add(e);
+		}
 		return r;
-//      return new ImmutableCollections.List12<E>(e1);
 	}
 	
 	public static List<String> List_of(String string, String string2, String string3) {

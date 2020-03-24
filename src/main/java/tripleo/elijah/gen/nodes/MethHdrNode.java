@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import tripleo.elijah.comp.GenBuffer;
+import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.Node;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.OS_Ident;
@@ -114,4 +116,20 @@ public class MethHdrNode implements Node {
 	public String genName() {
 		return methName.genName;
 	}
+
+	public void GenMethHdr(CompilerContext cctx, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void BeginMeth(CompilerContext cctx, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void EndMeth(CompilerContext cctx, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

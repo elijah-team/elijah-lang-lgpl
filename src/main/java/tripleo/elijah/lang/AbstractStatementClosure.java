@@ -12,6 +12,9 @@ package tripleo.elijah.lang;
 import java.util.ArrayList;
 import java.util.List;
 
+import antlr.Token;
+import tripleo.elijah.util.NotImplementedException;
+
 
 // Referenced classes of package pak2:
 //			StatementClosure, VariableSequence, ProcedureCallExpression, Loop, 
@@ -27,7 +30,53 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	public AbstractStatementClosure(ClassStatement classStatement) {
 		// TODO check final member
 //		parent = classStatement;
-		parent = null;
+		parent = new Scope() {
+
+			@Override
+			public void addDocString(Token s1) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void statementWrapper(IExpression aExpr) {
+				@SuppressWarnings("unused")
+				int y=2;
+			}
+
+			@Override
+			public StatementClosure statementClosure() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public BlockStatement blockStatement() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void add(StatementItem aItem) {
+				// TODO Auto-generated method stub
+//				NotImplementedException.raise();
+				classStatement.add((ClassItem) aItem);
+
+			}
+
+			@Override
+			public TypeAliasExpression typeAlias() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public InvariantStatement invariantStatement() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+		};
 	}
 
 	@Override

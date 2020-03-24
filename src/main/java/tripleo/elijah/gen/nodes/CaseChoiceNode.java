@@ -16,6 +16,7 @@ package tripleo.elijah.gen.nodes;
 
 import org.eclipse.jdt.annotation.NonNull;
 import tripleo.elijah.gen.CompilerContext;
+import tripleo.elijah.lang.NumericExpression;
 import tripleo.elijah.lang.OS_Integer;
 import tripleo.elijah.lang.VariableReference;
 
@@ -28,7 +29,7 @@ public class CaseChoiceNode {
 	public final CaseHdrNode header;
 	private String _defaultName;
 	
-	public CaseChoiceNode(OS_Integer expr1, CaseHdrNode header) {
+	public CaseChoiceNode(NumericExpression expr1, CaseHdrNode header) {
 		// TODO Auto-generated constructor stub
 		left=new ExpressionNode(expr1);
 		this.header = header;
