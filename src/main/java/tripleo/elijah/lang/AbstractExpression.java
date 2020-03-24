@@ -7,12 +7,6 @@
  * 
  */
 
-//
-//
-// TODO What the fuck is this?
-//
-//
-
 package tripleo.elijah.lang;
 
 import tripleo.elijah.util.TabbedOutputStream;
