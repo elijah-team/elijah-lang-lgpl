@@ -19,6 +19,7 @@ import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
+import tripleo.elijah.Documentable;
 
 // Referenced classes of package pak2:
 //			Scope, ExpressionWrapper, AbstractStatementClosure, StatementClosure, 
@@ -32,7 +33,7 @@ import tripleo.elijah.util.TabbedOutputStream;
  * variables
  * 
  */
-public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, OS_Element {
+public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, OS_Element, Documentable {
 	
 	private OS_Package _packageName;
 	
@@ -190,11 +191,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return null;
 	}
 
-	@Override
-	public String name() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }
 
 //

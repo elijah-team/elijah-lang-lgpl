@@ -16,6 +16,7 @@ import java.util.Map;
 
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.nodes.ImportNode;
+import tripleo.elijah.gen.nodes.LocalDeclAgnNode;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.buffer.Buffer;
 import tripleo.util.buffer.CodeGen;
@@ -86,5 +87,15 @@ public class GenBuffer {
 			fileOutputStream.close();
 			
 		}
+	}
+
+	public void GenLocalDeclAgn(CompilerContext cctx, LocalDeclAgnNode ldan1) {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
+	}
+
+	public void GenLocalAgn(CompilerContext cctx, LocalDeclAgnNode ldan_f1) {
+		// TODO Auto-generated method stub
+		NotImplementedException.raise();
 	}
 }

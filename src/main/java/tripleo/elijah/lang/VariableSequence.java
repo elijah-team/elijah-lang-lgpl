@@ -20,7 +20,7 @@ import tripleo.elijah.util.TabbedOutputStream;
 // Referenced classes of package pak2:
 //			BlockMember
 
-public class VariableSequence implements BlockMember, StatementItem, FunctionItem {
+public class VariableSequence implements BlockMember, StatementItem, FunctionItem, ClassItem {
 
 	public VariableSequence() {
 		stmts = new ArrayList<VariableStatement>();
@@ -60,5 +60,7 @@ public class VariableSequence implements BlockMember, StatementItem, FunctionIte
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 }
 

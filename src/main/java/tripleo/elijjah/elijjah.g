@@ -21,7 +21,7 @@ tokens {
 
 {
 Qualident xy;
-Out out;
+public Out out;
 IExpression expr;
 }
 
@@ -89,11 +89,11 @@ classInheritance_[ClassInheritance ci]:
 classInheritanceRuby[ClassInheritance ci]:
     LT_ classInheritance_[ci]
     ;
-docstrings[Scope sc]:
+docstrings[Documentable sc]:
     (s1:STRING_LITERAL {sc.addDocString(s1);})+
     ;
 classScope[ClassStatement cr]
-        {Scope sc=cr;}
+        {Scope sc=null;}
     : docstrings[cr]
     ( ("constructor"|"ctor") x1:IDENT {sc=cr.addCtor(x1);} scope[sc]
     |    ("destructor"|"dtor") {sc=cr.addDtor();} scope[sc]

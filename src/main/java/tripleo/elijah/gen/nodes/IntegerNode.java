@@ -11,6 +11,7 @@ package tripleo.elijah.gen.nodes;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.IExpression;
+import tripleo.elijah.lang.NumericExpression;
 import tripleo.elijah.lang.OS_Integer;
 
 /*
@@ -23,7 +24,7 @@ public class IntegerNode implements IExpressionNode {
 	private IExpression _expr;
 	private TypeRef _type;
 	
-	public IntegerNode(OS_Integer aInteger, TypeRef aTypeRef) {
+	public IntegerNode(NumericExpression aInteger, TypeRef aTypeRef) {
 		_expr = aInteger;
 		_type = aTypeRef;
 	}

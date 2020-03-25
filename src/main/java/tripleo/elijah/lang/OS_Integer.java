@@ -14,6 +14,8 @@
  */
 package tripleo.elijah.lang;
 
+import antlr.Token;
+
 public class OS_Integer extends AbstractExpression {
 	
 	@Override
@@ -28,9 +30,13 @@ public class OS_Integer extends AbstractExpression {
 	
 	private int i;
 
+	@Deprecated
 	public OS_Integer(int i) {
-		// TODO Auto-generated constructor stub
 		this.i = i;
+	}
+
+	public OS_Integer(Token t) {
+		this.i = Integer.parseInt(t.getText());
 	}
 	
 	public int getValue() {
@@ -41,3 +47,7 @@ public class OS_Integer extends AbstractExpression {
 		return true;
 	}
 }
+
+//
+//
+//

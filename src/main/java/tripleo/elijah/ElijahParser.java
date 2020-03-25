@@ -10,6 +10,7 @@ package tripleo.elijah;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import antlr.MismatchedTokenException;
 import antlr.NoViableAltException;
 import antlr.ParserSharedInputState;
 import antlr.RecognitionException;
@@ -582,7 +583,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 					}
 					}
 				}
-				scope(pc);
+					/* scope(pc); */
 				break;
 			}
 			case LITERAL_destructor:
@@ -602,7 +603,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 					}
 					}
 				}
-				scope(pc);
+					/* scope(pc); */
 				break;
 			}
 			case IDENT: {
@@ -768,6 +769,36 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			match(RCURLY);
 		} finally { // debugging
 			fireExitRule(4, 0);
+		}
+	}
+
+	private void docstrings(Documentable sc) throws RecognitionException, NoViableAltException, TokenStreamException {
+		fireEnterRule(7, 0);
+		try { // debugging
+			Token s1 = null;
+
+			{
+				int _cnt25 = 0;
+				_loop25: do {
+					if ((LA(1) == STRING_LITERAL) && (_tokenSet_2.member(LA(2)))) {
+						s1 = LT(1);
+						match(STRING_LITERAL);
+						if (inputState.guessing == 0) {
+							sc.addDocString(s1);
+						}
+					} else {
+						if (_cnt25 >= 1) {
+							break _loop25;
+						} else {
+							throw new NoViableAltException(LT(1), getFilename());
+						}
+					}
+
+					_cnt25++;
+				} while (true);
+			}
+		} finally { // debugging
+			fireExitRule(7, 0);
 		}
 	}
 

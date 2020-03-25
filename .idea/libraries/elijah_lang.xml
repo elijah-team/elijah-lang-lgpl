@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="elijah-lang">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/tripleo.jar!/" />
+      <root url="jar://$PROJECT_DIR$/org.eclipse.jdt.annotation_2.2.200.v20180921-1416.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

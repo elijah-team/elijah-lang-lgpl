@@ -26,9 +26,9 @@ public class NumericExpression implements IExpression {
 	int carrier;
 	private Token n;
 
-//	public NumericExpression(int aCarrier) {
-//		carrier = aCarrier;
-//	}
+	public NumericExpression(int aCarrier) {
+		carrier = aCarrier;
+	}
 
 	public NumericExpression(Token n) {
 		this.n = n;

@@ -18,6 +18,8 @@ import tripleo.elijah.ElijahLexer;
 import tripleo.elijah.ElijahParser;
 import tripleo.elijah.Out;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijjah.ElijjahLexer;
+import tripleo.elijjah.ElijjahParser;
 
 public class Compilation {
 
@@ -93,9 +95,9 @@ public class Compilation {
 
 	public static void parseFile(String f, InputStream s) throws Exception {
 		try {
-			ElijahLexer lexer = new ElijahLexer(s);
+			ElijjahLexer lexer = new ElijjahLexer(s);
 			lexer.setFilename(f);
-			ElijahParser parser = new ElijahParser(lexer);
+			ElijjahParser parser = new ElijjahParser(lexer);
 			parser.out = new Out(f);
 			parser.setFilename(f);
 			parser.program();

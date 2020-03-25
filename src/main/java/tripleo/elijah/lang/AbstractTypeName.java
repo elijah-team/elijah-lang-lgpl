@@ -78,7 +78,7 @@ tm=atm;
 	}
 	
 	public void set(int aType) {
-		type = aType;
+		type = aType;		// TODO where is this used at?
 	}
 	
 	private TypeModifiers tm;

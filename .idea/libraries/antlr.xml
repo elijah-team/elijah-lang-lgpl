@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="javassist">
+  <library name="antlr">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/javassist-3.1/javassist.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/java/antlr.zip!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

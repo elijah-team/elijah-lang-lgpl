@@ -103,6 +103,7 @@ public void addIndexingItem(Token i1, IExpression c1) {
 	public void visitGen(ICodeGen visit) {
 		visit.addModule(this);
 	}
+	
 }
 
 //

@@ -31,7 +31,7 @@ public class TypeAliasExpression {
 	
 	public void setIdent(Token aToken) {
 		// TODO
-		//x=aToken;
+		x = new IdentExpression(aToken);
 	}
 	
 	public void setBecomes(Qualident qq) {

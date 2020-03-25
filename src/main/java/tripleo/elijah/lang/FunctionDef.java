@@ -60,6 +60,8 @@ public class FunctionDef implements ClassItem {
 			// TODO Auto-generated method stub
 			
 		}
+
+		
 	}
 	
 	private final class FunctionDefScope implements Scope {
@@ -169,4 +171,6 @@ public class FunctionDef implements ClassItem {
 		// TODO Auto-generated method stub
 		return _returnType ;
 	}
+
+	
 }

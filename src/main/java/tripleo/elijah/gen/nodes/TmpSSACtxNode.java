@@ -11,6 +11,7 @@
  */
 package tripleo.elijah.gen.nodes;
 
+import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.ProcedureCallExpression;
@@ -56,6 +57,11 @@ public class TmpSSACtxNode {
 	
 	public void setExprType(IExpressionNode node) {
 		this._node = node;
+	}
+
+	public void GenLocalAgn(CompilerContext cctx, GenBuffer gbn) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

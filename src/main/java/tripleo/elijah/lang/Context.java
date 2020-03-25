@@ -21,10 +21,10 @@ public class Context {
 		final LookupResultList Result = new LookupResultList();
 		int level = 0;
 		
-		for (OS_Element i : attached.items()) {
-			if (i.name().equals(name)) {
+		for (OS_Element2 i : attached.items()) {
+//			if (i.name().equals(name)) {
 //				Result.add (i, i.sig, level);
-			}
+//			}
 		}
 		
 //		lookup(name, attached, parent, Result ,level+1);

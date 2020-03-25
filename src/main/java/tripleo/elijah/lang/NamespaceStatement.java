@@ -15,12 +15,13 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.Documentable;
 
 /**
  * @author Tripleo(sb)
  *
  */
-public class NamespaceStatement implements Scope { // TODO why implement Scope?
+public class NamespaceStatement implements Documentable {
 
 	private Token name;
 	private OS_Module parent;
@@ -35,42 +36,42 @@ public class NamespaceStatement implements Scope { // TODO why implement Scope?
 		name = i1;
 	}
 
-	@Override
-	public void statementWrapper(IExpression aExpr) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void statementWrapper(IExpression aExpr) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void addDocString(Token s) {
 		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException();
 	}
 
-	@Override
+//	@Override
 	public StatementClosure statementClosure() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public BlockStatement blockStatement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void add(StatementItem aItem) {
-		// TODO Auto-generated method stub
-		
+//
+//	@Override
+//	public BlockStatement blockStatement() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public void add(StatementItem aItem) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//	
+//	@Override
+	public TypeAliasExpression typeAlias() { 
+		return null; 
 	}
 	
-	@Override
-	public TypeAliasExpression typeAlias() {
-		return null;
-	}
-	
-	@Override
+//	@Override
 	public InvariantStatement invariantStatement() {
 		return null;
 	}

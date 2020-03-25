@@ -12,12 +12,11 @@ package tripleo.elijah.lang;
 //			StatementClosure, BlockStatement
 
 import antlr.Token;
+import tripleo.elijah.Documentable;
 
-public interface Scope {
+public interface Scope extends Documentable {
 
 	void statementWrapper(IExpression aExpr);
-
-	void addDocString(Token s);
 
 	StatementClosure statementClosure();
 

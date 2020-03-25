@@ -15,18 +15,62 @@ import java.util.List;
 
 public class IfExpression implements StatementItem {
 	
-	private final IfExpression sibling;
-	private List<IfExpression> parts = new ArrayList<IfExpression>();
+	private class IfExpressionScope implements Scope {
+		@Override
+		public void add(StatementItem aItem) {
+			parent.add(aItem);
+		}
+		
+		@Override
+		public void addDocString(Token s) {
+			parent.addDocString(s);
+		}
+		
+		@Override
+		public BlockStatement blockStatement() {
+			return parent.blockStatement(); // TODO
+		}
+		
+		@Override
+		public InvariantStatement invariantStatement() {
+			return null;
+		}
+		
+		@Override
+		public StatementClosure statementClosure() {
+			return new AbstractStatementClosure(this); // TODO
+		}
+		
+		@Override
+		public void statementWrapper(IExpression aExpr) {
+			parent.add(new FunctionDef.StatementWrapper(aExpr));
+		}
+		
+		@Override
+		public TypeAliasExpression typeAlias() {
+			return null;
+		}
+	}
 	
+	private int order = 0;
+	
+	private Scope parent;
+	private final IfExpression sibling;
+//	private final IfExpression if_parent;
+
+	private IExpression expr;
+	private List<IfExpression> parts = new ArrayList<IfExpression>();
+
+	public IfExpression(IfExpression ifExpression) {
+		this.sibling = ifExpression;
+		this.order = ++sibling/*if_parent*/.order;
+	}
+
 	public IfExpression(Scope aClosure) {
 		this.parent = aClosure;
 		this.sibling = null; // top
 	}
-	
-	public IfExpression(IfExpression ifExpression) {
-		this.sibling = ifExpression;
-	}
-	
+
 	public IfExpression else_() {
 		IfExpression elsepart = new IfExpression(this);
 		parts.add(elsepart);
@@ -38,53 +82,22 @@ public class IfExpression implements StatementItem {
 		parts.add(elseifpart);
 		return elseifpart;
 	}
-
+	
+	/** 
+	 * will not be null during if or elseif
+	 * 
+	 * @param expr
+	 */
 	public void expr(IExpression expr) {
 		this.expr = expr;
 	}
-
+	
+	/**
+	 * will always be nonnull
+	 * 
+	 */
 	public Scope scope() {
 		return new IfExpressionScope();
-	}
-
-	private IExpression expr;
-	private Scope parent;
-	
-	private class IfExpressionScope implements Scope {
-		@Override
-		public void statementWrapper(IExpression aExpr) {
-			parent.add(new FunctionDef.StatementWrapper(aExpr));
-		}
-		
-		@Override
-		public void addDocString(Token s) {
-			parent.addDocString(s);
-		}
-		
-		@Override
-		public StatementClosure statementClosure() {
-			return new AbstractStatementClosure(this); // TODO
-		}
-		
-		@Override
-		public BlockStatement blockStatement() {
-			return parent.blockStatement(); // TODO
-		}
-		
-		@Override
-		public void add(StatementItem aItem) {
-			parent.add(aItem);
-		}
-		
-		@Override
-		public TypeAliasExpression typeAlias() {
-			return null;
-		}
-		
-		@Override
-		public InvariantStatement invariantStatement() {
-			return null;
-		}
 	}
 }
 
