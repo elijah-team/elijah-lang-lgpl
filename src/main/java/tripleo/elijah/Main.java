@@ -24,7 +24,7 @@ public class Main {
 		Compilation cc = new Compilation(errSink, new IO());
 		List<String> ls = new ArrayList<String>();
 		ls.addAll(Arrays.asList(args));
-		cc.main(ls);
+		cc.main(ls, new StdErrSink());
 //		try {
 //			//
 //			if (args.length > 0) {

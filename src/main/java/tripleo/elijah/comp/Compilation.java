@@ -37,7 +37,7 @@ public class Compilation {
 	public void feedCmdLine(List<String> args) {
 		// TODO Auto-generated method stub
 		//throw new NotImplementedException();
-		main(args);
+		main(args, new StdErrSink());
 	}
 
 	public IO getIO() {
@@ -52,8 +52,8 @@ public class Compilation {
 	//
 	//
 	
-	public void main(List<String> args) {
-		StdErrSink errSink = new StdErrSink();
+	public void main(List<String> args, StdErrSink stdErrSink) {
+		StdErrSink errSink = stdErrSink;
 		try {
 			if (args.size() > 0) {
 				for (int i = 0; i < args.size(); i++)
