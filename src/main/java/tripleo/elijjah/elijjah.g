@@ -59,14 +59,14 @@ classStatement [ClassStatement cls]:
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
     LCURLY
-     docstrings[cls]
+//     docstrings[cls]
      classScope[cls]
     RCURLY
     ;
 namespaceStatement [NamespaceStatement cls]:
     "namespace" i1:IDENT {cls.setName(i1);}
     LCURLY
-     docstrings[cls]
+//     docstrings[cls]
      namespaceScope[cls]
     RCURLY
     ;
@@ -90,7 +90,8 @@ classInheritanceRuby[ClassInheritance ci]:
     LT_ classInheritance_[ci]
     ;
 docstrings[Documentable sc]:
-    (s1:STRING_LITERAL {sc.addDocString(s1);})+
+    ((STRING_LITERAL)=> (s1:STRING_LITERAL {sc.addDocString(s1);})+
+    |)
     ;
 classScope[ClassStatement cr]
         {Scope sc=null;}
@@ -105,7 +106,7 @@ classScope[ClassStatement cr]
     | accessNotation)*
     ;
 namespaceScope[NamespaceStatement cr]
-        {Scope sc=cr;}
+        {Scope sc=null;}
     : docstrings[cr]
     ( functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure()]
@@ -658,7 +659,7 @@ formalArgList[FormalArgList fal]
 	;
 formalArgListItem_priv[FormalArgListItem fali]
 	:
-		( regularQualifiers[fali.typeName()]
+		( (regularQualifiers[fali.typeName()])?
 		i:IDENT  {	fali.setName(i.getText());	}
 		(TOK_COLON formalArgTypeName[fali.typeName()])?
 		|
