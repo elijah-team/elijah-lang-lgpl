@@ -134,9 +134,9 @@ scope[Scope sc]
     ;
 functionDef[FunctionDef fd]:
     i1:IDENT {fd.setName(i1);}
-    (TOK_ARROW typeName[fd.returnType()])?
     ( "const"|"immutable" )?
     opfal[fd.fal()]
+    (TOK_ARROW typeName[fd.returnType()])?
     scope[fd.scope()]
     ;
 programStatement[ProgramClosure pc]:
@@ -593,11 +593,13 @@ frobeIteration[StatementClosure cr]
 	( "from"                   {loop.type(Loop.FROM_TO_TYPE);}
 	  expr=expression          {loop.frompart(expr);}
 	  "to" expr=expression     {loop.topart(expr);}
+      	("with" i1:IDENT       {loop.iterName(i1);})?
 	| "to"                     {loop.type(Loop.TO_TYPE);}
 	  expr=expression          {loop.topart(expr);}
+      	("with" i2:IDENT       {loop.iterName(i2);})?
 	|                          {loop.type(Loop.EXPR_TYPE);}
 	  expr=expression          {loop.topart(expr);}
-      	("with" i1:IDENT       {loop.iterName(i1);})?
+      	("with" i3:IDENT       {loop.iterName(i3);})?
     )
     scope[loop.scope()]
     ;
@@ -630,7 +632,7 @@ abstractGenericTypeName_xx[TypeName tn]
 	;
 specifiedGenericTypeName_xx[TypeName tn]
 	: simpleTypeName_xx [tn]
-	  (LBRACK typeName[tn] {tn.genericPart(tn);} RBRACK)?
+	  (LBRACK typeName[tn] {tn.addGenericPart(tn);} RBRACK)? // what about  multi-generics?
 	;
 formalArgTypeName[TypeName tn]
 	: structTypeName[tn]
@@ -709,7 +711,8 @@ DIV_ASSIGN		:	"/="	;
 PLUS			:	'+'		;
 PLUS_ASSIGN		:	"+="	;
 INC				:	"++"	;
-MINUS			:	'-'		;
+TOK_ARROW  		:   "->"	;
+MINUS			:	'-' ('>' 		{_ttype=TOK_ARROW;})?;
 MINUS_ASSIGN	:	"-="	;
 DEC				:	"--"	;
 STAR			:	'*'		;
