@@ -515,17 +515,17 @@ el=expressionList2 ////////////////
 
 // the basic element of an expression
 primaryExpression returns [IExpression ee]
-		{ee=null;
-		IExpression e3=null;}
+		{ee=null;}
+		//IExpression e3=null;*/}
 	:	e:IDENT {ee=new IdentExpression(e);}
 //	|	newExpression
-	|	expr=constantValue
+	|	ee=constantValue
 //	|	"super"
 	|	"true"
 	|	"false"
 	|	"this"
 	|	"null"
-	|	LPAREN/*!*/ ee=assignmentExpression RPAREN/*!*/
+	|	LPAREN/*!*/ ee=assignmentExpression RPAREN/*!*/ {ee=new SubExpression(ee);}
 	;
 // A builtin type specification is a builtin type with possible brackets
 // afterwards (which would make it an array type).
