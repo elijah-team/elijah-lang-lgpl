@@ -75,6 +75,10 @@ public class NumericExpression implements IExpression {
 	public boolean is_simple() {
 		return true;
 	}
+
+	public int getValue() {
+		return carrier;
+	}
 }
 
 //
