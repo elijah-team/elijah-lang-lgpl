@@ -30,6 +30,7 @@ public class IdentExpression implements IExpression {
 
 	public IdentExpression(Token r1) {
 		this.text = r1;
+		this._a = new Attached(); // remember to do something fancy with Context
 	}
 
 	@Override
