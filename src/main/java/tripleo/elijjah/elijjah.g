@@ -289,10 +289,10 @@ accessNotation
 // assignment expression (level 13)
 assignmentExpression returns [IExpression ee]
 		{ee=null;IExpression e=null;IExpression e2;}
-	:	e=conditionalExpression
+	:	ee=conditionalExpression
 		(
 
-			(	ASSIGN/*^*/					{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.ASSIGNMENT);}
+			(	BECOMES/*^*/					{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.ASSIGNMENT);}
             |   PLUS_ASSIGN/*^*/		    {ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_PLUS);}
             |   MINUS_ASSIGN/*^*/			{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_MINUS);}
             |   STAR_ASSIGN/*^*/			{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_MULT);}
@@ -630,7 +630,7 @@ abstractGenericTypeName_xx[TypeName tn]
 	;
 specifiedGenericTypeName_xx[TypeName tn]
 	: simpleTypeName_xx [tn]
-	  (LBRACK typeName[tn] RBRACK)
+	  (LBRACK typeName[tn] {tn.genericPart(tn);} RBRACK)?
 	;
 formalArgTypeName[TypeName tn]
 	: structTypeName[tn]
@@ -654,8 +654,8 @@ funcTypeExpr[TypeName pc]
 	)
 	;
 formalArgList[FormalArgList fal]
-	: formalArgListItem_priv[fal.next()]
-	  (COMMA formalArgListItem_priv[fal.next()])*
+	: (formalArgListItem_priv[fal.next()]
+	  (COMMA formalArgListItem_priv[fal.next()])*)?
 	;
 formalArgListItem_priv[FormalArgListItem fali]
 	:
@@ -696,10 +696,10 @@ LBRACK			:	'['		;
 RBRACK			:	']'		;
 LCURLY			:	'{'		;
 RCURLY			:	'}'		;
-COLON			:	':'		;
+TOK_COLON			:	':'		;
 COMMA			:	','		;
 //DOT			:	'.'		;
-ASSIGN			:	'='		;
+BECOMES			:	'='		;
 EQUAL			:	"=="	;
 LNOT			:	'!'		;
 BNOT			:	'~'		;
