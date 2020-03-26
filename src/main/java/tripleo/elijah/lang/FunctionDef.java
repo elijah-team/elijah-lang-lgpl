@@ -68,7 +68,7 @@ public class FunctionDef implements ClassItem {
 				AbstractBinaryExpression abe = (AbstractBinaryExpression)expr;
 				if (abe.getType() == ExpressionType.ASSIGNMENT) {
 					sb.append(abe.getLeft().toString());
-					sb.append("+");
+					sb.append("=");
 					sb.append(abe.getRight().toString());
 						
 				} else if (abe.getType() == ExpressionType.AUG_MULT) {
