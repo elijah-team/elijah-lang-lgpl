@@ -130,9 +130,21 @@ public class JavaCodeGen implements ICodeGen {
 			Loop loop = (Loop)element;
 			if (loop.getType() == Loop.FROM_TO_TYPE) {
 				String varname="vt"+loop.getIterName();
-				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
-						varname, ((OS_Integer)loop.getFromPart()).getValue(),
-						varname, ((OS_Integer)loop.getToPart()).getValue(),  varname));
+				final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
+				if (loop.getToPart() instanceof NumericExpression) {
+					final NumericExpression toPart = (NumericExpression)loop.getToPart();
+				
+					System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
+							varname, fromPart.getValue(),
+							varname, toPart.getValue(),  varname));
+				} else if (loop.getToPart() instanceof IdentExpression) {
+					final IdentExpression toPart = (IdentExpression)loop.getToPart();
+					
+					System.out.println(String.format("{for (int %s=%d;%s<=%s;%s++){\n\t",
+							varname, fromPart.getValue(),
+							varname, "vv"+toPart.getText(),  varname));
+					
+				}
 				for (StatementItem item : loop.getItems()) {
 					System.out.println("\t"+item);
 				}
