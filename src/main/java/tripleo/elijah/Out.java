@@ -40,7 +40,8 @@ public class Out {
 			pc.module.finish(tos);
 			//
 			XStream x = new XStream();
-			x.toXML(pc.module, tos.getStream());
+			x.setMode(XStream.ID_REFERENCES);
+//			x.toXML(pc.module, tos.getStream());
 			//
 			final JavaCodeGen visit = new JavaCodeGen();
 			pc.module.visitGen(visit);
