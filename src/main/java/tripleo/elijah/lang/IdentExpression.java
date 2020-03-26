@@ -46,12 +46,12 @@ public class IdentExpression implements IExpression {
 		return ExpressionType.IDENT;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * same as getText()
 	 */
 	@Override
 	public String toString() {
-		return text.getText();
+		return getText();
 	}
 
 	@Override
