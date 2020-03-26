@@ -61,7 +61,24 @@ public class FunctionDef implements ClassItem {
 			
 		}
 
-		
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			if (expr instanceof AbstractBinaryExpression) {
+				AbstractBinaryExpression abe = (AbstractBinaryExpression)expr;
+				if (abe.getType() == ExpressionType.ASSIGNMENT) {
+					sb.append(abe.getLeft().toString());
+					sb.append("+");
+					sb.append(abe.getRight().toString());
+						
+				} else if (abe.getType() == ExpressionType.AUG_MULT) {
+					sb.append(abe.getLeft().toString());
+					sb.append("*=");
+					sb.append(abe.getRight().toString());
+				}
+			}
+			return sb.toString();
+		}
 	}
 	
 	private final class FunctionDefScope implements Scope {
