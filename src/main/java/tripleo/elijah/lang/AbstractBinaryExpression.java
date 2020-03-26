@@ -19,9 +19,6 @@ import java.io.IOException;
 
 import tripleo.elijah.util.TabbedOutputStream;
 
-// Referenced classes of package pak:
-//			IExpression, ScopeElement
-
 public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement {
 
 	/* (non-Javadoc)
@@ -118,3 +115,7 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 		return false;
 	}
 }
+
+//
+//
+//
