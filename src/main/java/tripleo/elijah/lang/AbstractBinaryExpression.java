@@ -24,6 +24,26 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement {
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		AbstractBinaryExpression abe = (AbstractBinaryExpression)this;
+		if (abe.getType() == ExpressionType.ASSIGNMENT) {
+			sb.append(abe.getLeft().toString());
+			sb.append("=");
+			sb.append(abe.getRight().toString());
+				
+		} else if (abe.getType() == ExpressionType.AUG_MULT) {
+			sb.append(abe.getLeft().toString());
+			sb.append("*=");
+			sb.append(abe.getRight().toString());
+		}
+		return sb.toString();
+	}
+
 	public AbstractBinaryExpression() {
 		left  = null;
 		right = null;
