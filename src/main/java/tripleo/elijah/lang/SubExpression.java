@@ -17,4 +17,10 @@ package tripleo.elijah.lang;
 
 public class SubExpression extends AbstractBinaryExpression {
 
+	private IExpression carrier;
+
+	public SubExpression(IExpression ee) {
+		carrier=ee;
+	}
+
 }

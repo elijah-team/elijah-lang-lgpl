@@ -2059,10 +2059,10 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			}
 			case LPAREN: {
 				match(LPAREN);
-				if (inputState.guessing == 0) {
-					e = new SubExpression();
-				}
 				expr = expression();
+				if (inputState.guessing == 0) {
+					e = new SubExpression(expr);
+				}
 				match(RPAREN);
 				break;
 			}
