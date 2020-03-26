@@ -17,6 +17,7 @@ import com.thoughtworks.xstream.XStream;
 import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.ParserClosure;
+import tripleo.elijah.stages.deduce.DeduceTypes;
 import tripleo.elijah.util.TabbedOutputStream;
 
 public class Out {
@@ -45,6 +46,8 @@ public class Out {
 			//
 			final JavaCodeGen visit = new JavaCodeGen();
 			pc.module.visitGen(visit);
+			//
+			new DeduceTypes(pc.module).deduce();
 		} catch (FileNotFoundException fnfe) {
 			println("&& FileNotFoundException");
 		} catch (IOException ioe) {
