@@ -3,7 +3,6 @@
  */
 package tripleo.elijah.stages.deduce;
 
-import javassist.CtClass;
 import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
@@ -27,6 +26,9 @@ import tripleo.elijah.util.NotImplementedException;
  */
 public class DeduceTypes {
 
+	private int _classCode = 101;
+	private int _functionCode = 1001;
+
 	private OS_Module module;
 
 	public DeduceTypes(OS_Module module) {
@@ -34,31 +36,22 @@ public class DeduceTypes {
 		this.module = module;
 	}
 
-	public void deduce() {
-		for (ModuleItem element : module.items) {
-			addModuleItem(element);
+	public void addClass(ClassStatement klass) {
+//		System.out.print("class " + klass.clsName + "{\n");
+		klass._a.setCode(nextClassCode());
+		{
+			for (ClassItem element : klass.items())
+				addClassItem(element, klass);
 		}
+		System.out.print("}\n");
 	}
-
-	private void addModuleItem(ModuleItem element) {
-		// TODO Auto-generated method stub
-		if (element instanceof ClassStatement) {
-			ClassStatement cl = (ClassStatement) element;
-			addClass(cl);
-		} else if (element instanceof ImportStatement) {
-			ImportStatement imp = (ImportStatement) element;
-			addImport(imp);
-		}
-	}
-	private void addImport(ImportStatement imp) {
-		throw new NotImplementedException();
-	}
-	private void addClassItem(ClassItem element) {
-		// throw new NotImplementedException();
+	
+	private void addClassItem(ClassItem element, ClassStatement parent) {
 		{
 			if (element instanceof FunctionDef) {
 				FunctionDef fd = (FunctionDef) element;
 				System.out.print("void " + fd.funName + "(){\n");  // TODO: _returnType and mFal
+				fd._a.setCode(nextFunctionCode());
 //				fd.visit(this);
 				System.out.print("\n}\n\n");
 			} else if (element instanceof ClassStatement) {
@@ -66,6 +59,7 @@ public class DeduceTypes {
 			}
 		}
 	}
+	
 	public void addFunctionItem(FunctionItem element) {
 		// TODO Auto-generated method stub
 		if (element instanceof VariableSequence)
@@ -114,15 +108,32 @@ public class DeduceTypes {
 
 		}
 	}
-	public void addClass(ClassStatement klass) {
-//		String pn = ((OS_Module)klass.parent).packageName();
-//		if (pn != null)
-//			System.out.print("package " + pn + ";");
-		System.out.print("class " + klass.clsName + "{\n");
-		{
-			for (ClassItem element : klass.items())
-				addClassItem(element);
+	
+	private void addImport(ImportStatement imp) {
+		throw new NotImplementedException();
+	}
+
+	private void addModuleItem(ModuleItem element) {
+		// TODO Auto-generated method stub
+		if (element instanceof ClassStatement) {
+			ClassStatement cl = (ClassStatement) element;
+			addClass(cl);
+		} else if (element instanceof ImportStatement) {
+			ImportStatement imp = (ImportStatement) element;
+			addImport(imp);
 		}
-		System.out.print("}\n");
+	}
+	public void deduce() {
+		for (ModuleItem element : module.items) {
+			addModuleItem(element);
+		}
+	}
+
+	private int nextClassCode() {
+		return ++_classCode;
+	}
+	
+	private int nextFunctionCode() {
+		return ++_functionCode;
 	}
 }
