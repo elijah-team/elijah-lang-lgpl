@@ -8,12 +8,13 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.gen.Node;
 
 /*
  * Created on 5/19/2019 at 02:09
  *
- * $$Id$
+ * $Id$
  *
  */
 public class Attached {
@@ -21,6 +22,15 @@ public class Attached {
 	Context _context;
 	Node _node;
 	
+	public Attached(Context aContext) {
+		_context = aContext;
+	}
+
+	public Attached() {
+		
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getCode() {
 		return _code;
 	}
@@ -50,4 +60,3 @@ public class Attached {
 //
 //
 //
-
