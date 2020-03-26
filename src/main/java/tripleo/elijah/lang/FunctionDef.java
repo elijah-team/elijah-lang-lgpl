@@ -124,6 +124,7 @@ public class FunctionDef implements ClassItem {
 	private OS_Element/*ClassStatement*/ parent;
 	private final FunctionDefScope mScope2 = new FunctionDefScope();
 	private TypeName _returnType = new RegularTypeName();
+	public Attached _a = new Attached(new FunctionContext(this));
 
 	public FunctionDef(OS_Element aStatement) {
 		parent = aStatement;

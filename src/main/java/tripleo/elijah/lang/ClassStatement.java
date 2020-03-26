@@ -16,6 +16,7 @@ import java.util.List;
 import antlr.Token;
 import com.thoughtworks.xstream.XStream;
 import tripleo.elijah.ProgramClosure;
+import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
@@ -149,6 +150,8 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	private final ArrayList<IExpression> mExprs = new ArrayList<IExpression>();
 
 	public /*final*/ OS_Element parent;
+
+	public Attached _a = new Attached(new ClassContext(this));
 
 	public synchronized Collection<ClassItem> items() {
 		return items;
