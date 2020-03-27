@@ -11,12 +11,13 @@ package tripleo.elijah.lang;
 import java.io.IOException;
 
 import antlr.Token;
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
 
 // Referenced classes of package pak:
 //			TypeRef, IExpression
 
-public class VariableStatement {
+public class VariableStatement implements OS_Element {
 
 	private final VariableSequence parent;
 	public String name;
@@ -110,6 +111,24 @@ public class VariableStatement {
 		
 		else
 			return "Z0*";
+	}
+
+	@Override
+	public void visitGen(ICodeGen visit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public OS_Element getParent() {
+		// TODO Auto-generated method stub
+		return parent;
+	}
+
+	@Override
+	public Context getContext() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
