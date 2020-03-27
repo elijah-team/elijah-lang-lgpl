@@ -16,7 +16,7 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 
-public class OS_Integer extends AbstractExpression {
+@Deprecated public class OS_Integer extends AbstractExpression {
 	
 	@Override
 	public String repr_() {
