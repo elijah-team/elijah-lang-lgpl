@@ -87,8 +87,7 @@ public class JavaCodeGen implements ICodeGen {
 	}
 
 	private void addImport(ImportStatement imp) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		NotImplementedException.raise();
 	}
 
 	private void addClassItem(ClassItem element) {
