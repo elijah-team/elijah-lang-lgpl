@@ -18,6 +18,7 @@ import com.thoughtworks.xstream.XStream;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 import tripleo.elijah.Documentable;
@@ -89,8 +90,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	@Override
 	public void print_osi(TabbedOutputStream tos) throws IOException {
-		XStream x= new XStream();
-		x.toXML(this, tos.getStream());
+		Helpers.printXML(this, tos);
 		//
 		System.out.println("Klass print_osi");
 		tos.incr_tabs();

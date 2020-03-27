@@ -1,8 +1,12 @@
 package tripleo.elijah.gen.nodes;
 
 import org.jetbrains.annotations.NotNull;
+
+import com.thoughtworks.xstream.XStream;
+
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,5 +72,11 @@ public class Helpers {
 		sb.append(String.join(", ", ls));
 		sb.append(")");
 		return sb.toString();
+	}
+
+	public static void printXML(Object obj, TabbedOutputStream tos) {
+		XStream x= new XStream();
+		x.setMode(XStream.ID_REFERENCES);
+		x.toXML(obj, tos.getStream());
 	}
 }

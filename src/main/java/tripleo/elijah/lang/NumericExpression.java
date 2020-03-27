@@ -18,6 +18,8 @@ import java.io.IOException;
 
 import antlr.Token;
 import com.thoughtworks.xstream.XStream;
+
+import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
@@ -47,8 +49,7 @@ public class NumericExpression implements IExpression {
 
 	@Override
 	public void print_osi(TabbedOutputStream aTabbedoutputstream) throws IOException {
-		XStream x = new XStream(); // TODO context.comp.xstream??
-		x.toXML(this, aTabbedoutputstream.getStream());
+		Helpers.printXML(this, tos);
 	}
 
 	@Override
