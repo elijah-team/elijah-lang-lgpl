@@ -213,14 +213,14 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 							case PLUS: {
 								match(PLUS);
 								if (inputState.guessing == 0) {
-									e = ExpressionBuilder.buildPartial(e, ExpressionType.ADDITION);
+									e = ExpressionBuilder.buildPartial(e, ExpressionKind.ADDITION);
 								}
 								break;
 							}
 							case MINUS: {
 								match(MINUS);
 								if (inputState.guessing == 0) {
-									e = ExpressionBuilder.buildPartial(e, ExpressionType.SUBTRACTION);
+									e = ExpressionBuilder.buildPartial(e, ExpressionKind.SUBTRACTION);
 								}
 								break;
 							}
@@ -296,84 +296,84 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 						case BECOMES: {
 							match(BECOMES);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.ASSIGNMENT);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.ASSIGNMENT);
 							}
 							break;
 						}
 						case PLUS_ASSIGN: {
 							match(PLUS_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_PLUS);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_PLUS);
 							}
 							break;
 						}
 						case MINUS_ASSIGN: {
 							match(MINUS_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_MINUS);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_MINUS);
 							}
 							break;
 						}
 						case STAR_ASSIGN: {
 							match(STAR_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_MULT);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_MULT);
 							}
 							break;
 						}
 						case DIV_ASSIGN: {
 							match(DIV_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_DIV);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_DIV);
 							}
 							break;
 						}
 						case MOD_ASSIGN: {
 							match(MOD_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_MOD);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_MOD);
 							}
 							break;
 						}
 						case SR_ASSIGN: {
 							match(SR_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_SR);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_SR);
 							}
 							break;
 						}
 						case BSR_ASSIGN: {
 							match(BSR_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_BSR);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_BSR);
 							}
 							break;
 						}
 						case SL_ASSIGN: {
 							match(SL_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_SL);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_SL);
 							}
 							break;
 						}
 						case BAND_ASSIGN: {
 							match(BAND_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_BAND);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_BAND);
 							}
 							break;
 						}
 						case BXOR_ASSIGN: {
 							match(BXOR_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_BXOR);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_BXOR);
 							}
 							break;
 						}
 						case BOR_ASSIGN: {
 							match(BOR_ASSIGN);
 							if (inputState.guessing == 0) {
-								e = ExpressionBuilder.buildPartial(e, ExpressionType.AUG_BOR);
+								e = ExpressionBuilder.buildPartial(e, ExpressionKind.AUG_BOR);
 							}
 							break;
 						}
@@ -1297,7 +1297,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				case LITERAL_from: {
 					match(LITERAL_from);
 					if (inputState.guessing == 0) {
-						loop.type(loop.FROM_TO_TYPE);
+						loop.type(Loop.FROM_TO_TYPE);
 					}
 					expr = expression();
 					if (inputState.guessing == 0) {
@@ -1313,7 +1313,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				case LITERAL_to: {
 					match(LITERAL_to);
 					if (inputState.guessing == 0) {
-						loop.type(loop.TO_TYPE);
+						loop.type(Loop.TO_TYPE);
 					}
 					expr = expression();
 					if (inputState.guessing == 0) {
@@ -1334,7 +1334,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				case CHAR_LITERAL:
 				case NUM_INT: {
 					if (inputState.guessing == 0) {
-						loop.type(loop.EXPR_TYPE);
+						loop.type(Loop.EXPR_TYPE);
 					}
 					expr = expression();
 					if (inputState.guessing == 0) {
@@ -1903,21 +1903,21 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 							case STAR: {
 								match(STAR);
 								if (inputState.guessing == 0) {
-									e=ExpressionBuilder.buildPartial(e, ExpressionType.MULTIPLY);
+									e=ExpressionBuilder.buildPartial(e, ExpressionKind.MULTIPLY);
 								}
 								break;
 							}
 							case DIV: {
 								match(DIV);
 								if (inputState.guessing == 0) {
-									e=ExpressionBuilder.buildPartial(e, ExpressionType.DIVIDE);
+									e=ExpressionBuilder.buildPartial(e, ExpressionKind.DIVIDE);
 								}
 								break;
 							}
 							case MOD: {
 								match(MOD);
 								if (inputState.guessing == 0) {
-									e=ExpressionBuilder.buildPartial(e, ExpressionType.MODULO);
+									e=ExpressionBuilder.buildPartial(e, ExpressionKind.MODULO);
 								}
 								break;
 							}
@@ -2019,13 +2019,13 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 						in = LT(1);
 						match(INC);
 						if (inputState.guessing == 0) {
-							e = ExpressionBuilder.build(e, ExpressionType.POST_INCREMENT);
+							e = ExpressionBuilder.build(e, ExpressionKind.POST_INCREMENT);
 						}
 					} else if ((LA(1) == DEC) && (_tokenSet_17.member(LA(2)))) {
 						de = LT(1);
 						match(DEC);
 						if (inputState.guessing == 0) {
-							e = ExpressionBuilder.build(e, ExpressionType.POST_DECREMENT);
+							e = ExpressionBuilder.build(e, ExpressionKind.POST_DECREMENT);
 						}
 					} else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
 					} else {
@@ -2330,7 +2330,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 						match(QIDENT);
 						e2 = unaryExpression();
 						if (inputState.guessing == 0) {
-							e = ExpressionBuilder.build(e, ExpressionType.QIDENT, (e2));
+							e = ExpressionBuilder.build(e, ExpressionKind.QIDENT, (e2));
 						}
 					} else {
 						break _loop162;
@@ -2665,7 +2665,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 					}
 					typeName(tn);
 					if (inputState.guessing == 0) {
-						e = ExpressionBuilder.build(e, ExpressionType.IS_A, new TypeNameExpression(tn));
+						e = ExpressionBuilder.build(e, ExpressionKind.IS_A, new TypeNameExpression(tn));
 					}
 					break;
 				}
@@ -2995,7 +2995,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(INC);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionType.INCREMENT);
+					e.set(ExpressionKind.INCREMENT);
 				}
 				break;
 			}
@@ -3003,7 +3003,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(DEC);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionType.DECREMENT);
+					e.set(ExpressionKind.DECREMENT);
 				}
 				break;
 			}
@@ -3011,7 +3011,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(MINUS);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionType.NEGATION);
+					e.set(ExpressionKind.NEGATION);
 				}
 				break;
 			}
@@ -3019,7 +3019,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(PLUS);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionType.POSITIVITY);
+					e.set(ExpressionKind.POSITIVITY);
 				}
 				break;
 			}
@@ -3055,7 +3055,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(BNOT);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionType.BNOT);
+					e.set(ExpressionKind.BNOT);
 				}
 				break;
 			}
@@ -3063,7 +3063,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(LNOT);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionType.LNOT);
+					e.set(ExpressionKind.LNOT);
 				}
 				break;
 			}
