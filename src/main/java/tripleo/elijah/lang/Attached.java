@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.gen.Node;
 
 /*

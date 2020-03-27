@@ -2,9 +2,6 @@ package tripleo.elijah.gen.nodes;
 
 import org.junit.Assert;
 import org.junit.Test;
-import tripleo.elijah.lang.VariableReference;
-
-import static org.junit.Assert.*;
 
 public class CaseHdrNodeTest {
 	

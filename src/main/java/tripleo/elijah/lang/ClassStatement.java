@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 
 import antlr.Token;
-import com.thoughtworks.xstream.XStream;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.gen.ICodeGen;

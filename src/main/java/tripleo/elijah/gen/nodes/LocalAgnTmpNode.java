@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.gen.nodes;
 
-import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.util.NotImplementedException;
 
 /**

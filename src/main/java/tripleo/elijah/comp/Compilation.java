@@ -14,8 +14,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import antlr.ANTLRException;
-import tripleo.elijah.ElijahLexer;
-import tripleo.elijah.ElijahParser;
 import tripleo.elijah.Out;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijjah.ElijjahLexer;

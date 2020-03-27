@@ -15,8 +15,6 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
-import com.thoughtworks.xstream.XStream;
-
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;

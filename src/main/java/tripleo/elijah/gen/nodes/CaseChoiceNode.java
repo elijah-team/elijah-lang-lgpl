@@ -17,8 +17,6 @@ package tripleo.elijah.gen.nodes;
 import org.eclipse.jdt.annotation.NonNull;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.lang.NumericExpression;
-import tripleo.elijah.lang.OS_Integer;
-import tripleo.elijah.lang.VariableReference;
 
 public class CaseChoiceNode {
 	

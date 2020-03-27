@@ -5,8 +5,6 @@ package tripleo.elijah.gen.nodes;
 
 import org.jetbrains.annotations.NotNull;
 
-import tripleo.elijah.comp.GenBuffer;
-import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.NumericExpression;
 import tripleo.elijah.lang.OS_Integer;

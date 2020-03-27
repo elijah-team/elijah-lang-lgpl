@@ -10,7 +10,6 @@ package tripleo.elijah;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import antlr.MismatchedTokenException;
 import antlr.NoViableAltException;
 import antlr.ParserSharedInputState;
 import antlr.RecognitionException;

@@ -11,7 +11,6 @@ package tripleo.elijah.lang;
 // Referenced classes of package pak2:
 //			StatementClosure, BlockStatement
 
-import antlr.Token;
 import tripleo.elijah.Documentable;
 
 public interface Scope extends Documentable {
