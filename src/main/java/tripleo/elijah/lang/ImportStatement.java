@@ -75,8 +75,7 @@ public class ImportStatement implements ModuleItem {
 
 	@Override
 	public OS_Element getParent() {
-		// TODO Auto-generated method stub
-		return null;
+		return parent;
 	}
 
 	@Override
