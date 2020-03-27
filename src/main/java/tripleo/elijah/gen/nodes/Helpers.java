@@ -31,14 +31,14 @@ public class Helpers {
 	}
 	
 	@NotNull
-	static ExpressionType ExpressionOperatorToExpressionType(ExpressionOperators middle) {
-		ExpressionType middle1;
+	static ExpressionKind ExpressionOperatorToExpressionType(ExpressionOperators middle) {
+		ExpressionKind middle1;
 		switch (middle) {
 			case OP_MINUS:
-				middle1 = ExpressionType.SUBTRACTION;
+				middle1 = ExpressionKind.SUBTRACTION;
 				break;
 			case OP_MULT:
-				middle1 = ExpressionType.MULTIPLY;
+				middle1 = ExpressionKind.MULTIPLY;
 				break;
 			default:
 				throw new NotImplementedException();

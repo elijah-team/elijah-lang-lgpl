@@ -58,14 +58,14 @@ public class DefFunctionDef implements ClassItem {
 			int y=2;
 			if (expr instanceof AbstractBinaryExpression) {
 				AbstractBinaryExpression abe = (AbstractBinaryExpression)expr;
-				if (abe.getType() == ExpressionType.ASSIGNMENT) {
+				if (abe.getKind() == ExpressionKind.ASSIGNMENT) {
 					aTos.put_string_ln("Assignment {");
 					aTos.incr_tabs();
 					aTos.put_string_ln(abe.getLeft().toString());
 					aTos.put_string_ln(abe.getRight().toString());
 					aTos.dec_tabs();
 					aTos.put_string_ln("}");
-				} else if (abe.getType() == ExpressionType.AUG_MULT) {
+				} else if (abe.getKind() == ExpressionKind.AUG_MULT) {
 					aTos.put_string_ln("AssignmentMultiplication {");
 					aTos.incr_tabs();
 					aTos.put_string_ln(abe.getLeft().toString());

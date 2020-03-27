@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import antlr.Token;
-import tripleo.elijah.lang.ExpressionType;
+import tripleo.elijah.lang.ExpressionKind;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.util.TabbedOutputStream;
 
@@ -54,12 +54,12 @@ public class Qualident  implements IExpression {
 	}
 	
 	@Override
-	public ExpressionType getType() {
-		return ExpressionType.QIDENT;
+	public ExpressionKind getKind() {
+		return ExpressionKind.QIDENT;
 	}
 	
 	@Override
-	public void set(ExpressionType aIncrement) {
+	public void set(ExpressionKind aIncrement) {
 		throw new IllegalArgumentException(); // TODO is this right?
 	}
 	

@@ -23,9 +23,9 @@ public interface IExpression {
 
 	void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException;
 
-	ExpressionType getType();
+	ExpressionKind getKind();
 
-	void set(ExpressionType aIncrement);
+	void set(ExpressionKind aKind);
 
 	IExpression getLeft();
 

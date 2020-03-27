@@ -28,7 +28,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		//NotImplementedException.raise();
 		setLeft(this); // TODO is this better left null?
 						// no contract specifies NotNull...
-		set(ExpressionType.VARREF);
+		set(ExpressionKind.VARREF);
 	}
 
 	public VariableReference(String m) {
@@ -36,7 +36,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		setMain(m);
 		setLeft(this); // TODO is this better left null?
 						// no contract specifies NotNull...
-		set(ExpressionType.VARREF);
+		set(ExpressionKind.VARREF);
 	}
 
 /*

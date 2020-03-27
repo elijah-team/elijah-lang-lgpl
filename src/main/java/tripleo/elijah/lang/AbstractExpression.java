@@ -19,7 +19,7 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 		_type  = null;
 	}
 
-	public AbstractExpression(IExpression aLeft, ExpressionType aType) {
+	public AbstractExpression(IExpression aLeft, ExpressionKind aType) {
 		left = aLeft;
 		_type = aType;
 	}
@@ -30,7 +30,7 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 	}
 	
 	@Override
-	public ExpressionType getType() {
+	public ExpressionKind getKind() {
 		return _type;
 	}
 
@@ -63,10 +63,10 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 //	}
 
 	public IExpression left;
-	public ExpressionType _type;
+	public ExpressionKind _type;
 
 	@Override
-	public void set(ExpressionType type1) {
+	public void set(ExpressionKind type1) {
 		_type=type1;
 	}
 }

@@ -14,7 +14,7 @@ public interface IBinaryExpression extends IExpression {
 
 	public abstract void setRight(IExpression iexpression);
 
-	public abstract void shift(ExpressionType aType);
+	public abstract void shift(ExpressionKind aType);
 
 	void set(IBinaryExpression aEx);
 

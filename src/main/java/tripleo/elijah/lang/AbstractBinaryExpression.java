@@ -28,12 +28,12 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		AbstractBinaryExpression abe = (AbstractBinaryExpression)this;
-		if (abe.getType() == ExpressionType.ASSIGNMENT) {
+		if (abe.getKind() == ExpressionKind.ASSIGNMENT) {
 			sb.append(abe.getLeft().toString());
 			sb.append("=");
 			sb.append(abe.getRight().toString());
 				
-		} else if (abe.getType() == ExpressionType.AUG_MULT) {
+		} else if (abe.getKind() == ExpressionKind.AUG_MULT) {
 			sb.append(abe.getLeft().toString());
 			sb.append("*=");
 			sb.append(abe.getRight().toString());
@@ -47,7 +47,7 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 		type  = null;
 	}
 
-	public AbstractBinaryExpression(IExpression aLeft, ExpressionType aType, IExpression aRight) {
+	public AbstractBinaryExpression(IExpression aLeft, ExpressionKind aType, IExpression aRight) {
 		left = aLeft;
 		type = aType;
 		right = aRight;
@@ -64,7 +64,7 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 	}
 
 	@Override
-	public ExpressionType getType() {
+	public ExpressionKind getKind() {
 		return type;
 	}
 
@@ -81,7 +81,7 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 	@Override
 	public void set(IBinaryExpression aEx) {
 		left=aEx.getLeft();
-		type=aEx.getType();
+		type=aEx.getKind();
 		right=aEx.getRight();
 	}
 
@@ -95,7 +95,7 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 		right = aRight;
 	}
 	@Override
-	public void shift(ExpressionType aType) {
+	public void shift(ExpressionKind aType) {
 		left=new AbstractBinaryExpression(left,type,right); //TODO
 		type=aType;
 		right=null;
@@ -103,10 +103,10 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 
 	public IExpression left;
 	public IExpression right;
-	public ExpressionType type;
+	public ExpressionKind type;
 
 	@Override
-	public void set(ExpressionType aIncrement) {
+	public void set(ExpressionKind aIncrement) {
 		type=aIncrement;
 	}
 

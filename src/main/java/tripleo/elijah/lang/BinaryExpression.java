@@ -14,7 +14,7 @@ import antlr.Token;
 
 class BinaryExpression extends AbstractBinaryExpression {
 
-	public BinaryExpression(IExpression aLast_exp, ExpressionType aType, Token aSide) {
+	public BinaryExpression(IExpression aLast_exp, ExpressionKind aType, Token aSide) {
 		left = aLast_exp;
 		type = aType;
 		StringExpression se=new StringExpression(aSide);

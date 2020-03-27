@@ -113,7 +113,7 @@ public class ExpressionNodeBuilder {
 	@Contract("_, _, _ -> new")
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, IExpression right) {
 		// TODO Auto-generated method stub
-		ExpressionType middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
+		ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
 		return new AbstractBinaryExpression(left, middle1, right);
 	}
 
@@ -121,7 +121,7 @@ public class ExpressionNodeBuilder {
 	@Contract("_, _, _ -> new")
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
-		ExpressionType middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
+		ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
 		return new AbstractBinaryExpression(left, middle1, new StringExpression(makeToken(right.text()))); // TODO !!!
 	}
 

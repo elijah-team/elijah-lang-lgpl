@@ -43,7 +43,7 @@ public class CharLitExpression implements IExpression {
 	 * @see tripleo.elijah.lang.IExpression#getType()
 	 */
 	@Override
-	public ExpressionType getType() {
+	public ExpressionKind getKind() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -52,7 +52,7 @@ public class CharLitExpression implements IExpression {
 	 * @see tripleo.elijah.lang.IExpression#set(tripleo.elijah.lang.ExpressionType)
 	 */
 	@Override
-	public void set(ExpressionType aIncrement) {
+	public void set(ExpressionKind aIncrement) {
 		// TODO Auto-generated method stub
 
 	}

@@ -52,12 +52,12 @@ public class FloatExpression implements IExpression {
 	}
 
 	@Override
-	public ExpressionType getType() {
-		return ExpressionType.FLOAT; // TODO
+	public ExpressionKind getKind() {
+		return ExpressionKind.FLOAT; // TODO
 	}
 
 	@Override
-	public void set(ExpressionType aType) {
+	public void set(ExpressionKind aType) {
 		// log and ignore
 		System.err.println("Trying to set ExpressionType of FloatExpression to "+aType.toString());
 	}

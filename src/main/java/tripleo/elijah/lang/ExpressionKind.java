@@ -8,7 +8,7 @@
  */
 package tripleo.elijah.lang;
 
-public enum ExpressionType {
+public enum ExpressionKind {
 
 	ADDITION, 
 	ASSIGNMENT,

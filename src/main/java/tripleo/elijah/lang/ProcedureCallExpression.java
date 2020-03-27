@@ -61,12 +61,12 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 	}
 
 	@Override
-	public ExpressionType getType() {
-		return ExpressionType.PROCEDURE_CALL;
+	public ExpressionKind getKind() {
+		return ExpressionKind.PROCEDURE_CALL;
 	}
 
 	@Override
-	public void set(ExpressionType aIncrement) {
+	public void set(ExpressionKind aIncrement) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}

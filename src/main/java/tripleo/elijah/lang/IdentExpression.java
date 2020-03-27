@@ -15,10 +15,7 @@ package tripleo.elijah.lang;
 import java.io.IOException;
 
 import antlr.Token;
-import com.thoughtworks.xstream.XStream;
-
 import tripleo.elijah.gen.nodes.Helpers;
-import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 /**
@@ -41,8 +38,8 @@ public class IdentExpression implements IExpression {
 	}
 
 	@Override
-	public ExpressionType getType() {
-		return ExpressionType.IDENT;
+	public ExpressionKind getKind() {
+		return ExpressionKind.IDENT;
 	}
 
 	/**
@@ -54,7 +51,7 @@ public class IdentExpression implements IExpression {
 	}
 
 	@Override
-	public void set(ExpressionType aIncrement) {
+	public void set(ExpressionKind aIncrement) {
 		// log and ignore
 		System.err.println("Trying to set ExpressionType of IdentExpression to "+aIncrement.toString());
 	}
