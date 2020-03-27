@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import java.io.IOException;
+import java.util.List;
 
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
@@ -40,7 +41,7 @@ public class ImportStatement implements ModuleItem {
 	 * @category from
 	 */
 	public void importRoot(Qualident xyz) {
-		root = xyz;
+		setRoot(xyz);
 	}
 
 	public QualidentList importList() {
@@ -50,7 +51,8 @@ public class ImportStatement implements ModuleItem {
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
 		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+//		throw new NotImplementedException();
+		aTos.put_string(String.format("%s %s", getRoot(), importList.toString()));
 	}
 
 	@Override
@@ -69,8 +71,8 @@ public class ImportStatement implements ModuleItem {
 	}
 	
 	public void addNormalPart(Qualident aQualident) {
-		throw new NotImplementedException();
-		
+//		throw new NotImplementedException();
+		importList.add(aQualident);		
 	}
 
 	@Override
@@ -82,6 +84,18 @@ public class ImportStatement implements ModuleItem {
 	public Context getContext() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Qualident getRoot() {
+		return root;
+	}
+
+	public void setRoot(Qualident root) {
+		this.root = root;
+	}
+
+	public List<Qualident> parts() {
+		return importList.parts;
 	}
 
 	
