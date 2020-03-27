@@ -473,7 +473,7 @@ postfixExpression returns [IExpression ee]
 	:	ee=primaryExpression // start with a primary
 
 		(	// qualified id (id.id.id.id...) -- build the name
-			DOT/*^*/ ( IDENT
+			DOT/*^*/ ( e:IDENT {ee=new DotExpression(ee, new IdentExpression(e));}
 				| "this"
 				| "class"
 //				| newExpression
@@ -496,7 +496,7 @@ postfixExpression returns [IExpression ee]
 			//   this rule would get really ugly...
 		|	lp:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
 /////////////////////////////////////////////////////////////////				argList
-el=expressionList2 ////////////////
+(el=expressionList2)? ////////////////
 			RPAREN/*!*/
 		)*
 
