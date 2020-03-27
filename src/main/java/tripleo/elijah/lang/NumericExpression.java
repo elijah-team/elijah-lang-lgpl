@@ -17,8 +17,6 @@ package tripleo.elijah.lang;
 import java.io.IOException;
 
 import antlr.Token;
-import com.thoughtworks.xstream.XStream;
-
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
@@ -49,7 +47,7 @@ public class NumericExpression implements IExpression {
 
 	@Override
 	public void print_osi(TabbedOutputStream aTabbedoutputstream) throws IOException {
-		Helpers.printXML(this, tos);
+		Helpers.printXML(this, aTabbedoutputstream);
 	}
 
 	@Override
@@ -58,12 +56,12 @@ public class NumericExpression implements IExpression {
 	}
 
 	@Override
-	public ExpressionType getType() {
-		return ExpressionType.NUMERIC; // TODO
+	public ExpressionKind getKind() {
+		return ExpressionKind.NUMERIC; // TODO
 	}
 
 	@Override
-	public void set(ExpressionType aType) {
+	public void set(ExpressionKind aType) {
 		// log and ignore
 		System.err.println("Trying to set ExpressionType of NumericExpression to "+aType.toString());
 	}
