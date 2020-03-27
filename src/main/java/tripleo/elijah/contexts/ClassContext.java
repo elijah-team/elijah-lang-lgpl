@@ -5,6 +5,7 @@ package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.Context;
+import tripleo.elijah.lang.FunctionDef;
 
 
 /**
@@ -18,6 +19,11 @@ public class ClassContext extends Context { // TODO is this right, or should be 
 
 	public ClassContext(ClassStatement classStatement) {
 		carrier = classStatement;
+	}
+
+	public void add(FunctionDef fd, String funName) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

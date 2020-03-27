@@ -61,6 +61,18 @@ public class VariableSequence implements BlockMember, StatementItem, FunctionIte
 		
 	}
 
+	@Override
+	public OS_Element getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Context getContext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }
 

@@ -69,6 +69,18 @@ public class FunctionDef implements ClassItem {
 			}
 			return sb.toString();
 		}
+
+		@Override
+		public OS_Element getParent() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Context getContext() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 	
 	private final class FunctionDefScope implements Scope {
@@ -178,6 +190,16 @@ public class FunctionDef implements ClassItem {
 	public TypeName returnType() {
 		// TODO Auto-generated method stub
 		return _returnType ;
+	}
+
+	@Override
+	public OS_Element getParent() {
+		return parent;
+	}
+
+	@Override
+	public Context getContext() {
+		return _a._context;
 	}
 
 	

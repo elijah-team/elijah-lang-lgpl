@@ -158,6 +158,12 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 		return args;
 	}
 
+	@Override
+	public Context getContext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }
 

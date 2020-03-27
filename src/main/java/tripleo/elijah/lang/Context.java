@@ -8,6 +8,9 @@
  */
 package tripleo.elijah.lang;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import tripleo.elijah.util.NotImplementedException;
 
 public class Context {
@@ -18,14 +21,22 @@ public class Context {
 	}
 	
 	LookupResultList lookup(String name) {
+		return lookup(name, 0);
+	}
+	
+	LookupResultList lookup(String name, int level) {
 		final LookupResultList Result = new LookupResultList();
-		int level = 0;
-		
+
+		/*
 		for (OS_Element2 i : attached.items()) {
 //			if (i.name().equals(name)) {
 //				Result.add (i, i.sig, level);
 //			}
 		}
+		*/
+		OS_Element element = members.get(name);
+		Result.add(name, level, element);
+		element.getParent().getContext().lookup(name, level);
 		
 //		lookup(name, attached, parent, Result ,level+1);
 		return Result;
@@ -34,6 +45,13 @@ public class Context {
 	void lookup(String name, OS_Container attached, OS_Element2 parent, LookupResultList Result, int level) {
 		throw new NotImplementedException();
 	}
+
+	public void add(OS_Element element, String name) {
+//		NotImplementedException.raise();
+		members.put(name, element);
+	}
+	
+	Map<String, OS_Element> members = new HashMap<String, OS_Element>();
 }
 
 //

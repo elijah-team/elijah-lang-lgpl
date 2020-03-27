@@ -93,6 +93,7 @@ public class VariableStatement {
 		else if (initialValue instanceof StringExpression)
 			return "char*";
 		else if (initialValue instanceof IdentExpression)
+//			return "Z"+((IdentExpression)initialValue).getText();
 			return "---------------10";
 		else if (initialValue instanceof Qualident)
 			return "---------------8";

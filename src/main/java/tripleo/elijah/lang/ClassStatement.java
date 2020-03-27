@@ -194,6 +194,11 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return null;
 	}
 
+	@Override
+	public Context getContext() {
+		return _a._context;
+	}
+
 	
 }
 

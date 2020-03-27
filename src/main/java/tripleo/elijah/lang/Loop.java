@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import antlr.Token;
+import tripleo.elijah.contexts.LoopContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.lang.FunctionDef.StatementWrapper;
 import tripleo.elijah.util.NotImplementedException;
@@ -26,8 +27,13 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem {
 	private Scope _scope = new LoopScope();
 	private List<String> docstrings = new ArrayList<String>();
 	private List<StatementItem> items = new ArrayList<StatementItem>();
+	private OS_Element parent;
 
-	public Loop() {
+	@Deprecated public Loop() {
+	}
+
+	public Loop(OS_Element aParent) {
+		parent = aParent;
 	}
 
 	public void type(int aType) {
@@ -62,6 +68,7 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem {
 	private int type;
 private IExpression topart,frompart;
 private IExpression expr;
+private Attached _a = new Attached(new LoopContext(this));
 
 	/**
 	 * @category type
@@ -163,6 +170,16 @@ private IExpression expr;
 			add(new StatementWrapper(aExpr));
 //			throw new NotImplementedException(); // TODO
 		}
+	}
+
+	@Override
+	public OS_Element getParent() {
+		return parent;
+	}
+
+	@Override
+	public Context getContext() {
+		return _a ._context;
 	}
 
 	

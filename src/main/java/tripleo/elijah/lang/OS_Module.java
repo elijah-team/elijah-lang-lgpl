@@ -46,12 +46,15 @@ public class OS_Module implements OS_Element {
 //	
 //	Stack<String> packageNames = new Stack<String>();
 	private Stack<Qualident> packageNames_q = new Stack<Qualident>();
+	public Attached _a = new Attached(new ModuleContext(this));
+	
 	public void add(ModuleItem aItem) {
 //		if (aItem instanceof ClassStatement)
 //			((ClassStatement)aItem).setPackageName(packageNames_q.peek());
 		items.add(aItem);
 	}
-public void addIndexingItem(Token i1, IExpression c1) {
+	
+	public void addIndexingItem(Token i1, IExpression c1) {
 		indexingItems.add(new IndexingItem(i1, c1));
 	}
 
@@ -102,6 +105,18 @@ public void addIndexingItem(Token i1, IExpression c1) {
 	@Override
 	public void visitGen(ICodeGen visit) {
 		visit.addModule(this);
+	}
+
+	@Override
+	public OS_Element getParent() {
+		// TODO return COMP??
+		return null;
+	}
+
+	@Override
+	public Context getContext() {
+		// TODO Auto-generated method stub
+		return _a._context;
 	}
 	
 }

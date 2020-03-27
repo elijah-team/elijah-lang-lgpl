@@ -3,6 +3,8 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import java.util.List;
+
 import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
@@ -18,6 +20,7 @@ import tripleo.elijah.lang.StatementItem;
 import tripleo.elijah.lang.VariableSequence;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.contexts.*;
 
 /**
  * @author Tripleo
@@ -26,8 +29,8 @@ import tripleo.elijah.util.NotImplementedException;
  */
 public class DeduceTypes {
 
-	private int _classCode = 101;
-	private int _functionCode = 1001;
+	private static int _classCode = 101;
+	private static int _functionCode = 1001;
 
 	private OS_Module module;
 
@@ -36,24 +39,26 @@ public class DeduceTypes {
 		this.module = module;
 	}
 
-	public void addClass(ClassStatement klass) {
+	public void addClass(ClassStatement klass, OS_Module parent) {
 //		System.out.print("class " + klass.clsName + "{\n");
 		klass._a.setCode(nextClassCode());
+		parent._a.getContext().add(klass, klass.getName());
 		{
 			for (ClassItem element : klass.items())
 				addClassItem(element, klass);
 		}
-		System.out.print("}\n");
+//		System.out.print("}\n");
 	}
 	
 	private void addClassItem(ClassItem element, ClassStatement parent) {
 		{
 			if (element instanceof FunctionDef) {
 				FunctionDef fd = (FunctionDef) element;
-				System.out.print("void " + fd.funName + "(){\n");  // TODO: _returnType and mFal
+//				System.out.print("void " + fd.funName + "(){\n");  // TODO: _returnType and mFal
 				fd._a.setCode(nextFunctionCode());
+				parent._a.getContext().add(fd, fd.funName);
 //				fd.visit(this);
-				System.out.print("\n}\n\n");
+//				System.out.print("\n}\n\n");
 			} else if (element instanceof ClassStatement) {
 //				((ClassStatement) element).visitGen(this);
 			}
@@ -117,13 +122,14 @@ public class DeduceTypes {
 		// TODO Auto-generated method stub
 		if (element instanceof ClassStatement) {
 			ClassStatement cl = (ClassStatement) element;
-			addClass(cl);
+			addClass(cl, module);
 		} else if (element instanceof ImportStatement) {
 			ImportStatement imp = (ImportStatement) element;
 			addImport(imp);
 		}
 	}
 	public void deduce() {
+		System.out.println("-------------------------------------------");
 		for (ModuleItem element : module.items) {
 			addModuleItem(element);
 		}

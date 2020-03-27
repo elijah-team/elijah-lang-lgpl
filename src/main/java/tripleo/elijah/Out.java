@@ -40,8 +40,8 @@ public class Out {
 			pc.module.print_osi(tos);
 			pc.module.finish(tos);
 			//
-			XStream x = new XStream();
-			x.setMode(XStream.ID_REFERENCES);
+//			XStream x = new XStream();
+//			x.setMode(XStream.ID_REFERENCES);
 //			x.toXML(pc.module, tos.getStream());
 			//
 			final JavaCodeGen visit = new JavaCodeGen();

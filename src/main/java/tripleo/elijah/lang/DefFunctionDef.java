@@ -14,8 +14,10 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.contexts.DefFunctionContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.java.JavaCodeGen;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
@@ -80,6 +82,19 @@ public class DefFunctionDef implements ClassItem {
 			
 		}
 
+		@Override
+		public OS_Element getParent() {
+			// TODO this is unimplemented
+			NotImplementedException.raise();
+			return null;
+		}
+
+		@Override
+		public Context getContext() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	
 	}
 	
@@ -128,7 +143,7 @@ public class DefFunctionDef implements ClassItem {
 		}
 	}
 
-	private List<String> docstrings = new ArrayList<String>();
+	private List<String> docstrings = new ArrayList<String>(); // TODO do we allow this?
 	public String funName;
 	private List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
@@ -136,6 +151,7 @@ public class DefFunctionDef implements ClassItem {
 	private OS_Element/*ClassStatement*/ parent;
 	private final FunctionDefScope mScope2 = new FunctionDefScope();
 	private TypeName _returnType = new RegularTypeName();
+	private Attached _a = new Attached(new DefFunctionContext(this));
 
 	public DefFunctionDef(OS_Element aStatement) {
 		parent = aStatement;
@@ -189,6 +205,16 @@ public class DefFunctionDef implements ClassItem {
 	public TypeName returnType() {
 		// TODO Auto-generated method stub
 		return _returnType ;
+	}
+
+	@Override
+	public OS_Element getParent() {
+		return parent;
+	}
+
+	@Override
+	public Context getContext() {
+		return _a ._context;
 	}
 
 	
