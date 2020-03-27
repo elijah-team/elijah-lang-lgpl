@@ -3,8 +3,6 @@
  */
 package tripleo.elijah.stages.deduce;
 
-import java.util.List;
-
 import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
@@ -13,14 +11,16 @@ import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.ImportStatement;
 import tripleo.elijah.lang.Loop;
 import tripleo.elijah.lang.ModuleItem;
+import tripleo.elijah.lang.NamespaceModify;
 import tripleo.elijah.lang.NumericExpression;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.ProcedureCallExpression;
+import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.lang.StatementItem;
 import tripleo.elijah.lang.VariableSequence;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.contexts.*;
 
 /**
  * @author Tripleo
@@ -57,6 +57,11 @@ public class DeduceTypes {
 //				System.out.print("void " + fd.funName + "(){\n");  // TODO: _returnType and mFal
 				fd._a.setCode(nextFunctionCode());
 				parent._a.getContext().add(fd, fd.funName);
+				{
+					for (FunctionItem fi : fd.items())
+						addFunctionItem(fi, fd);
+
+				}
 //				fd.visit(this);
 //				System.out.print("\n}\n\n");
 			} else if (element instanceof ClassStatement) {
@@ -65,21 +70,29 @@ public class DeduceTypes {
 		}
 	}
 	
-	public void addFunctionItem(FunctionItem element) {
+	public void addFunctionItem(FunctionItem element, FunctionDef parent) {
 		// TODO Auto-generated method stub
-		if (element instanceof VariableSequence)
+		if (element instanceof VariableSequence) {
+//			fd._a.setCode(nextFunctionCode());
+//			parent._a.getContext().add(element, null);
 			for (VariableStatement ii : ((VariableSequence) element).items()) {
-				// TODO Will eventually have to move this
-				String theType;
 				if (ii.typeName().isNull()) {
-//					theType = "int"; // Z0*
-					theType = ii.initialValueType();
-				} else{
-					theType = ii.typeName().getName();
+					if (ii.initialValue() != null) {
+						
+					}
 				}
-				System.out.println(String.format("%s vv%s;", theType, ii.name));
+				parent._a.getContext().add(ii, ii.getName());
+//				String theType;
+//				if (ii.typeName().isNull()) {
+////					theType = "int"; // Z0*
+//					theType = ii.initialValueType();
+//				} else{
+//					theType = ii.typeName().getName();
+//				}
+				System.out.println(String.format("%s;", ii.getName()));
 
 			}
+		}
 		else if (element instanceof ProcedureCallExpression) {
 			ProcedureCallExpression pce = (ProcedureCallExpression) element;
 			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
@@ -115,7 +128,13 @@ public class DeduceTypes {
 	}
 	
 	private void addImport(ImportStatement imp) {
-		throw new NotImplementedException();
+//		throw new NotImplementedException();
+		if (imp.getRoot() == null) {
+			for (Qualident q : imp.parts()) {
+				module.modify_namespace(q, NamespaceModify.IMPORT);
+			}
+		}
+//		module.
 	}
 
 	private void addModuleItem(ModuleItem element) {

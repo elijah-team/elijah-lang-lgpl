@@ -21,6 +21,7 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
@@ -117,6 +118,11 @@ public class OS_Module implements OS_Element {
 	public Context getContext() {
 		// TODO Auto-generated method stub
 		return _a._context;
+	}
+
+	public void modify_namespace(Qualident q, NamespaceModify import1) {
+//		NotImplementedException.raise();
+		getContext().add(null,  q.toString());
 	}
 	
 }
