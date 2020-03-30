@@ -38,5 +38,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="junit" level="project" />
+    <orderEntry type="library" name="commons-cli-1.4" level="project" />
   </component>
 </module>
