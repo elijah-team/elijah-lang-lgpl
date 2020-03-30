@@ -20,4 +20,7 @@ public class LookupResult {
 		this.level = level;
 	}
 
+	public String toString() {
+		return String.format("<%s %s %d>", element, name, level);
+	}
 }
