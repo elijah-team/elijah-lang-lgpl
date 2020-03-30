@@ -28,7 +28,6 @@ public class Out {
 	public void FinishModule() {
 		TabbedOutputStream tos;
 		println("** FinishModule");
-//		tos = null;
 		try {
 			final String filename = String.format("eljc-%d-%d-%d.out",
 					Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
@@ -36,15 +35,15 @@ public class Out {
 					Calendar.getInstance().get(Calendar.SECOND));
 			tos = new TabbedOutputStream(new FileOutputStream(filename));
 			tos.put_string_ln(pc.module.getFileName());
-			pc.module.print_osi(tos);
+//			pc.module.print_osi(tos);
 			pc.module.finish(tos);
 			//
 //			XStream x = new XStream();
 //			x.setMode(XStream.ID_REFERENCES);
 //			x.toXML(pc.module, tos.getStream());
 			//
-			final JavaCodeGen visit = new JavaCodeGen();
-			pc.module.visitGen(visit);
+//			final JavaCodeGen visit = new JavaCodeGen();
+//			pc.module.visitGen(visit);
 			//
 			new DeduceTypes(pc.module).deduce();
 		} catch (FileNotFoundException fnfe) {
@@ -52,7 +51,6 @@ public class Out {
 		} catch (IOException ioe) {
 			println("&& IOException");
 		}
-//		return;
 	}
 
 	public void println(String s) {
