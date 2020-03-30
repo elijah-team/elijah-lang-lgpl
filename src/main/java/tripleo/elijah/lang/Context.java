@@ -20,7 +20,11 @@ public class Context {
 	public Context() {
 	}
 	
-	LookupResultList lookup(String name) {
+	public Context(OS_Container attached) {
+		this.attached = attached;
+	}
+	
+	public LookupResultList lookup(String name) {
 		return lookup(name, 0);
 	}
 	
@@ -34,24 +38,36 @@ public class Context {
 //			}
 		}
 		*/
-		OS_Element element = members.get(name);
-		Result.add(name, level, element);
-		element.getParent().getContext().lookup(name, level);
+		if (members.containsKey(name))
+		{
+			OS_Element element = members.get(name);
+			Result.add(name, level, element);
+			element.getParent().getContext().lookup(name, level);
+		}
 		
 //		lookup(name, attached, parent, Result ,level+1);
 		return Result;
 	}
 	
-	void lookup(String name, OS_Container attached, OS_Element2 parent, LookupResultList Result, int level) {
+	void lookup(String name, OS_Container attached1, OS_Element2 parent, LookupResultList Result, int level) {
 		throw new NotImplementedException();
 	}
 
 	public void add(OS_Element element, String name) {
-//		NotImplementedException.raise();
 		members.put(name, element);
 	}
 	
+//	class TypedElement {
+//		OS_Element element;
+//		OS_Type type;
+//	}
+	
 	Map<String, OS_Element> members = new HashMap<String, OS_Element>();
+
+	public void add(OS_Element element, String name, OS_Type dtype) {
+//		element.setType(dtype);
+		members.put(name, element);
+	}
 }
 
 //

@@ -7,19 +7,24 @@ import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.FunctionItem;
+import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.ImportStatement;
+import tripleo.elijah.lang.LookupResult;
+import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.Loop;
 import tripleo.elijah.lang.ModuleItem;
 import tripleo.elijah.lang.NamespaceModify;
 import tripleo.elijah.lang.NumericExpression;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.ProcedureCallExpression;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.lang.StatementItem;
 import tripleo.elijah.lang.VariableSequence;
 import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.util.NotImplementedException;
 
 /**
@@ -42,7 +47,7 @@ public class DeduceTypes {
 	public void addClass(ClassStatement klass, OS_Module parent) {
 //		System.out.print("class " + klass.clsName + "{\n");
 		klass._a.setCode(nextClassCode());
-		parent._a.getContext().add(klass, klass.getName());
+		parent.getContext().add(klass, klass.getName());
 		{
 			for (ClassItem element : klass.items())
 				addClassItem(element, klass);
@@ -76,12 +81,21 @@ public class DeduceTypes {
 //			fd._a.setCode(nextFunctionCode());
 //			parent._a.getContext().add(element, null);
 			for (VariableStatement ii : ((VariableSequence) element).items()) {
+				OS_Type dtype = null;
 				if (ii.typeName().isNull()) {
 					if (ii.initialValue() != null) {
-						
+						IExpression iv = ii.initialValue();
+						if (iv instanceof NumericExpression) {
+							dtype = new OS_Type(BuiltInTypes.SystemInteger);
+						} else if (iv instanceof IdentExpression) {
+							LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
+							for (LookupResult n: lrl.results()) {
+								System.out.println("99"+n);
+							}
+						}
 					}
 				}
-				parent._a.getContext().add(ii, ii.getName());
+				parent._a.getContext().add(ii, ii.getName(), dtype);
 //				String theType;
 //				if (ii.typeName().isNull()) {
 ////					theType = "int"; // Z0*
