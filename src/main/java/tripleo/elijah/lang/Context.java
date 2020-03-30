@@ -63,10 +63,15 @@ public class Context {
 //	}
 	
 	Map<String, OS_Element> members = new HashMap<String, OS_Element>();
+	private NameTable nameTable = new NameTable();
 
 	public void add(OS_Element element, String name, OS_Type dtype) {
 //		element.setType(dtype);
 		members.put(name, element);
+	}
+
+	public NameTable nameTable() {
+		return this.nameTable ;
 	}
 }
 
