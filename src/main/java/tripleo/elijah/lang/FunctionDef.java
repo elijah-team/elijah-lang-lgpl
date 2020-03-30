@@ -202,8 +202,12 @@ public class FunctionDef implements ClassItem {
 		return _a._context;
 	}
 
-	public List<FunctionItem> items() {
+	public List<OS_Element2> items() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<FunctionItem> getItems() {
 		return items;
 	}
 
