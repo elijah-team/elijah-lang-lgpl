@@ -79,4 +79,16 @@ public class Helpers {
 		x.setMode(XStream.ID_REFERENCES);
 		x.toXML(obj, tos.getStream());
 	}
+
+	public static <E> List<E> List_of(E... e1) {
+		List<E> r = new ArrayList<E>();
+		for (E e : e1) {
+			r.add(e);
+		}
+		return r;
+	}
 }
+
+//
+//
+//

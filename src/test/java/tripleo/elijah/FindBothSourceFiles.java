@@ -397,16 +397,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		}
 		buf.append(");");
 	}
-	
-
-	public static <E> List<E> List_of(E... e1) {
-		List<E> r = new ArrayList<E>();
-		for (E e : e1) {
-			r.add(e);
-		}
-		return r;
-	}
-	
+		
 	public static List<String> List_of(String string, String string2, String string3) {
 		List<String> r = new ArrayList<String>();
 		r.add(string);
