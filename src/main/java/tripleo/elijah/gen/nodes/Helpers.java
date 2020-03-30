@@ -87,6 +87,15 @@ public class Helpers {
 		}
 		return r;
 	}
+
+//	public static List<String> List_of(String string, String string2, String string3) {
+//		List<String> r = new ArrayList<String>();
+//		r.add(string);
+//		r.add(string2);
+//		r.add(string3);
+//		return r;
+//	}
+	
 }
 
 //

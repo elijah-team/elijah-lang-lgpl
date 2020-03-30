@@ -18,7 +18,7 @@ import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.gen.nodes.*;
 import tripleo.util.buffer.Buffer;
 
-import static tripleo.elijah.FindBothSourceFiles.List_of;
+import static tripleo.elijah.gen.nodes.Helpers.List_of;
 
 public class FactorialDotElijahTest {
 	

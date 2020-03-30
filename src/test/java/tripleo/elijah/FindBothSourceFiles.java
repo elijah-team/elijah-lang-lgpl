@@ -32,6 +32,8 @@ import tripleo.elijah.lang.OS_Integer;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.buffer.*;
 
+import static tripleo.elijah.gen.nodes.Helpers.List_of;
+
 /**
  * @author Tripleo(sb)
  *
@@ -398,15 +400,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		buf.append(");");
 	}
 		
-	public static List<String> List_of(String string, String string2, String string3) {
-		List<String> r = new ArrayList<String>();
-		r.add(string);
-		r.add(string2);
-		r.add(string3);
-		return r;
-	}
-	
-	
 }
 	
 //
