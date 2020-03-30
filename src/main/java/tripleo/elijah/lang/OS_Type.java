@@ -32,6 +32,7 @@ public class OS_Type {
 	private BuiltInTypes type;
 	private Type kind;
 	private OS_Element etype;
+	private TypeName ttype;
 	
 	public OS_Type(BuiltInTypes aType) {
 		this.type = aType;
@@ -41,6 +42,11 @@ public class OS_Type {
 	public OS_Type(ClassStatement klass, Type user) {
 		this.etype = klass;
 		this.kind = user;
+	}
+
+	public OS_Type(TypeName typeName) {
+		this.ttype = typeName;
+		this.kind = Type.USER;
 	}
 
 }
