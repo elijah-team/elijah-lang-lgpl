@@ -112,7 +112,7 @@ public class DeduceTypes {
 //				} else{
 //					theType = ii.typeName().getName();
 //				}
-				System.out.println(String.format("%s;", ii.getName()));
+				System.out.println(String.format("100 %s;", ii.getName()));
 
 			}
 		}
@@ -179,7 +179,7 @@ public class DeduceTypes {
 //		parent.getContext().nameTable().add(ns, ns.getName(), new OS_Type(ns, OS_Type.Type.USER));
 		
 		{
-			for (ClassItem element : ns.items())
+			for (ClassItem element : ns.getItems())
 				addClassItem(element, ns);
 		}
 //		System.out.print("}\n");
