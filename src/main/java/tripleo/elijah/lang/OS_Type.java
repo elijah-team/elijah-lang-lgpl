@@ -17,10 +17,24 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.lang2.BuiltInTypes;
+
 /**
  * @author Tripleo(sb)
  *
  */
 public class OS_Type {
+
+	enum Type {
+		BUILT_IN, USER
+	}
+
+	private BuiltInTypes type;
+	private Type kind;
+	
+	public OS_Type(BuiltInTypes aType) {
+		this.type = aType;
+		this.kind = Type.BUILT_IN;
+	}
 
 }
