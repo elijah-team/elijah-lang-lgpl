@@ -123,7 +123,26 @@ public class OS_Module implements OS_Element {
 //		NotImplementedException.raise();
 		getContext().add(null,  q.toString());
 	}
-	
+
+	public OS_Element findClass(String className) {
+		for (ModuleItem item : items) {
+			if (item instanceof ClassStatement) {
+				if (((ClassStatement) item).getName().equals(className))
+					return item;
+			}
+		}
+		return null;
+	}
+
+	public boolean hasClass(String className) {
+		for (ModuleItem item : items) {
+			if (item instanceof ClassStatement) {
+				if (((ClassStatement) item).getName().equals(className))
+					return true;
+			}
+		}
+		return false;
+	}
 }
 
 //
