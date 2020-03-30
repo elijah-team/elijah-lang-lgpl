@@ -28,6 +28,7 @@ import tripleo.elijah.gen.ModuleRef;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.gen.nodes.*;
 import tripleo.elijah.lang.NumericExpression;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Integer;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.buffer.*;
@@ -45,8 +46,9 @@ public class DeductionTests {
 		Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
-		
-		Assert.assertNotNull(c.findClass("Main"));
+
+		final OS_Element aClass = c.findClass("Main");
+		Assert.assertNotNull(aClass);
 	}
 
 }
