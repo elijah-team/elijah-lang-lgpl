@@ -40,6 +40,15 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 	}
 	
 	/**
+	 * Set  the left hand side of the procedure call expression, ie the method name
+	 * 
+	 * @param xyz a method name might come as DotExpression or IdentExpression
+	 */
+	public void identifier(IExpression xyz) {
+		setLeft(xyz);
+	}
+	
+	/**
 	 * Get the argument list
 	 * 
 	 * @return the argument list
