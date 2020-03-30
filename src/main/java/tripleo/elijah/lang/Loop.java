@@ -125,7 +125,6 @@ private Attached _a = new Attached(new LoopContext(this));
 	public IExpression getFromPart() {
 		return frompart;
 	}
-	
 	private final class LoopScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);

@@ -73,6 +73,5 @@ public class VariableSequence implements BlockMember, StatementItem, FunctionIte
 		return null;
 	}
 
-	
 }
 

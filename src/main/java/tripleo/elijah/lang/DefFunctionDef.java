@@ -95,7 +95,6 @@ public class DefFunctionDef implements ClassItem {
 			return null;
 		}
 
-	
 	}
 	
 	private final class FunctionDefScope implements Scope {
