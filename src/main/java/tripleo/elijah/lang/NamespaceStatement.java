@@ -12,20 +12,26 @@
  */
 package tripleo.elijah.lang;
 
+import java.io.IOException;
+
 import antlr.Token;
 import tripleo.elijah.ProgramClosure;
+import tripleo.elijah.contexts.NamespaceContext;
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
 import tripleo.elijah.Documentable;
 
 /**
  * @author Tripleo(sb)
  *
  */
-public class NamespaceStatement implements Documentable {
+public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, StatementItem {
 
 	private Token name;
 	private OS_Module parent;
 	private NamespaceTypes type; // TODO implement setter
+	private Attached _a = new Attached(new NamespaceContext(this));
 
 	public NamespaceStatement(OS_Module module) {
 		this.parent = module;
@@ -48,43 +54,51 @@ public class NamespaceStatement implements Documentable {
 		throw new NotImplementedException();
 	}
 
-//	@Override
 	public StatementClosure statementClosure() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
 	}
-//
-//	@Override
-//	public BlockStatement blockStatement() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public void add(StatementItem aItem) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//	
-//	@Override
+
 	public TypeAliasExpression typeAlias() { 
-		return null; 
+		throw new NotImplementedException();
 	}
 	
-//	@Override
 	public InvariantStatement invariantStatement() {
-		return null;
+		throw new NotImplementedException();
 	}
 	
 	public FunctionDef funcDef() {
 		// TODO Auto-generated method stub
-		NotImplementedException.raise();
-		return null;
+		throw new NotImplementedException();
+//		NotImplementedException.raise();
+//		return null;
 	}
 	
 	public ProgramClosure XXX() {
-		NotImplementedException.raise();
-		return null;
+		throw new NotImplementedException();
+//		NotImplementedException.raise();
+//		return null;
+	}
+
+	@Override
+	public void print_osi(TabbedOutputStream aTos) throws IOException {
+		// TODO Auto-generated method stub
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void visitGen(ICodeGen visit) {
+		// TODO Auto-generated method stub
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public OS_Element getParent() {
+		return parent;
+	}
+
+	@Override
+	public Context getContext() {
+		return _a.getContext();
 	}
 }
 
