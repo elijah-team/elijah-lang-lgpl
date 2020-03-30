@@ -68,8 +68,7 @@ public class Compilation {
 				options.addOption("s", true, "stage: E: parse; O: output");
 				options.addOption("showtree", false, "show tree");
 				CommandLineParser clp = new DefaultParser();
-				/*final*/ String[] args2 = args.toArray(new String[0]);
-				CommandLine cmd = clp.parse(options, args2);
+				CommandLine cmd = clp.parse(options, args.toArray(new String[0]));
 
 				if (cmd.hasOption("s")) {
 					stage = cmd.getOptionValue('s');
@@ -78,7 +77,7 @@ public class Compilation {
 					showTree = true;
 				}
 
-				args2 = cmd.getArgs();
+				final String[] args2 = cmd.getArgs();
 
 				for (int i = 0; i < args2.length; i++)
 					doFile(new File(args2[i]));
