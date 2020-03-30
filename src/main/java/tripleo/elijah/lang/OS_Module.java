@@ -26,6 +26,7 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
@@ -142,6 +143,10 @@ public class OS_Module implements OS_Element {
 			}
 		}
 		return false;
+	}
+
+	public Collection<ModuleItem> getItems() {
+		return items;
 	}
 }
 
