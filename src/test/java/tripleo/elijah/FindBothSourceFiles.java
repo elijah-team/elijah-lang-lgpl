@@ -64,22 +64,8 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		List<String> args = List_of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
 //		ErrSink eee = JMock.of(ErrSink.class);
 		ErrSink eee = new StdErrSink();
-		Compilation c = new Compilation(eee, new IO() {
-			public CharSource openRead(Path p) {
-				record(FileOption.READ, p);
-				return null;
-			}
-			public CharSink openWrite(Path p) {
-				record(FileOption.WRITE, p);				
-				return null;
-			}
-			private void record(FileOption read, Path p) {
-				// TODO Auto-generated method stub
-				Map<FileOption, File> options11 = new HashMap<FileOption, File>();
-				options11.put(read, p.toFile());
-			}
-			// exists, delete, isType ....
-		});
+		Compilation c = new Compilation(eee, new IO());
+
 		c.feedCmdLine(args);
 		
 		//fail("Not yet implemented"); // TODO
