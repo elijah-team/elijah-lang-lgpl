@@ -15,6 +15,7 @@ import java.util.List;
 
 import antlr.ANTLRException;
 import tripleo.elijah.Out;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
@@ -106,5 +107,10 @@ public class Compilation {
 	}
 
 	static boolean showTree = false;
+
+	public OS_Element findClass(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
