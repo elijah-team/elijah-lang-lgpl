@@ -15,6 +15,7 @@ import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.Loop;
 import tripleo.elijah.lang.ModuleItem;
 import tripleo.elijah.lang.NamespaceModify;
+import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.NumericExpression;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
@@ -56,15 +57,20 @@ public class DeduceTypes {
 //		System.out.print("}\n");
 	}
 	
-	private void addClassItem(ClassItem element, ClassStatement parent) {
+	/**
+	 * 
+	 * @param element the element to add 
+	 * @param parent could be class or namespace
+	 */
+	private void addClassItem(ClassItem element, OS_Element parent) {
 		{
 			if (element instanceof FunctionDef) {
 				FunctionDef fd = (FunctionDef) element;
 //				System.out.print("void " + fd.funName + "(){\n");  // TODO: _returnType and mFal
 				fd._a.setCode(nextFunctionCode());
-				parent._a.getContext().add(fd, fd.funName);
+				parent.getContext().add(fd, fd.funName);
 				{
-					for (FunctionItem fi : fd.items())
+					for (FunctionItem fi : fd.getItems())
 						addFunctionItem(fi, fd);
 
 				}
@@ -95,6 +101,8 @@ public class DeduceTypes {
 							}
 						}
 					}
+				} else {
+					dtype = new OS_Type(ii.typeName());
 				}
 				parent._a.getContext().add(ii, ii.getName(), dtype);
 //				String theType;
@@ -142,7 +150,7 @@ public class DeduceTypes {
 		}
 	}
 	
-	private void addImport(ImportStatement imp) {
+	private void addImport(ImportStatement imp, OS_Module parent) {
 //		throw new NotImplementedException();
 		if (imp.getRoot() == null) {
 			for (Qualident q : imp.parts()) {
@@ -159,9 +167,24 @@ public class DeduceTypes {
 			addClass(cl, module);
 		} else if (element instanceof ImportStatement) {
 			ImportStatement imp = (ImportStatement) element;
-			addImport(imp);
+			addImport(imp, module);
+		} else if (element instanceof ImportStatement) {
+			NamespaceStatement ns = (NamespaceStatement) element;
+			addNamespace(ns, module);
 		}
 	}
+	private void addNamespace(NamespaceStatement ns, OS_Module parent) {
+//		System.out.print("class " + klass.clsName + "{\n");
+		ns._a.setCode(nextClassCode());	
+//		parent.getContext().nameTable().add(ns, ns.getName(), new OS_Type(ns, OS_Type.Type.USER));
+		
+		{
+			for (ClassItem element : ns.items())
+				addClassItem(element, ns);
+		}
+//		System.out.print("}\n");
+	}
+
 	public void deduce() {
 		System.out.println("-------------------------------------------");
 		for (ModuleItem element : module.items) {
