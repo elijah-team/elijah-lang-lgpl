@@ -13,7 +13,7 @@ import java.util.Map;
 
 import tripleo.elijah.util.NotImplementedException;
 
-public class Context {
+public abstract class Context {
 
 	private OS_Container attached;
 
@@ -28,26 +28,26 @@ public class Context {
 		return lookup(name, 0);
 	}
 	
-	LookupResultList lookup(String name, int level) {
-		final LookupResultList Result = new LookupResultList();
-
-		/*
-		for (OS_Element2 i : attached.items()) {
-//			if (i.name().equals(name)) {
-//				Result.add (i, i.sig, level);
-//			}
-		}
-		*/
-		if (members.containsKey(name))
-		{
-			OS_Element element = members.get(name);
-			Result.add(name, level, element);
-			element.getParent().getContext().lookup(name, level);
-		}
-		
-//		lookup(name, attached, parent, Result ,level+1);
-		return Result;
-	}
+	public abstract LookupResultList lookup(String name, int level); // {
+//		final LookupResultList Result = new LookupResultList();
+//
+//		/*
+//		for (OS_Element2 i : attached.items()) {
+////			if (i.name().equals(name)) {
+////				Result.add (i, i.sig, level);
+////			}
+//		}
+//		*/
+//		if (members.containsKey(name))
+//		{
+//			OS_Element element = members.get(name);
+//			Result.add(name, level, element);
+//			element.getParent().getContext().lookup(name, level);
+//		}
+//		
+////		lookup(name, attached, parent, Result ,level+1);
+//		return Result;
+//	}
 	
 	void lookup(String name, OS_Container attached1, OS_Element2 parent, LookupResultList Result, int level) {
 		throw new NotImplementedException();
