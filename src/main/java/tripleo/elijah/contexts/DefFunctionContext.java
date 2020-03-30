@@ -30,8 +30,8 @@ public class DefFunctionContext extends Context {
 	 * @param level
 	 * @return
 	 */
-	public LookupResultList lookup(String name, int level) {
-		final LookupResultList Result = new LookupResultList();
+	public LookupResultList lookup(String name, int level, LookupResultList Result) {
+//		final LookupResultList Result = new LookupResultList();
 		return Result;
 		
 	}

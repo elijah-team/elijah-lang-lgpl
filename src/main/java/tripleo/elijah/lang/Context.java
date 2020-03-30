@@ -25,10 +25,11 @@ public abstract class Context {
 	}
 	
 	public LookupResultList lookup(String name) {
-		return lookup(name, 0);
+		final LookupResultList Result = new LookupResultList();
+		return lookup(name, 0, Result);
 	}
 	
-	public abstract LookupResultList lookup(String name, int level); // {
+	public abstract LookupResultList lookup(String name, int level, LookupResultList Result); // {
 //		final LookupResultList Result = new LookupResultList();
 //
 //		/*
@@ -54,6 +55,7 @@ public abstract class Context {
 	}
 
 	public void add(OS_Element element, String name) {
+		System.out.println(String.format("104 Context.add: %s %s %s", this, element, name));
 		members.put(name, element);
 	}
 	
@@ -66,6 +68,7 @@ public abstract class Context {
 	private NameTable nameTable = new NameTable();
 
 	public void add(OS_Element element, String name, OS_Type dtype) {
+		System.out.println(String.format("105 Context.add: %s %s %s %s", this, element, name, dtype));
 //		element.setType(dtype);
 		members.put(name, element);
 	}

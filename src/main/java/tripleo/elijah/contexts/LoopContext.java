@@ -26,9 +26,9 @@ public class LoopContext extends Context {
 		carrier = loop;
 	}
 
-	@Override public LookupResultList lookup(String name, int level) {
+	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
 		// TODO implement me
-		final LookupResultList Result = new LookupResultList();
+//		final LookupResultList Result = new LookupResultList();
 //		for (FunctionItem item: carrier.getItems()) {
 //			if (!(item instanceof ClassStatement) &&
 //				!(item instanceof NamespaceStatement) &&
