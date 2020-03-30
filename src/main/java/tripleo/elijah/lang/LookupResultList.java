@@ -17,7 +17,11 @@ public class LookupResultList {
 
 	public void add(String name, int level, OS_Element element) {
 		// TODO Auto-generated method stub
-		results .add(new LookupResult(name, element, level));
+		results.add(new LookupResult(name, element, level));
+	}
+
+	public List<LookupResult> results() {
+		return results;
 	}
 
 }
