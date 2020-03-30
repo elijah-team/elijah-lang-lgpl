@@ -104,7 +104,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		return _a.getContext();
 	}
 
-	public List<ClassItem> items() {
+	public List<ClassItem> getItems() {
 		return items ;
 	}
 }
