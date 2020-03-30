@@ -495,8 +495,11 @@ postfixExpression returns [IExpression ee]
 			//  to validate a Java program a semantic check would be needed, or
 			//   this rule would get really ugly...
 		|	lp:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
-/////////////////////////////////////////////////////////////////				argList
-(el=expressionList2)? ////////////////
+				(el=expressionList2)? 
+{ProcedureCallExpression pce=new ProcedureCallExpression();
+pce.identifier(ee);
+pce.setArgs(el);
+ee=pce;}
 			RPAREN/*!*/
 		)*
 
