@@ -31,10 +31,20 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 		
 	}
 	
+	/**
+	 * Set  the left hand side of the procedure call expression, ie the method name
+	 * 
+	 * @param xyz a method name in Qualident form (might come as DotExpression in future)
+	 */
 	public void identifier(Qualident xyz) {
 		setLeft(xyz);
 	}
 	
+	/**
+	 * Get the argument list
+	 * 
+	 * @return the argument list
+	 */
 	public ExpressionList exprList() {
 		return args;
 	}
@@ -76,6 +86,9 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 		return _left;
 	}
 
+	/**
+	 * @see #identifier(Qualident)
+	 */
 	@Override
 	public void setLeft(IExpression iexpression) {
 		_left = iexpression;
