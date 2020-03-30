@@ -13,6 +13,8 @@
 package tripleo.elijah.lang;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import antlr.Token;
 import tripleo.elijah.ProgramClosure;
@@ -31,7 +33,8 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	private Token name;
 	private OS_Module parent;
 	private NamespaceTypes type; // TODO implement setter
-	private Attached _a = new Attached(new NamespaceContext(this));
+	public Attached _a = new Attached(new NamespaceContext(this));
+	private List<ClassItem> items = new ArrayList<ClassItem>();
 
 	public NamespaceStatement(OS_Module module) {
 		this.parent = module;
@@ -99,6 +102,10 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	@Override
 	public Context getContext() {
 		return _a.getContext();
+	}
+
+	public List<ClassItem> items() {
+		return items ;
 	}
 }
 
