@@ -16,4 +16,19 @@ public class FunctionContext extends Context {
 		carrier = functionDef;
 	}
 
+	LookupResultList lookup(String name, int level) {
+		final LookupResultList Result = new LookupResultList();
+		for (FunctionItem item: carrier.getItems()) {
+			if (item.name() != null) {
+				if (item.name().equals(name)) {
+					Result.add(name, level, item);
+				}
+			}
+		}
+		if (carrier.getParent() != null)
+			carrier.getParent().getContext().lookup(name, level+1);
+		return Result;
+		
+	}
+
 }

@@ -6,6 +6,7 @@ package tripleo.elijah.contexts;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.LookupResultList;
 
 
 /**
@@ -26,4 +27,9 @@ public class ClassContext extends Context { // TODO is this right, or should be 
 		
 	}
 
+	LookupResultList lookup(String name, int level) {
+		final LookupResultList Result = new LookupResultList();
+		return Result;
+		
+	}
 }
