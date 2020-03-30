@@ -27,8 +27,7 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 	}
 	
 	public ProcedureCallExpression() {
-		NotImplementedException.raise();
-		
+//		NotImplementedException.raise();
 	}
 	
 	/**
@@ -177,7 +176,6 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 		return null;
 	}
 
-	
 }
 
 //
