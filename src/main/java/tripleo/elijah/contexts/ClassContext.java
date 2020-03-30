@@ -27,7 +27,7 @@ public class ClassContext extends Context { // TODO is this right, or should be 
 		
 	}
 
-	LookupResultList lookup(String name, int level) {
+	@Override public LookupResultList lookup(String name, int level) {
 		final LookupResultList Result = new LookupResultList();
 		return Result;
 		
