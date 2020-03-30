@@ -20,12 +20,14 @@ package tripleo.elijah.lang;
 //			ExpressionType
 
 import tripleo.elijah.ProgramClosure;
+import tripleo.elijah.comp.Compilation;
 
 public class ParserClosure extends ProgramClosure {
 
-	public ParserClosure(String fn) {
+	public ParserClosure(String fn, Compilation compilation) {
 		module = new OS_Module();
 		module.setFileName(fn);
+		compilation.addModule(module);
 	}
 
 	public ClassStatement classStatement() {

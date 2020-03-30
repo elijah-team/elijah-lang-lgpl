@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 
+import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.ParserClosure;
@@ -21,8 +22,8 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 public class Out {
 	
-	public Out(String fn) {
-		pc = new ParserClosure(fn);
+	public Out(String fn, Compilation compilation) {
+		pc = new ParserClosure(fn, compilation);
 	}
 	
 	public void FinishModule() {
