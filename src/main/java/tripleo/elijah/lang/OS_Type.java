@@ -25,16 +25,26 @@ import tripleo.elijah.lang2.BuiltInTypes;
  */
 public class OS_Type {
 
-	enum Type {
+	public enum Type {
 		BUILT_IN, USER
 	}
 
 	private BuiltInTypes type;
 	private Type kind;
+	private OS_Element etype;
 	
 	public OS_Type(BuiltInTypes aType) {
 		this.type = aType;
 		this.kind = Type.BUILT_IN;
 	}
 
+	public OS_Type(ClassStatement klass, Type user) {
+		this.etype = klass;
+		this.kind = user;
+	}
+
 }
+
+//
+//
+//
