@@ -38,6 +38,8 @@ public class ExpressionNodeBuilder {
 		static String printableExpression(@NotNull IExpression expression) {
 			if (expression instanceof OS_Integer) {
 				return Integer.toString(((OS_Integer) expression).getValue());
+			} else if (expression instanceof NumericExpression) {
+				return Integer.toString(((NumericExpression) expression).getValue());
 			}
 			return "-------------7";
 		}
