@@ -15,6 +15,7 @@ package tripleo.elijah.lang;
 import java.io.IOException;
 
 import antlr.Token;
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.TabbedOutputStream;
 
@@ -22,7 +23,7 @@ import tripleo.elijah.util.TabbedOutputStream;
  * @author Tripleo(sb)
  *
  */
-public class IdentExpression implements IExpression {
+public class IdentExpression implements IExpression, OS_Element {
 
 	private Token text;
 	public  Attached _a;
@@ -82,6 +83,23 @@ public class IdentExpression implements IExpression {
 
 	public boolean is_simple() {
 		return true;
+	}
+
+	@Override
+	public void visitGen(ICodeGen visit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public OS_Element getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Context getContext() {
+		return _a.getContext();
 	}
 }
 
