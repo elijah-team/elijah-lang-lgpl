@@ -49,6 +49,14 @@ public class OS_Type {
 		this.kind = Type.USER;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format("%s %s %s %s", ttype, etype, type, kind);
+	}
+
 }
 
 //
