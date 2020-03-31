@@ -147,5 +147,5 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	final List<StatementItem> items =new ArrayList<StatementItem>();
 
-	final Scope parent;
+	public final Scope parent;
 }

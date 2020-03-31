@@ -103,8 +103,7 @@ public class Compilation {
 			if (fnl > EXTENSION.length()
 					&& file_name.substring(fnl - EXTENSION.length())
 							.equals(EXTENSION)) {
-				System.out.println((new StringBuilder("   ")).append(
-						f.getAbsolutePath()).toString());
+				System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
 				parseFile(file_name, new FileInputStream(f));
 			}
 		}
@@ -124,7 +123,7 @@ public class Compilation {
 		}
 	}
 
-	static boolean showTree = false;
+	boolean showTree = false;
 
 	public OS_Element findClass(String string) {
 		// TODO Auto-generated method stub

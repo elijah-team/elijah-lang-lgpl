@@ -288,25 +288,25 @@ accessNotation
 
 // assignment expression (level 13)
 assignmentExpression returns [IExpression ee]
-		{ee=null;IExpression e=null;IExpression e2;}
+		{ee=null;IExpression e=null;IExpression e2;ExpressionKind ek=null;}
 	:	ee=conditionalExpression
 		(
 
-			(	BECOMES/*^*/					{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.ASSIGNMENT);}
-            |   PLUS_ASSIGN/*^*/		    {ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_PLUS);}
-            |   MINUS_ASSIGN/*^*/			{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_MINUS);}
-            |   STAR_ASSIGN/*^*/			{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_MULT);}
-            |   DIV_ASSIGN/*^*/				{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_DIV);}
-            |   MOD_ASSIGN/*^*/				{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_MOD);}
-            |   SR_ASSIGN/*^*/				{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_SR);}
-            |   BSR_ASSIGN/*^*/				{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_BSR);}
-            |   SL_ASSIGN/*^*/			    {ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_SL);}
-            |   BAND_ASSIGN/*^*/			{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_BAND);}
-            |   BXOR_ASSIGN/*^*/			{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_BXOR);}
-            |   BOR_ASSIGN/*^*/				{ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_BOR);}
+			(	BECOMES/*^*/				{ek= (ExpressionKind.ASSIGNMENT);}
+            |   PLUS_ASSIGN/*^*/		    {ek= (ExpressionKind.AUG_PLUS);}
+            |   MINUS_ASSIGN/*^*/			{ek= (ExpressionKind.AUG_MINUS);}
+            |   STAR_ASSIGN/*^*/			{ek= (ExpressionKind.AUG_MULT);}
+            |   DIV_ASSIGN/*^*/				{ek= (ExpressionKind.AUG_DIV);}
+            |   MOD_ASSIGN/*^*/				{ek= (ExpressionKind.AUG_MOD);}
+            |   SR_ASSIGN/*^*/				{ek= (ExpressionKind.AUG_SR);}
+            |   BSR_ASSIGN/*^*/				{ek= (ExpressionKind.AUG_BSR);}
+            |   SL_ASSIGN/*^*/			    {ek= (ExpressionKind.AUG_SL);}
+            |   BAND_ASSIGN/*^*/			{ek= (ExpressionKind.AUG_BAND);}
+            |   BXOR_ASSIGN/*^*/			{ek= (ExpressionKind.AUG_BXOR);}
+            |   BOR_ASSIGN/*^*/				{ek= (ExpressionKind.AUG_BOR);}
             )
 
-			e2=assignmentExpression {	((IBinaryExpression) ee).setRight(e2);}
+			e2=assignmentExpression 		{ ee = ExpressionBuilder.build(ee, ek, e2);}
 		)?
 	;
 
@@ -324,7 +324,7 @@ logicalOrExpression returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
 	:	ee=logicalAndExpression
-		(LOR/*^*/ e3=logicalAndExpression   	{ee = ExpressionBuilder.build(ee, ExpressionType.LOR, e3);})*
+		(LOR/*^*/ e3=logicalAndExpression   	{ee = ExpressionBuilder.build(ee, ExpressionKind.LOR, e3);})*
 	;
 
 
@@ -332,7 +332,7 @@ logicalOrExpression returns [IExpression ee]
 logicalAndExpression returns [IExpression ee]
 		{ee=null;IExpression e3=null;}
 	:	ee=inclusiveOrExpression
-		(LAND/*^*/ e3=inclusiveOrExpression	{ee = ExpressionBuilder.build(ee, ExpressionType.LAND, e3);})*
+		(LAND/*^*/ e3=inclusiveOrExpression	{ee = ExpressionBuilder.build(ee, ExpressionKind.LAND, e3);})*
 	;
 
 
@@ -340,7 +340,7 @@ logicalAndExpression returns [IExpression ee]
 inclusiveOrExpression returns [IExpression ee]
 		{ee=null;IExpression e3=null;}
 	:	ee=exclusiveOrExpression
-		(BOR/*^*/ e3=exclusiveOrExpression		{ee = ExpressionBuilder.build(ee, ExpressionType.BOR, e3);})*
+		(BOR/*^*/ e3=exclusiveOrExpression		{ee = ExpressionBuilder.build(ee, ExpressionKind.BOR, e3);})*
 	;
 
 
@@ -349,7 +349,7 @@ exclusiveOrExpression returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
 	:	ee=andExpression
-		(BXOR/*^*/ e3=andExpression				{ee = ExpressionBuilder.build(ee, ExpressionType.BXOR, e3);})*
+		(BXOR/*^*/ e3=andExpression				{ee = ExpressionBuilder.build(ee, ExpressionKind.BXOR, e3);})*
 	;
 
 
@@ -358,18 +358,18 @@ andExpression returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
 	:	ee=equalityExpression
-		(BAND/*^*/ e3=equalityExpression	{ee = ExpressionBuilder.build(ee, ExpressionType.BAND, e3);})*
+		(BAND/*^*/ e3=equalityExpression	{ee = ExpressionBuilder.build(ee, ExpressionKind.BAND, e3);})*
 	;
 
 
 // equality/inequality (==/!=) (level 6)
 equalityExpression  returns [IExpression ee]
 		{ee=null;
-		ExpressionType e2=null;
+		ExpressionKind e2=null;
 		IExpression e3=null;}
 	:	ee=relationalExpression
-		((NOT_EQUAL/*^*/                   {e2=ExpressionType.NOT_EQUAL;}
-		| EQUAL/*^*/                       {e2=ExpressionType.EQUAL;}
+		((NOT_EQUAL/*^*/                   {e2=ExpressionKind.NOT_EQUAL;}
+		| EQUAL/*^*/                       {e2=ExpressionKind.EQUAL;}
 		) e3=relationalExpression 				{ee = ExpressionBuilder.build(ee, e2, e3);})*
 	;
 
@@ -377,14 +377,14 @@ equalityExpression  returns [IExpression ee]
 // boolean relational expressions (level 5)
 relationalExpression returns [IExpression ee]
 		{ee=null;
-		ExpressionType e2;
+		ExpressionKind e2;
 		IExpression e3=null;}
 
 	:	ee=shiftExpression
-		(	(	(	LT_/*^*/            {e2=ExpressionType.LT_;}
-				|	GT/*^*/             {e2=ExpressionType.GT;}
-				|	LE/*^*/             {e2=ExpressionType.LE;}
-				|	GE/*^*/             {e2=ExpressionType.GE;}
+		(	(	(	LT_/*^*/            {e2=ExpressionKind.LT_;}
+				|	GT/*^*/             {e2=ExpressionKind.GT;}
+				|	LE/*^*/             {e2=ExpressionKind.LE;}
+				|	GE/*^*/             {e2=ExpressionKind.GE;}
 				)
 				e3=shiftExpression
 			)*
@@ -395,24 +395,24 @@ relationalExpression returns [IExpression ee]
 
 // bit shift expressions (level 4)
 shiftExpression returns [IExpression ee]
-		{ee=null;ExpressionType e2=null;
+		{ee=null;ExpressionKind e2=null;
 		IExpression e3=null;}
 	:	ee=additiveExpression
-	((SL/*^*/ {e2=ExpressionType.LSHIFT;}
-	 | SR/*^*/ {e2=ExpressionType.RSHIFT;}
-	 | BSR/*^*/ {e2=ExpressionType.BSHIFTR;}
+	((SL/*^*/ {e2=ExpressionKind.LSHIFT;}
+	 | SR/*^*/ {e2=ExpressionKind.RSHIFT;}
+	 | BSR/*^*/ {e2=ExpressionKind.BSHIFTR;}
 	 ) e3=additiveExpression				{ee = ExpressionBuilder.build(ee, e2, e3);})*
 	;
 
 
 // binary addition/subtraction (level 3)
 additiveExpression returns [IExpression ee]
-		{ee=null;ExpressionType e2=null;
+		{ee=null;ExpressionKind e2=null;
 		IExpression e3=null;}
 	:	ee=multiplicativeExpression 
 	(
-		( PLUS/*^*/  {e2=ExpressionType.ADDITION;}
-		| MINUS/*^*/ {e2=ExpressionType.SUBTRACTION;}) 
+		( PLUS/*^*/  {e2=ExpressionKind.ADDITION;}
+		| MINUS/*^*/ {e2=ExpressionKind.SUBTRACTION;}) 
 		e3=multiplicativeExpression {ee = ExpressionBuilder.build(ee, e2, e3);})*
 	;
 
@@ -420,29 +420,29 @@ additiveExpression returns [IExpression ee]
 // multiplication/division/modulo (level 2)
 multiplicativeExpression returns [IExpression ee]
 		{ee=null;
-		IExpression e3=null;ExpressionType e2=null;}
+		IExpression e3=null;ExpressionKind e2=null;}
 	:	ee=unaryExpression 
-	((STAR/*^*/ {e2=ExpressionType.MULTIPLY;}
-	| DIV/*^*/  {e2=ExpressionType.DIVIDE;}
-	| MOD/*^*/  {e2=ExpressionType.MODULO;}
+	((STAR/*^*/ {e2=ExpressionKind.MULTIPLY;}
+	| DIV/*^*/  {e2=ExpressionKind.DIVIDE;}
+	| MOD/*^*/  {e2=ExpressionKind.MODULO;}
 	) e3=unaryExpression {ee = ExpressionBuilder.build(ee, e2, e3);})*
 	;
 
 unaryExpression returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
-	:	INC/*^*/ ee=unaryExpression {ee.set(ExpressionType.INC);}
-	|	DEC/*^*/ ee=unaryExpression {ee.set(ExpressionType.DEC);}
-	|	MINUS/*^*/ /*{#MINUS.setType(UNARY_MINUS);}*/ ee=unaryExpression {ee.set(ExpressionType.NEG);}
-	|	PLUS/*^*/  /*{#PLUS.setType(UNARY_PLUS);}*/ ee=unaryExpression {ee.set(ExpressionType.POS);}
+	:	INC/*^*/ ee=unaryExpression {ee.set(ExpressionKind.INC);}
+	|	DEC/*^*/ ee=unaryExpression {ee.set(ExpressionKind.DEC);}
+	|	MINUS/*^*/ /*{#MINUS.setType(UNARY_MINUS);}*/ ee=unaryExpression {ee.set(ExpressionKind.NEG);}
+	|	PLUS/*^*/  /*{#PLUS.setType(UNARY_PLUS);}*/ ee=unaryExpression {ee.set(ExpressionKind.POS);}
 	|	ee=unaryExpressionNotPlusMinus
 	;
 
 unaryExpressionNotPlusMinus returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
-	:	BNOT/*^*/ ee=unaryExpression {ee.set(ExpressionType.BNOT);}
-	|	LNOT/*^*/ ee=unaryExpression {ee.set(ExpressionType.LNOT);}
+	:	BNOT/*^*/ ee=unaryExpression {ee.set(ExpressionKind.BNOT);}
+	|	LNOT/*^*/ ee=unaryExpression {ee.set(ExpressionKind.LNOT);}
 
 	|	(	// subrule allows option to shut off warnings
 			options {
@@ -474,6 +474,16 @@ postfixExpression returns [IExpression ee]
 
 		(	// qualified id (id.id.id.id...) -- build the name
 			DOT/*^*/ ( e:IDENT {ee=new DotExpression(ee, new IdentExpression(e));}
+			
+			(lp2:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
+				(el=expressionList2)? 
+{ProcedureCallExpression pce=new ProcedureCallExpression();
+pce.identifier(ee);
+pce.setArgs(el);
+ee=pce;}
+			RPAREN/*!*/)?
+			
+			
 				| "this"
 				| "class"
 //				| newExpression
@@ -518,7 +528,7 @@ ee=pce;}
 
 // the basic element of an expression
 primaryExpression returns [IExpression ee]
-		{ee=null;}
+		{ee=null;FuncExpr ppc=null;}
 		//IExpression e3=null;*/}
 	:	e:IDENT {ee=new IdentExpression(e);}
 //	|	newExpression
@@ -529,7 +539,18 @@ primaryExpression returns [IExpression ee]
 	|	"this"
 	|	"null"
 	|	LPAREN/*!*/ ee=assignmentExpression RPAREN/*!*/ {ee=new SubExpression(ee);}
+	|   {ppc=new FuncExpr();} funcExpr[ppc]
 	;
+funcExpr[FuncExpr pc]
+	:
+	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
+	  (LPAREN typeNameList[pc.argList()] RPAREN)?
+	  ((TOK_ARROW|TOK_COLON) typeName[pc.returnValue()] )?
+	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
+	  (LPAREN typeNameList[pc.argList()] RPAREN)?
+	)
+	;
+
 // A builtin type specification is a builtin type with possible brackets
 // afterwards (which would make it an array type).
 builtInTypeSpec[boolean addImagNode]
@@ -701,7 +722,7 @@ LBRACK			:	'['		;
 RBRACK			:	']'		;
 LCURLY			:	'{'		;
 RCURLY			:	'}'		;
-TOK_COLON			:	':'		;
+TOK_COLON		:	':'		;
 COMMA			:	','		;
 //DOT			:	'.'		;
 BECOMES			:	'='		;

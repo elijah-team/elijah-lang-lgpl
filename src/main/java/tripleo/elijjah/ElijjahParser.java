@@ -20,6 +20,7 @@ import antlr.ASTPair;
 import antlr.collections.impl.ASTArray;
 
 import tripleo.elijah.lang.*;
+import tripleo.elijjah.lang.FuncExpr;
 import tripleo.elijah.*;
 
 public class ElijjahParser extends antlr.LLkParser
@@ -180,7 +181,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 			_loop10:
 			do {
-				if ((LA(1)==DOT)) {
+				if ((LA(1)==DOT) && (LA(2)==IDENT)) {
 					d1 = LT(1);
 					match(DOT);
 					r2 = LT(1);
@@ -310,7 +311,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_4);
+				consumeUntil(_tokenSet_2);
 			} else {
 			  throw ex;
 			}
@@ -545,7 +546,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_5);
+				consumeUntil(_tokenSet_4);
 			} else {
 			  throw ex;
 			}
@@ -565,7 +566,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_6);
+				consumeUntil(_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -690,7 +691,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_7);
+				consumeUntil(_tokenSet_6);
 			} else {
 			  throw ex;
 			}
@@ -786,7 +787,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_7);
+				consumeUntil(_tokenSet_6);
 			} else {
 			  throw ex;
 			}
@@ -930,7 +931,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					identList(il);
 					match(RCURLY);
 				}
-				else if ((LA(1)==IDENT) && (_tokenSet_8.member(LA(2)))) {
+				else if ((LA(1)==IDENT) && (_tokenSet_7.member(LA(2)))) {
 					q2=qualident();
 					if ( inputState.guessing==0 ) {
 						cr.addNormalPart(q2);
@@ -945,7 +946,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				if (inputState.guessing==0) {
 					reportError(ex);
 					consume();
-					consumeUntil(_tokenSet_9);
+					consumeUntil(_tokenSet_8);
 				} else {
 				  throw ex;
 				}
@@ -987,7 +988,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_7);
+				consumeUntil(_tokenSet_6);
 			} else {
 			  throw ex;
 			}
@@ -1048,7 +1049,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_10);
+				consumeUntil(_tokenSet_9);
 			} else {
 			  throw ex;
 			}
@@ -1064,7 +1065,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			{
 			boolean synPredMatched29 = false;
-			if (((LA(1)==STRING_LITERAL) && (_tokenSet_11.member(LA(2))))) {
+			if (((LA(1)==STRING_LITERAL) && (_tokenSet_10.member(LA(2))))) {
 				int _m29 = mark();
 				synPredMatched29 = true;
 				inputState.guessing++;
@@ -1084,7 +1085,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				int _cnt31=0;
 				_loop31:
 				do {
-					if ((LA(1)==STRING_LITERAL) && (_tokenSet_11.member(LA(2)))) {
+					if ((LA(1)==STRING_LITERAL) && (_tokenSet_10.member(LA(2)))) {
 						s1 = LT(1);
 						match(STRING_LITERAL);
 						if ( inputState.guessing==0 ) {
@@ -1099,7 +1100,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				} while (true);
 				}
 			}
-			else if ((_tokenSet_11.member(LA(1))) && (_tokenSet_12.member(LA(2)))) {
+			else if ((_tokenSet_10.member(LA(1))) && (_tokenSet_11.member(LA(2)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -1111,7 +1112,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_11);
+				consumeUntil(_tokenSet_10);
 			} else {
 			  throw ex;
 			}
@@ -1130,10 +1131,10 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 			_loop46:
 			do {
-				if ((_tokenSet_13.member(LA(1))) && (_tokenSet_14.member(LA(2)))) {
+				if ((_tokenSet_12.member(LA(1))) && (_tokenSet_13.member(LA(2)))) {
 					statement(sc.statementClosure());
 				}
-				else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
+				else if ((_tokenSet_14.member(LA(1))) && (_tokenSet_15.member(LA(2)))) {
 					expr=expression();
 					if ( inputState.guessing==0 ) {
 						sc.statementWrapper(expr);
@@ -1151,7 +1152,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_17);
+				consumeUntil(_tokenSet_16);
 			} else {
 			  throw ex;
 			}
@@ -1217,7 +1218,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_18);
+				consumeUntil(_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -1294,7 +1295,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_19);
+				consumeUntil(_tokenSet_18);
 			} else {
 			  throw ex;
 			}
@@ -1346,7 +1347,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_18);
+				consumeUntil(_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -1365,7 +1366,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_18);
+				consumeUntil(_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -1383,7 +1384,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_18);
+				consumeUntil(_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -1398,100 +1399,27 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			simpleTypeName_xx(tn);
 			{
-			switch ( LA(1)) {
-			case LBRACK:
-			{
+			if ((LA(1)==LBRACK) && (_tokenSet_19.member(LA(2)))) {
 				match(LBRACK);
 				typeName(tn);
 				if ( inputState.guessing==0 ) {
 					tn.addGenericPart(tn);
 				}
 				match(RBRACK);
-				break;
 			}
-			case EOF:
-			case LITERAL_indexing:
-			case IDENT:
-			case LITERAL_package:
-			case STRING_LITERAL:
-			case CHAR_LITERAL:
-			case NUM_INT:
-			case NUM_FLOAT:
-			case RBRACK:
-			case LITERAL_class:
-			case LITERAL_struct:
-			case LPAREN:
-			case RPAREN:
-			case LCURLY:
-			case RCURLY:
-			case LITERAL_namespace:
-			case LITERAL_from:
-			case LITERAL_import:
-			case COMMA:
-			case BECOMES:
-			case LITERAL_constructor:
-			case LITERAL_ctor:
-			case LITERAL_destructor:
-			case LITERAL_dtor:
-			case LITERAL_const:
-			case LITERAL_var:
-			case LITERAL_val:
-			case LITERAL_type:
-			case LITERAL_alias:
-			case LITERAL_construct:
-			case LITERAL_yield:
-			case SEMI:
-			case LITERAL_invariant:
-			case LITERAL_access:
-			case PLUS_ASSIGN:
-			case MINUS_ASSIGN:
-			case STAR_ASSIGN:
-			case DIV_ASSIGN:
-			case MOD_ASSIGN:
-			case SR_ASSIGN:
-			case BSR_ASSIGN:
-			case SL_ASSIGN:
-			case BAND_ASSIGN:
-			case BXOR_ASSIGN:
-			case BOR_ASSIGN:
-			case LOR:
-			case LAND:
-			case BOR:
-			case BXOR:
-			case BAND:
-			case NOT_EQUAL:
-			case EQUAL:
-			case PLUS:
-			case MINUS:
-			case INC:
-			case DEC:
-			case BNOT:
-			case LNOT:
-			case LITERAL_this:
-			case LITERAL_true:
-			case LITERAL_false:
-			case LITERAL_null:
-			case LITERAL_if:
-			case LITERAL_while:
-			case LITERAL_do:
-			case LITERAL_iterate:
-			case LITERAL_to:
-			case LITERAL_with:
-			{
-				break;
+			else if ((_tokenSet_2.member(LA(1))) && (_tokenSet_20.member(LA(2)))) {
 			}
-			default:
-			{
+			else {
 				throw new NoViableAltException(LT(1), getFilename());
 			}
-			}
+			
 			}
 		}
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_20);
+				consumeUntil(_tokenSet_2);
 			} else {
 			  throw ex;
 			}
@@ -1510,7 +1438,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			else if ((LA(1)==LITERAL_function||LA(1)==LITERAL_procedure)) {
 				funcTypeExpr(cr);
 			}
-			else if ((LA(1)==IDENT) && (_tokenSet_23.member(LA(2)))) {
+			else if ((LA(1)==IDENT) && (_tokenSet_2.member(LA(2)))) {
 				simpleTypeName_xx(cr);
 			}
 			else {
@@ -1522,7 +1450,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_20);
+				consumeUntil(_tokenSet_2);
 			} else {
 			  throw ex;
 			}
@@ -1583,7 +1511,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_20);
+				consumeUntil(_tokenSet_2);
 			} else {
 			  throw ex;
 			}
@@ -1605,12 +1533,12 @@ public ElijjahParser(ParserSharedInputState state) {
 						pc.type(TypeModifiers.FUNCTION);	
 				}
 				{
-				if ((LA(1)==LPAREN) && (_tokenSet_24.member(LA(2)))) {
+				if ((LA(1)==LPAREN) && (_tokenSet_19.member(LA(2)))) {
 					match(LPAREN);
 					typeNameList(pc.argList());
 					match(RPAREN);
 				}
-				else if ((_tokenSet_25.member(LA(1))) && (_tokenSet_26.member(LA(2)))) {
+				else if ((_tokenSet_23.member(LA(1))) && (_tokenSet_20.member(LA(2)))) {
 				}
 				else {
 					throw new NoViableAltException(LT(1), getFilename());
@@ -1651,7 +1579,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				case CHAR_LITERAL:
 				case NUM_INT:
 				case NUM_FLOAT:
+				case LBRACK:
 				case RBRACK:
+				case DOT:
 				case LITERAL_class:
 				case LITERAL_struct:
 				case LPAREN:
@@ -1663,6 +1593,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				case LITERAL_import:
 				case COMMA:
 				case BECOMES:
+				case LT_:
 				case LITERAL_constructor:
 				case LITERAL_ctor:
 				case LITERAL_destructor:
@@ -1695,8 +1626,18 @@ public ElijjahParser(ParserSharedInputState state) {
 				case BAND:
 				case NOT_EQUAL:
 				case EQUAL:
+				case GT:
+				case LE:
+				case GE:
+				case LITERAL_is_a:
+				case SL:
+				case SR:
+				case BSR:
 				case PLUS:
 				case MINUS:
+				case STAR:
+				case DIV:
+				case MOD:
 				case INC:
 				case DEC:
 				case BNOT:
@@ -1705,6 +1646,8 @@ public ElijjahParser(ParserSharedInputState state) {
 				case LITERAL_true:
 				case LITERAL_false:
 				case LITERAL_null:
+				case LITERAL_function:
+				case LITERAL_procedure:
 				case LITERAL_if:
 				case LITERAL_while:
 				case LITERAL_do:
@@ -1729,12 +1672,12 @@ public ElijjahParser(ParserSharedInputState state) {
 						pc.type(TypeModifiers.PROCEDURE);	
 				}
 				{
-				if ((LA(1)==LPAREN) && (_tokenSet_24.member(LA(2)))) {
+				if ((LA(1)==LPAREN) && (_tokenSet_19.member(LA(2)))) {
 					match(LPAREN);
 					typeNameList(pc.argList());
 					match(RPAREN);
 				}
-				else if ((_tokenSet_20.member(LA(1))) && (_tokenSet_26.member(LA(2)))) {
+				else if ((_tokenSet_2.member(LA(1))) && (_tokenSet_20.member(LA(2)))) {
 				}
 				else {
 					throw new NoViableAltException(LT(1), getFilename());
@@ -1754,7 +1697,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_20);
+				consumeUntil(_tokenSet_2);
 			} else {
 			  throw ex;
 			}
@@ -1794,7 +1737,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			switch ( LA(1)) {
 			case IDENT:
 			{
-				procedureCallStatement(cr.procCallExpr());
+				((AbstractStatementClosure)cr).parent.statementWrapper(postfixExpression());
+				//procedureCallStatement(cr.procCallExpr());
 				break;
 			}
 			case LITERAL_if:
@@ -1851,7 +1795,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_27);
+				consumeUntil(_tokenSet_24);
 			} else {
 			  throw ex;
 			}
@@ -1870,7 +1814,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_28);
+				consumeUntil(_tokenSet_25);
 			} else {
 			  throw ex;
 			}
@@ -1892,7 +1836,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_29);
+				consumeUntil(_tokenSet_26);
 			} else {
 			  throw ex;
 			}
@@ -1983,6 +1927,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_true:
 			case LITERAL_false:
 			case LITERAL_null:
+			case LITERAL_function:
+			case LITERAL_procedure:
 			case LITERAL_if:
 			case LITERAL_while:
 			case LITERAL_do:
@@ -2044,6 +1990,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_true:
 			case LITERAL_false:
 			case LITERAL_null:
+			case LITERAL_function:
+			case LITERAL_procedure:
 			case LITERAL_if:
 			case LITERAL_while:
 			case LITERAL_do:
@@ -2062,7 +2010,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_30);
+				consumeUntil(_tokenSet_27);
 			} else {
 			  throw ex;
 			}
@@ -2086,14 +2034,14 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				formalArgListItem_priv(fal.next());
 				{
-				_loop188:
+				_loop196:
 				do {
 					if ((LA(1)==COMMA)) {
 						match(COMMA);
 						formalArgListItem_priv(fal.next());
 					}
 					else {
-						break _loop188;
+						break _loop196;
 					}
 					
 				} while (true);
@@ -2115,7 +2063,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_31);
+				consumeUntil(_tokenSet_28);
 			} else {
 			  throw ex;
 			}
@@ -2136,7 +2084,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_32);
+				consumeUntil(_tokenSet_29);
 			} else {
 			  throw ex;
 			}
@@ -2161,7 +2109,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_33);
+				consumeUntil(_tokenSet_30);
 			} else {
 			  throw ex;
 			}
@@ -2181,7 +2129,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			scope(ifex.scope());
 			{
-			_loop154:
+			_loop162:
 			do {
 				switch ( LA(1)) {
 				case LITERAL_else:
@@ -2197,7 +2145,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				default:
 				{
-					break _loop154;
+					break _loop162;
 				}
 				}
 			} while (true);
@@ -2207,7 +2155,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_33);
+				consumeUntil(_tokenSet_30);
 			} else {
 			  throw ex;
 			}
@@ -2261,7 +2209,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_33);
+				consumeUntil(_tokenSet_30);
 			} else {
 			  throw ex;
 			}
@@ -2370,6 +2318,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_true:
 			case LITERAL_false:
 			case LITERAL_null:
+			case LITERAL_function:
+			case LITERAL_procedure:
 			{
 				if ( inputState.guessing==0 ) {
 					loop.type(Loop.EXPR_TYPE);
@@ -2414,7 +2364,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_33);
+				consumeUntil(_tokenSet_30);
 			} else {
 			  throw ex;
 			}
@@ -2454,6 +2404,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_true:
 			case LITERAL_false:
 			case LITERAL_null:
+			case LITERAL_function:
+			case LITERAL_procedure:
 			case LITERAL_if:
 			case LITERAL_while:
 			case LITERAL_do:
@@ -2472,7 +2424,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_27);
+				consumeUntil(_tokenSet_24);
 			} else {
 			  throw ex;
 			}
@@ -2482,7 +2434,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	public final IExpression  assignmentExpression() throws RecognitionException, TokenStreamException {
 		IExpression ee;
 		
-		ee=null;IExpression e=null;IExpression e2;
+		ee=null;IExpression e=null;IExpression e2;ExpressionKind ek=null;
 		
 		try {      // for error handling
 			ee=conditionalExpression();
@@ -2507,7 +2459,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(BECOMES);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.ASSIGNMENT);
+						ek= (ExpressionKind.ASSIGNMENT);
 					}
 					break;
 				}
@@ -2515,7 +2467,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(PLUS_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_PLUS);
+						ek= (ExpressionKind.AUG_PLUS);
 					}
 					break;
 				}
@@ -2523,7 +2475,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(MINUS_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_MINUS);
+						ek= (ExpressionKind.AUG_MINUS);
 					}
 					break;
 				}
@@ -2531,7 +2483,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(STAR_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_MULT);
+						ek= (ExpressionKind.AUG_MULT);
 					}
 					break;
 				}
@@ -2539,7 +2491,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(DIV_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_DIV);
+						ek= (ExpressionKind.AUG_DIV);
 					}
 					break;
 				}
@@ -2547,7 +2499,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(MOD_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_MOD);
+						ek= (ExpressionKind.AUG_MOD);
 					}
 					break;
 				}
@@ -2555,7 +2507,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(SR_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_SR);
+						ek= (ExpressionKind.AUG_SR);
 					}
 					break;
 				}
@@ -2563,7 +2515,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(BSR_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_BSR);
+						ek= (ExpressionKind.AUG_BSR);
 					}
 					break;
 				}
@@ -2571,7 +2523,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(SL_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_SL);
+						ek= (ExpressionKind.AUG_SL);
 					}
 					break;
 				}
@@ -2579,7 +2531,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(BAND_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_BAND);
+						ek= (ExpressionKind.AUG_BAND);
 					}
 					break;
 				}
@@ -2587,7 +2539,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(BXOR_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_BXOR);
+						ek= (ExpressionKind.AUG_BXOR);
 					}
 					break;
 				}
@@ -2595,7 +2547,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 					match(BOR_ASSIGN);
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.buildPartial(ee, ExpressionType.AUG_BOR);
+						ek= (ExpressionKind.AUG_BOR);
 					}
 					break;
 				}
@@ -2607,7 +2559,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				e2=assignmentExpression();
 				if ( inputState.guessing==0 ) {
-						((IBinaryExpression) ee).setRight(e2);
+					ee = ExpressionBuilder.build(ee, ek, e2);
 				}
 				break;
 			}
@@ -2654,6 +2606,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_true:
 			case LITERAL_false:
 			case LITERAL_null:
+			case LITERAL_function:
+			case LITERAL_procedure:
 			case LITERAL_if:
 			case LITERAL_while:
 			case LITERAL_do:
@@ -2674,7 +2628,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_28);
+				consumeUntil(_tokenSet_25);
 			} else {
 			  throw ex;
 			}
@@ -2854,7 +2808,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_34);
+				consumeUntil(_tokenSet_31);
 			} else {
 			  throw ex;
 			}
@@ -2886,7 +2840,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_31);
+				consumeUntil(_tokenSet_28);
 			} else {
 			  throw ex;
 			}
@@ -2974,7 +2928,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_31);
+				consumeUntil(_tokenSet_28);
 			} else {
 			  throw ex;
 			}
@@ -3023,7 +2977,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_35);
+				consumeUntil(_tokenSet_32);
 			} else {
 			  throw ex;
 			}
@@ -3046,7 +3000,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					match(LOR);
 					e3=logicalAndExpression();
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.build(ee, ExpressionType.LOR, e3);
+						ee = ExpressionBuilder.build(ee, ExpressionKind.LOR, e3);
 					}
 				}
 				else {
@@ -3060,7 +3014,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_35);
+				consumeUntil(_tokenSet_32);
 			} else {
 			  throw ex;
 			}
@@ -3082,7 +3036,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					match(LAND);
 					e3=inclusiveOrExpression();
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.build(ee, ExpressionType.LAND, e3);
+						ee = ExpressionBuilder.build(ee, ExpressionKind.LAND, e3);
 					}
 				}
 				else {
@@ -3096,7 +3050,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_36);
+				consumeUntil(_tokenSet_33);
 			} else {
 			  throw ex;
 			}
@@ -3118,7 +3072,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					match(BOR);
 					e3=exclusiveOrExpression();
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.build(ee, ExpressionType.BOR, e3);
+						ee = ExpressionBuilder.build(ee, ExpressionKind.BOR, e3);
 					}
 				}
 				else {
@@ -3132,7 +3086,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_37);
+				consumeUntil(_tokenSet_34);
 			} else {
 			  throw ex;
 			}
@@ -3155,7 +3109,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					match(BXOR);
 					e3=andExpression();
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.build(ee, ExpressionType.BXOR, e3);
+						ee = ExpressionBuilder.build(ee, ExpressionKind.BXOR, e3);
 					}
 				}
 				else {
@@ -3169,7 +3123,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_38);
+				consumeUntil(_tokenSet_35);
 			} else {
 			  throw ex;
 			}
@@ -3192,7 +3146,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					match(BAND);
 					e3=equalityExpression();
 					if ( inputState.guessing==0 ) {
-						ee = ExpressionBuilder.build(ee, ExpressionType.BAND, e3);
+						ee = ExpressionBuilder.build(ee, ExpressionKind.BAND, e3);
 					}
 				}
 				else {
@@ -3206,7 +3160,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_39);
+				consumeUntil(_tokenSet_36);
 			} else {
 			  throw ex;
 			}
@@ -3218,7 +3172,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		IExpression ee;
 		
 		ee=null;
-				ExpressionType e2=null;
+				ExpressionKind e2=null;
 				IExpression e3=null;
 		
 		try {      // for error handling
@@ -3233,7 +3187,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					{
 						match(NOT_EQUAL);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.NOT_EQUAL;
+							e2=ExpressionKind.NOT_EQUAL;
 						}
 						break;
 					}
@@ -3241,7 +3195,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					{
 						match(EQUAL);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.EQUAL;
+							e2=ExpressionKind.EQUAL;
 						}
 						break;
 					}
@@ -3267,7 +3221,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_40);
+				consumeUntil(_tokenSet_37);
 			} else {
 			  throw ex;
 			}
@@ -3279,7 +3233,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		IExpression ee;
 		
 		ee=null;
-				ExpressionType e2;
+				ExpressionKind e2;
 				IExpression e3=null;
 		
 		try {      // for error handling
@@ -3352,6 +3306,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_true:
 			case LITERAL_false:
 			case LITERAL_null:
+			case LITERAL_function:
+			case LITERAL_procedure:
 			case LITERAL_if:
 			case LITERAL_while:
 			case LITERAL_do:
@@ -3362,14 +3318,14 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 				_loop121:
 				do {
-					if ((_tokenSet_41.member(LA(1)))) {
+					if ((_tokenSet_38.member(LA(1)))) {
 						{
 						switch ( LA(1)) {
 						case LT_:
 						{
 							match(LT_);
 							if ( inputState.guessing==0 ) {
-								e2=ExpressionType.LT_;
+								e2=ExpressionKind.LT_;
 							}
 							break;
 						}
@@ -3377,7 +3333,7 @@ public ElijjahParser(ParserSharedInputState state) {
 						{
 							match(GT);
 							if ( inputState.guessing==0 ) {
-								e2=ExpressionType.GT;
+								e2=ExpressionKind.GT;
 							}
 							break;
 						}
@@ -3385,7 +3341,7 @@ public ElijjahParser(ParserSharedInputState state) {
 						{
 							match(LE);
 							if ( inputState.guessing==0 ) {
-								e2=ExpressionType.LE;
+								e2=ExpressionKind.LE;
 							}
 							break;
 						}
@@ -3393,7 +3349,7 @@ public ElijjahParser(ParserSharedInputState state) {
 						{
 							match(GE);
 							if ( inputState.guessing==0 ) {
-								e2=ExpressionType.GE;
+								e2=ExpressionKind.GE;
 							}
 							break;
 						}
@@ -3430,7 +3386,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_20);
+				consumeUntil(_tokenSet_39);
 			} else {
 			  throw ex;
 			}
@@ -3441,7 +3397,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	public final IExpression  shiftExpression() throws RecognitionException, TokenStreamException {
 		IExpression ee;
 		
-		ee=null;ExpressionType e2=null;
+		ee=null;ExpressionKind e2=null;
 				IExpression e3=null;
 		
 		try {      // for error handling
@@ -3456,7 +3412,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					{
 						match(SL);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.LSHIFT;
+							e2=ExpressionKind.LSHIFT;
 						}
 						break;
 					}
@@ -3464,7 +3420,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					{
 						match(SR);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.RSHIFT;
+							e2=ExpressionKind.RSHIFT;
 						}
 						break;
 					}
@@ -3472,7 +3428,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					{
 						match(BSR);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.BSHIFTR;
+							e2=ExpressionKind.BSHIFTR;
 						}
 						break;
 					}
@@ -3498,7 +3454,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_42);
+				consumeUntil(_tokenSet_40);
 			} else {
 			  throw ex;
 			}
@@ -3509,7 +3465,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	public final IExpression  additiveExpression() throws RecognitionException, TokenStreamException {
 		IExpression ee;
 		
-		ee=null;ExpressionType e2=null;
+		ee=null;ExpressionKind e2=null;
 				IExpression e3=null;
 		
 		try {      // for error handling
@@ -3517,14 +3473,14 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 			_loop129:
 			do {
-				if ((LA(1)==PLUS||LA(1)==MINUS) && (_tokenSet_15.member(LA(2)))) {
+				if ((LA(1)==PLUS||LA(1)==MINUS) && (_tokenSet_14.member(LA(2)))) {
 					{
 					switch ( LA(1)) {
 					case PLUS:
 					{
 						match(PLUS);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.ADDITION;
+							e2=ExpressionKind.ADDITION;
 						}
 						break;
 					}
@@ -3532,7 +3488,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					{
 						match(MINUS);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.SUBTRACTION;
+							e2=ExpressionKind.SUBTRACTION;
 						}
 						break;
 					}
@@ -3558,7 +3514,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_43);
+				consumeUntil(_tokenSet_41);
 			} else {
 			  throw ex;
 			}
@@ -3570,7 +3526,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		IExpression ee;
 		
 		ee=null;
-				IExpression e3=null;ExpressionType e2=null;
+				IExpression e3=null;ExpressionKind e2=null;
 		
 		try {      // for error handling
 			ee=unaryExpression();
@@ -3584,7 +3540,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					{
 						match(STAR);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.MULTIPLY;
+							e2=ExpressionKind.MULTIPLY;
 						}
 						break;
 					}
@@ -3592,7 +3548,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					{
 						match(DIV);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.DIVIDE;
+							e2=ExpressionKind.DIVIDE;
 						}
 						break;
 					}
@@ -3600,7 +3556,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					{
 						match(MOD);
 						if ( inputState.guessing==0 ) {
-							e2=ExpressionType.MODULO;
+							e2=ExpressionKind.MODULO;
 						}
 						break;
 					}
@@ -3626,7 +3582,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_43);
+				consumeUntil(_tokenSet_41);
 			} else {
 			  throw ex;
 			}
@@ -3647,7 +3603,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(INC);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionType.INC);
+					ee.set(ExpressionKind.INC);
 				}
 				break;
 			}
@@ -3656,7 +3612,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(DEC);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionType.DEC);
+					ee.set(ExpressionKind.DEC);
 				}
 				break;
 			}
@@ -3665,7 +3621,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(MINUS);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionType.NEG);
+					ee.set(ExpressionKind.NEG);
 				}
 				break;
 			}
@@ -3674,7 +3630,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(PLUS);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionType.POS);
+					ee.set(ExpressionKind.POS);
 				}
 				break;
 			}
@@ -3690,6 +3646,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_true:
 			case LITERAL_false:
 			case LITERAL_null:
+			case LITERAL_function:
+			case LITERAL_procedure:
 			{
 				ee=unaryExpressionNotPlusMinus();
 				break;
@@ -3704,7 +3662,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_44);
+				consumeUntil(_tokenSet_42);
 			} else {
 			  throw ex;
 			}
@@ -3726,7 +3684,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(BNOT);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionType.BNOT);
+					ee.set(ExpressionKind.BNOT);
 				}
 				break;
 			}
@@ -3735,7 +3693,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(LNOT);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionType.LNOT);
+					ee.set(ExpressionKind.LNOT);
 				}
 				break;
 			}
@@ -3749,6 +3707,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_true:
 			case LITERAL_false:
 			case LITERAL_null:
+			case LITERAL_function:
+			case LITERAL_procedure:
 			{
 				{
 				if ((LA(1)==LPAREN) && ((LA(2) >= LITERAL_void && LA(2) <= LITERAL_double))) {
@@ -3758,7 +3718,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					match(RPAREN);
 					ee=unaryExpression();
 				}
-				else if ((_tokenSet_45.member(LA(1))) && (_tokenSet_4.member(LA(2)))) {
+				else if ((_tokenSet_43.member(LA(1))) && (_tokenSet_23.member(LA(2)))) {
 					ee=postfixExpression();
 				}
 				else {
@@ -3778,7 +3738,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_44);
+				consumeUntil(_tokenSet_42);
 			} else {
 			  throw ex;
 			}
@@ -3795,7 +3755,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			builtInType();
 			{
-			_loop148:
+			_loop156:
 			do {
 				if ((LA(1)==LBRACK)) {
 					lb = LT(1);
@@ -3803,7 +3763,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					match(RBRACK);
 				}
 				else {
-					break _loop148;
+					break _loop156;
 				}
 				
 			} while (true);
@@ -3820,7 +3780,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_31);
+				consumeUntil(_tokenSet_28);
 			} else {
 			  throw ex;
 			}
@@ -3831,6 +3791,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		IExpression ee;
 		
 		Token  e = null;
+		Token  lp2 = null;
 		Token  lbc = null;
 		Token  lb = null;
 		Token  lp = null;
@@ -3842,7 +3803,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=primaryExpression();
 			{
-			_loop143:
+			_loop145:
 			do {
 				if ((LA(1)==DOT)) {
 					match(DOT);
@@ -3854,6 +3815,59 @@ public ElijjahParser(ParserSharedInputState state) {
 						match(IDENT);
 						if ( inputState.guessing==0 ) {
 							ee=new DotExpression(ee, new IdentExpression(e));
+						}
+						{
+						if ((LA(1)==LPAREN) && (_tokenSet_44.member(LA(2)))) {
+							lp2 = LT(1);
+							match(LPAREN);
+							{
+							switch ( LA(1)) {
+							case IDENT:
+							case STRING_LITERAL:
+							case CHAR_LITERAL:
+							case NUM_INT:
+							case NUM_FLOAT:
+							case LPAREN:
+							case PLUS:
+							case MINUS:
+							case INC:
+							case DEC:
+							case BNOT:
+							case LNOT:
+							case LITERAL_this:
+							case LITERAL_true:
+							case LITERAL_false:
+							case LITERAL_null:
+							case LITERAL_function:
+							case LITERAL_procedure:
+							{
+								el=expressionList2();
+								break;
+							}
+							case RPAREN:
+							{
+								break;
+							}
+							default:
+							{
+								throw new NoViableAltException(LT(1), getFilename());
+							}
+							}
+							}
+							if ( inputState.guessing==0 ) {
+								ProcedureCallExpression pce=new ProcedureCallExpression();
+								pce.identifier(ee);
+								pce.setArgs(el);
+								ee=pce;
+							}
+							match(RPAREN);
+						}
+						else if ((_tokenSet_2.member(LA(1))) && (_tokenSet_45.member(LA(2)))) {
+						}
+						else {
+							throw new NoViableAltException(LT(1), getFilename());
+						}
+						
 						}
 						break;
 					}
@@ -3876,8 +3890,8 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				else if ((LA(1)==LBRACK) && (LA(2)==RBRACK)) {
 					{
-					int _cnt141=0;
-					_loop141:
+					int _cnt143=0;
+					_loop143:
 					do {
 						if ((LA(1)==LBRACK)) {
 							lbc = LT(1);
@@ -3885,22 +3899,22 @@ public ElijjahParser(ParserSharedInputState state) {
 							match(RBRACK);
 						}
 						else {
-							if ( _cnt141>=1 ) { break _loop141; } else {throw new NoViableAltException(LT(1), getFilename());}
+							if ( _cnt143>=1 ) { break _loop143; } else {throw new NoViableAltException(LT(1), getFilename());}
 						}
 						
-						_cnt141++;
+						_cnt143++;
 					} while (true);
 					}
 					match(DOT);
 					match(LITERAL_class);
 				}
-				else if ((LA(1)==LBRACK) && (_tokenSet_15.member(LA(2)))) {
+				else if ((LA(1)==LBRACK) && (_tokenSet_14.member(LA(2)))) {
 					lb = LT(1);
 					match(LBRACK);
 					expr=expression();
 					match(RBRACK);
 				}
-				else if ((LA(1)==LPAREN) && (_tokenSet_46.member(LA(2)))) {
+				else if ((LA(1)==LPAREN) && (_tokenSet_44.member(LA(2)))) {
 					lp = LT(1);
 					match(LPAREN);
 					{
@@ -3921,6 +3935,8 @@ public ElijjahParser(ParserSharedInputState state) {
 					case LITERAL_true:
 					case LITERAL_false:
 					case LITERAL_null:
+					case LITERAL_function:
+					case LITERAL_procedure:
 					{
 						el=expressionList2();
 						break;
@@ -3944,21 +3960,21 @@ public ElijjahParser(ParserSharedInputState state) {
 					match(RPAREN);
 				}
 				else {
-					break _loop143;
+					break _loop145;
 				}
 				
 			} while (true);
 			}
 			{
-			if ((LA(1)==INC) && (_tokenSet_44.member(LA(2)))) {
+			if ((LA(1)==INC) && (_tokenSet_42.member(LA(2)))) {
 				in = LT(1);
 				match(INC);
 			}
-			else if ((LA(1)==DEC) && (_tokenSet_44.member(LA(2)))) {
+			else if ((LA(1)==DEC) && (_tokenSet_42.member(LA(2)))) {
 				de = LT(1);
 				match(DEC);
 			}
-			else if ((_tokenSet_44.member(LA(1))) && (_tokenSet_47.member(LA(2)))) {
+			else if ((_tokenSet_42.member(LA(1))) && (_tokenSet_45.member(LA(2)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -3970,7 +3986,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_44);
+				consumeUntil(_tokenSet_42);
 			} else {
 			  throw ex;
 			}
@@ -3982,7 +3998,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		IExpression ee;
 		
 		Token  e = null;
-		ee=null;
+		ee=null;FuncExpr ppc=null;
 		
 		try {      // for error handling
 			switch ( LA(1)) {
@@ -4033,6 +4049,15 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				break;
 			}
+			case LITERAL_function:
+			case LITERAL_procedure:
+			{
+				if ( inputState.guessing==0 ) {
+					ppc=new FuncExpr();
+				}
+				funcExpr(ppc);
+				break;
+			}
 			default:
 			{
 				throw new NoViableAltException(LT(1), getFilename());
@@ -4043,12 +4068,198 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_4);
+				consumeUntil(_tokenSet_2);
 			} else {
 			  throw ex;
 			}
 		}
 		return ee;
+	}
+	
+	public final void funcExpr(
+		FuncExpr pc
+	) throws RecognitionException, TokenStreamException {
+		
+		
+		try {      // for error handling
+			{
+			switch ( LA(1)) {
+			case LITERAL_function:
+			{
+				match(LITERAL_function);
+				if ( inputState.guessing==0 ) {
+						pc.type(TypeModifiers.FUNCTION);	
+				}
+				{
+				if ((LA(1)==LPAREN) && (_tokenSet_19.member(LA(2)))) {
+					match(LPAREN);
+					typeNameList(pc.argList());
+					match(RPAREN);
+				}
+				else if ((_tokenSet_23.member(LA(1))) && (_tokenSet_45.member(LA(2)))) {
+				}
+				else {
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				
+				}
+				{
+				switch ( LA(1)) {
+				case TOK_COLON:
+				case TOK_ARROW:
+				{
+					{
+					switch ( LA(1)) {
+					case TOK_ARROW:
+					{
+						match(TOK_ARROW);
+						break;
+					}
+					case TOK_COLON:
+					{
+						match(TOK_COLON);
+						break;
+					}
+					default:
+					{
+						throw new NoViableAltException(LT(1), getFilename());
+					}
+					}
+					}
+					typeName(pc.returnValue());
+					break;
+				}
+				case EOF:
+				case LITERAL_indexing:
+				case IDENT:
+				case LITERAL_package:
+				case STRING_LITERAL:
+				case CHAR_LITERAL:
+				case NUM_INT:
+				case NUM_FLOAT:
+				case LBRACK:
+				case RBRACK:
+				case DOT:
+				case LITERAL_class:
+				case LITERAL_struct:
+				case LPAREN:
+				case RPAREN:
+				case LCURLY:
+				case RCURLY:
+				case LITERAL_namespace:
+				case LITERAL_from:
+				case LITERAL_import:
+				case COMMA:
+				case BECOMES:
+				case LT_:
+				case LITERAL_constructor:
+				case LITERAL_ctor:
+				case LITERAL_destructor:
+				case LITERAL_dtor:
+				case LITERAL_const:
+				case LITERAL_var:
+				case LITERAL_val:
+				case LITERAL_type:
+				case LITERAL_alias:
+				case LITERAL_construct:
+				case LITERAL_yield:
+				case SEMI:
+				case LITERAL_invariant:
+				case LITERAL_access:
+				case PLUS_ASSIGN:
+				case MINUS_ASSIGN:
+				case STAR_ASSIGN:
+				case DIV_ASSIGN:
+				case MOD_ASSIGN:
+				case SR_ASSIGN:
+				case BSR_ASSIGN:
+				case SL_ASSIGN:
+				case BAND_ASSIGN:
+				case BXOR_ASSIGN:
+				case BOR_ASSIGN:
+				case LOR:
+				case LAND:
+				case BOR:
+				case BXOR:
+				case BAND:
+				case NOT_EQUAL:
+				case EQUAL:
+				case GT:
+				case LE:
+				case GE:
+				case LITERAL_is_a:
+				case SL:
+				case SR:
+				case BSR:
+				case PLUS:
+				case MINUS:
+				case STAR:
+				case DIV:
+				case MOD:
+				case INC:
+				case DEC:
+				case BNOT:
+				case LNOT:
+				case LITERAL_this:
+				case LITERAL_true:
+				case LITERAL_false:
+				case LITERAL_null:
+				case LITERAL_function:
+				case LITERAL_procedure:
+				case LITERAL_if:
+				case LITERAL_while:
+				case LITERAL_do:
+				case LITERAL_iterate:
+				case LITERAL_to:
+				case LITERAL_with:
+				{
+					break;
+				}
+				default:
+				{
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				}
+				}
+				break;
+			}
+			case LITERAL_procedure:
+			{
+				match(LITERAL_procedure);
+				if ( inputState.guessing==0 ) {
+						pc.type(TypeModifiers.PROCEDURE);	
+				}
+				{
+				if ((LA(1)==LPAREN) && (_tokenSet_19.member(LA(2)))) {
+					match(LPAREN);
+					typeNameList(pc.argList());
+					match(RPAREN);
+				}
+				else if ((_tokenSet_2.member(LA(1))) && (_tokenSet_45.member(LA(2)))) {
+				}
+				else {
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				
+				}
+				break;
+			}
+			default:
+			{
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			}
+			}
+		}
+		catch (RecognitionException ex) {
+			if (inputState.guessing==0) {
+				reportError(ex);
+				consume();
+				consumeUntil(_tokenSet_2);
+			} else {
+			  throw ex;
+			}
+		}
 	}
 	
 	public final void builtInType() throws RecognitionException, TokenStreamException {
@@ -4111,7 +4322,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_48);
+				consumeUntil(_tokenSet_46);
 			} else {
 			  throw ex;
 			}
@@ -4149,7 +4360,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_33);
+				consumeUntil(_tokenSet_30);
 			} else {
 			  throw ex;
 			}
@@ -4173,7 +4384,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_49);
+				consumeUntil(_tokenSet_47);
 			} else {
 			  throw ex;
 			}
@@ -4234,7 +4445,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_50);
+				consumeUntil(_tokenSet_48);
 			} else {
 			  throw ex;
 			}
@@ -4257,7 +4468,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_20);
+				consumeUntil(_tokenSet_2);
 			} else {
 			  throw ex;
 			}
@@ -4296,7 +4507,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_51);
+				consumeUntil(_tokenSet_49);
 			} else {
 			  throw ex;
 			}
@@ -4409,7 +4620,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_51);
+				consumeUntil(_tokenSet_49);
 			} else {
 			  throw ex;
 			}
@@ -4556,6 +4767,8 @@ public ElijjahParser(ParserSharedInputState state) {
 		"\"true\"",
 		"\"false\"",
 		"\"null\"",
+		"\"function\"",
+		"\"procedure\"",
 		"\"void\"",
 		"\"boolean\"",
 		"\"byte\"",
@@ -4574,8 +4787,6 @@ public ElijjahParser(ParserSharedInputState state) {
 		"\"with\"",
 		"\"elseif\"",
 		"\"def\"",
-		"\"function\"",
-		"\"procedure\"",
 		"QUESTION",
 		"LT",
 		"WS",
@@ -4592,105 +4803,101 @@ public ElijjahParser(ParserSharedInputState state) {
 	public static final BitSet _tokenSet_0 = new BitSet(_tokenSet_0_data_);
 	private static final long _tokenSet_1_data_[] = { 4398285668706L, 0L };
 	public static final BitSet _tokenSet_1 = new BitSet(_tokenSet_1_data_);
-	private static final long _tokenSet_2_data_[] = { -71987707405566110L, 274882186711039L, 0L, 0L };
+	private static final long _tokenSet_2_data_[] = { -71987706331791518L, 1099528807645183L, 0L, 0L };
 	public static final BitSet _tokenSet_2 = new BitSet(_tokenSet_2_data_);
 	private static final long _tokenSet_3_data_[] = { 216181095274971490L, 0L };
 	public static final BitSet _tokenSet_3 = new BitSet(_tokenSet_3_data_);
-	private static final long _tokenSet_4_data_[] = { -71987706331791518L, 274882201911295L, 0L, 0L };
+	private static final long _tokenSet_4_data_[] = { 12582912L, 0L };
 	public static final BitSet _tokenSet_4 = new BitSet(_tokenSet_4_data_);
-	private static final long _tokenSet_5_data_[] = { 12582912L, 0L };
+	private static final long _tokenSet_5_data_[] = { 8388608L, 0L };
 	public static final BitSet _tokenSet_5 = new BitSet(_tokenSet_5_data_);
-	private static final long _tokenSet_6_data_[] = { 8388608L, 0L };
+	private static final long _tokenSet_6_data_[] = { 16777216L, 0L };
 	public static final BitSet _tokenSet_6 = new BitSet(_tokenSet_6_data_);
-	private static final long _tokenSet_7_data_[] = { 16777216L, 0L };
+	private static final long _tokenSet_7_data_[] = { 216181095543439714L, 0L };
 	public static final BitSet _tokenSet_7 = new BitSet(_tokenSet_7_data_);
-	private static final long _tokenSet_8_data_[] = { 216181095543439714L, 0L };
+	private static final long _tokenSet_8_data_[] = { 216181095543406946L, 0L };
 	public static final BitSet _tokenSet_8 = new BitSet(_tokenSet_8_data_);
-	private static final long _tokenSet_9_data_[] = { 216181095543406946L, 0L };
+	private static final long _tokenSet_9_data_[] = { 281018368L, 0L };
 	public static final BitSet _tokenSet_9 = new BitSet(_tokenSet_9_data_);
-	private static final long _tokenSet_10_data_[] = { 281018368L, 0L };
+	private static final long _tokenSet_10_data_[] = { 216207483556142656L, 255103862308864L, 0L, 0L };
 	public static final BitSet _tokenSet_10 = new BitSet(_tokenSet_10_data_);
-	private static final long _tokenSet_11_data_[] = { 216207483556142656L, 63775954173952L, 0L, 0L };
+	private static final long _tokenSet_11_data_[] = { -71987294285873182L, 1688849860263935L, 0L, 0L };
 	public static final BitSet _tokenSet_11 = new BitSet(_tokenSet_11_data_);
-	private static final long _tokenSet_12_data_[] = { -71987569163780254L, 422212465065983L, 0L, 0L };
+	private static final long _tokenSet_12_data_[] = { 28071906246720L, 255086697644032L, 0L, 0L };
 	public static final BitSet _tokenSet_12 = new BitSet(_tokenSet_12_data_);
-	private static final long _tokenSet_13_data_[] = { 28071906246720L, 63771674411008L, 0L, 0L };
+	private static final long _tokenSet_13_data_[] = { 77635136L, 281492141375488L, 0L, 0L };
 	public static final BitSet _tokenSet_13 = new BitSet(_tokenSet_13_data_);
-	private static final long _tokenSet_14_data_[] = { 77635136L, 70373023940608L, 0L, 0L };
+	private static final long _tokenSet_14_data_[] = { 2104896L, 17164664832L, 0L, 0L };
 	public static final BitSet _tokenSet_14 = new BitSet(_tokenSet_14_data_);
-	private static final long _tokenSet_15_data_[] = { 2104896L, 4279762944L, 0L, 0L };
+	private static final long _tokenSet_15_data_[] = { -288202027738022208L, 263882790666239L, 0L, 0L };
 	public static final BitSet _tokenSet_15 = new BitSet(_tokenSet_15_data_);
-	private static final long _tokenSet_16_data_[] = { -288202302615929280L, 65970697666559L, 0L, 0L };
+	private static final long _tokenSet_16_data_[] = { 216242667928231488L, 1398595955195904L, 0L, 0L };
 	public static final BitSet _tokenSet_16 = new BitSet(_tokenSet_16_data_);
-	private static final long _tokenSet_17_data_[] = { 216242667928231488L, 349648977395712L, 0L, 0L };
+	private static final long _tokenSet_17_data_[] = { 216181095274971200L, 0L };
 	public static final BitSet _tokenSet_17 = new BitSet(_tokenSet_17_data_);
-	private static final long _tokenSet_18_data_[] = { 216181095274971200L, 0L };
+	private static final long _tokenSet_18_data_[] = { 216242667928231488L, 255103862308864L, 0L, 0L };
 	public static final BitSet _tokenSet_18 = new BitSet(_tokenSet_18_data_);
-	private static final long _tokenSet_19_data_[] = { 216242667928231488L, 63775954173952L, 0L, 0L };
+	private static final long _tokenSet_19_data_[] = { 54043298607661120L, 12884901888L, 0L, 0L };
 	public static final BitSet _tokenSet_19 = new BitSet(_tokenSet_19_data_);
-	private static final long _tokenSet_20_data_[] = { -71987707405574302L, 274882186711039L, 0L, 0L };
+	private static final long _tokenSet_20_data_[] = { -4433230883192862L, 2251799813685247L, 0L, 0L };
 	public static final BitSet _tokenSet_20 = new BitSet(_tokenSet_20_data_);
 	private static final long _tokenSet_21_data_[] = { 54043298607661120L, 0L };
 	public static final BitSet _tokenSet_21 = new BitSet(_tokenSet_21_data_);
-	private static final long _tokenSet_22_data_[] = { -17944511877087390L, 274882186711039L, 0L, 0L };
+	private static final long _tokenSet_22_data_[] = { -17944510803345566L, 1099528807645183L, 0L, 0L };
 	public static final BitSet _tokenSet_22 = new BitSet(_tokenSet_22_data_);
-	private static final long _tokenSet_23_data_[] = { -71987707405541534L, 274882186711039L, 0L, 0L };
+	private static final long _tokenSet_23_data_[] = { -71987431453884446L, 1099528807645183L, 0L, 0L };
 	public static final BitSet _tokenSet_23 = new BitSet(_tokenSet_23_data_);
-	private static final long _tokenSet_24_data_[] = { 54043298607661120L, 3377699720527872L, 0L, 0L };
+	private static final long _tokenSet_24_data_[] = { 28071925128768L, 255103862308864L, 0L, 0L };
 	public static final BitSet _tokenSet_24 = new BitSet(_tokenSet_24_data_);
-	private static final long _tokenSet_25_data_[] = { -71987432527667230L, 274882186711039L, 0L, 0L };
+	private static final long _tokenSet_25_data_[] = { 216242668209266530L, 1099528792440832L, 0L, 0L };
 	public static final BitSet _tokenSet_25 = new BitSet(_tokenSet_25_data_);
-	private static final long _tokenSet_26_data_[] = { -4433230883192862L, 3940649673949183L, 0L, 0L };
+	private static final long _tokenSet_26_data_[] = { 274886295552L, 0L };
 	public static final BitSet _tokenSet_26 = new BitSet(_tokenSet_26_data_);
-	private static final long _tokenSet_27_data_[] = { 28071925128768L, 63775954173952L, 0L, 0L };
+	private static final long _tokenSet_27_data_[] = { 216242668196666944L, 255103862308864L, 0L, 0L };
 	public static final BitSet _tokenSet_27 = new BitSet(_tokenSet_27_data_);
-	private static final long _tokenSet_28_data_[] = { 216242668209266530L, 274882186706944L, 0L, 0L };
+	private static final long _tokenSet_28_data_[] = { 4194304L, 0L };
 	public static final BitSet _tokenSet_28 = new BitSet(_tokenSet_28_data_);
-	private static final long _tokenSet_29_data_[] = { 274886295552L, 0L };
+	private static final long _tokenSet_29_data_[] = { 63256834088512L, 255103862308864L, 0L, 0L };
 	public static final BitSet _tokenSet_29 = new BitSet(_tokenSet_29_data_);
-	private static final long _tokenSet_30_data_[] = { 216242668196666944L, 63775954173952L, 0L, 0L };
+	private static final long _tokenSet_30_data_[] = { 63256297217600L, 255103862308864L, 0L, 0L };
 	public static final BitSet _tokenSet_30 = new BitSet(_tokenSet_30_data_);
-	private static final long _tokenSet_31_data_[] = { 4194304L, 0L };
+	private static final long _tokenSet_31_data_[] = { 64L, 0L };
 	public static final BitSet _tokenSet_31 = new BitSet(_tokenSet_31_data_);
-	private static final long _tokenSet_32_data_[] = { 63256834088512L, 63775954173952L, 0L, 0L };
+	private static final long _tokenSet_32_data_[] = { -71987707405574302L, 1099528792440863L, 0L, 0L };
 	public static final BitSet _tokenSet_32 = new BitSet(_tokenSet_32_data_);
-	private static final long _tokenSet_33_data_[] = { 63256297217600L, 63775954173952L, 0L, 0L };
+	private static final long _tokenSet_33_data_[] = { -71987707405574302L, 1099528792440895L, 0L, 0L };
 	public static final BitSet _tokenSet_33 = new BitSet(_tokenSet_33_data_);
-	private static final long _tokenSet_34_data_[] = { 64L, 0L };
+	private static final long _tokenSet_34_data_[] = { -71987707405574302L, 1099528792440959L, 0L, 0L };
 	public static final BitSet _tokenSet_34 = new BitSet(_tokenSet_34_data_);
-	private static final long _tokenSet_35_data_[] = { -71987707405574302L, 274882186706975L, 0L, 0L };
+	private static final long _tokenSet_35_data_[] = { -71987707405574302L, 1099528792441087L, 0L, 0L };
 	public static final BitSet _tokenSet_35 = new BitSet(_tokenSet_35_data_);
-	private static final long _tokenSet_36_data_[] = { -71987707405574302L, 274882186707007L, 0L, 0L };
+	private static final long _tokenSet_36_data_[] = { -71987707405574302L, 1099528792441343L, 0L, 0L };
 	public static final BitSet _tokenSet_36 = new BitSet(_tokenSet_36_data_);
-	private static final long _tokenSet_37_data_[] = { -71987707405574302L, 274882186707071L, 0L, 0L };
+	private static final long _tokenSet_37_data_[] = { -71987707405574302L, 1099528792441855L, 0L, 0L };
 	public static final BitSet _tokenSet_37 = new BitSet(_tokenSet_37_data_);
-	private static final long _tokenSet_38_data_[] = { -71987707405574302L, 274882186707199L, 0L, 0L };
+	private static final long _tokenSet_38_data_[] = { 1073741824L, 28672L, 0L, 0L };
 	public static final BitSet _tokenSet_38 = new BitSet(_tokenSet_38_data_);
-	private static final long _tokenSet_39_data_[] = { -71987707405574302L, 274882186707455L, 0L, 0L };
+	private static final long _tokenSet_39_data_[] = { -71987707405574302L, 1099528792444927L, 0L, 0L };
 	public static final BitSet _tokenSet_39 = new BitSet(_tokenSet_39_data_);
-	private static final long _tokenSet_40_data_[] = { -71987707405574302L, 274882186707967L, 0L, 0L };
+	private static final long _tokenSet_40_data_[] = { -71987706331832478L, 1099528792506367L, 0L, 0L };
 	public static final BitSet _tokenSet_40 = new BitSet(_tokenSet_40_data_);
-	private static final long _tokenSet_41_data_[] = { 1073741824L, 28672L, 0L, 0L };
+	private static final long _tokenSet_41_data_[] = { -71987706331832478L, 1099528792965119L, 0L, 0L };
 	public static final BitSet _tokenSet_41 = new BitSet(_tokenSet_41_data_);
-	private static final long _tokenSet_42_data_[] = { -71987706331832478L, 274882186772479L, 0L, 0L };
+	private static final long _tokenSet_42_data_[] = { -71987706331832478L, 1099528807645183L, 0L, 0L };
 	public static final BitSet _tokenSet_42 = new BitSet(_tokenSet_42_data_);
-	private static final long _tokenSet_43_data_[] = { -71987706331832478L, 274882187231231L, 0L, 0L };
+	private static final long _tokenSet_43_data_[] = { 2104896L, 16911433728L, 0L, 0L };
 	public static final BitSet _tokenSet_43 = new BitSet(_tokenSet_43_data_);
-	private static final long _tokenSet_44_data_[] = { -71987706331832478L, 274882201911295L, 0L, 0L };
+	private static final long _tokenSet_44_data_[] = { 6299200L, 17164664832L, 0L, 0L };
 	public static final BitSet _tokenSet_44 = new BitSet(_tokenSet_44_data_);
-	private static final long _tokenSet_45_data_[] = { 2104896L, 4026531840L, 0L, 0L };
+	private static final long _tokenSet_45_data_[] = { -17944029765304350L, 2251799813685247L, 0L, 0L };
 	public static final BitSet _tokenSet_45 = new BitSet(_tokenSet_45_data_);
-	private static final long _tokenSet_46_data_[] = { 6299200L, 4279762944L, 0L, 0L };
+	private static final long _tokenSet_46_data_[] = { 4202496L, 0L };
 	public static final BitSet _tokenSet_46 = new BitSet(_tokenSet_46_data_);
-	private static final long _tokenSet_47_data_[] = { -17944304643211294L, 3940649673949183L, 0L, 0L };
+	private static final long _tokenSet_47_data_[] = { 63256297217600L, 1398595955195904L, 0L, 0L };
 	public static final BitSet _tokenSet_47 = new BitSet(_tokenSet_47_data_);
-	private static final long _tokenSet_48_data_[] = { 4202496L, 0L };
+	private static final long _tokenSet_48_data_[] = { 36028797018964032L, 0L };
 	public static final BitSet _tokenSet_48 = new BitSet(_tokenSet_48_data_);
-	private static final long _tokenSet_49_data_[] = { 63256297217600L, 349648977395712L, 0L, 0L };
+	private static final long _tokenSet_49_data_[] = { 272629760L, 0L };
 	public static final BitSet _tokenSet_49 = new BitSet(_tokenSet_49_data_);
-	private static final long _tokenSet_50_data_[] = { 36028797018964032L, 0L };
-	public static final BitSet _tokenSet_50 = new BitSet(_tokenSet_50_data_);
-	private static final long _tokenSet_51_data_[] = { 272629760L, 0L };
-	public static final BitSet _tokenSet_51 = new BitSet(_tokenSet_51_data_);
 	
 	}

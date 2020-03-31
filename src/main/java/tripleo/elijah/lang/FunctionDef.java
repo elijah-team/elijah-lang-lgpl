@@ -20,6 +20,7 @@ import java.util.List;
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.java.JavaCodeGen;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 public class FunctionDef implements ClassItem {
@@ -66,8 +67,8 @@ public class FunctionDef implements ClassItem {
 			StringBuilder sb = new StringBuilder();
 			if (expr instanceof AbstractBinaryExpression) {
 				return expr.toString();
-			}
-			return sb.toString();
+			} else throw new NotImplementedException();
+			//return sb.toString();
 		}
 
 		@Override

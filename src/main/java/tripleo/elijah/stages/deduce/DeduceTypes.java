@@ -3,6 +3,8 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import antlr.CommonToken;
+import antlr.Token;
 import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
@@ -87,34 +89,8 @@ public class DeduceTypes {
 		if (element instanceof VariableSequence) {
 //			fd._a.setCode(nextFunctionCode());
 //			parent._a.getContext().add(element, null);
-			for (VariableStatement ii : ((VariableSequence) element).items()) {
-				OS_Type dtype = null;
-				if (ii.typeName().isNull()) {
-					if (ii.initialValue() != null) {
-						IExpression iv = ii.initialValue();
-						if (iv instanceof NumericExpression) {
-							dtype = new OS_Type(BuiltInTypes.SystemInteger);
-						} else if (iv instanceof IdentExpression) {
-							LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
-							for (LookupResult n: lrl.results()) {
-								System.out.println("99"+n);
-							}
-						}
-					}
-				} else {
-					dtype = new OS_Type(ii.typeName());
-				}
-				parent._a.getContext().add(ii, ii.getName(), dtype);
-//				String theType;
-//				if (ii.typeName().isNull()) {
-////					theType = "int"; // Z0*
-//					theType = ii.initialValueType();
-//				} else{
-//					theType = ii.typeName().getName();
-//				}
-				System.out.println(String.format("100 %s;", ii.getName()));
-
-			}
+			for (VariableStatement ii : ((VariableSequence) element).items())
+				addFunctionItem_deduceVariableStatement(parent, ii);
 		}
 		else if (element instanceof ProcedureCallExpression) {
 			ProcedureCallExpression pce = (ProcedureCallExpression) element;
@@ -122,6 +98,7 @@ public class DeduceTypes {
 		} else if (element instanceof Loop) {
 			Loop loop = (Loop)element;
 			if (loop.getType() == Loop.FROM_TO_TYPE) {
+				parent.getContext().add(new IdentExpression(makeToken(loop.getIterName())), loop.getIterName());
 				String varname="vt"+loop.getIterName();
 				final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
 				if (loop.getToPart() instanceof NumericExpression) {
@@ -146,6 +123,47 @@ public class DeduceTypes {
 		} else {
 				// element.visit(this);
 			System.out.println(element);
+
+		}
+	}
+
+	Token makeToken(String s) {
+		CommonToken r = new CommonToken(s);
+		return r;
+	}
+	
+	public void addFunctionItem_deduceVariableStatement(FunctionDef parent, VariableStatement vs) {
+		{
+			OS_Type dtype = null;
+			if (vs.typeName().isNull()) {
+				if (vs.initialValue() != null) {
+					IExpression iv = vs.initialValue();
+					if (iv instanceof NumericExpression) {
+						dtype = new OS_Type(BuiltInTypes.SystemInteger);
+					} else if (iv instanceof IdentExpression) {
+						LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
+						for (LookupResult n: lrl.results()) {
+							System.out.println("99 "+n);
+						}
+					} else if (iv instanceof ProcedureCallExpression) {
+//						LookupResultList lrl = parent.getContext().lookup(((ProcedureCallExpression) iv).getLeft());
+//						for (LookupResult n: lrl.results()) {
+							System.out.println("98 "+/*n*/iv);
+//						}
+					}
+				}
+			} else {
+				dtype = new OS_Type(vs.typeName());
+			}
+			parent._a.getContext().add(vs, vs.getName(), dtype);
+//				String theType;
+//				if (ii.typeName().isNull()) {
+////					theType = "int"; // Z0*
+//					theType = ii.initialValueType();
+//				} else{
+//					theType = ii.typeName().getName();
+//				}
+			System.out.println(String.format("100 %s;", vs.getName()));
 
 		}
 	}

@@ -107,6 +107,11 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	public List<ClassItem> getItems() {
 		return items ;
 	}
+	
+	public String getName() {
+		return name.getText();
+	}
+	
 }
 
 //
