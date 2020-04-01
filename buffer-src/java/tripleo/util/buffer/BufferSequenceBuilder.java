@@ -101,4 +101,12 @@ public class BufferSequenceBuilder {
 		parts.put(part_name, sb2);
 	}
 
+	public String fieldNamed(String string) {
+		return parts.get(string).toString();
+	}
+
+	public boolean fieldIsSemiEol(int i) {
+		return part_names.get(i).equals("klklkl");
+	}
+
 }

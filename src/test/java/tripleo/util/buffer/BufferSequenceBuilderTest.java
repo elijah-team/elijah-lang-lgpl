@@ -9,8 +9,13 @@ import tripleo.util.buffer.EnclosedBuffer;
 public class BufferSequenceBuilderTest {
 
 	@Test
-	public void testBuild() {
-		fail("Not yet implemented");
+	public void shouldHandleTwoSemiEols() {
+		BufferSequenceBuilder bsb = new BufferSequenceBuilder(2)
+				.semieol().semieol();
+		BufferSequence bsq = bsb.build();
+		String s = bsq.getText();
+		assertEquals(";\n;\n", s);
+		
 	}
 
 	@Test
@@ -33,4 +38,20 @@ public class BufferSequenceBuilderTest {
 		assertEquals("(!)", s);
 	}
 
+	@Test
+	public void shouldHandlePartsAndPartNamesCorrectly() {
+		BufferSequenceBuilder bsb = new BufferSequenceBuilder(4).
+				named("type").named("name").named("value").semieol();
+		bsb.set("type", "int", XX.SPACE);
+		bsb.set("name", "i");
+		bsb.set("value", "= 3;");
+		assertEquals("int ", bsb.fieldNamed("type"));
+		assertEquals("i", bsb.fieldNamed("name"));
+		assertEquals("= 3; ", bsb.fieldNamed("value"));
+		assertTrue(bsb.fieldIsSemiEol(4));
+	}
 }
+
+//
+//
+//
