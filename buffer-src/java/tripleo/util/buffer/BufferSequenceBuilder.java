@@ -71,16 +71,24 @@ public class BufferSequenceBuilder {
 		parts.put(part_name, new DefaultBuffer(setTo+sep));		
 	}
 
-	public String build() {
-		// TODO Auto-generated method stub
-		if (_built != null)
-			return _built;
-		//
-		StringBuffer sb = new StringBuffer();
+//	public String build() {
+//		// TODO Auto-generated method stub
+//		if (_built != null)
+//			return _built;
+//		//
+//		StringBuffer sb = new StringBuffer();
+//		for (Buffer element : parts.values()) {
+//			sb.append(element.getText());
+//		}
+//		return sb.toString();
+//	}
+
+	public BufferSequence build() {
+		BufferSequence bsq = new BufferSequence();
 		for (Buffer element : parts.values()) {
-			sb.append(element.getText());
+			bsq.add(element);
 		}
-		return sb.toString();
+		return bsq;
 	}
 
 	public void set(String part_name, String setTo, XX sep) {

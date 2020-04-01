@@ -12,7 +12,7 @@
 package tripleo.util.buffer;
 
 /**
- * @author olu
+ * @author Tripleo
  *
  */
 public class EnclosedBuffer extends DefaultBuffer {
@@ -35,8 +35,7 @@ public class EnclosedBuffer extends DefaultBuffer {
 	}
 
 	public void setPayload(BufferSequenceBuilder sequence) {
-		// TODO Auto-generated method stub
-		_payload = sequence.build(); // TODO lazy or not?
+		_payload = sequence.build().getText();
 	}
 	
 	@Override
@@ -45,4 +44,12 @@ public class EnclosedBuffer extends DefaultBuffer {
 		return //super.toString();
 			String.format("%s%s%s", _left, _payload, _right);
 	}
+
+	public void setPayload(String string) {
+		_payload = string;
+	}
 }
+
+//
+//
+//
