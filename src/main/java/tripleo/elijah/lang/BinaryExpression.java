@@ -16,7 +16,7 @@ class BinaryExpression extends AbstractBinaryExpression {
 
 	public BinaryExpression(IExpression aLast_exp, ExpressionKind aType, Token aSide) {
 		left = aLast_exp;
-		type = aType;
+		kind = aType;
 		StringExpression se=new StringExpression(aSide);
 		right = se;
 	}

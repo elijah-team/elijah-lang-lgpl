@@ -44,12 +44,12 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 	public AbstractBinaryExpression() {
 		left  = null;
 		right = null;
-		type  = null;
+		kind  = null;
 	}
 
 	public AbstractBinaryExpression(IExpression aLeft, ExpressionKind aType, IExpression aRight) {
 		left = aLeft;
-		type = aType;
+		kind = aType;
 		right = aRight;
 	}
 
@@ -65,7 +65,7 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 
 	@Override
 	public ExpressionKind getKind() {
-		return type;
+		return kind;
 	}
 
 	@Override
@@ -75,13 +75,13 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 
 	@Override
 	public String repr_() {
-		return String.format("<Expression %s %s %s>", left,type,right);
+		return String.format("<Expression %s %s %s>", left,kind,right);
 	}
 
 	@Override
 	public void set(IBinaryExpression aEx) {
 		left=aEx.getLeft();
-		type=aEx.getKind();
+		kind=aEx.getKind();
 		right=aEx.getRight();
 	}
 
@@ -96,18 +96,18 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 	}
 	@Override
 	public void shift(ExpressionKind aType) {
-		left=new AbstractBinaryExpression(left,type,right); //TODO
-		type=aType;
+		left=new AbstractBinaryExpression(left,kind,right); //TODO
+		kind=aType;
 		right=null;
 	}
 
 	public IExpression left;
 	public IExpression right;
-	public ExpressionKind type;
+	public ExpressionKind kind;
 
 	@Override
 	public void set(ExpressionKind aIncrement) {
-		type=aIncrement;
+		kind=aIncrement;
 	}
 
 	public boolean is_simple() {
