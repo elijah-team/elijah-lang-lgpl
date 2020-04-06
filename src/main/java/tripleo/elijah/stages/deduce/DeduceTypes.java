@@ -3,10 +3,17 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import antlr.CommonToken;
 import antlr.Token;
+import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.Context;
+import tripleo.elijah.lang.ExpressionKind;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.FunctionItem;
 import tripleo.elijah.lang.IExpression;
@@ -29,6 +36,7 @@ import tripleo.elijah.lang.VariableSequence;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
 
 /**
  * @author Tripleo
@@ -146,10 +154,19 @@ public class DeduceTypes {
 							System.out.println("99 "+n);
 						}
 					} else if (iv instanceof ProcedureCallExpression) {
-//						LookupResultList lrl = parent.getContext().lookup(((ProcedureCallExpression) iv).getLeft());
-//						for (LookupResult n: lrl.results()) {
+						final IExpression left = ((ProcedureCallExpression) iv).getLeft();
+						if (left.getKind() == ExpressionKind.IDENT) {
+							final String text = ((IdentExpression)left).getText();
+							LookupResultList lrl = parent.getContext().lookup(text);
 							System.out.println("98 "+/*n*/iv);
-//						}
+							for (LookupResult n: lrl.results()) {
+								System.out.println("97 "+n);
+//								Helpers.printXML(iv, new TabbedOutputStream(System.out));
+							}
+							final Collection<IExpression> expressions = ((ProcedureCallExpression) iv).getArgs().expressions();
+							List<OS_Type> q = expressions.stream().map(n -> deduce(n, parent.getContext())).collect(Collectors.toList());
+							int y=2;
+						}
 					}
 				}
 			} else {
@@ -168,6 +185,13 @@ public class DeduceTypes {
 		}
 	}
 	
+	private OS_Type deduce(IExpression n, Context context) {
+		if (n.getKind() == ExpressionKind.IDENT) {
+			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
+		}
+		return null;
+	}
+
 	private void addImport(ImportStatement imp, OS_Module parent) {
 //		throw new NotImplementedException();
 		if (imp.getRoot() == null) {
