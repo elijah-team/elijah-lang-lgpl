@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
 
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
@@ -75,7 +75,12 @@ public class VariableSequence implements BlockMember, StatementItem, FunctionIte
 	}
 
 	@Override public String toString() {
-		return (stmts.stream().map(n -> n.getName()).collect(Collectors.toList())).toString();
+		List<String> r = new ArrayList<String>();
+		for (VariableStatement stmt : stmts) {
+			r.add(stmt.getName());
+		}
+		return r.toString();
+//		return (stmts.stream().map(n -> n.getName()).collect(Collectors.toList())).toString();
 	}
 }
 

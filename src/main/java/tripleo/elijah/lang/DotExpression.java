@@ -3,10 +3,6 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-
-import tripleo.elijah.util.TabbedOutputStream;
-
 /**
  * @author olu
  *
@@ -17,6 +13,7 @@ public class DotExpression extends AbstractBinaryExpression {
 	public DotExpression(IExpression ee, IdentExpression identExpression) {
 		left = ee;
 		right = identExpression;
+		type = ExpressionKind.DOT_EXP;
 	}
 
 	//

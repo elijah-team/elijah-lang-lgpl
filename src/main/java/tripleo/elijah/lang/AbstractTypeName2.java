@@ -1,7 +1,5 @@
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.NotImplementedException;
-
 import java.util.*;
 
 /*

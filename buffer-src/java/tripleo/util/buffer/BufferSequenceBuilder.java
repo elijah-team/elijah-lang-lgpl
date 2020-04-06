@@ -23,6 +23,7 @@ import tripleo.elijah.gen.nodes.ArgumentNode;
  */
 public class BufferSequenceBuilder {
 	
+	private int semi_eol_count = 0;
 	private String _built;
 	private Map<String, Buffer> parts;
 	private Map<Integer, String> part_names;
@@ -54,10 +55,10 @@ public class BufferSequenceBuilder {
 	}
 
 	public BufferSequenceBuilder semieol() {
-		String key = "klkkl";
+		String key = "klkkl"+ (++semi_eol_count);
 		// TODO Auto-generated method stub
 		parts.put(key , new DefaultBuffer(";\n"));
-		part_names.put(part_names.size(), key);
+		part_names.put(part_names.size()+1, key);
 		return this;
 	}
 
@@ -70,18 +71,6 @@ public class BufferSequenceBuilder {
 		// TODO Auto-generated method stub
 		parts.put(part_name, new DefaultBuffer(setTo+sep));		
 	}
-
-//	public String build() {
-//		// TODO Auto-generated method stub
-//		if (_built != null)
-//			return _built;
-//		//
-//		StringBuffer sb = new StringBuffer();
-//		for (Buffer element : parts.values()) {
-//			sb.append(element.getText());
-//		}
-//		return sb.toString();
-//	}
 
 	public BufferSequence build() {
 		BufferSequence bsq = new BufferSequence();
@@ -102,11 +91,11 @@ public class BufferSequenceBuilder {
 	}
 
 	public String fieldNamed(String string) {
-		return parts.get(string).toString();
+		return parts.get(string).getText();
 	}
 
 	public boolean fieldIsSemiEol(int i) {
-		return part_names.get(i).equals("klklkl");
+		return part_names.get(i).matches("klklkl[0-9]+");
 	}
 
 }

@@ -9,12 +9,7 @@
 package tripleo.elijah;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,7 +24,6 @@ import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.gen.nodes.*;
 import tripleo.elijah.lang.NumericExpression;
 import tripleo.elijah.lang.OS_Integer;
-import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.buffer.*;
 
 import static tripleo.elijah.gen.nodes.Helpers.List_of;

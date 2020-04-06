@@ -6,7 +6,6 @@ package tripleo.elijah.contexts;
 import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.FunctionItem;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Element2;

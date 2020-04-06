@@ -8,23 +8,18 @@ import antlr.TokenStreamIOException;
 import antlr.TokenStreamRecognitionException;
 import antlr.CharStreamException;
 import antlr.CharStreamIOException;
-import antlr.ANTLRException;
 import java.io.Reader;
 import java.util.Hashtable;
-import antlr.CharScanner;
 import antlr.InputBuffer;
 import antlr.ByteBuffer;
 import antlr.CharBuffer;
 import antlr.Token;
-import antlr.CommonToken;
 import antlr.RecognitionException;
 import antlr.NoViableAltForCharException;
-import antlr.MismatchedCharException;
 import antlr.TokenStream;
 import antlr.ANTLRHashString;
 import antlr.LexerSharedInputState;
 import antlr.collections.impl.BitSet;
-import antlr.SemanticException;
 
 public class ElijjahLexer extends antlr.CharScanner implements ElijjahTokenTypes, TokenStream
  {
@@ -1071,7 +1066,7 @@ tryAgain:
 		
 		match("//");
 		{
-		_loop255:
+		_loop256:
 		do {
 			if ((_tokenSet_0.member(LA(1)))) {
 				{
@@ -1079,7 +1074,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop255;
+				break _loop256;
 			}
 			
 		} while (true);
@@ -1125,7 +1120,7 @@ tryAgain:
 		
 		match("/*");
 		{
-		_loop261:
+		_loop262:
 		do {
 			if ((LA(1)=='\r') && (LA(2)=='\n') && ((LA(3) >= '\u0003' && LA(3) <= '\u00ff')) && ((LA(4) >= '\u0003' && LA(4) <= '\u00ff'))) {
 				match('\r');
@@ -1149,7 +1144,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop261;
+				break _loop262;
 			}
 			
 		} while (true);
@@ -1240,17 +1235,17 @@ tryAgain:
 		case 'u':
 		{
 			{
-			int _cnt271=0;
-			_loop271:
+			int _cnt272=0;
+			_loop272:
 			do {
 				if ((LA(1)=='u')) {
 					match('u');
 				}
 				else {
-					if ( _cnt271>=1 ) { break _loop271; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+					if ( _cnt272>=1 ) { break _loop272; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 				}
 				
-				_cnt271++;
+				_cnt272++;
 			} while (true);
 			}
 			mHEX_DIGIT(false);
@@ -1330,7 +1325,7 @@ tryAgain:
 		
 		match('"');
 		{
-		_loop267:
+		_loop268:
 		do {
 			if ((LA(1)=='\\')) {
 				mESC(false);
@@ -1341,7 +1336,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop267;
+				break _loop268;
 			}
 			
 		} while (true);
@@ -1452,7 +1447,7 @@ tryAgain:
 		}
 		}
 		{
-		_loop285:
+		_loop286:
 		do {
 			switch ( LA(1)) {
 			case 'a':  case 'b':  case 'c':  case 'd':
@@ -1496,7 +1491,7 @@ tryAgain:
 			}
 			default:
 			{
-				break _loop285;
+				break _loop286;
 			}
 			}
 		} while (true);
@@ -1523,17 +1518,17 @@ tryAgain:
 			{
 			if (((LA(1) >= '0' && LA(1) <= '9'))) {
 				{
-				int _cnt289=0;
-				_loop289:
+				int _cnt290=0;
+				_loop290:
 				do {
 					if (((LA(1) >= '0' && LA(1) <= '9'))) {
 						matchRange('0','9');
 					}
 					else {
-						if ( _cnt289>=1 ) { break _loop289; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+						if ( _cnt290>=1 ) { break _loop290; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 					}
 					
-					_cnt289++;
+					_cnt290++;
 				} while (true);
 				}
 				{
@@ -1593,17 +1588,17 @@ tryAgain:
 					}
 					}
 					{
-					int _cnt296=0;
-					_loop296:
+					int _cnt297=0;
+					_loop297:
 					do {
 						if ((_tokenSet_5.member(LA(1))) && (true) && (true) && (true)) {
 							mHEX_DIGIT(false);
 						}
 						else {
-							if ( _cnt296>=1 ) { break _loop296; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+							if ( _cnt297>=1 ) { break _loop297; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 						}
 						
-						_cnt296++;
+						_cnt297++;
 					} while (true);
 					}
 					break;
@@ -1612,17 +1607,17 @@ tryAgain:
 				case '4':  case '5':  case '6':  case '7':
 				{
 					{
-					int _cnt298=0;
-					_loop298:
+					int _cnt299=0;
+					_loop299:
 					do {
 						if (((LA(1) >= '0' && LA(1) <= '7'))) {
 							matchRange('0','7');
 						}
 						else {
-							if ( _cnt298>=1 ) { break _loop298; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+							if ( _cnt299>=1 ) { break _loop299; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 						}
 						
-						_cnt298++;
+						_cnt299++;
 					} while (true);
 					}
 					break;
@@ -1642,13 +1637,13 @@ tryAgain:
 				matchRange('1','9');
 				}
 				{
-				_loop301:
+				_loop302:
 				do {
 					if (((LA(1) >= '0' && LA(1) <= '9'))) {
 						matchRange('0','9');
 					}
 					else {
-						break _loop301;
+						break _loop302;
 					}
 					
 				} while (true);
@@ -1690,13 +1685,13 @@ tryAgain:
 				{
 					match('.');
 					{
-					_loop306:
+					_loop307:
 					do {
 						if (((LA(1) >= '0' && LA(1) <= '9'))) {
 							matchRange('0','9');
 						}
 						else {
-							break _loop306;
+							break _loop307;
 						}
 						
 					} while (true);
@@ -1811,17 +1806,17 @@ tryAgain:
 		}
 		}
 		{
-		int _cnt314=0;
-		_loop314:
+		int _cnt315=0;
+		_loop315:
 		do {
 			if (((LA(1) >= '0' && LA(1) <= '9'))) {
 				matchRange('0','9');
 			}
 			else {
-				if ( _cnt314>=1 ) { break _loop314; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+				if ( _cnt315>=1 ) { break _loop315; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 			}
 			
-			_cnt314++;
+			_cnt315++;
 		} while (true);
 		}
 		if ( _createToken && _token==null && _ttype!=Token.SKIP ) {

@@ -101,7 +101,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	}
 	@Override
 	public Loop loop() {
-		loop=new Loop();
+		loop=new Loop((OS_Element) parent);
 		add(loop);
 		return loop;
 	}
@@ -147,5 +147,5 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	final List<StatementItem> items =new ArrayList<StatementItem>();
 
-	public final Scope parent;
+	final Scope parent;
 }

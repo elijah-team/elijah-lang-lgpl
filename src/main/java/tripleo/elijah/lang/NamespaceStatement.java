@@ -70,10 +70,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 	
 	public FunctionDef funcDef() {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
-//		NotImplementedException.raise();
-//		return null;
+		return new FunctionDef(this);
 	}
 	
 	public ProgramClosure XXX() {
@@ -110,6 +107,10 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	
 	public String getName() {
 		return name.getText();
+	}
+
+	public void setType(NamespaceTypes aType) {
+		type = aType;
 	}
 	
 }

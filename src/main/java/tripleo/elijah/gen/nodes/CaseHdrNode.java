@@ -16,7 +16,6 @@ package tripleo.elijah.gen.nodes;
 
 import tripleo.elijah.gen.Node;
 import tripleo.elijah.lang.VariableReference;
-import tripleo.elijah.util.NotImplementedException;
 
 public class CaseHdrNode implements Node {
 

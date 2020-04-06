@@ -47,7 +47,7 @@ public class BufferSequenceBuilderTest {
 		bsb.set("value", "= 3;");
 		assertEquals("int ", bsb.fieldNamed("type"));
 		assertEquals("i", bsb.fieldNamed("name"));
-		assertEquals("= 3; ", bsb.fieldNamed("value"));
+		assertEquals("= 3;", bsb.fieldNamed("value"));
 		assertTrue(bsb.fieldIsSemiEol(4));
 	}
 }

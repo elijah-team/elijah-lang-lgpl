@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import tripleo.elijah.comp.Compilation;
-import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.ParserClosure;
 import tripleo.elijah.stages.deduce.DeduceTypes;

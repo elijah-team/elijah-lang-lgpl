@@ -8,15 +8,20 @@
  */
 package tripleo.elijah.lang;
 
-// Referenced classes of package pak2:
-//			TypeName
+import java.util.ArrayList;
+import java.util.List;
 
 public class TypeNameList {
 
-	public TypeNameList() {
-	}
+	List<TypeName> p = new ArrayList<TypeName>();
 
 	public TypeName next() {
-		return null;
+		RegularTypeName t = new RegularTypeName();
+		p.add(t);
+		return t;
 	}
 }
+
+//
+//
+//

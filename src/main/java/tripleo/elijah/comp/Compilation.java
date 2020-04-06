@@ -22,7 +22,6 @@ import org.apache.commons.cli.Options;
 import tripleo.elijah.Out;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
 

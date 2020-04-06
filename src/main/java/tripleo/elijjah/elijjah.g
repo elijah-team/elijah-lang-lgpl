@@ -64,7 +64,10 @@ classStatement [ClassStatement cls]:
     RCURLY
     ;
 namespaceStatement [NamespaceStatement cls]:
-    "namespace" i1:IDENT {cls.setName(i1);}
+    "namespace" 
+    (  i1:IDENT  	{cls.setName(i1);/*cls.findType();*/}
+    | 				{cls.setType(NamespaceTypes.MODULE);}
+    )?
     LCURLY
 //     docstrings[cls]
      namespaceScope[cls]
