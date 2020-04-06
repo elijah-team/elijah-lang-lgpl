@@ -104,6 +104,10 @@ public class ExpressionNode implements IExpressionNode {
 			final int value = ((OS_Integer) iex).getValue();
 			return ((Integer) value).toString();
 		}
+		if (iex instanceof NumericExpression) {
+			final int value = ((NumericExpression) iex).getValue();
+			return ((Integer) value).toString();
+		}
 		if (iex instanceof AbstractBinaryExpression) {
 			if (iex.getLeft() instanceof VariableReference) {
 
@@ -114,11 +118,14 @@ public class ExpressionNode implements IExpressionNode {
 				if (abe.getRight() instanceof OS_Integer) {
 					right_side = ""+((OS_Integer) abe.getRight()).getValue();
 				}
-				if (abe.type == ExpressionKind.SUBTRACTION) {
+				if (abe.getRight() instanceof NumericExpression) {
+					right_side = ""+((NumericExpression) abe.getRight()).getValue();
+				}
+				if (abe.kind == ExpressionKind.SUBTRACTION) {
 					String s = String.format("%s - %s", left_side,	right_side);
 					return s;
 				}
-				if (abe.type == ExpressionKind.MULTIPLY) {
+				if (abe.kind == ExpressionKind.MULTIPLY) {
 					String s = String.format("%s * %s", left_side, right_side);
 					return s;
 				}
@@ -128,6 +135,10 @@ public class ExpressionNode implements IExpressionNode {
 		}
 		if (iex instanceof OS_Integer) {
 			final int value = ((OS_Integer) iex).getValue();
+			return ((Integer) value).toString();
+		}
+		if (iex instanceof NumericExpression) {
+			final int value = ((NumericExpression) iex).getValue();
 			return ((Integer) value).toString();
 		}
 		if (iex instanceof ProcedureCallExpression) {
