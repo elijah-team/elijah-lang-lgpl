@@ -57,7 +57,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	 * Test method for {@link tripleo.elijah.Main#parseFile(java.lang.String, java.io.InputStream)}.
 	 */
 	@Test
-	public final void testParseFile() {
+	public final void compilerShouldFindBothParseFiles() {
 		List<String> args = List_of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
 //		ErrSink eee = JMock.of(ErrSink.class);
 		ErrSink eee = new StdErrSink();
