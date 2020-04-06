@@ -249,12 +249,9 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		{
 			buf.append_s(node.header.getExpr().genType());//varref().getType().getText());
 			String string;
-			if (varref != null) {
-				string = varref.genText();
-			} else {
-				System.err.println("reached no mans land #6");
-				string = "----------------------6";
-			}
+			//
+			string = varref.genText();
+			//
 			buf.append_s(string);
 			buf.append(" = ");
 			buf.append(node.header.simpleGenText());
