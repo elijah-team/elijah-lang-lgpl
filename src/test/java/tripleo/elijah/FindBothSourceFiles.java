@@ -130,11 +130,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		return r;
 	}
 
-//	private List List_of(Inherited e1) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
 	void factorial_r(CompilerContext cctx, GenBuffer gbn) {
 		ModuleRef prelude = new ModuleRef(null, -1);
 		TypeRef   u64     = new TypeRef(prelude, prelude, "u64", 81);
