@@ -24,6 +24,7 @@ import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.gen.nodes.*;
 import tripleo.elijah.lang.NumericExpression;
 import tripleo.elijah.lang.OS_Integer;
+import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.util.buffer.*;
 
 import static tripleo.elijah.gen.nodes.Helpers.List_of;
@@ -71,7 +72,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 
 	void main2_el(CompilerContext cctx, GenBuffer gbn) {
 		ModuleRef prelude = new ModuleRef(null, -1);
-		TypeRef   sys_int = new TypeRef(prelude, prelude, "SystemInteger", 80);
+		TypeRef   sys_int = new TypeRef(prelude, prelude, "SystemInteger", BuiltInTypes.SystemInteger.getCode());
 		ModuleRef main2   = new ModuleRef("main2/main2.elijjah", 10000);
 		TypeRef   main    = new TypeRef(main2, main2, "Main", 100);
 				
