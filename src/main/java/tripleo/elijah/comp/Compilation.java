@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import antlr.ANTLRException;
 import org.apache.commons.cli.CommandLine;
@@ -98,10 +99,13 @@ public class Compilation {
 
 		} else {
 			final String file_name = f.getName();
-			int fnl = file_name.length();
-			if (fnl > EXTENSION.length()
-					&& file_name.substring(fnl - EXTENSION.length())
-							.equals(EXTENSION)) {
+			final boolean matches = Pattern.matches(".+\\.elijah$", file_name);
+//			System.err.print(String.format(" %s %s matches *.elijah\n", file_name, matches ? "does" : "doesn't"));
+//			int fnl = file_name.length();
+//			if (fnl > EXTENSION.length()
+//					&& file_name.substring(fnl - EXTENSION.length())
+//							.equals(EXTENSION)) {
+			if (matches) {
 				System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
 				parseFile(file_name, new FileInputStream(f));
 			}
