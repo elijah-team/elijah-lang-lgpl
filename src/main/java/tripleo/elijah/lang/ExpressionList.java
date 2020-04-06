@@ -12,6 +12,7 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class ExpressionList implements Iterable<IExpression> {
 		}
 	}
 
+	public Collection<IExpression> expressions() {
+		return exprs;
+	}
+	
 	@Override
 	public Iterator<IExpression> iterator() {
 		return exprs.iterator();
