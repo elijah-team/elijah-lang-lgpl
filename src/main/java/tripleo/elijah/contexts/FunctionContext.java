@@ -9,6 +9,7 @@ import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.FunctionItem;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.NamespaceStatement;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Element2;
 import tripleo.elijah.lang.VariableSequence;
 import tripleo.elijah.lang.VariableStatement;
@@ -41,7 +42,7 @@ public class FunctionContext extends Context {
 				}
 			} else if (((OS_Element2)item).name() != null) {
 				if (((OS_Element2)item).name().equals(name)) {
-					Result.add(name, level, item);
+					Result.add(name, level, (OS_Element) item); // TODO exception waiting to happen
 				}
 			}
 		}

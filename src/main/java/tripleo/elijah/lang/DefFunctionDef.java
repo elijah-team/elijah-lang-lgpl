@@ -76,24 +76,24 @@ public class DefFunctionDef implements ClassItem {
 			}
 		}
 
-		@Override
-		public void visitGen(ICodeGen visit) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public OS_Element getParent() {
-			// TODO this is unimplemented
-			NotImplementedException.raise();
-			return null;
-		}
-
-		@Override
-		public Context getContext() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+//		@Override
+//		public void visitGen(ICodeGen visit) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		@Override
+//		public OS_Element getParent() {
+//			// TODO this is unimplemented
+//			NotImplementedException.raise();
+//			return null;
+//		}
+//
+//		@Override
+//		public Context getContext() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
 
 	}
 	

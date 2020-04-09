@@ -100,11 +100,11 @@ private Attached _a = new Attached(new LoopContext(this));
 		NotImplementedException.raise();
 	}
 
-	@Override
-	public void visitGen(ICodeGen visit) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
-	}
+//	@Override
+//	public void visitGen(ICodeGen visit) {
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
+//	}
 	
 	public String getIterName() {
 		return iterName;
@@ -171,12 +171,12 @@ private Attached _a = new Attached(new LoopContext(this));
 		}
 	}
 
-	@Override
+//	@Override
 	public OS_Element getParent() {
 		return parent;
 	}
 
-	@Override
+//	@Override
 	public Context getContext() {
 		return _a ._context;
 	}

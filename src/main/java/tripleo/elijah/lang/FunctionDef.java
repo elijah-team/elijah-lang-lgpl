@@ -78,19 +78,19 @@ public class FunctionDef implements ClassItem {
 			expr = aexpr;
 		}
 
-		@Override
-		public Context getContext() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+//		@Override
+//		public Context getContext() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
+//
+//		@Override
+//		public OS_Element getParent() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
 
-		@Override
-		public OS_Element getParent() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
+//		@Override
 		public void print_osi(TabbedOutputStream aTos) throws IOException {
 			// TODO Auto-generated method stub
 			int y=2;
@@ -123,7 +123,7 @@ public class FunctionDef implements ClassItem {
 			//return sb.toString();
 		}
 
-		@Override
+//		@Override
 		public void visitGen(ICodeGen visit) {
 			// TODO Auto-generated method stub
 			

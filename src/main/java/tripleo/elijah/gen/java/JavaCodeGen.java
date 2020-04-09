@@ -150,11 +150,6 @@ public class JavaCodeGen implements ICodeGen {
 				System.out.println("}");
 			} else throw new NotImplementedException();
 		} else {
-			if (elementDone(element)) {
-				throw new NotImplementedException();
-			} else {
-				// element.visit(this);
-			}
 			System.out.println(element);
 
 		}
