@@ -12,7 +12,6 @@ public class DeduceTypesTest {
 
 	@Test
 	public void testDeduce() {
-//		fail("Not yet implemented"); // TODO
 		DeduceTypes d = new DeduceTypes(null);
 		OS_Type x = d.deduceExpression(new NumericExpression(3), null);
 		System.out.println(x);
