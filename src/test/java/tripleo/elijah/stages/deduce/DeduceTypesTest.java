@@ -3,9 +3,9 @@ package tripleo.elijah.stages.deduce;
 import org.junit.Assert;
 import org.junit.Test;
 
+import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.FunctionContext;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.NumericExpression;
@@ -28,21 +28,19 @@ public class DeduceTypesTest {
 
 	@Test
 	public void testDeduceIdentExpression() {
-		DeduceTypes d = new DeduceTypes(null);
 		OS_Module mod = new OS_Module();
+		DeduceTypes d = new DeduceTypes(mod);
 		ClassStatement cs = new ClassStatement(mod);
 		cs.setName(Helpers.makeToken("Test"));
 		final FunctionDef fd = cs.funcDef();
 		fd.setName(Helpers.makeToken("test"));
-		FunctionContext fc = (FunctionContext) fd.getContext(); // new FunctionContext(fd); // TODO needs to be mocked
-		VariableSequence vss = new VariableSequence();
-		final VariableStatement vs = new VariableStatement(vss);
+		VariableSequence vss = fd.scope().statementClosure().varSeq();
+		final VariableStatement vs = vss.next();
 		vs.setName(Helpers.makeToken("x"));
-		fd.add(vss)
 		final Qualident qu = new Qualident();
 		qu.append(Helpers.makeToken("Integer"));
 		vs.typeName().setName(qu);
-//		fc.add(vs, "x");
+		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		OS_Type x = d.deduceExpression(new IdentExpression(Helpers.makeToken("x")), fc);
 		System.out.println(x);
 		Assert.assertEquals(x.getBType(), new OS_Type(BuiltInTypes.SystemInteger).getBType());
