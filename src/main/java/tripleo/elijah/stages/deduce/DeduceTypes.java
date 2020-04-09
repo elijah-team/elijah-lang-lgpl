@@ -188,6 +188,7 @@ public class DeduceTypes {
 	public OS_Type deduceExpression(IExpression n, Context context) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
+			NotImplementedException.raise();
 		} else if (n.getKind() == ExpressionKind.NUMERIC) {
 			return new OS_Type(BuiltInTypes.SystemInteger);
 		}
