@@ -164,7 +164,7 @@ public class DeduceTypes {
 //								Helpers.printXML(iv, new TabbedOutputStream(System.out));
 							}
 							final Collection<IExpression> expressions = ((ProcedureCallExpression) iv).getArgs().expressions();
-							List<OS_Type> q = expressions.stream().map(n -> deduce(n, parent.getContext())).collect(Collectors.toList());
+							List<OS_Type> q = expressions.stream().map(n -> deduceExpression(n, parent.getContext())).collect(Collectors.toList());
 							int y=2;
 						}
 					}
@@ -185,7 +185,7 @@ public class DeduceTypes {
 		}
 	}
 	
-	private OS_Type deduce(IExpression n, Context context) {
+	public OS_Type deduceExpression(IExpression n, Context context) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
 		}

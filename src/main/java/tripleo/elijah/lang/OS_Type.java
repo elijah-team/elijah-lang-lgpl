@@ -57,6 +57,10 @@ public class OS_Type {
 		return String.format("%s %s %s %s", ttype, etype, type, kind);
 	}
 
+	public BuiltInTypes getBType() {
+		return type;
+	}
+
 }
 
 //
