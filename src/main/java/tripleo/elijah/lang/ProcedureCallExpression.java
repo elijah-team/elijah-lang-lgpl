@@ -16,7 +16,7 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 // TODO is ExpressionList an IExpression?
-public class ProcedureCallExpression implements StatementItem, FunctionItem, IExpression {
+public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/ IExpression {
 	
 	private IExpression _left;
 	private ExpressionList args=new ExpressionList();
@@ -72,11 +72,11 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 		tos.put_string_ln("}");
 	}
 
-	@Override
-	public void visitGen(ICodeGen visit) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
-	}
+//	@Override
+//	public void visitGen(ICodeGen visit) {
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
+//	}
 
 	@Override
 	public ExpressionKind getKind() {
@@ -108,40 +108,6 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 		return String.format("ProcedureCallExpression{%s %s}", getLeft(), args.toString()/*getRight()*/);
 	}
 	
-//	/**
-//	 * do not call
-//	 *
-//	 * @return NotImplementedException
-//	 */
-//	@Override
-//	public IExpression getRight() {
-//		// TODO fix this
-//		throw new NotImplementedException();
-////		return /* args */null;
-//	}
-//
-//	/**
-//	 * do not call
-//	 *
-//	 * @param iexpression
-//	 * @throws NotImplementedException always
-//	 */
-//	@Override
-//	public void setRight(IExpression iexpression) {
-//		// TODO fix this
-////		args = iexpression;
-//		throw new NotImplementedException();
-//	}
-	
-//	/**
-//	 * same as setArgs(ExpressionList)
-//	 *
-//	 * @param ael the new value
-//	 */
-//	public void setRight(ExpressionList ael) {
-//		args = ael;
-//	}
-	
 	/**
 	 * change then argument list all at once
 	 *
@@ -150,18 +116,6 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 	public void setArgs(ExpressionList ael) {
 		args = ael;
 	}
-	
-//	@Override
-//	public void shift(ExpressionType aType) {
-//		// TODO Auto-generated method stub
-//		throw new NotImplementedException();
-//	}
-//
-//	@Override
-//	public void set(IBinaryExpression aEx) {
-//		// TODO Auto-generated method stub
-//		throw new NotImplementedException();
-//	}
 	
 	public String getReturnTypeString() {
 		return "int"; // TODO hardcoded
@@ -177,12 +131,6 @@ public class ProcedureCallExpression implements StatementItem, FunctionItem, IEx
 	
 	public ExpressionList getArgs() {
 		return args;
-	}
-
-	@Override
-	public Context getContext() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
