@@ -17,10 +17,6 @@ import java.util.List;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
 
-
-// Referenced classes of package pak2:
-//			BlockMember
-
 public class VariableSequence implements BlockMember, StatementItem, FunctionItem, ClassItem {
 
 	public VariableSequence() {
@@ -84,3 +80,6 @@ public class VariableSequence implements BlockMember, StatementItem, FunctionIte
 	}
 }
 
+//
+//
+//
