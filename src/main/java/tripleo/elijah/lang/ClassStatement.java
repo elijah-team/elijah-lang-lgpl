@@ -55,28 +55,18 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		}
 	}
 
+	/**
+	 * A simple add-to-list operation
+	 * @param aDef
+	 */
 	public void add(ClassItem aDef) {
 		items.add (aDef);
 	}
 
-//	@Override
-//	public void add(StatementItem aItem) {
-//		if (aItem instanceof ClassItem) {
-//			ClassItem new_name = (ClassItem) aItem;
-//			items.add (new_name);
-//		} else
-//			throw new IllegalArgumentException(""+aItem.getClass().getName()+" cannot be added to class");
-//	}
-
-//	@Override
+	@Override
 	public void addDocString(Token aText) {
 		mDocs.add(aText.getText());
 	}
-
-//	@Override
-//	public BlockStatement blockStatement() {
-//		return null;
-//	}
 
 	public ClassInheritance classInheritance() {
 		// TODO once
