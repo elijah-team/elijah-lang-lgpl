@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import antlr.Token;
+import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.util.NotImplementedException;

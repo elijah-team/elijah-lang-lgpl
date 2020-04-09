@@ -1,7 +1,14 @@
 /**
  * 
  */
-package tripleo.elijah.lang;
+package tripleo.elijah.contexts;
+
+import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.Context;
+import tripleo.elijah.lang.LookupResultList;
+import tripleo.elijah.lang.ModuleItem;
+import tripleo.elijah.lang.NamespaceStatement;
+import tripleo.elijah.lang.OS_Module;
 
 /**
  * @author Tripleo
