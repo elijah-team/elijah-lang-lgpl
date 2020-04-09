@@ -124,7 +124,7 @@ public class ExpressionNodeBuilder {
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
 		ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
-		return new AbstractBinaryExpression(left, middle1, new StringExpression(makeToken(right.text()))); // TODO !!!
+		return new AbstractBinaryExpression(left, middle1, new StringExpression(Helpers.makeToken(right.text()))); // TODO !!!
 	}
 
 	@NotNull
@@ -370,12 +370,6 @@ public class ExpressionNodeBuilder {
 		return new NumericExpression(i);
 	}
 	
-	private static Token makeToken(String aText) {
-		CommonToken t = new CommonToken();
-		t.setText(aText);
-		return t;
-	}
-
 	@NotNull
 	@Contract("_, _, _ -> new")
 	public static VariableReferenceNode3 varref(String string, Node container, TypeRef typeRef) {

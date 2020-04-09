@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.thoughtworks.xstream.XStream;
 
+import antlr.CommonToken;
+import antlr.Token;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
@@ -87,6 +89,12 @@ public class Helpers {
 			r.add(e);
 		}
 		return r;
+	}
+
+	public static Token makeToken(String aText) {
+		CommonToken t = new CommonToken();
+		t.setText(aText);
+		return t;
 	}
 
 //	public static List<String> List_of(String string, String string2, String string3) {
