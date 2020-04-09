@@ -24,12 +24,69 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 public class FunctionDef implements ClassItem {
+	private final class FunctionDefScope implements Scope {
+
+		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
+
+		@Override
+		public void add(StatementItem aItem) {
+			if (aItem instanceof FunctionItem)
+				items.add((FunctionItem) aItem);
+			else
+				System.err.println(String.format("adding false StatementItem %s",
+					aItem.getClass().getName()));
+		}
+		
+		@Override
+		public void addDocString(Token aS) {
+			docstrings.add(aS.getText());
+		}
+		
+		@Override
+		public BlockStatement blockStatement() {
+			return new BlockStatement(this);
+		}
+		
+		@Override
+		public InvariantStatement invariantStatement() {
+			return null;
+		}
+
+		@Override
+		public StatementClosure statementClosure() {
+			return asc;
+		}
+
+		@Override
+		public void statementWrapper(IExpression aExpr) {
+			add(new StatementWrapper(aExpr));
+//			throw new NotImplementedException(); // TODO
+		}
+
+		@Override
+		public TypeAliasExpression typeAlias() {
+			return null;
+		}
+	}
+	
 	static class StatementWrapper implements StatementItem, FunctionItem {
 
 		private IExpression expr;
 
 		public StatementWrapper(IExpression aexpr) {
 			expr = aexpr;
+		}
+
+		@Override
+		public Context getContext() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public OS_Element getParent() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 		@Override
@@ -57,12 +114,6 @@ public class FunctionDef implements ClassItem {
 		}
 
 		@Override
-		public void visitGen(ICodeGen visit) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			if (expr instanceof AbstractBinaryExpression) {
@@ -72,84 +123,52 @@ public class FunctionDef implements ClassItem {
 		}
 
 		@Override
-		public OS_Element getParent() {
+		public void visitGen(ICodeGen visit) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Context getContext() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	}
-	
-	private final class FunctionDefScope implements Scope {
-
-		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
-
-		@Override
-		public void add(StatementItem aItem) {
-			if (aItem instanceof FunctionItem)
-				items.add((FunctionItem) aItem);
-			else
-				System.err.println(String.format("adding false StatementItem %s",
-					aItem.getClass().getName()));
-		}
-		
-		@Override
-		public TypeAliasExpression typeAlias() {
-			return null;
-		}
-		
-		@Override
-		public InvariantStatement invariantStatement() {
-			return null;
-		}
-		
-		@Override
-		public void addDocString(Token aS) {
-			docstrings.add(aS.getText());
-		}
-
-		@Override
-		public BlockStatement blockStatement() {
-			return new BlockStatement(this);
-		}
-
-		@Override
-		public StatementClosure statementClosure() {
-			return asc;
-		}
-
-		@Override
-		public void statementWrapper(IExpression aExpr) {
-			add(new StatementWrapper(aExpr));
-//			throw new NotImplementedException(); // TODO
+			
 		}
 	}
 
+	public Attached _a = new Attached(new FunctionContext(this));
+	private TypeName _returnType = new RegularTypeName();
 	private List<String> docstrings = new ArrayList<String>();
 	public String funName;
 	private List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
-//	private FunctionDefScope mScope;
-	private OS_Element/*ClassStatement*/ parent;
 	private final FunctionDefScope mScope2 = new FunctionDefScope();
-	private TypeName _returnType = new RegularTypeName();
-	public Attached _a = new Attached(new FunctionContext(this));
+	//	private FunctionDefScope mScope;
+	private OS_Element/*ClassStatement*/ parent;
 
-	public FunctionDef(OS_Element aStatement) {
-		parent = aStatement;
-		if (aStatement instanceof ClassStatement) {
+	public FunctionDef(OS_Element aElement) {
+		parent = aElement;
+		if (aElement instanceof ClassStatement) {
 			((ClassStatement)parent).add(this);
 		} else {
-			System.err.println("adding FunctionDef to "+aStatement.getClass().getName());
+			System.err.println("adding FunctionDef to "+aElement.getClass().getName());
 		}
 	}
 
 	public FormalArgList fal() {
 		return mFal;
+	}
+
+	@Override
+	public Context getContext() {
+		return _a._context;
+	}
+
+	public List<FunctionItem> getItems() {
+		return items;
+	}
+
+	@Override
+	public OS_Element getParent() {
+		return parent;
+	}
+
+	public List<OS_Element2> items() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -165,6 +184,11 @@ public class FunctionDef implements ClassItem {
 		}
 		tos.dec_tabs();
 		tos.put_string_ln((String.format("} // function %s",  funName)));
+	}
+
+	public TypeName returnType() {
+		// TODO Auto-generated method stub
+		return _returnType ;
 	}
 
 	public Scope scope() {
@@ -188,29 +212,9 @@ public class FunctionDef implements ClassItem {
 		
 	}
 
-	public TypeName returnType() {
-		// TODO Auto-generated method stub
-		return _returnType ;
-	}
-
-	@Override
-	public OS_Element getParent() {
-		return parent;
-	}
-
-	@Override
-	public Context getContext() {
-		return _a._context;
-	}
-
-	public List<OS_Element2> items() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<FunctionItem> getItems() {
-		return items;
-	}
-
 	
 }
+
+//
+//
+//
