@@ -132,6 +132,7 @@ scope[Scope sc]
     : LCURLY docstrings[sc]
       (statement[sc.statementClosure()]
       | expr=expression {sc.statementWrapper(expr);}
+      | classStatement[new ClassStatement(sc.getParent())]
       )*
       RCURLY
     ;
@@ -631,7 +632,7 @@ frobeIteration[StatementClosure cr]
     scope[loop.scope()]
     ;
 procCallEx[ProcedureCallExpression pce]
-	: LPAREN expressionList[pce.exprList()] RPAREN
+	: LPAREN (expressionList[pce.exprList()])? RPAREN
 	;
 varStmt_i[VariableStatement vs]
 	: i:IDENT                  {vs.setName(i);}

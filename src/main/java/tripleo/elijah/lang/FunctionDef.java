@@ -68,9 +68,20 @@ public class FunctionDef implements ClassItem {
 		public TypeAliasExpression typeAlias() {
 			return null;
 		}
+
+		/* (non-Javadoc)
+		 * @see tripleo.elijah.lang.Scope#getParent()
+		 */
+		@Override
+		public OS_Element getParent() {
+			// TODO Auto-generated method stub
+			return FunctionDef.this;
+		}
+		
+		
 	}
 	
-	static class StatementWrapper implements StatementItem, FunctionItem {
+	public static class StatementWrapper implements StatementItem, FunctionItem {
 
 		private IExpression expr;
 
@@ -123,11 +134,19 @@ public class FunctionDef implements ClassItem {
 			//return sb.toString();
 		}
 
-//		@Override
-		public void visitGen(ICodeGen visit) {
-			// TODO Auto-generated method stub
-			
+		/**
+		 * @return the expr
+		 */
+		public IExpression getExpr() {
+			return expr;
 		}
+
+//		@Override
+//		public void visitGen(ICodeGen visit) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+		
 	}
 
 	public Attached _a = new Attached(new FunctionContext(this));

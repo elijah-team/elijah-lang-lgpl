@@ -8,12 +8,16 @@
  */
 package tripleo.elijah.lang;
 
+import java.io.IOException;
+
 // Referenced classes of package pak2:
 //			StatementClosure, BlockStatement
 
 import tripleo.elijah.Documentable;
+import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.TabbedOutputStream;
 
-public interface Scope extends Documentable {
+public interface Scope extends Documentable, OS_Element {
 
 	void statementWrapper(IExpression aExpr);
 
@@ -26,4 +30,28 @@ public interface Scope extends Documentable {
 	TypeAliasExpression typeAlias();
 	
 	InvariantStatement invariantStatement();
+	
+	@Override
+	default Context getContext() {
+		// TODO Auto-generated method stub
+		return null;
+	} 
+	
+	@Override
+	default OS_Element getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}	
+	
+	@Override
+	default void print_osi(TabbedOutputStream aTos) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	default void visitGen(ICodeGen visit) {
+		// TODO Auto-generated method stub
+		
+	}
 }
