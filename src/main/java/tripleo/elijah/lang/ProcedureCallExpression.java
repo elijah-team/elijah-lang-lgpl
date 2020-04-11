@@ -125,6 +125,14 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return repr_();
+	}
+
 	public boolean is_simple() {
 		return false; // TODO is this correct?
 	}
