@@ -147,7 +147,7 @@ programStatement[ProgramClosure pc]:
     importStatement[pc.importStatement(out.module())]
     | namespaceStatement[pc.namespaceStatement(out.module())]
     | classStatement[pc.classStatement(out.module())]
-    | aliasStatement[pc.aliasStatement()]
+    | aliasStatement[pc.aliasStatement(out.module())]
     ;
 varStmt[StatementClosure cr]
         {VariableSequence vsq=null;}
@@ -219,8 +219,8 @@ ident2 returns [String ident]
 	:
 	r1:IDENT {ident=r1.getText();}
 	;
-aliasStatement[ProgramClosure pc]
-	: "alias" i1:IDENT BECOMES expr=expression {}
+aliasStatement[AliasStatement pc]
+	: "alias" i1:IDENT {pc.setName(i1);} BECOMES expr=expression {pc.setExpression(expr);}
 	;
 qualidentList[QualidentList qal]
 		{Qualident qid;}
@@ -547,7 +547,7 @@ primaryExpression returns [IExpression ee]
 	|   {ppc=new FuncExpr();} funcExpr[ppc] {ee=ppc;}
 	;
 funcExpr[FuncExpr pc] // remove scope to use in `typeName's
-		{Scope sc = new Scope0();}
+		{Scope0 sc = new Scope0();}
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
 	  (opfal[pc.argList()]) scope[pc.scope()]

@@ -8,12 +8,7 @@
  */
 package tripleo.elijah;
 
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.ImportStatement;
-import tripleo.elijah.lang.NamespaceStatement;
-import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.lang.*;
 
 public class ProgramClosure {
 	public ClassStatement classStatement(OS_Element aParent) {
@@ -31,9 +26,9 @@ public class ProgramClosure {
 		return namespaceStatement;
 	}
 	
-	public ProgramClosure aliasStatement() {
-		NotImplementedException.raise();
-		return null;
+	public AliasStatement aliasStatement(OS_Module aParent) {
+		final AliasStatement aliasStatement = new AliasStatement(aParent);
+		return aliasStatement;
 	}
 }
 

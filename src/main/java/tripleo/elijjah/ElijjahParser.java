@@ -233,7 +233,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			case LITERAL_alias:
 			{
-				aliasStatement(pc.aliasStatement());
+				aliasStatement(pc.aliasStatement(out.module()));
 				break;
 			}
 			default:
@@ -1861,7 +1861,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void aliasStatement(
-		ProgramClosure pc
+		AliasStatement pc
 	) throws RecognitionException, TokenStreamException {
 		
 		Token  i1 = null;
@@ -1870,9 +1870,13 @@ public ElijjahParser(ParserSharedInputState state) {
 			match(LITERAL_alias);
 			i1 = LT(1);
 			match(IDENT);
+			if ( inputState.guessing==0 ) {
+				pc.setName(i1);
+			}
 			match(BECOMES);
 			expr=expression();
 			if ( inputState.guessing==0 ) {
+				pc.setExpression(expr);
 			}
 		}
 		catch (RecognitionException ex) {
