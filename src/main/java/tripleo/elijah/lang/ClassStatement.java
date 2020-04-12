@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 import antlr.Token;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.gen.ICodeGen;
@@ -21,10 +22,6 @@ import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 import tripleo.elijah.Documentable;
-
-// Referenced classes of package pak2:
-//			Scope, ExpressionWrapper, AbstractStatementClosure, StatementClosure, 
-//			BlockStatement
 
 /**
  * Represents a "class"
@@ -34,7 +31,7 @@ import tripleo.elijah.Documentable;
  * variables
  * 
  */
-public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, OS_Element, Documentable {
+public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, FunctionItem, OS_Element, Documentable {
 	
 	private OS_Package _packageName;
 	
@@ -112,7 +109,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return parent;
 	}
 	
-	public void setName(Token aText) {
+	public void setName(@NotNull Token aText) {
 		clsName=aText.getText();
 	}
 
