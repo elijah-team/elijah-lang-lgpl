@@ -106,7 +106,7 @@ public class DeduceTypes {
 		} else if (element instanceof Loop) {
 			Loop loop = (Loop)element;
 			if (loop.getType() == Loop.FROM_TO_TYPE) {
-				parent.getContext().add(new IdentExpression(makeToken(loop.getIterName())), loop.getIterName());
+				parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
 				String varname="vt"+loop.getIterName();
 				final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
 				if (loop.getToPart() instanceof NumericExpression) {
@@ -127,18 +127,40 @@ public class DeduceTypes {
 					System.out.println("\t"+item);
 				}
 				System.out.println("}");
+			} else if (loop.getType() == Loop.EXPR_TYPE) {
+				if (loop.getToPart() instanceof NumericExpression) {
+					String varname="vt0_TODO";
+					final NumericExpression toPart = (NumericExpression)loop.getToPart();
+				
+					System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
+							varname, 0,
+							varname, toPart.getValue(),  varname));
+					for (StatementItem item : loop.getItems()) {
+						System.out.println("\t"+item);
+					}
+					System.out.println("}");
+				} else {
+					System.out.println("95 "+loop.getToPart().getClass().getName());
+					throw new NotImplementedException();
+				}
 			} else throw new NotImplementedException();
+		}  else if (element instanceof FunctionDef.StatementWrapper) {
+			IExpression expr = ((FunctionDef.StatementWrapper) element).getExpr();
+			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
+				NotImplementedException.raise();
+			}
 		} else {
+			
 				// element.visit(this);
 			System.out.println(element);
 
 		}
 	}
 
-	Token makeToken(String s) {
-		CommonToken r = new CommonToken(s);
-		return r;
-	}
+//	Token makeToken(String s) {
+//		CommonToken r = new CommonToken(s);
+//		return r;
+//	}
 	
 	public void addFunctionItem_deduceVariableStatement(FunctionDef parent, VariableStatement vs) {
 		{
@@ -154,16 +176,19 @@ public class DeduceTypes {
 							System.out.println("99 "+n);
 						}
 					} else if (iv instanceof ProcedureCallExpression) {
-						final IExpression left = ((ProcedureCallExpression) iv).getLeft();
+						final ProcedureCallExpression pce = (ProcedureCallExpression) iv;
+						final IExpression left = pce.getLeft();
 						if (left.getKind() == ExpressionKind.IDENT) {
 							final String text = ((IdentExpression)left).getText();
 							LookupResultList lrl = parent.getContext().lookup(text);
 							System.out.println("98 "+/*n*/iv);
+							if (lrl.results().size() == 0 )
+								System.err.println("96 no results for "+text);
 							for (LookupResult n: lrl.results()) {
 								System.out.println("97 "+n);
 //								Helpers.printXML(iv, new TabbedOutputStream(System.out));
 							}
-							final Collection<IExpression> expressions = ((ProcedureCallExpression) iv).getArgs().expressions();
+							final Collection<IExpression> expressions = pce.getArgs().expressions();
 							List<OS_Type> q = expressions.stream().map(n -> deduceExpression(n, parent.getContext())).collect(Collectors.toList());
 							int y=2;
 						}
