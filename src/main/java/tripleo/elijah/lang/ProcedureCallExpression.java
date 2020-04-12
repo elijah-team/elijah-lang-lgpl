@@ -104,8 +104,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 
 	@Override
 	public String repr_() {
-		// TODO garbage method
-		return String.format("ProcedureCallExpression{%s %s}", getLeft(), args.toString()/*getRight()*/);
+		return toString();
 	}
 	
 	/**
@@ -130,7 +129,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	 */
 	@Override
 	public String toString() {
-		return repr_();
+		return String.format("ProcedureCallExpression{%s %s}", getLeft(), args != null ? args.toString() : "()");
 	}
 
 	public boolean is_simple() {
