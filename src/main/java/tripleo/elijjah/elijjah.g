@@ -544,15 +544,24 @@ primaryExpression returns [IExpression ee]
 	|	"this"
 	|	"null"
 	|	LPAREN/*!*/ ee=assignmentExpression RPAREN/*!*/ {ee=new SubExpression(ee);}
-	|   {ppc=new FuncExpr();} funcExpr[ppc]
+	|   {ppc=new FuncExpr();} funcExpr[ppc] {ee=ppc;}
 	;
-funcExpr[FuncExpr pc]
+funcExpr[FuncExpr pc] // remove scope to use in `typeName's
+		{Scope sc = new Scope0();}
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
-	  (LPAREN (typeNameList[pc.argList()])? RPAREN)
+	  (opfal[pc.argList()]) scope[pc.scope()]
 	  ((TOK_ARROW|TOK_COLON) typeName[pc.returnValue()] )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
-	  (LPAREN (typeNameList[pc.argList()])? RPAREN)
+	  (opfal[pc.argList()]) scope[pc.scope()]
+	| 
+	  LCURLY ( BOR formalArgList[sc.fal()] BOR )? 
+	  (statement[sc.statementClosure()]
+      | expr=expression {sc.statementWrapper(expr);}
+      | classStatement[new ClassStatement(sc.getParent())]
+      )*
+      RCURLY
+	
 	)
 	;
 
@@ -918,7 +927,8 @@ NUM_INT
 		|	('1'..'9') ('0'..'9'|'_')*  {isDecimal=true;}		// non-zero decimal
 		)
 		(	('l'|'L')
-		|   INTLIT_TY
+		|   //INTLIT_TY
+			('u'|'i') ("8"|"16"|"32"|"64"|"size")
 		// only check to see if it's a float if looks like decimal so far
 		|	{isDecimal}?
 			(	'.' ('0'..'9')* (EXPONENT)? (FLOAT_SUFFIX)?
@@ -929,10 +939,12 @@ NUM_INT
 		)?
 	;
 
+/*
 INTLIT_TY
 	: ('u'|'i') ("8"|"16"|"32"|"64"|"size")
 	;
-	
+*/
+
 // a couple protected methods to assist in matching floating point numbers
 protected
 EXPONENT
