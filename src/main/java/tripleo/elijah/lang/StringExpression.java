@@ -11,6 +11,7 @@ package tripleo.elijah.lang;
 import java.io.IOException;
 
 import antlr.Token;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 public class StringExpression extends AbstractExpression {
@@ -19,20 +20,20 @@ public StringExpression(Token g) {
 set(g.getText());
 }
 
-	public boolean is_simple() {
+	@Override public boolean is_simple() {
 		return true;
 	}
 
-	/*@Override*/
-	public  void print_osi(TabbedOutputStream tabbedoutputstream)
-			throws IOException {
-		assert false;
-	}
+//	@Override
+//	public void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException {
+//		throw new NotImplementedException(/*"StringExpression print_osi"*/);
+//	}
 
 	@Override
 	public  IExpression getLeft() {
-		assert false;
-		return this;
+//		assert false;
+//		return this;
+		throw new NotImplementedException();
 	}
 
 	@Override
@@ -41,8 +42,18 @@ set(g.getText());
 	}
 
 	@Override
-	public  String repr_() {return repr_;}
+	public String repr_() {return repr_;}
 
 	public void set(String g) {repr_ = g;}
-	String repr_;
+
+	@Override
+	public String toString() {
+		return String.format("<StringExpression %s>", repr_);
+	}
+
+	private String repr_;
 }
+
+//
+//
+//
