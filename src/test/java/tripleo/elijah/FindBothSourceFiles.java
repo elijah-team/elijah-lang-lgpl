@@ -78,7 +78,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 
 		c.feedCmdLine(args);
 		
-//		Assert.fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	void main2_el(CompilerContext cctx, GenBuffer gbn) {
