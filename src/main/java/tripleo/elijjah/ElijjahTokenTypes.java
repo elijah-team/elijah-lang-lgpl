@@ -125,6 +125,7 @@ public interface ElijjahTokenTypes {
 	int ESC = 121;
 	int HEX_DIGIT = 122;
 	int VOCAB = 123;
-	int EXPONENT = 124;
-	int FLOAT_SUFFIX = 125;
+	int INTLIT_TY = 124;
+	int EXPONENT = 125;
+	int FLOAT_SUFFIX = 126;
 }

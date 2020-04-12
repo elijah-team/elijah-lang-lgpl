@@ -477,15 +477,16 @@ postfixExpression returns [IExpression ee]
 	:	ee=primaryExpression // start with a primary
 
 		(	// qualified id (id.id.id.id...) -- build the name
-			DOT/*^*/ ( e:IDENT {ee=new DotExpression(ee, new IdentExpression(e));}
+			DOT/*^*/ 
+				( e:IDENT {ee=new DotExpression(ee, new IdentExpression(e));}
 			
-			(lp2:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
-				(el=expressionList2)? 
-{ProcedureCallExpression pce=new ProcedureCallExpression();
-pce.identifier(ee);
-pce.setArgs(el);
-ee=pce;}
-			RPAREN/*!*/)?
+					( lp2:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
+					  (el=expressionList2)? 
+							{ProcedureCallExpression pce=new ProcedureCallExpression();
+							pce.identifier(ee);
+							pce.setArgs(el);
+							ee=pce;}
+					 RPAREN/*!*/)?
 			
 			
 				| "this"
@@ -548,10 +549,10 @@ primaryExpression returns [IExpression ee]
 funcExpr[FuncExpr pc]
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
-	  (LPAREN typeNameList[pc.argList()] RPAREN)?
+	  (LPAREN (typeNameList[pc.argList()])? RPAREN)
 	  ((TOK_ARROW|TOK_COLON) typeName[pc.returnValue()] )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
-	  (LPAREN typeNameList[pc.argList()] RPAREN)?
+	  (LPAREN (typeNameList[pc.argList()])? RPAREN)
 	)
 	;
 
@@ -914,10 +915,10 @@ NUM_INT
 				)+
 			|	('0'..'7')+									// octal
 			)?
-		|	('1'..'9') ('0'..'9')*  {isDecimal=true;}		// non-zero decimal
+		|	('1'..'9') ('0'..'9'|'_')*  {isDecimal=true;}		// non-zero decimal
 		)
 		(	('l'|'L')
-
+		|   INTLIT_TY
 		// only check to see if it's a float if looks like decimal so far
 		|	{isDecimal}?
 			(	'.' ('0'..'9')* (EXPONENT)? (FLOAT_SUFFIX)?
