@@ -13,6 +13,7 @@ import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.Context;
+import tripleo.elijah.lang.DotExpression;
 import tripleo.elijah.lang.ExpressionKind;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.FunctionItem;
@@ -88,6 +89,9 @@ public class DeduceTypes {
 //				System.out.print("\n}\n\n");
 			} else if (element instanceof ClassStatement) {
 //				((ClassStatement) element).visitGen(this);
+				System.err.println("93 "+element.getClass().getName());
+			} else {
+				System.err.println("92 "+element.getClass().getName());
 			}
 		}
 	}
@@ -139,6 +143,9 @@ public class DeduceTypes {
 						System.out.println("\t"+item);
 					}
 					System.out.println("}");
+				} else if (loop.getToPart() instanceof DotExpression) {
+					System.out.println("94 "+loop.getToPart().getClass().getName());
+					NotImplementedException.raise();
 				} else {
 					System.out.println("95 "+loop.getToPart().getClass().getName());
 					throw new NotImplementedException();
