@@ -90,8 +90,6 @@ public class Compilation {
 	}
 
 	public void doFile(File f) throws Exception {
-		final String EXTENSION = ".elijah";
-		
 		if (f.isDirectory()) {
 			String[] files = f.list();
 			for (int i = 0; i < files.length; i++)
@@ -100,11 +98,6 @@ public class Compilation {
 		} else {
 			final String file_name = f.getName();
 			final boolean matches = Pattern.matches(".+\\.elijah$", file_name);
-//			System.err.print(String.format(" %s %s matches *.elijah\n", file_name, matches ? "does" : "doesn't"));
-//			int fnl = file_name.length();
-//			if (fnl > EXTENSION.length()
-//					&& file_name.substring(fnl - EXTENSION.length())
-//							.equals(EXTENSION)) {
 			if (matches) {
 				System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
 				parseFile(file_name, new FileInputStream(f));
