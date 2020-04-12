@@ -7,37 +7,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import antlr.CommonToken;
-import antlr.Token;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.nodes.Helpers;
-import tripleo.elijah.lang.ClassItem;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.DotExpression;
-import tripleo.elijah.lang.ExpressionKind;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.FunctionItem;
-import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.lang.IdentExpression;
-import tripleo.elijah.lang.ImportStatement;
-import tripleo.elijah.lang.LookupResult;
-import tripleo.elijah.lang.LookupResultList;
-import tripleo.elijah.lang.Loop;
-import tripleo.elijah.lang.ModuleItem;
-import tripleo.elijah.lang.NamespaceModify;
-import tripleo.elijah.lang.NamespaceStatement;
-import tripleo.elijah.lang.NumericExpression;
-import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.lang.OS_Type;
-import tripleo.elijah.lang.ProcedureCallExpression;
-import tripleo.elijah.lang.Qualident;
-import tripleo.elijah.lang.StatementItem;
-import tripleo.elijah.lang.VariableSequence;
-import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
 /**
  * @author Tripleo
@@ -151,10 +125,11 @@ public class DeduceTypes {
 					throw new NotImplementedException();
 				}
 			} else throw new NotImplementedException();
-		}  else if (element instanceof FunctionDef.StatementWrapper) {
-			IExpression expr = ((FunctionDef.StatementWrapper) element).getExpr();
+		}  else if (element instanceof StatementWrapper) {
+			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
 				NotImplementedException.raise();
+				expr.getLeft().setType(deduceExpression(((IBinaryExpression)expr).getRight(), parent.getContext()));
 			}
 		} else {
 			
@@ -217,12 +192,18 @@ public class DeduceTypes {
 		}
 	}
 	
-	public OS_Type deduceExpression(IExpression n, Context context) {
+	public OS_Type deduceExpression(@NotNull IExpression n, Context context) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
 			if (lrl.results().size() == 1) {
 //				return lrl.results().get(0).getElement();
 				// TODO what to do here??
+				final OS_Element element = lrl.results().get(0).getElement();
+				if (element instanceof VariableStatement) {
+					if (((VariableStatement) element).typeName() != null)
+						return new OS_Type(((VariableStatement) element).typeName());
+				}
+
 			}
 			NotImplementedException.raise();
 		} else if (n.getKind() == ExpressionKind.NUMERIC) {
