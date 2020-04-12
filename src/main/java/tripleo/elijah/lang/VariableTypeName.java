@@ -18,6 +18,8 @@ import tripleo.elijah.util.NotImplementedException;
 
 public class VariableTypeName extends AbstractTypeName implements TypeName {
 
+	private TypeName genericPart = null;
+
 	@Override
 	public TypeName typeName(String aS) {
 		// TODO Auto-generated method stub
@@ -59,8 +61,17 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 
 	@Override
 	public void addGenericPart(TypeName tn2) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+		genericPart = tn2;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		if (genericPart != null)
+			return String.format("%s[%s]", pr_name.toString(), genericPart.toString());
+		return pr_name.toString();
 	}
 
 	@Override
