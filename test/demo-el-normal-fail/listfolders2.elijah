@@ -17,7 +17,7 @@ namespace __JAVA__ {
 }
 namespace {
   class signature ToStringable {
-    toString -> Java.java.lang.String
+    toString() -> Java.java.lang.String
       // {abstract}
   }
 }
