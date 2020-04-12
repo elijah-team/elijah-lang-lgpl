@@ -4,8 +4,7 @@
 package tripleo.elijah.gen.nodes;
 
 import org.eclipse.jdt.annotation.NonNull;
-
-import tripleo.elijah.lang.OS_Ident;
+import tripleo.elijah.lang.IdentExpression;
 
 /**
  * @author olu
@@ -13,7 +12,7 @@ import tripleo.elijah.lang.OS_Ident;
  */
 public class TypeNameNode {
 
-	public TypeNameNode(@NonNull OS_Ident return_type) {
+	public TypeNameNode(@NonNull IdentExpression return_type) {
 		// TODO Auto-generated constructor stub
 		genType=return_type.getText(); // TODO wrong prolly
 	}

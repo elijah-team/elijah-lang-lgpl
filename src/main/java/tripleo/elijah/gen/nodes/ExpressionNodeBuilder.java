@@ -351,10 +351,10 @@ public class ExpressionNodeBuilder {
 	 */
 	@NotNull
 	@Contract("_ -> new")
-	public static OS_Ident ident(String string) {
+	public static IdentExpression ident(String string) {
 		// TODO Parser level elements should not be used here
-		// TODO consider IdentExpression anyway
-		return new OS_Ident(string);
+		return new IdentExpression(Helpers.makeToken(string));
+
 	}
 	
 	/**
@@ -367,7 +367,6 @@ public class ExpressionNodeBuilder {
 	@Contract("_ -> new")
 	public static NumericExpression integer(int i) {
 		// TODO Parser level elements should not be used here
-		// TODO consider IdentExpression anyway
 		return new NumericExpression(i);
 	}
 	

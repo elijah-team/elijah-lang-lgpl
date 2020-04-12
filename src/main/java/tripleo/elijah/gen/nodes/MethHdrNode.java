@@ -11,18 +11,17 @@
  */
 package tripleo.elijah.gen.nodes;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
-
 import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.Node;
 import tripleo.elijah.gen.TypeRef;
-import tripleo.elijah.lang.OS_Ident;
+import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.TypeModifiers;
 import tripleo.elijah.util.NotImplementedException;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Tripleo(sb)
@@ -38,7 +37,7 @@ public class MethHdrNode implements Node {
 	private List<ArgumentNode> argument_types;
 	private final int _code;
 	
-	public MethHdrNode(Node parent, @NonNull OS_Ident return_type, String method_name, List<ArgumentNode> argument_types, int code) {
+	public MethHdrNode(Node parent, @NonNull IdentExpression return_type, String method_name, List<ArgumentNode> argument_types, int code) {
 		_parent = parent;
 		_code = code;
 		methName = new MethNameNode(method_name, this);

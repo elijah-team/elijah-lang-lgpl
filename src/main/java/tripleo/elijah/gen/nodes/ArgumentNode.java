@@ -12,35 +12,18 @@
 package tripleo.elijah.gen.nodes;
 
 import tripleo.elijah.gen.TypeRef;
-import tripleo.elijah.lang.OS_Ident;
+import tripleo.elijah.lang.IdentExpression;
 
 /**
- * @author olu
+ * @author Tripleo(acer)
  *
  */
 public class ArgumentNode {
 	
 	private final TypeRef _typeRef;
-	private OS_Ident ident;
+	private IdentExpression ident;
 	private String genType;
 	private String _varName;
-
-//	public ArgumentNode(OS_Ident ident) {
-//		// TODO Auto-generated constructor stub
-//		this.ident = ident;
-//		_typeRef = null;
-//	}
-//
-//	/**
-//	 * @param _varName
-//	 * @param genType
-//	 */
-//	public ArgumentNode(String _varName, String genType) {
-//		super();
-//		this._varName = _varName;
-//		this.genType = genType;
-//		_typeRef = null;
-//	}
 
 	public ArgumentNode(String varName, TypeRef genType) {
 		super();
@@ -52,11 +35,11 @@ public class ArgumentNode {
 		return _typeRef;
 	}
 	
-	public OS_Ident getIdent() {
+	public IdentExpression getIdent() {
 		return ident;
 	}
 	
-	public void setIdent(OS_Ident ident) {
+	public void setIdent(IdentExpression ident) {
 		this.ident = ident;
 	}
 	

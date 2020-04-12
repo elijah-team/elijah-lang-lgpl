@@ -4,10 +4,9 @@
 package tripleo.elijah.gen.nodes;
 
 import org.eclipse.jdt.annotation.NonNull;
-
 import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.gen.CompilerContext;
-import tripleo.elijah.lang.OS_Ident;
+import tripleo.elijah.lang.IdentExpression;
 
 /**
  * @author Tripleo(sb)
@@ -29,8 +28,8 @@ public class ClassDeclNode {
 		
 	}
 
-	public @NonNull OS_Ident type() {
-		// TODO Auto-generated method stub
+	public @NonNull IdentExpression type() {
+		// TODO what is this
 		return null;
 	}
 
