@@ -59,7 +59,7 @@ public class Qualident  implements IExpression {
 	}
 	
 	@Override
-	public void set(ExpressionKind aIncrement) {
+	public void setKind(ExpressionKind aIncrement) {
 		throw new IllegalArgumentException(); // TODO is this right?
 	}
 	
@@ -83,4 +83,19 @@ public class Qualident  implements IExpression {
 		// TODO Auto-generated method stub
 		return true;  // TODO is this true?
 	}
+
+	OS_Type _type;
+
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+    }
+
+	public OS_Type getType() {
+    	return _type;
+	}
+
 }
+
+//
+//
+//

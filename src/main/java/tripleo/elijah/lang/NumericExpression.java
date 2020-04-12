@@ -61,7 +61,7 @@ public class NumericExpression implements IExpression {
 	}
 
 	@Override
-	public void set(ExpressionKind aType) {
+	public void setKind(ExpressionKind aType) {
 		// log and ignore
 		System.err.println("Trying to set ExpressionType of NumericExpression to "+aType.toString());
 	}
@@ -73,6 +73,16 @@ public class NumericExpression implements IExpression {
 
 	public boolean is_simple() {
 		return true;
+	}
+
+	OS_Type _type;
+
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+    }
+
+	public OS_Type getType() {
+    	return _type;
 	}
 
 	public int getValue() {

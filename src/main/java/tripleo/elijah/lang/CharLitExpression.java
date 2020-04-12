@@ -52,7 +52,7 @@ public class CharLitExpression implements IExpression {
 	 * @see tripleo.elijah.lang.IExpression#set(tripleo.elijah.lang.ExpressionType)
 	 */
 	@Override
-	public void set(ExpressionKind aIncrement) {
+	public void setKind(ExpressionKind aIncrement) {
 		// TODO Auto-generated method stub
 
 	}
@@ -86,6 +86,16 @@ public class CharLitExpression implements IExpression {
 
 	public boolean is_simple() {
 		return true;
+	}
+
+	OS_Type _type;
+
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+    }
+
+	public OS_Type getType() {
+    	return _type;
 	}
 
 }

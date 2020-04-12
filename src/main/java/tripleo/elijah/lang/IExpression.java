@@ -25,7 +25,7 @@ public interface IExpression {
 
 	ExpressionKind getKind();
 
-	void set(ExpressionKind aKind);
+	void setKind(ExpressionKind aKind);
 
 	IExpression getLeft();
 
@@ -46,4 +46,11 @@ public interface IExpression {
 //	}
 
 	boolean is_simple();
+
+	void setType(OS_Type deducedExpression);
+    OS_Type getType();
 }
+
+//
+//
+//

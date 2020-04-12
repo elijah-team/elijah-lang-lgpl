@@ -106,14 +106,24 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 	public ExpressionKind kind;
 
 	@Override
-	public void set(ExpressionKind aIncrement) {
+	public void setKind(ExpressionKind aIncrement) {
 		kind=aIncrement;
 	}
 
 	public boolean is_simple() {
-		// TODO Auto-generated method stub
-		return false;
+		throw new IllegalStateException("Implement me");
 	}
+
+	OS_Type _type;
+
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+    }
+
+	public OS_Type getType() {
+    	return _type;
+	}
+
 }
 
 //

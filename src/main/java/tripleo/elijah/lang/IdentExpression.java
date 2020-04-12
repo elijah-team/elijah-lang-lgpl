@@ -52,7 +52,7 @@ public class IdentExpression implements IExpression, OS_Element {
 	}
 
 	@Override
-	public void set(ExpressionKind aIncrement) {
+	public void setKind(ExpressionKind aIncrement) {
 		// log and ignore
 		System.err.println("Trying to set ExpressionType of IdentExpression to "+aIncrement.toString());
 	}
@@ -101,6 +101,17 @@ public class IdentExpression implements IExpression, OS_Element {
 	public Context getContext() {
 		return _a.getContext();
 	}
+
+	OS_Type _type;
+
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+    }
+
+	public OS_Type getType() {
+    	return _type;
+	}
+
 }
 
 //

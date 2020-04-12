@@ -84,7 +84,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	}
 
 	@Override
-	public void set(ExpressionKind aIncrement) {
+	public void setKind(ExpressionKind aIncrement) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
@@ -139,6 +139,16 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	
 	public ExpressionList getArgs() {
 		return args;
+	}
+
+	OS_Type _type;
+
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+    }
+
+	public OS_Type getType() {
+    	return _type;
 	}
 
 }

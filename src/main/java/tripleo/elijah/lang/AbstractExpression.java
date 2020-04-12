@@ -16,12 +16,12 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 
 	public AbstractExpression() {
 		left  = null;
-		_type  = null;
+		_kind  = null;
 	}
 
 	public AbstractExpression(IExpression aLeft, ExpressionKind aType) {
 		left = aLeft;
-		_type = aType;
+		_kind = aType;
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 	
 	@Override
 	public ExpressionKind getKind() {
-		return _type;
+		return _kind;
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 
 	@Override
 	public String repr_() {
-		return String.format("<Expression %s %s>", left,_type);
+		return String.format("<Expression %s %s>", left,_kind);
 	}
 
 //	@Override
@@ -63,11 +63,11 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 //	}
 
 	public IExpression left;
-	public ExpressionKind _type;
+	public ExpressionKind _kind;
 
 	@Override
-	public void set(ExpressionKind type1) {
-		_type=type1;
+	public void setKind(ExpressionKind type1) {
+		_kind=type1;
 	}
 }
 

@@ -57,7 +57,7 @@ public class FloatExpression implements IExpression {
 	}
 
 	@Override
-	public void set(ExpressionKind aType) {
+	public void setKind(ExpressionKind aType) {
 		// log and ignore
 		System.err.println("Trying to set ExpressionType of FloatExpression to "+aType.toString());
 	}
@@ -70,6 +70,16 @@ public class FloatExpression implements IExpression {
 	public boolean is_simple() {
 		return true;
 	}
+	OS_Type _type;
+
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+    }
+
+	public OS_Type getType() {
+    	return _type;
+	}
+
 }
 
 //

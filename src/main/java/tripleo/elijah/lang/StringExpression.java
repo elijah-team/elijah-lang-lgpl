@@ -52,6 +52,17 @@ set(g.getText());
 	}
 
 	private String repr_;
+
+	OS_Type _type;
+
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+    }
+
+	public OS_Type getType() {
+    	return _type;
+	}
+
 }
 
 //

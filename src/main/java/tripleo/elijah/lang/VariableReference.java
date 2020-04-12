@@ -28,7 +28,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		//NotImplementedException.raise();
 		setLeft(this); // TODO is this better left null?
 						// no contract specifies NotNull...
-		set(ExpressionKind.VARREF);
+		setKind(ExpressionKind.VARREF);
 	}
 
 	public VariableReference(String m) {
@@ -36,7 +36,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		setMain(m);
 		setLeft(this); // TODO is this better left null?
 						// no contract specifies NotNull...
-		set(ExpressionKind.VARREF);
+		setKind(ExpressionKind.VARREF);
 	}
 
 /*
@@ -103,6 +103,16 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	@Override
 	public boolean is_simple() {
 		return parts.size() == 0; // TODO ; || type==VARREF_SIMPLE??
+	}
+
+	OS_Type _type;
+
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+    }
+
+	public OS_Type getType() {
+    	return _type;
 	}
 
 	@Override
