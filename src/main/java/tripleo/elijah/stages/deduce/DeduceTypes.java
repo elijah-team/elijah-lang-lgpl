@@ -171,7 +171,9 @@ public class DeduceTypes {
 //								Helpers.printXML(iv, new TabbedOutputStream(System.out));
 							}
 							final Collection<IExpression> expressions = pce.getArgs().expressions();
-							List<OS_Type> q = expressions.stream().map(n -> deduceExpression(n, parent.getContext())).collect(Collectors.toList());
+							List<OS_Type> q = expressions.stream()
+									.map(n -> deduceExpression(n, parent.getContext()))
+									.collect(Collectors.toList());
 							int y=2;
 						}
 					}
