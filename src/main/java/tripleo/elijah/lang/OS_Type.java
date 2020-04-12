@@ -54,7 +54,7 @@ public class OS_Type {
 	 */
 	@Override
 	public String toString() {
-		return String.format("%s %s %s %s", ttype, etype, type, kind);
+		return String.format("<OS_Type %s %s %s %s>", ttype, etype, type, kind);
 	}
 
 	public BuiltInTypes getBType() {
