@@ -435,18 +435,18 @@ multiplicativeExpression returns [IExpression ee]
 unaryExpression returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
-	:	INC/*^*/ ee=unaryExpression {ee.set(ExpressionKind.INC);}
-	|	DEC/*^*/ ee=unaryExpression {ee.set(ExpressionKind.DEC);}
-	|	MINUS/*^*/ /*{#MINUS.setType(UNARY_MINUS);}*/ ee=unaryExpression {ee.set(ExpressionKind.NEG);}
-	|	PLUS/*^*/  /*{#PLUS.setType(UNARY_PLUS);}*/ ee=unaryExpression {ee.set(ExpressionKind.POS);}
+	:	INC/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.INC);}
+	|	DEC/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.DEC);}
+	|	MINUS/*^*/ /*{#MINUS.setType(UNARY_MINUS);}*/ ee=unaryExpression {ee.setKind(ExpressionKind.NEG);}
+	|	PLUS/*^*/  /*{#PLUS.setType(UNARY_PLUS);}*/ ee=unaryExpression {ee.setKind(ExpressionKind.POS);}
 	|	ee=unaryExpressionNotPlusMinus
 	;
 
 unaryExpressionNotPlusMinus returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
-	:	BNOT/*^*/ ee=unaryExpression {ee.set(ExpressionKind.BNOT);}
-	|	LNOT/*^*/ ee=unaryExpression {ee.set(ExpressionKind.LNOT);}
+	:	BNOT/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.BNOT);}
+	|	LNOT/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.LNOT);}
 
 	|	(	// subrule allows option to shut off warnings
 			options {

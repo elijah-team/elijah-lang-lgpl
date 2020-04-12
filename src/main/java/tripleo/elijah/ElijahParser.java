@@ -2995,7 +2995,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(INC);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionKind.INCREMENT);
+					e.setKind(ExpressionKind.INCREMENT);
 				}
 				break;
 			}
@@ -3003,7 +3003,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(DEC);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionKind.DECREMENT);
+					e.setKind(ExpressionKind.DECREMENT);
 				}
 				break;
 			}
@@ -3011,7 +3011,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(MINUS);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionKind.NEGATION);
+					e.setKind(ExpressionKind.NEGATION);
 				}
 				break;
 			}
@@ -3019,7 +3019,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(PLUS);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionKind.POSITIVITY);
+					e.setKind(ExpressionKind.POSITIVITY);
 				}
 				break;
 			}
@@ -3055,7 +3055,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(BNOT);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionKind.BNOT);
+					e.setKind(ExpressionKind.BNOT);
 				}
 				break;
 			}
@@ -3063,7 +3063,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				match(LNOT);
 				e = unaryExpression();
 				if (inputState.guessing == 0) {
-					e.set(ExpressionKind.LNOT);
+					e.setKind(ExpressionKind.LNOT);
 				}
 				break;
 			}
