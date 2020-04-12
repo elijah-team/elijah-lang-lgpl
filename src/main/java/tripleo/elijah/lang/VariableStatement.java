@@ -102,8 +102,8 @@ public class VariableStatement implements OS_Element {
 //			return "---------------9";
 		else if (initialValue instanceof VariableReference)
 			return "---------------11";
-		else if (initialValue instanceof OS_Integer)
-			return "int";
+//		else if (initialValue instanceof OS_Integer)
+//			return "int";
 		else if (initialValue instanceof ExpressionWrapper)
 			return "---------------12";
 		else if (initialValue instanceof ListExpression)

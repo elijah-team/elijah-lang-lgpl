@@ -4,10 +4,8 @@
 package tripleo.elijah.gen.nodes;
 
 import org.jetbrains.annotations.NotNull;
-
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.NumericExpression;
-import tripleo.elijah.lang.OS_Integer;
 import tripleo.elijah.util.NotImplementedException;
 
 /**
@@ -16,10 +14,10 @@ import tripleo.elijah.util.NotImplementedException;
  */
 public class LocalDeclAgnNode {
 
-	public LocalDeclAgnNode(String string, @NotNull OS_Integer integer) {
-		// TODO Auto-generated constructor stub
-		NotImplementedException.raise();
-	}
+//	public LocalDeclAgnNode(String string, @NotNull OS_Integer integer) {
+//		// TODO Auto-generated constructor stub
+//		NotImplementedException.raise();
+//	}
 
 	public LocalDeclAgnNode(String string, @NotNull NumericExpression integer) {
 		// TODO Auto-generated constructor stub

@@ -40,7 +40,7 @@ public class ExpressionNode implements IExpressionNode {
 		ref_ = null;
 		iex = null;
 	}
-	
+	/*
 	public ExpressionNode(@NonNull  OS_Integer expr1) {
 		// TODO should  be interface
 		genName=((Integer)expr1.getValue()).toString(); // TODO likely wrong
@@ -48,7 +48,7 @@ public class ExpressionNode implements IExpressionNode {
 		_is_const_expr = true;
 		iex = expr1;
 	}
-	
+	*/
 	
 	public ExpressionNode(@NonNull IExpression expr1) {
 		// TODO Auto-generated constructor stub
@@ -100,10 +100,10 @@ public class ExpressionNode implements IExpressionNode {
 	
 	@Override
 	public String genText(CompilerContext cctx) {
-		if (iex instanceof OS_Integer) {
-			final int value = ((OS_Integer) iex).getValue();
-			return ((Integer) value).toString();
-		}
+//		if (iex instanceof OS_Integer) {
+//			final int value = ((OS_Integer) iex).getValue();
+//			return ((Integer) value).toString();
+//		}
 		if (iex instanceof NumericExpression) {
 			final int value = ((NumericExpression) iex).getValue();
 			return ((Integer) value).toString();
@@ -115,9 +115,9 @@ public class ExpressionNode implements IExpressionNode {
 				String right_side = null;
 				
 				final AbstractBinaryExpression abe = (AbstractBinaryExpression) this.iex;
-				if (abe.getRight() instanceof OS_Integer) {
-					right_side = ""+((OS_Integer) abe.getRight()).getValue();
-				}
+//				if (abe.getRight() instanceof OS_Integer) {
+//					right_side = ""+((OS_Integer) abe.getRight()).getValue();
+//				}
 				if (abe.getRight() instanceof NumericExpression) {
 					right_side = ""+((NumericExpression) abe.getRight()).getValue();
 				}
@@ -133,10 +133,10 @@ public class ExpressionNode implements IExpressionNode {
 				return "---------------2";
 			}
 		}
-		if (iex instanceof OS_Integer) {
-			final int value = ((OS_Integer) iex).getValue();
-			return ((Integer) value).toString();
-		}
+//		if (iex instanceof OS_Integer) {
+//			final int value = ((OS_Integer) iex).getValue();
+//			return ((Integer) value).toString();
+//		}
 		if (iex instanceof NumericExpression) {
 			final int value = ((NumericExpression) iex).getValue();
 			return ((Integer) value).toString();

@@ -8,7 +8,7 @@
  */
 package tripleo.elijah.gen.nodes;
 
-import tripleo.elijah.lang.OS_Integer;
+import tripleo.elijah.lang.NumericExpression;
 
 /**
  * @author Tripleo(sb)
@@ -16,9 +16,9 @@ import tripleo.elijah.lang.OS_Integer;
  */
 public class ReturnAgnSimpleIntNode {
 
-	private OS_Integer integer;
+	private NumericExpression integer;
 
-	public ReturnAgnSimpleIntNode(OS_Integer integer) {
+	public ReturnAgnSimpleIntNode(NumericExpression integer) {
 		// TODO Auto-generated constructor stub
 		this.integer=integer;
 	}

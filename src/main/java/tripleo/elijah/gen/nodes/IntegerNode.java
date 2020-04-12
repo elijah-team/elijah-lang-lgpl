@@ -12,7 +12,6 @@ import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.NumericExpression;
-import tripleo.elijah.lang.OS_Integer;
 
 /*
  * Created on 5/13/2019 at 01:44
@@ -56,7 +55,7 @@ public class IntegerNode implements IExpressionNode {
 	
 	@Override
 	public String genText(CompilerContext cctx) {
-		return Integer.toString(((OS_Integer)_expr).getValue());
+		return Integer.toString(((NumericExpression)_expr).getValue());
 	}
 	
 	@Override
@@ -66,7 +65,7 @@ public class IntegerNode implements IExpressionNode {
 	
 	@Override
 	public String genText() {
-		return Integer.toString(((OS_Integer)_expr).getValue());
+		return Integer.toString(((NumericExpression)_expr).getValue());
 	}
 	
 	@Override

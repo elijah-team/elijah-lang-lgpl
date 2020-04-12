@@ -8,24 +8,24 @@
  */
 package tripleo.elijah;
 
-import java.io.File;
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
-import tripleo.elijah.comp.Compilation;
-import tripleo.elijah.comp.ErrSink;
-import tripleo.elijah.comp.GenBuffer;
-import tripleo.elijah.comp.IO;
-import tripleo.elijah.comp.StdErrSink;
+import tripleo.elijah.comp.*;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.ModuleRef;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.gen.nodes.*;
 import tripleo.elijah.lang.NumericExpression;
-import tripleo.elijah.lang.OS_Integer;
 import tripleo.elijah.lang2.BuiltInTypes;
-import tripleo.util.buffer.*;
+import tripleo.elijah.util.NotImplementedException;
+import tripleo.util.buffer.Buffer;
+import tripleo.util.buffer.DefaultBuffer;
+import tripleo.util.buffer.Transform;
+import tripleo.util.buffer.XX;
+
+import java.io.File;
+import java.util.List;
 
 import static tripleo.elijah.gen.nodes.Helpers.List_of;
 
@@ -130,15 +130,15 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	}
 	
 	
-	private @NotNull OS_Integer convertToLocalAgnTmpNode2(IExpressionNode fncall) {
-		// TODO Auto-generated method stub
-		return null;
+	private @NotNull NumericExpression convertToLocalAgnTmpNode2(IExpressionNode fncall) {
+		throw new NotImplementedException();
 	}
 
 	private List<LocalAgnTmpNode> convertToLocalAgnTmpNode(List<@NotNull NumericExpression> list_of) {
 		// TODO Auto-generated method stub
 		List<LocalAgnTmpNode> r = null;
-		return r;
+		throw new NotImplementedException();
+//		return r;
 	}
 
 	void factorial_r(CompilerContext cctx, GenBuffer gbn) {
