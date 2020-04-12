@@ -121,20 +121,6 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return new AbstractStatementClosure(this);
 	}
 
-//	public IExpression statementWrapper() {
-//		IExpression R = new ExpressionWrapper();
-//		mExprs.add(R);
-//		return R;
-//	}
-
-//	@Override
-	public void statementWrapper(IExpression aExpr) {
-		// TODO Auto-generated method stub
-		System.err.println("** adding "+aExpr.repr_()+"to class");
-		mExprs.add(aExpr);
-//		throw new NotImplementedException();
-	}
-
 	public String clsName;
 
 	private final List<ClassItem> items=new ArrayList<ClassItem>();
@@ -162,7 +148,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return _packageName;
 	}
 	
-	public Scope addCtor(Token aX1) {
+	public Scope addCtor(Token aConstructorKW) {
 		NotImplementedException.raise();
 		return null;
 	}
