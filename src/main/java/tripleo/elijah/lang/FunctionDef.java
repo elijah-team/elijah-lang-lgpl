@@ -163,6 +163,8 @@ public class FunctionDef implements ClassItem {
 		parent = aElement;
 		if (aElement instanceof ClassStatement) {
 			((ClassStatement)parent).add(this);
+		} else if (parent instanceof OS_Container) {
+			((OS_Container) parent).add(aElement);
 		} else {
 			System.err.println("adding FunctionDef to "+aElement.getClass().getName());
 		}
