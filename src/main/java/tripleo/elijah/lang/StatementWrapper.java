@@ -36,10 +36,10 @@ public class StatementWrapper implements StatementItem, FunctionItem {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        if (expr instanceof AbstractBinaryExpression) {
+//        StringBuilder sb = new StringBuilder();
+//        if (expr instanceof AbstractBinaryExpression) {
             return expr.toString();
-        } else throw new NotImplementedException();
+//        } else throw new NotImplementedException();
         //return sb.toString();
     }
 
