@@ -115,7 +115,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	@Override
 	public ProcedureCallExpression procedureCallExpression() {
 		pce=new ProcedureCallExpression();
-		add(pce);
+		add(new FunctionDef.StatementWrapper(pce));
 		return pce;
 	}
 
