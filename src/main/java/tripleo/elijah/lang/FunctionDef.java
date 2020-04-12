@@ -166,7 +166,7 @@ public class FunctionDef implements ClassItem {
 		} else if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(aElement);
 		} else {
-			System.err.println("adding FunctionDef to "+aElement.getClass().getName());
+			throw new IllegalStateException("adding FunctionDef to "+aElement.getClass().getName());
 		}
 	}
 
