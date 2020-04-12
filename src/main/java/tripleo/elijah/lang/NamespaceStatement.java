@@ -74,9 +74,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 	
 	public ProgramClosure XXX() {
-		throw new NotImplementedException();
-//		NotImplementedException.raise();
-//		return null;
+		return new ProgramClosure() {};
 	}
 
 	@Override
