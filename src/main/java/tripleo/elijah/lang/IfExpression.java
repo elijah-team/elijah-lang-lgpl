@@ -44,7 +44,7 @@ public class IfExpression implements StatementItem {
 		@Override
 		public void statementWrapper(IExpression aExpr) {
 			if (parent == null) throw new IllegalStateException("parent is null");
-			parent.add(new FunctionDef.StatementWrapper(aExpr));
+			parent.add(new StatementWrapper(aExpr));
 		}
 		
 		@Override

@@ -14,8 +14,6 @@ import java.util.List;
 
 import antlr.Token;
 import tripleo.elijah.contexts.LoopContext;
-import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.lang.FunctionDef.StatementWrapper;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 

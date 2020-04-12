@@ -21,7 +21,6 @@ import antlr.Token;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.java.JavaCodeGen;
-import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 public class FunctionDef implements ClassItem, OS_Container {
@@ -78,59 +77,6 @@ public class FunctionDef implements ClassItem, OS_Container {
 			return FunctionDef.this;
 		}
 		
-		
-	}
-	
-	public static class StatementWrapper implements StatementItem, FunctionItem {
-
-		private IExpression expr;
-
-		public StatementWrapper(IExpression aexpr) {
-			expr = aexpr;
-		}
-
-//		@Override
-//		public Context getContext() {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-//
-//		@Override
-//		public OS_Element getParent() {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-
-//		@Override
-		public void print_osi(TabbedOutputStream aTos) throws IOException {
-			// TODO Auto-generated method stub
-			int y=2;
-			if (expr instanceof AbstractBinaryExpression) {
-				expr.print_osi(aTos);
-			}
-		}
-
-		@Override
-		public String toString() {
-			StringBuilder sb = new StringBuilder();
-			if (expr instanceof AbstractBinaryExpression) {
-				return expr.toString();
-			} else throw new NotImplementedException();
-			//return sb.toString();
-		}
-
-		/**
-		 * @return the expr
-		 */
-		public IExpression getExpr() {
-			return expr;
-		}
-
-//		@Override
-//		public void visitGen(ICodeGen visit) {
-//			// TODO Auto-generated method stub
-//			
-//		}
 		
 	}
 
