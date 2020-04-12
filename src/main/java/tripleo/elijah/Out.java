@@ -11,7 +11,10 @@ package tripleo.elijah;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.lang.OS_Module;
@@ -29,10 +32,14 @@ public class Out {
 		TabbedOutputStream tos;
 		println("** FinishModule");
 		try {
-			final String filename = String.format("eljc-%d-%d-%d.out",
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+			final String filename = String.format("eljc-%s.out", sdf.format(new Date())
+					/*Calendar.getInstance().get(Calendar.YEAR),
+					Calendar.getInstance().get(Calendar.MONTH),
+					Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
 					Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
 					Calendar.getInstance().get(Calendar.MINUTE),
-					Calendar.getInstance().get(Calendar.SECOND));
+					Calendar.getInstance().get(Calendar.SECOND)*/);
 			tos = new TabbedOutputStream(new FileOutputStream(filename));
 			tos.put_string_ln(pc.module.getFileName());
 //			pc.module.print_osi(tos);
