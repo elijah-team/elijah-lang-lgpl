@@ -4,20 +4,12 @@
 
 import antlr.TokenBuffer;
 import antlr.TokenStreamException;
-import antlr.TokenStreamIOException;
-import antlr.ANTLRException;
-import antlr.LLkParser;
 import antlr.Token;
 import antlr.TokenStream;
 import antlr.RecognitionException;
 import antlr.NoViableAltException;
-import antlr.MismatchedTokenException;
-import antlr.SemanticException;
 import antlr.ParserSharedInputState;
 import antlr.collections.impl.BitSet;
-import antlr.collections.AST;
-import antlr.ASTPair;
-import antlr.collections.impl.ASTArray;
 
 import tripleo.elijah.lang.*;
 import tripleo.elijah.*;
@@ -3621,7 +3613,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(INC);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionKind.INC);
+					ee.setKind(ExpressionKind.INC);
 				}
 				break;
 			}
@@ -3630,7 +3622,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(DEC);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionKind.DEC);
+					ee.setKind(ExpressionKind.DEC);
 				}
 				break;
 			}
@@ -3639,7 +3631,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(MINUS);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionKind.NEG);
+					ee.setKind(ExpressionKind.NEG);
 				}
 				break;
 			}
@@ -3648,7 +3640,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(PLUS);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionKind.POS);
+					ee.setKind(ExpressionKind.POS);
 				}
 				break;
 			}
@@ -3702,7 +3694,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(BNOT);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionKind.BNOT);
+					ee.setKind(ExpressionKind.BNOT);
 				}
 				break;
 			}
@@ -3711,7 +3703,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(LNOT);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.set(ExpressionKind.LNOT);
+					ee.setKind(ExpressionKind.LNOT);
 				}
 				break;
 			}
