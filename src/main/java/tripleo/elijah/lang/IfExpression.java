@@ -43,6 +43,7 @@ public class IfExpression implements StatementItem {
 		
 		@Override
 		public void statementWrapper(IExpression aExpr) {
+			if (parent == null) throw new IllegalStateException("parent is null");
 			parent.add(new FunctionDef.StatementWrapper(aExpr));
 		}
 		
@@ -64,6 +65,7 @@ public class IfExpression implements StatementItem {
 	public IfExpression(IfExpression ifExpression) {
 		this.sibling = ifExpression;
 		this.order = ++sibling/*if_parent*/.order;
+		this.parent = this.sibling.parent;
 	}
 
 	public IfExpression(Scope aClosure) {
