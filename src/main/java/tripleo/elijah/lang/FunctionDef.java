@@ -24,7 +24,7 @@ import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
-public class FunctionDef implements ClassItem {
+public class FunctionDef implements ClassItem, OS_Container {
 	private final class FunctionDefScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
@@ -191,6 +191,14 @@ public class FunctionDef implements ClassItem {
 	public List<OS_Element2> items() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void add(OS_Element anElement) {
+		if (anElement instanceof FunctionItem)
+			items.add((FunctionItem) anElement);
+		else
+			throw new IllegalStateException(String.format("Cant add %s to FunctionDef", anElement));
 	}
 
 	@Override
