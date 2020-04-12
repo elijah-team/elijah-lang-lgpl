@@ -659,8 +659,9 @@ abstractGenericTypeName_xx[TypeName tn]
 	: "generic" xy=qualident {tn.typeName(xy); tn.set(TypeModifiers.GENERIC);}
 	;
 specifiedGenericTypeName_xx[TypeName tn]
+		{RegularTypeName rtn=new RegularTypeName();}
 	: simpleTypeName_xx [tn]
-	  (LBRACK typeName[tn] {tn.addGenericPart(tn);} RBRACK)? // what about  multi-generics?
+	  (LBRACK typeName[rtn] {tn.addGenericPart(rtn);} RBRACK)? // TODO what about  multi-generics?
 	;
 formalArgTypeName[TypeName tn]
 	: structTypeName[tn]
@@ -927,7 +928,10 @@ NUM_INT
 		)?
 	;
 
-
+INTLIT_TY
+	: ('u'|'i') ("8"|"16"|"32"|"64"|"size")
+	;
+	
 // a couple protected methods to assist in matching floating point numbers
 protected
 EXPONENT
