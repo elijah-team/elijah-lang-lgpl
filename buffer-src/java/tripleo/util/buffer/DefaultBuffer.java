@@ -9,7 +9,7 @@
 package tripleo.util.buffer;
 
 /**
- * @author olu
+ * @author Tripleo(acer)
  *
  */
 public class DefaultBuffer implements Buffer {

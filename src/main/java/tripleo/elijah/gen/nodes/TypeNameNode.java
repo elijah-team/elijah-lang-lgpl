@@ -7,7 +7,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import tripleo.elijah.lang.IdentExpression;
 
 /**
- * @author olu
+ * @author Tripleo(acer)
  *
  */
 public class TypeNameNode {

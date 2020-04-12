@@ -12,7 +12,7 @@
 package tripleo.elijah.gen.nodes;
 
 /**
- * @author olu
+ * @author Tripleo(acer)
  *
  */
 public class MethNameNode {

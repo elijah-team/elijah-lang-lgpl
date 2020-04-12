@@ -15,7 +15,7 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
 /**
- * @author olu
+ * @author Tripleo(acer)
  *
  */
 public class ExpressionNode implements IExpressionNode {

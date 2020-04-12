@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * @author olu
+ * @author Tripleo(acer)
  *
  */
 public class FileBackedBuffer implements Buffer {

@@ -14,7 +14,7 @@ package tripleo.util.buffer;
 import tripleo.elijah.util.NotImplementedException;
 
 /**
- * @author olu
+ * @author Tripleo(acer)
  *
  */
 public enum XX {
