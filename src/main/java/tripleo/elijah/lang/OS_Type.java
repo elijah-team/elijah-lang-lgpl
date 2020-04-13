@@ -26,24 +26,27 @@ import tripleo.elijah.lang2.BuiltInTypes;
 public class OS_Type {
 
 	public enum Type {
-		BUILT_IN, USER
+		BUILT_IN, USER, USER_CLASS
 	}
 
 	private BuiltInTypes type;
 	private Type kind;
 	private OS_Element etype;
 	private TypeName ttype;
-	
+
+	/*@ \ensure kind == Type.BUILT_IN */
 	public OS_Type(BuiltInTypes aType) {
 		this.type = aType;
 		this.kind = Type.BUILT_IN;
 	}
 
-	public OS_Type(ClassStatement klass, Type user) {
+	/*@ \ensure kind == Type.USER_CLASS */
+	public OS_Type(ClassStatement klass) {
 		this.etype = klass;
-		this.kind = user;
+		this.kind = Type.USER_CLASS;
 	}
 
+	/*@ \ensure kind == Type.USER */
 	public OS_Type(TypeName typeName) {
 		this.ttype = typeName;
 		this.kind = Type.USER;
@@ -57,6 +60,7 @@ public class OS_Type {
 		return String.format("<OS_Type %s %s %s %s>", ttype, etype, type, kind);
 	}
 
+	/*@ \require kind == Type.BUILT_IN */
 	public BuiltInTypes getBType() {
 		return type;
 	}
