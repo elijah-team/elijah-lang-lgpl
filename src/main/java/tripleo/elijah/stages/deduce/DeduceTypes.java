@@ -33,7 +33,7 @@ public class DeduceTypes {
 	public void addClass(ClassStatement klass, OS_Module parent) {
 //		System.out.print("class " + klass.clsName + "{\n");
 		klass._a.setCode(nextClassCode());	
-		parent.getContext().nameTable().add(klass, klass.getName(), new OS_Type(klass, OS_Type.Type.USER));
+		parent.getContext().nameTable().add(klass, klass.getName(), new OS_Type(klass));
 		
 		{
 			for (ClassItem element : klass.items())
