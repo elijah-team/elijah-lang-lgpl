@@ -58,19 +58,19 @@ public class OS_Type {
 	private OS_Element etype;
 	private TypeName ttype;
 
-	/*@ \ensure kind == Type.BUILT_IN */
+	/*@ ensures kind = Type.BUILT_IN; */
 	public OS_Type(BuiltInTypes aType) {
 		this.type = aType;
 		this.kind = Type.BUILT_IN;
 	}
 
-	/*@ \ensure kind == Type.USER_CLASS */
+	/*@ ensures kind = Type.USER_CLASS; */
 	public OS_Type(ClassStatement klass) {
 		this.etype = klass;
 		this.kind = Type.USER_CLASS;
 	}
 
-	/*@ \ensure kind == Type.USER */
+	/*@ ensures kind = Type.USER; */
 	public OS_Type(TypeName typeName) {
 		this.ttype = typeName;
 		this.kind = Type.USER;
@@ -84,12 +84,12 @@ public class OS_Type {
 		return String.format("<OS_Type %s %s %s %s>", ttype, etype, type, kind);
 	}
 
-	/*@ \require kind == Type.BUILT_IN */
+	/*@ requires kind = Type.BUILT_IN; */
 	public BuiltInTypes getBType() {
 		return type;
 	}
 
-	/*@ \require kind == Type.USER */
+	/*@ requires kind = Type.USER; */
 	public TypeName getTypeName() {
 		return ttype;
 	}
