@@ -21,22 +21,6 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 	private TypeName genericPart = null;
 
 	@Override
-	public TypeName typeName(String aS) {
-		throw new NotImplementedException();
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-//		return null;
-	}
-
-	@Override
-	public TypeName typeof(String aS) {
-		throw new NotImplementedException();
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-//		return null;
-	}
-
-	@Override
 	public TypeName returnValue() {
 		throw new NotImplementedException();
 //		// TODO Auto-generated method stub

@@ -18,68 +18,95 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 public class RegularTypeName extends AbstractTypeName2 implements TypeName {
-	
-	public String getName() {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
-		return null;
+
+	private TypeName genericPart = null;
+
+	@Override
+	public void addGenericPart(TypeName tn2) {
+		genericPart = tn2;
 	}
+
+	@Override
+	public TypeNameList argList() {
+		throw new NotImplementedException();
+	//	// TODO Auto-generated method stub
+	//	NotImplementedException.raise();
+	//	return null;
+	}
+
+public String getName() {
+	return this.typeName.asSimpleString();
+}
+
+//	@Override
+public String getTypeName() {
+	return this.typeName.toString();
+}  // TODO is this right?
+
+//	@Override
+public void print_osi(TabbedOutputStream aTos) {
+	NotImplementedException.raise();
+}
+	
+	
+@Override
+public TypeName returnValue() {
+	throw new NotImplementedException();
+//	// TODO Auto-generated method stub
+//	NotImplementedException.raise();
+//	return null;
+}
+
+@Override
+public void set(TypeModifiers aModifiers) {
+	_ltm.add(aModifiers);
+}
+
+@Override
+public void setGeneric(boolean value) {
+	_ltm.add(TypeModifiers.GENERIC);
+}
+
 
 	public void setName(Qualident aS) {
 		this.typeName=aS;
 	}
 
-	public void set(int aI) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		for (TypeModifiers modifier : _ltm) {
+			switch (modifier) {
+				case CONST:      sb.append("const "); break;
+				case REFPAR:     sb.append("ref "); break;
+				case FUNCTION:   sb.append("fn "); break; // TODO
+				case PROCEDURE:  sb.append("proc "); break; // TODO
+				case GC:		 sb.append("gc "); break;
+				case ONCE:		 sb.append("once "); break;
+				case INPAR:		 sb.append("in "); break;
+				case LOCAL:		 sb.append("local "); break;
+				case MANUAL:	 sb.append("manual "); break;
+				case OUTPAR:	 sb.append("out "); break;
+				case POOLED:	 sb.append("pooled "); break;
+				case TAGGED:	 sb.append("tagged "); break;
+				case GENERIC:	 sb.append("generic "); break; // TODO
+				case NORMAL:	 break;
+				default: 		 throw new IllegalStateException("Cant be here!");
+			}
+		}
+		if (genericPart != null) {
+			sb.append(String.format("%s[%s]", getName().toString(), genericPart.toString()));
+		} else
+			sb.append(getName().toString());
+		return sb.toString();
 	}
 
 @Override
-public TypeName typeName(String aS) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return null;
-}
-
-@Override
-public TypeName typeof(String aS) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return null;
-}
-
-@Override
-public TypeName returnValue() {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return null;
-}
-	
-	
-@Override
 public void type(TypeModifiers atm) {
 tm=atm;		
-}
-
-@Override
-public TypeNameList argList() {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	return null;
-}
-
-@Override
-public void set(TypeModifiers aModifiers) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
-	
-}
-
-@Override
-public void addGenericPart(TypeName tn2) {
-	// TODO Should this be TypeNameList?
-	NotImplementedException.raise();
-
 }
 
 @Override
@@ -87,29 +114,17 @@ public void typeName(Qualident xy) {
 	// TODO Auto-generated method stub
 //	NotImplementedException.raise();
 	this.typeName = xy;
-	
 }
+	
 
 @Override
 public void typeof(Qualident xyz) {
-	// TODO Auto-generated method stub
-	NotImplementedException.raise();
+	throw new NotImplementedException();
+// //	 TODO Auto-generated method stub
 	
 }
-	
-	@Override
-	public void setGeneric(boolean value) {
-	
-	}
-	
-	//	@Override
-	public String getTypeName() {
-		return this.typeName.toString();
-	}  // TODO is this right?
-	
-//	@Override
-	public void print_osi(TabbedOutputStream aTos) {
-		NotImplementedException.raise();
-	}
 }
 
+//
+//
+//

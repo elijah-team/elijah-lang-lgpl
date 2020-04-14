@@ -32,12 +32,10 @@ public interface TypeName {
 
 	void set(TypeModifiers aModifiers);
 
-	TypeName typeName(String s);
-
-	TypeName typeof(String s);
-
 	TypeName returnValue();
 
+	/*@ requires modifiers = TypeModifiers.PROCEDURE
+			  || modifiers = TypeModifiers.FUNCTION; */
 	void type(TypeModifiers modifiers);
 
 	TypeNameList argList();
