@@ -22,41 +22,47 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 
 	@Override
 	public TypeName typeName(String aS) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
-		return null;
+		throw new NotImplementedException();
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
+//		return null;
 	}
 
 	@Override
 	public TypeName typeof(String aS) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
-		return null;
+		throw new NotImplementedException();
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
+//		return null;
 	}
 
 	@Override
 	public TypeName returnValue() {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
-		return null;
+		throw new NotImplementedException();
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
+//		return null;
 	}
 
 	public void type(int aI) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+		throw new NotImplementedException();
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
 	}
 
 	@Override
 	public TypeNameList argList() {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
-		return null;
+		throw new NotImplementedException();
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
+//		return null;
 	}
 
 	@Override
 	public void set(TypeModifiers aModifiers) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+		throw new NotImplementedException();
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
 	}
 
 	@Override
@@ -76,20 +82,26 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 
 	@Override
 	public void typeName(Qualident xy) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+		throw new NotImplementedException();
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
 	}
 
 	@Override
 	public void typeof(Qualident xyz) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+		throw new NotImplementedException();
+//		// TODO Auto-generated method stub
+//		NotImplementedException.raise();
 	}
 	
 	@Override
 	public void setGeneric(boolean value) {
-		NotImplementedException.raise();
+		throw new NotImplementedException();
+//		NotImplementedException.raise();
 	}
 	
 }
 
+//
+//
+//
