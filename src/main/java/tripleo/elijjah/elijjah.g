@@ -202,13 +202,20 @@ variableQualifiers[TypeName cr]:
 	| "manual"  {cr.set(TypeModifiers.MANUAL);}
 	| "gc"  {cr.set(TypeModifiers.GC);})
 	;
-regularQualifiers[TypeName fp]:
+regularQualifiers[TypeName fp]
+		{IdentExpression i1=null;}
+	:
 	( "in"            {fp.setIn(true);}
-	| "out"           {fp.setOut(true);}
-	| ("const"        {fp.setConstant(true);} |"ref")
-	  (IDENT
-	  |"ref"          {fp.setReference(true);} 
-	  |"generic"	  {fp.setGeneric(true);})
+	| "out"           {fp.setOut(true);})?
+	( ("const"        {fp.setConstant(true);}
+	   ("ref"		  {fp.setReference(true);})?)
+	| "ref"           {fp.setReference(true);} 
+	| "generic" i2:IDENT 	  {fp.setGeneric(true);
+        RegularTypeName rtn = new RegularTypeName();
+        Qualident q = new Qualident();
+        q.append(i2);
+        rtn.setName(q);
+        fp.addGenericPart(rtn);}
 	)
 	;
 typeNameList[TypeNameList cr]:
@@ -701,21 +708,15 @@ formalArgList[FormalArgList fal]
 formalArgListItem_priv[FormalArgListItem fali]
 	:
 		( (regularQualifiers[fali.typeName()])?
-		i:IDENT  {	fali.setName(i.getText());	}
+		i:IDENT  {	fali.setName(i);	}
 		(TOK_COLON formalArgTypeName[fali.typeName()])?
 		|
 			abstractGenericTypeName_xx[fali.typeName()]
 		)
 	;
-constant
-	:	NUM_INT
-	|	CHAR_LITERAL
-	|	STRING_LITERAL
-	|	NUM_FLOAT
-	;
 
 //----------------------------------------------------------------------------
-// The Java scanner
+// The Elijjah scanner
 //----------------------------------------------------------------------------
 class ElijjahLexer extends Lexer;
 
