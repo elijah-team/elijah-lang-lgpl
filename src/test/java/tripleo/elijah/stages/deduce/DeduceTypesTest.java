@@ -1,33 +1,20 @@
 package tripleo.elijah.stages.deduce;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.nodes.Helpers;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.IdentExpression;
-import tripleo.elijah.lang.NumericExpression;
-import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.lang.OS_Type;
-import tripleo.elijah.lang.Qualident;
-import tripleo.elijah.lang.VariableSequence;
-import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 
 public class DeduceTypesTest {
 
-	@Test
-	public void testDeduceNumericExpression() {
-		DeduceTypes d = new DeduceTypes(null);
-		OS_Type x = d.deduceExpression(new NumericExpression(3), null);
-		System.out.println(x);
-		Assert.assertEquals(x.getBType(), new OS_Type(BuiltInTypes.SystemInteger).getBType());
-	}
+	private OS_Type x;
 
-	@Test
-	public void testDeduceIdentExpression() {
+	@Before
+	public void setUp() {
 		OS_Module mod = new OS_Module();
 		DeduceTypes d = new DeduceTypes(mod);
 		ClassStatement cs = new ClassStatement(mod);
@@ -41,9 +28,39 @@ public class DeduceTypesTest {
 		qu.append(Helpers.makeToken("Integer"));
 		vs.typeName().setName(qu);
 		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
-		OS_Type x = d.deduceExpression(new IdentExpression(Helpers.makeToken("x")), fc);
+		x = d.deduceExpression(new IdentExpression(Helpers.makeToken("x")), fc);
 		System.out.println(x);
-		Assert.assertEquals(x.getBType(), new OS_Type(BuiltInTypes.SystemInteger).getBType());
+	}
+	@Test
+	public void test1() {
+		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());
+	}
+	@Test
+	public void test2() {
+		final RegularTypeName tn = new RegularTypeName();
+		Qualident tnq = new Qualident();
+		tnq.append(Helpers.makeToken("Integer"));
+		tn.setName(tnq);
+		Assert.assertEquals(new OS_Type(tn), x.getTypeName());
+	}
+	@Test
+	public void test3() {
+		final VariableTypeName tn = new VariableTypeName();
+		Qualident tnq = new Qualident();
+		tnq.append(Helpers.makeToken("Integer"));
+		tn.setName(tnq);
+//		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
+		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
+	}
+	@Test
+	public void test4() {
+		final VariableTypeName tn = new VariableTypeName();
+		Qualident tnq = new Qualident();
+		tnq.append(Helpers.makeToken("Integer"));
+		tn.setName(tnq);
+//		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
+//		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
+		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());
 	}
 
 }
