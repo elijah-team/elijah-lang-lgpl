@@ -8,19 +8,27 @@
  */
 package tripleo.elijah.lang;
 
-// Referenced classes of package pak2:
-//			TypeName
+import antlr.Token;
+import tripleo.elijah.gen.nodes.Helpers;
 
 public class FormalArgListItem {
 	
-	String name;
+	Token name;
 	TypeName tn=new RegularTypeName(); // TODO why make the choice for the program?
 
 	public TypeName typeName() {
 		return tn;
 	}
 
-	public void setName(String s) {
+	@Deprecated public void setName(String s) {
+		name=Helpers.makeToken(s);
+	}
+
+	public void setName(Token s) {
 		name=s;
 	}
 }
+
+//
+//
+//
