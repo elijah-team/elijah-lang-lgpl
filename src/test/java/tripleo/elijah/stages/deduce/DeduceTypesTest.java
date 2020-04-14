@@ -32,11 +32,11 @@ public class DeduceTypesTest {
 		System.out.println(x);
 	}
 	@Test
-	public void test1() {
+	public void testDeduceIdentExpression1() {
 		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());
 	}
 	@Test
-	public void test2() {
+	public void testDeduceIdentExpression2() {
 		final RegularTypeName tn = new RegularTypeName();
 		Qualident tnq = new Qualident();
 		tnq.append(Helpers.makeToken("Integer"));
@@ -44,7 +44,7 @@ public class DeduceTypesTest {
 		Assert.assertEquals(new OS_Type(tn), x.getTypeName());
 	}
 	@Test
-	public void test3() {
+	public void testDeduceIdentExpression3() {
 		final VariableTypeName tn = new VariableTypeName();
 		Qualident tnq = new Qualident();
 		tnq.append(Helpers.makeToken("Integer"));
@@ -53,7 +53,16 @@ public class DeduceTypesTest {
 		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
 	}
 	@Test
-	public void test4() {
+	public void testDeduceIdentExpression3_5() {
+		final VariableTypeName tn = new VariableTypeName();
+		Qualident tnq = new Qualident();
+		tnq.append(Helpers.makeToken("Integer"));
+		tn.setName(tnq);
+		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
+//		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
+	}
+	@Test
+	public void testDeduceIdentExpression4() {
 		final VariableTypeName tn = new VariableTypeName();
 		Qualident tnq = new Qualident();
 		tnq.append(Helpers.makeToken("Integer"));
