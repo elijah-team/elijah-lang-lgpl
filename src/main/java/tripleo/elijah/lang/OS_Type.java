@@ -19,12 +19,36 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.lang2.BuiltInTypes;
 
+import java.util.Objects;
+
 /**
  * @author Tripleo(sb)
  *
  */
 public class OS_Type {
+/*
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		OS_Type os_type = (OS_Type) o;
+		switch (kind) {
+			case USER: return (((OS_Type) o).getTypeName()).equals(getTypeName());
+			case BUILT_IN: return (((OS_Type) o).type).equals(type);
+			case USER_CLASS: return (((OS_Type) o).etype).equals(etype);
+			default: throw new IllegalStateException("Cant be here");
+		}
+//		return type == os_type.type &&
+//				kind == os_type.kind &&
+//				Objects.equals(etype, os_type.etype) &&
+//				Objects.equals(ttype, os_type.ttype);
+	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, kind, etype, ttype);
+	}
+*/
 	public enum Type {
 		BUILT_IN, USER, USER_CLASS
 	}
@@ -63,6 +87,11 @@ public class OS_Type {
 	/*@ \require kind == Type.BUILT_IN */
 	public BuiltInTypes getBType() {
 		return type;
+	}
+
+	/*@ \require kind == Type.USER */
+	public TypeName getTypeName() {
+		return ttype;
 	}
 
 }
