@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,8 @@ public class IfExpression implements StatementItem {
 		
 		@Override
 		public InvariantStatement invariantStatement() {
-			return null;
+			throw new NotImplementedException();
+//			return null;
 		}
 		
 		@Override
@@ -41,6 +43,7 @@ public class IfExpression implements StatementItem {
 			return new AbstractStatementClosure(this); // TODO
 		}
 		
+		/*@ requires parent != null; */
 		@Override
 		public void statementWrapper(IExpression aExpr) {
 			if (parent == null) throw new IllegalStateException("parent is null");
@@ -49,7 +52,8 @@ public class IfExpression implements StatementItem {
 		
 		@Override
 		public TypeAliasExpression typeAlias() {
-			return null;
+			throw new NotImplementedException();
+//			return null;
 		}
 	}
 	
