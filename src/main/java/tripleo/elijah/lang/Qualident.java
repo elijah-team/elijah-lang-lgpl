@@ -99,6 +99,9 @@ public class Qualident  implements IExpression {
 	public OS_Type getType() {
     	return _type;
 	}
+	public List<Token> parts() {
+		return parts;
+	}
 
 }
 
