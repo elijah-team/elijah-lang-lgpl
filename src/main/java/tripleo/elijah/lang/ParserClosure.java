@@ -27,11 +27,15 @@ public class ParserClosure extends ProgramClosure {
 	}
 
 	public ClassStatement classStatement() {
-		return new ClassStatement(module());
+		return super.classStatement(module());
 	}
 
 	public ImportStatement importStatement() {
-		return new ImportStatement(module());
+		return super.importStatement(module());
+	}
+
+	public NamespaceStatement namespaceStatement() {
+		return super.namespaceStatement(module());
 	}
 
 	private OS_Module module() {
@@ -44,10 +48,6 @@ public class ParserClosure extends ProgramClosure {
 	}
 
 	public final OS_Module module;
-
-	public NamespaceStatement namespaceStatement() {
-		return new NamespaceStatement(module());
-	}
 
 }
 
