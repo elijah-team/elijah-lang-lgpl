@@ -12,11 +12,6 @@
  * $Id$
  *
  */
-/* Created on Aug 30, 2005 8:21:52 PM
- * 
- * $Id$
- *
- */
 package tripleo.elijah.lang;
 
 import antlr.Token;
@@ -112,26 +107,26 @@ public void finish() {
 //		return null;
 	}
 
-//	public void modify_namespace(Qualident q, NamespaceModify import1) {
-////		NotImplementedException.raise();
+	public void modify_namespace(Qualident q, NamespaceModify import1) {
+		NotImplementedException.raise();
 //		getContext().add(null,  q.toString());
-//	}
+	}
 
 	@Override
-		public void print_osi(TabbedOutputStream tos) throws IOException {
-			System.out.println("Module print_osi");
-	//		if (packageName != null) {
-	//			tos.put_string("package ");
-	//			tos.put_string_ln(packageName);
-	//			tos.put_string_ln("");
-	//		}
-			tos.put_string_ln("//");
-			synchronized (items) {
-				for (ModuleItem element : items)
-					element.print_osi(tos);
-	
-			}
+	public void print_osi(TabbedOutputStream tos) throws IOException {
+		System.out.println("Module print_osi");
+//		if (packageName != null) {
+//			tos.put_string("package ");
+//			tos.put_string_ln(packageName);
+//			tos.put_string_ln("");
+//		}
+		tos.put_string_ln("//");
+		synchronized (items) {
+			for (ModuleItem element : items)
+				element.print_osi(tos);
+
 		}
+	}
 
 	/**
 	 * The last package name declared in the source file
