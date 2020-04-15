@@ -20,6 +20,7 @@ import antlr.ASTPair;
 import antlr.collections.impl.ASTArray;
 
 import tripleo.elijah.lang.*;
+import tripleo.elijjah.lang.IndexingStatement;
 import tripleo.elijah.*;
 
 public class ElijjahParser extends antlr.LLkParser
