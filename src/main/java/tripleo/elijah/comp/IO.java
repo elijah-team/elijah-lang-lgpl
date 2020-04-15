@@ -14,10 +14,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.CharSink;
 import tripleo.elijah.CharSource;
 import tripleo.elijah.FileOption;
@@ -26,8 +25,8 @@ public class IO {
 
 	// exists, delete, isType ....
 
-	List<File> recordedreads  = new ArrayList<File>();
-	List<File> recordedwrites = new ArrayList<File>();
+	final List<File> recordedreads  = new ArrayList<File>();
+	final List<File> recordedwrites = new ArrayList<File>();
 	
 	public boolean recordedRead(File file) {
 		return recordedreads.contains(file);
@@ -47,16 +46,21 @@ public class IO {
 		return null;
 	}
 
-	private void record(FileOption read, Path p) {
-		// TODO Auto-generated method stub
-		Map<FileOption, File> options11 = new HashMap<FileOption, File>();
-		options11.put(read, p.toFile());
+	private void record(FileOption read, @NotNull Path p) {
+		record(read, p.toFile());
 	}
 
-	private void record(FileOption read, File file) {
-//		Map<FileOption, File> options11 = new HashMap<FileOption, File>();
-//		options11.put(read, p);
-		recordedreads.add(file);
+	private void record(@NotNull FileOption read, @NotNull File file) {
+		switch (read) {
+			case WRITE:
+				recordedwrites.add(file);
+				break;
+			case READ:
+				recordedreads.add(file);
+				break;
+			default:
+				throw new IllegalStateException("Cant be here");
+		}
 	}
 
 	public InputStream readFile(File f) throws FileNotFoundException {
