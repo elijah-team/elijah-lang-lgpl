@@ -70,17 +70,6 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		Assert.assertTrue(c.getIO().recordedRead(new File(new File(".", "main2"), "main2.elijah")));
 	}
 
-	@Test
-	public final void testBasic() {
-		List<String> args = List_of("test/basic", "-sE");
-		ErrSink eee = new StdErrSink();
-		Compilation c = new Compilation(eee, new IO());
-
-		c.feedCmdLine(args);
-		
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
 	void main2_el(CompilerContext cctx, GenBuffer gbn) {
 		ModuleRef prelude = new ModuleRef(null, -1);
 		TypeRef   sys_int = new TypeRef(prelude, prelude, "SystemInteger", BuiltInTypes.SystemInteger.getCode());
