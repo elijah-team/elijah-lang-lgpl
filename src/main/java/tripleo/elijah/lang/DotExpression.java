@@ -16,6 +16,12 @@ public class DotExpression extends AbstractBinaryExpression {
 		kind = ExpressionKind.DOT_EXP;
 	}
 
+	public DotExpression(IExpression ee, IExpression identExpression) {
+		left = ee;
+		right = identExpression;
+		kind = ExpressionKind.DOT_EXP;
+	}
+
 	//
 	// all this garbage below
 	//
