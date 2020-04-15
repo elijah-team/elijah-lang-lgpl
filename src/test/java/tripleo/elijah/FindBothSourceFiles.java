@@ -66,8 +66,8 @@ public class FindBothSourceFiles /* extends TestCase */ {
 		c.feedCmdLine(args);
 		
 		//fail("Not yet implemented"); // TODO
-		Assert.assertTrue(c.getIO().recordedRead(new File(".", "factdemo.elijah")));
-		Assert.assertTrue(c.getIO().recordedRead(new File(new File(".", "main2"), "main2.elijah")));
+		Assert.assertTrue(c.getIO().recordedRead(new File(new File("test", "demo-el-normal"), "fact1.elijah")));
+		Assert.assertTrue(c.getIO().recordedRead(new File(new File(new File("test", "demo-el-normal"), "main2"), "main2.elijah")));
 	}
 
 	void main2_el(CompilerContext cctx, GenBuffer gbn) {
