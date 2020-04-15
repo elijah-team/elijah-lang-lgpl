@@ -11,7 +11,12 @@ package tripleo.elijah.comp;
 public interface ErrSink {
 	
 	void exception(Exception exception);
-	
+
+    void reportError(Errors error, String s);
+
+    public enum Errors {
+        ERROR, WARNING, INFO
+    }
 }
 
 //

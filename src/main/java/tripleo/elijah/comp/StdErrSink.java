@@ -24,6 +24,11 @@ public class StdErrSink implements ErrSink {
 				.toString());
 		e.printStackTrace(System.err);
 	}
+
+	@Override
+	public void reportError(Errors error, String s) {
+		System.err.println(String.format("%s: %s", error.toString(), s));
+	}
 }
 
 //
