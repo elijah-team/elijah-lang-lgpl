@@ -60,8 +60,7 @@ public class Compilation {
 
 	String stage = "O"; // Output
 
-	public void main(List<String> args, StdErrSink stdErrSink) {
-		StdErrSink errSink = stdErrSink;
+	public void main(List<String> args, ErrSink errSink) {
 		try {
 			if (args.size() > 0) {
 				Options options = new Options();
@@ -80,7 +79,7 @@ public class Compilation {
 				final String[] args2 = cmd.getArgs();
 
 				for (int i = 0; i < args2.length; i++)
-					doFile(new File(args2[i]));
+					doFile(new File(args2[i]), errSink);
 			} else {
 				System.err.println("Usage: eljc [-showtree] <directory or file name>");
 			}
@@ -89,18 +88,21 @@ public class Compilation {
 		}
 	}
 
-	public void doFile(File f) throws Exception {
+	public void doFile(File f, ErrSink errSink) throws Exception {
 		if (f.isDirectory()) {
 			String[] files = f.list();
 			for (int i = 0; i < files.length; i++)
-				doFile(new File(f, files[i]));
+				doFile(new File(f, files[i]), errSink);
 
 		} else {
 			final String file_name = f.getName();
 			final boolean matches = Pattern.matches(".+\\.elijah$", file_name);
 			if (matches) {
 				System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
-				parseFile(file_name, new FileInputStream(f));
+				if (f.exists())
+					parseFile(file_name, new FileInputStream(f));
+				else
+					errSink.reportError(ErrSink.Errors.ERROR, "File doesn't exist " + f.getAbsolutePath().toString());
 			}
 		}
 	}
