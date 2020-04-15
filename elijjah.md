@@ -6,29 +6,20 @@ It is intended to provide the power of C++, the exressibility of Python, and the
 
 ## Contents
 
-*   [1 Design](#Design)
-    *   [1.1 Performance of idiomatic Rust](#Performance_of_idiomatic_Rust)
-    *   [1.2 Syntax](#Syntax)
-    *   [1.3 Memory safety](#Memory_safety)
-    *   [1.4 Memory management](#Memory_management)
-    *   [1.5 Ownership](#Ownership)
-    *   [1.6 Types and polymorphism](#Types_and_polymorphism)
-*   [2 History](#History)
-*   [3 Examples](#Examples)
-    *   [3.1 Hello World](#Hello_World)
-    *   [3.2 Factorial function](#Factorial_function)
-        *   [3.2.1 Recursive](#Recursive)
-        *   [3.2.2 Iterative](#Iterative)
-        *   [3.2.3 Using Iterators](#Using_Iterators)
-*   [4 Projects](#Projects)
-    *   [4.1 Web browser](#Web_browser)
-    *   [4.2 Build system](#Build_system)
-    *   [4.3 Operating system](#Operating_system)
-    *   [4.4 Other](#Other)
-*   [5 Conferences](#Conferences)
-*   [6 See also](#See_also)
-*   [7 References](#References)
-*   [8 External links](#External_links)
+*   [1 History](#History)
+*   [2 Philosophy](#Philosophy)
+*   [3 Syntax](#Syntax)
+*   [4 Memory safety](#Memory_safety)
+*   [3 Syntax](#Syntax)
+    *   [3.1 Design and Features](#design-and-features)
+    *   [3.2 Ownership](#Ownership)
+    *   [3.3 Types and polymorphism](#Types_and_polymorphism)
+    *   [3.4 Main Entry Point](#main-entry-point)
+    *   [3.5 Extension Methods](#extension-methods)
+    *   [3.6 Operator Overloading](#operator-overloading)
+    *   [3.7 Higher Order Functions](#higher-order-functions)
+*   [4 Tools](#Tools)
+*   [5 Unimplemented Things](#unimplemented-things)
 
 ## History
 
@@ -38,19 +29,19 @@ Due to unforseen circumstances, the compiler is just now being produced and rele
 
 The language has evolved over time from a simple JavaScript clone to a full-fledged programming language fit to challenge today's top contenders.  
 
-### Philosophy
+## Philosophy
 
 The author states that Elijjah is designed to be an industrial strength object-oriented language, and a better language that C++ and Java, but to still be interoperable with either, allowing programmers to make a gradual transition to Elijjah.
 
 Semicolons are optional as a statement terminator , though whilespace is ignored in the current compiler,  eventually a newline should be enough to deduce that the statement has ended.
 
-### Syntax
+## Syntax
 
 The concrete syntax of Elijjah is similar to C/C++ and Java with hints from JabaScript, Python, and Eiffel.  Blocks of code are delimited by curly braces and control flow keywords such as `if`, `else`, and `while` are allowed.  As of now `for` is not supported and `foreach` is available as `iterate`.
 
 A function is composed of expressions and statements.  Everything other than a function call or a variable assignment is a statement.  A function need not end with a return statement (if enabled), but the return value must be assigned to a special variable `Result`.
 
-### Memory safety
+## Memory safety
 
 Elijjah has an option for using a [garbage collector](https://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#AUTOMATIC "Garbage collection (computer science)") of the prrogrammer's choice whwen using C/C++ backend, otherwise it uses the default model of its backend.
 

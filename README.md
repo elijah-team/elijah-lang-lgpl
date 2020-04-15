@@ -21,6 +21,6 @@ All of this is a wwork in progress and your support would be appreciated.
 
 tripleo+elijah (at) gmail.com
 
-((google group))
+[google group](https://groups.google.com/forum/#!forum/elijjah)
 
 ((reddit post))
