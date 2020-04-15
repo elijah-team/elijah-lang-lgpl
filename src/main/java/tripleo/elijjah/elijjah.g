@@ -26,11 +26,18 @@ IExpression expr;
 }
 
 program
-        {String xx=null; ExpressionList el=null;	ParserClosure pc = out.closure();}
-    : ( "indexing" (IDENT TOK_COLON {el=new ExpressionList();} expressionList[el])*
+        {ExpressionList el=null;	ParserClosure pc = out.closure();}
+    : ( indexingStatement[pc.indexingStatement()]
 	  |"package" xy=qualident {pc.packageName(xy);}
 	  |programStatement[pc])*
 	  EOF {out.FinishModule();}
+	;
+indexingStatement[IndexingStatement idx]
+		{ExpressionList el=null;}
+	: "indexing" 
+		(i1:IDENT 			{idx.setName(i1);}
+		 TOK_COLON 			{el=new ExpressionList();} 
+		 expressionList[el]	{idx.setExprs(el);})*
 	;
 constantValue returns [IExpression e]
 	 {e=null;}
@@ -708,10 +715,9 @@ formalArgList[FormalArgList fal]
 formalArgListItem_priv[FormalArgListItem fali]
 	:
 		( (regularQualifiers[fali.typeName()])?
-		i:IDENT  {	fali.setName(i);	}
-		(TOK_COLON formalArgTypeName[fali.typeName()])?
-		|
-			abstractGenericTypeName_xx[fali.typeName()]
+		  i:IDENT  {	fali.setName(i);	}
+		  ( TOK_COLON formalArgTypeName[fali.typeName()])?
+		| abstractGenericTypeName_xx[fali.typeName()]
 		)
 	;
 

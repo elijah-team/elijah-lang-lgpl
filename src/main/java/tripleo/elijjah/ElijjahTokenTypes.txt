@@ -1,10 +1,10 @@
 // $ANTLR 2.7.1: elijjah.g -> ElijjahTokenTypes.txt$
 Elijjah    // output token vocab name
 LITERAL_tokens="tokens"=4
-LITERAL_indexing="indexing"=5
-IDENT=6
-TOK_COLON=7
-LITERAL_package="package"=8
+LITERAL_package="package"=5
+LITERAL_indexing="indexing"=6
+IDENT=7
+TOK_COLON=8
 STRING_LITERAL=9
 CHAR_LITERAL=10
 NUM_INT=11

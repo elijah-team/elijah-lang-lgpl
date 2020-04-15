@@ -6,10 +6,10 @@ public interface ElijjahTokenTypes {
 	int EOF = 1;
 	int NULL_TREE_LOOKAHEAD = 3;
 	int LITERAL_tokens = 4;
-	int LITERAL_indexing = 5;
-	int IDENT = 6;
-	int TOK_COLON = 7;
-	int LITERAL_package = 8;
+	int LITERAL_package = 5;
+	int LITERAL_indexing = 6;
+	int IDENT = 7;
+	int TOK_COLON = 8;
 	int STRING_LITERAL = 9;
 	int CHAR_LITERAL = 10;
 	int NUM_INT = 11;
