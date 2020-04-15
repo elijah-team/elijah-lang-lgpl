@@ -9,6 +9,9 @@
 package tripleo.elijah.comp;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,12 +46,22 @@ public class IO {
 		record(FileOption.WRITE, p);				
 		return null;
 	}
-	
+
 	private void record(FileOption read, Path p) {
 		// TODO Auto-generated method stub
 		Map<FileOption, File> options11 = new HashMap<FileOption, File>();
 		options11.put(read, p.toFile());
+	}
 
+	private void record(FileOption read, File file) {
+//		Map<FileOption, File> options11 = new HashMap<FileOption, File>();
+//		options11.put(read, p);
+		recordedreads.add(file);
+	}
+
+	public InputStream readFile(File f) throws FileNotFoundException {
+		record(FileOption.READ, f);
+		return new FileInputStream(f);
 	}
 }
 

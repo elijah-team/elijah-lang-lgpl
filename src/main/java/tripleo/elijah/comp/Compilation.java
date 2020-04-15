@@ -20,6 +20,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.Out;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
@@ -81,14 +82,14 @@ public class Compilation {
 				for (int i = 0; i < args2.length; i++)
 					doFile(new File(args2[i]), errSink);
 			} else {
-				System.err.println("Usage: eljc [-showtree] <directory or file name>");
+				System.err.println("Usage: eljc [--showtree] [-sE] <directory or file names>");
 			}
 		} catch (Exception e) {
 			errSink.exception(e);
 		}
 	}
 
-	public void doFile(File f, ErrSink errSink) throws Exception {
+	public void doFile(@NotNull File f, ErrSink errSink) throws Exception {
 		if (f.isDirectory()) {
 			String[] files = f.list();
 			for (int i = 0; i < files.length; i++)
@@ -100,7 +101,7 @@ public class Compilation {
 			if (matches) {
 				System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
 				if (f.exists())
-					parseFile(file_name, new FileInputStream(f));
+					parseFile(file_name, io.readFile(f));
 				else
 					errSink.reportError(ErrSink.Errors.ERROR, "File doesn't exist " + f.getAbsolutePath().toString());
 			}
