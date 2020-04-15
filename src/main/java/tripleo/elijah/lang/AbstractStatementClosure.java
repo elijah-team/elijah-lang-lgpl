@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import antlr.Token;
+import tripleo.elijah.util.NotImplementedException;
 
 
 // Referenced classes of package pak2:
@@ -33,26 +34,26 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 			@Override
 			public void addDocString(Token s1) {
-				// TODO Auto-generated method stub
-				
+				classStatement.addDocString(s1);
 			}
 
 			@Override
 			public void statementWrapper(IExpression aExpr) {
-				@SuppressWarnings("unused")
-				int y=2;
+				throw new NotImplementedException();
 			}
 
 			@Override
 			public StatementClosure statementClosure() {
-				// TODO Auto-generated method stub
-				return null;
+				throw new NotImplementedException();
+//				// TODO Auto-generated method stub
+//				return null;
 			}
 
 			@Override
 			public BlockStatement blockStatement() {
-				// TODO Auto-generated method stub
-				return null;
+				throw new NotImplementedException();
+//				// TODO Auto-generated method stub
+//				return null;
 			}
 
 			@Override
@@ -60,19 +61,20 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 				// TODO Auto-generated method stub
 //				NotImplementedException.raise();
 				classStatement.add((ClassItem) aItem);
-
 			}
 
 			@Override
 			public TypeAliasExpression typeAlias() {
-				// TODO Auto-generated method stub
-				return null;
+				throw new NotImplementedException();
+//				// TODO Auto-generated method stub
+//				return null;
 			}
 
 			@Override
 			public InvariantStatement invariantStatement() {
-				// TODO Auto-generated method stub
-				return null;
+				throw new NotImplementedException();
+//				// TODO Auto-generated method stub
+//				return null;
 			}
 			
 		};
