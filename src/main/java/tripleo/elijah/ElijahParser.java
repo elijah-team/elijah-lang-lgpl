@@ -1222,7 +1222,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 					i = LT(1);
 					match(IDENT);
 					if (inputState.guessing == 0) {
-						fali.setName(i.getText());
+						fali.setName(i);
 					}
 					{
 						switch (LA(1)) {
