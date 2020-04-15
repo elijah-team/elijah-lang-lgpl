@@ -25,16 +25,16 @@ public class ImportStatement implements ModuleItem {
 	 * @category from
 	 */
 	private Qualident root;
-	private QualidentList importList;
+	private QualidentList importList = new QualidentList();
 
 	public ImportStatement(OS_Element aParent) {
 		parent = aParent;
 		if (parent instanceof OS_Module)
 			((OS_Module) parent).add(this);
-		else
+		else if (parent instanceof OS_Container) {
+			((OS_Container) parent).add(this);
+		} else
 			throw new NotImplementedException();
-		//
-		importList=new QualidentList();
 	}
 
 	/** Used in from syntax
