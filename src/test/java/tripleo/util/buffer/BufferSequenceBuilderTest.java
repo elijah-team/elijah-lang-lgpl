@@ -23,8 +23,8 @@ public class BufferSequenceBuilderTest {
 		BufferSequenceBuilder bsb = new BufferSequenceBuilder(4).
 				named("type").named("name").named("value").semieol();
 		bsb.set("type", "int", XX.SPACE);
-		bsb.set("name", "i");
-		bsb.set("value", "= 3;");
+		bsb.set("name", "i", XX.SPACE);
+		bsb.set("value", "= 3");
 		BufferSequence bsq = bsb.build();
 		String s = bsq.getText();
 		assertEquals("int i = 3;\n", s);

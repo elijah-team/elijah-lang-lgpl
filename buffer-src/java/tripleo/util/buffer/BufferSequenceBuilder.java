@@ -69,14 +69,17 @@ public class BufferSequenceBuilder {
 
 	public void set(String part_name, String setTo, char sep) {
 		// TODO Auto-generated method stub
-		parts.put(part_name, new DefaultBuffer(setTo+sep));		
+		parts.put(part_name, new DefaultBuffer(setTo+sep));
 	}
 
 	public BufferSequence build() {
 		BufferSequence bsq = new BufferSequence();
-		for (Buffer element : parts.values()) {
-			bsq.add(element);
+		for (String s : part_names.values()) {
+			bsq.add(parts.get(s));
 		}
+//		for (Buffer element : parts.values()) {
+//			bsq.add(element);
+//		}
 		return bsq;
 	}
 
