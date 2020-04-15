@@ -23,7 +23,8 @@ public class ParserClosure extends ProgramClosure {
 	public ParserClosure(String fn, @NotNull Compilation compilation) {
 		module = new OS_Module();
 		module.setFileName(fn);
-		compilation.addModule(module);
+		module.setParent(compilation); // TODO take a look at all this here
+		compilation.addModule(module, fn);
 	}
 
 	public ClassStatement classStatement() {
@@ -48,6 +49,10 @@ public class ParserClosure extends ProgramClosure {
 	}
 
 	public final OS_Module module;
+
+	public IndexingStatement indexingStatement() {
+		return new IndexingStatement(module());
+	}
 
 }
 
