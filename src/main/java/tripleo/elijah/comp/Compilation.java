@@ -12,10 +12,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import antlr.ANTLRException;
+import com.thoughtworks.xstream.core.AbstractReferenceMarshaller;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -32,13 +35,11 @@ public class Compilation {
 	private IO io;
 	private ErrSink eee;
 	private List<OS_Module> modules = new ArrayList<OS_Module>();
+	private Map<String, OS_Module> fn2m = new HashMap<String, OS_Module>();
 
 	public Compilation(ErrSink eee, IO io) {
-		// TODO Auto-generated constructor stub
 		this.eee = eee;
-		this.setIO(io);
-				
-//		throw new NotImplementedException();
+		this.io  = io;
 	}
 
 	public void feedCmdLine(List<String> args) {
@@ -59,7 +60,7 @@ public class Compilation {
 	//
 	//
 
-	String stage = "O"; // Output
+	public String stage = "O"; // Output
 
 	public void main(List<String> args, ErrSink errSink) {
 		try {
@@ -93,17 +94,19 @@ public class Compilation {
 		if (f.isDirectory()) {
 			String[] files = f.list();
 			for (int i = 0; i < files.length; i++)
-				doFile(new File(f, files[i]), errSink);
+				doFile(new File(f, files[i]), errSink); // recursion, backpressure
 
 		} else {
 			final String file_name = f.getName();
 			final boolean matches = Pattern.matches(".+\\.elijah$", file_name);
 			if (matches) {
 				System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
-				if (f.exists())
-					parseFile(file_name, io.readFile(f));
-				else
-					errSink.reportError(ErrSink.Errors.ERROR, "File doesn't exist " + f.getAbsolutePath().toString());
+				if (f.exists()) {
+					if (!fn2m.containsKey(f.getAbsolutePath())) // don't parse twice
+						parseFile(file_name, io.readFile(f));
+				} else
+					errSink.reportError(ErrSink.Errors.ERROR,
+							"File doesn't exist " + f.getAbsolutePath().toString());
 			}
 		}
 	}
@@ -134,8 +137,9 @@ public class Compilation {
 		return null;
 	}
 
-	public void addModule(OS_Module module) {
+	public void addModule(OS_Module module, String fn) {
 		modules.add(module);
+		fn2m.put(fn, module);
 	}
 }
 
