@@ -22,6 +22,8 @@ import tripleo.elijah.util.NotImplementedException;
 
 public final class AbstractStatementClosure implements StatementClosure, StatementItem {
 
+	private ClassStatement realParent;
+
 	public AbstractStatementClosure(Scope aParent) {
 		// TODO Auto-generated constructor stub
 		parent = aParent;
@@ -29,7 +31,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	public AbstractStatementClosure(ClassStatement classStatement) {
 		// TODO check final member
-//		parent = classStatement;
+		realParent = classStatement;
 		parent = new Scope() {
 
 			@Override
@@ -103,14 +105,14 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	}
 	@Override
 	public Loop loop() {
-		loop = new Loop(/* (OS_Element) parent */);
+		loop = new Loop(getParent());
 		add(loop);
 		return loop;
 	}
 	@Override
 	public StatementClosure procCallExpr() {
 		pcex=new AbstractStatementClosure(parent); //TODO:
-		add(pcex);
+//		add(pcex);
 		return pcex;
 	}
 
@@ -123,7 +125,13 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	@Override
 	public VariableSequence varSeq() {
-		return (VariableSequence) add(vsq=new VariableSequence());
+		vsq=new VariableSequence();
+		vsq.setParent(this.getParent());
+		return (VariableSequence) add(vsq);
+	}
+
+	private OS_Element getParent() {
+		return realParent;
 	}
 
 	@Override
