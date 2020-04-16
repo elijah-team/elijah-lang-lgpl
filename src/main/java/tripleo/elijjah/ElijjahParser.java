@@ -3993,6 +3993,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		Token  lp2 = null;
 		Token  lbc = null;
 		Token  lb = null;
+		Token  rb = null;
 		Token  lp = null;
 		Token  in = null;
 		Token  de = null;
@@ -4112,7 +4113,11 @@ public ElijjahParser(ParserSharedInputState state) {
 					lb = LT(1);
 					match(LBRACK);
 					expr=expression();
+					rb = LT(1);
 					match(RBRACK);
+					if ( inputState.guessing==0 ) {
+						ee=new IndexOpExpression(ee, expr);((IndexOpExpression)ee).parens(lb,rb);
+					}
 				}
 				else if ((LA(1)==LPAREN) && (_tokenSet_48.member(LA(2)))) {
 					lp = LT(1);

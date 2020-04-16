@@ -518,7 +518,8 @@ postfixExpression returns [IExpression ee]
 			DOT/*^*/ "class"
 
 			// an array indexing operation
-		|	lb:LBRACK/*^*/ /*{#lb.setType(INDEX_OP);}*/ expr=expression RBRACK/*!*/
+		|	lb:LBRACK/*^*/ /*{#lb.setType(INDEX_OP);}*/ expr=expression rb:RBRACK/*!*/
+			{ee=new IndexOpExpression(ee, expr);((IndexOpExpression)ee).parens(lb,rb);}
 
 			// method invocation
 			// The next line is not strictly proper; it allows x(3)(4) or
