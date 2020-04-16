@@ -81,6 +81,18 @@ public class Compilation {
 
 				for (int i = 0; i < args2.length; i++)
 					doFile(new File(args2[i]), errSink);
+
+				//
+				if (stage.equals("E")) {
+					// do nothing. job over
+				} else {
+					for (OS_Module module : modules) {
+						new DeduceTypes(module).deduce();
+					}
+				}
+//				final JavaCodeGen visit = new JavaCodeGen();
+//				module.visitGen(visit);
+
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE] <directory or file names>");
 			}
@@ -103,14 +115,6 @@ public class Compilation {
 				if (f.exists()) {
 					if (!fn2m.containsKey(f.getAbsolutePath())) { // don't parse twice
 						OS_Module module = parseFile(file_name, io.readFile(f));
-						//
-						if (stage.equals("E")) {
-							// do nothing. job over
-						} else {
-							new DeduceTypes(module).deduce();
-						}
-//						final JavaCodeGen visit = new JavaCodeGen();
-//						module.visitGen(visit);
 					}
 				} else
 					errSink.reportError(
