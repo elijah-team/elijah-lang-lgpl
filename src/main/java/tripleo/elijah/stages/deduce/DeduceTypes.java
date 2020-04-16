@@ -83,49 +83,7 @@ public class DeduceTypes {
 			ProcedureCallExpression pce = (ProcedureCallExpression) element;
 			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
 		} else if (element instanceof Loop) {
-			Loop loop = (Loop)element;
-			if (loop.getType() == Loop.FROM_TO_TYPE) {
-				parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
-				String varname="vt"+loop.getIterName();
-				final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
-				if (loop.getToPart() instanceof NumericExpression) {
-					final NumericExpression toPart = (NumericExpression)loop.getToPart();
-				
-					System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
-							varname, fromPart.getValue(),
-							varname, toPart.getValue(),  varname));
-				} else if (loop.getToPart() instanceof IdentExpression) {
-					final IdentExpression toPart = (IdentExpression)loop.getToPart();
-					
-					System.out.println(String.format("{for (int %s=%d;%s<=%s;%s++){\n\t",
-							varname, fromPart.getValue(),
-							varname, "vv"+toPart.getText(),  varname));
-					
-				}
-				for (StatementItem item : loop.getItems()) {
-					System.out.println("\t"+item);
-				}
-				System.out.println("}");
-			} else if (loop.getType() == Loop.EXPR_TYPE) {
-				if (loop.getToPart() instanceof NumericExpression) {
-					String varname="vt0_TODO";
-					final NumericExpression toPart = (NumericExpression)loop.getToPart();
-				
-					System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
-							varname, 0,
-							varname, toPart.getValue(),  varname));
-					for (StatementItem item : loop.getItems()) {
-						System.out.println("\t"+item);
-					}
-					System.out.println("}");
-				} else if (loop.getToPart() instanceof DotExpression) {
-					System.out.println("94 "+loop.getToPart().getClass().getName());
-					NotImplementedException.raise();
-				} else {
-					System.out.println("95 "+loop.getToPart().getClass().getName());
-					throw new NotImplementedException();
-				}
-			} else throw new NotImplementedException();
+			addFunctionItem_Loop((Loop) element, parent);
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
@@ -137,17 +95,66 @@ public class DeduceTypes {
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
 				deduceProcedureCall((ProcedureCallExpression) expr, parent.getContext());
 			} else throw new NotImplementedException();
+		} else if (element instanceof ClassStatement) {
+			parent._a.getContext().nameTable().add((OS_Element) element, ((ClassStatement) element).getName(), new OS_Type((ClassStatement) element));
 		} else {
 			System.out.println("91 "+element);
 			throw new NotImplementedException();
 		}
 	}
 
+	private void addFunctionItem_Loop(Loop element, FunctionDef parent) {
+		Loop loop = element;
+		if (loop.getType() == Loop.FROM_TO_TYPE) {
+			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
+			String varname="vt"+loop.getIterName();
+			final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
+			if (loop.getToPart() instanceof NumericExpression) {
+				final NumericExpression toPart = (NumericExpression)loop.getToPart();
+
+				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
+						varname, fromPart.getValue(),
+						varname, toPart.getValue(),  varname));
+			} else if (loop.getToPart() instanceof IdentExpression) {
+				final IdentExpression toPart = (IdentExpression)loop.getToPart();
+
+				System.out.println(String.format("{for (int %s=%d;%s<=%s;%s++){\n\t",
+						varname, fromPart.getValue(),
+						varname, "vv"+toPart.getText(),  varname));
+
+			}
+			for (StatementItem item : loop.getItems()) {
+				System.out.println("\t"+item);
+			}
+			System.out.println("}");
+		} else if (loop.getType() == Loop.EXPR_TYPE) {
+			if (loop.getToPart() instanceof NumericExpression) {
+				String varname="vt0_TODO";
+				final NumericExpression toPart = (NumericExpression)loop.getToPart();
+
+				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
+						varname, 0,
+						varname, toPart.getValue(),  varname));
+				for (StatementItem item : loop.getItems()) {
+					System.out.println("\t"+item);
+				}
+				System.out.println("}");
+			} else if (loop.getToPart() instanceof DotExpression) {
+				System.out.println("94 "+loop.getToPart().getClass().getName());
+				NotImplementedException.raise();
+			} else {
+				System.out.println("95 "+loop.getToPart().getClass().getName());
+				throw new NotImplementedException();
+			}
+		} else throw new NotImplementedException();
+	}
+
 	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
-		int y=2;
 		IExpression de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
 		System.out.println("77 "+de);
 		pce.setLeft(de);
+		LookupResultList lrl = ctx.lookup(((IdentExpression) pce.getLeft()).getText());
+		int y=2;
 //		final OS_Type right_type = deduceExpression(((IBinaryExpression) expr).getRight(), parent.getContext());
 //		((IBinaryExpression)expr).getRight().setType(right_type);
 //		expr.getLeft().setType(right_type);
