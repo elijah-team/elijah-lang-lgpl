@@ -34,17 +34,22 @@ public class FunctionContext extends Context {
 				!(item instanceof NamespaceStatement) &&
 				!(item instanceof VariableSequence)
 			) continue;
+			if (item instanceof OS_Element2) {
+				if (((OS_Element2) item).name().equals(name)) {
+					Result.add(name, level, (OS_Element) item);
+				}
+			}
 			if (item instanceof VariableSequence) {
 				System.out.println("101 "+item);
 				for (VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs);
 				}
-			} else if (((OS_Element2)item).name() != null) {
+			} /*else if (((OS_Element2)item).name() != null) {
 				if (((OS_Element2)item).name().equals(name)) {
 					Result.add(name, level, (OS_Element) item); // TODO exception waiting to happen
 				}
-			}
+			}*/
 		}
 		if (carrier.getParent() != null)
 			carrier.getParent().getContext().lookup(name, level+1, Result);

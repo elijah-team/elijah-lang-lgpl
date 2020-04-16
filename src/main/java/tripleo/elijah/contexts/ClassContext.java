@@ -40,13 +40,18 @@ public class ClassContext extends Context { // TODO is this right, or should be 
 				!(item instanceof FunctionDef) &&
 				!(item instanceof VariableSequence)
 			) continue;
+			if (item instanceof OS_Element2) {
+				if (((OS_Element2) item).name().equals(name)) {
+					Result.add(name, level, item);
+				}
+			}
 			if (item instanceof VariableSequence) {
 				System.out.println("102 "+item);
 				for (VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs);
 				}
-			} else if (item instanceof FunctionDef) {
+			} /*else if (item instanceof FunctionDef) {
 				if (((FunctionDef)item).funName.equals(name))
 					Result.add(name, level, item);
 				
@@ -54,7 +59,7 @@ public class ClassContext extends Context { // TODO is this right, or should be 
 				if (((OS_Element2)item).name().equals(name)) {
 					Result.add(name, level, item);
 				}
-			}
+			}*/
 		}
 		if (carrier.getParent() != null)
 			carrier.getParent().getContext().lookup(name, level+1, Result);

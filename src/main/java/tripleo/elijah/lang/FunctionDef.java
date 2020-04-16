@@ -23,7 +23,8 @@ import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
 
-public class FunctionDef implements ClassItem, OS_Container {
+public class FunctionDef implements ClassItem, OS_Container, OS_Element2 {
+
 	private final class FunctionDefScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
@@ -173,7 +174,11 @@ public class FunctionDef implements ClassItem, OS_Container {
 		
 	}
 
-	
+	@Override // OS_Element2
+	public String name() {
+		return funName;
+	}
+
 }
 
 //
