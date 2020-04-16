@@ -35,6 +35,7 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 	}
 
 	List<VariableStatement> stmts;
+	private OS_Element parent;
 
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
@@ -60,8 +61,11 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 
 	@Override
 	public OS_Element getParent() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.parent;
+	}
+
+	public void setParent(OS_Element parent) {
+		this.parent = parent;
 	}
 
 	@Override
@@ -78,6 +82,7 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 		return r.toString();
 //		return (stmts.stream().map(n -> n.getName()).collect(Collectors.toList())).toString();
 	}
+
 }
 
 //
