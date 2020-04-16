@@ -27,9 +27,6 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem {
 	private List<StatementItem> items = new ArrayList<StatementItem>();
 	private OS_Element parent;
 
-	@Deprecated public Loop() {
-	}
-
 	public Loop(OS_Element aParent) {
 		parent = aParent;
 	}
