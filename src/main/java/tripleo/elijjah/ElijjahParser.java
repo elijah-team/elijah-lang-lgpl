@@ -2101,14 +2101,14 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				formalArgListItem_priv(fal.next());
 				{
-				_loop206:
+				_loop207:
 				do {
 					if ((LA(1)==COMMA)) {
 						match(COMMA);
 						formalArgListItem_priv(fal.next());
 					}
 					else {
-						break _loop206;
+						break _loop207;
 					}
 					
 				} while (true);
@@ -2246,33 +2246,38 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			match(LCURLY);
 			{
-			if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
-				if ( inputState.guessing==0 ) {
-					mcp1 = mc.typeMatch();
+			int _cnt171=0;
+			_loop171:
+			do {
+				if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
+					if ( inputState.guessing==0 ) {
+						mcp1 = mc.typeMatch();
+					}
+					i1 = LT(1);
+					match(IDENT);
+					if ( inputState.guessing==0 ) {
+						mcp1.ident(i1);
+					}
+					match(TOK_COLON);
+					typeName(mcp1.typeName());
+					scope(mcp1.scope());
 				}
-				i1 = LT(1);
-				match(IDENT);
-				if ( inputState.guessing==0 ) {
-					mcp1.ident(i1);
+				else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
+					if ( inputState.guessing==0 ) {
+						mcp2 = mc.normal();
+					}
+					expr=expression();
+					if ( inputState.guessing==0 ) {
+						mcp2.expr(expr);
+					}
+					scope(mcp2.scope());
 				}
-				match(TOK_COLON);
-				typeName(mcp1.typeName());
-				scope(mcp1.scope());
-			}
-			else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
-				if ( inputState.guessing==0 ) {
-					mcp2 = mc.normal();
+				else {
+					if ( _cnt171>=1 ) { break _loop171; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
-				expr=expression();
-				if ( inputState.guessing==0 ) {
-					mcp2.expr(expr);
-				}
-				scope(mcp2.scope());
-			}
-			else {
-				throw new NoViableAltException(LT(1), getFilename());
-			}
-			
+				
+				_cnt171++;
+			} while (true);
 			}
 			match(RCURLY);
 		}

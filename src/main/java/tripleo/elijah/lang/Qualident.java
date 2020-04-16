@@ -29,6 +29,7 @@ import tripleo.elijah.util.TabbedOutputStream;
  */
 public class Qualident  implements IExpression {
 
+	/** Look into creating a {@link DotExpression} from here */
 	public void append(Token r1) {
 		parts.add(r1);		
 	}
@@ -36,7 +37,7 @@ public class Qualident  implements IExpression {
 //		parts.add(d1);
 	}
 	
-	List<Token> parts = new ArrayList<Token>();
+	private List<Token> parts = new ArrayList<Token>();
 
 	@Override
 	public String toString() {
@@ -112,10 +113,7 @@ public class Qualident  implements IExpression {
 		for (int i=0; i< parts.size();i++) {
 			Token ppart = qualident.parts.get(i);
 			Token part  = parts.get(i);
-			if (!(part.getText().equals(ppart.getText()) &&
-				part.getLine() == ppart.getLine() &&
-				part.getColumn() == ppart.getColumn() &&
-				part.getType() == ppart.getType()))
+			if (!equivalentTokens(ppart, part))
 				return false;
 //			if (!qualident.parts.contains(token))
 //				return false;
@@ -124,6 +122,13 @@ public class Qualident  implements IExpression {
 			if (Objects.equals(_type, qualident._type))
 				return true;
 		return false;
+	}
+
+	private static boolean equivalentTokens(Token token1, Token token2) {
+		return token2.getText().equals(token1.getText()) &&
+			token2.getLine() == token1.getLine() &&
+			token2.getColumn() == token1.getColumn() &&
+			token2.getType() == token1.getType();
 	}
 
 	@Override

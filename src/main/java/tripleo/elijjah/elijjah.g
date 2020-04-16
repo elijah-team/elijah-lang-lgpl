@@ -641,7 +641,7 @@ matchConditional[MatchConditional mc]
       		i1:IDENT {mcp1.ident(i1);} TOK_COLON typeName[mcp1.typeName()] scope[mcp1.scope()]
       | { mcp2 = mc.normal();}
       		expr=expression {mcp2.expr(expr);} scope[mcp2.scope()]
-      )
+      )+
       RCURLY
     ;
 caseConditional[CaseConditional mc]
