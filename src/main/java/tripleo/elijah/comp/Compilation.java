@@ -9,7 +9,6 @@
 package tripleo.elijah.comp;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import antlr.ANTLRException;
-import com.thoughtworks.xstream.core.AbstractReferenceMarshaller;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -105,7 +103,7 @@ public class Compilation {
 					if (!fn2m.containsKey(f.getAbsolutePath())) // don't parse twice
 						parseFile(file_name, io.readFile(f));
 				} else
-					errSink.reportError(ErrSink.Errors.ERROR,
+					errSink.reportError(
 							"File doesn't exist " + f.getAbsolutePath().toString());
 			}
 		}
@@ -140,6 +138,10 @@ public class Compilation {
 	public void addModule(OS_Module module, String fn) {
 		modules.add(module);
 		fn2m.put(fn, module);
+	}
+
+	public int errorCount() {
+		return eee.errorCount();
 	}
 }
 

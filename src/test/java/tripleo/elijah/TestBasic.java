@@ -26,13 +26,24 @@ import static tripleo.elijah.gen.nodes.Helpers.List_of;
 public class TestBasic {
 
 	@Test
-	public final void testBasic() {
+	public final void testBasicParse() {
 		List<String> args = List_of("test/basic", "-sE");
 		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
-		
+
+		Assert.assertTrue(c.errorCount() == 0);
+	}
+
+	@Test
+	public final void testBasic() {
+		List<String> args = List_of("test/basic", "-sO");
+		ErrSink eee = new StdErrSink();
+		Compilation c = new Compilation(eee, new IO());
+
+		c.feedCmdLine(args);
+
 		Assert.fail("Not yet implemented"); // TODO
 	}
 

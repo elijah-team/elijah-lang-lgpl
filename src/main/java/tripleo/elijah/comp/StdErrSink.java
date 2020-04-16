@@ -17,17 +17,26 @@ package tripleo.elijah.comp;
  *
  */
 public class StdErrSink implements ErrSink {
-	
+
+	private int _errorCount;
+
 	@Override
 	public void exception(Exception e) {
+		_errorCount++;
 		System.err.println((new StringBuilder("exception: ")).append(e)
 				.toString());
 		e.printStackTrace(System.err);
 	}
 
 	@Override
-	public void reportError(Errors error, String s) {
-		System.err.println(String.format("%s: %s", error.toString(), s));
+	public void reportError(String s) {
+		_errorCount++;
+		System.err.println(String.format("ERROR: %s", s));
+	}
+
+	@Override
+	public int errorCount() {
+		return _errorCount;
 	}
 }
 

@@ -12,7 +12,10 @@ public interface ErrSink {
 	
 	void exception(Exception exception);
 
-    void reportError(Errors error, String s);
+    /*@ requires errorCount() == \old errorCount + 1*/
+    void reportError(String s);
+
+    int errorCount();
 
     public enum Errors {
         ERROR, WARNING, INFO
