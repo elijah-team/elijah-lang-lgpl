@@ -30,7 +30,7 @@ import tripleo.elijah.Documentable;
  */
 public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, StatementItem, FunctionItem, OS_Container, OS_Element2 {
 
-	private Token name;
+	private Token nsName;
 	private OS_Module parent;
 	private NamespaceTypes type; // TODO implement setter
 	public Attached _a = new Attached(new NamespaceContext(this));
@@ -41,8 +41,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 
 	public void setName(Token i1) {
-		// TODO Auto-generated method stub
-		name = i1;
+		nsName = i1;
 	}
 
 //	@Override
@@ -77,24 +76,24 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		return new ProgramClosure() {};
 	}
 
-	@Override
+	@Override // OS_Element, FunctionItem
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
 
-	@Override
+	@Override // OS_Element
 	public void visitGen(ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
 
-	@Override
+	@Override // OS_Element
 	public OS_Element getParent() {
 		return parent;
 	}
 
-	@Override
+	@Override // OS_Element
 	public Context getContext() {
 		return _a.getContext();
 	}
@@ -104,25 +103,25 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 	
 	public String getName() {
-		return name.getText();
+		return nsName.getText();
 	}
 
 	public void setType(NamespaceTypes aType) {
 		type = aType;
 	}
 
-	@Override
+	@Override // OS_Container
 	public List<OS_Element2> items() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	@Override // OS_Container
 	public void add(OS_Element anElement) {
 		if (anElement instanceof ClassItem)
 			items.add((ClassItem) anElement);
 		else
-			System.err.println(String.format("92 adding %s to NameSpaceStatement", anElement));
+			System.err.println(String.format("[NamespaceStatement#add] not a ClassItem: %s", anElement));
 	}
 
 	@Override // OS_Element2
