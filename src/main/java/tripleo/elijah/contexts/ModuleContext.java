@@ -3,12 +3,7 @@
  */
 package tripleo.elijah.contexts;
 
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.LookupResultList;
-import tripleo.elijah.lang.ModuleItem;
-import tripleo.elijah.lang.NamespaceStatement;
-import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.lang.*;
 
 /**
  * @author Tripleo
@@ -42,15 +37,20 @@ public class ModuleContext extends Context {
 //					Result.add(name, level, item);
 //				}
 //			}
-			if (item instanceof ClassStatement) {
-				if (((ClassStatement) item).getName().equals(name)) {
-					Result.add(name, level, item);
-				}
-			} else if (item instanceof NamespaceStatement) {
-				if (((NamespaceStatement) item).getName().equals(name)) {
+			if (item instanceof OS_Element2) {
+				if (((OS_Element2) item).name().equals(name)) {
 					Result.add(name, level, item);
 				}
 			}
+//			if (item instanceof ClassStatement) {
+//				if (((ClassStatement) item).getName().equals(name)) {
+//					Result.add(name, level, item);
+//				}
+//			} else if (item instanceof NamespaceStatement) {
+//				if (((NamespaceStatement) item).getName().equals(name)) {
+//					Result.add(name, level, item);
+//				}
+//			}
 			
 		}
 		if (carrier.getParent() != null)

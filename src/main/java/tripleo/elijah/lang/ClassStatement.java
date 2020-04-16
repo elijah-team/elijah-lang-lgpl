@@ -31,7 +31,7 @@ import tripleo.elijah.Documentable;
  * variables
  * 
  */
-public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, FunctionItem, OS_Element, Documentable {
+public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, FunctionItem, OS_Element, OS_Element2, Documentable {
 	
 	private OS_Package _packageName;
 	
@@ -169,12 +169,16 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return null;
 	}
 
-	@Override
+	@Override // OS_Element
 	public Context getContext() {
 		return _a._context;
 	}
 
-	
+
+	@Override // OS_Element2
+	public String name() {
+		return getName();
+	}
 }
 
 //

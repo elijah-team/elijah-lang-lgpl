@@ -28,7 +28,7 @@ import tripleo.elijah.Documentable;
  * @author Tripleo(sb)
  *
  */
-public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, StatementItem, OS_Container {
+public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, StatementItem, FunctionItem, OS_Container, OS_Element2 {
 
 	private Token name;
 	private OS_Module parent;
@@ -124,7 +124,11 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		else
 			System.err.println(String.format("92 adding %s to NameSpaceStatement", anElement));
 	}
-	
+
+	@Override // OS_Element2
+	public String name() {
+		return getName();
+	}
 }
 
 //
