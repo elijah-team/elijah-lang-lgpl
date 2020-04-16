@@ -19,7 +19,8 @@ public class ConstructorDef extends FunctionDef {
 
 	public ConstructorDef(Token aConstructorName, ClassStatement classStatement) {
 		super(classStatement);
-		setName(aConstructorName);
+		if (aConstructorName != null)
+			setName(aConstructorName);
 	}
 
 }
