@@ -25,13 +25,14 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.Out;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.stages.deduce.DeduceTypes;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
 
 public class Compilation {
 
 	private IO io;
-	private ErrSink eee;
+	public ErrSink eee;
 	private List<OS_Module> modules = new ArrayList<OS_Module>();
 	private Map<String, OS_Module> fn2m = new HashMap<String, OS_Module>();
 
@@ -100,8 +101,17 @@ public class Compilation {
 			if (matches) {
 				System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
 				if (f.exists()) {
-					if (!fn2m.containsKey(f.getAbsolutePath())) // don't parse twice
-						parseFile(file_name, io.readFile(f));
+					if (!fn2m.containsKey(f.getAbsolutePath())) { // don't parse twice
+						OS_Module module = parseFile(file_name, io.readFile(f));
+						//
+						if (stage.equals("E")) {
+							// do nothing. job over
+						} else {
+							new DeduceTypes(module).deduce();
+						}
+//						final JavaCodeGen visit = new JavaCodeGen();
+//						module.visitGen(visit);
+					}
 				} else
 					errSink.reportError(
 							"File doesn't exist " + f.getAbsolutePath().toString());
@@ -109,7 +119,7 @@ public class Compilation {
 		}
 	}
 
-	public void parseFile(String f, InputStream s) throws Exception {
+	public OS_Module parseFile(String f, InputStream s) throws Exception {
 		try {
 			ElijjahLexer lexer = new ElijjahLexer(s);
 			lexer.setFilename(f);
@@ -117,10 +127,12 @@ public class Compilation {
 			parser.out = new Out(f, this);
 			parser.setFilename(f);
 			parser.program();
+			return parser.out.module();
 		} catch (ANTLRException e) {
 			System.err.println(("parser exception: "+e));
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	boolean showTree = false;

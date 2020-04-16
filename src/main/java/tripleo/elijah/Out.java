@@ -43,14 +43,7 @@ public class Out {
 //			x.toXML(pc.module, tos.getStream());
 			//
 //			tos.close();
-//			final JavaCodeGen visit = new JavaCodeGen();
-//			pc.module.visitGen(visit);
 			//
-			if (compilation.stage.equals("E")) {
-				// do nothing. job over
-			} else {
-				new DeduceTypes(pc.module).deduce();
-			}
 		} catch (FileNotFoundException fnfe) {
 			println("&& FileNotFoundException");
 		} catch (IOException ioe) {
