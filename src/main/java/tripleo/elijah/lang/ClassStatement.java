@@ -145,14 +145,12 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return _packageName;
 	}
 	
-	public Scope addCtor(Token aConstructorKW) {
-		NotImplementedException.raise();
-		return null;
+	public ConstructorDef addCtor(Token aConstructorName) {
+		return new ConstructorDef(aConstructorName, this);
 	}
 	
-	public Scope addDtor() {
-		NotImplementedException.raise();
-		return null;
+	public DestructorDef addDtor() {
+		return new DestructorDef(this);
 	}
 	
 	public TypeAliasExpression typeAlias() {
