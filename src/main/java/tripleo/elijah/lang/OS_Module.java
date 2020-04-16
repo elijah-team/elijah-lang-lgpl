@@ -84,10 +84,15 @@ public void finish() {
 	public Collection<ModuleItem> getItems() {
 		return items;
 	}
-	
+
+	/**
+	 * A module has no parent which is an element (not even a package - this is not Java).<br>
+	 * If you want the Compilation use the member {@link #parent}
+	 *
+	 * @return null
+	 */
 	@Override
 	public OS_Element getParent() {
-		// TODO return COMP??
 		return null;
 	}
 
@@ -101,7 +106,7 @@ public void finish() {
 		return false;
 	}
 
-	@Override
+	@Override // OS_Container
 	public List<OS_Element2> items() {
 		throw new NotImplementedException();
 //		return null;
