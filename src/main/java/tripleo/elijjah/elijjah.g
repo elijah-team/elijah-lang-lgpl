@@ -183,6 +183,8 @@ statement[StatementClosure cr]
 	:
 	(procedureCallStatement[cr.procCallExpr()]
 	| ifConditional[cr.ifExpression()]
+	| matchConditional[cr.matchConditional()]
+	| caseConditional[cr.caseConditional()]
 	| varStmt[cr]
 	| whileLoop[cr]
 	| frobeIteration[cr]
@@ -630,6 +632,27 @@ ifConditional[IfExpression ifex]
 	| elseif_part[ifex.elseif()]
 	)*
 	;
+matchConditional[MatchConditional mc]
+		{MatchConditional.MatchConditionalPart1 mcp1=null;
+		 MatchConditional.MatchConditionalPart2 mcp2=null;}
+    : "match" expr=expression {mc.expr(expr);}
+      LCURLY
+      ( { mcp1 = mc.typeMatch();} 
+      		i1:IDENT {mcp1.ident(i1);} TOK_COLON typeName[mcp1.typeName()] scope[mcp1.scope()]
+      | { mcp2 = mc.normal();}
+      		expr=expression {mcp2.expr(expr);} scope[mcp2.scope()]
+      )
+      RCURLY
+    ;
+caseConditional[CaseConditional mc]
+    : "case" expr=expression {mc.expr(expr);}
+/*      LCURLY
+      ( i1:IDENT TOK_COLON typeName scope
+      | expression scope
+      )
+      RCURLY
+*/    ;
+
 whileLoop[StatementClosure cr]
 	 {Loop loop=cr.loop();}
 	:( "while"                 {loop.type(Loop.WHILE);}
