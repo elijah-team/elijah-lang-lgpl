@@ -104,10 +104,10 @@ docstrings[Documentable sc]:
     |)
     ;
 classScope[ClassStatement cr]
-        {Scope sc=null;}
+        {Scope sc=null;ConstructorDef cd=null;DestructorDef dd=null;}
     : docstrings[cr]
-    ( ("constructor"|"ctor") x1:IDENT {sc=cr.addCtor(x1);} scope[sc]
-    |    ("destructor"|"dtor") {sc=cr.addDtor();} scope[sc]
+    ( ("constructor"|"ctor") (x1:IDENT {cd=cr.addCtor(x1);}|{cd=cr.addCtor(null);}) opfal[cd.fal()] scope[cd.scope()]
+    |    ("destructor"|"dtor") {dd=cr.addDtor();} opfal[dd.fal()] scope[dd.scope()]
     | functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure()]
     | typeAlias[cr.typeAlias()]
