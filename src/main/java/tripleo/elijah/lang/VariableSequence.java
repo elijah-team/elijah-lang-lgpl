@@ -17,7 +17,7 @@ import java.util.List;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
 
-public class VariableSequence implements BlockMember, StatementItem, FunctionItem, ClassItem {
+public class VariableSequence implements StatementItem, FunctionItem, ClassItem {
 
 	public VariableSequence() {
 		stmts = new ArrayList<VariableStatement>();
