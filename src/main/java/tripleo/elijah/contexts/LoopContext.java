@@ -6,6 +6,7 @@ package tripleo.elijah.contexts;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.Loop;
+import tripleo.elijah.util.NotImplementedException;
 
 /**
  * @author Tripleo
@@ -22,6 +23,7 @@ public class LoopContext extends Context {
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
 		// TODO implement me
+		throw new NotImplementedException();
 //		final LookupResultList Result = new LookupResultList();
 //		for (FunctionItem item: carrier.getItems()) {
 //			if (!(item instanceof ClassStatement) &&
@@ -42,7 +44,7 @@ public class LoopContext extends Context {
 //		}
 //		if (carrier.getParent() != null)
 //			carrier.getParent().getContext().lookup(name, level+1);
-		return Result;
+//		return Result;
 		
 	}
 
