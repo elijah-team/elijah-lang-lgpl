@@ -22,6 +22,11 @@ public class DotExpression extends AbstractBinaryExpression {
 		kind = ExpressionKind.DOT_EXP;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s.%s", left, right);
+	}
+
 	//
 	// all this garbage below
 	//
