@@ -8,10 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-// Referenced classes of package pak2:
-//			VariableSequence, ProcedureCallExpression, Loop, YieldExpression, 
-//			IfExpression
-
 public interface StatementClosure {
 
 	VariableSequence varSeq();
@@ -29,7 +25,15 @@ public interface StatementClosure {
 	IfExpression ifExpression();
 
 	BlockStatement blockClosure();
+
+	CaseConditional caseConditional();
+
+	MatchConditional matchConditional();
 	
 	// TODO new
 	//IdentList identList();
 }
+
+//
+//
+//

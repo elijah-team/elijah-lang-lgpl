@@ -150,4 +150,16 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	final List<StatementItem> items =new ArrayList<StatementItem>();
 
 	final Scope parent;
+
+	@Override
+	public CaseConditional caseConditional() {
+		// TODO Auto-generated method stub
+		return new CaseConditional();
+	}
+
+	@Override
+	public MatchConditional matchConditional() {
+		// TODO Auto-generated method stub
+		return new MatchConditional();
+	}
 }
