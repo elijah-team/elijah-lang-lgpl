@@ -39,6 +39,9 @@ public class DeduceTypesTest {
 		x = d.deduceExpression(new IdentExpression(Helpers.makeToken("x")), fc);
 		System.out.println(x);
 	}
+	/** This test fails beacause we are comparing a BUILT_IN vs a USER OS_Type.
+	 *  Eventually it should pass when we resolve the primitive types.
+	 */
 	@Test
 	public void testDeduceIdentExpression1() {
 		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());

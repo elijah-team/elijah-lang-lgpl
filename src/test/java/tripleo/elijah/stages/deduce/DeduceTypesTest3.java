@@ -49,6 +49,7 @@ public class DeduceTypesTest3 {
 //	public void testDeduceIdentExpression1() {
 //		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());
 //	}
+	/** This test fails because we are comparing RegularTypeName and VariableTypeName */
 	@Test
 	public void testDeduceIdentExpression2() {
 		final RegularTypeName tn = new RegularTypeName();

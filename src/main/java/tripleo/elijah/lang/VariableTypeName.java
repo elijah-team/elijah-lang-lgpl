@@ -16,6 +16,8 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.Objects;
+
 public class VariableTypeName extends AbstractTypeName implements TypeName {
 
 	private TypeName genericPart = null;
@@ -88,7 +90,20 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 		throw new NotImplementedException();
 //		NotImplementedException.raise();
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof VariableTypeName)) return false;
+		if (!super.equals(o)) return false;
+		VariableTypeName that = (VariableTypeName) o;
+		return Objects.equals(genericPart, that.genericPart);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), genericPart);
+	}
 }
 
 //

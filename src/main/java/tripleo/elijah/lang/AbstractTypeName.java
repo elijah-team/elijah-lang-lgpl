@@ -11,6 +11,8 @@ package tripleo.elijah.lang;
 // Referenced classes of package pak2:
 //			TypeName
 
+import java.util.Objects;
+
 public abstract class AbstractTypeName implements TypeName {
 
 	public AbstractTypeName() {
@@ -90,4 +92,23 @@ tm=atm;
 	protected Qualident pr_name;
 
 	int type;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof AbstractTypeName)) return false;
+		AbstractTypeName that = (AbstractTypeName) o;
+		return pr_constant == that.pr_constant &&
+				pr_reference == that.pr_reference &&
+				pr_out == that.pr_out &&
+				pr_in == that.pr_in &&
+				type == that.type &&
+				tm == that.tm &&
+				pr_name.equals(that.pr_name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(tm, pr_constant, pr_reference, pr_out, pr_in, pr_name, type);
+	}
 }

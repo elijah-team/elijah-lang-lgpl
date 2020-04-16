@@ -15,6 +15,7 @@ package tripleo.elijah.lang;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import antlr.Token;
 import org.jetbrains.annotations.NotNull;
@@ -103,6 +104,32 @@ public class Qualident  implements IExpression {
 		return parts;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Qualident)) return false;
+		Qualident qualident = (Qualident) o;
+		for (int i=0; i< parts.size();i++) {
+			Token ppart = qualident.parts.get(i);
+			Token part  = parts.get(i);
+			if (!(part.getText().equals(ppart.getText()) &&
+				part.getLine() == ppart.getLine() &&
+				part.getColumn() == ppart.getColumn() &&
+				part.getType() == ppart.getType()))
+				return false;
+//			if (!qualident.parts.contains(token))
+//				return false;
+		}
+//		if (Objects.equals(parts, qualident.parts))
+			if (Objects.equals(_type, qualident._type))
+				return true;
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(parts, _type);
+	}
 }
 
 //
