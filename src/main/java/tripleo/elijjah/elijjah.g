@@ -655,24 +655,24 @@ caseConditional[CaseConditional mc]
 
 whileLoop[StatementClosure cr]
 	 {Loop loop=cr.loop();}
-	:( "while"                 {loop.type(Loop.WHILE);}
+	:( "while"                 {loop.type(LoopTypes2.WHILE);}
 	  expr=expression         {loop.expr(expr);}
 	  scope[loop.scope()]
-	| "do"                    {loop.type(Loop.DO_WHILE);}
+	| "do"                    {loop.type(LoopTypes2.DO_WHILE);}
 	  scope[loop.scope()]
       "while" expr=expression {loop.expr(expr);})
     ;
 frobeIteration[StatementClosure cr]
 	 {Loop loop=cr.loop();}
 	:"iterate"
-	( "from"                   {loop.type(Loop.FROM_TO_TYPE);}
+	( "from"                   {loop.type(LoopTypes2.FROM_TO_TYPE);}
 	  expr=expression          {loop.frompart(expr);}
 	  "to" expr=expression     {loop.topart(expr);}
       	("with" i1:IDENT       {loop.iterName(i1);})?
-	| "to"                     {loop.type(Loop.TO_TYPE);}
+	| "to"                     {loop.type(LoopTypes2.TO_TYPE);}
 	  expr=expression          {loop.topart(expr);}
       	("with" i2:IDENT       {loop.iterName(i2);})?
-	|                          {loop.type(Loop.EXPR_TYPE);}
+	|                          {loop.type(LoopTypes2.EXPR_TYPE);}
 	  expr=expression          {loop.topart(expr);}
       	("with" i3:IDENT       {loop.iterName(i3);})?
     )

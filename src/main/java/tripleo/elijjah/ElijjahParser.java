@@ -2328,7 +2328,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				match(LITERAL_while);
 				if ( inputState.guessing==0 ) {
-					loop.type(Loop.WHILE);
+					loop.type(LoopTypes2.WHILE);
 				}
 				expr=expression();
 				if ( inputState.guessing==0 ) {
@@ -2341,7 +2341,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				match(LITERAL_do);
 				if ( inputState.guessing==0 ) {
-					loop.type(Loop.DO_WHILE);
+					loop.type(LoopTypes2.DO_WHILE);
 				}
 				scope(loop.scope());
 				match(LITERAL_while);
@@ -2386,7 +2386,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				match(LITERAL_from);
 				if ( inputState.guessing==0 ) {
-					loop.type(Loop.FROM_TO_TYPE);
+					loop.type(LoopTypes2.FROM_TO_TYPE);
 				}
 				expr=expression();
 				if ( inputState.guessing==0 ) {
@@ -2425,7 +2425,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				match(LITERAL_to);
 				if ( inputState.guessing==0 ) {
-					loop.type(Loop.TO_TYPE);
+					loop.type(LoopTypes2.TO_TYPE);
 				}
 				expr=expression();
 				if ( inputState.guessing==0 ) {
@@ -2476,7 +2476,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_procedure:
 			{
 				if ( inputState.guessing==0 ) {
-					loop.type(Loop.EXPR_TYPE);
+					loop.type(LoopTypes2.EXPR_TYPE);
 				}
 				expr=expression();
 				if ( inputState.guessing==0 ) {

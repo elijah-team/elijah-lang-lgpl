@@ -11,7 +11,7 @@ public class JavaCodeGen implements ICodeGen {
 
 	final ClassPool cp = new ClassPool();
 
-	private List<OS_Element> finished = new ArrayList<OS_Element>();;
+	private List<OS_Element> finished = new ArrayList<OS_Element>();
 
 	public void addClass(ClassStatement klass) {
 //		String pn = ((OS_Module)klass.parent).packageName();
@@ -127,7 +127,7 @@ public class JavaCodeGen implements ICodeGen {
 			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
 		} else if (element instanceof Loop) {
 			Loop loop = (Loop)element;
-			if (loop.getType() == Loop.FROM_TO_TYPE) {
+			if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
 				String varname="vt"+loop.getIterName();
 				final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
 				if (loop.getToPart() instanceof NumericExpression) {

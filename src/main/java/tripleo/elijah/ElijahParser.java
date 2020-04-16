@@ -1297,7 +1297,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				case LITERAL_from: {
 					match(LITERAL_from);
 					if (inputState.guessing == 0) {
-						loop.type(Loop.FROM_TO_TYPE);
+						loop.type(LoopTypes2.FROM_TO_TYPE);
 					}
 					expr = expression();
 					if (inputState.guessing == 0) {
@@ -1313,7 +1313,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				case LITERAL_to: {
 					match(LITERAL_to);
 					if (inputState.guessing == 0) {
-						loop.type(Loop.TO_TYPE);
+						loop.type(LoopTypes2.TO_TYPE);
 					}
 					expr = expression();
 					if (inputState.guessing == 0) {
@@ -1334,7 +1334,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				case CHAR_LITERAL:
 				case NUM_INT: {
 					if (inputState.guessing == 0) {
-						loop.type(Loop.EXPR_TYPE);
+						loop.type(LoopTypes2.EXPR_TYPE);
 					}
 					expr = expression();
 					if (inputState.guessing == 0) {
@@ -3386,7 +3386,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			case LITERAL_while: {
 				match(LITERAL_while);
 				if (inputState.guessing == 0) {
-					loop.type(LoopTypes.WHILE);
+					loop.type(LoopTypes2.WHILE);
 				}
 				expr = expression();
 				if (inputState.guessing == 0) {
@@ -3398,7 +3398,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 			case LITERAL_do: {
 				match(LITERAL_do);
 				if (inputState.guessing == 0) {
-					loop.type(LoopTypes.DO_WHILE);
+					loop.type(LoopTypes2.DO_WHILE);
 				}
 				scope(loop.scope());
 				match(LITERAL_while);

@@ -34,7 +34,7 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem {
 		parent = aParent;
 	}
 
-	public void type(int aType) {
+	public void type(LoopTypes2 aType) {
 		type = aType;
 	}
 
@@ -63,34 +63,34 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem {
 	/**
 	 * @category type
 	 */
-	private int type;
+	private LoopTypes2 type;
 private IExpression topart,frompart;
 private IExpression expr;
 private Attached _a = new Attached(new LoopContext(this));
+//
+//	/**
+//	 * @category type
+//	 */
+//	public static final int FROM_TO_TYPE = 82;
+//
+//	/**
+//	 * @category type
+//	 */
+//	public static final int TO_TYPE = 81;
 
-	/**
-	 * @category type
-	 */
-	public static final int FROM_TO_TYPE = 82;
-
-	/**
-	 * @category type
-	 */
-	public static final int TO_TYPE = 81;
-	
 	public List<StatementItem> getItems() {
 		return items;
 	}
-	
-	/**
-	 * @category type
-	 */
-	public static final int ITER_TYPE = 86;
 
-	/**
-	 * @category type
-	 */
-	public static final int EXPR_TYPE = 83;
+//	/**
+//	 * @category type
+//	 */
+//	public static final int ITER_TYPE = 86;
+//
+//	/**
+//	 * @category type
+//	 */
+//	public static final int EXPR_TYPE = 83;
 
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
@@ -108,7 +108,7 @@ private Attached _a = new Attached(new LoopContext(this));
 		return iterName;
 	}
 	
-	public int getType() {
+	public LoopTypes2 getType() {
 		return type;
 	}
 	
