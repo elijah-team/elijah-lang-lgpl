@@ -153,7 +153,10 @@ public class DeduceTypes {
 		IExpression de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
 		System.out.println("77 "+de);
 		pce.setLeft(de);
-		LookupResultList lrl = ctx.lookup(((IdentExpression) pce.getLeft()).getText());
+		final String function_name = ((IdentExpression) pce.getLeft()).getText();
+		LookupResultList lrl = ctx.lookup(function_name);
+		if (lrl.results().size() == 0)
+			module.parent.eee.reportError("function not found " + function_name);
 		int y=2;
 //		final OS_Type right_type = deduceExpression(((IBinaryExpression) expr).getRight(), parent.getContext());
 //		((IBinaryExpression)expr).getRight().setType(right_type);
@@ -217,7 +220,7 @@ public class DeduceTypes {
 //				} else{
 //					theType = ii.typeName().getName();
 //				}
-			System.out.println(String.format("100 %s;", vs.getName()));
+			System.out.println(String.format("[#addFunctionItem_deduceVariableStatement] %s %s;", vs.getName(), dtype));
 
 		}
 	}
