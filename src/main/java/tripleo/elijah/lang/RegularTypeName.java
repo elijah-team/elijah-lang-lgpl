@@ -43,10 +43,10 @@ public String getTypeName() {
 	return this.typeName.toString();
 }  // TODO is this right?
 
-//	@Override
-public void print_osi(TabbedOutputStream aTos) {
-	NotImplementedException.raise();
-}
+//  @Override
+//public void print_osi(TabbedOutputStream aTos) {
+//	NotImplementedException.raise();
+//}
 	
 	
 @Override
@@ -77,7 +77,7 @@ public void setGeneric(boolean value) {
 	 */
 	@Override
 	public String toString() {
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		for (TypeModifiers modifier : _ltm) {
 			switch (modifier) {
 				case CONST:      sb.append("const "); break;
@@ -97,10 +97,13 @@ public void setGeneric(boolean value) {
 				default: 		 throw new IllegalStateException("Cant be here!");
 			}
 		}
-		if (genericPart != null) {
-			sb.append(String.format("%s[%s]", getName().toString(), genericPart.toString()));
+		if (typeName == null) {
+			if (genericPart != null) {
+				sb.append(String.format("%s[%s]", getName(), genericPart.toString()));
+			} else
+				sb.append(getName());
 		} else
-			sb.append(getName().toString());
+			sb.append("Unit");
 		return sb.toString();
 	}
 
