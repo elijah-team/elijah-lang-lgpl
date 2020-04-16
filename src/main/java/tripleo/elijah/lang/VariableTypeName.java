@@ -59,14 +59,19 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
-	/*@ requires pr_name != null; */
+	/* @ requires pr_name != null; */
+	// pr_name is null when first created
 	@Override
 	public String toString() {
 		String result;
-		if (genericPart != null) {
-			result = String.format("%s[%s]", pr_name.toString(), genericPart.toString());
+		if (pr_name != null) {
+			if (genericPart != null) {
+				result = String.format("%s[%s]", pr_name.toString(), genericPart.toString());
+			} else {
+				result = pr_name.toString();
+			}
 		} else {
-			result = pr_name.toString();
+			result = "<VariableTypeName null>";
 		}
 		return result;
 	}

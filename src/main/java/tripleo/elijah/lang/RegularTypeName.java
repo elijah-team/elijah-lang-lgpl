@@ -42,12 +42,6 @@ public String getName() {
 public String getTypeName() {
 	return this.typeName.toString();
 }  // TODO is this right?
-
-//  @Override
-//public void print_osi(TabbedOutputStream aTos) {
-//	NotImplementedException.raise();
-//}
-	
 	
 @Override
 public TypeName returnValue() {
@@ -97,7 +91,7 @@ public void setGeneric(boolean value) {
 				default: 		 throw new IllegalStateException("Cant be here!");
 			}
 		}
-		if (typeName == null) {
+		if (typeName != null) {
 			if (genericPart != null) {
 				sb.append(String.format("%s[%s]", getName(), genericPart.toString()));
 			} else
