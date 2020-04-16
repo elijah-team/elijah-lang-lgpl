@@ -17,7 +17,6 @@ package tripleo.elijah.lang;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.comp.Compilation;
-import tripleo.elijjah.lang.IndexingStatement;
 
 public class ParserClosure extends ProgramClosure {
 
