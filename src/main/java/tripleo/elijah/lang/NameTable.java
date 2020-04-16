@@ -20,6 +20,14 @@ public class NameTable {
 		}
 		OS_Element element;
 		OS_Type type;
+
+		@Override
+		public String toString() {
+			return "TypedElement{" +
+					"element=" + element +
+					", type=" + type +
+					'}';
+		}
 	}
 	
 	Map<String, TypedElement> members = new HashMap<String, TypedElement>();
@@ -27,6 +35,11 @@ public class NameTable {
 	public void add(OS_Element element, String name, OS_Type dtype) {
 //		element.setType(dtype);
 		members.put(name, new TypedElement(element, dtype));
+		System.err.println("[NameTable#add] "+members);
 	}
 	
 }
+
+//
+//
+//
