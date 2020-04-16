@@ -103,9 +103,9 @@ public class DeduceTypes {
 		}
 	}
 
-	private void addFunctionItem_Loop(Loop element, FunctionDef parent) {
-		Loop loop = element;
-		if (loop.getType() == Loop.FROM_TO_TYPE) {
+	private void addFunctionItem_Loop(Loop loop, FunctionDef parent) {
+
+		if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
 			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
 			String varname="vt"+loop.getIterName();
 			final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
@@ -127,7 +127,7 @@ public class DeduceTypes {
 				System.out.println("\t"+item);
 			}
 			System.out.println("}");
-		} else if (loop.getType() == Loop.EXPR_TYPE) {
+		} else if (loop.getType() == LoopTypes2.EXPR_TYPE) {
 			if (loop.getToPart() instanceof NumericExpression) {
 				String varname="vt0_TODO";
 				final NumericExpression toPart = (NumericExpression)loop.getToPart();
