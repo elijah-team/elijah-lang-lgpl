@@ -98,8 +98,8 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		add((StatementItem) aExpr);
 	}
 	@Override
- 	public IfExpression ifConditional() {
-		ifex=new IfExpression(this.parent); 
+ 	public IfConditional ifConditional() {
+		ifex=new IfConditional(this.parent);
 		add(ifex);
 		return ifex;
 	}
@@ -147,7 +147,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	
 	private BlockStatement bs;
 	private ConstructExpression ctex;
-	private IfExpression ifex;
+	private IfConditional ifex;
 	
 	private Loop loop;
 	private ProcedureCallExpression pce;

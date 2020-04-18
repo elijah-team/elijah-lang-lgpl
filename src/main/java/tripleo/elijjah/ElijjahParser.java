@@ -2309,7 +2309,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void ifConditional(
-		IfExpression ifex
+		IfConditional ifex
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -4775,7 +4775,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void elseif_part(
-		IfExpression ifex
+		IfConditional ifex
 	) throws RecognitionException, TokenStreamException {
 		
 		

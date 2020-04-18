@@ -14,7 +14,7 @@ import tripleo.elijah.util.NotImplementedException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IfExpression implements StatementItem {
+public class IfConditional implements StatementItem {
 	
 	private class IfConditionalScope implements Scope {
 		@Override
@@ -60,31 +60,31 @@ public class IfExpression implements StatementItem {
 	private int order = 0;
 	
 	private Scope parent;
-	private final IfExpression sibling;
+	private final IfConditional sibling;
 //	private final IfExpression if_parent;
 
 	private IExpression expr;
-	private List<IfExpression> parts = new ArrayList<IfExpression>();
+	private List<IfConditional> parts = new ArrayList<IfConditional>();
 
-	public IfExpression(IfExpression ifExpression) {
+	public IfConditional(IfConditional ifExpression) {
 		this.sibling = ifExpression;
 		this.order = ++sibling/*if_parent*/.order;
 		this.parent = this.sibling.parent;
 	}
 
-	public IfExpression(Scope aClosure) {
+	public IfConditional(Scope aClosure) {
 		this.parent = aClosure;
 		this.sibling = null; // top
 	}
 
-	public IfExpression else_() {
-		IfExpression elsepart = new IfExpression(this);
+	public IfConditional else_() {
+		IfConditional elsepart = new IfConditional(this);
 		parts.add(elsepart);
 		return elsepart;
 	}
 
-	public IfExpression elseif() {
-		IfExpression elseifpart = new IfExpression(this);
+	public IfConditional elseif() {
+		IfConditional elseifpart = new IfConditional(this);
 		parts.add(elseifpart);
 		return elseifpart;
 	}

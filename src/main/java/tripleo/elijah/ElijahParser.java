@@ -1019,7 +1019,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 		}
 	}
 
-	private final void elseif_part(IfExpression ifex) throws RecognitionException, TokenStreamException {
+	private final void elseif_part(IfConditional ifex) throws RecognitionException, TokenStreamException {
 
 		fireEnterRule(29, 0);
 		try { // debugging
@@ -1752,7 +1752,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 		}
 	}
 
-	public final void ifConditional(IfExpression ifex) throws RecognitionException, TokenStreamException {
+	public final void ifConditional(IfConditional ifex) throws RecognitionException, TokenStreamException {
 
 		fireEnterRule(24, 0);
 		try { // debugging
