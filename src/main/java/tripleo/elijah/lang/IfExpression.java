@@ -16,7 +16,7 @@ import java.util.List;
 
 public class IfExpression implements StatementItem {
 	
-	private class IfExpressionScope implements Scope {
+	private class IfConditionalScope implements Scope {
 		@Override
 		public void add(StatementItem aItem) {
 			parent.add(aItem);
@@ -103,7 +103,7 @@ public class IfExpression implements StatementItem {
 	 * 
 	 */
 	public Scope scope() {
-		return new IfExpressionScope();
+		return new IfConditionalScope();
 	}
 }
 

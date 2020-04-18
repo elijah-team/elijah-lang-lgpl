@@ -16,7 +16,8 @@ options {
 }
 
 tokens {
-    "tokens";
+    //"tokens"; 
+    AS="as"; CAST_TO="cast_to";
 }
 
 {
@@ -66,7 +67,6 @@ classStatement [ClassStatement cls]:
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
     LCURLY
-//     docstrings[cls]
      classScope[cls]
     RCURLY
     ;
@@ -76,7 +76,6 @@ namespaceStatement [NamespaceStatement cls]:
     | 				{cls.setType(NamespaceTypes.MODULE);}
     )?
     LCURLY
-//     docstrings[cls]
      namespaceScope[cls]
     RCURLY
     ;
@@ -110,6 +109,7 @@ classScope[ClassStatement cr]
     |    ("destructor"|"dtor") {dd=cr.addDtor();} opfal[dd.fal()] scope[dd.scope()]
     | functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure()]
+    | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | typeAlias[cr.typeAlias()]
     | programStatement[cr.XXX()]
     | invariantStatement[cr.invariantStatement()]
@@ -137,10 +137,13 @@ typeName[TypeName cr]:
 scope[Scope sc]
       {IExpression expr;}
     : LCURLY docstrings[sc]
-      (statement[sc.statementClosure()]
+      ((statement[sc.statementClosure()]
       | expr=expression {sc.statementWrapper(expr);}
       | classStatement[new ClassStatement(sc.getParent())]
-      )*
+      | "continue"
+      | "break" // opt label?
+      | "return" ((expression) => (expr=expression)|)
+      ) opt_semi )*
       RCURLY
     ;
 functionDef[FunctionDef fd]:
@@ -182,7 +185,7 @@ statement[StatementClosure cr]
 		{Qualident q=null;FormalArgList o=null;}
 	:
 	(procedureCallStatement[cr.procCallExpr()]
-	| ifConditional[cr.ifExpression()]
+	| ifConditional[cr.ifConditional()]
 	| matchConditional[cr.matchConditional()]
 	| caseConditional[cr.caseConditional()]
 	| varStmt[cr]
@@ -470,7 +473,7 @@ unaryExpressionNotPlusMinus returns [IExpression ee]
 
 // qualified names, array expressions, method invocation, post inc/dec
 postfixExpression returns [IExpression ee]
-		{ee=null;
+		{ee=null;TypeCastExpression tc=null;
 		IExpression e3=null;ExpressionList el=null;}
 	:	ee=primaryExpression // start with a primary
 
@@ -510,6 +513,8 @@ ee=pce;}
 		|	// nothing
 		)
 
+		( (AS|CAST_TO) {tc=new TypeCastExpression();ee=tc;} typeName[tc.typeName()])?
+		
 		// look for int.class and int[].class
 //	|	builtInType
 //		( lbt:LBRACK/*^*/ /*{#lbt.setType(ARRAY_DECLARATOR);}*/ RBRACK/*!*/ )*
@@ -567,16 +572,16 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 	)
 	;
 
-// A builtin type specification is a builtin type with possible brackets
-// afterwards (which would make it an array type).
-builtInTypeSpec[boolean addImagNode]
-	:	builtInType (lb:LBRACK/*^*/ /*{#lb.setType(ARRAY_DECLARATOR);}*/ RBRACK/*!*/)*
-		{
-			if ( addImagNode ) {
-//				#builtInTypeSpec = #(#[TYPE,"TYPE"], #builtInTypeSpec);
-			}
-		}
-	;
+//// A builtin type specification is a builtin type with possible brackets
+//// afterwards (which would make it an array type).
+//builtInTypeSpec[boolean addImagNode]
+//	:	builtInType (lb:LBRACK/*^*/ /*{#lb.setType(ARRAY_DECLARATOR);}*/ RBRACK/*!*/)*
+//		{
+//			if ( addImagNode ) {
+////				#builtInTypeSpec = #(#[TYPE,"TYPE"], #builtInTypeSpec);
+//			}
+//		}
+//	;
 
 // A type name. which is either a (possibly qualified) class name or
 //   a primitive (builtin) type
@@ -589,8 +594,8 @@ type
 // The primitive types.
 builtInType
 	:	"void"
-	|	"boolean"
-	|	"byte"
+//	|	"boolean"
+//	|	"byte"
 	|	"char"
 	|	"short"
 	|	"int"
@@ -611,7 +616,7 @@ procedureCallStatement[StatementClosure cr]
 	: xy=qualident {pce.identifier(xy);}
 	  procCallEx[pce]
 	;
-ifConditional[IfExpression ifex]
+ifConditional[IfConditional ifex]
 	: "if" expr=expression {ifex.expr(expr);}
 	scope[ifex.scope()]
 	("else" scope[ifex.else_().scope()]
@@ -672,7 +677,7 @@ varStmt_i[VariableStatement vs]
 	( TOK_COLON typeName[vs.typeName()])?
 	( BECOMES expr=expression  {vs.initial(expr);})?
 	;
-elseif_part[IfExpression ifex]
+elseif_part[IfConditional ifex]
 	: "elseif" expr=expression {ifex.expr(expr);}
 	scope[ifex.scope()]
 	;
@@ -729,7 +734,9 @@ formalArgListItem_priv[FormalArgListItem fali]
 		| abstractGenericTypeName_xx[fali.typeName()]
 		)
 	;
-
+	
+	
+	
 //----------------------------------------------------------------------------
 // The Elijjah scanner
 //----------------------------------------------------------------------------

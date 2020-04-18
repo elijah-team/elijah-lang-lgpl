@@ -98,7 +98,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		add((StatementItem) aExpr);
 	}
 	@Override
-	public IfExpression ifExpression() {
+ 	public IfExpression ifConditional() {
 		ifex=new IfExpression(this.parent); 
 		add(ifex);
 		return ifex;

@@ -2810,7 +2810,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 					break;
 				}
 				case LITERAL_if: {
-					ifConditional(pc.ifExpression());
+					ifConditional(pc.ifConditional());
 					break;
 				}
 				case LITERAL_var:
