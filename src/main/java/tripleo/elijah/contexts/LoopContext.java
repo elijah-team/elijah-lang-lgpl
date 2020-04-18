@@ -3,7 +3,9 @@
  */
 package tripleo.elijah.contexts;
 
+import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.Context;
+import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.Loop;
 import tripleo.elijah.util.NotImplementedException;
@@ -23,8 +25,9 @@ public class LoopContext extends Context {
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
 		// TODO implement me
-		throw new NotImplementedException();
+//		throw new NotImplementedException();
 //		final LookupResultList Result = new LookupResultList();
+
 //		for (FunctionItem item: carrier.getItems()) {
 //			if (!(item instanceof ClassStatement) &&
 //				!(item instanceof NamespaceStatement) &&
@@ -42,10 +45,20 @@ public class LoopContext extends Context {
 //				}
 //			}
 //		}
-//		if (carrier.getParent() != null)
-//			carrier.getParent().getContext().lookup(name, level+1);
-//		return Result;
+		if (carrier.getIterName().equals(name)) {
+			String iterName = carrier.getIterName();
+			IdentExpression ie = new IdentExpression(Helpers.makeToken(iterName));
+			Result.add(name, level, ie); // TODO just made ie
+		}
+
+		if (carrier.getParent() != null)
+			carrier.getParent().getContext().lookup(name, level+1, Result); // TODO test this
+		return Result;
 		
 	}
 
 }
+
+//
+//
+//
