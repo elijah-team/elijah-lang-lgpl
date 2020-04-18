@@ -15,7 +15,9 @@
 package tripleo.elijah.lang;
 
 
-public class SubExpression extends BasicBinaryExpression {
+import tripleo.elijah.util.NotImplementedException;
+
+public class SubExpression extends AbstractExpression {
 
 	private IExpression carrier;
 
@@ -23,4 +25,18 @@ public class SubExpression extends BasicBinaryExpression {
 		carrier=ee;
 	}
 
+	@Override
+	public boolean is_simple() {
+		return true;
+	}
+
+	@Override
+	public void setType(OS_Type deducedExpression) {
+		throw new IllegalStateException("Cant set this type");
+	}
+
+	@Override
+	public OS_Type getType() {
+		return carrier.getType();
+	}
 }
