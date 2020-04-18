@@ -23,4 +23,4 @@ tripleo+elijah (at) gmail.com
 
 [google group](https://groups.google.com/forum/#!forum/elijjah)
 
-((reddit post))
+[wiki](https://gitlab.com/elijah-team/elijah-lang/-/wikis/home)
