@@ -10,7 +10,7 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
 
-public class YieldExpression extends AbstractBinaryExpression implements StatementItem {
+public class YieldExpression extends BasicBinaryExpression implements StatementItem {
 
 	public YieldExpression(Scope aScope) {
 		throw new NotImplementedException();

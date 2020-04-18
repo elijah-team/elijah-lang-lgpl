@@ -8,7 +8,7 @@
  */
 package tripleo.elijah.lang;
 
-public class ExpressionWrapper extends AbstractBinaryExpression implements
+public class ExpressionWrapper extends BasicBinaryExpression implements
 		IBinaryExpression {
 
 	public ExpressionWrapper() {

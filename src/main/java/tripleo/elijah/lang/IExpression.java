@@ -33,7 +33,7 @@ public interface IExpression {
 
 	@Deprecated String repr_();
 
-	IExpression UNASSIGNED = new AbstractBinaryExpression() {
+	IExpression UNASSIGNED = new BasicBinaryExpression() {
 	};
 
 //	default boolean is_simple() {

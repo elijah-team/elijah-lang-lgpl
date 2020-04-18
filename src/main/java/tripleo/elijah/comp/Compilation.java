@@ -114,7 +114,7 @@ public class Compilation {
 				System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
 				if (f.exists()) {
 					if (!fn2m.containsKey(f.getAbsolutePath())) { // don't parse twice
-						OS_Module module = parseFile(file_name, io.readFile(f));
+						parseFile(file_name, io.readFile(f));
 					}
 				} else
 					errSink.reportError(
@@ -123,7 +123,7 @@ public class Compilation {
 		}
 	}
 
-	public OS_Module parseFile(String f, InputStream s) throws Exception {
+	public void parseFile(String f, InputStream s) throws Exception {
 		try {
 			ElijjahLexer lexer = new ElijjahLexer(s);
 			lexer.setFilename(f);
@@ -131,12 +131,11 @@ public class Compilation {
 			parser.out = new Out(f, this);
 			parser.setFilename(f);
 			parser.program();
-			return parser.out.module();
+//			return parser.out.module();
 		} catch (ANTLRException e) {
 			System.err.println(("parser exception: "+e));
 			e.printStackTrace();
 		}
-		return null;
 	}
 
 	boolean showTree = false;

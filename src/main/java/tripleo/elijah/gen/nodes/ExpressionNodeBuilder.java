@@ -117,7 +117,7 @@ public class ExpressionNodeBuilder {
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, IExpression right) {
 		// TODO Auto-generated method stub
 		ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
-		return new AbstractBinaryExpression(left, middle1, right);
+		return new BasicBinaryExpression(left, middle1, right);
 	}
 
 	@NotNull
@@ -125,7 +125,7 @@ public class ExpressionNodeBuilder {
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
 		ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
-		return new AbstractBinaryExpression(left, middle1, new StringExpression(Helpers.makeToken(right.text()))); // TODO !!!
+		return new BasicBinaryExpression(left, middle1, new StringExpression(Helpers.makeToken(right.text()))); // TODO !!!
 	}
 
 	@NotNull

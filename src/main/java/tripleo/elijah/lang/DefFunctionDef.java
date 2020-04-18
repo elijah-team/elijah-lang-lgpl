@@ -17,7 +17,6 @@ import antlr.Token;
 import tripleo.elijah.contexts.DefFunctionContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.java.JavaCodeGen;
-import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
@@ -56,8 +55,8 @@ public class DefFunctionDef implements ClassItem {
 		public void print_osi(TabbedOutputStream aTos) throws IOException {
 			// TODO Auto-generated method stub
 			int y=2;
-			if (expr instanceof AbstractBinaryExpression) {
-				AbstractBinaryExpression abe = (AbstractBinaryExpression)expr;
+			if (expr instanceof BasicBinaryExpression) {
+				BasicBinaryExpression abe = (BasicBinaryExpression)expr;
 				if (abe.getKind() == ExpressionKind.ASSIGNMENT) {
 					aTos.put_string_ln("Assignment {");
 					aTos.incr_tabs();

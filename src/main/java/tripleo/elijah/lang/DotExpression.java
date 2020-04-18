@@ -8,7 +8,7 @@ package tripleo.elijah.lang;
  *
  * Created 	Mar 27, 2020 at 12:59:41 AM
  */
-public class DotExpression extends AbstractBinaryExpression {
+public class DotExpression extends BasicBinaryExpression {
 
 	public DotExpression(IExpression ee, IdentExpression identExpression) {
 		left = ee;

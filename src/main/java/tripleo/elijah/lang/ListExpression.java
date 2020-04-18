@@ -15,7 +15,7 @@
 package tripleo.elijah.lang;
 
 
-public class ListExpression extends AbstractBinaryExpression {
+public class ListExpression extends BasicBinaryExpression {
 
 	public ExpressionList contents() {
 		return contents;

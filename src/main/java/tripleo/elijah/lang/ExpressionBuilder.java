@@ -18,11 +18,11 @@ public class ExpressionBuilder {
 
 	public static IBinaryExpression buildPartial(IExpression aE, ExpressionKind aType) {
 		// TODO Auto-generated method stub
-		return new AbstractBinaryExpression(aE, aType, null);
+		return new BasicBinaryExpression(aE, aType, null);
 	}
 
 	public static IBinaryExpression build(IExpression aE, ExpressionKind aType, IExpression aExpression) {
-		return new AbstractBinaryExpression(aE, aType, aExpression);
+		return new BasicBinaryExpression(aE, aType, aExpression);
 	}
 
 	public static IExpression build(IExpression aE, ExpressionKind aType) {

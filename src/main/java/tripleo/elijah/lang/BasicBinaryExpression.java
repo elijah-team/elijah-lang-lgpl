@@ -7,19 +7,13 @@
  * 
  */
 
-//
-//
-// TODO What the fuck is this?
-//
-//
-
 package tripleo.elijah.lang;
 
 import java.io.IOException;
 
 import tripleo.elijah.util.TabbedOutputStream;
 
-public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement {
+public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -27,7 +21,7 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		AbstractBinaryExpression abe = (AbstractBinaryExpression)this;
+		BasicBinaryExpression abe = (BasicBinaryExpression)this;
 		if (abe.getKind() == ExpressionKind.ASSIGNMENT) {
 			sb.append(abe.getLeft().toString());
 			sb.append("=");
@@ -41,13 +35,13 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 		return sb.toString();
 	}
 
-	public AbstractBinaryExpression() {
+	public BasicBinaryExpression() {
 		left  = null;
 		right = null;
 		kind  = null;
 	}
 
-	public AbstractBinaryExpression(IExpression aLeft, ExpressionKind aType, IExpression aRight) {
+	public BasicBinaryExpression(IExpression aLeft, ExpressionKind aType, IExpression aRight) {
 		left = aLeft;
 		kind = aType;
 		right = aRight;
@@ -70,7 +64,7 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
-		AbstractBinaryExpression abe = (AbstractBinaryExpression)this;
+		BasicBinaryExpression abe = (BasicBinaryExpression)this;
 		if (abe.getKind() == ExpressionKind.ASSIGNMENT) {
 			aTos.put_string_ln("Assignment {");
 			aTos.incr_tabs();
@@ -111,7 +105,7 @@ public class AbstractBinaryExpression implements IBinaryExpression, ScopeElement
 	}
 	@Override
 	public void shift(ExpressionKind aType) {
-		left=new AbstractBinaryExpression(left,kind,right); //TODO
+		left=new BasicBinaryExpression(left,kind,right); //TODO
 		kind=aType;
 		right=null;
 	}

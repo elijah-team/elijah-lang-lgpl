@@ -12,7 +12,7 @@
 
 import antlr.Token;
 
-class BinaryExpression extends AbstractBinaryExpression {
+class BinaryExpression extends BasicBinaryExpression {
 
 	public BinaryExpression(IExpression aLast_exp, ExpressionKind aType, Token aSide) {
 		left = aLast_exp;

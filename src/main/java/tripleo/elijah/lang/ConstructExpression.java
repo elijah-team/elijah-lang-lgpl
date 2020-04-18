@@ -15,7 +15,7 @@
 package tripleo.elijah.lang;
 
 
-public class ConstructExpression extends AbstractBinaryExpression implements StatementItem {
+public class ConstructExpression extends BasicBinaryExpression implements StatementItem {
 
 	public ConstructExpression(Scope aScope) {
 	}

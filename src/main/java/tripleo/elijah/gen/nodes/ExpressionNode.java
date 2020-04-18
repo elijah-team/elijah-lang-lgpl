@@ -108,13 +108,13 @@ public class ExpressionNode implements IExpressionNode {
 			final int value = ((NumericExpression) iex).getValue();
 			return ((Integer) value).toString();
 		}
-		if (iex instanceof AbstractBinaryExpression) {
+		if (iex instanceof BasicBinaryExpression) {
 			if (iex.getLeft() instanceof VariableReference) {
 
 				final String left_side = ((VariableReference) this.iex.getLeft()).getName();
 				String right_side = null;
 				
-				final AbstractBinaryExpression abe = (AbstractBinaryExpression) this.iex;
+				final BasicBinaryExpression abe = (BasicBinaryExpression) this.iex;
 //				if (abe.getRight() instanceof OS_Integer) {
 //					right_side = ""+((OS_Integer) abe.getRight()).getValue();
 //				}

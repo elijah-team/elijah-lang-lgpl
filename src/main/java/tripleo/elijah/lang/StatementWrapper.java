@@ -1,6 +1,5 @@
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class StatementWrapper implements StatementItem, FunctionItem {
     public void print_osi(TabbedOutputStream aTos) throws IOException {
         // TODO Auto-generated method stub
         int y=2;
-        if (expr instanceof AbstractBinaryExpression) {
+        if (expr instanceof BasicBinaryExpression) {
             expr.print_osi(aTos);
         }
     }
