@@ -26,7 +26,18 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 			sb.append(abe.getLeft().toString());
 			sb.append("=");
 			sb.append(abe.getRight().toString());
-				
+		} else if (abe.getKind() == ExpressionKind.EQUAL) {
+			sb.append(abe.getLeft().toString());
+			sb.append("==");
+			sb.append(abe.getRight().toString());
+		} else if (abe.getKind() == ExpressionKind.NOT_EQUAL) {
+			sb.append(abe.getLeft().toString());
+			sb.append("!=");
+			sb.append(abe.getRight().toString());
+		} else if (abe.getKind() == ExpressionKind.ADDITION) {
+			sb.append(abe.getLeft().toString());
+			sb.append("+");
+			sb.append(abe.getRight().toString());
 		} else if (abe.getKind() == ExpressionKind.AUG_MULT) {
 			sb.append(abe.getLeft().toString());
 			sb.append("*=");
