@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.gen.nodes.Helpers;
 
 /**
  * @author Tripleo
@@ -21,6 +22,7 @@ public class ConstructorDef extends FunctionDef {
 		super(classStatement);
 		if (aConstructorName != null)
 			setName(aConstructorName);
+		else setName(Helpers.makeToken("<>")); // hack for Context#lookup
 	}
 
 }
