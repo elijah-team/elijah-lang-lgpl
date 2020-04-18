@@ -8,11 +8,11 @@ class Main {
   }
 }
 
-#pragma return-result
+#pragma return_result
 
 ns /*__MODULE__*/ { 
   factorial_r(i: u64) -> u64 {
-     select i {
+     case i {
         0 { Result = 0 }
         n { Result = n * factorial(n-1) } // _r/_i // also tailcall
      }
