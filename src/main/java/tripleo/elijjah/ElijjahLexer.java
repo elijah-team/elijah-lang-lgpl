@@ -44,15 +44,15 @@ public ElijjahLexer(LexerSharedInputState state) {
 	literals.put(new ANTLRHashString("case", this), new Integer(110));
 	literals.put(new ANTLRHashString("tagged", this), new Integer(48));
 	literals.put(new ANTLRHashString("to", this), new Integer(114));
-	literals.put(new ANTLRHashString("this", this), new Integer(92));
+	literals.put(new ANTLRHashString("this", this), new Integer(94));
 	literals.put(new ANTLRHashString("procedure", this), new Integer(97));
 	literals.put(new ANTLRHashString("interface", this), new Integer(17));
 	literals.put(new ANTLRHashString("class", this), new Integer(16));
 	literals.put(new ANTLRHashString("destructor", this), new Integer(33));
 	literals.put(new ANTLRHashString("construct", this), new Integer(43));
 	literals.put(new ANTLRHashString("manual", this), new Integer(50));
-	literals.put(new ANTLRHashString("false", this), new Integer(94));
-	literals.put(new ANTLRHashString("true", this), new Integer(93));
+	literals.put(new ANTLRHashString("false", this), new Integer(93));
+	literals.put(new ANTLRHashString("true", this), new Integer(92));
 	literals.put(new ANTLRHashString("indexing", this), new Integer(6));
 	literals.put(new ANTLRHashString("void", this), new Integer(98));
 	literals.put(new ANTLRHashString("def", this), new Integer(117));
@@ -1073,7 +1073,7 @@ tryAgain:
 		
 		match("//");
 		{
-		_loop266:
+		_loop264:
 		do {
 			if ((_tokenSet_0.member(LA(1)))) {
 				{
@@ -1081,7 +1081,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop266;
+				break _loop264;
 			}
 			
 		} while (true);
@@ -1127,7 +1127,7 @@ tryAgain:
 		
 		match("/*");
 		{
-		_loop272:
+		_loop270:
 		do {
 			if ((LA(1)=='\r') && (LA(2)=='\n') && ((LA(3) >= '\u0003' && LA(3) <= '\u00ff')) && ((LA(4) >= '\u0003' && LA(4) <= '\u00ff'))) {
 				match('\r');
@@ -1151,7 +1151,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop272;
+				break _loop270;
 			}
 			
 		} while (true);
@@ -1242,17 +1242,17 @@ tryAgain:
 		case 'u':
 		{
 			{
-			int _cnt282=0;
-			_loop282:
+			int _cnt280=0;
+			_loop280:
 			do {
 				if ((LA(1)=='u')) {
 					match('u');
 				}
 				else {
-					if ( _cnt282>=1 ) { break _loop282; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+					if ( _cnt280>=1 ) { break _loop280; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 				}
 				
-				_cnt282++;
+				_cnt280++;
 			} while (true);
 			}
 			mHEX_DIGIT(false);
@@ -1332,7 +1332,7 @@ tryAgain:
 		
 		match('"');
 		{
-		_loop278:
+		_loop276:
 		do {
 			if ((LA(1)=='\\')) {
 				mESC(false);
@@ -1343,7 +1343,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop278;
+				break _loop276;
 			}
 			
 		} while (true);
@@ -1454,7 +1454,7 @@ tryAgain:
 		}
 		}
 		{
-		_loop296:
+		_loop294:
 		do {
 			switch ( LA(1)) {
 			case 'a':  case 'b':  case 'c':  case 'd':
@@ -1498,7 +1498,7 @@ tryAgain:
 			}
 			default:
 			{
-				break _loop296;
+				break _loop294;
 			}
 			}
 		} while (true);
@@ -1525,17 +1525,17 @@ tryAgain:
 			{
 			if (((LA(1) >= '0' && LA(1) <= '9'))) {
 				{
-				int _cnt300=0;
-				_loop300:
+				int _cnt298=0;
+				_loop298:
 				do {
 					if (((LA(1) >= '0' && LA(1) <= '9'))) {
 						matchRange('0','9');
 					}
 					else {
-						if ( _cnt300>=1 ) { break _loop300; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+						if ( _cnt298>=1 ) { break _loop298; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 					}
 					
-					_cnt300++;
+					_cnt298++;
 				} while (true);
 				}
 				{
@@ -1595,17 +1595,17 @@ tryAgain:
 					}
 					}
 					{
-					int _cnt307=0;
-					_loop307:
+					int _cnt305=0;
+					_loop305:
 					do {
 						if ((_tokenSet_5.member(LA(1))) && (true) && (true) && (true)) {
 							mHEX_DIGIT(false);
 						}
 						else {
-							if ( _cnt307>=1 ) { break _loop307; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+							if ( _cnt305>=1 ) { break _loop305; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 						}
 						
-						_cnt307++;
+						_cnt305++;
 					} while (true);
 					}
 					break;
@@ -1614,17 +1614,17 @@ tryAgain:
 				case '4':  case '5':  case '6':  case '7':
 				{
 					{
-					int _cnt309=0;
-					_loop309:
+					int _cnt307=0;
+					_loop307:
 					do {
 						if (((LA(1) >= '0' && LA(1) <= '7'))) {
 							matchRange('0','7');
 						}
 						else {
-							if ( _cnt309>=1 ) { break _loop309; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+							if ( _cnt307>=1 ) { break _loop307; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 						}
 						
-						_cnt309++;
+						_cnt307++;
 					} while (true);
 					}
 					break;
@@ -1644,7 +1644,7 @@ tryAgain:
 				matchRange('1','9');
 				}
 				{
-				_loop312:
+				_loop310:
 				do {
 					switch ( LA(1)) {
 					case '0':  case '1':  case '2':  case '3':
@@ -1661,7 +1661,7 @@ tryAgain:
 					}
 					default:
 					{
-						break _loop312;
+						break _loop310;
 					}
 					}
 				} while (true);
@@ -1762,13 +1762,13 @@ tryAgain:
 					{
 						match('.');
 						{
-						_loop319:
+						_loop317:
 						do {
 							if (((LA(1) >= '0' && LA(1) <= '9'))) {
 								matchRange('0','9');
 							}
 							else {
-								break _loop319;
+								break _loop317;
 							}
 							
 						} while (true);
@@ -1883,17 +1883,17 @@ tryAgain:
 		}
 		}
 		{
-		int _cnt327=0;
-		_loop327:
+		int _cnt325=0;
+		_loop325:
 		do {
 			if (((LA(1) >= '0' && LA(1) <= '9'))) {
 				matchRange('0','9');
 			}
 			else {
-				if ( _cnt327>=1 ) { break _loop327; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+				if ( _cnt325>=1 ) { break _loop325; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
 			}
 			
-			_cnt327++;
+			_cnt325++;
 		} while (true);
 		}
 		if ( _createToken && _token==null && _ttype!=Token.SKIP ) {

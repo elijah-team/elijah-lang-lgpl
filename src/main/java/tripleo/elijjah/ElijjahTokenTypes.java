@@ -93,9 +93,9 @@ public interface ElijjahTokenTypes {
 	int DEC = 89;
 	int BNOT = 90;
 	int LNOT = 91;
-	int LITERAL_this = 92;
-	int LITERAL_true = 93;
-	int LITERAL_false = 94;
+	int LITERAL_true = 92;
+	int LITERAL_false = 93;
+	int LITERAL_this = 94;
 	int LITERAL_null = 95;
 	int LITERAL_function = 96;
 	int LITERAL_procedure = 97;

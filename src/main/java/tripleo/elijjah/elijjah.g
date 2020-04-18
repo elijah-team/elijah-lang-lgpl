@@ -26,7 +26,7 @@ IExpression expr;
 }
 
 program
-        {ExpressionList el=null;	ParserClosure pc = out.closure();}
+        {ParserClosure pc = out.closure();}
     : ( indexingStatement[pc.indexingStatement()]
 	  |"package" xy=qualident {pc.packageName(xy);}
 	  |programStatement[pc])*
@@ -397,8 +397,9 @@ equalityExpression  returns [IExpression ee]
 // boolean relational expressions (level 5)
 relationalExpression returns [IExpression ee]
 		{ee=null;
-		ExpressionKind e2;
-		IExpression e3=null;}
+		ExpressionKind e2=null; // should never be null (below)
+		IExpression e3=null;
+		TypeName tn=new RegularTypeName();}
 
 	:	ee=shiftExpression
 		(	(	(	LT_/*^*/            {e2=ExpressionKind.LT_;}
@@ -406,9 +407,10 @@ relationalExpression returns [IExpression ee]
 				|	LE/*^*/             {e2=ExpressionKind.LE;}
 				|	GE/*^*/             {e2=ExpressionKind.GE;}
 				)
-				e3=shiftExpression
+				e3=shiftExpression      {ee=ExpressionBuilder.build(ee,e2,e3);}
 			)*
-		|	"is_a"/*^*/ typeName[null] //typeSpec[true]
+		|	"is_a"/*^*/ typeName[tn] //typeSpec[true]
+										{ee=new TypeCheckExpression(ee, tn);}
 		)
 	;
 
@@ -463,27 +465,7 @@ unaryExpressionNotPlusMinus returns [IExpression ee]
 		IExpression e3=null;}
 	:	BNOT/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.BNOT);}
 	|	LNOT/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.LNOT);}
-
-	|	(	// subrule allows option to shut off warnings
-			options {
-				// "(int" ambig with postfixExpr due to lack of sequence
-				// info in linear approximate LL(k).  It's ok.  Shut up.
-				generateAmbigWarnings=false;
-			}
-		:	// If typecast is built in type, must be numeric operand
-			// Also, no reason to backtrack if type keyword like int, float...
-			lpb:LPAREN/*^*/ /*{#lpb.setType(TYPECAST);}*/ builtInTypeSpec[true] RPAREN/*!*/
-			ee=unaryExpression
-
-			// Have to backtrack to see if operator follows.  If no operator
-			// follows, it's a typecast.  No semantic checking needed to parse.
-			// if it _looks_ like a cast, it _is_ a cast; else it's a "(expr)"
-//		|	(LPAREN classTypeSpec[true] RPAREN unaryExpressionNotPlusMinus)=>
-//			lp:LPAREN/*^*/ /*{#lp.setType(TYPECAST);}*/ classTypeSpec[true] RPAREN/*!*/
-//			unaryExpressionNotPlusMinus
-
-		|	ee=postfixExpression
-		)
+	|	ee=postfixExpression
 	;
 
 // qualified names, array expressions, method invocation, post inc/dec
@@ -494,19 +476,9 @@ postfixExpression returns [IExpression ee]
 
 		(	// qualified id (id.id.id.id...) -- build the name
 			DOT/*^*/ 
-				( e:IDENT {ee=new DotExpression(ee, new IdentExpression(e));}
-			
-					( lp2:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
-					  (el=expressionList2)? 
-							{ProcedureCallExpression pce=new ProcedureCallExpression();
-							pce.identifier(ee);
-							pce.setArgs(el);
-							ee=pce;}
-					 RPAREN/*!*/)?
-			
-			
-				| "this"
-				| "class"
+				( ee=dot_expression_or_procedure_call[ee]
+//				| "this"
+//				| "class"
 //				| newExpression
 //				| "inherit" LPAREN ( expressionList2 )? RPAREN
 				)
@@ -514,18 +486,14 @@ postfixExpression returns [IExpression ee]
 			//   is the _last_ qualifier.
 
 			// allow ClassName[].class
-		|	( lbc:LBRACK/*^*/ /*{#lbc.setType(ARRAY_DECLARATOR);}*/ RBRACK/*!*/ )+
-			DOT/*^*/ "class"
+//		|	( lbc:LBRACK/*^*/ /*{#lbc.setType(ARRAY_DECLARATOR);}*/ RBRACK/*!*/ )+
+//			DOT/*^*/ "class"
 
 			// an array indexing operation
 		|	lb:LBRACK/*^*/ /*{#lb.setType(INDEX_OP);}*/ expr=expression rb:RBRACK/*!*/
 			{ee=new IndexOpExpression(ee, expr);((IndexOpExpression)ee).parens(lb,rb);}
 
 			// method invocation
-			// The next line is not strictly proper; it allows x(3)(4) or
-			//  x[2](4) which are not valid in Java.  If this grammar were used
-			//  to validate a Java program a semantic check would be needed, or
-			//   this rule would get really ugly...
 		|	lp:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
 				(el=expressionList2)? 
 {ProcedureCallExpression pce=new ProcedureCallExpression();
@@ -547,6 +515,23 @@ ee=pce;}
 //		( lbt:LBRACK/*^*/ /*{#lbt.setType(ARRAY_DECLARATOR);}*/ RBRACK/*!*/ )*
 //		DOT/*^*/ "class"
 	;
+
+
+
+dot_expression_or_procedure_call [IExpression e1] returns [IExpression ee]
+		{ee=null;ExpressionList el=null;}
+	: e:IDENT {ee=new DotExpression(e1, new IdentExpression(e));}
+
+    ( lp2:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
+      (el=expressionList2)?
+            {ProcedureCallExpression pce=new ProcedureCallExpression();
+            pce.identifier(ee);
+            pce.setArgs(el);
+            ee=pce;}
+     RPAREN/*!*/)?
+	;
+
+
 
 // the basic element of an expression
 primaryExpression returns [IExpression ee]

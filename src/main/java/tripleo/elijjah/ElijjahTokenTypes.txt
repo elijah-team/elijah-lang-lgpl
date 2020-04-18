@@ -88,9 +88,9 @@ INC=88
 DEC=89
 BNOT=90
 LNOT=91
-LITERAL_this="this"=92
-LITERAL_true="true"=93
-LITERAL_false="false"=94
+LITERAL_true="true"=92
+LITERAL_false="false"=93
+LITERAL_this="this"=94
 LITERAL_null="null"=95
 LITERAL_function="function"=96
 LITERAL_procedure="procedure"=97
