@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import tripleo.elijah.CharSink;
-import tripleo.elijah.CharSource;
+import tripleo.util.io.CharSink;
+import tripleo.util.io.CharSource;
 import tripleo.elijah.FileOption;
 
 public class IO {
