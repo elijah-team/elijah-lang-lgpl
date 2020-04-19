@@ -135,7 +135,7 @@ typeName[TypeName cr]:
     | simpleTypeName_xx[cr]
     ;
 scope[Scope sc]
-      {IExpression expr;}
+      //{IExpression expr;}
     : LCURLY docstrings[sc]
       ((statement[sc.statementClosure()]
       | expr=expression {sc.statementWrapper(expr);}
@@ -678,7 +678,7 @@ varStmt_i[VariableStatement vs]
 	( BECOMES expr=expression  {vs.initial(expr);})?
 	;
 elseif_part[IfConditional ifex]
-	: "elseif" expr=expression {ifex.expr(expr);}
+	: ("elseif" | "else" "if") expr=expression {ifex.expr(expr);}
 	scope[ifex.scope()]
 	;
 structTypeName[TypeName cr]
