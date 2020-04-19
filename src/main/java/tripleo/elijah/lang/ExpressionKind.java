@@ -43,7 +43,7 @@ public enum ExpressionKind {
 	
 	BAND, BOR, BXOR, NOT_EQUAL, EQUAL, LT_, GT, LE, GE, INC, DEC, NEG, POS, LAND, LOR, BSHIFTR, LSHIFT, RSHIFT, 
 	
-	DOT_EXP, INDEX_OF;
+	DOT_EXP, INDEX_OF, TO_EXPR
 }
 
 //

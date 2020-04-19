@@ -107,45 +107,54 @@ public class DeduceTypes {
 
 		if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
 			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
-			String varname="vt"+loop.getIterName();
-			final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
-			if (loop.getToPart() instanceof NumericExpression) {
-				final NumericExpression toPart = (NumericExpression)loop.getToPart();
+//			String varname="vt"+loop.getIterName();
+			ToExpression toex = new ToExpression(loop.getFromPart(), loop.getToPart());
+			deduceExpression(toex.getLeft(), parent.getContext());
+			deduceExpression(toex.getRight(), parent.getContext());
 
-				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
-						varname, fromPart.getValue(),
-						varname, toPart.getValue(),  varname));
-			} else if (loop.getToPart() instanceof IdentExpression) {
-				final IdentExpression toPart = (IdentExpression)loop.getToPart();
-
-				System.out.println(String.format("{for (int %s=%d;%s<=%s;%s++){\n\t",
-						varname, fromPart.getValue(),
-						varname, "vv"+toPart.getText(),  varname));
-
-			}
-			for (StatementItem item : loop.getItems()) {
-				System.out.println("\t"+item);
-			}
-			System.out.println("}");
-		} else if (loop.getType() == LoopTypes2.EXPR_TYPE) {
-			if (loop.getToPart() instanceof NumericExpression) {
-				String varname="vt0_TODO";
-				final NumericExpression toPart = (NumericExpression)loop.getToPart();
-
-				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
-						varname, 0,
-						varname, toPart.getValue(),  varname));
-				for (StatementItem item : loop.getItems()) {
-					System.out.println("\t"+item);
-				}
-				System.out.println("}");
-			} else if (loop.getToPart() instanceof DotExpression) {
-				System.out.println("94 "+loop.getToPart().getClass().getName());
-				NotImplementedException.raise();
-			} else {
-				System.out.println("95 "+loop.getToPart().getClass().getName());
+			if (loop.getFromPart() instanceof IdentExpression)
+				loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
+			else
 				throw new NotImplementedException();
-			}
+
+//			final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
+//			if (loop.getToPart() instanceof NumericExpression) {
+//				final NumericExpression toPart = (NumericExpression)loop.getToPart();
+//
+//				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
+//						varname, fromPart.getValue(),
+//						varname, toPart.getValue(),  varname));
+//			} else if (loop.getToPart() instanceof IdentExpression) {
+//				final IdentExpression toPart = (IdentExpression)loop.getToPart();
+//
+//				System.out.println(String.format("{for (int %s=%d;%s<=%s;%s++){\n\t",
+//						varname, fromPart.getValue(),
+//						varname, "vv"+toPart.getText(),  varname));
+//
+//			}
+//			for (StatementItem item : loop.getItems()) {
+//				System.out.println("\t"+item);
+//			}
+//			System.out.println("}");
+//		} else if (loop.getType() == LoopTypes2.EXPR_TYPE) {
+//			if (loop.getToPart() instanceof NumericExpression) {
+//				String varname="vt0_TODO";
+//				final NumericExpression toPart = (NumericExpression)loop.getToPart();
+//
+//				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
+//						varname, 0,
+//						varname, toPart.getValue(),  varname));
+//				for (StatementItem item : loop.getItems()) {
+//					System.out.println("\t"+item);
+//				}
+//				System.out.println("}");
+//			} else if (loop.getToPart() instanceof DotExpression) {
+//				System.out.println("94 "+loop.getToPart().getClass().getName());
+//				NotImplementedException.raise();
+//			} else {
+//				System.out.println("95 "+loop.getToPart().getClass().getName());
+//				throw new NotImplementedException();
+//			}
 		} else throw new NotImplementedException();
 	}
 
