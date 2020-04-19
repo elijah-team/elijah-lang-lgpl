@@ -20,7 +20,7 @@ public class BufferSequenceBuilderTest {
 
 	@Test
 	public void shouldConcatSimpleStringsCorrectly2() {
-		BufferSequenceBuilder bsb = new BufferSequenceBuilder(4).
+		tripleo.util.buffer.BufferSequenceBuilder bsb = new BufferSequenceBuilder(4).
 				named("type").named("name").named("value").semieol();
 		bsb.set("type", "int", XX.SPACE);
 		bsb.set("name", "i", XX.SPACE);

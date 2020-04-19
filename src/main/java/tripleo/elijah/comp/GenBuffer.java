@@ -8,18 +8,17 @@
  */
 package tripleo.elijah.comp;
 
+import tripleo.elijah.gen.CompilerContext;
+import tripleo.elijah.gen.nodes.ImportNode;
+import tripleo.elijah.gen.nodes.LocalDeclAgnNode;
+import tripleo.util.NotImplementedException;
+import tripleo.util.buffer.Buffer;
+import tripleo.util.buffer.FileBackedBuffer;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import tripleo.elijah.gen.CompilerContext;
-import tripleo.elijah.gen.nodes.ImportNode;
-import tripleo.elijah.gen.nodes.LocalDeclAgnNode;
-import tripleo.elijah.util.NotImplementedException;
-import tripleo.util.buffer.Buffer;
-import tripleo.util.buffer.CodeGen;
-import tripleo.util.buffer.FileBackedBuffer;
 
 public class GenBuffer {
 
@@ -29,13 +28,13 @@ public class GenBuffer {
 	public void GenImportStmt(CompilerContext cctx, ImportNode impn) {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
-		
+
 	}
 
 	public void InitMod(CompilerContext cctx, String string) {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
-		
+
 	}
 
 	public Buffer moduleBufHdr(String module) {
@@ -61,18 +60,18 @@ public class GenBuffer {
 		}
 	}
 
-	public CodeGen getCodeGen() {
-		// TODO Auto-generated method stub
-		return new CodeGen() {
-
-			@Override
-			public void appendHeader(String module, String build) {
-				// TODO Auto-generated method stub
-				super.appendHeader(module, build);
-			}
-			
-		};
-	}
+//	public CodeGen getCodeGen() {
+//		// TODO Auto-generated method stub
+//		return new CodeGen() {
+//
+//			@Override
+//			public void appendHeader(String module, String build) {
+//				// TODO Auto-generated method stub
+//				super.appendHeader(module, build);
+//			}
+//
+//		};
+//	}
 	
 	public void writeBuffers() throws IOException {
 		for (Map.Entry<String, Buffer> entry : reg_bufs.entrySet()) {
@@ -98,3 +97,7 @@ public class GenBuffer {
 		NotImplementedException.raise();
 	}
 }
+
+//
+//
+//
