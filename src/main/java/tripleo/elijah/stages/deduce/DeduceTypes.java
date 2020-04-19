@@ -1,5 +1,10 @@
-/**
- * 
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ *
+ * The contents of this library are released under the LGPL licence v3,
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ *
  */
 package tripleo.elijah.stages.deduce;
 
@@ -136,7 +141,18 @@ public class DeduceTypes {
 //				System.out.println("\t"+item);
 //			}
 //			System.out.println("}");
-//		} else if (loop.getType() == LoopTypes2.EXPR_TYPE) {
+		} else if (loop.getType() == LoopTypes2.EXPR_TYPE) {
+			assert loop.getIterName() != null;
+			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
+//			String varname="vt"+loop.getIterName();
+			ToExpression toex = new ToExpression(new NumericExpression(0), loop.getToPart());
+			deduceExpression(toex.getLeft(), parent.getContext());
+			deduceExpression(toex.getRight(), parent.getContext());
+
+			if (loop.getFromPart() instanceof IdentExpression)
+				loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
+			else
+				throw new NotImplementedException();
 //			if (loop.getToPart() instanceof NumericExpression) {
 //				String varname="vt0_TODO";
 //				final NumericExpression toPart = (NumericExpression)loop.getToPart();

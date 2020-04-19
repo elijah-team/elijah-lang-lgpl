@@ -10,12 +10,19 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IfConditional implements StatementItem {
-	
+public class IfConditional implements StatementItem, FunctionItem {
+
+	@Override // FunctionItem
+	public void print_osi(TabbedOutputStream tos) throws IOException {
+		throw new NotImplementedException();
+	}
+
 	private class IfConditionalScope implements Scope {
 		@Override
 		public void add(StatementItem aItem) {
