@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/buffer-src/buffer-src.iml" filepath="$PROJECT_DIR$/buffer-src/buffer-src.iml" />
+      <module fileurl="file://$PROJECT_DIR$/buffer/buffer.iml" filepath="$PROJECT_DIR$/buffer/buffer.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/main/main.iml" filepath="$PROJECT_DIR$/src/main/main.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/test/test.iml" filepath="$PROJECT_DIR$/src/test/test.iml" />
     </modules>
