@@ -269,8 +269,12 @@ procCallEx2 returns [ProcedureCallExpression pce]
 	: lp:LPAREN el=expressionList2 rp:RPAREN {pce=new ProcedureCallExpression(lp,el,rp);}
 	;
 invariantStatement[InvariantStatement cr]
+        {InvariantStatementPart isp=null;}
 	: "invariant"
-	;
+        ((i1:IDENT)? 		{isp = new InvariantStatementPart(cr, i1);}
+         TOK_COLON 			//{el=new ExpressionList();}
+         expr=expression    {isp.setExpr(expr);})*
+    ;
 accessNotation
 	: "access" IDENT
 	;
