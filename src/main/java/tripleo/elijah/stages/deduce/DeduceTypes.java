@@ -114,8 +114,8 @@ public class DeduceTypes {
 			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
 //			String varname="vt"+loop.getIterName();
 			ToExpression toex = new ToExpression(loop.getFromPart(), loop.getToPart());
-			deduceExpression(toex.getLeft(), parent.getContext());
-			deduceExpression(toex.getRight(), parent.getContext());
+			deduceExpression_(toex.getLeft(), parent.getContext());
+			deduceExpression_(toex.getRight(), parent.getContext());
 
 			if (loop.getFromPart() instanceof IdentExpression)
 				loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
@@ -146,8 +146,8 @@ public class DeduceTypes {
 			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
 //			String varname="vt"+loop.getIterName();
 			ToExpression toex = new ToExpression(new NumericExpression(0), loop.getToPart());
-			deduceExpression(toex.getLeft(), parent.getContext());
-			deduceExpression(toex.getRight(), parent.getContext());
+			deduceExpression_(toex.getLeft(), parent.getContext());
+			deduceExpression_(toex.getRight(), parent.getContext());
 
 			if (loop.getFromPart() instanceof IdentExpression)
 				loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
@@ -172,6 +172,11 @@ public class DeduceTypes {
 //				throw new NotImplementedException();
 //			}
 		} else throw new NotImplementedException();
+	}
+
+	private void deduceExpression_(IExpression expression, Context context) {
+		OS_Type t = deduceExpression(expression, context);
+		expression.setType(t);
 	}
 
 	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
@@ -280,12 +285,21 @@ public class DeduceTypes {
 				if (element instanceof VariableStatement) {
 					if (((VariableStatement) element).typeName() != null)
 						return new OS_Type(((VariableStatement) element).typeName());
+				} else if (element instanceof FormalArgListItem) {
+					return new OS_Type(((FormalArgListItem) element).tn);
 				}
+				System.err.println("89 "+element.getClass().getName());
 
 			}
+			module.parent.eee.reportError("IDENT not found: "+((IdentExpression) n).getText());
 			NotImplementedException.raise();
 		} else if (n.getKind() == ExpressionKind.NUMERIC) {
 			return new OS_Type(BuiltInTypes.SystemInteger);
+		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
+			DotExpression de = (DotExpression) n;
+			OS_Type left_type = deduceExpression(de.getLeft(), context);
+			OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
+			int y=2;
 		}
 		
 		return null;

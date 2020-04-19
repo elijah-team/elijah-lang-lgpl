@@ -28,4 +28,12 @@ public class FormalArgList {
 	public String toString( ) {
 		return falis.toString();
 	}
+
+	public Iterable<FormalArgListItem> items() {
+		return falis;
+	}
 }
+
+//
+//
+//

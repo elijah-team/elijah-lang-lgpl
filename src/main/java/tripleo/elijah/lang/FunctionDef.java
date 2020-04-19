@@ -25,6 +25,10 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 public class FunctionDef implements ClassItem, OS_Container, OS_Element2 {
 
+	public Iterable<FormalArgListItem> getArgs() {
+		return mFal.items();
+	}
+
 	private final class FunctionDefScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);

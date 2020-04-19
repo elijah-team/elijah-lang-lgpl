@@ -18,6 +18,7 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.Objects;
 
@@ -49,6 +50,13 @@ public class OS_Type {
 	@Override
 	public int hashCode() {
 		return Objects.hash(type, kind, etype.hashCode(), ttype.hashCode());
+	}
+
+	public ClassStatement getClassOf() {
+		if (etype != null && etype instanceof ClassStatement)
+			return (ClassStatement) etype;
+		throw new NotImplementedException();
+//		return null;
 	}
 
 	public enum Type {
