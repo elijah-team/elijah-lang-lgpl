@@ -8,16 +8,7 @@
  */
 package tripleo.elijah.contexts;
 
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.FunctionItem;
-import tripleo.elijah.lang.LookupResultList;
-import tripleo.elijah.lang.NamespaceStatement;
-import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.OS_Element2;
-import tripleo.elijah.lang.VariableSequence;
-import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.lang.*;
 
 /**
  * @author Tripleo
@@ -55,6 +46,11 @@ public class FunctionContext extends Context {
 					Result.add(name, level, (OS_Element) item); // TODO exception waiting to happen
 				}
 			}*/
+		}
+		for (FormalArgListItem arg : carrier.getArgs()) {
+			if (arg.name.getText().equals(name)) {
+				Result.add(name, level, arg);
+			}
 		}
 		if (carrier.getParent() != null)
 			carrier.getParent().getContext().lookup(name, level+1, Result);
