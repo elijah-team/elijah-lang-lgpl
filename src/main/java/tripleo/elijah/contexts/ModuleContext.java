@@ -6,9 +6,6 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  *
  */
-/**
- * 
- */
 package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.*;
@@ -27,7 +24,7 @@ public class ModuleContext extends Context {
 	}
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
-//		final LookupResultList Result = new LookupResultList();
+		// TODO look all this up in a table, not by iteration
 		for (ModuleItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) //&&
@@ -46,3 +43,7 @@ public class ModuleContext extends Context {
 	}
 
 }
+
+//
+//
+//
