@@ -1,0 +1,12 @@
+package Prelude;
+
+class interface String {
+}
+class Integer64 {
+}
+class Integer32 {
+}
+class Boolean {
+}
+alias SystemInteger = Integer64
+alias Integer = SystemInteger
