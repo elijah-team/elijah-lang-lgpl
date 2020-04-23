@@ -28,9 +28,9 @@ IExpression expr;
 
 program
         {ParserClosure pc = out.closure();}
-    : ( indexingStatement[pc.indexingStatement()]
+    : (( indexingStatement[pc.indexingStatement()]
 	  |"package" xy=qualident {pc.packageName(xy);}
-	  |programStatement[pc])*
+	  |programStatement[pc]) opt_semi)*
 	  EOF {out.FinishModule();}
 	;
 indexingStatement[IndexingStatement idx]
@@ -108,12 +108,12 @@ docstrings[Documentable sc]:
     |)
     ;
 classScope[ClassStatement cr]
-        {Scope sc=null;ConstructorDef cd=null;DestructorDef dd=null;}
+        {ConstructorDef cd=null;DestructorDef dd=null;}
     : docstrings[cr]
     ( ("constructor"|"ctor") (x1:IDENT {cd=cr.addCtor(x1);}|{cd=cr.addCtor(null);}) opfal[cd.fal()] scope[cd.scope()]
     |    ("destructor"|"dtor") {dd=cr.addDtor();} opfal[dd.fal()] scope[dd.scope()]
     | functionDef[cr.funcDef()]
-    | varStmt[cr.statementClosure()]
+    | varStmt[cr.statementClosure(), cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | typeAlias[cr.typeAlias()]
     | programStatement[cr.XXX()]
@@ -121,10 +121,10 @@ classScope[ClassStatement cr]
     | accessNotation)*
     ;
 namespaceScope[NamespaceStatement cr]
-        {Scope sc=null;}
+        //{Scope sc=null;}
     : docstrings[cr]
     ( functionDef[cr.funcDef()]
-    | varStmt[cr.statementClosure()]
+    | varStmt[cr.statementClosure(), cr]
     | typeAlias[cr.typeAlias()]
     | programStatement[cr.XXX()]
     | invariantStatement[cr.invariantStatement()]
@@ -164,7 +164,7 @@ programStatement[ProgramClosure pc]:
     | classStatement[pc.classStatement(out.module())]
     | aliasStatement[pc.aliasStatement(out.module())]
     ;
-varStmt[StatementClosure cr]
+varStmt[StatementClosure cr, OS_Element aParent]
         {VariableSequence vsq=null;}
     : ("var" {vsq=cr.varSeq();}
     | ("const"|"val") {vsq=cr.varSeq();vsq.defaultModifiers(TypeModifiers.CONST);})
@@ -193,7 +193,7 @@ statement[StatementClosure cr, OS_Element aParent]
 	| ifConditional[cr.ifConditional()]
 	| matchConditional[cr.matchConditional(), aParent]
 	| caseConditional[cr.caseConditional()]
-	| varStmt[cr]
+	| varStmt[cr, aParent]
 	| whileLoop[cr]
 	| frobeIteration[cr]
 	| "construct" q=qualident o=opfal2 {cr.constructExpression(q,o);}
