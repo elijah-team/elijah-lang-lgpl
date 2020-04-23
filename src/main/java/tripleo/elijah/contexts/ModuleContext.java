@@ -42,13 +42,7 @@ public class ModuleContext extends Context {
 				}
 			}
 		}
-		if (carrier.getParent() != null) {
-			System.out.println("How did we get here");
-			carrier.getParent().getContext().lookup(name, level+1, Result);
-		}
 		return carrier.prelude.getContext().lookup(name, level+1, Result);
-//		return Result;
-		
 	}
 
 }
