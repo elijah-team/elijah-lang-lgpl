@@ -39,6 +39,8 @@ public class ModuleContext extends Context {
 				}
 			}
 		}
+		if (carrier.prelude == null)
+			return Result;
 		return carrier.prelude.getContext().lookup(name, level+1, Result);
 	}
 
