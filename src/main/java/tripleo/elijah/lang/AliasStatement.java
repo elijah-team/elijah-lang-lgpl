@@ -9,8 +9,13 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
 
-public class AliasStatement {
+import java.io.IOException;
+
+public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_Element2 {
     private final OS_Element parent;
 	private IExpression expr;
 	private String name;
@@ -25,6 +30,32 @@ public class AliasStatement {
 
 	public void setName(Token i1) {
 		this.name = i1.getText();
+	}
+
+	@Override // OS_Element
+	public void print_osi(TabbedOutputStream aTos) throws IOException {
+		throw new NotImplementedException();
+	}
+
+	@Override // OS_Element
+	public void visitGen(ICodeGen visit) {
+    	throw new NotImplementedException();
+	}
+
+	@Override // OS_Element
+	public OS_Element getParent() {
+		return this.parent;
+	}
+
+	@Override // OS_Element
+	public Context getContext() {
+		throw new NotImplementedException();
+//		return null;
+	}
+
+	@Override // OS_Element2
+	public String name() {
+		return this.name;
 	}
 }
 
