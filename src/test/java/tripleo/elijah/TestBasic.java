@@ -44,7 +44,8 @@ public class TestBasic {
 
 		c.feedCmdLine(args);
 
-		Assert.fail("Not yet implemented"); // TODO
+//		Assert.fail("Not yet implemented"); // TODO
+		Assert.assertTrue(c.errorCount() == 0);
 	}
 
 }
