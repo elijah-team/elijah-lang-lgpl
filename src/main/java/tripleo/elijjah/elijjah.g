@@ -594,7 +594,7 @@ type
 //	|	builtInType
 	;
 
-
+/*
 // The primitive types.
 builtInType
 	:	"void"
@@ -607,7 +607,7 @@ builtInType
 	|	"long"
 	|	"double"
 	;
-
+*/
 
 
 
