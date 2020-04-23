@@ -28,11 +28,12 @@ test:
 
 deploy:
   stage: deploy
+  image: maven:latest
   script:
-    - mvn $MAVEN_CLI_OPTS deploy
+    - mvn $MAVEN_CLI_OPTS deploy -s ci_settings.xml'
   only:
     - master
-    
+
 sast:
   image: docker:stable
   variables:
