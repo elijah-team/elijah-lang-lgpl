@@ -117,7 +117,8 @@ public class Compilation {
 			//
 			System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
 			if (f.exists()) {
-				parseFile(file_name, io.readFile(f), f);
+				OS_Module m = parseFile(file_name, io.readFile(f), f);
+				m.prelude = this.findPrelude("c"); // TODO we dont know which prelude to find yet
 			} else {
 				errSink.reportError(
 						"File doesn't exist " + f.getAbsolutePath().toString());
@@ -130,7 +131,9 @@ public class Compilation {
 			return fn2m.get(file.getAbsolutePath());
 		}
 		try {
-			return parseFile_(f, s);
+			OS_Module R = parseFile_(f, s);
+			s.close();
+			return R;
 		} catch (ANTLRException e) {
 			System.err.println(("parser exception: " + e));
 			e.printStackTrace();
