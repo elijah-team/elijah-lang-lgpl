@@ -244,7 +244,7 @@ ident2 returns [String ident]
 	r1:IDENT {ident=r1.getText();}
 	;
 aliasStatement[AliasStatement pc]
-	: "alias" i1:IDENT {pc.setName(i1);} BECOMES expr=expression {pc.setExpression(expr);}
+	: "alias" i1:IDENT {pc.setName(i1);} BECOMES xy=qualident {pc.setExpression(xy);}
 	;
 qualidentList[QualidentList qal]
 		{Qualident qid;}

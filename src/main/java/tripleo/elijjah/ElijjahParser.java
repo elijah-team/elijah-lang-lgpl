@@ -2176,9 +2176,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				pc.setName(i1);
 			}
 			match(BECOMES);
-			expr=expression();
+			xy=qualident();
 			if ( inputState.guessing==0 ) {
-				pc.setExpression(expr);
+				pc.setExpression(xy);
 			}
 		}
 		catch (RecognitionException ex) {
