@@ -709,6 +709,7 @@ specifiedGenericTypeName_xx[TypeName tn]
 		{RegularTypeName rtn=new RegularTypeName();}
 	: simpleTypeName_xx [tn]
 	  (LBRACK typeName[rtn] {tn.addGenericPart(rtn);} RBRACK)? // TODO what about  multi-generics?
+	  (QUESTION {tn.setNullable();})?
 	;
 formalArgTypeName[TypeName tn]
 	: structTypeName[tn]
