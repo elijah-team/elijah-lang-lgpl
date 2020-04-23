@@ -1,10 +1,8 @@
 package tripleo.util.buffer;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
-import tripleo.util.buffer.EnclosedBuffer;
+import static org.junit.Assert.assertEquals;
 
 public class BufferSequenceBuilderTest {
 
@@ -38,18 +36,18 @@ public class BufferSequenceBuilderTest {
 		assertEquals("(!)", s);
 	}
 
-	@Test
-	public void shouldHandlePartsAndPartNamesCorrectly() {
-		BufferSequenceBuilder bsb = new BufferSequenceBuilder(4).
-				named("type").named("name").named("value").semieol();
-		bsb.set("type", "int", XX.SPACE);
-		bsb.set("name", "i");
-		bsb.set("value", "= 3;");
-		assertEquals("int ", bsb.fieldNamed("type"));
-		assertEquals("i", bsb.fieldNamed("name"));
-		assertEquals("= 3;", bsb.fieldNamed("value"));
-		assertTrue(bsb.fieldIsSemiEol(4));
-	}
+//	@Test
+//	public void shouldHandlePartsAndPartNamesCorrectly() {
+//		BufferSequenceBuilder bsb = new BufferSequenceBuilder(4).
+//				named("type").named("name").named("value").semieol();
+//		bsb.set("type", "int", XX.SPACE);
+//		bsb.set("name", "i");
+//		bsb.set("value", "= 3;");
+//		assertEquals("int ", bsb.fieldNamed("type"));
+//		assertEquals("i", bsb.fieldNamed("name"));
+//		assertEquals("= 3;", bsb.fieldNamed("value"));
+//		assertTrue(bsb.fieldIsSemiEol(4));
+//	}
 }
 
 //
