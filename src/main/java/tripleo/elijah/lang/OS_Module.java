@@ -42,6 +42,7 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	public void setParent(Compilation parent) {
 		this.parent = parent;
+		this.prelude = parent.findPrelude("c"); // TODO we dont know which prelude to find yet
 	}
 
 //	public void add(ModuleItem aItem) {

@@ -8,15 +8,9 @@
  */
 package tripleo.elijah.comp;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import antlr.ANTLRException;
+import antlr.RecognitionException;
+import antlr.TokenStreamException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -28,6 +22,14 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeduceTypes;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class Compilation {
 
@@ -109,33 +111,41 @@ public class Compilation {
 
 		} else {
 			final String file_name = f.getName();
-			final boolean matches = Pattern.matches(".+\\.elijah$", file_name);
-			if (matches) {
-				System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
-				if (f.exists()) {
-					if (!fn2m.containsKey(f.getAbsolutePath())) { // don't parse twice
-						parseFile(file_name, io.readFile(f));
-					}
-				} else
-					errSink.reportError(
-							"File doesn't exist " + f.getAbsolutePath().toString());
+			final boolean matches = Pattern.matches(".+\\.elijah$", file_name)
+								 || Pattern.matches(".+\\.elijjah$", file_name);
+			if (!matches) return;
+			//
+			System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
+			if (f.exists()) {
+				parseFile(file_name, io.readFile(f), f);
+			} else {
+				errSink.reportError(
+						"File doesn't exist " + f.getAbsolutePath().toString());
 			}
 		}
 	}
 
-	public void parseFile(String f, InputStream s) throws Exception {
-		try {
-			ElijjahLexer lexer = new ElijjahLexer(s);
-			lexer.setFilename(f);
-			ElijjahParser parser = new ElijjahParser(lexer);
-			parser.out = new Out(f, this);
-			parser.setFilename(f);
-			parser.program();
-//			return parser.out.module();
-		} catch (ANTLRException e) {
-			System.err.println(("parser exception: "+e));
-			e.printStackTrace();
+	public OS_Module parseFile(String f, InputStream s, File file) throws Exception {
+		if (fn2m.containsKey(file.getAbsolutePath())) { // don't parse twice
+			return fn2m.get(file.getAbsolutePath());
 		}
+		try {
+			return parseFile_(f, s);
+		} catch (ANTLRException e) {
+			System.err.println(("parser exception: " + e));
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private OS_Module parseFile_(String f, InputStream s) throws RecognitionException, TokenStreamException {
+		ElijjahLexer lexer = new ElijjahLexer(s);
+		lexer.setFilename(f);
+		ElijjahParser parser = new ElijjahParser(lexer);
+		parser.out = new Out(f, this);
+		parser.setFilename(f);
+		parser.program();
+		return parser.out.module();
 	}
 
 	boolean showTree = false;
@@ -157,6 +167,19 @@ public class Compilation {
 
 	public int errorCount() {
 		return eee.errorCount();
+	}
+
+	public OS_Module findPrelude(String prelude_name) {
+		File local_prelude = new File("lib_elijjah/lib-"+prelude_name+"/Prelude.elijjah");
+		if (local_prelude.exists()) {
+			try {
+				return parseFile(local_prelude.getName(), io.readFile(local_prelude), local_prelude);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return null;
 	}
 }
 

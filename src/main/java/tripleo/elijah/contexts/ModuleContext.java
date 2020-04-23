@@ -32,17 +32,22 @@ public class ModuleContext extends Context {
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) //&&
 //				!(item instanceof VariableSequence)
-			// TODO what about imports and aliases
+			// TODO what about imports
 			) continue;
 			if (item instanceof OS_Element2) {
 				if (((OS_Element2) item).name().equals(name)) {
 					Result.add(name, level, item);
+				} else if (item instanceof ImportStatement) {
+					System.err.println("ignoring "+item);
 				}
 			}
 		}
-		if (carrier.getParent() != null)
+		if (carrier.getParent() != null) {
+			System.out.println("How did we get here");
 			carrier.getParent().getContext().lookup(name, level+1, Result);
-		return Result;
+		}
+		return carrier.prelude.getContext().lookup(name, level+1, Result);
+//		return Result;
 		
 	}
 
