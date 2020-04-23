@@ -340,7 +340,7 @@ public class DeduceTypes {
 	public OS_Type deduceExpression(@NotNull IExpression n, Context context) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
-			if (lrl.results().size() == 1) {
+			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
 //				return lrl.results().get(0).getElement();
 				// TODO what to do here??
 				final OS_Element element = lrl.results().get(0).getElement();
@@ -348,10 +348,13 @@ public class DeduceTypes {
 					if (((VariableStatement) element).typeName() != null)
 						return new OS_Type(((VariableStatement) element).typeName());
 				} else if (element instanceof FormalArgListItem) {
-					return new OS_Type(((FormalArgListItem) element).tn);
+					final TypeName typeName = ((FormalArgListItem) element).tn;
+					if (typeName != null)
+						return new OS_Type(typeName);
 				}
 				System.err.println("89 "+element.getClass().getName());
-
+				module.parent.eee.reportError("type not specified: "+ getElementName(element));
+				return null;
 			}
 			module.parent.eee.reportError("IDENT not found: "+((IdentExpression) n).getText());
 			NotImplementedException.raise();
@@ -365,6 +368,17 @@ public class DeduceTypes {
 		}
 		
 		return null;
+	}
+
+	private String getElementName(OS_Element element) {
+		if (element instanceof VariableStatement) {
+			return "<VariableStatement>";
+		} else if (element instanceof FormalArgListItem) {
+			return ((FormalArgListItem) element).name.getText();
+		} else if (element instanceof OS_Element2) {
+			return ((OS_Element2) element).name();
+		}
+		return "<"+element.getClass().getName()+">";
 	}
 
 	private void addImport(ImportStatement imp, OS_Module parent) {
