@@ -62,6 +62,7 @@ qualident returns [Qualident q]
       (d1:DOT r2:IDENT {q.appendDot(d1); q.append(r2);})*
     ;
 classStatement [ClassStatement cls]:
+    (annotation_clause)*
     "class" ("interface"|"struct"|"signature"|"abstract")?
       i1:IDENT {cls.setName(i1);}
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
@@ -70,6 +71,10 @@ classStatement [ClassStatement cls]:
      classScope[cls]
     RCURLY
     ;
+annotation_clause
+		{Qualident q=null;ExpressionList el=null;}
+	: ANNOT (q=qualident (LPAREN {el=new ExpressionList();} expressionList[el] RPAREN)?)+ RBRACK
+	;
 namespaceStatement [NamespaceStatement cls]:
     "namespace" 
     (  i1:IDENT  	{cls.setName(i1);/*cls.findType();*/}
@@ -804,7 +809,7 @@ BAND			:	'&'		;
 BAND_ASSIGN		:	"&="	;
 LAND			:	"&&"	;
 SEMI			:	';'		;
-
+ANNOT           :   "#["    ;
 
 // Whitespace -- ignored
 WS	:	(	' '
