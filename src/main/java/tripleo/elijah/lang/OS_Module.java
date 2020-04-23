@@ -36,6 +36,7 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	public String moduleName="default";
 
+	public OS_Module prelude;
 	private String _fileName;
 	public Compilation parent;
 
@@ -51,15 +52,24 @@ public class OS_Module implements OS_Element, OS_Container {
 	
 	@Override
 	public void add(OS_Element anElement) {
-		if (anElement instanceof ModuleItem) {
-			items.add((ModuleItem) anElement);
-		} else {
+		if (!(anElement instanceof ModuleItem)) {
 			parent.eee.info(String.format(
 					"[Module#add] adding %s to OS_Module", anElement.getClass().getName()));
-			items.add((ModuleItem) anElement);
 		}
-
-	throw new NotImplementedException();
+		if (anElement instanceof OS_Element2) {
+			final String element_name = ((OS_Element2) anElement).name();
+			// TODO make and check a nametable, will fail for imports
+			for (ModuleItem item : items) {
+				if (item instanceof OS_Element2)
+					if (((OS_Element2) item).name().equals(element_name)) {
+						parent.eee.reportError(String.format(
+								"[Module#add] Already has a member by the name of ",
+								element_name));
+						return;
+					}
+			}
+		}
+		items.add((ModuleItem) anElement);
 	}
 
 	public void addIndexingItem(Token i1, IExpression c1) {
@@ -76,9 +86,9 @@ public class OS_Module implements OS_Element, OS_Container {
 		return null;
 	}
 
-public void finish() {
-//	parent.put_module(_fileName, this);
-}
+	public void finish() {
+//		parent.put_module(_fileName, this);
+	}
 
 	@Override
 	public Context getContext() {
@@ -99,6 +109,7 @@ public void finish() {
 	 *
 	 * @return null
 	 */
+	/**@ ensures \result == null */
 	@Override
 	public OS_Element getParent() {
 		return null;
