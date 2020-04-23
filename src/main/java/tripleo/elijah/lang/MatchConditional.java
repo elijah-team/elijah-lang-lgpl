@@ -12,9 +12,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
-import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
@@ -30,6 +28,7 @@ import java.util.List;
 public class MatchConditional implements OS_Element {
 
 	private IExpression expr;
+	private OS_Element parent;
 
 	/**
 	 * @category OS_Element
@@ -38,7 +37,7 @@ public class MatchConditional implements OS_Element {
 	 */
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
-
+		throw new NotImplementedException();
 	}
 
 	/**
@@ -46,7 +45,7 @@ public class MatchConditional implements OS_Element {
 	 */
 	@Override
 	public void visitGen(ICodeGen visit) {
-
+		throw new NotImplementedException();
 	}
 
 	/**
@@ -54,7 +53,7 @@ public class MatchConditional implements OS_Element {
 	 */
 	@Override
 	public OS_Element getParent() {
-		return null;
+		return this.parent;
 	}
 
 	/**
@@ -63,7 +62,12 @@ public class MatchConditional implements OS_Element {
 	 */
 	@Override
 	public Context getContext() {
-		return null;
+		throw new NotImplementedException();
+//		return null;
+	}
+
+	public void setParent(OS_Element aParent) {
+		this.parent = aParent;
 	}
 
 	interface MC1 {

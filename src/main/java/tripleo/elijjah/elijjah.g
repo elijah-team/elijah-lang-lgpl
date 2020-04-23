@@ -137,7 +137,7 @@ typeName[TypeName cr]:
 scope[Scope sc]
       //{IExpression expr;}
     : LCURLY docstrings[sc]
-      ((statement[sc.statementClosure()]
+      ((statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);}
       | classStatement[new ClassStatement(sc.getParent())]
       | "continue"
@@ -181,12 +181,12 @@ opfal2 returns [FormalArgList fal]
 		{fal=new FormalArgList();}
 	: LPAREN formalArgList[fal] RPAREN
 	;
-statement[StatementClosure cr]
+statement[StatementClosure cr, OS_Element aParent]
 		{Qualident q=null;FormalArgList o=null;}
 	:
 	(procedureCallStatement[cr.procCallExpr()]
 	| ifConditional[cr.ifConditional()]
-	| matchConditional[cr.matchConditional()]
+	| matchConditional[cr.matchConditional(), aParent]
 	| caseConditional[cr.caseConditional()]
 	| varStmt[cr]
 	| whileLoop[cr]
@@ -567,7 +567,7 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 	  (opfal[pc.argList()]) scope[pc.scope()]
 	| 
 	  LCURLY ( BOR formalArgList[sc.fal()] BOR )? 
-	  (statement[sc.statementClosure()]
+	  (statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);}
       | classStatement[new ClassStatement(sc.getParent())]
       )*
@@ -627,10 +627,10 @@ ifConditional[IfConditional ifex]
 	| elseif_part[ifex.elseif()]
 	)*
 	;
-matchConditional[MatchConditional mc]
+matchConditional[MatchConditional mc, OS_Element aParent]
 		{MatchConditional.MatchConditionalPart1 mcp1=null;
 		 MatchConditional.MatchConditionalPart2 mcp2=null;}
-    : "match" expr=expression {mc.expr(expr);}
+    : "match" expr=expression {mc.setParent(aParent);mc.expr(expr);}
       LCURLY
       ( { mcp1 = mc.typeMatch();} 
       		i1:IDENT {mcp1.ident(i1);} TOK_COLON typeName[mcp1.typeName()] scope[mcp1.scope()]
