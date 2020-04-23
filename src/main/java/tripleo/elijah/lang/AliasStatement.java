@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
@@ -28,7 +29,7 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 		this.expr = expr;
 	}
 
-	public void setName(Token i1) {
+	public void setName(@NotNull Token i1) {
 		this.name = i1.getText();
 	}
 
@@ -48,7 +49,7 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 	}
 
 	@Override // OS_Element
-	public Context getContext() {
+	public @NotNull Context getContext() {
 		throw new NotImplementedException();
 //		return null;
 	}
