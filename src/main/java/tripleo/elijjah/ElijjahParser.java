@@ -1284,7 +1284,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					}
 					default:
 						if ((_tokenSet_21.member(LA(1))) && (_tokenSet_22.member(LA(2)))) {
-							statement(sc.statementClosure());
+							statement(sc.statementClosure(), sc.getParent());
 						}
 						else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
 							expr=expression();
@@ -1837,7 +1837,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void statement(
-		StatementClosure cr
+		StatementClosure cr, OS_Element aParent
 	) throws RecognitionException, TokenStreamException {
 		
 		Qualident q=null;FormalArgList o=null;
@@ -1857,7 +1857,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			case LITERAL_match:
 			{
-				matchConditional(cr.matchConditional());
+				matchConditional(cr.matchConditional(), aParent);
 				break;
 			}
 			case LITERAL_case:
@@ -2299,7 +2299,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void matchConditional(
-		MatchConditional mc
+		MatchConditional mc, OS_Element aParent
 	) throws RecognitionException, TokenStreamException {
 		
 		Token  i1 = null;
@@ -2310,7 +2310,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			match(LITERAL_match);
 			expr=expression();
 			if ( inputState.guessing==0 ) {
-				mc.expr(expr);
+				mc.setParent(aParent);mc.expr(expr);
 			}
 			match(LCURLY);
 			{
@@ -4458,7 +4458,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				_loop170:
 				do {
 					if ((_tokenSet_21.member(LA(1))) && (_tokenSet_22.member(LA(2)))) {
-						statement(sc.statementClosure());
+						statement(sc.statementClosure(), sc.getParent());
 					}
 					else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_37.member(LA(2)))) {
 						expr=expression();
