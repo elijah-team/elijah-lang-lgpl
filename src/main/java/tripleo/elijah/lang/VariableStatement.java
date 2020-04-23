@@ -8,11 +8,11 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
+
+import java.io.IOException;
 
 // Referenced classes of package pak:
 //			TypeRef, IExpression
@@ -23,7 +23,7 @@ public class VariableStatement implements OS_Element {
 	public String name;
 	
 	private IExpression initialValue = IExpression.UNASSIGNED;
-	private TypeModifiers type;
+	private TypeModifiers typeModifiers;
 	private TypeName typeName = new VariableTypeName();
 
 	public VariableStatement(VariableSequence aSequence) {
@@ -73,7 +73,7 @@ public class VariableStatement implements OS_Element {
 */
 
 	public void set(TypeModifiers y) {
-		type = y;
+		typeModifiers = y;
 	}
 
 	public TypeName typeName() {
