@@ -43,15 +43,23 @@ public class OS_Module implements OS_Element, OS_Container {
 		this.parent = parent;
 	}
 
-	public void add(ModuleItem aItem) {
-//		if (aItem instanceof ClassStatement)
-//			((ClassStatement)aItem).setPackageName(packageNames_q.peek());
-		items.add(aItem);
-	}
+//	public void add(ModuleItem aItem) {
+////		if (aItem instanceof ClassStatement)
+////			((ClassStatement)aItem).setPackageName(packageNames_q.peek());
+//		items.add(aItem);
+//	}
 	
 	@Override
 	public void add(OS_Element anElement) {
-		throw new NotImplementedException();
+		if (anElement instanceof ModuleItem) {
+			items.add((ModuleItem) anElement);
+		} else {
+			parent.eee.info(String.format(
+					"[Module#add] adding %s to OS_Module", anElement.getClass().getName()));
+			items.add((ModuleItem) anElement);
+		}
+
+	throw new NotImplementedException();
 	}
 
 	public void addIndexingItem(Token i1, IExpression c1) {

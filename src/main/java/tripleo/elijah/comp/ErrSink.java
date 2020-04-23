@@ -17,6 +17,8 @@ public interface ErrSink {
 
     int errorCount();
 
+    void info(String format);
+
     public enum Errors {
         ERROR, WARNING, INFO
     }

@@ -38,6 +38,11 @@ public class StdErrSink implements ErrSink {
 	public int errorCount() {
 		return _errorCount;
 	}
+
+	@Override
+	public void info(String message) {
+		System.err.println(String.format("INFO: %message", message));
+	}
 }
 
 //
