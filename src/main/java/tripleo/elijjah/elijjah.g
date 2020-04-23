@@ -704,6 +704,7 @@ genericQualifiers[TypeName cr]
 	;
 abstractGenericTypeName_xx[TypeName tn]
 	: "generic" xy=qualident {tn.typeName(xy); tn.set(TypeModifiers.GENERIC);}
+	| QUESTION xy=qualident {tn.typeName(xy); tn.set(TypeModifiers.GENERIC);}
 	;
 specifiedGenericTypeName_xx[TypeName tn]
 		{RegularTypeName rtn=new RegularTypeName();}
