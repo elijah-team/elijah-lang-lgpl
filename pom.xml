@@ -138,7 +138,19 @@
             </goals>
             <configuration>
               <sources>
-                <source>buffer-src/java/</source>
+                <source>buffer/src/</source>
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>buffer/test/</source>
               </sources>
             </configuration>
           </execution>
