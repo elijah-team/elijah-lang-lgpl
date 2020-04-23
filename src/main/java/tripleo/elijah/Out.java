@@ -8,17 +8,16 @@
  */
 package tripleo.elijah;
  
+import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.lang.ParserClosure;
+import tripleo.elijah.util.TabbedOutputStream;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import tripleo.elijah.comp.Compilation;
-import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.lang.ParserClosure;
-import tripleo.elijah.stages.deduce.DeduceTypes;
-import tripleo.elijah.util.TabbedOutputStream;
 
 public class Out {
 
@@ -42,7 +41,7 @@ public class Out {
 //			x.setMode(XStream.ID_REFERENCES);
 //			x.toXML(pc.module, tos.getStream());
 			//
-//			tos.close();
+			tos.close();
 			//
 		} catch (FileNotFoundException fnfe) {
 			println("&& FileNotFoundException");
