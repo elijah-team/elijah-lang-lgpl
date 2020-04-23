@@ -26,6 +26,13 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
     }
 
 	public void setExpression(IExpression expr) {
+		if (expr.getKind() != ExpressionKind.IDENT &&
+			expr.getKind() != ExpressionKind.QIDENT &&
+			expr.getKind() != ExpressionKind.DOT_EXP) // TODO need DOT_EXP to QIDENT
+		{
+			throw new NotImplementedException();
+//			System.out.println(String.format("[AliasStatement#setExpression] %s %s", expr, expr.getKind()));
+		}
 		this.expr = expr;
 	}
 
