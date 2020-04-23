@@ -51,6 +51,8 @@ public interface TypeName {
 	
 	void setGeneric(boolean value);
 
+    void setNullable();
+
 //	public static final int NORMAL = 0;
 //	public static final int CONST = 1;
 //	public static final int GC = 2;

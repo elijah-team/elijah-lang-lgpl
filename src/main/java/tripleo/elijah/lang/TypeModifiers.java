@@ -11,6 +11,6 @@ package tripleo.elijah.lang;
 public enum TypeModifiers {
 	NORMAL, CONST, GC, TAGGED, POOLED, MANUAL,
 	LOCAL, ONCE, PROCEDURE, FUNCTION, REFPAR, GENERIC,
-	INPAR, OUTPAR;
+	INPAR, OUTPAR, NULLABLE;
 }
 

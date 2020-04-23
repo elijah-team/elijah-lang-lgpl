@@ -58,7 +58,12 @@ public abstract class AbstractTypeName2 implements TypeName {
 	public void setIn(boolean aFlag) {
 		_ltm.add(TypeModifiers.INPAR);
 	}
-	
+
+	@Override
+	public void setNullable() {
+		_ltm.add(TypeModifiers.NULLABLE);
+	}
+
 }
 
 //

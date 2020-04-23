@@ -8,15 +8,11 @@
  */
 package tripleo.elijah.lang;
 
-// Referenced classes of package pak2:
-//			TypeName
-
 import java.util.Objects;
 
 public abstract class AbstractTypeName implements TypeName {
 
-	public AbstractTypeName() {
-	}
+	private boolean isNullable = false;
 
 	@Override
 	public boolean isNull() {
@@ -78,7 +74,12 @@ public abstract class AbstractTypeName implements TypeName {
 	public void type(TypeModifiers atm) {
 tm=atm;		
 	}
-	
+
+	@Override
+	public void setNullable() {
+		this.isNullable = true;
+	}
+
 	public void set(int aType) {
 		type = aType;		// TODO where is this used at?
 	}
@@ -112,3 +113,7 @@ tm=atm;
 		return Objects.hash(tm, pr_constant, pr_reference, pr_out, pr_in, pr_name, type);
 	}
 }
+
+//
+//
+//
