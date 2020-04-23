@@ -40,9 +40,8 @@ public class OS_Module implements OS_Element, OS_Container {
 	private String _fileName;
 	public Compilation parent;
 
-	public void setParent(Compilation parent) {
+	public void setParent(@NotNull Compilation parent) {
 		this.parent = parent;
-		this.prelude = parent.findPrelude("c"); // TODO we dont know which prelude to find yet
 	}
 
 //	public void add(ModuleItem aItem) {
