@@ -34,7 +34,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	private final Stack<Qualident> packageNames_q = new Stack<Qualident>();
 	public Attached _a = new Attached(new ModuleContext(this));
 
-	public String moduleName="default";
+//	public String moduleName="default";
 
 	public OS_Module prelude;
 	private String _fileName;

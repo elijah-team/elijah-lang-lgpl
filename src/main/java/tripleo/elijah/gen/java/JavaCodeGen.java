@@ -1,11 +1,13 @@
 package tripleo.elijah.gen.java;
 
-import java.util.*;
-
-import javassist.*;
+import javassist.ClassPool;
+import javassist.CtClass;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class JavaCodeGen implements ICodeGen {
 
@@ -36,7 +38,7 @@ public class JavaCodeGen implements ICodeGen {
 	public void addModule(OS_Module module) {
 		if (elementDone(module)) {
 			try {
-				CtClass ctc = cp.makeClass(module.moduleName);
+				CtClass ctc = cp.makeClass(("default" /*module.moduleName*/)); //TODO commented out
 				// ctc.setPackagename(pacakageName); // TODO
 				System.out.println(ctc.toString());
 			} catch (Exception e) {
@@ -132,17 +134,17 @@ public class JavaCodeGen implements ICodeGen {
 				final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
 				if (loop.getToPart() instanceof NumericExpression) {
 					final NumericExpression toPart = (NumericExpression)loop.getToPart();
-				
+
 					System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
 							varname, fromPart.getValue(),
 							varname, toPart.getValue(),  varname));
 				} else if (loop.getToPart() instanceof IdentExpression) {
 					final IdentExpression toPart = (IdentExpression)loop.getToPart();
-					
+
 					System.out.println(String.format("{for (int %s=%d;%s<=%s;%s++){\n\t",
 							varname, fromPart.getValue(),
 							varname, "vv"+toPart.getText(),  varname));
-					
+
 				}
 				for (StatementItem item : loop.getItems()) {
 					System.out.println("\t"+item);
