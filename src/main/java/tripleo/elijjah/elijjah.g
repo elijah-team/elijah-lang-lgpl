@@ -4,6 +4,7 @@ header {
 
 {
 import tripleo.elijah.lang.*;
+import tripleo.elijah.lang2.*;
 import tripleo.elijah.*;
 }
 
@@ -419,7 +420,8 @@ relationalExpression returns [IExpression ee]
 				|	LE/*^*/             {e2=ExpressionKind.LE;}
 				|	GE/*^*/             {e2=ExpressionKind.GE;}
 				)
-				e3=shiftExpression      {ee=ExpressionBuilder.build(ee,e2,e3);}
+				e3=shiftExpression      {ee=ExpressionBuilder.build(ee,e2,e3);
+										ee.setType(new OS_Type(BuiltInTypes.Boolean));}
 			)*
 		|	"is_a"/*^*/ typeName[tn] //typeSpec[true]
 										{ee=new TypeCheckExpression(ee, tn);}

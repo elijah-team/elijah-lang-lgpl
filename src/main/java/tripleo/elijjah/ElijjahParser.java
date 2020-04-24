@@ -20,6 +20,7 @@ import antlr.ASTPair;
 import antlr.collections.impl.ASTArray;
 
 import tripleo.elijah.lang.*;
+import tripleo.elijah.lang2.*;
 import tripleo.elijah.*;
 
 public class ElijjahParser extends antlr.LLkParser
@@ -3750,6 +3751,7 @@ public ElijjahParser(ParserSharedInputState state) {
 						e3=shiftExpression();
 						if ( inputState.guessing==0 ) {
 							ee=ExpressionBuilder.build(ee,e2,e3);
+																	ee.setType(new OS_Type(BuiltInTypes.Boolean));
 						}
 					}
 					else {
