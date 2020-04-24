@@ -130,9 +130,7 @@ public class MatchConditional implements OS_Element {
 		 */
 		@Override
 		public OS_Element getParent() {
-			// TODO Auto-generated method stub
-//			return element;
-			throw new NotImplementedException();
+			return MatchConditional.this;
 		}
 	}
 
