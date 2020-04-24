@@ -29,6 +29,9 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, 
 	private OS_Element parent;
 
 	public Loop(OS_Element aParent) {
+		// document assumption
+		if (!(parent instanceof FunctionDef))
+			System.out.println("parent is not FunctionDef");
 		parent = aParent;
 	}
 
