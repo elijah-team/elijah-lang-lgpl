@@ -22,7 +22,7 @@ n(a: generic A) {
 	match a {
 		x: Foo  { println(x.m1) }
 		y: Foo1 { println(x.m2) }
-}  }
+}  }  }
 
 //
 //
