@@ -122,7 +122,7 @@ private Attached _a = new Attached(new LoopContext(this));
 		
 		@Override
 		public TypeAliasExpression typeAlias() {
-			throw new NotImplementedException();
+			return new TypeAliasExpression(Loop.this);
 		}
 		
 		@Override
