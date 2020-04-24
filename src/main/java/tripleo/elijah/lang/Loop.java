@@ -8,19 +8,20 @@
  */
 package tripleo.elijah.lang;
 
+import antlr.Token;
+import tripleo.elijah.contexts.LoopContext;
+import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import antlr.Token;
-import tripleo.elijah.contexts.LoopContext;
-import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
-
 // Referenced classes of package pak2:
 //			Statement, LoopTypes, Scope
 
-public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem {
+public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, OS_Element {
 
 	private Scope _scope = new LoopScope();
 	private List<String> docstrings = new ArrayList<String>();
@@ -70,18 +71,18 @@ private Attached _a = new Attached(new LoopContext(this));
 		return items;
 	}
 
-	@Override
+	@Override // OS_Element, FunctionItem
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
 		// TODO this is not implementeed
-		NotImplementedException.raise();
+//		NotImplementedException.raise();
+		throw new NotImplementedException();
 	}
 
-//	@Override
-//	public void visitGen(ICodeGen visit) {
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-//	}
-	
+	@Override // OS_Element
+	public void visitGen(ICodeGen visit) {
+		throw new NotImplementedException();
+	}
+
 	public String getIterName() {
 		return iterName;
 	}
