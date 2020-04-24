@@ -20,10 +20,15 @@ import antlr.Token;
  */
 public class TypeAliasExpression {
 
+	private final OS_Element parent;
 	private IdentExpression x;
 	private Qualident y;
 
-	public void make(IdentExpression x, Qualident y) {
+	public TypeAliasExpression(OS_Element aParent) {
+		this.parent = aParent;
+	}
+
+    public void make(IdentExpression x, Qualident y) {
 		// TODO Auto-generated method stub
 		this.x=x;
 		this.y=y;
