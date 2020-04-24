@@ -2921,7 +2921,7 @@ public class ElijahParser extends antlr.debug.LLkDebuggingParser implements Elij
 				IdentExpression x = ident();
 				match(BECOMES);
 				Qualident y = qualident();
-				TypeAliasExpression ty = new TypeAliasExpression();
+				TypeAliasExpression ty = new TypeAliasExpression(null);
 				ty.make(x, y);
 				break;
 			}
