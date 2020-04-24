@@ -147,17 +147,33 @@ public class DeduceTypes {
 //			}
 //			System.out.println("}");
 		} else if (loop.getType() == LoopTypes2.EXPR_TYPE) {
-			assert loop.getIterName() != null;
-			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
-//			String varname="vt"+loop.getIterName();
-			ToExpression toex = new ToExpression(new NumericExpression(0), loop.getToPart());
-			deduceExpression_(toex.getLeft(), parent.getContext());
-			deduceExpression_(toex.getRight(), parent.getContext());
+			addFunctionItem_Loop_EXPR_TYPE(loop, parent);
+		} else throw new NotImplementedException();
+	}
 
-			if (loop.getFromPart() instanceof IdentExpression)
-				loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
-			else
-				throw new NotImplementedException();
+	private void addFunctionItem_Loop_EXPR_TYPE(Loop loop, FunctionDef parent) {
+		if (loop.getIterName() != null) {
+			parent.getContext().add(
+					new IdentExpression(Helpers.makeToken(loop.getIterName())),
+					loop.getIterName());
+		} else {
+			System.out.println("loop.getIterName() == null");
+//				String varname="vt"+loop.getIterName();
+		}
+		ToExpression toex;
+		if (loop.getFromPart() == null)
+			toex = new ToExpression(new NumericExpression(0), loop.getToPart());
+		else
+			toex = new ToExpression(loop.getFromPart(), loop.getToPart());
+		deduceExpression_(toex.getLeft(), parent.getContext());
+		deduceExpression_(toex.getRight(), parent.getContext());
+
+		if (loop.getFromPart() instanceof IdentExpression)
+			loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
+		else if (loop.getFromPart() == null) {
+			System.out.println("88 loop.getFromPart() == null");
+		} else
+			throw new NotImplementedException();
 //			if (loop.getToPart() instanceof NumericExpression) {
 //				String varname="vt0_TODO";
 //				final NumericExpression toPart = (NumericExpression)loop.getToPart();
@@ -165,9 +181,23 @@ public class DeduceTypes {
 //				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
 //						varname, 0,
 //						varname, toPart.getValue(),  varname));
-//				for (StatementItem item : loop.getItems()) {
-//					System.out.println("\t"+item);
-//				}
+				for (StatementItem item : loop.getItems()) {
+					System.out.println("\t"+item);
+					if (item instanceof VariableSequence) {
+//						fd._a.setCode(nextFunctionCode());
+//						parent._a.getContext().add(element, null);
+						for (VariableStatement ii : ((VariableSequence) item).items())
+							deduceVariableStatement(loop, ii);
+					} else if (item instanceof StatementWrapper) {
+						IExpression e = ((StatementWrapper) item).getExpr();
+						if (e instanceof BasicBinaryExpression) {
+							deduceExpression_(e.getLeft(), loop.getContext());
+							deduceExpression_(((BasicBinaryExpression) e).getRight(), loop.getContext());
+							e.setType(e.getLeft().getType());
+						}
+					}
+
+				}
 //				System.out.println("}");
 //			} else if (loop.getToPart() instanceof DotExpression) {
 //				System.out.println("94 "+loop.getToPart().getClass().getName());
@@ -176,7 +206,6 @@ public class DeduceTypes {
 //				System.out.println("95 "+loop.getToPart().getClass().getName());
 //				throw new NotImplementedException();
 //			}
-		} else throw new NotImplementedException();
 	}
 
 	private void deduceExpression_(IExpression expression, Context context) {
@@ -316,9 +345,65 @@ public class DeduceTypes {
 
 		}
 	}
+	public void deduceVariableStatement(OS_Element parent, @NotNull VariableStatement vs) {
+		{
+			OS_Type dtype = null;
+			if (vs.typeName().isNull()) {
+				if (vs.initialValue() != null) {
+					IExpression iv = vs.initialValue();
+					if (iv instanceof NumericExpression) {
+						dtype = new OS_Type(BuiltInTypes.SystemInteger);
+					} else if (iv instanceof IdentExpression) {
+						LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
+						for (LookupResult n: lrl.results()) {
+							System.out.println("99 "+n);
+						}
+					} else if (iv instanceof ProcedureCallExpression) {
+						final ProcedureCallExpression pce = (ProcedureCallExpression) iv;
+						final IExpression left = pce.getLeft();
+						if (left.getKind() == ExpressionKind.IDENT) {
+							deduceVariableStatement_procedureCallExpression(parent, iv, pce, (IdentExpression) left);
+						}
+					}
+				}
+			} else {
+				dtype = new OS_Type(vs.typeName());
+			}
+//100			parent._a.getContext().add(vs, vs.getName(), dtype);
+//				String theType;
+//				if (ii.typeName().isNull()) {
+////					theType = "int"; // Z0*
+//					theType = ii.initialValueType();
+//				} else{
+//					theType = ii.typeName().getName();
+//				}
+			System.out.println(String.format("[#addFunctionItem_deduceVariableStatement] %s %s;", vs.getName(), dtype));
+
+		}
+	}
 
 	private void addClassItem_deduceVariableStatement_procedureCallExpression(
 			@NotNull ClassStatement parent, IExpression iv,
+			ProcedureCallExpression pce, @NotNull IdentExpression left) {
+		final String text = left.getText();
+		final LookupResultList lrl = parent.getContext().lookup(text);
+		System.out.println("98 "+/*n*/iv);
+		if (lrl.results().size() == 0 )
+			System.err.println("96 no results for "+text);
+		for (LookupResult n: lrl.results()) {
+			System.out.println("97 "+n);
+//			Helpers.printXML(iv, new TabbedOutputStream(System.out));
+		}
+		final Collection<IExpression> expressions = pce.getArgs().expressions();
+		List<OS_Type> q = expressions.stream()
+				.map(n -> deduceExpression(n, parent.getContext()))
+				.collect(Collectors.toList());
+		System.out.println("90 "+q);
+		NotImplementedException.raise();
+	}
+
+	private void deduceVariableStatement_procedureCallExpression(
+			@NotNull OS_Element parent, IExpression iv,
 			ProcedureCallExpression pce, @NotNull IdentExpression left) {
 		final String text = left.getText();
 		final LookupResultList lrl = parent.getContext().lookup(text);
