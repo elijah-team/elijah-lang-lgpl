@@ -16,7 +16,6 @@ import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.Loop;
-import tripleo.elijah.util.NotImplementedException;
 
 /**
  * @author Tripleo
@@ -53,7 +52,7 @@ public class LoopContext extends Context {
 //				}
 //			}
 //		}
-		if (carrier.getIterName().equals(name)) {
+		if (name.equals(carrier.getIterName())) { // reversed to prevent NPEs
 			String iterName = carrier.getIterName();
 			IdentExpression ie = new IdentExpression(Helpers.makeToken(iterName));
 			Result.add(name, level, ie); // TODO just made ie
