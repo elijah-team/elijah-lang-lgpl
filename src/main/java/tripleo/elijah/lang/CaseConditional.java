@@ -16,11 +16,17 @@ package tripleo.elijah.lang;
  *
  * Created 	Apr 15, 2020 at 10:09:03 PM
  */
-public class CaseConditional {
+public class CaseConditional implements StatementItem {
 
-	public void expr(IExpression expr) {
-		// TODO Auto-generated method stub
-		
+    private final OS_Element parent;
+    private IExpression expr;
+
+    public CaseConditional(OS_Element parent) {
+        this.parent = parent;
+    }
+
+    public void expr(IExpression expr) {
+		this.expr = expr;
 	}
 
 }

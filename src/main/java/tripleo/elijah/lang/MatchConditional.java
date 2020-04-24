@@ -25,10 +25,14 @@ import java.util.List;
  *
  * Created 	Apr 15, 2020 at 10:11:16 PM
  */
-public class MatchConditional implements OS_Element {
+public class MatchConditional implements OS_Element, StatementItem {
 
 	private IExpression expr;
 	private OS_Element parent;
+
+	public MatchConditional(OS_Element parent) {
+		this.parent = parent;
+	}
 
 	/**
 	 * @category OS_Element

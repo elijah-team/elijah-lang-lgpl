@@ -9,11 +9,11 @@
 
 package tripleo.elijah.lang;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import antlr.Token;
 import tripleo.elijah.util.NotImplementedException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 // Referenced classes of package pak2:
@@ -161,13 +161,15 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	@Override
 	public CaseConditional caseConditional() {
-		// TODO Auto-generated method stub
-		return new CaseConditional();
+		final CaseConditional caseConditional = new CaseConditional(getParent());
+		add(caseConditional);
+		return caseConditional;
 	}
 
 	@Override
 	public MatchConditional matchConditional() {
-		// TODO Auto-generated method stub
-		return new MatchConditional();
+		final MatchConditional matchConditional = new MatchConditional(getParent());
+		add(matchConditional);
+		return matchConditional;
 	}
 }
