@@ -6,13 +6,9 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  * 
  */
-package tripleo.elijjah;
+package tripleo.elijah.lang;
 
 import antlr.Token;
-import tripleo.elijah.lang.AbstractExpression;
-import tripleo.elijah.lang.ExpressionKind;
-import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.util.NotImplementedException;
 
 /**
@@ -20,12 +16,12 @@ import tripleo.elijah.util.NotImplementedException;
  *
  * Created 	Apr 16, 2020 at 7:58:36 AM
  */
-public class IndexOpExpression extends AbstractExpression { // TODO binary?
+public class GetItemExpression extends AbstractExpression { // TODO binary?
 
 	private IExpression index;
 	private IExpression primary;
 
-	public IndexOpExpression(IExpression ee, IExpression expr) {
+	public GetItemExpression(IExpression ee, IExpression expr) {
 		this.primary = ee;
 		this.index = expr;
 	}
@@ -70,3 +66,7 @@ public class IndexOpExpression extends AbstractExpression { // TODO binary?
 	}
 
 }
+
+//
+//
+//
