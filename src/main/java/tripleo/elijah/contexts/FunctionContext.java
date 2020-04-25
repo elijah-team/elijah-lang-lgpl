@@ -58,4 +58,15 @@ public class FunctionContext extends Context {
 		
 	}
 
+    public void introduceVariable(IExpression variable) {
+		System.out.println("77 "+variable);
+    }
+
+	public void introduceVariable(VariableStatement variable) {
+		System.out.println("77 "+variable);
+	}
 }
+
+//
+//
+//
