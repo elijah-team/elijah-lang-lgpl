@@ -484,7 +484,7 @@ public class DeduceTypes {
 		} else if (element instanceof ImportStatement) {
 			ImportStatement imp = (ImportStatement) element;
 			addImport(imp, module);
-		} else if (element instanceof ImportStatement) {
+		} else if (element instanceof NamespaceStatement) {
 			NamespaceStatement ns = (NamespaceStatement) element;
 			addNamespace(ns, module);
 		}
