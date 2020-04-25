@@ -29,8 +29,10 @@ public interface StatementClosure {
 	CaseConditional caseConditional();
 
 	MatchConditional matchConditional();
-	
-	// TODO new
+
+    void statementWrapper(IExpression expr);
+
+    // TODO new
 	//IdentList identList();
 }
 

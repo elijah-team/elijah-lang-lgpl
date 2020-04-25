@@ -172,4 +172,13 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		add(matchConditional);
 		return matchConditional;
 	}
+
+	@Override
+	public void statementWrapper(IExpression expr) {
+		parent.statementWrapper(expr);
+	}
 }
+
+//
+//
+//
