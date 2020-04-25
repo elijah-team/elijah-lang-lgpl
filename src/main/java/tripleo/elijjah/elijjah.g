@@ -190,7 +190,8 @@ opfal2 returns [FormalArgList fal]
 statement[StatementClosure cr, OS_Element aParent]
 		{Qualident q=null;FormalArgList o=null;}
 	:
-	(procedureCallStatement[cr.procCallExpr()]
+	( expr=postfixExpression {cr.statementWrapper(expr);}
+	//procedureCallStatement[cr.procCallExpr()]
 	| ifConditional[cr.ifConditional()]
 	| matchConditional[cr.matchConditional(), aParent]
 	| caseConditional[cr.caseConditional()]
@@ -263,12 +264,18 @@ expressionList2 returns [ExpressionList el]
 	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
 	;
 variableReference returns [IExpression ee]
-		{VariableReference vr=new VariableReference();ProcedureCallExpression pcx;ee=null;}
-	: r1:IDENT  {vr.setMain(r1);}
-	( DOT r2:IDENT {vr.addIdentPart(r2);}
-	| LBRACK expr=expression RBRACK {vr.addArrayPart(expr);}
-	| pcx=procCallEx2 {vr.addProcCallPart(pcx);}
-	) {ee=vr;}
+		{ProcedureCallExpression pcx;ExpressionList el=null;ee=null;}
+	: r1:IDENT  {ee=new IdentExpression(r1);}
+	( DOT r2:IDENT {ee=new DotExpression(ee, new IdentExpression(r2));}
+	| LBRACK expr=expression RBRACK {ee=new GetItemExpression(ee, expr);}
+	| lp:LPAREN	(el=expressionList2)?
+      {ProcedureCallExpression pce=new ProcedureCallExpression();
+      pce.identifier(ee);
+      pce.setArgs(el);
+      ee=pce;} RPAREN
+
+	//pcx=procCallEx2 {pcx.setLeft(ee);ee=pcx;}
+	) //{ee=vr;}
 	;
 procCallEx2 returns [ProcedureCallExpression pce]
 		{pce=null;ExpressionList el=null;}
@@ -505,7 +512,7 @@ postfixExpression returns [IExpression ee]
 
 			// an array indexing operation
 		|	lb:LBRACK/*^*/ /*{#lb.setType(INDEX_OP);}*/ expr=expression rb:RBRACK/*!*/
-			{ee=new IndexOpExpression(ee, expr);((IndexOpExpression)ee).parens(lb,rb);}
+			{ee=new GetItemExpression(ee, expr);((GetItemExpression)ee).parens(lb,rb);}
 
 			// method invocation
 		|	lp:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
