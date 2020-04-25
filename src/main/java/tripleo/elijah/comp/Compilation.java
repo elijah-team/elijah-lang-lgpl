@@ -20,6 +20,7 @@ import tripleo.elijah.Out;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeduceTypes;
+import tripleo.elijah.stages.expand.ExpandFunctions;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
 
@@ -89,6 +90,7 @@ public class Compilation {
 					// do nothing. job over
 				} else {
 					for (OS_Module module : modules) {
+						new ExpandFunctions(module).expand();
 						new DeduceTypes(module).deduce();
 					}
 				}
@@ -113,6 +115,7 @@ public class Compilation {
 			final String file_name = f.getName();
 			final boolean matches = Pattern.matches(".+\\.elijah$", file_name)
 								 || Pattern.matches(".+\\.elijjah$", file_name);
+			if (f.isDirectory()) return; // TODO testing idea tools (failed)
 			if (!matches) return;
 			//
 			System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
