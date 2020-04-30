@@ -214,9 +214,14 @@ public class DeduceTypes {
 	}
 
 	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
-		IExpression de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
-		System.out.println("77 "+de);
-		pce.setLeft(de);
+		IExpression de;
+		if (pce.getLeft() instanceof Qualident) {
+			de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
+			System.out.println("77 "+de);
+			pce.setLeft(de);
+		} else {
+			de = pce.getLeft();
+		}
 		final String function_name = ((IdentExpression) pce.getLeft()).getText();
 		LookupResultList lrl = ctx.lookup(function_name);
 		if (lrl.results().size() == 0)
