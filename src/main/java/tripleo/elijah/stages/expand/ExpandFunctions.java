@@ -69,8 +69,6 @@ public class ExpandFunctions {
 	public void addFunctionItem(FunctionItem element, FunctionDef parent) {
 		// TODO Auto-generated method stub
 		if (element instanceof VariableSequence) {
-//			fd._a.setCode(nextFunctionCode());
-//			parent._a.getContext().add(element, null);
 			for (VariableStatement ii : ((VariableSequence) element).items()) {
 //				addFunctionItem_deduceVariableStatement(parent, ii);
 				((FunctionContext)parent.getContext()).introduceVariable(ii);
@@ -84,14 +82,18 @@ public class ExpandFunctions {
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
-//				NotImplementedException.raise();
-				final OS_Type right_type = deduceExpression(((IBinaryExpression) expr).getRight(), parent.getContext(), (FunctionContext) parent.getContext());
-				((IBinaryExpression)expr).getRight().setType(right_type);
-				expr.getLeft().setType(right_type);
-				expr.setType(expr.getLeft().getType());
+				FunctionInstruction fi = ((FunctionContext)parent.getContext()).introduceVariable(expr.getLeft());
+				if (((IBinaryExpression)expr).getRight().getKind() == ExpressionKind.IDENT) {
+					FunctionInstruction fi2 = ((FunctionContext)parent.getContext()).introduceVariable(((IBinaryExpression) expr).getRight());
+				}
+				int y=2;
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
-				expandProcedureCall((ProcedureCallExpression) expr, parent.getContext(), (FunctionContext) parent.getContext());
+				final FunctionInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, parent.getContext(), (FunctionContext) parent.getContext());
+				final ExpressionList args = ((ProcedureCallExpression) expr).getArgs();
+				((FunctionContext)parent.getContext()).makeProcCall(fi, args);
+				int y=2;
 			} else throw new NotImplementedException();
+		} else if (element instanceof IfConditional) {
 		} else if (element instanceof ClassStatement) {
 			parent._a.getContext().nameTable().add((OS_Element) element, ((ClassStatement) element).getName(), new OS_Type((ClassStatement) element));
 		} else {
@@ -196,21 +198,33 @@ public class ExpandFunctions {
 	}
 
 	private void deduceExpression_(IExpression expression, Context context, FunctionContext fc) {
-		OS_Type t = deduceExpression(expression, context, fc);
-		expression.setType(t);
+		FunctionInstruction fi = deduceExpression(expression, context, fc);
+		//expression.setType(t);
+		int y=2;
 	}
-
-	private void expandProcedureCall(ProcedureCallExpression pce, Context ctx, FunctionContext fc) {
+	private FunctionInstruction expandProcedureCall(ProcedureCallExpression pce, Context ctx, FunctionContext fc) {
+		FunctionInstruction i;
 		if (pce.getLeft().getKind() == ExpressionKind.PROCEDURE_CALL)
-			expandProcedureCall((ProcedureCallExpression) pce.getLeft(), ctx, fc);
+			i =  expandProcedureCall((ProcedureCallExpression) pce.getLeft(), ctx, fc);
 		else if (pce.getLeft().getKind() == ExpressionKind.DOT_EXP){
-			deduceExpression(pce.getLeft().getLeft(), ctx, fc);
+			i =  deduceExpression(pce.getLeft().getLeft(), ctx, fc);
+			DotExpression de = (DotExpression) pce.getLeft();
+			if (de.getRight().getKind() == ExpressionKind.IDENT)
+				return fc.dotExpression((IntroducedVariable) i, de.getRight());
+//			epc2(i, pce.getLeft(), ctx, fc);
 		} else if (pce.getLeft().getKind() == ExpressionKind.IDENT) {
-			fc.introduceVariable(pce.getLeft());
+			IntroducedVariable intro = fc.introduceVariable(pce.getLeft());
+			intro.makeIntoFunctionCall(pce.getArgs());
+			return intro;
 		} else {
 			throw new NotImplementedException();
 		}
+		return null;
 	}
+
+//	private void epc2(IntroducedVariable i, IExpression expr, Context ctx, FunctionContext fc) {
+//		if (expr.getKind() == ExpressionKind.DOT_EXP)
+//	}
 
 	public void addFunctionItem_deduceVariableStatement(@NotNull FunctionDef parent, @NotNull VariableStatement vs) {
 		{
@@ -262,7 +276,7 @@ public class ExpandFunctions {
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
-		List<OS_Type> q = expressions.stream()
+		List<FunctionInstruction> q = expressions.stream()
 				.map(n -> deduceExpression(n, parent.getContext(), (FunctionContext)parent.getContext()))
 				.collect(Collectors.toList());
 		System.out.println("90 "+q);
@@ -319,14 +333,14 @@ public class ExpandFunctions {
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
-		List<OS_Type> q = expressions.stream()
+		List<FunctionInstruction> q = expressions.stream()
 				.map(n -> deduceExpression(n, parent.getContext(), fc))
 				.collect(Collectors.toList());
 		System.out.println("90 "+q);
 		NotImplementedException.raise();
 	}
 
-	public OS_Type deduceExpression(@NotNull IExpression n, Context context, FunctionContext fc) {
+	public FunctionInstruction deduceExpression(@NotNull IExpression n, Context context, FunctionContext fc) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
 			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
@@ -334,12 +348,14 @@ public class ExpandFunctions {
 				// TODO what to do here??
 				final OS_Element element = lrl.results().get(0).getElement();
 				if (element instanceof VariableStatement) {
-					if (((VariableStatement) element).typeName() != null)
-						return new OS_Type(((VariableStatement) element).typeName());
+					if (((VariableStatement) element).typeName() != null) {
+//						return new OS_Type(((VariableStatement) element).typeName());
+					}
 				} else if (element instanceof FormalArgListItem) {
 					final TypeName typeName = ((FormalArgListItem) element).tn;
-					if (typeName != null)
-						return new OS_Type(typeName);
+					if (typeName != null) {
+//						return new OS_Type(typeName);
+					}
 				}
 				System.err.println("89 "+element.getClass().getName());
 				module.parent.eee.reportError("type not specified: "+ getElementName(element));
@@ -348,14 +364,14 @@ public class ExpandFunctions {
 			module.parent.eee.reportError("IDENT not found: "+((IdentExpression) n).getText());
 			NotImplementedException.raise();
 		} else if (n.getKind() == ExpressionKind.NUMERIC) {
-			return new OS_Type(BuiltInTypes.SystemInteger);
+//			return new OS_Type(BuiltInTypes.SystemInteger);
 		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
 			DotExpression de = (DotExpression) n;
-			OS_Type left_type = deduceExpression(de.getLeft(), context, fc);
-			OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext(), fc);
+			var left_type = deduceExpression(de.getLeft(), context, fc);
+//			var right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext(), fc);
 			int y=2;
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
-			expandProcedureCall((ProcedureCallExpression) n, context, fc);
+			return expandProcedureCall((ProcedureCallExpression) n, context, fc);
 		}
 		
 		return null;
