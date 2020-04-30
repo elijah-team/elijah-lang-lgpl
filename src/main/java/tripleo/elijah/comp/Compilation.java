@@ -112,7 +112,7 @@ public class Compilation {
 				doFile(new File(f, files[i]), errSink); // recursion, backpressure
 
 		} else {
-			final String file_name = f.getName();
+			final String file_name = f.toString();
 			final boolean matches = Pattern.matches(".+\\.elijah$", file_name)
 								 || Pattern.matches(".+\\.elijjah$", file_name);
 			if (f.isDirectory()) return; // TODO testing idea tools (failed)
@@ -130,16 +130,18 @@ public class Compilation {
 	}
 
 	public OS_Module parseFile(String f, InputStream s, File file) throws Exception {
-		if (fn2m.containsKey(file.getAbsolutePath())) { // don't parse twice
-			return fn2m.get(file.getAbsolutePath());
+		if (fn2m.containsKey(f)) { // don't parse twice
+			return fn2m.get(f);
 		}
 		try {
 			OS_Module R = parseFile_(f, s);
 			s.close();
+			fn2m.put(f, R);
 			return R;
 		} catch (ANTLRException e) {
 			System.err.println(("parser exception: " + e));
-			e.printStackTrace();
+			e.printStackTrace(System.err);
+			s.close();
 			return null;
 		}
 	}
@@ -187,6 +189,13 @@ public class Compilation {
 		}
 		return null;
 	}
+
+    public OS_Module moduleFor(String fileName) {
+        if (fn2m.containsKey(fileName)) {
+            return fn2m.get(fileName);
+        }
+        return null;
+    }
 }
 
 //
