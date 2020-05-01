@@ -210,7 +210,7 @@ public class ExpandFunctions {
 			i =  deduceExpression(pce.getLeft().getLeft(), ctx, fc);
 			DotExpression de = (DotExpression) pce.getLeft();
 			if (de.getRight().getKind() == ExpressionKind.IDENT)
-				return fc.dotExpression((IntroducedVariable) i, de.getRight());
+				return fc.dotExpression(i, de.getRight());
 //			epc2(i, pce.getLeft(), ctx, fc);
 		} else if (pce.getLeft().getKind() == ExpressionKind.IDENT) {
 			IntroducedVariable intro = fc.introduceVariable(pce.getLeft());
@@ -349,6 +349,11 @@ public class ExpandFunctions {
 				final OS_Element element = lrl.results().get(0).getElement();
 				if (element instanceof VariableStatement) {
 					if (((VariableStatement) element).typeName() != null) {
+						if (((VariableStatement) element).typeName().isNull()) {
+							FunctionInstruction i = deduceExpression(((VariableStatement) element).initialValue(), context, fc);
+							int y=2;
+							return i;
+						}
 //						return new OS_Type(((VariableStatement) element).typeName());
 					}
 				} else if (element instanceof FormalArgListItem) {
@@ -357,7 +362,7 @@ public class ExpandFunctions {
 //						return new OS_Type(typeName);
 					}
 				}
-				System.err.println("89 "+element.getClass().getName());
+				System.err.println("89 "+n);//element.getClass().getName());
 				module.parent.eee.reportError("type not specified: "+ getElementName(element));
 				return null;
 			}
