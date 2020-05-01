@@ -8,20 +8,20 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import antlr.Token;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.Documentable;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
-import tripleo.elijah.Documentable;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents a "class"
@@ -176,6 +176,15 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	@Override // OS_Element2
 	public String name() {
 		return getName();
+	}
+
+	public FunctionDef findFunction(String name) {
+		for (ClassItem item : items) {
+			if (item instanceof FunctionDef)
+				if (((FunctionDef) item).name().equals(name))
+					return (FunctionDef) item;
+		}
+		return null;
 	}
 }
 
