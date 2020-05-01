@@ -15,6 +15,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import org.eclipse.jdt.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.contexts.ModuleContext;
@@ -176,6 +177,22 @@ public class OS_Module implements OS_Element, OS_Container {
 	@Override
 	public void visitGen(ICodeGen visit) {
 		visit.addModule(this);
+	}
+
+	/**
+	 * Get a class by name. Must not be qualified. Wont return a {@link NamespaceStatement}
+	 * Same as {@link #findClass(String)}
+	 *
+	 * @param name the class we are looking for
+	 * @return either the class or null
+	 */
+	public @Nullable ClassStatement getClassByName(String name) {
+		for (ModuleItem item : items) {
+			if (item instanceof ClassStatement)
+				if (((ClassStatement) item).getName().equals(name))
+					return (ClassStatement) item;
+		}
+		return null;
 	}
 }
 
