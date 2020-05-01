@@ -42,18 +42,13 @@ public class FunctionContext extends Context {
 				if (((OS_Element2) item).name().equals(name)) {
 					Result.add(name, level, (OS_Element) item);
 				}
-			}
-			if (item instanceof VariableSequence) {
+			} else if (item instanceof VariableSequence) {
 				System.out.println("[FunctionContext#lookup] VariableSequence "+item);
 				for (VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs);
 				}
-			} /*else if (((OS_Element2)item).name() != null) {
-				if (((OS_Element2)item).name().equals(name)) {
-					Result.add(name, level, (OS_Element) item); // TODO exception waiting to happen
-				}
-			}*/
+			}
 		}
 		for (FormalArgListItem arg : carrier.getArgs()) {
 			if (arg.name.getText().equals(name)) {
@@ -84,7 +79,7 @@ public class FunctionContext extends Context {
 
 	List<IntroducedVariable> variableTable = new ArrayList<IntroducedVariable>();
 
-	public DotExpressionInstruction dotExpression(IntroducedVariable i, IExpression de) {
+	public DotExpressionInstruction dotExpression(FunctionInstruction i, IExpression de) {
 		DotExpressionInstruction dei = new DotExpressionInstruction(i, de);
 		functionInstructions.add(dei);
 		return dei;
