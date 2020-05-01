@@ -3,10 +3,10 @@ package tripleo.elijah.stages.expand;
 import tripleo.elijah.lang.IExpression;
 
 public class DotExpressionInstruction implements FunctionInstruction {
-    private final IntroducedVariable variable;
+    private final FunctionInstruction variable;
     private final IExpression expr;
 
-    public DotExpressionInstruction(IntroducedVariable i, IExpression de) {
+    public DotExpressionInstruction(FunctionInstruction i, IExpression de) {
         this.variable = i;
         this.expr     = de;
     }
