@@ -25,7 +25,7 @@ import java.util.List;
 public class FunctionContext extends Context {
 
 	private final FunctionDef carrier;
-	private List<FunctionInstruction> functionInstructions = new ArrayList<FunctionInstruction>();
+	public List<FunctionInstruction> functionInstructions = new ArrayList<FunctionInstruction>();
 
 	public FunctionContext(FunctionDef functionDef) {
 		carrier = functionDef;
