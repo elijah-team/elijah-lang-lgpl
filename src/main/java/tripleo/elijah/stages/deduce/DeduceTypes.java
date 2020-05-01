@@ -94,6 +94,8 @@ public class DeduceTypes {
 			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
 		} else if (element instanceof Loop) {
 			addFunctionItem_Loop((Loop) element, parent);
+		} else if (element instanceof IfConditional) {
+			System.out.println("92 Fount idf conditional "+((IfConditional) element).getExpr(););
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
@@ -222,7 +224,13 @@ public class DeduceTypes {
 		} else {
 			de = pce.getLeft();
 		}
-		final String function_name = ((IdentExpression) pce.getLeft()).getText();
+		final String function_name;
+		IExpression i = pce.getLeft();
+		while (!(i instanceof IdentExpression)) {
+			i = i.getLeft();
+		}
+		function_name = ((IdentExpression) i).getText();
+		//
 		LookupResultList lrl = ctx.lookup(function_name);
 		if (lrl.results().size() == 0)
 			module.parent.eee.reportError("function not found " + function_name);

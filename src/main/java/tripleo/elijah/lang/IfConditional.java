@@ -23,7 +23,11 @@ public class IfConditional implements StatementItem, FunctionItem {
 		throw new NotImplementedException();
 	}
 
-	private class IfConditionalScope implements Scope {
+    public IExpression getExpr() {
+		return expr;
+    }
+
+    private class IfConditionalScope implements Scope {
 		@Override
 		public void add(StatementItem aItem) {
 			parent.add(aItem);
