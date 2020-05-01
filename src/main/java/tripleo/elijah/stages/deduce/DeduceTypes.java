@@ -95,7 +95,7 @@ public class DeduceTypes {
 		} else if (element instanceof Loop) {
 			addFunctionItem_Loop((Loop) element, parent);
 		} else if (element instanceof IfConditional) {
-			System.out.println("92 Fount idf conditional "+((IfConditional) element).getExpr(););
+			System.out.println("92 Fount if conditional "+((IfConditional) element).getExpr());
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
