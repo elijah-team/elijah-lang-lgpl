@@ -18,4 +18,10 @@ public class DotExpressionInstruction implements FunctionPrelimInstruction {
                 ", dot_exp=" + expr +
                 '}';
     }
+    @Override
+    public int instructionNumber() {
+        return _inst;
+    }
+    private int _inst;
+    public void setInstructionNumber(int i) {_inst = i;}
 }

@@ -45,6 +45,12 @@ public class IntroducedVariable implements FunctionPrelimInstruction {
 
     }
 
+    public void setInstructionNumber(int i) {_inst = i;}
+    @Override
+    public int instructionNumber() {
+        return _inst;
+    }
+    private int _inst;
 }
 
 //

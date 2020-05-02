@@ -10,4 +10,10 @@ public class FunctionCallPrelimInstruction implements FunctionPrelimInstruction 
         this.left_side = fi;
         this.args = args;
     }
+    @Override
+    public int instructionNumber() {
+        return _inst;
+    }
+    private int _inst;
+    public void setInstructionNumber(int i) {_inst = i;}
 }
