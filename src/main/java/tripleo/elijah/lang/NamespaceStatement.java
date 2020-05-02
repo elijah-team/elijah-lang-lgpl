@@ -12,17 +12,17 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import antlr.Token;
+import tripleo.elijah.Documentable;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.contexts.NamespaceContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
-import tripleo.elijah.Documentable;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tripleo(sb)
@@ -32,9 +32,9 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 
 	private Token nsName;
 	private OS_Module parent;
-	private NamespaceTypes type; // TODO implement setter
 	public Attached _a = new Attached(new NamespaceContext(this));
 	private List<ClassItem> items = new ArrayList<ClassItem>();
+	private NamespaceTypes _kind;
 
 	public NamespaceStatement(OS_Module module) {
 		this.parent = module;
@@ -57,7 +57,46 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 
 	public StatementClosure statementClosure() {
-		throw new NotImplementedException();
+		return new AbstractStatementClosure(new Scope() {
+			@Override
+			public void statementWrapper(IExpression aExpr) {
+				throw new NotImplementedException();
+			}
+
+			@Override
+			public StatementClosure statementClosure() {
+				throw new NotImplementedException();
+//				return null;
+			}
+
+			@Override
+			public BlockStatement blockStatement() {
+				throw new NotImplementedException();
+//				return null;
+			}
+
+			@Override
+			public void add(StatementItem aItem) {
+				items.add((ClassItem) aItem);
+			}
+
+			@Override
+			public TypeAliasExpression typeAlias() {
+				throw new NotImplementedException();
+//				return null;
+			}
+
+			@Override
+			public InvariantStatement invariantStatement() {
+				throw new NotImplementedException();
+//				return null;
+			}
+
+			@Override
+			public void addDocString(Token s1) {
+				throw new NotImplementedException();
+			}
+		});
 	}
 
 	public TypeAliasExpression typeAlias() { 
@@ -107,8 +146,10 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 
 	public void setType(NamespaceTypes aType) {
-		type = aType;
+		_kind = aType;
 	}
+
+	public NamespaceTypes getKind() { return _kind; }
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
