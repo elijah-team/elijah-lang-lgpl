@@ -10,8 +10,8 @@ package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.expand.DotExpressionInstruction;
-import tripleo.elijah.stages.expand.FunctionCallInstruction;
-import tripleo.elijah.stages.expand.FunctionInstruction;
+import tripleo.elijah.stages.expand.FunctionCallPrelimInstruction;
+import tripleo.elijah.stages.expand.FunctionPrelimInstruction;
 import tripleo.elijah.stages.expand.IntroducedVariable;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.List;
 public class FunctionContext extends Context {
 
 	private final FunctionDef carrier;
-	public List<FunctionInstruction> functionInstructions = new ArrayList<FunctionInstruction>();
+	public List<FunctionPrelimInstruction> functionPrelimInstructions = new ArrayList<FunctionPrelimInstruction>();
 
 	public FunctionContext(FunctionDef functionDef) {
 		carrier = functionDef;
@@ -65,7 +65,7 @@ public class FunctionContext extends Context {
 		System.out.println("[#introduceVariable] "+variable);
 		final IntroducedVariable introducedVariable = new IntroducedVariable(variable);
 		variableTable.add(introducedVariable);
-		functionInstructions.add(introducedVariable);
+		functionPrelimInstructions.add(introducedVariable);
 		return introducedVariable;
 	}
 
@@ -73,23 +73,23 @@ public class FunctionContext extends Context {
 		System.out.println("[#introduceVariable] "+variable);
 		final IntroducedVariable introducedVariable = new IntroducedVariable(variable);
 		variableTable.add(introducedVariable);
-		functionInstructions.add(introducedVariable);
+		functionPrelimInstructions.add(introducedVariable);
 		return introducedVariable;
 	}
 
 	List<IntroducedVariable> variableTable = new ArrayList<IntroducedVariable>();
 
-	public DotExpressionInstruction dotExpression(FunctionInstruction i, IExpression de) {
+	public DotExpressionInstruction dotExpression(FunctionPrelimInstruction i, IExpression de) {
 		DotExpressionInstruction dei = new DotExpressionInstruction(i, de);
-		functionInstructions.add(dei);
+		functionPrelimInstructions.add(dei);
 		return dei;
 	}
 
-	public FunctionCallInstruction makeProcCall(FunctionInstruction fi, ExpressionList args) {
+	public FunctionCallPrelimInstruction makeProcCall(FunctionPrelimInstruction fi, ExpressionList args) {
 		int y=2;
 //		((IntroducedVariable)fi).makeIntoFunctionCall(args);
-		FunctionCallInstruction fci = new FunctionCallInstruction(fi, args);
-		functionInstructions.add(fci);
+		FunctionCallPrelimInstruction fci = new FunctionCallPrelimInstruction(fi, args);
+		functionPrelimInstructions.add(fci);
 		return fci;
 	}
 }
