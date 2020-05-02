@@ -8,11 +8,9 @@
  */
 package tripleo.elijah.contexts;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.expand.DotExpressionInstruction;
-import tripleo.elijah.stages.expand.FunctionCallPrelimInstruction;
-import tripleo.elijah.stages.expand.FunctionPrelimInstruction;
-import tripleo.elijah.stages.expand.IntroducedVariable;
+import tripleo.elijah.stages.expand.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +24,7 @@ public class FunctionContext extends Context {
 
 	private final FunctionDef carrier;
 	public List<FunctionPrelimInstruction> functionPrelimInstructions = new ArrayList<FunctionPrelimInstruction>();
+	private int functionPrelimInstructionsNumber = 1;
 
 	public FunctionContext(FunctionDef functionDef) {
 		carrier = functionDef;
@@ -65,7 +64,7 @@ public class FunctionContext extends Context {
 		System.out.println("[#introduceVariable] "+variable);
 		final IntroducedVariable introducedVariable = new IntroducedVariable(variable);
 		variableTable.add(introducedVariable);
-		functionPrelimInstructions.add(introducedVariable);
+		addPrelimInstruction(introducedVariable);
 		return introducedVariable;
 	}
 
@@ -73,7 +72,7 @@ public class FunctionContext extends Context {
 		System.out.println("[#introduceVariable] "+variable);
 		final IntroducedVariable introducedVariable = new IntroducedVariable(variable);
 		variableTable.add(introducedVariable);
-		functionPrelimInstructions.add(introducedVariable);
+		addPrelimInstruction(introducedVariable);
 		return introducedVariable;
 	}
 
@@ -81,7 +80,7 @@ public class FunctionContext extends Context {
 
 	public DotExpressionInstruction dotExpression(FunctionPrelimInstruction i, IExpression de) {
 		DotExpressionInstruction dei = new DotExpressionInstruction(i, de);
-		functionPrelimInstructions.add(dei);
+		addPrelimInstruction(dei);
 		return dei;
 	}
 
@@ -89,8 +88,19 @@ public class FunctionContext extends Context {
 		int y=2;
 //		((IntroducedVariable)fi).makeIntoFunctionCall(args);
 		FunctionCallPrelimInstruction fci = new FunctionCallPrelimInstruction(fi, args);
-		functionPrelimInstructions.add(fci);
+		addPrelimInstruction(fci);
 		return fci;
+	}
+
+	public FunctionPrelimInstruction assign(FunctionPrelimInstruction fi, FunctionPrelimInstruction fi2) {
+		AssignPrelimInstruction api = new AssignPrelimInstruction(fi, fi2);
+		addPrelimInstruction(api);
+		return api;
+	}
+
+	private void addPrelimInstruction(final @NotNull FunctionPrelimInstruction fpi) {
+		functionPrelimInstructions.add(fpi);
+		fpi.setInstructionNumber(functionPrelimInstructionsNumber++);
 	}
 }
 
