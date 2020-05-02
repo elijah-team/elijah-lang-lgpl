@@ -17,12 +17,12 @@ import tripleo.elijah.lang.VariableStatement;
  *
  * Created 	Apr 30, 2020 at 04:19:23
  */
-public class IntroducedVariable implements FunctionInstruction {
+public class IntroducedVariable implements FunctionPrelimInstruction {
 
     private VariableStatement vardecl;
-    private Type kind;
-    private ExpressionList args;
-    private IExpression variable;
+    Type kind;
+    ExpressionList args;
+    IExpression variable;
 
     public IntroducedVariable(IExpression variable) {
         this.variable = variable;
