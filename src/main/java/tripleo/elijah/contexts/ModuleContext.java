@@ -38,6 +38,9 @@ public class ModuleContext extends Context {
 					System.err.println("ignoring "+item);
 				}
 			}
+			if (item instanceof NamespaceStatement && ((NamespaceStatement) item).getKind() == NamespaceTypes.MODULE) {
+				((NamespaceStatement)item).getContext().lookup(name, level, Result);
+			}
 		}
 		if (carrier.prelude == null)
 			return Result;
