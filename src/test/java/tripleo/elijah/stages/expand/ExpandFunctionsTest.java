@@ -7,10 +7,7 @@ import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.nodes.Helpers;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.IdentExpression;
-import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.lang.*;
 
 public class ExpandFunctionsTest {
 
@@ -35,17 +32,29 @@ public class ExpandFunctionsTest {
         {
             final FunctionPrelimInstruction fi2 = fc.functionPrelimInstructions.get(1);
             assert fi2 instanceof DotExpressionInstruction;
-            Assert.assertTrue(((DotExpressionInstruction) fi2).expr != null);
+            final IExpression expr = ((DotExpressionInstruction) fi2).expr;
+            Assert.assertTrue(((IdentExpression)expr).getText().equals("main"));
         }
-//        final FunctionInstruction fi1 = fc.functionInstructions.get(0);
-//        assert fi1 instanceof IntroducedVariable;
-//        Assert.assertTrue(((IntroducedVariable) fi1).kind == IntroducedVariable.Type.PROCEDURE_CALL);
-//        final FunctionInstruction fi1 = fc.functionInstructions.get(0);
-//        assert fi1 instanceof IntroducedVariable;
-//        Assert.assertTrue(((IntroducedVariable) fi1).kind == IntroducedVariable.Type.PROCEDURE_CALL);
-//        final FunctionInstruction fi1 = fc.functionInstructions.get(0);
-//        assert fi1 instanceof IntroducedVariable;
-//        Assert.assertTrue(((IntroducedVariable) fi1).kind == IntroducedVariable.Type.PROCEDURE_CALL);
+        {
+            final FunctionPrelimInstruction fi3 = fc.functionPrelimInstructions.get(2);
+//          assert fi3 instanceof IntroducedVariable;
+//          Assert.assertTrue(((IntroducedVariable) fi3).kind == IntroducedVariable.Type.PROCEDURE_CALL);
+        }
+        {
+            final FunctionPrelimInstruction fi4 = fc.functionPrelimInstructions.get(3);
+//          assert fi4 instanceof IntroducedVariable;
+//          Assert.assertTrue(((IntroducedVariable) fi4).kind == IntroducedVariable.Type.PROCEDURE_CALL);
+        }
+        {
+            final FunctionPrelimInstruction fi5 = fc.functionPrelimInstructions.get(4);
+//          assert fi5 instanceof IntroducedVariable;
+//          Assert.assertTrue(((IntroducedVariable) fi5).kind == IntroducedVariable.Type.PROCEDURE_CALL);
+        }
+        {
+            final FunctionPrelimInstruction fi6 = fc.functionPrelimInstructions.get(5);
+            assert fi6 instanceof AssignPrelimInstruction;
+            Assert.assertTrue(((AssignPrelimInstruction) fi6).instructionNumber() == 7);
+        }
         int y=2;
     }
 }
