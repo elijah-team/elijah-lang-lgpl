@@ -67,30 +67,30 @@ public class ExpandFunctions {
 	}
 	
 	public void addFunctionItem(FunctionItem element, FunctionDef parent) {
-		// TODO Auto-generated method stub
+		final FunctionContext fc = (FunctionContext) parent.getContext();
 		if (element instanceof VariableSequence) {
 			for (VariableStatement ii : ((VariableSequence) element).items()) {
 //				addFunctionItem_deduceVariableStatement(parent, ii);
-				((FunctionContext)parent.getContext()).introduceVariable(ii);
+				fc.introduceVariable(ii);
 			}
-		}
-		else if (element instanceof ProcedureCallExpression) {
+		} else if (element instanceof ProcedureCallExpression) {
 			ProcedureCallExpression pce = (ProcedureCallExpression) element;
 			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
 		} else if (element instanceof Loop) {
-			addFunctionItem_Loop((Loop) element, parent, (FunctionContext) parent.getContext());
+			addFunctionItem_Loop((Loop) element, parent, fc);
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
-				FunctionPrelimInstruction fi = ((FunctionContext)parent.getContext()).introduceVariable(expr.getLeft());
+				FunctionPrelimInstruction fi = fc.introduceVariable(expr.getLeft());
 				if (((IBinaryExpression)expr).getRight().getKind() == ExpressionKind.IDENT) {
-					FunctionPrelimInstruction fi2 = ((FunctionContext)parent.getContext()).introduceVariable(((IBinaryExpression) expr).getRight());
+					FunctionPrelimInstruction fi2 = fc.introduceVariable(((IBinaryExpression) expr).getRight());
+					FunctionPrelimInstruction fi3 = fc.assign(fi, fi2);
 				}
 				int y=2;
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
-				final FunctionPrelimInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, parent.getContext(), (FunctionContext) parent.getContext());
+				final FunctionPrelimInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, parent.getContext(), fc);
 				final ExpressionList args = ((ProcedureCallExpression) expr).getArgs();
-				((FunctionContext)parent.getContext()).makeProcCall(fi, args);
+				fc.makeProcCall(fi, args);
 				int y=2;
 			} else throw new NotImplementedException();
 		} else if (element instanceof IfConditional) {
@@ -105,14 +105,14 @@ public class ExpandFunctions {
 	private void addFunctionItem_Loop(Loop loop, FunctionDef parent, FunctionContext fc) {
 
 		if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
-			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
+			parent.getContext().add(ie(loop.getIterName()), ie(loop.getIterName()));
 //			String varname="vt"+loop.getIterName();
 			ToExpression toex = new ToExpression(loop.getFromPart(), loop.getToPart());
 			deduceExpression_(toex.getLeft(), parent.getContext(), fc);
 			deduceExpression_(toex.getRight(), parent.getContext(), fc);
 
 			if (loop.getFromPart() instanceof IdentExpression)
-				loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
+				loop.getContext().add((OS_Element) toex.getLeft(), ie(loop.getIterName()), toex.getLeft().getType());
 			else
 				throw new NotImplementedException();
 
@@ -140,11 +140,16 @@ public class ExpandFunctions {
 		} else throw new NotImplementedException();
 	}
 
+	@NotNull
+	private IdentExpression ie(String s) {
+		return new IdentExpression(Helpers.makeToken(s));
+	}
+
 	private void addFunctionItem_Loop_EXPR_TYPE(Loop loop, FunctionDef parent, FunctionContext fc) {
 		if (loop.getIterName() != null) {
 			parent.getContext().add(
-					new IdentExpression(Helpers.makeToken(loop.getIterName())),
-					loop.getIterName());
+					ie(loop.getIterName()),
+					ie(loop.getIterName()));
 		} else {
 			System.out.println("loop.getIterName() == null");
 //				String varname="vt"+loop.getIterName();
@@ -158,7 +163,7 @@ public class ExpandFunctions {
 		deduceExpression_(toex.getRight(), parent.getContext(), fc);
 
 		if (loop.getFromPart() instanceof IdentExpression)
-			loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
+			loop.getContext().add((OS_Element) toex.getLeft(), ie(loop.getIterName()), toex.getLeft().getType());
 		else if (loop.getFromPart() == null) {
 			System.out.println("88 loop.getFromPart() == null");
 		} else
@@ -222,63 +227,6 @@ public class ExpandFunctions {
 			throw new NotImplementedException();
 		}
 		return null;
-	}
-
-	public void addFunctionItem_deduceVariableStatement(@NotNull FunctionDef parent, @NotNull VariableStatement vs) {
-		{
-			OS_Type dtype = null;
-			if (vs.typeName().isNull()) {
-				if (vs.initialValue() != null) {
-					IExpression iv = vs.initialValue();
-					if (iv instanceof NumericExpression) {
-						dtype = new OS_Type(BuiltInTypes.SystemInteger);
-					} else if (iv instanceof IdentExpression) {
-						LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
-						for (LookupResult n: lrl.results()) {
-							System.out.println("99 "+n);
-						}
-					} else if (iv instanceof ProcedureCallExpression) {
-						final ProcedureCallExpression pce = (ProcedureCallExpression) iv;
-						final IExpression left = pce.getLeft();
-						if (left.getKind() == ExpressionKind.IDENT) {
-							addFunctionItem_deduceVariableStatement_procedureCallExpression(parent, iv, pce, (IdentExpression) left);
-						}
-					}
-				}
-			} else {
-				dtype = new OS_Type(vs.typeName());
-			}
-//100			parent._a.getContext().add(vs, vs.getName(), dtype);
-//				String theType;
-//				if (ii.typeName().isNull()) {
-////					theType = "int"; // Z0*
-//					theType = ii.initialValueType();
-//				} else{
-//					theType = ii.typeName().getName();
-//				}
-			System.out.println(String.format("[#addFunctionItem_deduceVariableStatement] %s %s;", vs.getName(), dtype));
-
-		}
-	}
-
-	private void addFunctionItem_deduceVariableStatement_procedureCallExpression(
-			@NotNull FunctionDef parent, IExpression iv,
-			ProcedureCallExpression pce, @NotNull IdentExpression left) {
-		final String text = left.getText();
-		final LookupResultList lrl = parent.getContext().lookup(text);
-		System.out.println("98 "+/*n*/iv);
-		if (lrl.results().size() == 0 )
-			System.err.println("96 no results for "+text);
-		for (LookupResult n: lrl.results()) {
-			System.out.println("97 "+n);
-//			Helpers.printXML(iv, new TabbedOutputStream(System.out));
-		}
-		final Collection<IExpression> expressions = pce.getArgs().expressions();
-		List<FunctionPrelimInstruction> q = expressions.stream()
-				.map(n -> deduceExpression(n, parent.getContext(), (FunctionContext)parent.getContext()))
-				.collect(Collectors.toList());
-		System.out.println("90 "+q);
-		NotImplementedException.raise();
 	}
 
 	public void deduceVariableStatement(OS_Element parent, @NotNull VariableStatement vs, FunctionContext fc) {
