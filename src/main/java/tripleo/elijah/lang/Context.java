@@ -8,10 +8,11 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.gen.nodes.Helpers;
+import tripleo.elijah.util.NotImplementedException;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import tripleo.elijah.util.NotImplementedException;
 
 public abstract class Context {
 
@@ -54,7 +55,15 @@ public abstract class Context {
 		throw new NotImplementedException();
 	}
 
-	public void add(OS_Element element, String name) {
+	@Deprecated public void add(OS_Element element, String name) {
+		add(element, new IdentExpression(Helpers.makeToken(name)));
+	}
+
+	@Deprecated public void add(OS_Element element, String name, OS_Type dtype) {
+		add(element, new IdentExpression(Helpers.makeToken(name)), dtype);
+	}
+
+	public void add(OS_Element element, IExpression name) {
 		System.out.println(String.format("104 Context.add: %s %s %s", this, element, name));
 		members.put(name, element);
 	}
@@ -64,10 +73,10 @@ public abstract class Context {
 //		OS_Type type;
 //	}
 	
-	Map<String, OS_Element> members = new HashMap<String, OS_Element>();
+	Map<IExpression, OS_Element> members = new HashMap<IExpression, OS_Element>();
 	private NameTable nameTable = new NameTable();
 
-	public void add(OS_Element element, String name, OS_Type dtype) {
+	public void add(OS_Element element, IExpression name, OS_Type dtype) {
 		System.out.println(String.format("105 Context.add: %s %s %s %s", this, element, name, dtype));
 //		element.setType(dtype);
 		members.put(name, element);

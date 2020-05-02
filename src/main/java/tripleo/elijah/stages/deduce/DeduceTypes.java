@@ -483,7 +483,7 @@ public class DeduceTypes {
 //		throw new NotImplementedException();
 		if (imp.getRoot() == null) {
 			for (Qualident q : imp.parts()) {
-				module.modify_namespace(q, NamespaceModify.IMPORT);
+				module.modify_namespace(imp, q, NamespaceModify.IMPORT);
 			}
 		}
 //		module.
