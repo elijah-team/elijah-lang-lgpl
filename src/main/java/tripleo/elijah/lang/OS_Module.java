@@ -133,9 +133,16 @@ public class OS_Module implements OS_Element, OS_Container {
 //		return null;
 	}
 
-	public void modify_namespace(Qualident q, NamespaceModify import1) {
-		NotImplementedException.raise();
-//		getContext().add(null,  q.toString());
+	public void modify_namespace(Qualident q, NamespaceModify aModification) { // TODO aModification is unused
+//		NotImplementedException.raise();
+		System.err.println("[OS_Module#modify_namespace] " + q + " "+ aModification);
+		getContext().add(null,  q);
+	}
+
+	public void modify_namespace(ImportStatement imp, Qualident q, NamespaceModify aModification) { // TODO aModification is unused
+//		NotImplementedException.raise();
+		System.err.println("[OS_Module#modify_namespace] " + imp + " " + q + " "+ aModification);
+		getContext().add(imp,  q); // TODO prolly wrong
 	}
 
 	@Override
