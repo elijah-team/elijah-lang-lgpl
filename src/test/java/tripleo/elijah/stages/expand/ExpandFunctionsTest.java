@@ -53,7 +53,7 @@ public class ExpandFunctionsTest {
         {
             final FunctionPrelimInstruction fi6 = fc.functionPrelimInstructions.get(5);
             assert fi6 instanceof AssignPrelimInstruction;
-            Assert.assertTrue(((AssignPrelimInstruction) fi6).instructionNumber() == 7);
+            Assert.assertTrue(((AssignPrelimInstruction) fi6).instructionNumber() == 6);
         }
         int y=2;
     }
