@@ -82,13 +82,13 @@ public class ExpandFunctions {
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
-				FunctionInstruction fi = ((FunctionContext)parent.getContext()).introduceVariable(expr.getLeft());
+				FunctionPrelimInstruction fi = ((FunctionContext)parent.getContext()).introduceVariable(expr.getLeft());
 				if (((IBinaryExpression)expr).getRight().getKind() == ExpressionKind.IDENT) {
-					FunctionInstruction fi2 = ((FunctionContext)parent.getContext()).introduceVariable(((IBinaryExpression) expr).getRight());
+					FunctionPrelimInstruction fi2 = ((FunctionContext)parent.getContext()).introduceVariable(((IBinaryExpression) expr).getRight());
 				}
 				int y=2;
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
-				final FunctionInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, parent.getContext(), (FunctionContext) parent.getContext());
+				final FunctionPrelimInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, parent.getContext(), (FunctionContext) parent.getContext());
 				final ExpressionList args = ((ProcedureCallExpression) expr).getArgs();
 				((FunctionContext)parent.getContext()).makeProcCall(fi, args);
 				int y=2;
@@ -198,20 +198,22 @@ public class ExpandFunctions {
 	}
 
 	private void deduceExpression_(IExpression expression, Context context, FunctionContext fc) {
-		FunctionInstruction fi = deduceExpression(expression, context, fc);
+		FunctionPrelimInstruction fi = deduceExpression(expression, context, fc);
 		//expression.setType(t);
 		int y=2;
 	}
-	private FunctionInstruction expandProcedureCall(ProcedureCallExpression pce, Context ctx, FunctionContext fc) {
-		FunctionInstruction i;
-		if (pce.getLeft().getKind() == ExpressionKind.PROCEDURE_CALL)
+	private FunctionPrelimInstruction expandProcedureCall(ProcedureCallExpression pce, Context ctx, FunctionContext fc) {
+		FunctionPrelimInstruction i;
+		if (pce.getLeft().getKind() == ExpressionKind.PROCEDURE_CALL) {
 			i =  expandProcedureCall((ProcedureCallExpression) pce.getLeft(), ctx, fc);
-		else if (pce.getLeft().getKind() == ExpressionKind.DOT_EXP){
+		} else if (pce.getLeft().getKind() == ExpressionKind.DOT_EXP){
 			i =  deduceExpression(pce.getLeft().getLeft(), ctx, fc);
 			DotExpression de = (DotExpression) pce.getLeft();
-			if (de.getRight().getKind() == ExpressionKind.IDENT)
+			if (de.getRight().getKind() == ExpressionKind.IDENT) {
 				return fc.dotExpression(i, de.getRight());
-//			epc2(i, pce.getLeft(), ctx, fc);
+			} else {
+				throw new NotImplementedException();
+			}
 		} else if (pce.getLeft().getKind() == ExpressionKind.IDENT) {
 			IntroducedVariable intro = fc.introduceVariable(pce.getLeft());
 			intro.makeIntoFunctionCall(pce.getArgs());
@@ -221,10 +223,6 @@ public class ExpandFunctions {
 		}
 		return null;
 	}
-
-//	private void epc2(IntroducedVariable i, IExpression expr, Context ctx, FunctionContext fc) {
-//		if (expr.getKind() == ExpressionKind.DOT_EXP)
-//	}
 
 	public void addFunctionItem_deduceVariableStatement(@NotNull FunctionDef parent, @NotNull VariableStatement vs) {
 		{
@@ -276,7 +274,7 @@ public class ExpandFunctions {
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
-		List<FunctionInstruction> q = expressions.stream()
+		List<FunctionPrelimInstruction> q = expressions.stream()
 				.map(n -> deduceExpression(n, parent.getContext(), (FunctionContext)parent.getContext()))
 				.collect(Collectors.toList());
 		System.out.println("90 "+q);
@@ -333,14 +331,14 @@ public class ExpandFunctions {
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
-		List<FunctionInstruction> q = expressions.stream()
+		List<FunctionPrelimInstruction> q = expressions.stream()
 				.map(n -> deduceExpression(n, parent.getContext(), fc))
 				.collect(Collectors.toList());
 		System.out.println("90 "+q);
 		NotImplementedException.raise();
 	}
 
-	public FunctionInstruction deduceExpression(@NotNull IExpression n, Context context, FunctionContext fc) {
+	public FunctionPrelimInstruction deduceExpression(@NotNull IExpression n, Context context, FunctionContext fc) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
 			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
@@ -350,7 +348,7 @@ public class ExpandFunctions {
 				if (element instanceof VariableStatement) {
 					if (((VariableStatement) element).typeName() != null) {
 						if (((VariableStatement) element).typeName().isNull()) {
-							FunctionInstruction i = deduceExpression(((VariableStatement) element).initialValue(), context, fc);
+							FunctionPrelimInstruction i = deduceExpression(((VariableStatement) element).initialValue(), context, fc);
 							int y=2;
 							return i;
 						}
