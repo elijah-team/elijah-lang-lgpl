@@ -153,7 +153,9 @@ public class Compilation {
 		parser.out = new Out(f, this);
 		parser.setFilename(f);
 		parser.program();
-		return parser.out.module();
+		final OS_Module module = parser.out.module();
+		parser.out = null;
+		return module;
 	}
 
 	boolean showTree = false;
