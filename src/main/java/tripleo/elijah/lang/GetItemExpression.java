@@ -23,7 +23,8 @@ public class GetItemExpression extends AbstractExpression { // TODO binary?
 
 	public GetItemExpression(IExpression ee, IExpression expr) {
 		this.primary = ee;
-		this.index = expr;
+		this.index   = expr;
+		this._kind   = ExpressionKind.GET_ITEM;
 	}
 
 	/* (non-Javadoc)
@@ -32,7 +33,7 @@ public class GetItemExpression extends AbstractExpression { // TODO binary?
 	@Override
 	public ExpressionKind getKind() {
 		// TODO Auto-generated method stub
-		return ExpressionKind.INDEX_OF;
+		return ExpressionKind.GET_ITEM;
 	}
 
 	/* (non-Javadoc)
