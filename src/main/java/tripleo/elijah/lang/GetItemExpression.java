@@ -18,11 +18,10 @@ import tripleo.elijah.util.NotImplementedException;
  */
 public class GetItemExpression extends AbstractExpression { // TODO binary?
 
-	private IExpression index;
-	private IExpression primary;
+	public IExpression index;;
 
 	public GetItemExpression(IExpression ee, IExpression expr) {
-		this.primary = ee;
+		this.left    = ee;
 		this.index   = expr;
 		this._kind   = ExpressionKind.GET_ITEM;
 	}
@@ -32,7 +31,6 @@ public class GetItemExpression extends AbstractExpression { // TODO binary?
 	 */
 	@Override
 	public ExpressionKind getKind() {
-		// TODO Auto-generated method stub
 		return ExpressionKind.GET_ITEM;
 	}
 
@@ -41,8 +39,7 @@ public class GetItemExpression extends AbstractExpression { // TODO binary?
 	 */
 	@Override
 	public boolean is_simple() {
-		// TODO Auto-generated method stub
-		return false;
+		return false; // TODO is this correct? Let's err on the side of caution
 	}
 
 	/* (non-Javadoc)
