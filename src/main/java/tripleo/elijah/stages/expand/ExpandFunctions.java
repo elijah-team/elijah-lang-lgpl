@@ -321,6 +321,13 @@ public class ExpandFunctions {
 			var left_type = deduceExpression(de.getLeft(), context, fc);
 //			var right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext(), fc);
 			int y=2;
+		} else if (n.getKind() == ExpressionKind.GET_ITEM) {
+			int y=2;
+			FunctionPrelimInstruction i = fc.introduceFunction(n.getLeft());
+			final IntroducedFunction nn = (IntroducedFunction) i;
+			nn.setName("__getitem__");
+			nn.setArgs(Helpers.List_of(((GetItemExpression)n).index));
+			return i;
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
 			return expandProcedureCall((ProcedureCallExpression) n, context, fc);
 		}
