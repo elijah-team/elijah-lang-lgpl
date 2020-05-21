@@ -23,6 +23,7 @@ public class IntroducedVariable implements FunctionPrelimInstruction {
     Type kind;
     ExpressionList args;
     IExpression variable;
+    private IntroducedExpressionList args2;
 
     public IntroducedVariable(IExpression variable) {
         this.variable = variable;
@@ -40,9 +41,20 @@ public class IntroducedVariable implements FunctionPrelimInstruction {
         System.out.println("[#makeIntoFunctionCall] " + this + " " + args);
     }
 
+    public void makeIntoFunctionCall(IntroducedExpressionList expressionList) {
+        this.args2 = expressionList;// == null ? new IntroducedExpressionList() : expressionList; // TODO is this really necessary?
+        this.kind = Type.PROCEDURE_CALL;
+        System.out.println("[#makeIntoFunctionCall] " + this + " " + expressionList);
+    }
+
     public enum Type {
         PROCEDURE_CALL, VARDECL, VARREF
 
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[IntroducedVariable#toString] %s %s %s %s", variable, vardecl, kind, args == null ? args2 : args);
     }
 
     public void setInstructionNumber(int i) {_inst = i;}
