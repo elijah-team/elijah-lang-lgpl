@@ -216,13 +216,15 @@ public class ExpandFunctions {
 			i =  deduceExpression(pce.getLeft().getLeft(), ctx, fc);
 			DotExpression de = (DotExpression) pce.getLeft();
 			if (de.getRight().getKind() == ExpressionKind.IDENT) {
-				return fc.dotExpression(i, de.getRight());
+				i = fc.dotExpression(i, de.getRight());
+				i = fc.makeProcCall(i, pce.getArgs()); // TODO look below
+				return i;
 			} else {
 				throw new NotImplementedException();
 			}
 		} else if (pce.getLeft().getKind() == ExpressionKind.IDENT) {
 			IntroducedVariable intro = fc.introduceVariable(pce.getLeft());
-			intro.makeIntoFunctionCall(pce.getArgs());
+			intro.makeIntoFunctionCall(pce.getArgs()); // TODO look above
 			return intro;
 		} else {
 			throw new NotImplementedException();
