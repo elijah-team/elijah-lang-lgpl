@@ -211,25 +211,25 @@ public class ExpandFunctions {
 		FunctionPrelimInstruction i;
 		if (pce.getLeft().getKind() == ExpressionKind.PROCEDURE_CALL) {
 			i =  expandProcedureCall((ProcedureCallExpression) pce.getLeft(), ctx, fc);
-			return i;
 		} else if (pce.getLeft().getKind() == ExpressionKind.DOT_EXP){
 			i =  deduceExpression(pce.getLeft().getLeft(), ctx, fc);
 			DotExpression de = (DotExpression) pce.getLeft();
 			if (de.getRight().getKind() == ExpressionKind.IDENT) {
 				i = fc.dotExpression(i, de.getRight());
 				i = fc.makeProcCall(i, pce.getArgs()); // TODO look below
-				return i;
+				//return i;
 			} else {
 				throw new NotImplementedException();
 			}
+			i = fc.makeProcCall(i, pce.getArgs());
 		} else if (pce.getLeft().getKind() == ExpressionKind.IDENT) {
 			IntroducedVariable intro = fc.introduceVariable(pce.getLeft());
 			intro.makeIntoFunctionCall(pce.getArgs()); // TODO look above
-			return intro;
+			i = intro;
 		} else {
 			throw new NotImplementedException();
 		}
-		//return null;
+		return i;
 	}
 
 	public void deduceVariableStatement(OS_Element parent, @NotNull VariableStatement vs, FunctionContext fc) {
