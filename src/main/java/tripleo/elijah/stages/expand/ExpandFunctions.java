@@ -293,15 +293,18 @@ public class ExpandFunctions {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
 			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
-//				return lrl.results().get(0).getElement();
 				// TODO what to do here??
 				final OS_Element element = lrl.results().get(0).getElement();
 				if (element instanceof VariableStatement) {
-					if (((VariableStatement) element).typeName() != null) {
-						if (((VariableStatement) element).typeName().isNull()) {
-							FunctionPrelimInstruction i = deduceExpression(((VariableStatement) element).initialValue(), context, fc);
+					final VariableStatement vs = (VariableStatement) element;
+					if (vs.typeName() != null) {
+						FunctionPrelimInstruction i;
+						if (vs.typeName().isNull()) {
+							i = deduceExpression(vs.initialValue(), context, fc);
 							int y=2;
 							return i;
+						} else {
+							i = fc.introduceVariable(vs);
 						}
 //						return new OS_Type(((VariableStatement) element).typeName());
 					}
