@@ -211,6 +211,7 @@ public class ExpandFunctions {
 		FunctionPrelimInstruction i;
 		if (pce.getLeft().getKind() == ExpressionKind.PROCEDURE_CALL) {
 			i =  expandProcedureCall((ProcedureCallExpression) pce.getLeft(), ctx, fc);
+			return i;
 		} else if (pce.getLeft().getKind() == ExpressionKind.DOT_EXP){
 			i =  deduceExpression(pce.getLeft().getLeft(), ctx, fc);
 			DotExpression de = (DotExpression) pce.getLeft();
@@ -226,7 +227,7 @@ public class ExpandFunctions {
 		} else {
 			throw new NotImplementedException();
 		}
-		return null;
+		//return null;
 	}
 
 	public void deduceVariableStatement(OS_Element parent, @NotNull VariableStatement vs, FunctionContext fc) {
