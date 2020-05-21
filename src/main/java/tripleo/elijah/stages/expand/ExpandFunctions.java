@@ -85,8 +85,8 @@ public class ExpandFunctions {
 				if (((IBinaryExpression)expr).getRight().getKind() == ExpressionKind.IDENT) {
 					FunctionPrelimInstruction fi2 = fc.introduceVariable(((IBinaryExpression) expr).getRight());
 					FunctionPrelimInstruction fi3 = fc.assign(fi, fi2);
-				}
-				int y=2;
+				} else
+					throw new NotImplementedException();
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
 				final FunctionPrelimInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, parent.getContext(), fc);
 //				final ExpressionList args = ((ProcedureCallExpression) expr).getArgs();
