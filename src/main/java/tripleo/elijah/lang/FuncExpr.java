@@ -3,13 +3,13 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tripleo
@@ -107,7 +107,7 @@ public class FuncExpr implements IExpression, OS_Element {
 	/****** FOR IEXPRESSION ******/
 	@Override
 	public ExpressionKind getKind() {
-		return null;
+		return ExpressionKind.FUNC_EXPR;
 	}
 
 	@Override
