@@ -89,8 +89,8 @@ public class ExpandFunctions {
 				int y=2;
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
 				final FunctionPrelimInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, parent.getContext(), fc);
-				final ExpressionList args = ((ProcedureCallExpression) expr).getArgs();
-				fc.makeProcCall(fi, args);
+//				final ExpressionList args = ((ProcedureCallExpression) expr).getArgs();
+//				fc.makeProcCall(fi, args);
 				int y=2;
 			} else throw new NotImplementedException();
 		} else if (element instanceof IfConditional) {
