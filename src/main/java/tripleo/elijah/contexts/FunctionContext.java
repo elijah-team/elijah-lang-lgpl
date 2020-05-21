@@ -85,11 +85,32 @@ public class FunctionContext extends Context {
 	}
 
 	public FunctionCallPrelimInstruction makeProcCall(FunctionPrelimInstruction fi, ExpressionList args) {
-		int y=2;
-//		((IntroducedVariable)fi).makeIntoFunctionCall(args);
-		FunctionCallPrelimInstruction fci = new FunctionCallPrelimInstruction(fi, args);
+		IntroducedExpressionList els = simplifyExpressionList(args);
+		FunctionCallPrelimInstruction fci = new FunctionCallPrelimInstruction(fi, els);
 		addPrelimInstruction(fci);
 		return fci;
+	}
+
+	private IntroducedExpressionList simplifyExpressionList(ExpressionList args) {
+		IntroducedExpressionList args1 = new IntroducedExpressionList();
+		if (args == null) return args1;
+		for (IExpression arg : args) {
+			int y=2;
+			if (arg.getKind() == ExpressionKind.PROCEDURE_CALL) {
+				FunctionPrelimInstruction i = null; // TODO
+				if (arg.getLeft().getKind() == ExpressionKind.IDENT) {
+					i=introduceVariable(arg.getLeft());
+					final ExpressionList args2 = ((ProcedureCallExpression) arg).getArgs();
+					final IntroducedExpressionList expressionList = simplifyExpressionList(args2);
+					((IntroducedVariable)i).makeIntoFunctionCall(expressionList);
+					args1.add(i);
+				} else if (arg.getKind() == ExpressionKind.FUNC_EXPR) {
+					int yy=2;
+				}
+				//makeProcCall(i, ((ProcedureCallExpression)arg).getArgs());
+			}
+		}
+		return args1;
 	}
 
 	public FunctionPrelimInstruction assign(FunctionPrelimInstruction fi, FunctionPrelimInstruction fi2) {
@@ -101,6 +122,14 @@ public class FunctionContext extends Context {
 	private void addPrelimInstruction(final @NotNull FunctionPrelimInstruction fpi) {
 		functionPrelimInstructions.add(fpi);
 		fpi.setInstructionNumber(functionPrelimInstructionsNumber++);
+	}
+
+	public FunctionPrelimInstruction introduceFunction(IExpression expression) {
+		System.out.println("[#introduceFunction] "+expression);
+		final IntroducedFunction introducedFunction = new IntroducedFunction(expression);
+//		variableTable.add(introducedFunction);
+		addPrelimInstruction(introducedFunction);
+		return introducedFunction;
 	}
 }
 
