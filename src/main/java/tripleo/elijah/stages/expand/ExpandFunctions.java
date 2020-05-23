@@ -203,7 +203,7 @@ public class ExpandFunctions {
 	}
 
 	private void deduceExpression_(IExpression expression, Context context, FunctionContext fc) {
-		FunctionPrelimInstruction fi = deduceExpression(expression, context, fc);
+		FunctionPrelimInstruction fi = expandExpression(expression, context, fc);
 		//expression.setType(t);
 		int y=2;
 	}
@@ -212,7 +212,7 @@ public class ExpandFunctions {
 		if (pce.getLeft().getKind() == ExpressionKind.PROCEDURE_CALL) {
 			i =  expandProcedureCall((ProcedureCallExpression) pce.getLeft(), ctx, fc);
 		} else if (pce.getLeft().getKind() == ExpressionKind.DOT_EXP){
-			i =  deduceExpression(pce.getLeft().getLeft(), ctx, fc);
+			i =  expandExpression(pce.getLeft().getLeft(), ctx, fc);
 			DotExpression de = (DotExpression) pce.getLeft();
 			if (de.getRight().getKind() == ExpressionKind.IDENT) {
 				i = fc.dotExpression(i, de.getRight());
@@ -283,13 +283,13 @@ public class ExpandFunctions {
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
 		List<FunctionPrelimInstruction> q = expressions.stream()
-				.map(n -> deduceExpression(n, parent.getContext(), fc))
+				.map(n -> expandExpression(n, parent.getContext(), fc))
 				.collect(Collectors.toList());
 		System.out.println("90 "+q);
 		NotImplementedException.raise();
 	}
 
-	public FunctionPrelimInstruction deduceExpression(@NotNull IExpression n, Context context, FunctionContext fc) {
+	public FunctionPrelimInstruction expandExpression(@NotNull IExpression n, Context context, FunctionContext fc) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
 			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
@@ -300,7 +300,7 @@ public class ExpandFunctions {
 					if (vs.typeName() != null) {
 						FunctionPrelimInstruction i;
 						if (vs.typeName().isNull()) {
-							i = deduceExpression(vs.initialValue(), context, fc);
+							i = expandExpression(vs.initialValue(), context, fc);
 							int y=2;
 							return i;
 						} else {
@@ -325,7 +325,7 @@ public class ExpandFunctions {
 //			return new OS_Type(BuiltInTypes.SystemInteger);
 		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
 			DotExpression de = (DotExpression) n;
-			var left_type = deduceExpression(de.getLeft(), context, fc);
+			var left_type = expandExpression(de.getLeft(), context, fc);
 //			var right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext(), fc);
 			int y=2;
 		} else if (n.getKind() == ExpressionKind.GET_ITEM) {
