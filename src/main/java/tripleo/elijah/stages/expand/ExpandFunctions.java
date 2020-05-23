@@ -305,6 +305,7 @@ public class ExpandFunctions {
 							return i;
 						} else {
 							i = fc.introduceVariable(vs);
+							return i;
 						}
 //						return new OS_Type(((VariableStatement) element).typeName());
 					}
