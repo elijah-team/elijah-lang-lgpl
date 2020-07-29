@@ -26,7 +26,7 @@ class MainLogic {
   main(args: List[String]) {
     const fun = function (f) {
               Result = f.isDirectory()}
-    const folders = args[1].  // Can we use Option or Maybe here?
+    const folders = File(args[1]).  // Can we use Option or Maybe here?
         listFiles(fun)
     if folders {  // folders?. //??
         // copy(folders, p1)
