@@ -2,7 +2,7 @@
 
 **Elijjah** is a [multi-paradigm](https://en.wikipedia.org/wiki/Multi-paradigm_programming_language "Multi-paradigm programming language") [systems and applications programming language](https://en.wikipedia.org/wiki/Systems_programming_language "Systems programming language") with an emphasis on making the programmer's life easier. It is statically typed while using type deduction where possible and it supports both functional and object oriented paradigms.
 
-It is intended to provide the power of C++, the exressibility of Python, and the utility of Java.  The code the reference compiler generates if C/C++ or Java is intended to complement eaach and every one of those in any combination.  It can reliably interact with Java libraries or C/C++ libraries like Swing/JavaFX, SWT, boost, or gtk and Qt.
+It is intended to provide the power of C++, the expressibility of Python, and the utility of Java.  The code the reference compiler generates if C/C++ or Java is intended to complement each and every one of those in any combination.  It can reliably interact with Java libraries or C/C++ libraries like Swing/JavaFX, SWT, boost, or gtk and Qt.
 
 ## Contents
 
