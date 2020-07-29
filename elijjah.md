@@ -37,7 +37,7 @@ Semicolons are optional as a statement terminator , though whilespace is ignored
 
 ## Syntax
 
-The concrete syntax of Elijjah is similar to C/C++ and Java with hints from JabaScript, Python, and Eiffel.  Blocks of code are delimited by curly braces and control flow keywords such as `if`, `else`, and `while` are allowed.  As of now `for` is not supported and `foreach` is available as `iterate`.
+The concrete syntax of Elijjah is similar to C/C++ and Java with hints from JavaScript, Python, and Eiffel.  Blocks of code are delimited by curly braces and control flow keywords such as `if`, `else`, and `while` are allowed.  As of now `for` is not supported and `foreach` is available as `iterate`.
 
 A function is composed of expressions and statements.  Everything other than a function call or a variable assignment is a statement.  A function need not end with a return statement (if enabled), but the return value must be assigned to a special variable `Result`.
 
@@ -81,7 +81,7 @@ Where not explicit, the types of variables (and values honestly) are deduced by 
 
 Both function and classes can be given [generic](https://en.wikipedia.org/wiki/Generic_programming "Generic programming") [parameters](https://en.wikipedia.org/wiki/Parameter_%28computer_programming%29 "Parameter (computer programming)"), and class `signature`s can be used to require a class to implement a certain interface without raxing the type system.  TGhe implementation of generics is similar to the typical implementation of C++ templates: a separate copy of the code is generated for each instantiation. This is called monomorphization and contrasts with the [type erasure](https://en.wikipedia.org/wiki/Type_erasure "Type erasure") scheme typically used in Java and Haskell. The benefit of monomorphization is optimized code for each specific use case; the drawback is increased compile time and size of the resulting binaries.
 
-`Struct`s are used to control memory layout. Structs cannot fully participate in OOP aand member function on structs must be resolvable statically.
+`struct`s are used to control memory layout. Structs cannot fully participate in OOP aand member function on structs must be resolvable statically.
 
 There are no static members in Elijjah.  This functionality is implemented by `namespace`s, each of which is a singleton and can be counted on to exist only once in an entire program. (Note that multi-threading behavior is undefined here.)
 
@@ -133,7 +133,11 @@ Lambdas are declared using braces, `{|| }` . If a lambda takes parameters, they 
 
 
 ~~~~// the following statement defines a lambda that takes a single parameter and passes it to the println function
-val l s= { |c : Maybe[Any]|  println(c) } }
+val l s= { |c : Maybe[Any]|  println(c.unwrap()) } }
+
+probably should be:
+
+val l s= { |c : Maybe[Any]|  match c {Some[d:Any] {println(d)} _ {} } }
 // lambdas with no parameters may simply be defined using { }
 val l2 = { || print("no parameters") }
 ~~~~
