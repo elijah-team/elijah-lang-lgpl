@@ -20,19 +20,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Make sure all (I)Expressions have types.
+ *
  * @author Tripleo
  *
  * Created 	Mar 26, 2020 at 5:39:30 AM
  */
 public class DeduceTypes {
 
-	public int nextClassCode() { return module.parent.nextClassCode(); }
-	public int nextFunctionCode() { return module.parent.nextFunctionCode(); }
+	public int nextClassCode(void) { return module.parent.nextClassCode(); }
+	public int nextFunctionCode(void) { return module.parent.nextFunctionCode(); }
 
 	private OS_Module module;
 
 	public DeduceTypes(OS_Module module) {
-//		NotImplementedException.raise();
+		if (module == null) throw new IllegalArgumentException("module must not be null");
 		this.module = module;
 	}
 
@@ -490,7 +492,7 @@ public class DeduceTypes {
 	}
 
 	private void addModuleItem(ModuleItem element) {
-		// TODO Auto-generated method stub
+		// TODO indexing, package, alias, pragma
 		if (element instanceof ClassStatement) {
 			ClassStatement cl = (ClassStatement) element;
 			addClass(cl, module);
