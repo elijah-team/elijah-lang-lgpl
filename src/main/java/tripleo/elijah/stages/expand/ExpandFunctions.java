@@ -210,10 +210,6 @@ public class ExpandFunctions {
 		int y=2;
 	}
 
-	@Deprecated private FunctionPrelimInstruction expandProcedureCall(ProcedureCallExpression pce, Context ctx, FunctionContext fc) {
-		return expandProcedureCall(pce, fc);
-	}
-
 	private FunctionPrelimInstruction expandProcedureCall(ProcedureCallExpression pce, FunctionContext fc) {
 		FunctionPrelimInstruction i;
 		final ExpressionKind pce_left_kind = pce.getLeft().getKind();
