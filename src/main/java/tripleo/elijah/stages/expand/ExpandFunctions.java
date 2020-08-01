@@ -203,17 +203,23 @@ public class ExpandFunctions {
 	}
 
 	private void deduceExpression_(IExpression expression, Context context, FunctionContext fc) {
-		FunctionPrelimInstruction fi = expandExpression(expression, context, fc);
+		FunctionPrelimInstruction fi = expandExpression(expression, fc);
 		//expression.setType(t);
 		int y=2;
 	}
-	private FunctionPrelimInstruction expandProcedureCall(ProcedureCallExpression pce, Context ctx, FunctionContext fc) {
+
+	@Deprecated private FunctionPrelimInstruction expandProcedureCall(ProcedureCallExpression pce, Context ctx, FunctionContext fc) {
+		return expandProcedureCall(pce, fc);
+	}
+
+	private FunctionPrelimInstruction expandProcedureCall(ProcedureCallExpression pce, FunctionContext fc) {
 		FunctionPrelimInstruction i;
-		if (pce.getLeft().getKind() == ExpressionKind.PROCEDURE_CALL) {
+		final ExpressionKind pce_left_kind = pce.getLeft().getKind();
+		if (pce_left_kind == ExpressionKind.PROCEDURE_CALL) {
 			i =  expandProcedureCall((ProcedureCallExpression) pce.getLeft(), ctx, fc);
-		} else if (pce.getLeft().getKind() == ExpressionKind.DOT_EXP){
-			i =  expandExpression(pce.getLeft().getLeft(), ctx, fc);
-			DotExpression de = (DotExpression) pce.getLeft();
+		} else if (pce_left_kind == ExpressionKind.DOT_EXP){
+			final DotExpression de = (DotExpression) pce.getLeft();
+			i =  expandExpression(de.getLeft(), fc);
 			if (de.getRight().getKind() == ExpressionKind.IDENT) {
 				i = fc.dotExpression(i, de.getRight());
 				i = fc.makeProcCall(i, pce.getArgs()); // TODO look below
@@ -221,8 +227,8 @@ public class ExpandFunctions {
 			} else {
 				throw new NotImplementedException();
 			}
-			i = fc.makeProcCall(i, pce.getArgs());
-		} else if (pce.getLeft().getKind() == ExpressionKind.IDENT) {
+			//i = fc.makeProcCall(i, pce.getArgs());
+		} else if (pce_left_kind == ExpressionKind.IDENT) {
 			IntroducedVariable intro = fc.introduceVariable(pce.getLeft());
 			intro.makeIntoFunctionCall(pce.getArgs()); // TODO look above
 			i = intro;
@@ -283,15 +289,15 @@ public class ExpandFunctions {
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
 		List<FunctionPrelimInstruction> q = expressions.stream()
-				.map(n -> expandExpression(n, parent.getContext(), fc))
+				.map(n -> expandExpression(n, fc))
 				.collect(Collectors.toList());
 		System.out.println("90 "+q);
 		NotImplementedException.raise();
 	}
 
-	public FunctionPrelimInstruction expandExpression(@NotNull IExpression n, Context context, FunctionContext fc) {
+	public FunctionPrelimInstruction expandExpression(@NotNull IExpression n, FunctionContext fc) {
 		if (n.getKind() == ExpressionKind.IDENT) {
-			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
+			LookupResultList lrl = /*context*/fc.lookup(((IdentExpression)n).getText());
 			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
 				// TODO what to do here??
 				final OS_Element element = lrl.results().get(0).getElement();
@@ -300,7 +306,7 @@ public class ExpandFunctions {
 					if (vs.typeName() != null) {
 						FunctionPrelimInstruction i;
 						if (vs.typeName().isNull()) {
-							i = expandExpression(vs.initialValue(), context, fc);
+							i = expandExpression(vs.initialValue(), fc);
 							int y=2;
 							return i;
 						} else {
@@ -325,7 +331,7 @@ public class ExpandFunctions {
 //			return new OS_Type(BuiltInTypes.SystemInteger);
 		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
 			DotExpression de = (DotExpression) n;
-			var left_type = expandExpression(de.getLeft(), context, fc);
+			var left_type = expandExpression(de.getLeft(), fc);
 //			var right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext(), fc);
 			int y=2;
 		} else if (n.getKind() == ExpressionKind.GET_ITEM) {
@@ -336,7 +342,7 @@ public class ExpandFunctions {
 			nn.setArgs(Helpers.List_of(((GetItemExpression)n).index));
 			return i;
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
-			return expandProcedureCall((ProcedureCallExpression) n, context, fc);
+			return expandProcedureCall((ProcedureCallExpression) n, fc, fc);
 		}
 		
 		return null;
