@@ -16,7 +16,7 @@ package tripleo.elijah.comp;
  * @author tripleo(sb)
  *
  */
-public class StdErrSink implements ErrSink {
+public class ListErrSink implements ErrSink {
 
 	private int _errorCount;
 
