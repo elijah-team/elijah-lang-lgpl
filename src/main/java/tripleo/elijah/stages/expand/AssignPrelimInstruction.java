@@ -8,11 +8,13 @@
  */
 package tripleo.elijah.stages.expand;
 
+import tripleo.elijah.lang.IExpression;
+
 public class AssignPrelimInstruction implements FunctionPrelimInstruction {
     private final FunctionPrelimInstruction var;
-    private final FunctionPrelimInstruction expr;
+    private final IExpression /*FunctionPrelimInstruction*/ expr;
 
-    public AssignPrelimInstruction(FunctionPrelimInstruction fi, FunctionPrelimInstruction fi2) {
+    public AssignPrelimInstruction(FunctionPrelimInstruction fi, /*FunctionPrelimInstruction*/IExpression fi2) {
         this.var = fi;
         this.expr = fi2;
     }

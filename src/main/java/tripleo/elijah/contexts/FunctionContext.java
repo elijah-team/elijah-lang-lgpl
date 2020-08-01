@@ -121,6 +121,12 @@ public class FunctionContext extends Context {
 		return api;
 	}
 
+	public FunctionPrelimInstruction assign(FunctionPrelimInstruction fi, IExpression fi2) {
+		AssignPrelimInstruction api = new AssignPrelimInstruction(fi, fi2);
+		addPrelimInstruction(api);
+		return api;
+	}
+
 	private void addPrelimInstruction(final @NotNull FunctionPrelimInstruction fpi) {
 		functionPrelimInstructions.add(fpi);
 		fpi.setInstructionNumber(functionPrelimInstructionsNumber++);
