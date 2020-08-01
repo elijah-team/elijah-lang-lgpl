@@ -296,9 +296,9 @@ public class ExpandFunctions {
 	public FunctionPrelimInstruction expandExpression(@NotNull IExpression n, FunctionContext fc) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			LookupResultList lrl = /*context*/fc.lookup(((IdentExpression)n).getText());
-			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
+			if (/*lrl.results().size() == 1*/true) { // TODO the reason were having problems here is constraints vs shadowing
 				// TODO what to do here??
-				final OS_Element element = lrl.results().get(0).getElement();
+				final OS_Element element = lrl.chooseBest(null);
 				if (element instanceof VariableStatement) {
 					final VariableStatement vs = (VariableStatement) element;
 					if (vs.typeName() != null) {
