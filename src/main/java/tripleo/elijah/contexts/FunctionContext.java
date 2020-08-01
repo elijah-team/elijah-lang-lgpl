@@ -104,10 +104,12 @@ public class FunctionContext extends Context {
 					final IntroducedExpressionList expressionList = simplifyExpressionList(args2);
 					((IntroducedVariable)i).makeIntoFunctionCall(expressionList);
 					args1.add(i);
-				} else if (arg.getKind() == ExpressionKind.FUNC_EXPR) {
-					int yy=2;
 				}
 				//makeProcCall(i, ((ProcedureCallExpression)arg).getArgs());
+			} else if (arg.getKind() == ExpressionKind.FUNC_EXPR) {
+				int yy=2;
+				FunctionPrelimInstruction i = introduceVariable(arg);
+				args1.add(i);
 			}
 		}
 		return args1;
