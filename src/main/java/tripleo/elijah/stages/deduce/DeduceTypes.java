@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
  */
 public class DeduceTypes {
 
-	public int nextClassCode(void) { return module.parent.nextClassCode(); }
-	public int nextFunctionCode(void) { return module.parent.nextFunctionCode(); }
+	public int nextClassCode() { return module.parent.nextClassCode(); }
+	public int nextFunctionCode() { return module.parent.nextFunctionCode(); }
 
 	private OS_Module module;
 
@@ -523,13 +523,6 @@ public class DeduceTypes {
 		}
 	}
 
-	private int nextClassCode() {
-		return ++_classCode;
-	}
-	
-	private int nextFunctionCode() {
-		return ++_functionCode;
-	}
 }
 
 //
