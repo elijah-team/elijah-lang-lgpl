@@ -2,17 +2,23 @@ package Prelude;
 
 class interface String {
 }
-class Integer64 {
+class interface Integer {
 }
-class Integer32 {
+class Integer64 < Integer {
 }
-class Boolean {
+class Integer32 < Integer {
+}
+//enum
+class
+ Boolean {
+//    True, False
 }
 alias SystemInteger = Integer64
 alias Integer = SystemInteger
 
 namespace {
-    val ExitSuccess = 1
+    val ExitSuccess = 0
+    val ExitFailure = 1
 }
 
 //
