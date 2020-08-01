@@ -244,7 +244,7 @@ public class DeduceTypes {
 		function_name = ((IdentExpression) i).getText();
 		//
 		LookupResultList lrl = ctx.lookup(function_name);
-		if (lrl.results().size() == 0)
+		if (lrl.chooseBest(null) == null)
 			module.parent.eee.reportError("function not found " + function_name);
 		int y=2;
 //		final OS_Type right_type = deduceExpression(((IBinaryExpression) expr).getRight(), parent.getContext());
