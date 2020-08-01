@@ -142,7 +142,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	public void modify_namespace(ImportStatement imp, Qualident q, NamespaceModify aModification) { // TODO aModification is unused
 //		NotImplementedException.raise();
 		System.err.println("[OS_Module#modify_namespace] " + imp + " " + q + " "+ aModification);
-		getContext().add(imp,  q); // TODO prolly wrong
+		getContext().add(imp,  q); // TODO prolly wrong; do a second pass later to add definition...?
 	}
 
 	@Override
