@@ -13,15 +13,14 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import antlr.Token;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FunctionDef implements ClassItem, OS_Container, OS_Element2 {
 
@@ -166,11 +165,11 @@ public class FunctionDef implements ClassItem, OS_Container, OS_Element2 {
 		funName = aText.getText();
 	}
 
-	public void visit(JavaCodeGen gen) {
-		// TODO Auto-generated method stub
-		for (FunctionItem element : items)
-			gen.addFunctionItem(element);
-	}
+//	public void visit(JavaCodeGen gen) {
+//		// TODO Auto-generated method stub
+//		for (FunctionItem element : items)
+//			gen.addFunctionItem(element);
+//	}
 
 	@Override
 	public void visitGen(ICodeGen visit) {

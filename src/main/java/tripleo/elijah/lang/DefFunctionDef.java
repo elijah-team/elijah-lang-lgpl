@@ -16,7 +16,6 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.contexts.DefFunctionContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.gen.java.JavaCodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
@@ -188,11 +187,11 @@ public class DefFunctionDef implements ClassItem {
 		funName = aText.getText();
 	}
 
-	public void visit(JavaCodeGen gen) {
-		// TODO Auto-generated method stub
-		for (FunctionItem element : items)
-			gen.addFunctionItem(element);
-	}
+//	public void visit(JavaCodeGen gen) {
+//		// TODO Auto-generated method stub
+//		for (FunctionItem element : items)
+//			gen.addFunctionItem(element);
+//	}
 
 	@Override
 	public void visitGen(ICodeGen visit) {
