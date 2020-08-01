@@ -16,15 +16,14 @@ import java.util.function.Predicate;
  */
 public class LookupResultList {
 
-	private List<LookupResult> results = new ArrayList<LookupResult>();
+	private List<LookupResult> _results = new ArrayList<LookupResult>();
 
 	public void add(String name, int level, OS_Element element) {
-		// TODO Auto-generated method stub
-		results.add(new LookupResult(name, element, level));
+		_results.add(new LookupResult(name, element, level));
 	}
 
-	public List<LookupResult> results() {
-		return results;
+	public List<LookupResult> results() { // TODO want ImmutableList
+		return _results;
 	}
 
 	public OS_Element chooseBest(List<Predicate> l) {
