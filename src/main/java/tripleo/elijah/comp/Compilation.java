@@ -161,7 +161,6 @@ public class Compilation {
 	boolean showTree = false;
 
 	public OS_Element findClass(String string) {
-		// TODO Auto-generated method stub
 		for (OS_Module module : modules) {
 			if (module.hasClass(string)) {
 				return module.findClass(string);
