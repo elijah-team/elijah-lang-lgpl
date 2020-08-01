@@ -115,11 +115,11 @@ public class FunctionContext extends Context {
 		return args1;
 	}
 
-	public FunctionPrelimInstruction assign(FunctionPrelimInstruction fi, FunctionPrelimInstruction fi2) {
-		AssignPrelimInstruction api = new AssignPrelimInstruction(fi, fi2);
-		addPrelimInstruction(api);
-		return api;
-	}
+//	public FunctionPrelimInstruction assign(FunctionPrelimInstruction fi, FunctionPrelimInstruction fi2) {
+//		AssignPrelimInstruction api = new AssignPrelimInstruction(fi, fi2);
+//		addPrelimInstruction(api);
+//		return api;
+//	}
 
 	public FunctionPrelimInstruction assign(FunctionPrelimInstruction fi, IExpression fi2) {
 		AssignPrelimInstruction api = new AssignPrelimInstruction(fi, fi2);
