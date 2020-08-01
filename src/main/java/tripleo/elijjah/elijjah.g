@@ -817,7 +817,7 @@ GT				:	">"		;
 SL				:	"<<"	;
 SL_ASSIGN		:	"<<="	;
 LE				:	"<="	;
-LT				:	'<'		;
+LT_				:	'<'		;
 BXOR			:	'^'		;
 BXOR_ASSIGN		:	"^="	;
 BOR				:	'|'		;

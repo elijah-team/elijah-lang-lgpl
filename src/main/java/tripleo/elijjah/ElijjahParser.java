@@ -5301,7 +5301,6 @@ public ElijjahParser(ParserSharedInputState state) {
 		"\"elseif\"",
 		"QUESTION",
 		"\"def\"",
-		"LT",
 		"WS",
 		"SL_COMMENT",
 		"ML_COMMENT",
