@@ -161,6 +161,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 	
 	public String getName() {
+		if (nsName == null) return "";
 		return nsName.getText();
 	}
 
