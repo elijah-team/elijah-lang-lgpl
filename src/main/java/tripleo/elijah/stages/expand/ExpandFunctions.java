@@ -88,7 +88,7 @@ public class ExpandFunctions {
 				} else
 					throw new NotImplementedException();
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
-				final FunctionPrelimInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, parent.getContext(), fc);
+				final FunctionPrelimInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, fc);
 //				final ExpressionList args = ((ProcedureCallExpression) expr).getArgs();
 //				fc.makeProcCall(fi, args);
 				int y=2;
@@ -216,7 +216,7 @@ public class ExpandFunctions {
 		FunctionPrelimInstruction i;
 		final ExpressionKind pce_left_kind = pce.getLeft().getKind();
 		if (pce_left_kind == ExpressionKind.PROCEDURE_CALL) {
-			i =  expandProcedureCall((ProcedureCallExpression) pce.getLeft(), ctx, fc);
+			i =  expandProcedureCall((ProcedureCallExpression) pce.getLeft(), fc);
 		} else if (pce_left_kind == ExpressionKind.DOT_EXP){
 			final DotExpression de = (DotExpression) pce.getLeft();
 			i =  expandExpression(de.getLeft(), fc);
@@ -342,7 +342,7 @@ public class ExpandFunctions {
 			nn.setArgs(Helpers.List_of(((GetItemExpression)n).index));
 			return i;
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
-			return expandProcedureCall((ProcedureCallExpression) n, fc, fc);
+			return expandProcedureCall((ProcedureCallExpression) n, fc);
 		}
 		
 		return null;
