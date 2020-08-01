@@ -61,14 +61,15 @@ public class OS_Module implements OS_Element, OS_Container {
 		if (anElement instanceof OS_Element2) {
 			final String element_name = ((OS_Element2) anElement).name();
 			// TODO make and check a nametable, will fail for imports
-			for (ModuleItem item : items) {
-				if (item instanceof OS_Element2)
-					if (((OS_Element2) item).name().equals(element_name)) {
-						parent.eee.reportError(String.format(
-								"[Module#add] Already has a member by the name of ",
-								element_name));
-						return;
-					}
+			if (element_name != null)
+				for (ModuleItem item : items) {
+					if (item instanceof OS_Element2)
+						if (element_name.equals(((OS_Element2) item).name())) {
+							parent.eee.reportError(String.format(
+									"[Module#add] Already has a member by the name of ",
+									element_name));
+							return;
+						}
 			}
 		}
 		items.add((ModuleItem) anElement);
