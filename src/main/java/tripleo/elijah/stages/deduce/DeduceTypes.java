@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
  */
 public class DeduceTypes {
 
-	private static int _classCode = 101;
-	private static int _functionCode = 1001;
+	public int nextClassCode() { return module.parent.nextClassCode(); }
+	public int nextFunctionCode() { return module.parent.nextFunctionCode(); }
 
 	private OS_Module module;
 

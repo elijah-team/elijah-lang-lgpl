@@ -197,6 +197,21 @@ public class Compilation {
         }
         return null;
     }
+
+    //
+	//  CLASS AND FUNCTION CODES
+	//
+
+	private static int _classCode = 101;
+	private static int _functionCode = 1001;
+
+	public int nextClassCode() {
+		return _classCode++;
+	}
+
+	public int nextFunctionCode() {
+		return _functionCode++;
+	}
 }
 
 //
