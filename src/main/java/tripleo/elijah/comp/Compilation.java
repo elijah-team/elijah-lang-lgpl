@@ -115,7 +115,7 @@ public class Compilation {
 			final String file_name = f.toString();
 			final boolean matches = Pattern.matches(".+\\.elijah$", file_name)
 								 || Pattern.matches(".+\\.elijjah$", file_name);
-			if (f.isDirectory()) return; // TODO testing idea tools (failed)
+//			if (f.isDirectory()) return; // TODO testing idea tools (failed)
 			if (!matches) return;
 			//
 			System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
