@@ -39,7 +39,7 @@ public class ModuleContext extends Context {
 				}
 			}
 			if (item instanceof NamespaceStatement && ((NamespaceStatement) item).getKind() == NamespaceTypes.MODULE) {
-				((NamespaceStatement)item).getContext().lookup(name, level, Result);
+				((NamespaceContext)((NamespaceStatement)item).getContext()).lookup(name, level, Result, carrier);
 			}
 		}
 		if (carrier.prelude == null)
