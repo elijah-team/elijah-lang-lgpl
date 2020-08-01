@@ -13,36 +13,7 @@
     <jacoco.version>0.8.2</jacoco.version>
     <downloadSources>true</downloadSources>
   </properties>
-  <repositories>
-    <repository>
-      <id>gitlab-maven</id>
-      <url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
-    </repository>
-  </repositories>
-  <distributionManagement>
-    <repository>
-      <id>gitlab-maven</id>
-      <url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
-    </repository>
-    <snapshotRepository>
-      <id>gitlab-maven</id>
-      <url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
-    </snapshotRepository>
-  </distributionManagement>
-  <!--
-    <repository>
-      <id>ProjectRepo</id>
-      <name>ProjectRepo</name>
-      <url>file://${project.basedir}/libs</url>
-    </repository>
-    -->
-  <!--
-    <repository>
-      <id>ProjectRepo</id>
-      <name>ProjectRepo</name>
-      <url>file://${project.basedir}/libs</url>
-    </repository>
-    -->
+
   <dependencies>
 
     <!-- https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.annotation -->
@@ -68,33 +39,41 @@
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/javassist/javassist -->
+<!--
     <dependency>
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
       <version>3.1</version>
     </dependency>
+-->
 
     <!-- https://mvnrepository.com/artifact/antlr/antlr -->
+<!--
     <dependency>
       <groupId>antlr</groupId>
       <artifactId>antlr</artifactId>
       <version>2.7.5</version>
     </dependency>
+-->
 
     <!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+<!--
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
       <artifactId>xstream</artifactId>
       <version>1.4.11.1</version>
     </dependency>
+-->
 
     <!-- https://mvnrepository.com/artifact/org.apache.bcel/bcel -->
+<!--
     <dependency>
       <groupId>org.apache.bcel</groupId>
       <artifactId>bcel</artifactId>
       <version>6.3.1</version>
     </dependency>
-    
+-->
+
     <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
     <dependency>
       <groupId>commons-cli</groupId>
@@ -121,7 +100,6 @@
       <url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
     </snapshotRepository>
   </distributionManagement>
-
 
   <build>
     <!--
