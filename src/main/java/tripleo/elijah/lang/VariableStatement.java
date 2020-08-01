@@ -20,7 +20,7 @@ import java.io.IOException;
 public class VariableStatement implements OS_Element {
 
 	private final VariableSequence parent;
-	public String name;
+	public Token name;
 	
 	private IExpression initialValue = IExpression.UNASSIGNED;
 	private TypeModifiers typeModifiers;
@@ -31,11 +31,11 @@ public class VariableStatement implements OS_Element {
 	}
 
 	public String getName() {
-		return name;
+		return name.getText();
 	}
 	
 	public void setName(Token s) {
-		name = s.getText();
+		name = s;
 	}
 
 	public void initial(IExpression aExpr) {
