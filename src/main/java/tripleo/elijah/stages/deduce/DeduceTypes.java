@@ -493,11 +493,16 @@ public class DeduceTypes {
 
 	private void addImport(ImportStatement imp, OS_Module parent) {
 //		throw new NotImplementedException();
+		//
+		// SHOULDN'T BE MODIFYING NAMESPACE HERE
+		//
+/*
 		if (imp.getRoot() == null) {
 			for (Qualident q : imp.parts()) {
 				module.modify_namespace(imp, q, NamespaceModify.IMPORT);
 			}
 		}
+*/
 //		module.
 	}
 
