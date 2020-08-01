@@ -82,9 +82,11 @@ public class ExpandFunctions {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
 				FunctionPrelimInstruction fi = fc.introduceVariable(expr.getLeft());
-				if (((IBinaryExpression)expr).getRight().getKind() == ExpressionKind.IDENT) {
-					FunctionPrelimInstruction fi2 = fc.introduceVariable(((IBinaryExpression) expr).getRight());
-					FunctionPrelimInstruction fi3 = fc.assign(fi, fi2);
+				final IExpression right_side = ((IBinaryExpression) expr).getRight();
+				if (right_side.getKind() == ExpressionKind.IDENT) {
+					//FunctionPrelimInstruction fi2 = fc.introduceVariable(right_side);
+					FunctionPrelimInstruction fi3 = fc.assign(fi, /*fi2*/right_side);
+//					fi2.setInstructionNumber(-1); // why introduce in the first place?
 				} else
 					throw new NotImplementedException();
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
