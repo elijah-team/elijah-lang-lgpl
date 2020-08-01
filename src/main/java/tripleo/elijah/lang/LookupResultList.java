@@ -3,8 +3,11 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.util.NotImplementedException;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author Tripleo(sb)
@@ -24,4 +27,12 @@ public class LookupResultList {
 		return results;
 	}
 
+	public OS_Element chooseBest(List<Predicate> l) {
+		if (l != null) throw new NotImplementedException();
+		//
+		if (results().size() == 1)
+			return results().get(0).getElement();
+		else
+			throw new NotImplementedException();
+	}
 }
