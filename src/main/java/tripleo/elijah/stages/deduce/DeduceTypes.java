@@ -86,7 +86,12 @@ public class DeduceTypes {
 //				fd._a.setCode(nextFunctionCode());
 //				parent._a.getContext().add(element, null);
 				for (VariableStatement ii : ((VariableSequence) element).items())
-					addClassItem_deduceVariableStatement((ClassStatement) parent, ii); // TODO could be namespace?
+					if (parent instanceof ClassStatement)
+						addClassItem_deduceVariableStatement((ClassStatement) parent, ii);
+					else if (parent instanceof NamespaceStatement)
+						addClassItem_deduceVariableStatement((NamespaceStatement) parent, ii);
+					else
+						throw new NotImplementedException();
 			} else {
 				System.err.println("92 "+element.getClass().getName());
 			}
@@ -370,6 +375,42 @@ public class DeduceTypes {
 
 		}
 	}
+	public void addClassItem_deduceVariableStatement(NamespaceStatement parent, @NotNull VariableStatement vs) {
+		{
+			OS_Type dtype = null;
+			if (vs.typeName().isNull()) {
+				if (vs.initialValue() != null) {
+					IExpression iv = vs.initialValue();
+					if (iv instanceof NumericExpression) {
+						dtype = new OS_Type(BuiltInTypes.SystemInteger);
+					} else if (iv instanceof IdentExpression) {
+						LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
+						for (LookupResult n: lrl.results()) {
+							System.out.println("99 "+n);
+						}
+					} else if (iv instanceof ProcedureCallExpression) {
+						final ProcedureCallExpression pce = (ProcedureCallExpression) iv;
+						final IExpression left = pce.getLeft();
+						if (left.getKind() == ExpressionKind.IDENT) {
+							addClassItem_deduceVariableStatement_procedureCallExpression(parent, iv, pce, (IdentExpression) left);
+						}
+					}
+				}
+			} else {
+				dtype = new OS_Type(vs.typeName());
+			}
+//100			parent._a.getContext().add(vs, vs.getName(), dtype);
+//				String theType;
+//				if (ii.typeName().isNull()) {
+////					theType = "int"; // Z0*
+//					theType = ii.initialValueType();
+//				} else{
+//					theType = ii.typeName().getName();
+//				}
+			System.out.println(String.format("[#addFunctionItem_deduceVariableStatement] %s %s;", vs.getName(), dtype));
+
+		}
+	}
 	public void deduceVariableStatement(OS_Element parent, @NotNull VariableStatement vs) {
 		{
 			OS_Type dtype = null;
@@ -421,8 +462,28 @@ public class DeduceTypes {
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
 		List<OS_Type> q = expressions.stream()
-				.map(n -> deduceExpression(n, parent.getContext()))
-				.collect(Collectors.toList());
+				                  .map(n -> deduceExpression(n, parent.getContext()))
+				                  .collect(Collectors.toList());
+		System.out.println("90 "+q);
+		NotImplementedException.raise();
+	}
+
+	private void addClassItem_deduceVariableStatement_procedureCallExpression(
+			@NotNull NamespaceStatement parent, IExpression iv,
+			ProcedureCallExpression pce, @NotNull IdentExpression left) {
+		final String text = left.getText();
+		final LookupResultList lrl = parent.getContext().lookup(text);
+		System.out.println("98 "+/*n*/iv);
+		if (lrl.results().size() == 0 )
+			System.err.println("96 no results for "+text);
+		for (LookupResult n: lrl.results()) {
+			System.out.println("97 "+n);
+//			Helpers.printXML(iv, new TabbedOutputStream(System.out));
+		}
+		final Collection<IExpression> expressions = pce.getArgs().expressions();
+		List<OS_Type> q = expressions.stream()
+				                  .map(n -> deduceExpression(n, parent.getContext()))
+				                  .collect(Collectors.toList());
 		System.out.println("90 "+q);
 		NotImplementedException.raise();
 	}
