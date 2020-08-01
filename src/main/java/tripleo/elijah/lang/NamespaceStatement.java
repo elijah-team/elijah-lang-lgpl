@@ -31,13 +31,32 @@ import java.util.List;
 public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, StatementItem, FunctionItem, OS_Container, OS_Element2 {
 
 	private Token nsName;
-	private OS_Module parent;
+	private OS_Element parent;
 	public Attached _a = new Attached(new NamespaceContext(this));
 	private List<ClassItem> items = new ArrayList<ClassItem>();
 	private NamespaceTypes _kind;
+	private OS_Package _packageName;
 
-	public NamespaceStatement(OS_Module module) {
-		this.parent = module;
+	public NamespaceStatement(OS_Element aElement) {
+		parent = aElement; // setParent
+		if (aElement instanceof  OS_Module) {
+			final OS_Module module = (OS_Module) aElement;
+			//
+			this.setPackageName(module.pullPackageName());
+			module.add(this);
+		} else if (aElement instanceof OS_Container) {
+			((OS_Container) aElement).add(this);
+		} else {
+			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", aElement));
+		}
+	}
+
+	public void setPackageName(OS_Package aPackageName) {
+		_packageName = aPackageName;
+	}
+
+	public OS_Package getPackageName() {
+		return _packageName;
 	}
 
 	public void setName(Token i1) {
