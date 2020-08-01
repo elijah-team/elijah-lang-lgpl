@@ -40,9 +40,14 @@ public class DeduceTypes {
 
 	public void addClass(ClassStatement klass, OS_Module parent) {
 //		System.out.print("class " + klass.clsName + "{\n");
-		klass._a.setCode(nextClassCode());	
+		klass._a.setCode(nextClassCode());
+		//
+		// SHOULDN'T BE MODIFYING NAMESPACE HERE. SETTING CODES IS QUESTIONABLE
+		//
+/*
 		parent.getContext().nameTable().add(klass, klass.getName(), new OS_Type(klass)); // TODO cache or memoize, or singleton somehow
-		
+*/
+
 		{
 			for (ClassItem element : klass.items())
 				addClassItem(element, klass);
@@ -61,7 +66,12 @@ public class DeduceTypes {
 				FunctionDef fd = (FunctionDef) element;
 //				System.out.print("void " + fd.funName + "(){\n");  // TODO: _returnType and mFal
 				fd._a.setCode(nextFunctionCode());
+				//
+				// SHOULDN'T BE MODIFYING NAMESPACE HERE. SETTING CODES IS QUESTIONABLE
+				//
+/*
 				parent.getContext().add(fd, fd.funName);
+*/
 				{
 					for (FunctionItem fi : fd.getItems())
 						addFunctionItem(fi, fd);
