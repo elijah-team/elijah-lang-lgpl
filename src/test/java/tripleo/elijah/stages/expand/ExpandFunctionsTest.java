@@ -16,7 +16,7 @@ public class ExpandFunctionsTest {
         Compilation c = new Compilation(new StdErrSink(), new IO());
         final String file_name = "test/basic/listfolders2.elijah";
         c.feedCmdLine(Helpers.List_of(file_name, "-sO"));
-        OS_Module mod = c.moduleFor(file_name);
+        OS_Module mod = c.fileNameToModule(file_name);
         Assert.assertTrue(mod != null);
         ClassStatement kl = mod.getClassByName("Main");
         FunctionDef fd = kl.findFunction("main");

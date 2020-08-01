@@ -191,7 +191,7 @@ public class Compilation {
 		return null;
 	}
 
-    public OS_Module moduleFor(String fileName) {
+    public OS_Module fileNameToModule(String fileName) {
         if (fn2m.containsKey(fileName)) {
             return fn2m.get(fileName);
         }
