@@ -40,7 +40,7 @@ public class LookupResultList {
 		if (results().size() == 1)
 			return results().get(0).getElement();
 		else
-			throw new NotImplementedException();
+			return null; //throw new NotImplementedException();
 	}
 }
 
