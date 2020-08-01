@@ -90,8 +90,8 @@ public class Compilation {
 					// do nothing. job over
 				} else {
 					for (OS_Module module : modules) {
-						new ExpandFunctions(module).expand();
 						new DeduceTypes(module).deduce();
+						new ExpandFunctions(module).expand();
 					}
 				}
 //				final JavaCodeGen visit = new JavaCodeGen();
