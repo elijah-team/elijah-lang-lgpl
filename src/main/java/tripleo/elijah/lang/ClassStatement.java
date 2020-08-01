@@ -34,7 +34,8 @@ import java.util.List;
 public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, FunctionItem, OS_Element, OS_Element2, Documentable {
 	
 	private OS_Package _packageName;
-	
+	private ClassTypes _type;
+
 //	/**
 //	 * For XMLBeans. Must use setParent.
 //	 */
@@ -185,6 +186,10 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 					return (FunctionDef) item;
 		}
 		return null;
+	}
+
+	public void setType(ClassTypes aType) {
+		_type = aType;
 	}
 }
 

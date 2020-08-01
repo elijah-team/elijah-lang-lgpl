@@ -64,12 +64,19 @@ qualident returns [Qualident q]
     ;
 classStatement [ClassStatement cls]:
     (annotation_clause)*
-    "class" ("interface"|"struct"|"signature"|"abstract")?
+    "class"
+            ("interface" {cls.setType(ClassTypes.INTERFACE);}
+            |"struct"    {cls.setType(ClassTypes.STRUCTURE);}
+            |"signature" {cls.setType(ClassTypes.SIGNATURE);}
+            |"abstract"  {cls.setType(ClassTypes.ABSTRACT);})?
       i1:IDENT {cls.setName(i1);}
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
     LCURLY
-     classScope[cls]
+     (classScope[cls]
+     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);}
+      (invariantStatement[cls.invariantStatement()])?
+     )
     RCURLY
     ;
 annotation_clause
