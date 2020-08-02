@@ -9,7 +9,6 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
-import tripleo.elijah.util.NotImplementedException;
 
 /**
  * @author Tripleo
@@ -42,20 +41,14 @@ public class GetItemExpression extends AbstractExpression { // TODO binary?
 		return false; // TODO is this correct? Let's err on the side of caution
 	}
 
-	/* (non-Javadoc)
-	 * @see tripleo.elijah.lang.IExpression#setType(tripleo.elijah.lang.OS_Type)
-	 */
-	@Override
+	OS_Type _type;
+
 	public void setType(OS_Type deducedExpression) {
-		throw new NotImplementedException();
+		_type = deducedExpression;
 	}
 
-	/* (non-Javadoc)
-	 * @see tripleo.elijah.lang.IExpression#getType()
-	 */
-	@Override
 	public OS_Type getType() {
-		throw new NotImplementedException();
+		return _type;
 	}
 
 	public void parens(Token lb, Token rb) {
