@@ -133,7 +133,7 @@ public class FunctionContext extends Context {
 	}
 
 	public FunctionPrelimInstruction introduceFunction(IExpression expression) {
-		System.out.println("[#introduceFunction] "+expression);
+//		System.out.println("[#introduceFunction] "+expression);
 		final IntroducedFunction introducedFunction = new IntroducedFunction(expression);
 //		variableTable.add(introducedFunction);
 		addPrelimInstruction(introducedFunction);
