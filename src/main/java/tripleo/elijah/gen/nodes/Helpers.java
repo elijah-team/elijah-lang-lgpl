@@ -2,6 +2,7 @@ package tripleo.elijah.gen.nodes;
 
 import antlr.CommonToken;
 import antlr.Token;
+import com.thoughtworks.xstream.XStream;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.ExpressionKind;
 import tripleo.elijah.lang.ExpressionList;
@@ -77,9 +78,9 @@ public class Helpers {
 	}
 
 	public static void printXML(Object obj, @NotNull TabbedOutputStream tos) {
-//		XStream x= new XStream();
-//		x.setMode(XStream.ID_REFERENCES);
-//		x.toXML(obj, tos.getStream());
+		XStream x= new XStream();
+		//x.setMode(XStream.ID_REFERENCES);
+		x.toXML(obj, tos.getStream());
 	}
 
 	@NotNull

@@ -65,11 +65,13 @@ public class Compilation {
 	public String stage = "O"; // Output
 
 	public void main(List<String> args, ErrSink errSink) {
+		boolean do_out = false;
 		try {
 			if (args.size() > 0) {
 				Options options = new Options();
 				options.addOption("s", true, "stage: E: parse; O: output");
 				options.addOption("showtree", false, "show tree");
+				options.addOption("out", false, "make debug files");
 				CommandLineParser clp = new DefaultParser();
 				CommandLine cmd = clp.parse(options, args.toArray(new String[0]));
 
@@ -79,11 +81,14 @@ public class Compilation {
 				if (cmd.hasOption("showtree")) {
 					showTree = true;
 				}
+				if (cmd.hasOption("out")) {
+					do_out = true;
+				}
 
 				final String[] args2 = cmd.getArgs();
 
 				for (int i = 0; i < args2.length; i++)
-					doFile(new File(args2[i]), errSink);
+					doFile(new File(args2[i]), errSink, do_out);
 
 				//
 				if (stage.equals("E")) {
@@ -105,11 +110,11 @@ public class Compilation {
 		}
 	}
 
-	public void doFile(@NotNull File f, ErrSink errSink) throws Exception {
+	public void doFile(@NotNull File f, ErrSink errSink, boolean do_out) throws Exception {
 		if (f.isDirectory()) {
 			String[] files = f.list();
 			for (int i = 0; i < files.length; i++)
-				doFile(new File(f, files[i]), errSink); // recursion, backpressure
+				doFile(new File(f, files[i]), errSink, do_out); // recursion, backpressure
 
 		} else {
 			final String file_name = f.toString();
@@ -120,7 +125,7 @@ public class Compilation {
 			//
 			System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
 			if (f.exists()) {
-				OS_Module m = parseFile(file_name, io.readFile(f), f);
+				OS_Module m = parseFile(file_name, io.readFile(f), f, do_out);
 				m.prelude = this.findPrelude("c"); // TODO we dont know which prelude to find yet
 			} else {
 				errSink.reportError(
@@ -129,12 +134,12 @@ public class Compilation {
 		}
 	}
 
-	public OS_Module parseFile(String f, InputStream s, File file) throws Exception {
+	public OS_Module parseFile(String f, InputStream s, File file, boolean do_out) throws Exception {
 		if (fn2m.containsKey(f)) { // don't parse twice
 			return fn2m.get(f);
 		}
 		try {
-			OS_Module R = parseFile_(f, s);
+			OS_Module R = parseFile_(f, s, do_out);
 			s.close();
 			fn2m.put(f, R);
 			return R;
@@ -146,11 +151,11 @@ public class Compilation {
 		}
 	}
 
-	private OS_Module parseFile_(String f, InputStream s) throws RecognitionException, TokenStreamException {
+	private OS_Module parseFile_(String f, InputStream s, boolean do_out) throws RecognitionException, TokenStreamException {
 		ElijjahLexer lexer = new ElijjahLexer(s);
 		lexer.setFilename(f);
 		ElijjahParser parser = new ElijjahParser(lexer);
-		parser.out = new Out(f, this);
+		parser.out = new Out(f, this, do_out);
 		parser.setFilename(f);
 		parser.program();
 		final OS_Module module = parser.out.module();
@@ -182,7 +187,7 @@ public class Compilation {
 		File local_prelude = new File("lib_elijjah/lib-"+prelude_name+"/Prelude.elijjah");
 		if (local_prelude.exists()) {
 			try {
-				return parseFile(local_prelude.getName(), io.readFile(local_prelude), local_prelude);
+				return parseFile(local_prelude.getName(), io.readFile(local_prelude), local_prelude, false);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
