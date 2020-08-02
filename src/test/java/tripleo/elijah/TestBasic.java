@@ -38,7 +38,7 @@ public class TestBasic {
 
 	@Test
 	public final void testBasic() {
-		List<String> args = List_of("test/basic", "-sO");
+		List<String> args = List_of("test/basic", "-sO", "-out");
 		ErrSink eee = new ListErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
