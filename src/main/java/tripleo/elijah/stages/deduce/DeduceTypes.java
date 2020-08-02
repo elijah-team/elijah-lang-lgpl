@@ -17,10 +17,11 @@ import tripleo.elijah.util.NotImplementedException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
- * Make sure all (I)Expressions have types.
+ * Make sure all (I)Expressions have valid and correct types.
  *
  * @author Tripleo
  *
@@ -232,39 +233,95 @@ public class DeduceTypes {
 		expression.setType(t);
 	}
 
-	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
-		IExpression de;
-		if (pce.getLeft() instanceof Qualident) {
-			de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
-			System.out.println("77 "+de);
-			pce.setLeft(de);
-		} else {
-			de = pce.getLeft();
+	static class ExpressionPair {
+
+		private final IExpression left;
+		private final IExpression right;
+
+		public ExpressionPair(IExpression left, IExpression right) {
+			this.left=left;
+			this.right=right;
 		}
-		final String function_name;
-		IExpression i = pce.getLeft();
-		while (!(i instanceof IdentExpression)) {
-			i = i.getLeft();
-		}
-		function_name = ((IdentExpression) i).getText();
-		//
-		LookupResultList lrl = ctx.lookup(function_name);
-		if (lrl.chooseBest(null) == null)
-			module.parent.eee.reportError("function not found " + function_name);
-		int y=2;
-//		final OS_Type right_type = deduceExpression(((IBinaryExpression) expr).getRight(), parent.getContext());
-//		((IBinaryExpression)expr).getRight().setType(right_type);
-//		expr.getLeft().setType(right_type);
-//		expr.setType(expr.getLeft().getType());
 	}
 
-//	public DotExpression qualidentToDotExpression(DotExpression de, List<Token> ts) {
-//		final DotExpression dotExpression = qualidentToDotExpression2(ts.subList(1, ts.size()));
-//		if (dotExpression == null)
-//			return de;
-//		return new DotExpression(new IdentExpression(ts.get(0)),
-//				dotExpression);
-//	}
+	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
+		System.err.println(String.format("75 %s", pce.getType()));
+		try {
+			IExpression de;
+			if (pce.getLeft() instanceof Qualident) {
+				de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
+				System.out.println("77 "+de);
+				pce.setLeft(de);
+			} else {
+				de = pce.getLeft();
+			}
+
+			Stack<ExpressionPair> s = new Stack<ExpressionPair>();
+
+			{
+				IExpression i = /*pce.getLeft()*/de, xi = pce;
+
+				while (!(i instanceof IdentExpression)) {
+					xi = i;
+					i = i.getLeft();
+
+					s.push(new ExpressionPair(xi, i));
+	//		    	System.err.println(String.format("%s %s", xi, i));
+				}
+			}
+
+			while (!s.isEmpty()) {
+				ExpressionPair ep = s.peek();
+				if (ep.right instanceof IdentExpression) {
+					final String function_name = ((IdentExpression) ep.right).getText();
+					//
+					lookup_and_set(ctx, ep.right, function_name);
+				} else if (ep.right.getType() != null) { // to get Context
+					System.err.println(String.format("77 %s %s", ep.left, ep.right));
+					IExpression f = ((IBinaryExpression)ep.left).getRight();
+					while (!(f instanceof IdentExpression)) {
+						f = f.getLeft();
+					}
+					final Context ctx1 = ep.right.getType().getClassOf().getContext();
+					final String function_name = ((IdentExpression) f).getText();
+					lookup_and_set(ctx1, ep.left, function_name);
+				} else {
+					System.err.println(String.format("78 %s %s", ep.left, ep.right));
+				}
+				s.pop();
+			}
+		} finally {
+			System.err.println(String.format("76 %s", pce.getType()));
+		}
+	}
+
+	private void lookup_and_set(Context ctx, IExpression exp, String function_name) {
+		final LookupResultList lrl = ctx.lookup(function_name);
+		final OS_Element best = lrl.chooseBest(null);
+		if (best == null)
+			module.parent.eee.reportError("function not found " + function_name);
+		else {
+			if (best instanceof ClassStatement) {
+				final OS_Type t = new OS_Type((ClassStatement) best);
+				exp.setType(t);
+			} else if (best instanceof FunctionDef) {
+				final OS_Type t = new OS_Type(((FunctionDef)best).returnType());
+				exp.setType(t);
+			} else if (best instanceof VariableStatement) {
+				final TypeName typeName = ((VariableStatement) best).typeName();
+				if (typeName.isNull())
+					deduceProcedureCall((ProcedureCallExpression) ((VariableStatement) best).initialValue(), ctx);
+				final OS_Type t = new OS_Type(typeName);
+				exp.setType(t);
+			} else if (best instanceof FormalArgListItem) {
+				final OS_Type t = new OS_Type(((FormalArgListItem) best).typeName());
+				exp.setType(t);
+			}
+			else
+				throw new NotImplementedException();
+		}
+	}
+
 	public static IExpression qualidentToDotExpression2(@NotNull List<Token> ts) {
 		return qualidentToDotExpression2(ts, 1);
 	}
