@@ -14,6 +14,8 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../../lib/com/thoughtworks/xstream/xstream/1.4.11.1/xstream-1.4.11.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
