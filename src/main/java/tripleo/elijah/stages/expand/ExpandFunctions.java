@@ -61,7 +61,7 @@ public class ExpandFunctions {
 				System.err.println("91 " + element.getClass().getName());
 				addClassItem(element, parent);
 			} else {
-				System.err.println("90 "+element.getClass().getName());
+				System.err.println("[ExpandFunctions#addClassItem] "+element.getClass().getName());
 			}
 		}
 	}
@@ -71,7 +71,8 @@ public class ExpandFunctions {
 		if (element instanceof VariableSequence) {
 			for (VariableStatement ii : ((VariableSequence) element).items()) {
 //				addFunctionItem_deduceVariableStatement(parent, ii);
-				fc.introduceVariable(ii);
+				IntroducedVariable i = fc.introduceVariable(ii);
+				//i.setModifiers(ii.typeModifiers);
 			}
 		} else if (element instanceof ProcedureCallExpression) {
 			ProcedureCallExpression pce = (ProcedureCallExpression) element;
