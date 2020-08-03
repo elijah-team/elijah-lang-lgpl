@@ -7,14 +7,14 @@
  *
  */
 /**
- * 
+ *
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.NotImplementedException;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -30,17 +30,40 @@ public class LookupResultList {
 		_results.add(new LookupResult(name, element, level));
 	}
 
-	public List<LookupResult> results() { // TODO want ImmutableList
-		return _results;
-	}
-
 	public OS_Element chooseBest(List<Predicate> l) {
-		if (l != null) throw new NotImplementedException();
+		List<LookupResult> r = results();
+		if (l != null) {
+			r = getMaxScoredResults(l);
+		}
 		//
-		if (results().size() == 1)
-			return results().get(0).getElement();
+		if (r.size() == 1)
+			return r.get(0).getElement();
 		else
 			return null; //throw new NotImplementedException();
+	}
+
+	private List<LookupResult> getMaxScoredResults(List<Predicate> l) {
+		Map<LookupResult, Integer> new_results = new HashMap<LookupResult, Integer>();
+		int maxScore = -1;
+
+		for (LookupResult lookupResult : _results) {
+			int score = 0;
+			for (Predicate predicate : l) {
+				if (predicate.test(lookupResult))
+					score++;
+			}
+			if (score >= maxScore) {
+				maxScore = score;
+				new_results.clear();
+				new_results.put(lookupResult, score);
+			} else
+				new_results.put(lookupResult, score);
+		}
+		return new ArrayList<LookupResult>(new_results.keySet());
+	}
+
+	public List<LookupResult> results() { // TODO want ImmutableList
+		return _results;
 	}
 }
 
