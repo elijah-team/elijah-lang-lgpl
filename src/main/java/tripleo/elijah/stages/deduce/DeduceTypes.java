@@ -310,45 +310,10 @@ public class DeduceTypes {
 				}
 				pce.setType(t);
 			} else {
-				module.parent.eee.reportError("IDENT not found: " + ((IdentExpression) de).getText());
+				module.parent.eee.reportError(String.format("IDENT not found: %s", de));
 				NotImplementedException.raise();
 			}
 		}
-
-//		Stack<ExpressionPair> s = new Stack<ExpressionPair>();
-//
-//		{
-//			IExpression i = /*pce.getLeft()*/de, xi = pce;
-//
-//			while (!(i instanceof IdentExpression)) {
-//				xi = i;
-//				i = i.getLeft();
-//
-//				s.push(new ExpressionPair(xi, i));
-//				//		    	System.err.println(String.format("%s %s", xi, i));
-//			}
-//		}
-//
-//		while (!s.isEmpty()) {
-//			ExpressionPair ep = s.peek();
-//			if (ep.right instanceof IdentExpression) {
-//				final String function_name = ((IdentExpression) ep.right).getText();
-//				//
-//				lookup_and_set(ctx, ep.left, function_name);
-//			} else if (ep.right.getType() != null) { // to get Context
-//				System.err.println(String.format("77 %s %s", ep.left, ep.right));
-//				IExpression f = ((IBinaryExpression)ep.left).getRight();
-//				while (!(f instanceof IdentExpression)) {
-//					f = f.getLeft();
-//				}
-//				final Context ctx1 = ep.right.getType().getClassOf().getContext();
-//				final String function_name = ((IdentExpression) f).getText();
-//				lookup_and_set(ctx1, ep.left, function_name);
-//			} else {
-//				System.err.println(String.format("78 %s %s", ep.left, ep.right));
-//			}
-//			s.pop();
-//		}
 	}
 
 	private LookupResultList lookup_dot_expression(Context ctx, DotExpression de) {
