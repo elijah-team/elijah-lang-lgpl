@@ -54,7 +54,7 @@ public class LookupResultList {
 				if (predicate.test(lookupResult))
 					score++;
 			}
-			if (score >= maxScore) {
+			if (score >= maxScore && maxScore != 0) {
 				maxScore = score;
 				new_results.clear();
 				new_results.put(lookupResult, score);
