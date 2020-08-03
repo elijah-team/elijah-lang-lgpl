@@ -16,17 +16,17 @@ public class ProgramClosure {
 		return classStatement;
 	}
 	
-	public ImportStatement importStatement(OS_Module aParent) {
+	public ImportStatement importStatement(OS_Element aParent) {
 		final ImportStatement importStatement = new ImportStatement(aParent);
 		return importStatement;
 	}
 	
-	public NamespaceStatement namespaceStatement(OS_Module aParent) {
+	public NamespaceStatement namespaceStatement(OS_Element aParent) {
 		final NamespaceStatement namespaceStatement = new NamespaceStatement(aParent);
 		return namespaceStatement;
 	}
 	
-	public AliasStatement aliasStatement(OS_Module aParent) {
+	public AliasStatement aliasStatement(OS_Element aParent) {
 		final AliasStatement aliasStatement = new AliasStatement(aParent);
 		return aliasStatement;
 	}
