@@ -58,8 +58,14 @@ public class OS_Type {
 	public ClassStatement getClassOf() {
 		if (etype != null && etype instanceof ClassStatement)
 			return (ClassStatement) etype;
-		throw new NotImplementedException();
+		throw new IllegalArgumentException();
 //		return null;
+	}
+
+	public OS_Element getElement() {
+		if (type_of_type != Type.FUNCTION || type_of_type != Type.USER_CLASS)
+			throw new IllegalArgumentException();
+		return etype;
 	}
 
 	public enum Type {
