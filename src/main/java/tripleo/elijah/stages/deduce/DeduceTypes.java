@@ -121,7 +121,6 @@ public class DeduceTypes {
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
 				NotImplementedException.raise();
 				//
-				// TODO this fails for some reason
 				// TODO doesn't take into account assignment operator
 				//
 				final OS_Type right_type = deduceExpression(((IBinaryExpression) expr).getRight(), parent.getContext());
@@ -291,7 +290,7 @@ public class DeduceTypes {
 					if (((VariableStatement) element).typeName() != null) {
 						t = new OS_Type(((VariableStatement) element).typeName());
 					} else
-						throw new NotImplementedException();
+						t = deduceTypeName((VariableStatement) element, ctx);
 				} else if (element instanceof FormalArgListItem) {
 					final TypeName typeName = ((FormalArgListItem) element).tn;
 					if (typeName != null) {
@@ -662,8 +661,11 @@ public class DeduceTypes {
 			// TODO what to do here??
 			final OS_Element element = lrl.results().get(0).getElement();
 			if (element instanceof VariableStatement) {
-				if (((VariableStatement) element).typeName() != null)
+				final TypeName tn = ((VariableStatement) element).typeName();
+				if (!tn.isNull())
 					return new OS_Type(((VariableStatement) element).typeName());
+				else
+					return deduceTypeName((VariableStatement) element, context);
 			} else if (element instanceof FormalArgListItem) {
 				final TypeName typeName = ((FormalArgListItem) element).tn;
 				if (typeName != null)
@@ -679,6 +681,13 @@ public class DeduceTypes {
 		}
 		module.parent.eee.reportError("IDENT not found: "+ n.getText());
 		NotImplementedException.raise();
+		return null;
+	}
+
+	private OS_Type deduceTypeName(VariableStatement vs, Context ctx) {
+		if (vs.typeName().isNull())
+			if (vs.initialValue() instanceof NumericExpression)
+				return new OS_Type(BuiltInTypes.SystemInteger);
 		return null;
 	}
 
@@ -740,7 +749,7 @@ public class DeduceTypes {
 		}
 	}
 	private void addNamespace(NamespaceStatement ns, OS_Module parent) {
-//		System.out.print("class " + klass.clsName + "{\n");
+//		System.out.print("namespace " + klass.clsName + " {\n");
 		ns._a.setCode(nextClassCode());	
 //		parent.getContext().nameTable().add(ns, ns.getName(), new OS_Type(ns, OS_Type.Type.USER));
 		
