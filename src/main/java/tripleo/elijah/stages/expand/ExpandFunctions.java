@@ -35,7 +35,7 @@ public class ExpandFunctions {
 	public void addClass(ClassStatement klass, OS_Module parent) {
 //		System.out.print("class " + klass.clsName + "{\n");
 		{
-			for (ClassItem element : klass.items())
+			for (ClassItem element : klass.getItems())
 				addClassItem(element, klass);
 		}
 //		System.out.print("}\n");
