@@ -102,7 +102,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return items;
 	}
 	
-	public ArrayList<String> getDocstrings() {
+	public List<String> getDocstrings() {
 		return mDocs;
 	}
 	
