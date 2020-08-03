@@ -14,6 +14,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.Documentable;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.TabbedOutputStream;
@@ -22,10 +23,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FunctionDef implements ClassItem, OS_Container, OS_Element2 {
+public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
 
 	public Iterable<FormalArgListItem> getArgs() {
 		return mFal.items();
+	}
+	private final List<String> mDocs = new ArrayList<String>();
+
+	@Override
+	public void addDocString(Token aText) {
+		mDocs.add(aText.getText());
 	}
 
 	private final class FunctionDefScope implements Scope {
