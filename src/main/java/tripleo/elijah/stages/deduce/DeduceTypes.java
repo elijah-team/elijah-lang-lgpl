@@ -52,7 +52,7 @@ public class DeduceTypes {
 */
 
 		{
-			for (ClassItem element : klass.items())
+			for (ClassItem element : klass.getItems())
 				addClassItem(element, klass);
 		}
 //		System.out.print("}\n");
