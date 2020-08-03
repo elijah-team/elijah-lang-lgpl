@@ -3,8 +3,9 @@ package tripleo.elijah.stages.deduce;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.lang.*;
 
+import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
  * Created 8/3/20 8:41 AM
@@ -75,9 +76,11 @@ public class DeduceUtils {
 			if (((LookupResult)o).getElement() instanceof FunctionDef) {
 				//o filter isCtor each (each args isCompat)
 				FunctionDef fd = (FunctionDef) ((LookupResult)o).getElement();
-				Stream matching_functions = fd.items().stream().filter(
-						new MatchArgs(pce.getArgs()));
-				return matching_functions.iterator().hasNext();
+				List<OS_Element2> matching_functions = (List<OS_Element2>) fd.items()
+						                                       .stream()
+						                                       .filter(new MatchArgs(pce.getArgs()))
+						                                       .collect(Collectors.toList());
+				return matching_functions.size() > 0;
 			}
 			System.out.println(o);
 			return false;
