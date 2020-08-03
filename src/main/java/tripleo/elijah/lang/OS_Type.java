@@ -28,6 +28,9 @@ import java.util.Objects;
  */
 public class OS_Type {
 
+	public OS_Type() {
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -41,7 +44,7 @@ public class OS_Type {
 		}
 */
 		final boolean b = type == os_type.type &&
-				kind == os_type.kind &&
+				type_of_type == os_type.type_of_type &&
 				Objects.equals(etype, os_type.etype) &&
 				Objects.equals(ttype, os_type.ttype);
 		return b;
@@ -49,7 +52,7 @@ public class OS_Type {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(type, kind, etype.hashCode(), ttype.hashCode());
+		return Objects.hash(type, type_of_type, etype.hashCode(), ttype.hashCode());
 	}
 
 	public ClassStatement getClassOf() {
@@ -60,30 +63,30 @@ public class OS_Type {
 	}
 
 	public enum Type {
-		BUILT_IN, USER, USER_CLASS
+		BUILT_IN, USER, USER_CLASS, FUNCTION
 	}
 
 	private BuiltInTypes type;
-	private Type kind;
+	private Type type_of_type;
 	private OS_Element etype;
 	private TypeName ttype;
 
-	/*@ ensures kind = Type.BUILT_IN; */
+	/*@ ensures type_of_type = Type.BUILT_IN; */
 	public OS_Type(BuiltInTypes aType) {
 		this.type = aType;
-		this.kind = Type.BUILT_IN;
+		this.type_of_type = Type.BUILT_IN;
 	}
 
-	/*@ ensures kind = Type.USER_CLASS; */
+	/*@ ensures type_of_type = Type.USER_CLASS; */
 	public OS_Type(ClassStatement klass) {
 		this.etype = klass;
-		this.kind = Type.USER_CLASS;
+		this.type_of_type = Type.USER_CLASS;
 	}
 
-	/*@ ensures kind = Type.USER; */
+	/*@ ensures type_of_type = Type.USER; */
 	public OS_Type(TypeName typeName) {
 		this.ttype = typeName;
-		this.kind = Type.USER;
+		this.type_of_type = Type.USER;
 	}
 
 	/* (non-Javadoc)
@@ -91,15 +94,15 @@ public class OS_Type {
 	 */
 	@Override
 	public String toString() {
-		return String.format("<OS_Type %s %s %s %s>", ttype, etype, type, kind);
+		return String.format("<OS_Type %s %s %s %s>", ttype, etype, type, type_of_type);
 	}
 
-	/*@ requires kind = Type.BUILT_IN; */
+	/*@ requires type_of_type = Type.BUILT_IN; */
 	public BuiltInTypes getBType() {
 		return type;
 	}
 
-	/*@ requires kind = Type.USER; */
+	/*@ requires type_of_type = Type.USER; */
 	public TypeName getTypeName() {
 		return ttype;
 	}
