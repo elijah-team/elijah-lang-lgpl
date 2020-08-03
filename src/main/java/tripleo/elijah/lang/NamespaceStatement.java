@@ -47,7 +47,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		} else if (aElement instanceof OS_Container) {
 			((OS_Container) aElement).add(this);
 		} else {
-			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", aElement));
+			throw new IllegalStateException(String.format("Cant add NamespaceStatement to %s", aElement));
 		}
 	}
 
