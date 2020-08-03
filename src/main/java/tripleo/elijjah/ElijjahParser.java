@@ -86,7 +86,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					case LITERAL_import:
 					case LITERAL_alias:
 					{
-						programStatement(pc);
+						programStatement(pc, out.module());
 						break;
 					}
 					default:
@@ -210,7 +210,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void programStatement(
-		ProgramClosure pc
+		ProgramClosure pc, OS_Element cont
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -219,23 +219,23 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_from:
 			case LITERAL_import:
 			{
-				importStatement(pc.importStatement(out.module()));
+				importStatement(pc.importStatement(cont));
 				break;
 			}
 			case LITERAL_namespace:
 			{
-				namespaceStatement(pc.namespaceStatement(out.module()));
+				namespaceStatement(pc.namespaceStatement(cont));
 				break;
 			}
 			case LITERAL_class:
 			case ANNOT:
 			{
-				classStatement(pc.classStatement(out.module()));
+				classStatement(pc.classStatement(cont));
 				break;
 			}
 			case LITERAL_alias:
 			{
-				aliasStatement(pc.aliasStatement(out.module()));
+				aliasStatement(pc.aliasStatement(cont));
 				break;
 			}
 			default:
@@ -922,7 +922,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				case LITERAL_import:
 				case LITERAL_alias:
 				{
-					programStatement(cr.XXX());
+					programStatement(cr.XXX(), cr);
 					break;
 				}
 				case LITERAL_invariant:
@@ -1113,7 +1113,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				case LITERAL_import:
 				case LITERAL_alias:
 				{
-					programStatement(cr.XXX());
+					programStatement(cr.XXX(), cr);
 					break;
 				}
 				case LITERAL_invariant:
