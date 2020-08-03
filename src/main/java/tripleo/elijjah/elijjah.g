@@ -31,7 +31,7 @@ program
         {ParserClosure pc = out.closure();}
     : (( indexingStatement[pc.indexingStatement()]
 	  |"package" xy=qualident {pc.packageName(xy);}
-	  |programStatement[pc]) opt_semi)*
+	  |programStatement[pc, out.module()]) opt_semi)*
 	  EOF {out.FinishModule();}
 	;
 indexingStatement[IndexingStatement idx]
@@ -124,7 +124,7 @@ classScope[ClassStatement cr]
     | varStmt[cr.statementClosure(), cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | typeAlias[cr.typeAlias()]
-    | programStatement[cr.XXX()]
+    | programStatement[cr.XXX(), cr]
     | invariantStatement[cr.invariantStatement()]
     | accessNotation)*
     ;
@@ -134,7 +134,7 @@ namespaceScope[NamespaceStatement cr]
     ( functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure(), cr]
     | typeAlias[cr.typeAlias()]
-    | programStatement[cr.XXX()]
+    | programStatement[cr.XXX(), cr]
     | invariantStatement[cr.invariantStatement()]
     | accessNotation)*
     ;
@@ -166,11 +166,11 @@ functionDef[FunctionDef fd]:
     (TOK_ARROW typeName[fd.returnType()])?
     scope[fd.scope()]
     ;
-programStatement[ProgramClosure pc]:
-    importStatement[pc.importStatement(out.module())]
-    | namespaceStatement[pc.namespaceStatement(out.module())]
-    | classStatement[pc.classStatement(out.module())]
-    | aliasStatement[pc.aliasStatement(out.module())]
+programStatement[ProgramClosure pc, OS_Element cont]:
+    importStatement[pc.importStatement(cont)]
+    | namespaceStatement[pc.namespaceStatement(cont)]
+    | classStatement[pc.classStatement(cont)]
+    | aliasStatement[pc.aliasStatement(cont)]
     ;
 varStmt[StatementClosure cr, OS_Element aParent]
         {VariableSequence vsq=null;}
