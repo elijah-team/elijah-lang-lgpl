@@ -20,7 +20,6 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ import java.util.List;
  * variables
  * 
  */
-public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, FunctionItem, OS_Element, OS_Element2, Documentable {
+public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, FunctionItem, OS_Element, OS_Element2, Documentable, OS_Container {
 	
 	private OS_Package _packageName;
 	private ClassTypes _type;
@@ -61,7 +60,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	 * @param aDef
 	 */
 	public void add(ClassItem aDef) {
-		items.add (aDef);
+		items.add(aDef);
 	}
 
 	@Override
@@ -129,8 +128,17 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	public Attached _a = new Attached(new ClassContext(this));
 
-	public synchronized Collection<ClassItem> items() {
-		return items;
+	@Override // OS_Container
+	public List<OS_Element2> items() {
+		return null;
+	}
+
+	@Override // OS_Container
+	public void add(OS_Element anElement) {
+		if (anElement instanceof ClassItem)
+			items.add((ClassItem) anElement);
+		else
+			throw new IllegalStateException(String.format("Cant add %s to ClassStatement", anElement));
 	}
 
 	@Override
