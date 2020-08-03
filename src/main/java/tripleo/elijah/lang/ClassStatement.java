@@ -122,8 +122,8 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	public String clsName;
 
 	private final List<ClassItem> items=new ArrayList<ClassItem>();
-	private final ArrayList<String> mDocs = new ArrayList<String>();
-	private final ArrayList<IExpression> mExprs = new ArrayList<IExpression>();
+	private final List<String> mDocs = new ArrayList<String>();
+	private final List<IExpression> mExprs = new ArrayList<IExpression>();
 
 	public /*final*/ OS_Element parent;
 
