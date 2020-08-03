@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FormalArgList {
 
-	private List<FormalArgListItem> falis=new ArrayList<FormalArgListItem>();
+	public List<FormalArgListItem> falis=new ArrayList<FormalArgListItem>();
 
 	public FormalArgListItem next() {
 		FormalArgListItem fali = new FormalArgListItem();
