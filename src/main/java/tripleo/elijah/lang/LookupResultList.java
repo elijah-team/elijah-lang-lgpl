@@ -31,9 +31,11 @@ public class LookupResultList {
 	}
 
 	public OS_Element chooseBest(List<Predicate> l) {
-		List<LookupResult> r = results();
+		List<LookupResult> r;
 		if (l != null) {
 			r = getMaxScoredResults(l);
+		} else {
+			r = results();
 		}
 		//
 		if (r.size() == 1)
