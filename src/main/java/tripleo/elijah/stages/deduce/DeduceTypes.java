@@ -326,7 +326,11 @@ public class DeduceTypes {
 			ss.setType(t);  // TODO should this be here?
 			s.pop();
 		}
-		return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
+		if (t == null) {
+			int y=2;
+			return new LookupResultList();
+		} else
+			return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
 	}
 
 	@NotNull
