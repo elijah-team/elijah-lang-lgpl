@@ -24,12 +24,13 @@ import tripleo.elijah.lang.VariableStatement;
  *
  * Created 	Mar 26, 2020 at 6:04:02 AM
  */
-public class ClassContext extends Context { // TODO is this right, or should be interface??
+public class ClassContext extends Context {
 
 	private final ClassStatement carrier;
 
 	public ClassContext(ClassStatement classStatement) {
 		carrier = classStatement;
+//		super(classStatement);
 	}
 
 	public void add(FunctionDef fd, String funName) {

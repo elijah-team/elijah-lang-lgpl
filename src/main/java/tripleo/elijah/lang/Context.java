@@ -14,6 +14,7 @@ import tripleo.elijah.util.NotImplementedException;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO is this right, or should be interface??
 public abstract class Context {
 
 	private OS_Container attached;
