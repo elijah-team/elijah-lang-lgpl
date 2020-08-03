@@ -15,6 +15,11 @@ package tripleo.elijah.lang;
 public class OS_FuncType extends OS_Type {
 	private final FunctionDef function_def;
 
+	@Override
+	public OS_Element getElement() {
+		return function_def;
+	}
+
 	public OS_FuncType(FunctionDef functionDef) {
 		super();
 		this.function_def = functionDef;
@@ -25,7 +30,7 @@ public class OS_FuncType extends OS_Type {
 	 */
 	@Override
 	public String toString() {
-		return String.format("<OS_FuncType %s %s %s %s>", function_def);
+		return String.format("<OS_FuncType %s>", function_def);
 	}
 
 }
