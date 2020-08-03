@@ -15,9 +15,11 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -29,8 +31,8 @@ import java.util.stream.Collectors;
  */
 public class DeduceTypes {
 
-	public int nextClassCode() { return module.parent.nextClassCode(); }
-	public int nextFunctionCode() { return module.parent.nextFunctionCode(); }
+	private int nextClassCode() { return module.parent.nextClassCode(); }
+	private int nextFunctionCode() { return module.parent.nextFunctionCode(); }
 
 	private OS_Module module;
 
@@ -117,7 +119,11 @@ public class DeduceTypes {
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
-//				NotImplementedException.raise();
+				NotImplementedException.raise();
+				//
+				// TODO this fails for some reason
+				// TODO doesn't take into account assignment operator
+				//
 				final OS_Type right_type = deduceExpression(((IBinaryExpression) expr).getRight(), parent.getContext());
 				((IBinaryExpression)expr).getRight().setType(right_type);
 				expr.getLeft().setType(right_type);
@@ -247,71 +253,155 @@ public class DeduceTypes {
 	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
 		System.err.println(String.format("75 %s", pce.getType()));
 		try {
-			IExpression de;
-			if (pce.getLeft() instanceof Qualident) {
-				de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
-				System.out.println("77 "+de);
-				pce.setLeft(de);
-			} else {
-				de = pce.getLeft();
-			}
-
-			Stack<ExpressionPair> s = new Stack<ExpressionPair>();
-
-			{
-				IExpression i = /*pce.getLeft()*/de, xi = pce;
-
-				while (!(i instanceof IdentExpression)) {
-					xi = i;
-					i = i.getLeft();
-
-					s.push(new ExpressionPair(xi, i));
-	//		    	System.err.println(String.format("%s %s", xi, i));
-				}
-			}
-
-			while (!s.isEmpty()) {
-				ExpressionPair ep = s.peek();
-				if (ep.right instanceof IdentExpression) {
-					final String function_name = ((IdentExpression) ep.right).getText();
-					//
-					lookup_and_set(ctx, ep.right, function_name);
-				} else if (ep.right.getType() != null) { // to get Context
-					System.err.println(String.format("77 %s %s", ep.left, ep.right));
-					IExpression f = ((IBinaryExpression)ep.left).getRight();
-					while (!(f instanceof IdentExpression)) {
-						f = f.getLeft();
-					}
-					final Context ctx1 = ep.right.getType().getClassOf().getContext();
-					final String function_name = ((IdentExpression) f).getText();
-					lookup_and_set(ctx1, ep.left, function_name);
-				} else {
-					System.err.println(String.format("78 %s %s", ep.left, ep.right));
-				}
-				s.pop();
-			}
+			deduceProcedureCall_LEFT(pce, ctx);
+//			deduceProcedureCall_ARGS(pce, ctx);
 		} finally {
 			System.err.println(String.format("76 %s", pce.getType()));
 		}
 	}
 
+	private void deduceProcedureCall_LEFT(final ProcedureCallExpression pce, Context ctx) {
+		IExpression de;
+		if (pce.getLeft() instanceof Qualident) {
+			de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
+			System.out.println("77 "+de);
+			pce.setLeft(de);
+		} else {
+			de = pce.getLeft();
+		}
+
+		OS_Type t = null;//deduceExpression(de, ctx);
+//		int y=2;
+		{
+			LookupResultList lrl;
+			if (de instanceof DotExpression)
+				lrl = lookup_dot_expression(ctx, (DotExpression) de);
+			else if (de instanceof IdentExpression)
+				lrl = ctx.lookup(((IdentExpression) de).getText());
+			else
+				throw new NotImplementedException();
+			//
+			List<Predicate> pl = new ArrayList<Predicate>();
+//			pl.add(new DeduceUtils.MatchConstructorArgs(pce));
+			pl.add(new DeduceUtils.MatchFunctionArgs(pce));
+			final OS_Element best = lrl.chooseBest(pl);
+			if (best != null){
+				final OS_Element element = best;
+				if (element instanceof VariableStatement) {
+					if (((VariableStatement) element).typeName() != null) {
+						t = new OS_Type(((VariableStatement) element).typeName());
+					} else
+						throw new NotImplementedException();
+				} else if (element instanceof FormalArgListItem) {
+					final TypeName typeName = ((FormalArgListItem) element).tn;
+					if (typeName != null) {
+						t = new OS_Type(typeName);
+					} else
+						throw new NotImplementedException();
+				} else if (element instanceof ClassStatement) {
+					t = new OS_Type((ClassStatement) element);
+				} else if (element instanceof FunctionDef) {
+					t = new OS_FuncType((FunctionDef) element);
+				}
+				if (t == null) {
+					System.err.println("89 "+element.getClass().getName());
+					module.parent.eee.reportError("type not specified: "+ getElementName(element));
+					NotImplementedException.raise();
+					return;
+				}
+				pce.setType(t);
+			} else {
+				module.parent.eee.reportError("IDENT not found: " + ((IdentExpression) de).getText());
+				NotImplementedException.raise();
+			}
+		}
+
+//		Stack<ExpressionPair> s = new Stack<ExpressionPair>();
+//
+//		{
+//			IExpression i = /*pce.getLeft()*/de, xi = pce;
+//
+//			while (!(i instanceof IdentExpression)) {
+//				xi = i;
+//				i = i.getLeft();
+//
+//				s.push(new ExpressionPair(xi, i));
+//				//		    	System.err.println(String.format("%s %s", xi, i));
+//			}
+//		}
+//
+//		while (!s.isEmpty()) {
+//			ExpressionPair ep = s.peek();
+//			if (ep.right instanceof IdentExpression) {
+//				final String function_name = ((IdentExpression) ep.right).getText();
+//				//
+//				lookup_and_set(ctx, ep.left, function_name);
+//			} else if (ep.right.getType() != null) { // to get Context
+//				System.err.println(String.format("77 %s %s", ep.left, ep.right));
+//				IExpression f = ((IBinaryExpression)ep.left).getRight();
+//				while (!(f instanceof IdentExpression)) {
+//					f = f.getLeft();
+//				}
+//				final Context ctx1 = ep.right.getType().getClassOf().getContext();
+//				final String function_name = ((IdentExpression) f).getText();
+//				lookup_and_set(ctx1, ep.left, function_name);
+//			} else {
+//				System.err.println(String.format("78 %s %s", ep.left, ep.right));
+//			}
+//			s.pop();
+//		}
+	}
+
+	private LookupResultList lookup_dot_expression(Context ctx, DotExpression de) {
+		Stack<IExpression> s = dot_expression_to_stack(de);
+		OS_Type t = null;
+		IExpression ss = s.peek();
+		while (!s.isEmpty()) {
+			ss = s.peek();
+			t = deduceExpression(ss, ctx);
+			ss.setType(t);  // TODO should this be here?
+			s.pop();
+		}
+		return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
+	}
+
+	@NotNull
+	private Stack<IExpression> dot_expression_to_stack(DotExpression de) {
+		Stack<IExpression> s = new Stack<IExpression>();
+		IExpression e = de;
+		IExpression left = null;
+		s.push(de.getRight());
+		while (true) {
+			left = e.getLeft();
+			s.push(left);
+			if (!(left instanceof DotExpression)) break;
+		}
+		return s;
+	}
+
 	private void lookup_and_set(Context ctx, IExpression exp, String function_name) {
 		final LookupResultList lrl = ctx.lookup(function_name);
 		final OS_Element best = lrl.chooseBest(null);
-		if (best == null)
+		if (best == null) {
 			module.parent.eee.reportError("function not found " + function_name);
-		else {
+			return;
+		}
+		{
 			if (best instanceof ClassStatement) {
 				final OS_Type t = new OS_Type((ClassStatement) best);
 				exp.setType(t);
 			} else if (best instanceof FunctionDef) {
-				final OS_Type t = new OS_Type(((FunctionDef)best).returnType());
+				final OS_Type t = new OS_FuncType(((FunctionDef) best));
 				exp.setType(t);
 			} else if (best instanceof VariableStatement) {
 				final TypeName typeName = ((VariableStatement) best).typeName();
-				if (typeName.isNull())
-					deduceProcedureCall((ProcedureCallExpression) ((VariableStatement) best).initialValue(), ctx);
-				final OS_Type t = new OS_Type(typeName);
+				OS_Type t;
+				if (typeName.isNull()) {
+					//deduceProcedureCall((ProcedureCallExpression) ((VariableStatement) best).initialValue(), ctx);
+					t = deduceExpression(((VariableStatement) best).initialValue(), ctx);
+					int y=2;
+				} else
+					t = new OS_Type(typeName);
 				exp.setType(t);
 			} else if (best instanceof FormalArgListItem) {
 				final OS_Type t = new OS_Type(((FormalArgListItem) best).typeName());
@@ -565,27 +655,36 @@ public class DeduceTypes {
 		NotImplementedException.raise();
 	}
 
+	public OS_Type deduceIdentExpression(@NotNull IdentExpression n, Context context) {
+		LookupResultList lrl = context.lookup(n.getText());
+		if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
+//				return lrl.results().get(0).getElement();
+			// TODO what to do here??
+			final OS_Element element = lrl.results().get(0).getElement();
+			if (element instanceof VariableStatement) {
+				if (((VariableStatement) element).typeName() != null)
+					return new OS_Type(((VariableStatement) element).typeName());
+			} else if (element instanceof FormalArgListItem) {
+				final TypeName typeName = ((FormalArgListItem) element).tn;
+				if (typeName != null)
+					return new OS_Type(typeName);
+			} else if (element instanceof ClassStatement) {
+				return new OS_Type((ClassStatement) element);
+			} else if (element instanceof FunctionDef) {
+				return new OS_FuncType((FunctionDef) element);
+			}
+			System.err.println("89 "+element.getClass().getName());
+			module.parent.eee.reportError("type not specified: "+ getElementName(element));
+			return null;
+		}
+		module.parent.eee.reportError("IDENT not found: "+ n.getText());
+		NotImplementedException.raise();
+		return null;
+	}
+
 	public OS_Type deduceExpression(@NotNull IExpression n, Context context) {
 		if (n.getKind() == ExpressionKind.IDENT) {
-			LookupResultList lrl = context.lookup(((IdentExpression)n).getText());
-			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
-//				return lrl.results().get(0).getElement();
-				// TODO what to do here??
-				final OS_Element element = lrl.results().get(0).getElement();
-				if (element instanceof VariableStatement) {
-					if (((VariableStatement) element).typeName() != null)
-						return new OS_Type(((VariableStatement) element).typeName());
-				} else if (element instanceof FormalArgListItem) {
-					final TypeName typeName = ((FormalArgListItem) element).tn;
-					if (typeName != null)
-						return new OS_Type(typeName);
-				}
-				System.err.println("89 "+element.getClass().getName());
-				module.parent.eee.reportError("type not specified: "+ getElementName(element));
-				return null;
-			}
-			module.parent.eee.reportError("IDENT not found: "+((IdentExpression) n).getText());
-			NotImplementedException.raise();
+			return deduceIdentExpression((IdentExpression)n, context);
 		} else if (n.getKind() == ExpressionKind.NUMERIC) {
 			return new OS_Type(BuiltInTypes.SystemInteger);
 		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
@@ -593,6 +692,9 @@ public class DeduceTypes {
 			OS_Type left_type = deduceExpression(de.getLeft(), context);
 			OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
 			int y=2;
+		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
+			deduceProcedureCall((ProcedureCallExpression) n, context);
+			return n.getType();
 		}
 		
 		return null;
@@ -655,7 +757,6 @@ public class DeduceTypes {
 			addModuleItem(element);
 		}
 	}
-
 }
 
 //
