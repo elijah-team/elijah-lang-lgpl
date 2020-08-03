@@ -46,7 +46,7 @@ public class LookupResultList {
 
 	private List<LookupResult> getMaxScoredResults(List<Predicate> l) {
 		Map<LookupResult, Integer> new_results = new HashMap<LookupResult, Integer>();
-		int maxScore = -1;
+		int maxScore = 0;
 
 		for (LookupResult lookupResult : _results) {
 			int score = 0;
