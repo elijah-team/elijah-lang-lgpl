@@ -110,7 +110,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		if (aElement instanceof ClassStatement) {
 			((ClassStatement)parent).add(this);
 		} else if (parent instanceof OS_Container) {
-			((OS_Container) parent).add(aElement);
+			((OS_Container) parent).add(this);
 		} else {
 			throw new IllegalStateException("adding FunctionDef to "+aElement.getClass().getName());
 		}
