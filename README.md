@@ -18,7 +18,7 @@ Much work is needed.
 
 See [Language Overview](elijjah.md) for more details on the language.
 
-All of this is a wwork in progress and your support would be appreciated.
+All of this is a work in progress and your support would be appreciated.
 
 tripleo+elijah (at) gmail.com
 
