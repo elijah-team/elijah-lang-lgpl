@@ -5,13 +5,14 @@ along the lines Smalltalk/Tunes Slate.
 It is free software intended for use on all systems, including GNU/Linux.
 
 Other Software Required:
-  * antlr 
-  * javassist
+  * antlr (included)
+  * javassist (not used yet, but included)
   * python (not yet)
   * java-compiler (java8)
   
 The repo is currently buildable from maven.  You can also import into Eclipse and IDEA
-and get up and running.  The Makefiles probably do not work.
+and get up and running.  The tests need to run run from the root directory, which is 
+done automatically in maven but not IDEA.
 
 Much work is needed.
 
