@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
@@ -16,31 +17,48 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IfConditional implements StatementItem, FunctionItem {
+public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 
 	@Override // FunctionItem
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		throw new NotImplementedException();
 	}
 
-    public IExpression getExpr() {
+	@Override
+	public void visitGen(ICodeGen visit) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public OS_Element getParent() {
+		throw new NotImplementedException();
+//		return null;
+	}
+
+	@Override
+	public Context getContext() {
+		throw new NotImplementedException();
+//		return null;
+	}
+
+	public IExpression getExpr() {
 		return expr;
     }
 
     private class IfConditionalScope implements Scope {
 		@Override
 		public void add(StatementItem aItem) {
-			parent.add(aItem);
+			parent_scope.add(aItem);
 		}
 		
 		@Override
 		public void addDocString(Token s) {
-			parent.addDocString(s);
+			parent_scope.addDocString(s);
 		}
 		
 		@Override
 		public BlockStatement blockStatement() {
-			return parent.blockStatement(); // TODO
+			return parent_scope.blockStatement(); // TODO
 		}
 		
 		@Override
@@ -62,8 +80,8 @@ public class IfConditional implements StatementItem, FunctionItem {
 		/*@ requires parent != null; */
 		@Override
 		public void statementWrapper(IExpression aExpr) {
-			if (parent == null) throw new IllegalStateException("parent is null");
-			parent.add(new StatementWrapper(aExpr));
+			if (parent_scope == null) throw new IllegalStateException("parent is null");
+			parent_scope.add(new StatementWrapper(aExpr));
 		}
 		
 		@Override
@@ -75,7 +93,7 @@ public class IfConditional implements StatementItem, FunctionItem {
 	
 	private int order = 0;
 	
-	private Scope parent;
+	private Scope parent_scope;
 	private final IfConditional sibling;
 //	private final IfExpression if_parent;
 
@@ -85,11 +103,11 @@ public class IfConditional implements StatementItem, FunctionItem {
 	public IfConditional(IfConditional ifExpression) {
 		this.sibling = ifExpression;
 		this.order = ++sibling/*if_parent*/.order;
-		this.parent = this.sibling.parent;
+		this.parent_scope = this.sibling.parent_scope;
 	}
 
 	public IfConditional(Scope aClosure) {
-		this.parent = aClosure;
+		this.parent_scope = aClosure;
 		this.sibling = null; // top
 	}
 
