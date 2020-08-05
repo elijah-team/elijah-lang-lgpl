@@ -581,7 +581,7 @@ primaryExpression returns [IExpression ee]
 	|   {ppc=new FuncExpr();} funcExpr[ppc] {ee=ppc;}
 	;
 funcExpr[FuncExpr pc] // remove scope to use in `typeName's
-		{Scope0 sc = new Scope0();}
+		{Scope0 sc = new Scope0(pc);}
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
 	  (opfal[pc.argList()]) scope[pc.scope()]
