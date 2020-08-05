@@ -174,7 +174,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	public TypeName returnType() {
 		// TODO Auto-generated method stub
-		if (_returnType.isNull()) System.err.println("101 NULL (Unresolved) returnType");
+//		if (_returnType.isNull()) System.err.println("101 NULL (Unresolved) returnType");
 		return _returnType;
 	}
 
