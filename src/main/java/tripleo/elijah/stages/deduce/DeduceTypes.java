@@ -41,7 +41,7 @@ public class DeduceTypes {
 		this.module = module;
 	}
 
-	public void addClass(ClassStatement klass, OS_Module parent) {
+	public void addClass(ClassStatement klass, OS_Element parent) {
 //		System.out.print("class " + klass.clsName + "{\n");
 		klass._a.setCode(nextClassCode());
 		//
@@ -78,13 +78,13 @@ public class DeduceTypes {
 				{
 					for (FunctionItem fi : fd.getItems())
 						addFunctionItem(fi, fd);
-
 				}
 //				fd.visit(this);
 //				System.out.print("\n}\n\n");
 			} else if (element instanceof ClassStatement) {
 //				((ClassStatement) element).visitGen(this);
-				System.err.println("93 " + element.getClass().getName());
+				System.err.println("93 " + ((ClassStatement) element).getName()/*element.getClass().getName()*/);
+				addClass((ClassStatement) element, parent);
 			} else if (element instanceof VariableSequence) {
 //				fd._a.setCode(nextFunctionCode());
 //				parent._a.getContext().add(element, null);
