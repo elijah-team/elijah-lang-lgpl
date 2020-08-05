@@ -1,69 +1,96 @@
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ *
+ * The contents of this library are released under the LGPL licence v3,
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ *
+ */
 package tripleo.elijah.lang;
+
+import antlr.Token;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import antlr.Token;
-
 public class Scope0 implements Scope {
+	private final FuncExpr funcExpr;
 	private List<String> docstrings = new ArrayList<String>();
 	private List<FunctionItem> items = new ArrayList<FunctionItem>();
 
-		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
+	private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 
-		@Override
-		public void add(StatementItem aItem) {
-			if (aItem instanceof FunctionItem)
-				items.add((FunctionItem) aItem);
-			else
-				System.err.println(String.format("adding false StatementItem %s",
-					aItem.getClass().getName()));
-		}
-		
-		@Override
-		public void addDocString(Token aS) {
-//			docstrings.add(aS.getText());
-		}
-		
-		@Override
-		public BlockStatement blockStatement() {
-			return new BlockStatement(this);
-		}
-		
-		@Override
-		public InvariantStatement invariantStatement() {
-			return null;
-		}
-
-		@Override
-		public StatementClosure statementClosure() {
-			return asc;
-		}
-
-		@Override
-		public void statementWrapper(IExpression aExpr) {
-			add(new StatementWrapper(aExpr));
-//			throw new NotImplementedException(); // TODO
-		}
-
-		@Override
-		public TypeAliasExpression typeAlias() {
-			return null;
-		}
-
-		/* (non-Javadoc)
-		 * @see tripleo.elijah.lang.Scope#getParent()
-		 */
-		@Override
-		public OS_Element getParent() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public FormalArgList fal() {
-			// TODO Auto-generated method stub
-			return new FormalArgList();
-		}
-		
-		
+	public Scope0(FuncExpr funcExpr) {
+		this.funcExpr = funcExpr;
 	}
+
+	@Override
+	public void add(StatementItem aItem) {
+		if (aItem instanceof FunctionItem)
+			items.add((FunctionItem) aItem);
+		else
+			System.err.println(String.format("106 adding false FunctionItem %s",
+				aItem.getClass().getName()));
+	}
+
+	@Override
+	public void addDocString(Token aS) {
+		throw new NotImplementedException();
+//			docstrings.add(aS.getText());
+	}
+
+	@Override
+	public BlockStatement blockStatement() {
+		return new BlockStatement(this);
+	}
+
+	@Override
+	public InvariantStatement invariantStatement() {
+		throw new NotImplementedException();
+
+	}
+
+	@Override
+	public StatementClosure statementClosure() {
+		return asc;
+	}
+
+	@Override
+	public void statementWrapper(IExpression aExpr) {
+		add(new StatementWrapper(aExpr));
+//			throw new NotImplementedException(); // TODO
+	}
+
+	@Override
+	public TypeAliasExpression typeAlias() {
+		throw new NotImplementedException();
+
+	}
+
+	/* (non-Javadoc)
+	 * @see tripleo.elijah.lang.Scope#getParent()
+	 */
+	@Override
+	public OS_Element getParent() {
+		// TODO Auto-generated method stub
+		throw new NotImplementedException();
+//		return null;
+	}
+
+	@Override
+	public OS_Element getElement() {
+		return funcExpr;
+	}
+
+	public FormalArgList fal() {
+		// TODO Auto-generated method stub
+		return new FormalArgList();
+	}
+		
+		
+}
+
+//
+//
+//
