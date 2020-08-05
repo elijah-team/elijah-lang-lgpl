@@ -13,12 +13,11 @@ package wpkotlin.demo.list_folders
 import Java.java.io.File
 
 namespace __JAVA__ {
-  p1(a: ToStringable) {println(a.toString())}
+  p1(const a: ToStringable) {println(a.toString())}
 }
 namespace {
   class signature ToStringable {
-    toString() -> Java.java.lang.String {} // TODO make it parse
-      // {abstract}
+    toString() -> Java.java.lang.String { abstract } 
   }
 }
 
@@ -28,7 +27,7 @@ class MainLogic {
               Result = f.isDirectory()}
     const folders = File(args[1]).  // Can we use Option or Maybe here?
         listFiles(fun)
-    if folders {  // folders?. //??
+    if folders != None {  // folders?. //??
         // copy(folders, p1)
         folders.forEach(p1)
     }
