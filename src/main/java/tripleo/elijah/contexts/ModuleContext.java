@@ -29,12 +29,32 @@ public class ModuleContext extends Context {
 		alreadySearched.add(carrier.getContext());
 		// TODO look all this up in a table, not by iteration
 		for (ModuleItem item: carrier.getItems()) {
+			//
+//			List<String> items;
+//			if ((item instanceof ClassStatement)) {
+//				items = ((ClassStatement) item).getItems()
+//						        .stream()
+//						        .filter((s) -> s instanceof OS_Element2)
+//						        .map((s) -> ((OS_Element2)s).name())
+//						        .collect(Collectors.toList());
+//			} else if (item instanceof NamespaceStatement) {
+//				items = ((NamespaceStatement) item).getItems()
+//						        .stream()
+//						        .filter((s) -> s instanceof OS_Element2)
+//						        .map((s) -> ((OS_Element2)s).name())
+//						        .collect(Collectors.toList());
+//			} else {
+//				items = new ArrayList<String>();
+//			}
+//			System.err.println("101 Searching "+items.toString()+" for "+name);
+			//
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) //&&
 //				!(item instanceof VariableSequence)
 				// TODO what about imports
 			) continue;
 			if (item instanceof OS_Element2) {
+//				System.err.println("102 "+((OS_Element2) item).name());
 				if (((OS_Element2) item).name().equals(name)) {
 					Result.add(name, level, item);
 				} else if (item instanceof ImportStatement) {
@@ -42,6 +62,7 @@ public class ModuleContext extends Context {
 				}
 			}
 			if (item instanceof NamespaceStatement && ((NamespaceStatement) item).getKind() == NamespaceTypes.MODULE) {
+//				System.err.println(103);
 				final NamespaceContext namespaceContext = (NamespaceContext) item.getContext();
 				namespaceContext.lookup(name, level, Result, alreadySearched);
 			}
