@@ -30,7 +30,7 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, 
 
 	public Loop(OS_Element aParent) {
 		// document assumption
-		if (!(parent instanceof FunctionDef))
+		if (!(aParent instanceof FunctionDef))
 			System.out.println("parent is not FunctionDef");
 		parent = aParent;
 	}
