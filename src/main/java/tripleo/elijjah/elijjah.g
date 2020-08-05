@@ -112,7 +112,7 @@ classInheritanceRuby[ClassInheritance ci]:
     LT_ classInheritance_[ci]
     ;
 docstrings[Documentable sc]:
-    ((STRING_LITERAL)=> (s1:STRING_LITERAL {sc.addDocString(s1);})+
+    ((STRING_LITERAL)=> (s1:STRING_LITERAL {if (sc!=null) sc.addDocString(s1);})+
     |)
     ;
 classScope[ClassStatement cr]
@@ -164,7 +164,9 @@ functionDef[FunctionDef fd]:
     ( "const"|"immutable" )?
     opfal[fd.fal()]
     (TOK_ARROW typeName[fd.returnType()])?
-    scope[fd.scope()]
+    ( scope[fd.scope()]
+    | (LCURLY docstrings[null])=> LCURLY docstrings[fd.scope()] "abstract" {fd.setAbstract(true);} RCURLY // TODO what about pre/post??
+    )
     ;
 programStatement[ProgramClosure pc, OS_Element cont]:
     importStatement[pc.importStatement(cont)]

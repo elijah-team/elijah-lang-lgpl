@@ -29,6 +29,8 @@ import java.util.List;
 
 public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
 
+	private boolean _isAbstract;
+
 	public Iterable<FormalArgListItem> getArgs() {
 		return mFal.items();
 	}
@@ -37,6 +39,10 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	@Override
 	public void addDocString(Token aText) {
 		mDocs.add(aText.getText());
+	}
+
+	public void setAbstract(boolean b) {
+		_isAbstract = b;
 	}
 
 	private final class FunctionDefScope implements Scope {
