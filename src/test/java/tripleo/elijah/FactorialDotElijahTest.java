@@ -10,7 +10,6 @@ package tripleo.elijah;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.ModuleRef;
@@ -92,14 +91,14 @@ public class FactorialDotElijahTest {
 		LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(u64,
 				ExpressionNodeBuilder.varref("n", shn, u64),
 				ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
-		Buffer b1 = FindBothSourceFiles.BeginTmpSSACtx(cctx, tccssan, gbn);
+		Buffer b1 = FactorialR.BeginTmpSSACtx(cctx, tccssan, gbn);
 //		Assert.assertEquals("{\n\tu64 ", b1.getText()); // TODO maybe this wll be right in the future.
 		Assert.assertEquals("{\n\tZ81 ", b1.getText());
 		
 		TmpSSACtxNode tccssan2 = new TmpSSACtxNode(cctx);
 		LocalAgnTmpNode latn2=new LocalAgnTmpNode(tccssan2, ExpressionNodeBuilder.fncall(
 				fact_r, List_of(lamn)));
-		Buffer b2 = FindBothSourceFiles.GenLocalAgn(cctx, latn2, gbn);
+		Buffer b2 = FactorialR.GenLocalAgn(cctx, latn2, gbn);
 		Assert.assertEquals("{\n" +
 				"\tZ81 vt2 = z100factorial_r(vt1);\n" +
 				"\t", b2.getText());
