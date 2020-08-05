@@ -10,6 +10,7 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
@@ -116,7 +117,7 @@ public class VariableStatement implements OS_Element {
 	@Override
 	public void visitGen(ICodeGen visit) {
 		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException();
 	}
 
 	@Override
@@ -127,7 +128,8 @@ public class VariableStatement implements OS_Element {
 	@Override
 	public Context getContext() {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
+//		return null;
 	}
 
 }
