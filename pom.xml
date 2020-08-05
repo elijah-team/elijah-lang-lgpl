@@ -13,6 +13,7 @@
         <jacoco.version>0.8.2</jacoco.version>
         <downloadSources>true</downloadSources>
         <guava.version>29.0-jre</guava.version>
+        <buffers.version>0.0.1</buffers.version>
     </properties>
 
     <dependencies>
@@ -86,12 +87,22 @@
             <version>${guava.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>tripleo.buffers</groupId>
+            <artifactId>buffers-v1</artifactId>
+            <version>${buffers.version}</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
         <repository>
             <id>gitlab-maven</id>
             <url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
+        </repository>
+        <repository>
+            <id>gitlab-maven-buffers</id>
+            <url>https://gitlab.com/api/v4/projects/20346374/packages/maven</url>
         </repository>
     </repositories>
     <distributionManagement>
@@ -123,37 +134,6 @@
         </plugins>
         -->
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>buffer/src/</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-test-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>buffer/test/</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
