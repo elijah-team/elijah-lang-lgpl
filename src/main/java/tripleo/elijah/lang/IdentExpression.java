@@ -12,12 +12,13 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.gen.nodes.Helpers;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
+
+import java.io.IOException;
 
 /**
  * @author Tripleo(sb)
@@ -94,7 +95,8 @@ public class IdentExpression implements IExpression, OS_Element {
 	@Override
 	public OS_Element getParent() {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
+//		return null;
 	}
 
 	@Override
