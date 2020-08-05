@@ -8,13 +8,13 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-import java.util.List;
-
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 
@@ -29,9 +29,7 @@ public class ImportStatement implements ModuleItem {
 
 	public ImportStatement(OS_Element aParent) {
 		parent = aParent;
-		if (parent instanceof OS_Module)
-			((OS_Module) parent).add(this);
-		else if (parent instanceof OS_Container) {
+		if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(this);
 		} else
 			throw new NotImplementedException();
