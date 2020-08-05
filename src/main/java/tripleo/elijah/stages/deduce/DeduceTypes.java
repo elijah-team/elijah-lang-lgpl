@@ -310,6 +310,7 @@ public class DeduceTypes {
 				}
 				pce.setType(t);
 			} else {
+				if (!(de instanceof IdentExpression)) System.err.println("100 "+de.getClass().getName());
 				module.parent.eee.reportError(String.format("IDENT not found: %s", de));
 				NotImplementedException.raise();
 			}
@@ -646,13 +647,14 @@ public class DeduceTypes {
 			} else if (element instanceof FunctionDef) {
 				return new OS_FuncType((FunctionDef) element);
 			}
-			System.err.println("89 "+element.getClass().getName());
-			module.parent.eee.reportError("type not specified: "+ getElementName(element));
+			System.err.println("89 " + element.getClass().getName());
+			module.parent.eee.reportError("type not specified: " + getElementName(element));
+			return null;
+		} else {
+			module.parent.eee.reportError("IDENT not found: " + n.getText());
+			NotImplementedException.raise();
 			return null;
 		}
-		module.parent.eee.reportError("IDENT not found: "+ n.getText());
-		NotImplementedException.raise();
-		return null;
 	}
 
 	private OS_Type deduceTypeName(VariableStatement vs, Context ctx) {
