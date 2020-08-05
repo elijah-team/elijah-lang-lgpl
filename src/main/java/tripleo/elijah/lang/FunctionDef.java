@@ -107,9 +107,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	public FunctionDef(OS_Element aElement) {
 		parent = aElement;
-		if (aElement instanceof ClassStatement) {
-			((ClassStatement)parent).add(this);
-		} else if (parent instanceof OS_Container) {
+		if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(this);
 		} else {
 			throw new IllegalStateException("adding FunctionDef to "+aElement.getClass().getName());
@@ -120,7 +118,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		return mFal;
 	}
 
-	@Override
+	@Override // OS_Element
 	public Context getContext() {
 		return _a._context;
 	}
@@ -129,17 +127,18 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		return items;
 	}
 
-	@Override
+	@Override // OS_Element
 	public OS_Element getParent() {
 		return parent;
 	}
 
+	@Override // OS_Container
 	public List<OS_Element2> items() {
 		Collection<FunctionItem> c = Collections2.filter(getItems(), new Predicate<FunctionItem>() {
 			@Override
 			public boolean apply(@Nullable FunctionItem input) {
 				final boolean b = input instanceof OS_Element2;
-				System.out.println(String.format("%s %b", input, b));
+//				System.out.println(String.format("%s %b", input, b));
 				return b;
 			}
 		});
@@ -150,7 +149,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		return a;
 	}
 
-	@Override
+	@Override // OS_Container
 	public void add(OS_Element anElement) {
 		if (anElement instanceof FunctionItem)
 			items.add((FunctionItem) anElement);
@@ -158,7 +157,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 			throw new IllegalStateException(String.format("Cant add %s to FunctionDef", anElement));
 	}
 
-	@Override
+	@Override // OS_Element
 	public void print_osi(TabbedOutputStream tos) throws IOException {
 		System.out.println("Function print_osi");
 		tos.put_string("Function (");
@@ -175,7 +174,8 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	public TypeName returnType() {
 		// TODO Auto-generated method stub
-		return _returnType ;
+		if (_returnType.isNull()) System.err.println("101 NULL (Unresolved) returnType");
+		return _returnType;
 	}
 
 	public Scope scope() {
