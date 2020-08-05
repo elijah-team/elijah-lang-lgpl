@@ -74,8 +74,7 @@ public class Scope0 implements Scope {
 	@Override
 	public OS_Element getParent() {
 		// TODO Auto-generated method stub
-		throw new NotImplementedException();
-//		return null;
+		return funcExpr;
 	}
 
 	@Override
@@ -83,9 +82,10 @@ public class Scope0 implements Scope {
 		return funcExpr;
 	}
 
+	final FormalArgList formalArgList = new FormalArgList();
+
 	public FormalArgList fal() {
-		// TODO Auto-generated method stub
-		return new FormalArgList();
+		return formalArgList;
 	}
 		
 		
