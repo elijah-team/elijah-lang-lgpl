@@ -11,12 +11,17 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.util.TabbedOutputStream;
+
+import java.io.IOException;
+
 /**
  * @author Tripleo
  *
  * Created 	Apr 15, 2020 at 10:09:03 PM
  */
-public class CaseConditional implements StatementItem {
+public class CaseConditional implements StatementItem, FunctionItem {
 
     private final OS_Element parent;
     private IExpression expr;
@@ -29,6 +34,10 @@ public class CaseConditional implements StatementItem {
 		this.expr = expr;
 	}
 
+	@Override
+	public void print_osi(TabbedOutputStream tos) throws IOException {
+		throw new NotImplementedException();
+	}
 }
 
 //
