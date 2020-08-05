@@ -133,7 +133,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	@Override
 	public VariableSequence varSeq() {
 		vsq=new VariableSequence();
-		vsq.setParent(this.getParent());
+		vsq.setParent(parent.getParent()/*this.getParent()*/);
 		return (VariableSequence) add(vsq);
 	}
 
