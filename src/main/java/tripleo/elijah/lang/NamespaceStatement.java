@@ -69,10 +69,11 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 //		
 //	}
 
+	private final List<String> mDocs = new ArrayList<String>();
+
 	@Override
-	public void addDocString(Token s) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+	public void addDocString(Token aText) {
+		mDocs.add(aText.getText());
 	}
 
 	public StatementClosure statementClosure() {
@@ -113,7 +114,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 
 			@Override
 			public void addDocString(Token s1) {
-				throw new NotImplementedException();
+				NamespaceStatement.this.addDocString(s1);
 			}
 		});
 	}
