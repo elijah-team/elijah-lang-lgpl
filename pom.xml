@@ -4,7 +4,7 @@
     <groupId>tripleo.elijah</groupId>
     <artifactId>elijah-v1</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.3a</version>
+    <version>0.0.4</version>
     <name>eljc-v1</name>
     <url>http://gitlab.com/elijah-team/elijah-lang/</url>
     <properties>
