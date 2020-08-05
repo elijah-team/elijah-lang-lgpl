@@ -43,11 +43,7 @@ public class NamespaceContext extends Context {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs);
 				}
-			}/* else if (((OS_Element2)item).name() != null) {
-				if (((OS_Element2)item).name().equals(name)) {
-					Result.add(name, level, item);
-				}
-			}*/
+			}
 		}
 		if (carrier.getParent() != null)
 			carrier.getParent().getContext().lookup(name, level+1, Result);
