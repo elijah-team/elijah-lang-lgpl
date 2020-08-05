@@ -60,7 +60,7 @@ public class FindBothSourceFiles /* extends TestCase */ {
 	public final void compilerShouldFindBothParseFiles() {
 		List<String> args = List_of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
 //		ErrSink eee = JMock.of(ErrSink.class);
-		ErrSink eee = new ListErrSink();
+		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);

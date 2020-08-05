@@ -13,7 +13,7 @@ import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.IO;
-import tripleo.elijah.comp.ListErrSink;
+import tripleo.elijah.comp.StdErrSink;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class TestBasic {
 	@Test
 	public final void testBasicParse() {
 		List<String> args = List_of("test/basic", "-sE");
-		ErrSink eee = new ListErrSink();
+		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
@@ -39,7 +39,7 @@ public class TestBasic {
 	@Test
 	public final void testBasic() {
 		List<String> args = List_of("test/basic", "-sO", "-out");
-		ErrSink eee = new ListErrSink();
+		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);

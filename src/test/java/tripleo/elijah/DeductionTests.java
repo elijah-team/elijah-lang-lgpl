@@ -13,7 +13,7 @@ import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.IO;
-import tripleo.elijah.comp.ListErrSink;
+import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.OS_Element;
 
@@ -28,7 +28,7 @@ public class DeductionTests {
 	@Test
 	public final void testParseFile() {
 		List<String> args = Helpers.List_of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
-		ErrSink eee = new ListErrSink();
+		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
@@ -41,7 +41,7 @@ public class DeductionTests {
 	@Test
 	public final void testListFolders() {
 		List<String> args = Helpers.List_of("test/demo-el-normal/listfolders2.elijah", "test/demo-el-normal/listfolders.elijah", "-sE");
-		ErrSink eee = new ListErrSink();
+		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
