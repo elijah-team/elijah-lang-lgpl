@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class VariableStatement implements OS_Element {
 
-	private final VariableSequence parent;
+	private final VariableSequence _parent;
 	public Token name;
 	
 	private IExpression initialValue = IExpression.UNASSIGNED;
@@ -27,7 +27,7 @@ public class VariableStatement implements OS_Element {
 	private TypeName typeName = new VariableTypeName();
 
 	public VariableStatement(VariableSequence aSequence) {
-		parent = aSequence;
+		_parent = aSequence;
 	}
 
 	public String getName() {
@@ -121,8 +121,7 @@ public class VariableStatement implements OS_Element {
 
 	@Override
 	public OS_Element getParent() {
-		// TODO Auto-generated method stub
-		return parent;
+		return _parent;
 	}
 
 	@Override
