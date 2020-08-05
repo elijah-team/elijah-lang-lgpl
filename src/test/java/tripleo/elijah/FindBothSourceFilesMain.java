@@ -11,10 +11,10 @@
  */
 package tripleo.elijah;
 
-import java.io.IOException;
-
 import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.gen.CompilerContext;
+
+import java.io.IOException;
 
 /**
  * @author tripleoacer
@@ -32,7 +32,7 @@ public class FindBothSourceFilesMain {
 		}
 		GenBuffer gbn = new GenBuffer();
 		CompilerContext cctx = new CompilerContext("fact.elijah");
-		f.factorial_r(cctx , gbn);
+		new FactorialR().factorial_r(cctx , gbn);
 		try {
 			gbn.writeBuffers();
 		} catch (IOException e) {
