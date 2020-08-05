@@ -21,6 +21,18 @@ namespace {
     val ExitFailure = 1
 }
 
+class interface IPrintable {
+    // TODO forgot what to put here
+    printable() -> String {}
+}
+
+namespace {
+    print (a: IPrintable) {
+    }
+    println (a: IPrintable) {
+    }
+}
+
 //
 //
 //
