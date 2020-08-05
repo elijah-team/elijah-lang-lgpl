@@ -9,9 +9,9 @@
 
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-
 import tripleo.elijah.util.TabbedOutputStream;
+
+import java.io.IOException;
 
 public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 
@@ -22,26 +22,260 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		BasicBinaryExpression abe = (BasicBinaryExpression)this;
-		if (abe.getKind() == ExpressionKind.ASSIGNMENT) {
-			sb.append(abe.getLeft().toString());
-			sb.append("=");
-			sb.append(abe.getRight().toString());
-		} else if (abe.getKind() == ExpressionKind.EQUAL) {
-			sb.append(abe.getLeft().toString());
-			sb.append("==");
-			sb.append(abe.getRight().toString());
-		} else if (abe.getKind() == ExpressionKind.NOT_EQUAL) {
-			sb.append(abe.getLeft().toString());
-			sb.append("!=");
-			sb.append(abe.getRight().toString());
-		} else if (abe.getKind() == ExpressionKind.ADDITION) {
-			sb.append(abe.getLeft().toString());
-			sb.append("+");
-			sb.append(abe.getRight().toString());
-		} else if (abe.getKind() == ExpressionKind.AUG_MULT) {
-			sb.append(abe.getLeft().toString());
-			sb.append("*=");
-			sb.append(abe.getRight().toString());
+		switch (abe.getKind()) {
+			case ASSIGNMENT:
+				sb.append(abe.getLeft().toString());
+				sb.append("=");
+				sb.append(abe.getRight().toString());
+				break;
+			case EQUAL:
+				sb.append(abe.getLeft().toString());
+				sb.append("==");
+				sb.append(abe.getRight().toString());
+				break;
+			case MULTIPLY:
+				sb.append(abe.getLeft().toString());
+				sb.append("*");
+				sb.append(abe.getRight().toString());
+				break;
+			case NOT_EQUAL:
+				sb.append(abe.getLeft().toString());
+				sb.append("!=");
+				sb.append(abe.getRight().toString());
+				break;
+			case ADDITION:
+				sb.append(abe.getLeft().toString());
+				sb.append("+");
+				sb.append(abe.getRight().toString());
+				break;
+			case AUG_PLUS:
+				break;
+			case AUG_MINUS:
+				break;
+			case AUG_MULT:
+				sb.append(abe.getLeft().toString());
+				sb.append("*=");
+				sb.append(abe.getRight().toString());
+				break;
+			case AUG_DIV:
+				sb.append(abe.getLeft().toString());
+				sb.append("/=");
+				sb.append(abe.getRight().toString());
+				break;
+			case AUG_MOD:
+				sb.append(abe.getLeft().toString());
+				sb.append("%=");
+				sb.append(abe.getRight().toString());
+				break;
+			case AUG_SR:
+				sb.append(abe.getLeft().toString());
+				sb.append(">>=");
+				sb.append(abe.getRight().toString());
+				break;
+			case AUG_BSR:
+				sb.append(abe.getLeft().toString());
+				sb.append(">>>=");
+				sb.append(abe.getRight().toString());
+				break;
+			case AUG_SL:
+				sb.append(abe.getLeft().toString());
+				sb.append("<<=");
+				sb.append(abe.getRight().toString());
+				break;
+			case AUG_BAND:
+				sb.append(abe.getLeft().toString());
+				sb.append("&=");
+				sb.append(abe.getRight().toString());
+				break;
+			case AUG_BXOR:
+				sb.append(abe.getLeft().toString());
+				sb.append("^=");
+				sb.append(abe.getRight().toString());
+				break;
+			case AUG_BOR:
+				sb.append(abe.getLeft().toString());
+				sb.append("|=");
+				sb.append(abe.getRight().toString());
+				break;
+			case IS_A:
+				sb.append(abe.getLeft().toString());
+				sb.append(" is_a ");
+				sb.append(abe.getRight().toString());
+				break;
+			case QIDENT:
+				break;
+			case INCREMENT:
+				sb.append("++");
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				break;
+			case DECREMENT:
+				sb.append("--");
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				break;
+			case NEGATION:
+				sb.append("-");
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				break;
+			case POSITIVITY:
+				sb.append("+");
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				break;
+			case POST_INCREMENT:
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				sb.append("++");
+				break;
+			case POST_DECREMENT:
+				sb.append(abe.getLeft().toString());
+				sb.append("--");
+				sb.append(abe.getRight().toString());
+				break;
+			case SUBTRACTION:
+				sb.append(abe.getLeft().toString());
+				sb.append("-");
+				sb.append(abe.getRight().toString());
+				break;
+			case BNOT:
+				sb.append(abe.getLeft().toString());
+				sb.append("~");
+				sb.append(abe.getRight().toString());
+				break;
+			case LNOT:
+				sb.append("!");
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				break;
+			case MODULO:
+				sb.append(abe.getLeft().toString());
+				sb.append("%");
+				sb.append(abe.getRight().toString());
+				break;
+			case DIVIDE:
+				sb.append(abe.getLeft().toString());
+				sb.append("/");
+				sb.append(abe.getRight().toString());
+				break;
+			case STRING_LITERAL:
+				break;
+			case PROCEDURE_CALL:
+				break;
+			case VARREF:
+				break;
+			case IDENT:
+				break;
+			case NUMERIC:
+				break;
+			case FLOAT:
+				break;
+			case BAND:
+				sb.append(abe.getLeft().toString());
+				sb.append(" & ");
+				sb.append(abe.getRight().toString());
+				break;
+			case BOR:
+				sb.append(abe.getLeft().toString());
+				sb.append(" | ");
+				sb.append(abe.getRight().toString());
+				break;
+			case BXOR:
+				sb.append(abe.getLeft().toString());
+				sb.append(" ^= ");
+				sb.append(abe.getRight().toString());
+				break;
+			case LT_:
+				sb.append(abe.getLeft().toString());
+				sb.append(" < ");
+				sb.append(abe.getRight().toString());
+				break;
+			case GT:
+				sb.append(abe.getLeft().toString());
+				sb.append(" > ");
+				sb.append(abe.getRight().toString());
+				break;
+			case LE:
+				sb.append(abe.getLeft().toString());
+				sb.append(" <= ");
+				sb.append(abe.getRight().toString());
+				break;
+			case GE:
+				sb.append(abe.getLeft().toString());
+				sb.append(" >= ");
+				sb.append(abe.getRight().toString());
+				break;
+			case INC:
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				sb.append("++");
+				break;
+			case DEC:
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				sb.append("--");
+				break;
+			case NEG:
+				sb.append("-");
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				break;
+			case POS:
+				sb.append("+");
+				sb.append(abe.getLeft().toString());
+				sb.append(abe.getRight().toString());
+				break;
+			case LAND:
+				sb.append(abe.getLeft().toString());
+				sb.append(" & ");
+				sb.append(abe.getRight().toString());
+				break;
+			case LOR:
+				sb.append(abe.getLeft().toString());
+				sb.append(" | ");
+				sb.append(abe.getRight().toString());
+				break;
+			case BSHIFTR:
+				sb.append(abe.getLeft().toString());
+				sb.append(" >>>= ");
+				sb.append(abe.getRight().toString());
+				break;
+			case LSHIFT:
+				sb.append(abe.getLeft().toString());
+				sb.append(" << ");
+				sb.append(abe.getRight().toString());
+				break;
+			case RSHIFT:
+				sb.append(abe.getLeft().toString());
+				sb.append(" >> ");
+				sb.append(abe.getRight().toString());
+				break;
+			case DOT_EXP:
+				sb.append(abe.getLeft().toString());
+				sb.append(" DOT_EXP ");
+				sb.append(abe.getRight().toString());
+				break;
+			case INDEX_OF:
+				sb.append(abe.getLeft().toString());
+				sb.append(" INDEX_OF ");
+				sb.append(abe.getRight().toString());
+				break;
+			case GET_ITEM:
+				sb.append(abe.getLeft().toString());
+				sb.append(" GET_ITEM ");
+				sb.append(abe.getRight().toString());
+				break;
+			case FUNC_EXPR:
+				sb.append(abe.getLeft().toString());
+				sb.append(" FUNC_EXPR ");
+				sb.append(abe.getRight().toString());
+				break;
+			case TO_EXPR:
+				sb.append(abe.getLeft().toString());
+				sb.append(" TO_EXPR ");
+				sb.append(abe.getRight().toString());
+				break;
 		}
 		return sb.toString();
 	}
