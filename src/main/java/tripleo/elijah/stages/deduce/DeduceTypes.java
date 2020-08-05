@@ -639,6 +639,8 @@ public class DeduceTypes {
 				final TypeName typeName = ((FormalArgListItem) element).tn;
 				if (typeName != null)
 					return new OS_Type(typeName);
+				else
+					throw new NotImplementedException();
 			} else if (element instanceof ClassStatement) {
 				return new OS_Type((ClassStatement) element);
 			} else if (element instanceof FunctionDef) {
