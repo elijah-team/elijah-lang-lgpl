@@ -5,6 +5,7 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
@@ -35,29 +36,36 @@ public class FuncExpr implements IExpression, OS_Element {
 		return typeName;
 	}
 
+	final FuncExprScope funcExprScope = new FuncExprScope(this);
+
 	public Scope scope() {
-		return new FuncExprScope();
+		return funcExprScope;
 	}
 
 	private List<String> docstrings = new ArrayList<String>();
 	private List<FunctionItem> items = new ArrayList<FunctionItem>();
 
-	final class FuncExprScope implements Scope {
+	final static class FuncExprScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
+		private final FuncExpr funcExpr;
+
+		public FuncExprScope(FuncExpr funcExpr) {
+			this.funcExpr = funcExpr;
+		}
 
 		@Override
 		public void add(StatementItem aItem) {
 			if (aItem instanceof FunctionItem)
-				items.add((FunctionItem) aItem);
+				funcExpr.items.add((FunctionItem) aItem);
 			else
-				System.err.println(String.format("adding false StatementItem %s",
+				System.err.println(String.format("adding false FunctionItem %s",
 					aItem.getClass().getName()));
 		}
 		
 		@Override
 		public void addDocString(Token aS) {
-			docstrings.add(aS.getText());
+			funcExpr.docstrings.add(aS.getText());
 		}
 		
 		@Override
@@ -97,7 +105,7 @@ public class FuncExpr implements IExpression, OS_Element {
 		@Override
 		public OS_Element getParent() {
 			// TODO Auto-generated method stub
-			return FuncExpr.this;
+			return funcExpr;
 		}
 		
 		
@@ -106,7 +114,7 @@ public class FuncExpr implements IExpression, OS_Element {
 	@Override
 	public void print_osi(TabbedOutputStream aTos) throws IOException {
 		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException();
 	}
 
 	/****** FOR IEXPRESSION ******/
@@ -117,7 +125,7 @@ public class FuncExpr implements IExpression, OS_Element {
 
 	@Override
 	public void setKind(ExpressionKind aKind) {
-
+		throw new NotImplementedException();
 	}
 
 	@Override
@@ -127,7 +135,7 @@ public class FuncExpr implements IExpression, OS_Element {
 
 	@Override
 	public void setLeft(IExpression iexpression) {
-
+		throw new NotImplementedException();
 	}
 
 	@Override
@@ -143,30 +151,33 @@ public class FuncExpr implements IExpression, OS_Element {
 	/************* FOR THE OTHER ONE ******************/
 	@Override
 	public void setType(OS_Type deducedExpression) {
-
+		throw new NotImplementedException();
 	}
 
 	@Override
 	public OS_Type getType() {
-		return null;
+		throw new NotImplementedException();
+//		return null;
 	}
 
 	@Override
 	public void visitGen(ICodeGen visit) {
 		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException();
 	}
 
 	@Override
 	public OS_Element getParent() {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
+//		return null;
 	}
 
 	@Override
 	public Context getContext() {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
+//		return null;
 	}
 }
 
