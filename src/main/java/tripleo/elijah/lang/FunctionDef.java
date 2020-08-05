@@ -97,8 +97,13 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 			// TODO Auto-generated method stub
 			return FunctionDef.this;
 		}
-		
-		
+
+		@Override
+		public OS_Element getElement() {
+			return FunctionDef.this;
+		}
+
+
 	}
 
 	public Attached _a = new Attached(new FunctionContext(this));

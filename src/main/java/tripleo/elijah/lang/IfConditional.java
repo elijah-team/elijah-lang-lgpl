@@ -48,8 +48,13 @@ public class IfConditional implements StatementItem, FunctionItem {
 			throw new NotImplementedException();
 //			return null;
 		}
-		
-		@Override
+
+	    @Override
+	    public OS_Element getElement() {
+		    return IfConditional.this;
+	    }
+
+	    @Override
 		public StatementClosure statementClosure() {
 			return new AbstractStatementClosure(this); // TODO
 		}

@@ -71,6 +71,11 @@ public class FuncExpr implements IExpression, OS_Element {
 		}
 
 		@Override
+		public OS_Element getElement() {
+			return funcExpr;
+		}
+
+		@Override
 		public StatementClosure statementClosure() {
 			return asc;
 		}

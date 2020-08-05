@@ -111,6 +111,11 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 			}
 
 			@Override
+			public OS_Element getElement() {
+				return NamespaceStatement.this;
+			}
+
+			@Override
 			public void addDocString(Token s1) {
 				NamespaceStatement.this.addDocString(s1);
 			}

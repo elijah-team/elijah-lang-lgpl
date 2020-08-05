@@ -114,6 +114,11 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
+		public OS_Element getElement() {
+			return MatchConditional.this;
+		}
+
+		@Override
 		public StatementClosure statementClosure() {
 			return asc;
 		}
