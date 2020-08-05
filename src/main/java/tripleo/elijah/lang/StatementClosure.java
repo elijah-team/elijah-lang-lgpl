@@ -16,7 +16,7 @@ public interface StatementClosure {
 
 	Loop loop();
 
-	StatementClosure procCallExpr();
+//	StatementClosure procCallExpr();
 
 	void constructExpression(IExpression aExpr, FormalArgList aO);
 

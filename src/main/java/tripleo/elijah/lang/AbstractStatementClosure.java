@@ -29,7 +29,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		parent = aParent;
 	}
 
-	public AbstractStatementClosure(ClassStatement classStatement) {
+	public AbstractStatementClosure(final ClassStatement classStatement) {
 		// TODO check final member
 		realParent = classStatement;
 		parent = new Scope() {
@@ -109,12 +109,14 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		add(loop);
 		return loop;
 	}
+/*
 	@Override
 	public StatementClosure procCallExpr() {
 		pcex=new AbstractStatementClosure(parent); //TODO:
 //		add(pcex);
 		return pcex;
 	}
+*/
 
 	@Override
 	public ProcedureCallExpression procedureCallExpression() {
