@@ -250,12 +250,12 @@ public class DeduceTypes {
 	}
 
 	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
-		System.err.println(String.format("75 %s", pce.getType()));
+//		System.err.println(String.format("75 %s", pce.getType()));
 		try {
 			deduceProcedureCall_LEFT(pce, ctx);
 //			deduceProcedureCall_ARGS(pce, ctx);
 		} finally {
-			System.err.println(String.format("76 %s", pce.getType()));
+//			System.err.println(String.format("76 %s", pce.getType()));
 		}
 	}
 
