@@ -18,7 +18,7 @@ namespace /*__MODULE__*/ {
   }
   factorial_i(i: u64) -> u64 {
      var acc = 1
-     iterate 2 to i with num {
+     iterate from 2 to i with num {
         acc *= num
      }
      // BUG: Result = acc
