@@ -97,19 +97,17 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 
 			@Override
 			public void add(StatementItem aItem) {
-				items.add((ClassItem) aItem);
+				NamespaceStatement.this.add((OS_Element) aItem);
 			}
 
 			@Override
 			public TypeAliasExpression typeAlias() {
-				throw new NotImplementedException();
-//				return null;
+				return NamespaceStatement.this.typeAlias();
 			}
 
 			@Override
 			public InvariantStatement invariantStatement() {
-				throw new NotImplementedException();
-//				return null;
+				return NamespaceStatement.this.invariantStatement();
 			}
 
 			@Override
@@ -119,10 +117,10 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		});
 	}
 
-	public TypeAliasExpression typeAlias() { 
+	public TypeAliasExpression typeAlias() {
 		throw new NotImplementedException();
 	}
-	
+
 	public InvariantStatement invariantStatement() {
 		throw new NotImplementedException();
 	}
