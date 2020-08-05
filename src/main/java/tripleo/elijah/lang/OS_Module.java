@@ -1,14 +1,14 @@
 /*
  * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
- * 
- * The contents of this library are released under the LGPL licence v3, 
+ *
+ * The contents of this library are released under the LGPL licence v3,
  * the GNU Lesser General Public License text was downloaded from
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
- * 
+ *
  */
 /*
  * Created on Sep 1, 2005 8:16:32 PM
- * 
+ *
  * $Id$
  *
  */
@@ -31,19 +31,18 @@ import java.util.Stack;
 
 public class OS_Module implements OS_Element, OS_Container {
 
-	private List<IndexingItem> indexingItems=new ArrayList<IndexingItem>();
-	public List<ModuleItem> items=new ArrayList<ModuleItem>();
 	private final Stack<Qualident> packageNames_q = new Stack<Qualident>();
+	public List<ModuleItem> items = new ArrayList<ModuleItem>();
 	public Attached _a = new Attached(new ModuleContext(this));
-
-//	public String moduleName="default";
-
 	public OS_Module prelude;
-	private String _fileName;
-	public Compilation parent;
 
-	public void setParent(@NotNull Compilation parent) {
-		this.parent = parent;
+	//	public String moduleName="default";
+	public Compilation parent;
+	private List<IndexingItem> indexingItems = new ArrayList<IndexingItem>();
+	private String _fileName;
+
+	public void addIndexingItem(Token i1, IExpression c1) {
+		indexingItems.add(new IndexingItem(i1, c1));
 	}
 
 //	public void add(ModuleItem aItem) {
@@ -51,33 +50,6 @@ public class OS_Module implements OS_Element, OS_Container {
 ////			((ClassStatement)aItem).setPackageName(packageNames_q.peek());
 //		items.add(aItem);
 //	}
-	
-	@Override
-	public void add(OS_Element anElement) {
-		if (!(anElement instanceof ModuleItem)) {
-			parent.eee.info(String.format(
-					"[Module#add] adding %s to OS_Module", anElement.getClass().getName()));
-		}
-		if (anElement instanceof OS_Element2) {
-			final String element_name = ((OS_Element2) anElement).name();
-			// TODO make and check a nametable, will fail for imports
-			if (element_name != null)
-				for (ModuleItem item : items) {
-					if (item instanceof OS_Element2)
-						if (element_name.equals(((OS_Element2) item).name())) {
-							parent.eee.reportError(String.format(
-									"[Module#add] Already has a member by the name of ",
-									element_name));
-							return;
-						}
-			}
-		}
-		items.add((ModuleItem) anElement);
-	}
-
-	public void addIndexingItem(Token i1, IExpression c1) {
-		indexingItems.add(new IndexingItem(i1, c1));
-	}
 
 	public OS_Element findClass(String className) {
 		for (ModuleItem item : items) {
@@ -93,29 +65,16 @@ public class OS_Module implements OS_Element, OS_Container {
 //		parent.put_module(_fileName, this);
 	}
 
-	@Override
-	public Context getContext() {
-		return _a._context;
-	}
-	
 	public String getFileName() {
 		return _fileName;
 	}
-	
-	public Collection<ModuleItem> getItems() {
-		return items;
+
+	public void setFileName(String fileName) {
+		this._fileName = fileName;
 	}
 
-	/**
-	 * A module has no parent which is an element (not even a package - this is not Java).<br>
-	 * If you want the Compilation use the member {@link #parent}
-	 *
-	 * @return null
-	 */
-	/**@ ensures \result == null */
-	@Override
-	public OS_Element getParent() {
-		return null;
+	public Collection<ModuleItem> getItems() {
+		return items;
 	}
 
 	public boolean hasClass(String className) {
@@ -134,16 +93,50 @@ public class OS_Module implements OS_Element, OS_Container {
 //		return null;
 	}
 
+	/**
+	 * A module has no parent which is an element (not even a package - this is not Java).<br>
+	 * If you want the Compilation use the member {@link #parent}
+	 *
+	 * @return null
+	 */
+
+	@Override
+	public void add(OS_Element anElement) {
+		if (!(anElement instanceof ModuleItem)) {
+			parent.eee.info(String.format(
+					"[Module#add] adding %s to OS_Module", anElement.getClass().getName()));
+		}
+		if (anElement instanceof OS_Element2) {
+			final String element_name = ((OS_Element2) anElement).name();
+			// TODO make and check a nametable, will fail for imports
+			if (element_name == null) {
+//				throw new IllegalArgumentException("element2 with null name");
+				System.err.println(String.format("OS_Element2 (%s) with null name", anElement));
+			} else {
+				for (ModuleItem item : items) {
+					if (item instanceof OS_Element2)
+						if (element_name.equals(((OS_Element2) item).name())) {
+							parent.eee.reportWarning(String.format(
+									"[Module#add] Already has a member by the name of %s",
+									element_name));
+//							return;
+						}
+				}
+			}
+		}
+		items.add((ModuleItem) anElement);
+	}
+
 	public void modify_namespace(Qualident q, NamespaceModify aModification) { // TODO aModification is unused
 //		NotImplementedException.raise();
-		System.err.println("[OS_Module#modify_namespace] " + q + " "+ aModification);
-		getContext().add(null,  q);
+		System.err.println("[OS_Module#modify_namespace] " + q + " " + aModification);
+		getContext().add(null, q);
 	}
 
 	public void modify_namespace(ImportStatement imp, Qualident q, NamespaceModify aModification) { // TODO aModification is unused
 //		NotImplementedException.raise();
-		System.err.println("[OS_Module#modify_namespace] " + imp + " " + q + " "+ aModification);
-		getContext().add(imp,  q); // TODO prolly wrong; do a second pass later to add definition...?
+		System.err.println("[OS_Module#modify_namespace] " + imp + " " + q + " " + aModification);
+		getContext().add(imp, q); // TODO prolly wrong; do a second pass later to add definition...?
 	}
 
 	@Override
@@ -162,6 +155,28 @@ public class OS_Module implements OS_Element, OS_Container {
 		}
 	}
 
+	@Override
+	public void visitGen(ICodeGen visit) {
+		visit.addModule(this);
+	}
+
+	/**
+	 * @ ensures \result == null
+	 */
+	@Override
+	public OS_Element getParent() {
+		return null;
+	}
+
+	public void setParent(@NotNull Compilation parent) {
+		this.parent = parent;
+	}
+
+	@Override
+	public Context getContext() {
+		return _a._context;
+	}
+
 	/**
 	 * The last package name declared in the source file
 	 *
@@ -176,15 +191,6 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	public void pushPackageName(Qualident xyz) {
 		packageNames_q.push(xyz);
-	}
-
-	public void setFileName(String fileName) {
-		this._fileName = fileName;
-	}
-
-	@Override
-	public void visitGen(ICodeGen visit) {
-		visit.addModule(this);
 	}
 
 	/**
