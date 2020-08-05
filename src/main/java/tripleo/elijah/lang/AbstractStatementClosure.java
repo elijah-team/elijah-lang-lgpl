@@ -10,6 +10,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import org.jetbrains.annotations.Contract;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
@@ -146,7 +147,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		add(new YieldExpression(aExpr));
 	}
 
-	@org.jetbrains.annotations.Contract("_ -> param1")
+	@Contract("_ -> param1")
 	private StatementItem add(StatementItem aItem) {
 		parent.add(aItem);
 		return aItem;
