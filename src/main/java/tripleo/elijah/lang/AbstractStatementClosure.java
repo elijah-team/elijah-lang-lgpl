@@ -78,7 +78,12 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 //				// TODO Auto-generated method stub
 //				return null;
 			}
-			
+
+			@Override
+			public OS_Element getElement() {
+				return realParent;
+			}
+
 		};
 	}
 
@@ -105,7 +110,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	}
 	@Override
 	public Loop loop() {
-		loop = new Loop(getParent());
+		loop = new Loop(this.parent.getElement());
 		add(loop);
 		return loop;
 	}

@@ -8,14 +8,14 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.Documentable;
+import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.TabbedOutputStream;
+
 import java.io.IOException;
 
 // Referenced classes of package pak2:
 //			StatementClosure, BlockStatement
-
-import tripleo.elijah.Documentable;
-import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.TabbedOutputStream;
 
 public interface Scope extends Documentable, OS_Element {
 
@@ -54,4 +54,10 @@ public interface Scope extends Documentable, OS_Element {
 		// TODO Auto-generated method stub
 		
 	}
+
+	OS_Element getElement();
 }
+
+//
+//
+//
