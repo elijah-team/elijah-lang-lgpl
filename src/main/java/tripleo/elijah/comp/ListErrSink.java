@@ -35,6 +35,11 @@ public class ListErrSink implements ErrSink {
 	}
 
 	@Override
+	public void reportWarning(String s) {
+		System.err.println(String.format("WARNING: %s", s));
+	}
+
+	@Override
 	public int errorCount() {
 		return _errorCount;
 	}
