@@ -59,7 +59,7 @@ public class ExpandFunctions {
 			} else if (element instanceof ClassStatement) {
 //				((ClassStatement) element).visitGen(this);
 				System.err.println("91 " + element.getClass().getName());
-				addClassItem(element, parent);
+				//addClassItem(element, parent); // TODO infintie recursion
 			} else {
 				System.err.println("[ExpandFunctions#addClassItem] "+element.getClass().getName());
 			}
