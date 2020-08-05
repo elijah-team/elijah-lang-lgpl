@@ -33,7 +33,8 @@ public class NamespaceContext extends Context {
 		for (ClassItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 					    !(item instanceof NamespaceStatement) &&
-					    !(item instanceof VariableSequence)
+					    !(item instanceof VariableSequence) &&
+						!(item instanceof FunctionDef)
 			) continue;
 			if (item instanceof OS_Element2) {
 				if (((OS_Element2) item).name().equals(name)) {
