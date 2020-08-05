@@ -12,6 +12,8 @@ import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.DefFunctionDef;
 import tripleo.elijah.lang.LookupResultList;
 
+import java.util.List;
+
 /**
  * @author Tripleo
  *
@@ -30,10 +32,12 @@ public class DefFunctionContext extends Context {
 	 * 
 	 * @param name
 	 * @param level
+	 * @param alreadySearched
 	 * @return
 	 */
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
+	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched) {
 //		final LookupResultList Result = new LookupResultList();
+		alreadySearched.add(carrier.getContext());
 		return Result;
 	}
 

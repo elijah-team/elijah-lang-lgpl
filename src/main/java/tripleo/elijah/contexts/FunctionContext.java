@@ -30,8 +30,8 @@ public class FunctionContext extends Context {
 		carrier = functionDef;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
-//		final LookupResultList Result = new LookupResultList();
+	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched) {
+		alreadySearched.add(carrier.getContext());
 		for (FunctionItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) &&
@@ -54,8 +54,11 @@ public class FunctionContext extends Context {
 				Result.add(name, level, arg);
 			}
 		}
-		if (carrier.getParent() != null)
-			carrier.getParent().getContext().lookup(name, level+1, Result);
+		if (carrier.getParent() != null) {
+			final Context context = carrier.getParent().getContext();
+			if (!alreadySearched.contains(context))
+				context.lookup(name, level + 1, Result, alreadySearched);
+		}
 		return Result;
 	}
 

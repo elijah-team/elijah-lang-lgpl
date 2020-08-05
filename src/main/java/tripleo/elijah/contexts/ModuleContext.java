@@ -10,6 +10,8 @@ package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.*;
 
+import java.util.List;
+
 /**
  * @author Tripleo
  *
@@ -23,7 +25,8 @@ public class ModuleContext extends Context {
 		this.carrier = module;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
+	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched) {
+		alreadySearched.add(carrier.getContext());
 		// TODO look all this up in a table, not by iteration
 		for (ModuleItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
@@ -40,12 +43,12 @@ public class ModuleContext extends Context {
 			}
 			if (item instanceof NamespaceStatement && ((NamespaceStatement) item).getKind() == NamespaceTypes.MODULE) {
 				final NamespaceContext namespaceContext = (NamespaceContext) item.getContext();
-				namespaceContext.lookup(name, level, Result);
+				namespaceContext.lookup(name, level, Result, alreadySearched);
 			}
 		}
 		if (carrier.prelude == null)
 			return Result;
-		return carrier.prelude.getContext().lookup(name, level+1, Result);
+		return carrier.prelude.getContext().lookup(name, level+1, Result, alreadySearched);
 	}
 
 }

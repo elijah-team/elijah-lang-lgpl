@@ -18,6 +18,8 @@ import tripleo.elijah.lang.OS_Element2;
 import tripleo.elijah.lang.VariableSequence;
 import tripleo.elijah.lang.VariableStatement;
 
+import java.util.List;
+
 
 /**
  * @author Tripleo
@@ -38,8 +40,8 @@ public class ClassContext extends Context {
 		
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
-//		final LookupResultList Result = new LookupResultList();
+	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched) {
+		alreadySearched.add(carrier.getContext());
 		for (ClassItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) &&
@@ -67,8 +69,11 @@ public class ClassContext extends Context {
 				}
 			}*/
 		}
-		if (carrier.getParent() != null)
-			carrier.getParent().getContext().lookup(name, level+1, Result);
+		if (carrier.getParent() != null) {
+			final Context context = carrier.getParent().getContext();
+			if (!alreadySearched.contains(context))
+				context.lookup(name, level + 1, Result, alreadySearched);
+		}
 		return Result;
 		
 	}

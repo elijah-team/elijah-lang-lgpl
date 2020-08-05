@@ -11,7 +11,9 @@ package tripleo.elijah.lang;
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 // TODO is this right, or should be interface??
@@ -28,10 +30,10 @@ public abstract class Context {
 	
 	public LookupResultList lookup(String name) {
 		final LookupResultList Result = new LookupResultList();
-		return lookup(name, 0, Result);
+		return lookup(name, 0, Result, new ArrayList<Context>());
 	}
 	
-	public abstract LookupResultList lookup(String name, int level, LookupResultList Result); // {
+	public abstract LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched); // {
 //		final LookupResultList Result = new LookupResultList();
 //
 //		/*

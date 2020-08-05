@@ -13,6 +13,8 @@ package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.*;
 
+import java.util.List;
+
 /**
  * @author Tripleo
  *
@@ -26,7 +28,8 @@ public class NamespaceContext extends Context {
 		carrier = namespaceStatement;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
+	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched) {
+		alreadySearched.add(carrier.getContext());
 		for (ClassItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 					    !(item instanceof NamespaceStatement) &&
@@ -45,8 +48,11 @@ public class NamespaceContext extends Context {
 				}
 			}
 		}
-		if (carrier.getParent() != null)
-			carrier.getParent().getContext().lookup(name, level+1, Result);
+		if (carrier.getParent() != null) {
+			final Context context = carrier.getParent().getContext();
+			if (!alreadySearched.contains(context))
+				context.lookup(name, level + 1, Result, alreadySearched);
+		}
 		return Result;
 
 	}
