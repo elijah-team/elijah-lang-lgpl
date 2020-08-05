@@ -129,7 +129,12 @@ private Attached _a = new Attached(new LoopContext(this));
 		public InvariantStatement invariantStatement() {
 			throw new NotImplementedException();
 		}
-		
+
+		@Override
+		public OS_Element getElement() {
+			return Loop.this;
+		}
+
 		@Override
 		public void addDocString(Token aS) {
 			docstrings.add(aS.getText());
