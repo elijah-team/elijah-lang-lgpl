@@ -9,6 +9,10 @@
 package tripleo.elijah.stages.deduce;
 
 import antlr.Token;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.*;
@@ -442,15 +446,25 @@ public class DeduceTypes {
 		final LookupResultList lrl = parent.getContext().lookup(text);
 		System.out.println("98 "+/*n*/iv);
 		if (lrl.results().size() == 0 )
-			System.err.println("96 no results for "+text);
+			System.err.println("196 no results for "+text);
 		for (LookupResult n: lrl.results()) {
-			System.out.println("97 "+n);
+			System.out.println("197 "+n);
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
+/*
 		List<OS_Type> q = expressions.stream()
 				.map(n -> deduceExpression(n, parent.getContext()))
 				.collect(Collectors.toList());
+*/
+		Collection<OS_Type> qq = Collections2.transform(expressions, new Function<IExpression, OS_Type>() {
+			@Override
+			public @Nullable OS_Type apply(@Nullable IExpression input) {
+				return deduceExpression(input, parent.getContext());
+			}
+		});
+		List<OS_Type> q = Lists.newArrayList(qq);
+
 		System.out.println("90 "+q);
 		NotImplementedException.raise();
 	}
@@ -571,9 +585,9 @@ public class DeduceTypes {
 		final LookupResultList lrl = parent.getContext().lookup(text);
 		System.out.println("98 "+/*n*/iv);
 		if (lrl.results().size() == 0 )
-			System.err.println("96 no results for "+text);
+			System.err.println("296 no results for "+text);
 		for (LookupResult n: lrl.results()) {
-			System.out.println("97 "+n);
+			System.out.println("297 "+n);
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
@@ -591,9 +605,9 @@ public class DeduceTypes {
 		final LookupResultList lrl = parent.getContext().lookup(text);
 		System.out.println("98 "+/*n*/iv);
 		if (lrl.results().size() == 0 )
-			System.err.println("96 no results for "+text);
+			System.err.println("396 no results for "+text);
 		for (LookupResult n: lrl.results()) {
-			System.out.println("97 "+n);
+			System.out.println("397 "+n);
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
@@ -611,9 +625,9 @@ public class DeduceTypes {
 		final LookupResultList lrl = parent.getContext().lookup(text);
 		System.out.println("98 "+/*n*/iv);
 		if (lrl.results().size() == 0 )
-			System.err.println("96 no results for "+text);
+			System.err.println("496 no results for "+text);
 		for (LookupResult n: lrl.results()) {
-			System.out.println("97 "+n);
+			System.out.println("497 "+n);
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
