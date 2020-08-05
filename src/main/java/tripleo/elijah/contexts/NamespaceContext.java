@@ -20,43 +20,13 @@ import tripleo.elijah.lang.*;
  */
 public class NamespaceContext extends Context {
 
-	private NamespaceStatement carrier;
+	public NamespaceStatement carrier;
 
 	public NamespaceContext(NamespaceStatement namespaceStatement) {
 		carrier = namespaceStatement;
 	}
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
-//		final LookupResultList Result = new LookupResultList();
-		for (ClassItem item: carrier.getItems()) {
-			if (!(item instanceof ClassStatement) &&
-				!(item instanceof NamespaceStatement) &&
-				!(item instanceof VariableSequence)
-			) continue;
-			if (item instanceof OS_Element2) {
-				if (((OS_Element2) item).name().equals(name)) {
-					Result.add(name, level, item);
-				}
-			}
-			if (item instanceof VariableSequence) {
-				System.out.println("[NamespaceContext#lookup] VariableSequence "+item);
-				for (VariableStatement vs : ((VariableSequence) item).items()) {
-					if (vs.getName().equals(name))
-						Result.add(name, level, vs);
-				}
-			}/* else if (((OS_Element2)item).name() != null) {
-				if (((OS_Element2)item).name().equals(name)) {
-					Result.add(name, level, item);
-				}
-			}*/
-		}
-		if (carrier.getParent() != null)
-			carrier.getParent().getContext().lookup(name, level+1, Result);
-		return Result;
-		
-	}
-
-	public void lookup(String name, int level, LookupResultList Result, OS_Module carrier1) {
 		for (ClassItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 					    !(item instanceof NamespaceStatement) &&
@@ -79,8 +49,10 @@ public class NamespaceContext extends Context {
 				}
 			}*/
 		}
-		if (carrier.getParent() != carrier1 && carrier.getParent() != null)
+		if (carrier.getParent() != null)
 			carrier.getParent().getContext().lookup(name, level+1, Result);
-//		return Result;
+		return Result;
+
 	}
+
 }

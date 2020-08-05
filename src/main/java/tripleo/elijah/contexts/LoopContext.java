@@ -31,6 +31,7 @@ public class LoopContext extends Context {
 	}
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result) {
+//		final LookupResultList Result = new LookupResultList();
 		// TODO implement me
 //		throw new NotImplementedException();
 //		final LookupResultList Result = new LookupResultList();

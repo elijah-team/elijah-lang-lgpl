@@ -57,10 +57,9 @@ public class FunctionContext extends Context {
 		if (carrier.getParent() != null)
 			carrier.getParent().getContext().lookup(name, level+1, Result);
 		return Result;
-		
 	}
 
-    public IntroducedVariable introduceVariable(IExpression variable) {
+	public IntroducedVariable introduceVariable(IExpression variable) {
 //		System.out.println("[#introduceVariable] "+variable);
 		final IntroducedVariable introducedVariable = new IntroducedVariable(variable);
 		variableTable.add(introducedVariable);

@@ -29,7 +29,7 @@ public class ModuleContext extends Context {
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) //&&
 //				!(item instanceof VariableSequence)
-			// TODO what about imports
+				// TODO what about imports
 			) continue;
 			if (item instanceof OS_Element2) {
 				if (((OS_Element2) item).name().equals(name)) {
@@ -39,7 +39,8 @@ public class ModuleContext extends Context {
 				}
 			}
 			if (item instanceof NamespaceStatement && ((NamespaceStatement) item).getKind() == NamespaceTypes.MODULE) {
-				((NamespaceContext)((NamespaceStatement)item).getContext()).lookup(name, level, Result, carrier);
+				final NamespaceContext namespaceContext = (NamespaceContext) item.getContext();
+				namespaceContext.lookup(name, level, Result);
 			}
 		}
 		if (carrier.prelude == null)
