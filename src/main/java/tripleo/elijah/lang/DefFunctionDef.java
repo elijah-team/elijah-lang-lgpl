@@ -95,7 +95,7 @@ public class DefFunctionDef implements ClassItem {
 
 	}
 	
-	private final class FunctionDefScope implements Scope {
+	private final class DefFunctionDefScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 
@@ -104,7 +104,7 @@ public class DefFunctionDef implements ClassItem {
 			if (aItem instanceof FunctionItem)
 				items.add((FunctionItem) aItem);
 			else
-				System.err.println(String.format("adding false StatementItem %s",
+				System.err.println(String.format("105 adding false StatementItem %s to DefFunctionDef",
 					aItem.getClass().getName()));
 		}
 		
@@ -117,7 +117,12 @@ public class DefFunctionDef implements ClassItem {
 		public InvariantStatement invariantStatement() {
 			return null;
 		}
-		
+
+		@Override
+		public OS_Element getElement() {
+			return DefFunctionDef.this;
+		}
+
 		@Override
 		public void addDocString(Token aS) {
 			docstrings.add(aS.getText());
@@ -146,7 +151,7 @@ public class DefFunctionDef implements ClassItem {
 	private final FormalArgList mFal = new FormalArgList();
 //	private FunctionDefScope mScope;
 	private OS_Element/*ClassStatement*/ parent;
-	private final FunctionDefScope mScope2 = new FunctionDefScope();
+	private final DefFunctionDefScope mScope2 = new DefFunctionDefScope();
 	private TypeName _returnType = new RegularTypeName();
 	private Attached _a = new Attached(new DefFunctionContext(this));
 
