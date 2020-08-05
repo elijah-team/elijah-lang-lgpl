@@ -116,9 +116,11 @@ public class OS_Module implements OS_Element, OS_Container {
 				for (ModuleItem item : items) {
 					if (item instanceof OS_Element2)
 						if (element_name.equals(((OS_Element2) item).name())) {
+/*
 							parent.eee.reportWarning(String.format(
 									"[Module#add] Already has a member by the name of %s",
 									element_name));
+*/
 //							return;
 						}
 				}
