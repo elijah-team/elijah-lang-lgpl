@@ -281,16 +281,16 @@ public class ExpandFunctions {
 		final LookupResultList lrl = parent.getContext().lookup(text);
 		System.out.println("98 "+/*n*/iv);
 		if (lrl.results().size() == 0 )
-			System.err.println("96 no results for "+text);
+			System.err.println("596 no results for "+text);
 		for (LookupResult n: lrl.results()) {
-			System.out.println("97 "+n);
+			System.out.println("597 "+n);
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
 		List<FunctionPrelimInstruction> q = expressions.stream()
 				.map(n -> expandExpression(n, fc))
 				.collect(Collectors.toList());
-		System.out.println("90 "+q);
+		System.out.println("590 "+q);
 		NotImplementedException.raise();
 	}
 
