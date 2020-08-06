@@ -523,7 +523,7 @@ postfixExpression returns [IExpression ee]
 		|	lb:LBRACK/*^*/ /*{#lb.setType(INDEX_OP);}*/ expr=expression rb:RBRACK/*!*/
 			{ee=new GetItemExpression(ee, expr);((GetItemExpression)ee).parens(lb,rb);}
 			( BECOMES expr=expression {ee=new SetItemExpression((GetItemExpression)ee, expr);}
-			)
+			)?
 
 			// method invocation
 		|	lp:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/

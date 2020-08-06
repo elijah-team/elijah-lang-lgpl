@@ -2620,14 +2620,22 @@ public ElijjahParser(ParserSharedInputState state) {
 						ee=new GetItemExpression(ee, expr);((GetItemExpression)ee).parens(lb,rb);
 					}
 					{
-					match(BECOMES);
-					expr=expression();
-					if ( inputState.guessing==0 ) {
-						ee=new SetItemExpression((GetItemExpression)ee, expr);
+					if ((LA(1)==BECOMES) && (_tokenSet_24.member(LA(2)))) {
+						match(BECOMES);
+						expr=expression();
+						if ( inputState.guessing==0 ) {
+							ee=new SetItemExpression((GetItemExpression)ee, expr);
+						}
 					}
+					else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_40.member(LA(2)))) {
+					}
+					else {
+						throw new NoViableAltException(LT(1), getFilename());
+					}
+					
 					}
 				}
-				else if ((LA(1)==LPAREN) && (_tokenSet_40.member(LA(2)))) {
+				else if ((LA(1)==LPAREN) && (_tokenSet_41.member(LA(2)))) {
 					lp = LT(1);
 					match(LPAREN);
 					{
@@ -2688,7 +2696,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				de = LT(1);
 				match(DEC);
 			}
-			else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_41.member(LA(2)))) {
+			else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_40.member(LA(2)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -2720,7 +2728,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				typeName(tc.typeName());
 			}
-			else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_41.member(LA(2)))) {
+			else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_40.member(LA(2)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -3193,7 +3201,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					ee = ExpressionBuilder.build(ee, ek, e2);
 				}
 			}
-			else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_41.member(LA(2)))) {
+			else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_40.member(LA(2)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -3831,7 +3839,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=shiftExpression();
 			{
-			if ((_tokenSet_8.member(LA(1))) && (_tokenSet_41.member(LA(2)))) {
+			if ((_tokenSet_8.member(LA(1))) && (_tokenSet_40.member(LA(2)))) {
 				{
 				_loop148:
 				do {
@@ -4354,7 +4362,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				ee=new DotExpression(e1, new IdentExpression(e));
 			}
 			{
-			if ((LA(1)==LPAREN) && (_tokenSet_40.member(LA(2)))) {
+			if ((LA(1)==LPAREN) && (_tokenSet_41.member(LA(2)))) {
 				lp2 = LT(1);
 				match(LPAREN);
 				{
@@ -4400,7 +4408,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				match(RPAREN);
 			}
-			else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_41.member(LA(2)))) {
+			else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_40.member(LA(2)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -4461,7 +4469,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					}
 					typeName(pc.returnType());
 				}
-				else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_41.member(LA(2)))) {
+				else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_40.member(LA(2)))) {
 				}
 				else {
 					throw new NoViableAltException(LT(1), getFilename());
@@ -5156,9 +5164,9 @@ public ElijjahParser(ParserSharedInputState state) {
 	public static final BitSet _tokenSet_38 = new BitSet(_tokenSet_38_data_);
 	private static final long _tokenSet_39_data_[] = { 4167701094350080L, 69268746010624L, 0L, 0L };
 	public static final BitSet _tokenSet_39 = new BitSet(_tokenSet_39_data_);
-	private static final long _tokenSet_40_data_[] = { 29375744L, 549269274624L, 0L, 0L };
+	private static final long _tokenSet_40_data_[] = { -1148417904979476494L, 1125899906842623L, 0L, 0L };
 	public static final BitSet _tokenSet_40 = new BitSet(_tokenSet_40_data_);
-	private static final long _tokenSet_41_data_[] = { -1148417904979476494L, 1125899906842623L, 0L, 0L };
+	private static final long _tokenSet_41_data_[] = { 29375744L, 549269274624L, 0L, 0L };
 	public static final BitSet _tokenSet_41 = new BitSet(_tokenSet_41_data_);
 	private static final long _tokenSet_42_data_[] = { 20987136L, 1099025088512L, 0L, 0L };
 	public static final BitSet _tokenSet_42 = new BitSet(_tokenSet_42_data_);
