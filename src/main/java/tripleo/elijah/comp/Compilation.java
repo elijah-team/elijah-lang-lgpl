@@ -101,11 +101,8 @@ public class Compilation {
 //		        		module.visitGen(visit);
 					}
 				}
-//				final JavaCodeGen visit = new JavaCodeGen();
-//				module.visitGen(visit);
-
 			} else {
-				System.err.println("Usage: eljc [--showtree] [-sE] <directory or file names>");
+				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or file names>");
 			}
 		} catch (Exception e) {
 			errSink.exception(e);
