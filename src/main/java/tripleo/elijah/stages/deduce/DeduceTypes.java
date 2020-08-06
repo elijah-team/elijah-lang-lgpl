@@ -181,6 +181,10 @@ public class DeduceTypes {
 	}
 
 	private void addFunctionItem_Loop_EXPR_TYPE(Loop loop, FunctionDef parent) {
+		//
+		//   DON'T MODIFY NAMESPACE
+		//
+/*
 		if (loop.getIterName() != null) {
 			parent.getContext().add(
 					new IdentExpression(Helpers.makeToken(loop.getIterName())),
@@ -189,6 +193,7 @@ public class DeduceTypes {
 			System.out.println("loop.getIterName() == null");
 //				String varname="vt"+loop.getIterName();
 		}
+*/
 		ToExpression toex;
 		if (loop.getFromPart() == null)
 			toex = new ToExpression(new NumericExpression(0), loop.getToPart());
