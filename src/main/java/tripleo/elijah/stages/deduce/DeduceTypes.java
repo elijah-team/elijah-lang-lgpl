@@ -11,7 +11,6 @@ package tripleo.elijah.stages.deduce;
 import antlr.Token;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.nodes.Helpers;
@@ -110,12 +109,15 @@ public class DeduceTypes {
 		if (element instanceof VariableSequence) {
 //			fd._a.setCode(nextFunctionCode());
 //			parent._a.getContext().add(element, null);
-			for (VariableStatement ii : ((VariableSequence) element).items())
-				addFunctionItem_deduceVariableStatement(parent, ii);
+			for (VariableStatement ii : ((VariableSequence) element).items()) {
+//				addFunctionItem_deduceVariableStatement(parent, ii);
+				deduceVariableStatement(ii, parent);
+//				ttt=deduceExpression(ii, parent.getContext());
+			}
 		}
 		else if (element instanceof ProcedureCallExpression) {
 			ProcedureCallExpression pce = (ProcedureCallExpression) element;
-			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
+			System.out.println(String.format("91.5 %s(%s);", pce./*target*/getLeft(), pce.exprList()));
 		} else if (element instanceof Loop) {
 			addFunctionItem_Loop((Loop) element, parent);
 		} else if (element instanceof IfConditional) {
@@ -216,7 +218,7 @@ public class DeduceTypes {
 //						fd._a.setCode(nextFunctionCode());
 //						parent._a.getContext().add(element, null);
 						for (VariableStatement ii : ((VariableSequence) item).items())
-							deduceVariableStatement(loop, ii);
+							deduceVariableStatement(ii, loop);
 					} else if (item instanceof StatementWrapper) {
 						IExpression e = ((StatementWrapper) item).getExpr();
 						if (e instanceof BasicBinaryExpression) {
@@ -402,75 +404,104 @@ public class DeduceTypes {
 		return r;
 	}
 
-	public void addFunctionItem_deduceVariableStatement(@NotNull FunctionDef parent, @NotNull VariableStatement vs) {
-		{
-			OS_Type dtype = null;
-			if (vs.typeName().isNull()) {
-				if (vs.initialValue() != null) {
-					IExpression iv = vs.initialValue();
-					if (iv instanceof NumericExpression) {
-						dtype = new OS_Type(BuiltInTypes.SystemInteger);
-					} else if (iv instanceof IdentExpression) {
-						LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
-						for (LookupResult n: lrl.results()) {
-							System.out.println("99 "+n);
-						}
-					} else if (iv instanceof ProcedureCallExpression) {
-						final ProcedureCallExpression pce = (ProcedureCallExpression) iv;
-						final IExpression left = pce.getLeft();
-						if (left.getKind() == ExpressionKind.IDENT) {
-							addFunctionItem_deduceVariableStatement_procedureCallExpression(parent, iv, pce, (IdentExpression) left);
-						}
-					}
-				}
-			} else {
-				dtype = new OS_Type(vs.typeName());
-			}
-//100			parent._a.getContext().add(vs, vs.getName(), dtype);
-//				String theType;
-//				if (ii.typeName().isNull()) {
-////					theType = "int"; // Z0*
-//					theType = ii.initialValueType();
-//				} else{
-//					theType = ii.typeName().getName();
+//	public void addFunctionItem_deduceVariableStatement(@NotNull FunctionDef parent, @NotNull VariableStatement vs) {
+//		{
+//			OS_Type dtype = null;
+//			if (vs.typeName().isNull()) {
+//				if (vs.initialValue() != null) {
+//					IExpression iv = vs.initialValue();
+//					if (iv instanceof NumericExpression) {
+//						dtype = new OS_Type(BuiltInTypes.SystemInteger);
+//					} else if (iv instanceof IdentExpression) {
+//						LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
+//						for (LookupResult n: lrl.results()) {
+//							System.out.println("99 "+n);
+//						}
+//					} else if (iv instanceof ProcedureCallExpression) {
+//						final ProcedureCallExpression pce = (ProcedureCallExpression) iv;
+//						final IExpression left = pce.getLeft();
+//						if (left.getKind() == ExpressionKind.IDENT) {
+//							addFunctionItem_deduceVariableStatement_procedureCallExpression(parent, iv, pce, (IdentExpression) left);
+//						}
+//					}
+//					if (dtype != null) {
+//						iv.setType(dtype);
+//						// TODO plus should we be modifying vs.typeName anyway
+////						vs.typeName().setName(new Qualident(dtype.getClassOf().getName()); // TODO no setTypeName
+//					}
 //				}
-			System.out.println(String.format("[#addFunctionItem_deduceVariableStatement] %s %s;", vs.getName(), dtype));
+//			} else {
+//				dtype = new OS_Type(vs.typeName());
+//				NotImplementedException.raise();
+//			}
+////100			parent._a.getContext().add(vs, vs.getName(), dtype);
+////				String theType;
+////				if (ii.typeName().isNull()) {
+//////					theType = "int"; // Z0*
+////					theType = ii.initialValueType();
+////				} else{
+////					theType = ii.typeName().getName();
+////				}
+//			System.out.println(String.format("[#addFunctionItem_deduceVariableStatement] %s %s;", vs.getName(), dtype));
+//
+////			assert dtype should be String
+//		}
+//	}
 
-		}
-	}
-
-	private void addFunctionItem_deduceVariableStatement_procedureCallExpression(
-			@NotNull FunctionDef parent, IExpression iv,
+	private void /*addFunctionItem_*/deduceVariableStatement_procedureCallExpression(
+			@NotNull final /*FunctionDef*/OS_Element parent, IExpression iv,
 			ProcedureCallExpression pce, @NotNull IdentExpression left) {
 		final String text = left.getText();
 		final LookupResultList lrl = parent.getContext().lookup(text);
-		System.out.println("98 "+/*n*/iv);
-		if (lrl.results().size() == 0 )
+		System.out.println("198 "+/*n*/iv);
+		if (lrl.results().size() == 0 ) {
 			System.err.println("196 no results for "+text);
+			return;
+		}
 		for (LookupResult n: lrl.results()) {
 			System.out.println("197 "+n);
+//			return ((FunctionDef)n.getElement()).returnType().decoded(); // TODO loookup OS_Type from typename
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
+//			Helpers.printXML(n, new TabbedOutputStream(System.out));
 		}
+
+		if (lrl.results().size() == 1) {
+			LookupResult n = lrl.results().get(0);
+			pce.getLeft().setType(new OS_FuncType((FunctionDef) n.getElement()));
+			deduceProcedureCall_ARGS(pce, parent.getContext());
+		} else {
+			System.err.println("191 too many results");
+		}
+//		NotImplementedException.raise();
+	}
+
+	private void deduceProcedureCall_ARGS(ProcedureCallExpression pce, final Context ctx) {
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
 /*
 		List<OS_Type> q = expressions.stream()
-				.map(n -> deduceExpression(n, parent.getContext()))
+				.map(n -> deduceExpression(n, ctx.getContext()))
 				.collect(Collectors.toList());
 */
 		Collection<OS_Type> qq = Collections2.transform(expressions, new Function<IExpression, OS_Type>() {
 			@Override
 			public @Nullable OS_Type apply(@Nullable IExpression input) {
-				return deduceExpression(input, parent.getContext());
+				return deduceExpression(input, ctx);
 			}
 		});
-		List<OS_Type> q = Lists.newArrayList(qq);
+//		List<OS_Type> q = Lists.newArrayList(qq);
 
-		System.out.println("90 "+q);
-		NotImplementedException.raise();
+		System.out.println("190 " + qq);
+
+		int i = 0;
+		for (OS_Type os_type : qq) {
+			((ArrayList<IExpression>) expressions).get(i++).setType(os_type);
+		}
 	}
 
 	public void addClassItem_deduceVariableStatement(ClassStatement parent, @NotNull VariableStatement vs) {
-		{
+		deduceVariableStatement(vs, parent);
+//		return;
+		if (false) {
 			OS_Type dtype = null;
 			if (vs.typeName().isNull()) {
 				if (vs.initialValue() != null) {
@@ -541,7 +572,7 @@ public class DeduceTypes {
 
 		}
 	}
-	public void deduceVariableStatement(OS_Element parent, @NotNull VariableStatement vs) {
+	public void deduceVariableStatement(@NotNull VariableStatement vs, OS_Element parent) {
 		{
 			OS_Type dtype = null;
 			if (vs.typeName().isNull()) {
@@ -561,7 +592,13 @@ public class DeduceTypes {
 							deduceVariableStatement_procedureCallExpression(parent, iv, pce, (IdentExpression) left);
 						}
 					}
+					if (dtype != null) {
+						iv.setType(dtype);
+						// TODO plus should we be modifying vs.typeName anyway
+//						vs.typeName().setName(new Qualident(dtype.getClassOf().getName()); // TODO no setTypeName
+					}
 				}
+
 			} else {
 				dtype = new OS_Type(vs.typeName());
 			}
@@ -573,7 +610,7 @@ public class DeduceTypes {
 //				} else{
 //					theType = ii.typeName().getName();
 //				}
-			System.out.println(String.format("[#addFunctionItem_deduceVariableStatement] %s %s;", vs.getName(), dtype));
+			System.out.println(String.format("[#deduceVariableStatement] %s %s;", vs.getName(), dtype));
 
 		}
 	}
@@ -618,25 +655,25 @@ public class DeduceTypes {
 		NotImplementedException.raise();
 	}
 
-	private void deduceVariableStatement_procedureCallExpression(
-			@NotNull OS_Element parent, IExpression iv,
-			ProcedureCallExpression pce, @NotNull IdentExpression left) {
-		final String text = left.getText();
-		final LookupResultList lrl = parent.getContext().lookup(text);
-		System.out.println("98 "+/*n*/iv);
-		if (lrl.results().size() == 0 )
-			System.err.println("496 no results for "+text);
-		for (LookupResult n: lrl.results()) {
-			System.out.println("497 "+n);
-//			Helpers.printXML(iv, new TabbedOutputStream(System.out));
-		}
-		final Collection<IExpression> expressions = pce.getArgs().expressions();
-		List<OS_Type> q = expressions.stream()
-				.map(n -> deduceExpression(n, parent.getContext()))
-				.collect(Collectors.toList());
-		System.out.println("90 "+q);
-		NotImplementedException.raise();
-	}
+//	private void deduceVariableStatement_procedureCallExpression(
+//			@NotNull OS_Element parent, IExpression iv,
+//			ProcedureCallExpression pce, @NotNull IdentExpression left) {
+//		final String text = left.getText();
+//		final LookupResultList lrl = parent.getContext().lookup(text);
+//		System.out.println("498 "+/*n*/iv);
+//		if (lrl.results().size() == 0 )
+//			System.err.println("496 no results for "+text);
+//		for (LookupResult n: lrl.results()) {
+//			System.out.println("497 "+n);
+////			Helpers.printXML(iv, new TabbedOutputStream(System.out));
+//		}
+//		final Collection<IExpression> expressions = pce.getArgs().expressions();
+//		List<OS_Type> q = expressions.stream()
+//				.map(n -> deduceExpression(n, parent.getContext()))
+//				.collect(Collectors.toList());
+//		System.out.println("490 "+q);
+//		NotImplementedException.raise();
+//	}
 
 	public OS_Type deduceIdentExpression(@NotNull IdentExpression n, Context context) {
 		LookupResultList lrl = context.lookup(n.getText());
