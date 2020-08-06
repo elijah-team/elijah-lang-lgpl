@@ -334,6 +334,8 @@ public class DeduceTypes {
 		IExpression ss = s.peek();
 		while (!s.isEmpty()) {
 			ss = s.peek();
+			if (t != null && t.getType() == OS_Type.Type.USER_CLASS)
+				ctx = t.getClassOf().getContext();
 			t = deduceExpression(ss, ctx);
 			ss.setType(t);  // TODO should this be here?
 			s.pop();
@@ -626,10 +628,11 @@ public class DeduceTypes {
 					return deduceTypeName((VariableStatement) element, context);
 			} else if (element instanceof FormalArgListItem) {
 				final TypeName typeName = ((FormalArgListItem) element).tn;
-				if (typeName != null)
-					return new OS_Type(typeName);
-				else
-					throw new NotImplementedException();
+				if (typeName != null) {
+					OS_Type t = deduceTypeName(typeName, context);
+					return t;
+				} else
+					return null;
 			} else if (element instanceof ClassStatement) {
 				return new OS_Type((ClassStatement) element);
 			} else if (element instanceof FunctionDef) {
@@ -650,6 +653,19 @@ public class DeduceTypes {
 		if (vs.typeName().isNull())
 			if (vs.initialValue() instanceof NumericExpression)
 				return new OS_Type(BuiltInTypes.SystemInteger);
+		return null;
+	}
+
+	private OS_Type deduceTypeName(TypeName typeName, Context ctx) {
+//		if (vs.typeName().isNull())
+//			if (vs.initialValue() instanceof NumericExpression)
+//				return new OS_Type(BuiltInTypes.SystemInteger);
+		LookupResultList lrl = ctx.lookup(typeName.getName());
+		OS_Element best = lrl.chooseBest(null);
+		if (best != null) {
+			if (best instanceof ClassStatement)
+				return new OS_Type((ClassStatement) best);
+		}
 		return null;
 	}
 

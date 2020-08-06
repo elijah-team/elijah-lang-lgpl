@@ -72,6 +72,10 @@ public class OS_Type {
 		BUILT_IN, USER, USER_CLASS, FUNCTION
 	}
 
+	public Type getType() {
+		return type_of_type;
+	}
+
 	private BuiltInTypes type;
 	private Type type_of_type;
 	private OS_Element etype;
