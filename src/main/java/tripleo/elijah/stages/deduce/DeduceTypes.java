@@ -258,14 +258,14 @@ public class DeduceTypes {
 	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
 //		System.err.println(String.format("75 %s", pce.getType()));
 		try {
-			deduceProcedureCall_LEFT(pce, ctx);
-//			deduceProcedureCall_ARGS(pce, ctx);
+			if (deduceProcedureCall_LEFT(pce, ctx))
+				deduceProcedureCall_ARGS(pce, ctx);
 		} finally {
 //			System.err.println(String.format("76 %s", pce.getType()));
 		}
 	}
 
-	private void deduceProcedureCall_LEFT(final ProcedureCallExpression pce, Context ctx) {
+	private boolean deduceProcedureCall_LEFT(final ProcedureCallExpression pce, Context ctx) {
 		IExpression de;
 		if (pce.getLeft() instanceof Qualident) {
 			de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
@@ -312,15 +312,17 @@ public class DeduceTypes {
 					System.err.println("89 "+element.getClass().getName());
 					module.parent.eee.reportError("type not specified: "+ getElementName(element));
 					NotImplementedException.raise();
-					return;
+					return false;
 				}
 				pce.setType(t);
 			} else {
 				if (!(de instanceof IdentExpression)) System.err.println("100 "+de.getClass().getName());
 				module.parent.eee.reportError(String.format("IDENT not found: %s", de));
 				NotImplementedException.raise();
+				return false;
 			}
 		}
+		return true;
 	}
 
 	private LookupResultList lookup_dot_expression(Context ctx, DotExpression de) {
