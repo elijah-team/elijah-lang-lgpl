@@ -121,11 +121,11 @@ public class ExpressionNode implements IExpressionNode {
 				if (abe.getRight() instanceof NumericExpression) {
 					right_side = ""+((NumericExpression) abe.getRight()).getValue();
 				}
-				if (abe.kind == ExpressionKind.SUBTRACTION) {
+				if (abe._kind == ExpressionKind.SUBTRACTION) {
 					String s = String.format("%s - %s", left_side,	right_side);
 					return s;
 				}
-				if (abe.kind == ExpressionKind.MULTIPLY) {
+				if (abe._kind == ExpressionKind.MULTIPLY) {
 					String s = String.format("%s * %s", left_side, right_side);
 					return s;
 				}

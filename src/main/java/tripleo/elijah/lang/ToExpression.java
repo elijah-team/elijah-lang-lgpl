@@ -23,7 +23,7 @@ public class ToExpression extends BasicBinaryExpression {
     public ToExpression(IExpression fromPart, IExpression toPart) {
         left = fromPart;
         right = toPart;
-        kind = ExpressionKind.TO_EXPR;
+        _kind = ExpressionKind.TO_EXPR;
     }
 }
 

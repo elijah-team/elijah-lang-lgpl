@@ -13,13 +13,13 @@ public class DotExpression extends BasicBinaryExpression {
 	public DotExpression(IExpression ee, IdentExpression identExpression) {
 		left = ee;
 		right = identExpression;
-		kind = ExpressionKind.DOT_EXP;
+		_kind = ExpressionKind.DOT_EXP;
 	}
 
 	public DotExpression(IExpression ee, IExpression aExpression) {
 		left = ee;
 		right = aExpression;
-		kind = ExpressionKind.DOT_EXP;
+		_kind = ExpressionKind.DOT_EXP;
 	}
 
 	@Override
