@@ -1,9 +1,5 @@
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.TabbedOutputStream;
-
-import java.io.IOException;
-
 public class StatementWrapper implements StatementItem, FunctionItem {
 
     private IExpression expr;
