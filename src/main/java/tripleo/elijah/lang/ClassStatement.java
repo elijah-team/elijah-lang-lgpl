@@ -68,9 +68,10 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		mDocs.add(aText.getText());
 	}
 
+	final ClassInheritance _inh = new ClassInheritance(this);
+
 	public ClassInheritance classInheritance() {
-		// TODO once
-		return new ClassInheritance(this);
+		return _inh;
 	}
 
 	public FunctionDef funcDef() {
