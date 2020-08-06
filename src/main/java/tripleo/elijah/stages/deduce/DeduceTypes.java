@@ -320,7 +320,7 @@ public class DeduceTypes {
 				pce.setType(t);
 			} else {
 				if (!(de instanceof IdentExpression)) System.err.println("100 "+de.getClass().getName());
-				module.parent.eee.reportError(String.format("IDENT not found: %s", de));
+				module.parent.eee.reportError(String.format("1001 mIDENT not found: %s", de));
 				NotImplementedException.raise();
 				return false;
 			}
@@ -617,8 +617,6 @@ public class DeduceTypes {
 	public OS_Type deduceIdentExpression(@NotNull IdentExpression n, Context context) {
 		LookupResultList lrl = context.lookup(n.getText());
 		if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
-//				return lrl.results().get(0).getElement();
-			// TODO what to do here??
 			final OS_Element element = lrl.results().get(0).getElement();
 			if (element instanceof VariableStatement) {
 				final TypeName tn = ((VariableStatement) element).typeName();
@@ -641,7 +639,8 @@ public class DeduceTypes {
 			module.parent.eee.reportError("type not specified: " + getElementName(element));
 			return null;
 		} else {
-			module.parent.eee.reportError("IDENT not found: " + n.getText());
+			// TODO what to do here??
+			module.parent.eee.reportError("1002 IDENT not found: " + n.getText());
 			NotImplementedException.raise();
 			return null;
 		}
