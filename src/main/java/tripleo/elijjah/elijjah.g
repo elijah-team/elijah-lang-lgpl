@@ -610,30 +610,6 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 //		}
 //	;
 
-// A type name. which is either a (possibly qualified) class name or
-//   a primitive (builtin) type
-type
-	:	IDENT // identifier
-//	|	builtInType
-	;
-
-/*
-// The primitive types.
-builtInType
-	:	"void"
-//	|	"boolean"
-//	|	"byte"
-	|	"char"
-	|	"short"
-	|	"int"
-	|	"float"
-	|	"long"
-	|	"double"
-	;
-*/
-
-
-
 
 
 
