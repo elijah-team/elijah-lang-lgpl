@@ -181,6 +181,12 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	public void setType(ClassTypes aType) {
 		_type = aType;
 	}
+
+	public PropertyStatement propertyStatement() {
+		final PropertyStatement propertyStatement = new PropertyStatement(this);
+		add(propertyStatement);
+		return propertyStatement;
+	}
 }
 
 //

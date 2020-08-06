@@ -43,14 +43,20 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		_isAbstract = b;
 	}
 
-	private final class FunctionDefScope implements Scope {
+	static class FunctionDefScope implements Scope {
+
+		private final FunctionDef _Parent;
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
+
+		FunctionDefScope(FunctionDef parent_) {
+			_Parent = parent_;
+		}
 
 		@Override
 		public void add(StatementItem aItem) {
 			if (aItem instanceof FunctionItem)
-				items.add((FunctionItem) aItem);
+				_Parent.items.add((FunctionItem) aItem);
 			else
 				System.err.println(String.format("adding false StatementItem %s",
 					aItem.getClass().getName()));
@@ -58,7 +64,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		
 		@Override
 		public void addDocString(Token aS) {
-			docstrings.add(aS.getText());
+			_Parent.docstrings.add(aS.getText());
 		}
 		
 		@Override
@@ -92,16 +98,13 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		 */
 		@Override
 		public OS_Element getParent() {
-			// TODO Auto-generated method stub
-			return FunctionDef.this;
+			return _Parent;
 		}
 
 		@Override
 		public OS_Element getElement() {
-			return FunctionDef.this;
+			return _Parent;
 		}
-
-
 	}
 
 	public Attached _a = new Attached(new FunctionContext(this));
@@ -110,7 +113,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	public String funName;
 	private List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
-	private final FunctionDefScope mScope2 = new FunctionDefScope();
+	private final FunctionDefScope mScope2 = new FunctionDefScope(this);
 	//	private FunctionDefScope mScope;
 	private OS_Element/*ClassStatement*/ parent;
 

@@ -116,12 +116,16 @@ public interface ElijjahTokenTypes {
 	int LITERAL_elseif = 112;
 	int QUESTION = 113;
 	int LITERAL_def = 114;
-	int WS = 115;
-	int SL_COMMENT = 116;
-	int ML_COMMENT = 117;
-	int ESC = 118;
-	int HEX_DIGIT = 119;
-	int VOCAB = 120;
-	int EXPONENT = 121;
-	int FLOAT_SUFFIX = 122;
+	int LITERAL_prop = 115;
+	int LITERAL_property = 116;
+	int LITERAL_get = 117;
+	int LITERAL_set = 118;
+	int WS = 119;
+	int SL_COMMENT = 120;
+	int ML_COMMENT = 121;
+	int ESC = 122;
+	int HEX_DIGIT = 123;
+	int VOCAB = 124;
+	int EXPONENT = 125;
+	int FLOAT_SUFFIX = 126;
 }

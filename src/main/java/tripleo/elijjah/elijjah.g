@@ -122,10 +122,11 @@ classScope[ClassStatement cr]
     |    ("destructor"|"dtor") {dd=cr.addDtor();} opfal[dd.fal()] scope[dd.scope()]
     | functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure(), cr]
-    | "type" IDENT BECOMES IDENT ( BOR IDENT)*
+    | "type" IDENT BECOMES IDENT ( BOR IDENT)* // TODO implement me
     | typeAlias[cr.typeAlias()]
     | programStatement[cr.XXX(), cr]
     | invariantStatement[cr.invariantStatement()]
+    | propertyStatement[cr.propertyStatement()]
     | accessNotation)*
     ;
 namespaceScope[NamespaceStatement cr]
@@ -742,7 +743,14 @@ formalArgListItem_priv[FormalArgListItem fali]
 		)
 	;
 	
-	
+propertyStatement[PropertyStatement ps]
+		{IdentExpression prop_name=null;}
+	: ("prop"|"property") prop_name=ident {ps.setName(prop_name);}
+			TOK_COLON typeName[ps.typeName()] LCURLY
+	("get" scope[ps.get_scope()]
+	|"set" scope[ps.set_scope()])*
+	;
+
 	
 //----------------------------------------------------------------------------
 // The Elijjah scanner
