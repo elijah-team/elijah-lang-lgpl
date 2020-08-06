@@ -3,6 +3,9 @@ package Prelude;
 class interface String {
     to_int() -> Integer {
     }
+    prop Length :  Integer {
+	get { Value = len() }
+    }
 }
 class interface Integer {
 }
