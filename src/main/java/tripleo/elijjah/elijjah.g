@@ -585,7 +585,7 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
 	  (opfal[pc.argList()]) scope[pc.scope()]
-	  ((TOK_ARROW|TOK_COLON) typeName[pc.returnValue()] )?
+	  ((TOK_ARROW|TOK_COLON) typeName[pc.returnType()] )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
 	  (opfal[pc.argList()]) scope[pc.scope()]
 	| 

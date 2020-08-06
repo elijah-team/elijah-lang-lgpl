@@ -4,12 +4,20 @@
 
 import antlr.TokenBuffer;
 import antlr.TokenStreamException;
+import antlr.TokenStreamIOException;
+import antlr.ANTLRException;
+import antlr.LLkParser;
 import antlr.Token;
 import antlr.TokenStream;
 import antlr.RecognitionException;
 import antlr.NoViableAltException;
+import antlr.MismatchedTokenException;
+import antlr.SemanticException;
 import antlr.ParserSharedInputState;
 import antlr.collections.impl.BitSet;
+import antlr.collections.AST;
+import antlr.ASTPair;
+import antlr.collections.impl.ASTArray;
 
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.*;
@@ -4670,7 +4678,6 @@ public ElijjahParser(ParserSharedInputState state) {
 	) throws RecognitionException, TokenStreamException {
 		
 		Scope0 sc = new Scope0(pc);
-//		Scope sc = pc.scope();
 		
 		try {      // for error handling
 			{
@@ -4705,7 +4712,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					}
 					}
 					}
-					typeName(pc.returnValue());
+					typeName(pc.returnType());
 				}
 				else if ((_tokenSet_8.member(LA(1))) && (_tokenSet_43.member(LA(2)))) {
 				}

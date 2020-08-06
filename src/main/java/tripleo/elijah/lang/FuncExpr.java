@@ -21,7 +21,7 @@ public class FuncExpr implements IExpression, OS_Element {
 
 //	private final TypeNameList argList = new TypeNameList();
 	private final FormalArgList argList = new FormalArgList();
-	private final RegularTypeName typeName = new RegularTypeName();
+	private final RegularTypeName _returnType = new RegularTypeName();
 
 	public void type(TypeModifiers function) {
 		// TODO Auto-generated method stub
@@ -32,8 +32,8 @@ public class FuncExpr implements IExpression, OS_Element {
 		return argList;
 	}
 
-	public TypeName returnValue() {
-		return typeName;
+	public TypeName returnType() {
+		return _returnType;
 	}
 
 	final FuncExprScope funcExprScope = new FuncExprScope(this);
