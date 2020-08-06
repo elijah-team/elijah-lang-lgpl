@@ -20,7 +20,6 @@ import tripleo.elijah.Out;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeduceTypes;
-import tripleo.elijah.stages.expand.ExpandFunctions;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
 
@@ -96,7 +95,10 @@ public class Compilation {
 				} else {
 					for (OS_Module module : modules) {
 						new DeduceTypes(module).deduce();
-						new ExpandFunctions(module).expand();
+//						new ExpandFunctions(module).expand();
+//
+//      				final JavaCodeGen visit = new JavaCodeGen();
+//		        		module.visitGen(visit);
 					}
 				}
 //				final JavaCodeGen visit = new JavaCodeGen();
