@@ -2529,14 +2529,14 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				formalArgListItem_priv(fal.next());
 				{
-				_loop229:
+				_loop228:
 				do {
 					if ((LA(1)==COMMA)) {
 						match(COMMA);
 						formalArgListItem_priv(fal.next());
 					}
 					else {
-						break _loop229;
+						break _loop228;
 					}
 					
 				} while (true);
@@ -2846,7 +2846,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			scope(ifex.scope());
 			{
-			_loop188:
+			_loop187:
 			do {
 				if ((LA(1)==LITERAL_else) && (LA(2)==LCURLY)) {
 					match(LITERAL_else);
@@ -2856,7 +2856,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					elseif_part(ifex.elseif());
 				}
 				else {
-					break _loop188;
+					break _loop187;
 				}
 				
 			} while (true);
@@ -2889,8 +2889,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			match(LCURLY);
 			{
-			int _cnt191=0;
-			_loop191:
+			int _cnt190=0;
+			_loop190:
 			do {
 				if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
 					if ( inputState.guessing==0 ) {
@@ -2916,10 +2916,10 @@ public ElijjahParser(ParserSharedInputState state) {
 					scope(mcp2.scope());
 				}
 				else {
-					if ( _cnt191>=1 ) { break _loop191; } else {throw new NoViableAltException(LT(1), getFilename());}
+					if ( _cnt190>=1 ) { break _loop190; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt191++;
+				_cnt190++;
 			} while (true);
 			}
 			match(RCURLY);
@@ -4825,23 +4825,6 @@ public ElijjahParser(ParserSharedInputState state) {
 				reportError(ex);
 				consume();
 				consumeUntil(_tokenSet_8);
-			} else {
-			  throw ex;
-			}
-		}
-	}
-	
-	public final void type() throws RecognitionException, TokenStreamException {
-		
-		
-		try {      // for error handling
-			match(IDENT);
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_1);
 			} else {
 			  throw ex;
 			}
