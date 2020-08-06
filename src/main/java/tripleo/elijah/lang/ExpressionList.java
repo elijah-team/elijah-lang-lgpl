@@ -8,9 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.TabbedOutputStream;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -34,12 +31,6 @@ public class ExpressionList implements Iterable<IExpression> {
 
 	public String toString() {
 		return exprs.toString();
-	}
-	
-	public void print_osi(TabbedOutputStream tos) throws IOException {
-		for (IExpression expr : exprs) {
-			tos.put_string_ln(expr.repr_());
-		}
 	}
 
 	public Collection<IExpression> expressions() {

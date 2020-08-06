@@ -21,9 +21,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -139,22 +137,6 @@ public class OS_Module implements OS_Element, OS_Container {
 //		NotImplementedException.raise();
 		System.err.println("[OS_Module#modify_namespace] " + imp + " " + q + " " + aModification);
 		getContext().add(imp, q); // TODO prolly wrong; do a second pass later to add definition...?
-	}
-
-	@Override
-	public void print_osi(TabbedOutputStream tos) throws IOException {
-		System.out.println("Module print_osi");
-//		if (packageName != null) {
-//			tos.put_string("package ");
-//			tos.put_string_ln(packageName);
-//			tos.put_string_ln("");
-//		}
-		tos.put_string_ln("//");
-		synchronized (items) {
-			for (ModuleItem element : items)
-				element.print_osi(tos);
-
-		}
 	}
 
 	@Override

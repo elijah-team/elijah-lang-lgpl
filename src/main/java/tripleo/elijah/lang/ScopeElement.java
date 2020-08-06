@@ -8,11 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-
-import tripleo.elijah.util.TabbedOutputStream;
-
 public interface ScopeElement {
 
-	public abstract void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException;
 }

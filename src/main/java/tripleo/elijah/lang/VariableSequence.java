@@ -8,14 +8,13 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
+import tripleo.elijah.gen.ICodeGen;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-//import java.util.stream.Collectors;
 
-import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.TabbedOutputStream;
+//import java.util.stream.Collectors;
 
 public class VariableSequence implements StatementItem, FunctionItem, ClassItem {
 
@@ -36,18 +35,6 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 
 	List<VariableStatement> stmts;
 	private OS_Element parent;
-
-	@Override
-	public void print_osi(TabbedOutputStream aTos) throws IOException {
-//		NotImplementedException.raise();
-		//
-		aTos.incr_tabs();
-		aTos.put_string_ln("var");
-		for (VariableStatement stmt: stmts) {
-			stmt.print_osi(aTos);
-		}
-		aTos.dec_tabs();
-	}
 
 	public Collection<VariableStatement> items() {
 		return stmts;

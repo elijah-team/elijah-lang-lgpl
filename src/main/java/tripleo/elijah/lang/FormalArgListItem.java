@@ -10,11 +10,7 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
-
-import java.io.IOException;
 
 public class FormalArgListItem implements OS_Element {
 	
@@ -32,11 +28,6 @@ public class FormalArgListItem implements OS_Element {
 	public void setName(Token s) {
 		name=s;
 	}
-
-    @Override // OS_Element
-    public void print_osi(TabbedOutputStream aTos) throws IOException {
-	    throw new NotImplementedException();
-    }
 
     @Override // OS_Element
     public void visitGen(ICodeGen visit) {

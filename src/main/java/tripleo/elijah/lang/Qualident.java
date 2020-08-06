@@ -12,16 +12,12 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
+import antlr.Token;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import antlr.Token;
-import org.jetbrains.annotations.NotNull;
-import tripleo.elijah.lang.ExpressionKind;
-import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.util.TabbedOutputStream;
 
 /**
  * @author Tripleo(sb)
@@ -54,11 +50,6 @@ public class Qualident  implements IExpression {
 		final String s = sb.toString();
 		final String substring = s.substring(0, s.length() - 1);
 		return substring;
-	}
-
-	@Override
-	public void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException {
-		tabbedoutputstream.put_string_ln(String.format("Qualident (%s)", toString()));
 	}
 	
 	@Override

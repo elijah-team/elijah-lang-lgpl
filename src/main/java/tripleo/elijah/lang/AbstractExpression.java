@@ -9,9 +9,6 @@
 
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.TabbedOutputStream;
-import java.io.IOException;
-
 public abstract class AbstractExpression implements IExpression, ScopeElement {
 
 	public AbstractExpression() {
@@ -32,11 +29,6 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 	@Override
 	public ExpressionKind getKind() {
 		return _kind;
-	}
-
-	@Override
-	public void print_osi(TabbedOutputStream $1) throws IOException {
-		throw new IllegalStateException("please implement this method");
 	}
 
 	@Override

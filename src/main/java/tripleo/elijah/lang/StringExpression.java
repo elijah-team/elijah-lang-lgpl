@@ -8,11 +8,8 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-
 import antlr.Token;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
 public class StringExpression extends AbstractExpression {
 
@@ -23,11 +20,6 @@ set(g.getText());
 	@Override public boolean is_simple() {
 		return true;
 	}
-
-//	@Override
-//	public void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException {
-//		throw new NotImplementedException(/*"StringExpression print_osi"*/);
-//	}
 
 	@Override
 	public  IExpression getLeft() {

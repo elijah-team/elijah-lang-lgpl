@@ -8,15 +8,12 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import antlr.Token;
 import org.eclipse.jdt.annotation.NonNull;
-
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VariableReference extends AbstractExpression implements OS_Expression {
 
@@ -66,15 +63,6 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		NotImplementedException.raise();
 		String s = t.getText();
 		parts.add(new VR_IdentPart(s));
-	}
-	
-	@Override
-	public void print_osi(TabbedOutputStream tos) throws IOException {
-		tos.put_string_ln(
-				(new StringBuilder("VariableReference { name = \""))
-					.append(main)
-					.append("\"}")
-					.toString());
 	}
 	
 	@Override

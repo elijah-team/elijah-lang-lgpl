@@ -20,9 +20,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.Documentable;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.TabbedOutputStream;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -166,21 +164,6 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 			items.add((FunctionItem) anElement);
 		else
 			throw new IllegalStateException(String.format("Cant add %s to FunctionDef", anElement));
-	}
-
-	@Override // OS_Element
-	public void print_osi(TabbedOutputStream tos) throws IOException {
-		System.out.println("Function print_osi");
-		tos.put_string("Function (");
-		tos.put_string(funName);
-		tos.put_string_ln(") {");
-		tos.put_string_ln("//");
-		tos.incr_tabs();
-		for (FunctionItem item : items) {
-			item.print_osi(tos);
-		}
-		tos.dec_tabs();
-		tos.put_string_ln((String.format("} // function %s",  funName)));
 	}
 
 	public TypeName returnType() {

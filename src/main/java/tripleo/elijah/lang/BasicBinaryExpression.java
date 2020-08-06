@@ -308,26 +308,6 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 	}
 
 	@Override
-	public void print_osi(TabbedOutputStream aTos) throws IOException {
-		BasicBinaryExpression abe = (BasicBinaryExpression)this;
-		if (abe.getKind() == ExpressionKind.ASSIGNMENT) {
-			aTos.put_string_ln("Assignment {");
-			aTos.incr_tabs();
-			aTos.put_string_ln(abe.getLeft().toString());
-			aTos.put_string_ln(abe.getRight().toString());
-			aTos.dec_tabs();
-			aTos.put_string_ln("}");
-		} else if (abe.getKind() == ExpressionKind.AUG_MULT) {
-			aTos.put_string_ln("AssignmentMultiplication {");
-			aTos.incr_tabs();
-			aTos.put_string_ln(abe.getLeft().toString());
-			aTos.put_string_ln(abe.getRight().toString());
-			aTos.dec_tabs();
-			aTos.put_string_ln("}");
-		}
-	}
-
-	@Override
 	public String repr_() {
 		return String.format("<Expression %s %s %s>", left, _kind,right);
 	}

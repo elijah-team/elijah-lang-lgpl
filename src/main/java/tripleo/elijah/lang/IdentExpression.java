@@ -14,11 +14,7 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
-
-import java.io.IOException;
 
 /**
  * @author Tripleo(sb)
@@ -32,11 +28,6 @@ public class IdentExpression implements IExpression, OS_Element {
 	public IdentExpression(Token r1) {
 		this.text = r1;
 		this._a = new Attached(); // remember to do something fancy with Context
-	}
-
-	@Override
-	public void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException {
-		Helpers.printXML(this, tabbedoutputstream);
 	}
 
 	@Override

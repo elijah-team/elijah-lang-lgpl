@@ -14,9 +14,7 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,15 +32,6 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		this.parent = parent;
 	}
 
-	/**
-	 * @category OS_Element
-	 * @param aTos
-	 * @throws IOException
-	 */
-	@Override
-	public void print_osi(TabbedOutputStream aTos) throws IOException {
-		throw new NotImplementedException();
-	}
 
 	/**
 	 * @category OS_Element

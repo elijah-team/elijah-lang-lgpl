@@ -11,18 +11,11 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class IfConditional implements StatementItem, FunctionItem, OS_Element {
-
-	@Override // FunctionItem
-	public void print_osi(TabbedOutputStream tos) throws IOException {
-		throw new NotImplementedException();
-	}
 
 	@Override
 	public void visitGen(ICodeGen visit) {

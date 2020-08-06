@@ -16,9 +16,7 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.contexts.DefFunctionContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.TabbedOutputStream;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,30 +46,6 @@ public class DefFunctionDef implements ClassItem {
 
 		public StatementWrapper(IExpression aexpr) {
 			expr = aexpr;
-		}
-
-		@Override
-		public void print_osi(TabbedOutputStream aTos) throws IOException {
-			// TODO Auto-generated method stub
-			int y=2;
-			if (expr instanceof BasicBinaryExpression) {
-				BasicBinaryExpression abe = (BasicBinaryExpression)expr;
-				if (abe.getKind() == ExpressionKind.ASSIGNMENT) {
-					aTos.put_string_ln("Assignment {");
-					aTos.incr_tabs();
-					aTos.put_string_ln(abe.getLeft().toString());
-					aTos.put_string_ln(abe.getRight().toString());
-					aTos.dec_tabs();
-					aTos.put_string_ln("}");
-				} else if (abe.getKind() == ExpressionKind.AUG_MULT) {
-					aTos.put_string_ln("AssignmentMultiplication {");
-					aTos.incr_tabs();
-					aTos.put_string_ln(abe.getLeft().toString());
-					aTos.put_string_ln(abe.getRight().toString());
-					aTos.dec_tabs();
-					aTos.put_string_ln("}");
-				}
-			}
 		}
 
 //		@Override
@@ -166,21 +140,6 @@ public class DefFunctionDef implements ClassItem {
 
 	public FormalArgList fal() {
 		return mFal;
-	}
-
-	@Override
-	public void print_osi(TabbedOutputStream tos) throws IOException {
-		System.out.println("Function print_osi");
-		tos.put_string("Function (");
-		tos.put_string(funName);
-		tos.put_string_ln(") {");
-		tos.put_string_ln("//");
-		tos.incr_tabs();
-		for (FunctionItem item : items) {
-			item.print_osi(tos);
-		}
-		tos.dec_tabs();
-		tos.put_string_ln((String.format("} // function %s",  funName)));
 	}
 
 	public Scope scope() {

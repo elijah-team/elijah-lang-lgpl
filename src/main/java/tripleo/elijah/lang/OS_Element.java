@@ -8,13 +8,9 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.TabbedOutputStream;
 
 public interface OS_Element {
-	void print_osi(TabbedOutputStream aTos) throws IOException;
 	void visitGen(ICodeGen visit);
 	OS_Element getParent();
 	Context getContext();

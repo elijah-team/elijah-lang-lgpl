@@ -14,12 +14,8 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-
 import antlr.Token;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
 public class NumericExpression implements IExpression {
 
@@ -43,11 +39,6 @@ public class NumericExpression implements IExpression {
 	@Override
 	public void setLeft(IExpression aLeft) {
 		throw new NotImplementedException(); // TODO
-	}
-
-	@Override
-	public void print_osi(TabbedOutputStream aTabbedoutputstream) throws IOException {
-		Helpers.printXML(this, aTabbedoutputstream);
 	}
 
 	@Override

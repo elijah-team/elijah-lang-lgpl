@@ -6,9 +6,7 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,12 +107,6 @@ public class FuncExpr implements IExpression, OS_Element {
 		}
 		
 		
-	}
-
-	@Override
-	public void print_osi(TabbedOutputStream aTos) throws IOException {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
 	}
 
 	/****** FOR IEXPRESSION ******/

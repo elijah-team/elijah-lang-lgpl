@@ -11,9 +11,6 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
-
-import java.io.IOException;
 
 // Referenced classes of package pak:
 //			TypeRef, IExpression
@@ -41,26 +38,6 @@ public class VariableStatement implements OS_Element {
 
 	public void initial(IExpression aExpr) {
 		initialValue=aExpr;
-	}
-
-	public void print_osi(TabbedOutputStream tos) throws IOException {
-		tos.incr_tabs();
-		tos.put_string_ln("VariableDeclaration {");
-		tos.put_string("name = \"");
-		tos.put_string(getName());
-		tos.put_string_ln("\"");
-/*
-		if (typeRef != null) {
-			tos.incr_tabs();
-			tos.put_string_ln("type = {");
-			tos.dec_tabs();
-			typeRef.print_osi(tos);
-			tos.dec_tabs();
-			tos.put_string_ln("} // type = ...");
-		}
-*/
-		tos.dec_tabs();
-		tos.put_string_ln("} // VariableDeclaration");
 	}
 
 /*

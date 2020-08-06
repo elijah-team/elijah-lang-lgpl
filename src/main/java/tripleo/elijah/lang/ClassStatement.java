@@ -14,11 +14,8 @@ import tripleo.elijah.Documentable;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,22 +73,6 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	public FunctionDef funcDef() {
 		return new FunctionDef(this);
-	}
-
-	@Override
-	public void print_osi(TabbedOutputStream tos) throws IOException {
-		Helpers.printXML(this, tos);
-		//
-		System.out.println("Klass print_osi");
-		tos.incr_tabs();
-		tos.put_string_ln(String.format("Class (%s) {", clsName));
-		tos.put_string_ln("//");
-		for (ClassItem item : items) {
-			item.print_osi(tos);
-		}
-		tos.dec_tabs();
-		tos.put_string_ln(String.format("} // class %s ", clsName));
-		tos.flush();
 	}
 	
 	public String getName() {

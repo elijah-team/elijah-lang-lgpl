@@ -10,9 +10,6 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.Documentable;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.TabbedOutputStream;
-
-import java.io.IOException;
 
 // Referenced classes of package pak2:
 //			StatementClosure, BlockStatement
@@ -41,12 +38,6 @@ public interface Scope extends Documentable, OS_Element {
 	default OS_Element getParent() {
 		// TODO Auto-generated method stub
 		return null;
-	}	
-	
-	@Override
-	default void print_osi(TabbedOutputStream aTos) throws IOException {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override

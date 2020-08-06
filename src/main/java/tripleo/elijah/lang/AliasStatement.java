@@ -12,9 +12,6 @@ import antlr.Token;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
-
-import java.io.IOException;
 
 public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_Element2 {
     private final OS_Element parent;
@@ -38,11 +35,6 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 
 	public void setName(@NotNull Token i1) {
 		this.name = i1.getText();
-	}
-
-	@Override // OS_Element
-	public void print_osi(TabbedOutputStream aTos) throws IOException {
-		throw new NotImplementedException();
 	}
 
 	@Override // OS_Element

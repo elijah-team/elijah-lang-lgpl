@@ -31,15 +31,6 @@ public class CharLitExpression implements IExpression {
 	}
 
 	/* (non-Javadoc)
-	 * @see tripleo.elijah.lang.IExpression#print_osi(tripleo.elijah.util.TabbedOutputStream)
-	 */
-	@Override
-	public void print_osi(TabbedOutputStream tabbedoutputstream) throws IOException {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
 	 * @see tripleo.elijah.lang.IExpression#getType()
 	 */
 	@Override

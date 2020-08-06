@@ -12,9 +12,7 @@ import antlr.Token;
 import tripleo.elijah.contexts.LoopContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,13 +70,6 @@ private Attached _a = new Attached(new LoopContext(this));
 
 	public List<StatementItem> getItems() {
 		return items;
-	}
-
-	@Override // OS_Element, FunctionItem
-	public void print_osi(TabbedOutputStream aTos) throws IOException {
-		// TODO this is not implementeed
-//		NotImplementedException.raise();
-		throw new NotImplementedException();
 	}
 
 	@Override // OS_Element
