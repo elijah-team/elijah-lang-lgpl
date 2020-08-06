@@ -8,15 +8,7 @@
  */
 package tripleo.elijah.contexts;
 
-import tripleo.elijah.lang.ClassItem;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.LookupResultList;
-import tripleo.elijah.lang.NamespaceStatement;
-import tripleo.elijah.lang.OS_Element2;
-import tripleo.elijah.lang.VariableSequence;
-import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.lang.*;
 
 import java.util.List;
 
@@ -69,6 +61,20 @@ public class ClassContext extends Context {
 				}
 			}*/
 		}
+		for (TypeName tn : carrier.classInheritance().tns) {
+//			System.out.println("1001 "+tn);
+			LookupResultList tnl = carrier.getParent().getContext().lookup(tn.getName());
+//			System.out.println("1002 "+tnl.results());
+			OS_Element best = tnl.chooseBest(null);
+			if (best != null) {
+				LookupResultList lrl2 = best.getContext().lookup(name);
+				OS_Element best2 = lrl2.chooseBest(null);
+				if (best2 != null)
+					Result.add(name, level, best2);
+			}
+//			System.out.println("1003 "+name+" "+Result.results());
+		}
+
 		if (carrier.getParent() != null) {
 			final Context context = carrier.getParent().getContext();
 			if (!alreadySearched.contains(context))

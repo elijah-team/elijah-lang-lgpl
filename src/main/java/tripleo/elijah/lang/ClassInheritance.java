@@ -25,7 +25,7 @@ public class ClassInheritance {
 		parent=aStatement;
 	}
 
-	List<TypeName> tns=new ArrayList<TypeName>();
+	public List<TypeName> tns=new ArrayList<TypeName>();
 	
 	public TypeName next() {
 		TypeName tn = new RegularTypeName();
