@@ -1,6 +1,8 @@
 package Prelude;
 
 class interface String {
+    to_int() -> Integer {
+    }
 }
 class interface Integer {
 }
@@ -30,6 +32,13 @@ namespace {
     print (a: IPrintable) {
     }
     println (a: IPrintable) {
+    }
+}
+
+class Arguments {
+    arguments()-> SystemInteger {
+    }
+    argument(n: SystemInteger) -> String {
     }
 }
 
