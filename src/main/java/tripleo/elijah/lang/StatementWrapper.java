@@ -24,15 +24,6 @@ public class StatementWrapper implements StatementItem, FunctionItem {
 //			return null;
 //		}
 
-//		@Override
-    public void print_osi(TabbedOutputStream aTos) throws IOException {
-        // TODO Auto-generated method stub
-        int y=2;
-        if (expr instanceof BasicBinaryExpression) {
-            expr.print_osi(aTos);
-        }
-    }
-
     @Override
     public String toString() {
 //        StringBuilder sb = new StringBuilder();
