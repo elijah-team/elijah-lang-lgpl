@@ -2,7 +2,7 @@
 
 class SudokuSolver {
 
-    var grid : Array[Integer]
+	var grid : Array[Integer]
 
 	constructor(s: String) {
 		copy(grid, 0)
@@ -38,7 +38,7 @@ class SudokuSolver {
 			placeNumber(pos + 1)
 			return Intermediate
 		}
-        
+		
 		iterate from 1 to 9 with n {
 			if (checkValidity(n, pos % 9, pos / 9)) {
 				grid[pos] = n;
@@ -56,41 +56,40 @@ class SudokuSolver {
 			}
 		}
 		
-        val startX = (x / 3) * 3;
-        val startY = (y / 3) * 3;
-        iterate from startY to startY+3 with i {
-            iterate from startX to startX+3 with j {
-                if (grid[i * 9 + j] == vall) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
- 
-    //@Override
-    toString() -> String
-    {
-        val sb = "";
-        iterate from 0 to 8 with i {
-		iterate from 0 to 8 with j {
-			sb += (grid[i * 9 + j] + " ");
-			if (j == 2 || j == 5) {
-				sb += ("| ");
+			val startX = (x / 3) * 3;
+		val startY = (y / 3) * 3;
+		iterate from startY to startY+3 with i {
+			iterate from startX to startX+3 with j {
+				if (grid[i * 9 + j] == vall) {
+					return false;
+				}
 			}
 		}
-		sb += ('\n');
-		if (i == 2 || i == 5) {
-			sb += ("------+-------+------\n");
+		return true;
+	}
+ 
+	//@Override
+	toString() -> String {
+		val sb = "";
+		iterate from 0 to 8 with i {
+			iterate from 0 to 8 with j {
+				sb += (grid[i * 9 + j] + " ");
+				if (j == 2 || j == 5) {
+					sb += ("| ");
+				}
+			}
+			sb += ('\n');
+			if (i == 2 || i == 5) {
+				sb += ("------+-------+------\n");
+			}
+			}
+			return sb;
 		}
-        }
-        return sb;
-    }
- }
+	}
  
 class Main {
 	main() {
-    
+	
 		val ss = SudokuSolver("850002400" +
 					"720000009" +
 					"004000000" +
