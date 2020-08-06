@@ -1,5 +1,7 @@
 package tripleo.elijah.stages.deduce;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.lang.*;
 
@@ -29,7 +31,6 @@ public class DeduceUtils {
 	}
 
 	static class IsConstructor implements com.google.common.base.Predicate<OS_Element> {
-
 		@Override
 		public boolean apply(@Nullable OS_Element input) {
 			return input instanceof ConstructorDef;
@@ -50,19 +51,19 @@ public class DeduceUtils {
 			if (((LookupResult)o).getElement() instanceof ClassStatement) {
 				//o filter isCtor each (each args isCompat)
 				ClassStatement klass = (ClassStatement) ((LookupResult)o).getElement();
-/*
-				Iterable ctors = Iterables.filter(
-						Iterables.filter(klass.getItems(), new DeduceUtils.IsConstructor()),
-						new DeduceUtils.MatchArgs(pce.getArgs()));
-				return ctors.iterator().hasNext();
-*/
-				return true; // TODO
+
+				Iterable<ClassItem> ctors = Iterables.filter(klass.getItems(), new IsConstructor());
+				Iterable<ClassItem> ctors2 = Iterables.filter(ctors, new MatchFunctionArgs(pce));
+//				return ctors.iterator().hasNext();
+				return Lists.newArrayList(ctors2).size() > 0;
+
+//				return true; // TODO
 			}
 			System.out.println(o);
 			return false;
 		}
 	}
-	static class MatchFunctionArgs implements java.util.function.Predicate {
+	static class MatchFunctionArgs implements com.google.common.base.Predicate<ClassItem> {
 		private final ProcedureCallExpression pce;
 
 		public MatchFunctionArgs(ProcedureCallExpression pce) {
@@ -70,20 +71,20 @@ public class DeduceUtils {
 		}
 
 		@Override
-		public boolean test(Object o) {
+		public boolean apply(ClassItem o) {
 			final ExpressionList args = pce.getArgs();
 			// See if candidate matches args
-			if (((LookupResult)o).getElement() instanceof FunctionDef) {
+			/*if (((LookupResult)o).getElement() instanceof FunctionDef)*/ {
 				//o filter isCtor each (each args isCompat)
-				FunctionDef fd = (FunctionDef) ((LookupResult)o).getElement();
+				FunctionDef fd = (FunctionDef) (/*(LookupResult)*/o)/*.getElement()*/;
 				List<OS_Element2> matching_functions = (List<OS_Element2>) fd.items()
 						                                       .stream()
 						                                       .filter(new MatchArgs(pce.getArgs()))
 						                                       .collect(Collectors.toList());
+				System.out.println("2000 "+o);
 				return matching_functions.size() > 0;
 			}
-			System.out.println(o);
-			return false;
+//			return false;
 		}
 	}
 }
