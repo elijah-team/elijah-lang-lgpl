@@ -142,6 +142,9 @@ public class DeduceTypes {
 			}
 		} else if (element instanceof ClassStatement) {
 			parent._a.getContext().nameTable().add((OS_Element) element, ((ClassStatement) element).getName(), new OS_Type((ClassStatement) element));
+		} else if (element instanceof CaseConditional) {
+			CaseConditional cc = (CaseConditional) element;
+			int y=2;
 		} else {
 			System.out.println("91 "+element);
 			throw new NotImplementedException();
