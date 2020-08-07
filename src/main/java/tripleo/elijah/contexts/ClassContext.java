@@ -38,7 +38,8 @@ public class ClassContext extends Context {
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) &&
 				!(item instanceof FunctionDef) &&
-				!(item instanceof VariableSequence)
+				!(item instanceof VariableSequence) &&
+				!(item instanceof AliasStatement)
 			) continue;
 			if (item instanceof OS_Element2) {
 				if (((OS_Element2) item).name().equals(name)) {
@@ -74,7 +75,10 @@ public class ClassContext extends Context {
 			}
 //			System.out.println("1003 "+name+" "+Result.results());
 		}
-
+		// search inherited classes, tho this might be being done above
+//		for (Context context : carrier.classInheritance().) {
+//
+//		}
 		if (carrier.getParent() != null) {
 			final Context context = carrier.getParent().getContext();
 			if (!alreadySearched.contains(context))
