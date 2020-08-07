@@ -28,6 +28,10 @@ public interface IExpression {
 	@Deprecated String repr_();
 
 	IExpression UNASSIGNED = new BasicBinaryExpression() {
+		@Override
+		public String toString() {
+			return "<UNASSIGNED expression>";
+		}
 	};
 
 //	default boolean is_simple() {
