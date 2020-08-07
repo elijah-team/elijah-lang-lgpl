@@ -113,7 +113,7 @@ importPart1 [AssigningImportStatement cr] //current rule
     : i1:IDENT BECOMES q1=qualident {cr.addAssigningPart(i1,q1);}
     ;
 importPart2 [QualifiedImportStatement cr] //current rule
-		{Qualident q3;IdentList il=null;}
+		{Qualident q3;IdentList il=new IdentList();}
     : q3=qualident /*DOT*/ LCURLY identList[il] { cr.addSelectivePart(q3, il);} RCURLY
     ;
 importPart3 [NormalImportStatement cr] //current rule

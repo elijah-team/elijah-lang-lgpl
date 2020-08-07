@@ -1366,7 +1366,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		QualifiedImportStatement cr
 	) throws RecognitionException, TokenStreamException {
 		
-		Qualident q3;IdentList il=null;
+		Qualident q3;IdentList il=new IdentList();
 		
 		try {      // for error handling
 			q3=qualident();
