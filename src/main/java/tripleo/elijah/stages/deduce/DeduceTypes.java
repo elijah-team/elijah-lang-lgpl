@@ -148,6 +148,11 @@ public class DeduceTypes {
 		}
 	}
 
+	private OS_FuncExprType deduceFuncExpr(FuncExpr funcExpr, Context ctx) {
+		int y=2;
+		return new OS_FuncExprType(funcExpr);
+	}
+
 	private void addFunctionItem_Loop(Loop loop, FunctionDef parent) {
 
 		if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
