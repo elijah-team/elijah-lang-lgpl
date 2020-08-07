@@ -101,7 +101,7 @@ importStatement[OS_Element el] returns [ImportStatement pc]
         ( (IDENT BECOMES) =>
                 {pc=new AssigningImportStatement(el);}
             importPart1[(AssigningImportStatement)pc] (COMMA importPart1[(AssigningImportStatement)pc])*
-        | (qualident LCURLY) =>
+        | (qualident /*DOT*/ LCURLY) =>
                 {pc=new QualifiedImportStatement(el);}
             importPart2[(QualifiedImportStatement)pc] (COMMA importPart2[(QualifiedImportStatement)pc])*
         |       {pc=new NormalImportStatement(el);}
@@ -114,7 +114,7 @@ importPart1 [AssigningImportStatement cr] //current rule
     ;
 importPart2 [QualifiedImportStatement cr] //current rule
 		{Qualident q3;IdentList il=null;}
-    : q3=qualident LCURLY identList[il] { cr.addSelectivePart(q3, il);} RCURLY
+    : q3=qualident /*DOT*/ LCURLY identList[il] { cr.addSelectivePart(q3, il);} RCURLY
     ;
 importPart3 [NormalImportStatement cr] //current rule
 		{Qualident q2;}
