@@ -133,7 +133,13 @@ public class DeduceTypes {
 				expr.setType(expr.getLeft().getType());
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
 				deduceProcedureCall((ProcedureCallExpression) expr, parent.getContext());
-			} else throw new NotImplementedException();
+			} else if (expr.getKind() == ExpressionKind.FUNC_EXPR) {
+				OS_FuncExprType t = deduceFuncExpr((FuncExpr) expr, parent.getContext());
+				expr.setType(t);
+			}  else {
+				System.out.println(String.format("93 %s %s", expr, expr.getKind()));
+				throw new NotImplementedException();
+			}
 		} else if (element instanceof ClassStatement) {
 			parent._a.getContext().nameTable().add((OS_Element) element, ((ClassStatement) element).getName(), new OS_Type((ClassStatement) element));
 		} else {
