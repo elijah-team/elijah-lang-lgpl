@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.lang;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -28,7 +29,7 @@ public abstract class Context {
 		this.attached = attached;
 	}
 	
-	public LookupResultList lookup(String name) {
+	public LookupResultList lookup(@NotNull String name) {
 		final LookupResultList Result = new LookupResultList();
 		return lookup(name, 0, Result, new ArrayList<Context>());
 	}

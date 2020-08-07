@@ -24,6 +24,7 @@ public abstract class AbstractTypeName2 implements TypeName {
 	
 	public boolean isNull() {
 		//return tm == null && (typeName == null /*|| typeName.isNull()*/);
+		if (typeName == null) return false;
 		return _ltm.isEmpty() && typeName == null; // TODO check for correctness
 	}
 	

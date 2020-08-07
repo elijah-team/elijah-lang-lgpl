@@ -15,7 +15,6 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
 public class RegularTypeName extends AbstractTypeName2 implements TypeName {
 
@@ -35,6 +34,7 @@ public class RegularTypeName extends AbstractTypeName2 implements TypeName {
 	}
 
 public String getName() {
+	if (typeName == null) return null;
 	return this.typeName.asSimpleString();
 }
 
