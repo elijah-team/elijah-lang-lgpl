@@ -67,6 +67,16 @@ public class ModuleContext extends Context {
 				namespaceContext.lookup(name, level, Result, alreadySearched);
 			}
 		}
+		for (ModuleItem item : carrier.getItems()) {
+			if (item instanceof ImportStatement) {
+				final ImportStatement importStatement = (ImportStatement) item;
+//				System.err.println("2002 "+importStatement.importList());
+				for (Qualident importStatementItem : importStatement.parts()) {
+					System.err.println("2005 "+importStatementItem);
+				}
+			}
+		}
+//		System.err.println("2003 "+carrier.getItems());
 		if (carrier.prelude == null)
 			return Result;
 		return carrier.prelude.getContext().lookup(name, level+1, Result, alreadySearched);
