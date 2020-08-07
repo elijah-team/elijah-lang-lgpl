@@ -334,7 +334,7 @@ public class DeduceTypes {
 				pce.setType(t);
 			} else {
 				if (!(de instanceof IdentExpression)) System.err.println("100 "+de.getClass().getName());
-				module.parent.eee.reportError(String.format("1001 mIDENT not found: %s", de));
+				module.parent.eee.reportError(String.format("1001 IDENT not found: %s", de));
 				NotImplementedException.raise();
 				return false;
 			}
