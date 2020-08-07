@@ -34,6 +34,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="com.google.guava:guava:29.0-jre" level="project" />
-    <orderEntry type="library" name="buffers-v1-0.0.1" level="project" />
+    <orderEntry type="library" name="buffers-v1-0.0.2" level="project" />
   </component>
 </module>
