@@ -72,6 +72,10 @@ public class DeduceUtils {
 
 		@Override
 		public boolean apply(ClassItem o) {
+			//  TODO what about __call__ and __ctor__ for ClassStatement?
+			System.out.println("2000 "+o);
+			if (!(o instanceof FunctionDef)) return false;
+			//
 			final ExpressionList args = pce.getArgs();
 			// See if candidate matches args
 			/*if (((LookupResult)o).getElement() instanceof FunctionDef)*/ {
@@ -81,7 +85,6 @@ public class DeduceUtils {
 						                                       .stream()
 						                                       .filter(new MatchArgs(pce.getArgs()))
 						                                       .collect(Collectors.toList());
-				System.out.println("2000 "+o);
 				return matching_functions.size() > 0;
 			}
 //			return false;
