@@ -72,7 +72,7 @@ public class ModuleContext extends Context {
 				final ImportStatement importStatement = (ImportStatement) item;
 //				System.err.println("2002 "+importStatement.importList());
 				for (Qualident importStatementItem : importStatement.parts()) {
-					System.err.println("2005 "+importStatementItem);
+//					System.err.println("2005 "+importStatementItem);
 				}
 			}
 		}
