@@ -51,7 +51,7 @@ public class LookupResultList {
 		for (LookupResult lookupResult : _results) {
 			int score = 0;
 			for (Predicate predicate : l) {
-				if (predicate.test(lookupResult))
+				if (predicate.test(lookupResult.getElement()))
 					score++;
 			}
 			if (score >= maxScore && maxScore != 0) {
