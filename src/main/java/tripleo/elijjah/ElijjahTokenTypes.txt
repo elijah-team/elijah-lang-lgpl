@@ -26,8 +26,8 @@ ANNOT=26
 LITERAL_namespace="namespace"=27
 LITERAL_from="from"=28
 LITERAL_import="import"=29
-COMMA=30
-BECOMES=31
+BECOMES=30
+COMMA=31
 LT_=32
 LITERAL_constructor="constructor"=33
 LITERAL_ctor="ctor"=34

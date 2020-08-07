@@ -93,16 +93,24 @@ namespaceStatement [NamespaceStatement cls]:
     RCURLY
     ;
 importStatement [ImportStatement pc]:
-      "from" xy=qualident "import" qualidentList[pc.importList()] {pc.importRoot(xy);}
-    | "import" importPart[pc] (COMMA importPart[pc])*
-    // next?
+      "from" xy=qualident "import" qualidentList[pc.importList()] {pc.importRoot(xy);} opt_semi
+    | "import"
+        ( (IDENT BECOMES) =>    importPart1[pc] (COMMA importPart1[pc])*
+        | (qualident LCURLY) => importPart2[pc] (COMMA importPart2[pc])*
+        |                       importPart3[pc] (COMMA importPart3[pc])*
+        ) opt_semi
     ;
-importPart [ImportStatement cr] //current rule
-		{Qualident q1,q2,q3;IdentList il=null;}
+importPart1 [ImportStatement cr] //current rule
+		{Qualident q1;}
     : i1:IDENT BECOMES q1=qualident {cr.addAssigningPart(i1,q1);}
-    | (qualident LCURLY) =>
-        q3=qualident LCURLY { il=cr.addSelectivePart(q3);} identList[il] RCURLY
-    | q2=qualident {cr.addNormalPart(q2);}
+    ;
+importPart2 [ImportStatement cr] //current rule
+		{Qualident q3;IdentList il=null;}
+    : q3=qualident LCURLY { il=cr.addSelectivePart(q3);} identList[il] RCURLY
+    ;
+importPart3 [ImportStatement cr] //current rule
+		{Qualident q2;}
+    : q2=qualident {cr.addNormalPart(q2);}
     ;
 classInheritance_[ClassInheritance ci]:
     inhTypeName[ci.next()]
@@ -726,8 +734,7 @@ funcTypeExpr[TypeName pc]
 	  (LPAREN typeNameList[pc.argList()] RPAREN)?
 	  ((TOK_ARROW|TOK_COLON) typeName[pc.returnValue()] )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
-	  (LPAREN typeNameList[pc.argList()] RPAREN)?
-	)
+?)
 	;
 formalArgList[FormalArgList fal]
 	: (formalArgListItem_priv[fal.next()]
@@ -741,9 +748,9 @@ formalArgListItem_priv[FormalArgListItem fali]
 		| abstractGenericTypeName_xx[fali.typeName()]
 		)
 	;
-	
-	
-	
+
+
+
 //----------------------------------------------------------------------------
 // The Elijjah scanner
 //----------------------------------------------------------------------------

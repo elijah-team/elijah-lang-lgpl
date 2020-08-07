@@ -31,8 +31,8 @@ public interface ElijjahTokenTypes {
 	int LITERAL_namespace = 27;
 	int LITERAL_from = 28;
 	int LITERAL_import = 29;
-	int COMMA = 30;
-	int BECOMES = 31;
+	int BECOMES = 30;
+	int COMMA = 31;
 	int LT_ = 32;
 	int LITERAL_constructor = 33;
 	int LITERAL_ctor = 34;
