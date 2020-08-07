@@ -88,6 +88,8 @@ public class ExpandFunctions {
 					//FunctionPrelimInstruction fi2 = fc.introduceVariable(right_side);
 					FunctionPrelimInstruction fi3 = fc.assign(fi, /*fi2*/right_side);
 //					fi2.setInstructionNumber(-1); // why introduce in the first place?
+				} else if (right_side.getKind() == ExpressionKind.PROCEDURE_CALL) {
+					System.err.println("2002 here"); // TODO implement me
 				} else
 					throw new NotImplementedException();
 			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
