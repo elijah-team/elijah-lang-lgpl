@@ -52,15 +52,7 @@ public class ClassContext extends Context {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs);
 				}
-			} /*else if (item instanceof FunctionDef) {
-				if (((FunctionDef)item).funName.equals(name))
-					Result.add(name, level, item);
-				
-			} else if (((OS_Element2)item).name() != null) {
-				if (((OS_Element2)item).name().equals(name)) {
-					Result.add(name, level, item);
-				}
-			}*/
+			}
 		}
 		for (TypeName tn : carrier.classInheritance().tns) {
 //			System.out.println("1001 "+tn);
