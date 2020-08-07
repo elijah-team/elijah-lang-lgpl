@@ -332,7 +332,18 @@ public class DeduceTypes {
 				} else if (element instanceof ClassStatement) {
 					t = new OS_Type((ClassStatement) element);
 				} else if (element instanceof FunctionDef) {
-					t = new OS_FuncType((FunctionDef) element);
+					if (true) {
+						final TypeName typeName = ((FunctionDef) element).returnType();
+						if (typeName != null && typeName.getName() != null) {
+							LookupResultList lrl3 = ctx.lookup(typeName.getName());
+							final ClassStatement klass = (ClassStatement) lrl3.chooseBest(null);
+							if (klass != null)
+								t = new OS_Type(klass);
+						} else
+							t = null;
+					} else {
+						t = new OS_FuncType((FunctionDef) element);
+					}
 				}
 				if (t == null) {
 					System.err.println("89 "+element.getClass().getName());
@@ -357,7 +368,7 @@ public class DeduceTypes {
 		IExpression ss = s.peek();
 		while (!s.isEmpty()) {
 			ss = s.peek();
-			if (t != null && t.getType() == OS_Type.Type.USER_CLASS)
+			if (t != null && (t.getType() == OS_Type.Type.USER_CLASS || t.getType() == OS_Type.Type.FUNCTION))
 				ctx = t.getClassOf().getContext();
 			t = deduceExpression(ss, ctx);
 			ss.setType(t);  // TODO should this be here?
@@ -497,7 +508,12 @@ public class DeduceTypes {
 
 		if (lrl.results().size() == 1) {
 			LookupResult n = lrl.results().get(0);
-			pce.getLeft().setType(new OS_FuncType((FunctionDef) n.getElement()));
+			final OS_FuncType deducedExpression = new OS_FuncType((FunctionDef) n.getElement());
+			pce.getLeft().setType(deducedExpression); // TODO how do we know before looking at args?
+			final TypeName typeName = ((FunctionDef) n.getElement()).returnType();
+			LookupResultList lrl2 = parent.getContext().lookup(typeName.getName());
+			OS_Element best2 = lrl2.results().get(0).getElement();//chooseBest(null); // TODO not using chooseBest here. see why
+			pce.setType(new OS_Type((ClassStatement) best2));
 			deduceProcedureCall_ARGS(pce, parent.getContext());
 		} else {
 			System.err.println("191 too many results");
@@ -556,6 +572,7 @@ public class DeduceTypes {
 						final IExpression left = pce.getLeft();
 						if (left.getKind() == ExpressionKind.IDENT) {
 							deduceVariableStatement_procedureCallExpression(parent, iv, pce, (IdentExpression) left);
+							dtype = pce.getType();
 						}
 					}
 					if (dtype != null) {
@@ -678,6 +695,10 @@ public class DeduceTypes {
 		if (vs.typeName().isNull())
 			if (vs.initialValue() instanceof NumericExpression)
 				return new OS_Type(BuiltInTypes.SystemInteger);
+			else if (vs.initialValue() instanceof ProcedureCallExpression) {
+				deduceProcedureCall((ProcedureCallExpression) vs.initialValue(), ctx);
+				return vs.initialValue().getType();
+			}
 		return null;
 	}
 
@@ -701,6 +722,7 @@ public class DeduceTypes {
 			return new OS_Type(BuiltInTypes.SystemInteger);
 		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
 			DotExpression de = (DotExpression) n;
+			LookupResultList lrl = lookup_dot_expression(context, de);
 			OS_Type left_type = deduceExpression(de.getLeft(), context);
 			OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
 			int y=2;
