@@ -305,7 +305,7 @@ public class FactorialR /* extends TestCase */ {
 		buf.append_nl("} // close select "+node.getExpr().genText()+"");
 	}
 	
-	public class Transform1 implements Transform {
+	public class Transform1 implements Transform<ArgumentNode> {
 		/* (non-Javadoc)
 		 * @see tripleo.util.buffer.Transform#transform(tripleo.elijah.gen.nodes.ArgumentNode, tripleo.util.buffer.DefaultBuffer)
 		 */
