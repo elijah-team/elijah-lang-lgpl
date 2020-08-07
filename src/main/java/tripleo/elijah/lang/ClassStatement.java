@@ -52,13 +52,13 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		}
 	}
 
-	/**
-	 * A simple add-to-list operation
-	 * @param aDef
-	 */
-	public void add(ClassItem aDef) {
-		items.add(aDef);
-	}
+//	/**
+//	 * A simple add-to-list operation
+//	 * @param aDef
+//	 */
+//	public void add(ClassItem aDef) {
+//		items.add(aDef);
+//	}
 
 	@Override
 	public void addDocString(Token aText) {
