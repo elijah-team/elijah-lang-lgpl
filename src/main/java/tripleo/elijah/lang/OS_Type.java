@@ -18,7 +18,6 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.lang2.BuiltInTypes;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.Objects;
 
@@ -58,6 +57,7 @@ public class OS_Type {
 	public ClassStatement getClassOf() {
 		if (etype != null && etype instanceof ClassStatement)
 			return (ClassStatement) etype;
+		System.err.println("3001 "+etype+" "+toString());
 		throw new IllegalArgumentException();
 //		return null;
 	}
@@ -89,6 +89,7 @@ public class OS_Type {
 
 	/*@ ensures type_of_type = Type.USER_CLASS; */
 	public OS_Type(ClassStatement klass) {
+		assert klass != null;
 		this.etype = klass;
 		this.type_of_type = Type.USER_CLASS;
 	}
