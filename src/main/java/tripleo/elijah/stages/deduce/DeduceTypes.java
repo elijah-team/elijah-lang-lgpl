@@ -167,8 +167,12 @@ public class DeduceTypes {
 
 			if (loop.getFromPart() instanceof IdentExpression)
 				loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
-			else
+			else if (loop.getFromPart() instanceof NumericExpression) {
+				System.err.println("2007 "+loop.getFromPart());
+			} else {
+				System.err.println("2006 "+loop.getFromPart().getClass().getName());
 				throw new NotImplementedException();
+			}
 
 //			final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
 //			if (loop.getToPart() instanceof NumericExpression) {
