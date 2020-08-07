@@ -73,7 +73,7 @@ public class DeduceUtils {
 		@Override
 		public boolean apply(ClassItem o) {
 			//  TODO what about __call__ and __ctor__ for ClassStatement?
-			System.out.println("2000 "+o);
+//			System.out.println("2000 "+o);
 			if (!(o instanceof FunctionDef)) return false;
 			//
 			final ExpressionList args = pce.getArgs();
