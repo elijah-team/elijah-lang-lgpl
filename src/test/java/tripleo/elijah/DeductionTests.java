@@ -40,7 +40,7 @@ public class DeductionTests {
 
 	@Test
 	public final void testListFolders() {
-		List<String> args = Helpers.List_of("test/demo-el-normal/listfolders2.elijah", "test/demo-el-normal/listfolders.elijah", "-sE");
+		List<String> args = Helpers.List_of(/*"test/demo-el-normal/listfolders2.elijah",*/ "test/demo-el-normal/listfolders.elijah", "-sE");
 		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
