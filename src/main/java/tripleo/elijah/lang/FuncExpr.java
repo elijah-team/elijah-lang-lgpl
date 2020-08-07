@@ -17,13 +17,18 @@ import java.util.List;
  */
 public class FuncExpr implements IExpression, OS_Element {
 
-//	private final TypeNameList argList = new TypeNameList();
+	private List<String> docstrings = new ArrayList<String>();
+	private List<FunctionItem> items = new ArrayList<FunctionItem>();
+	//	private final TypeNameList argList = new TypeNameList();
 	private final FormalArgList argList = new FormalArgList();
+	private final FuncExprScope funcExprScope = new FuncExprScope(this);
 	private final RegularTypeName _returnType = new RegularTypeName();
+	private OS_Type _type;
+
 
 	public void type(TypeModifiers function) {
 		// TODO Auto-generated method stub
-		
+		NotImplementedException.raise();
 	}
 
 	public FormalArgList argList() {
@@ -34,14 +39,9 @@ public class FuncExpr implements IExpression, OS_Element {
 		return _returnType;
 	}
 
-	final FuncExprScope funcExprScope = new FuncExprScope(this);
-
 	public Scope scope() {
 		return funcExprScope;
 	}
-
-	private List<String> docstrings = new ArrayList<String>();
-	private List<FunctionItem> items = new ArrayList<FunctionItem>();
 
 	final static class FuncExprScope implements Scope {
 
@@ -143,13 +143,12 @@ public class FuncExpr implements IExpression, OS_Element {
 	/************* FOR THE OTHER ONE ******************/
 	@Override
 	public void setType(OS_Type deducedExpression) {
-		throw new NotImplementedException();
+		_type = deducedExpression;
 	}
 
 	@Override
 	public OS_Type getType() {
-		throw new NotImplementedException();
-//		return null;
+		return _type;
 	}
 
 	@Override
