@@ -133,7 +133,12 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 	
 	public ProgramClosure XXX() {
-		return new ProgramClosure() {};
+		return new ProgramClosure() {
+			@Override
+			public void addImportStatement(ImportStatement imp) {
+				add(imp);
+			}
+		};
 	}
 
 	@Override // OS_Element

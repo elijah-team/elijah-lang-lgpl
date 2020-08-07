@@ -181,6 +181,11 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	public void setType(ClassTypes aType) {
 		_type = aType;
 	}
+
+	@Override
+	public void addImportStatement(ImportStatement imp) {
+		add(imp);
+	}
 }
 
 //

@@ -31,9 +31,9 @@ public class ParserClosure extends ProgramClosure {
 		return super.classStatement(module());
 	}
 
-	public ImportStatement importStatement() {
-		return super.importStatement(module());
-	}
+//	public ImportStatement importStatement() {
+//		return super.importStatement(module());
+//	}
 
 	public NamespaceStatement namespaceStatement() {
 		return super.namespaceStatement(module());
@@ -54,5 +54,10 @@ public class ParserClosure extends ProgramClosure {
 		return new IndexingStatement(module());
 	}
 
+	@Override
+	public void addImportStatement(ImportStatement imp) {
+		System.err.println("3000 adding import statement to module");
+		module.add(imp); // TODO is this correct?
+	}
 }
 

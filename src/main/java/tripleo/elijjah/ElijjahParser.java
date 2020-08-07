@@ -20,6 +20,7 @@ import antlr.ASTPair;
 import antlr.collections.impl.ASTArray;
 
 import tripleo.elijah.lang.*;
+import tripleo.elijah.lang.imports.*;
 import tripleo.elijah.lang2.*;
 import tripleo.elijah.*;
 
@@ -213,13 +214,17 @@ public ElijjahParser(ParserSharedInputState state) {
 		ProgramClosure pc, OS_Element cont
 	) throws RecognitionException, TokenStreamException {
 		
+		ImportStatement imp=null;
 		
 		try {      // for error handling
 			switch ( LA(1)) {
 			case LITERAL_from:
 			case LITERAL_import:
 			{
-				importStatement(pc.importStatement(cont));
+				imp=importStatement(cont);
+				if ( inputState.guessing==0 ) {
+					pc.addImportStatement(imp);
+				}
 				break;
 			}
 			case LITERAL_namespace:
@@ -1145,21 +1150,26 @@ public ElijjahParser(ParserSharedInputState state) {
 		}
 	}
 	
-	public final void importStatement(
-		ImportStatement pc
+	public final ImportStatement  importStatement(
+		OS_Element el
 	) throws RecognitionException, TokenStreamException {
+		ImportStatement pc;
 		
+		pc=null;
 		
 		try {      // for error handling
 			switch ( LA(1)) {
 			case LITERAL_from:
 			{
 				match(LITERAL_from);
+				if ( inputState.guessing==0 ) {
+					pc=new RootedImportStatement(el);
+				}
 				xy=qualident();
 				match(LITERAL_import);
-				qualidentList(pc.importList());
+				qualidentList(((RootedImportStatement)pc).importList());
 				if ( inputState.guessing==0 ) {
-					pc.importRoot(xy);
+					((RootedImportStatement)pc).importRoot(xy);
 				}
 				opt_semi();
 				break;
@@ -1186,13 +1196,16 @@ public ElijjahParser(ParserSharedInputState state) {
 					inputState.guessing--;
 				}
 				if ( synPredMatched30 ) {
-					importPart1(pc);
+					if ( inputState.guessing==0 ) {
+						pc=new AssigningImportStatement(el);
+					}
+					importPart1((AssigningImportStatement)pc);
 					{
 					_loop32:
 					do {
 						if ((LA(1)==COMMA)) {
 							match(COMMA);
-							importPart1(pc);
+							importPart1((AssigningImportStatement)pc);
 						}
 						else {
 							break _loop32;
@@ -1220,13 +1233,16 @@ public ElijjahParser(ParserSharedInputState state) {
 						inputState.guessing--;
 					}
 					if ( synPredMatched34 ) {
-						importPart2(pc);
+						if ( inputState.guessing==0 ) {
+							pc=new QualifiedImportStatement(el);
+						}
+						importPart2((QualifiedImportStatement)pc);
 						{
 						_loop36:
 						do {
 							if ((LA(1)==COMMA)) {
 								match(COMMA);
-								importPart2(pc);
+								importPart2((QualifiedImportStatement)pc);
 							}
 							else {
 								break _loop36;
@@ -1236,13 +1252,16 @@ public ElijjahParser(ParserSharedInputState state) {
 						}
 					}
 					else if ((LA(1)==IDENT) && (_tokenSet_16.member(LA(2)))) {
-						importPart3(pc);
+						if ( inputState.guessing==0 ) {
+							pc=new NormalImportStatement(el);
+						}
+						importPart3((NormalImportStatement)pc);
 						{
 						_loop38:
 						do {
 							if ((LA(1)==COMMA)) {
 								match(COMMA);
-								importPart3(pc);
+								importPart3((NormalImportStatement)pc);
 							}
 							else {
 								break _loop38;
@@ -1274,6 +1293,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				  throw ex;
 				}
 			}
+			return pc;
 		}
 		
 	public final void qualidentList(
@@ -1316,7 +1336,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void importPart1(
-		ImportStatement cr
+		AssigningImportStatement cr
 	) throws RecognitionException, TokenStreamException {
 		
 		Token  i1 = null;
@@ -1343,7 +1363,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void importPart2(
-		ImportStatement cr
+		QualifiedImportStatement cr
 	) throws RecognitionException, TokenStreamException {
 		
 		Qualident q3;IdentList il=null;
@@ -1351,10 +1371,10 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			q3=qualident();
 			match(LCURLY);
-			if ( inputState.guessing==0 ) {
-				il=cr.addSelectivePart(q3);
-			}
 			identList(il);
+			if ( inputState.guessing==0 ) {
+				cr.addSelectivePart(q3, il);
+			}
 			match(RCURLY);
 		}
 		catch (RecognitionException ex) {
@@ -1369,7 +1389,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void importPart3(
-		ImportStatement cr
+		NormalImportStatement cr
 	) throws RecognitionException, TokenStreamException {
 		
 		Qualident q2;

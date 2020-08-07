@@ -10,16 +10,16 @@ package tripleo.elijah;
 
 import tripleo.elijah.lang.*;
 
-public class ProgramClosure {
+public abstract class ProgramClosure {
 	public ClassStatement classStatement(OS_Element aParent) {
 		final ClassStatement classStatement = new ClassStatement(aParent);
 		return classStatement;
 	}
 	
-	public ImportStatement importStatement(OS_Element aParent) {
-		final ImportStatement importStatement = new ImportStatement(aParent);
-		return importStatement;
-	}
+//	public ImportStatement importStatement(OS_Element aParent) {
+//		final ImportStatement importStatement = new ImportStatement(aParent);
+//		return importStatement;
+//	}
 	
 	public NamespaceStatement namespaceStatement(OS_Element aParent) {
 		final NamespaceStatement namespaceStatement = new NamespaceStatement(aParent);
@@ -30,6 +30,9 @@ public class ProgramClosure {
 		final AliasStatement aliasStatement = new AliasStatement(aParent);
 		return aliasStatement;
 	}
+
+	public abstract void addImportStatement(ImportStatement imp);
+
 }
 
 //

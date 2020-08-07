@@ -13,18 +13,12 @@ import java.util.List;
 
 public class QualidentList {
 
-	public QualidentList() {
-	}
-
-//	public void add(String s) {
-//	}
-
 	public void add(Qualident qid) {
 		// TODO Auto-generated method stub
 		parts.add(qid);
 	}
 	
-	List<Qualident> parts = new ArrayList<Qualident>();
+	public List<Qualident> parts = new ArrayList<Qualident>();
 }
 
 //

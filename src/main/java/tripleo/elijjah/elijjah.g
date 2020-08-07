@@ -4,6 +4,7 @@ header {
 
 {
 import tripleo.elijah.lang.*;
+import tripleo.elijah.lang.imports.*;
 import tripleo.elijah.lang2.*;
 import tripleo.elijah.*;
 }
@@ -92,23 +93,30 @@ namespaceStatement [NamespaceStatement cls]:
      namespaceScope[cls]
     RCURLY
     ;
-importStatement [ImportStatement pc]:
-      "from" xy=qualident "import" qualidentList[pc.importList()] {pc.importRoot(xy);} opt_semi
+importStatement[OS_Element el] returns [ImportStatement pc]
+	 {pc=null;}
+    : "from" {pc=new RootedImportStatement(el);}
+        xy=qualident "import" qualidentList[((RootedImportStatement)pc).importList()] {((RootedImportStatement)pc).importRoot(xy);} opt_semi
     | "import"
-        ( (IDENT BECOMES) =>    importPart1[pc] (COMMA importPart1[pc])*
-        | (qualident LCURLY) => importPart2[pc] (COMMA importPart2[pc])*
-        |                       importPart3[pc] (COMMA importPart3[pc])*
+        ( (IDENT BECOMES) =>
+                {pc=new AssigningImportStatement(el);}
+            importPart1[(AssigningImportStatement)pc] (COMMA importPart1[(AssigningImportStatement)pc])*
+        | (qualident LCURLY) =>
+                {pc=new QualifiedImportStatement(el);}
+            importPart2[(QualifiedImportStatement)pc] (COMMA importPart2[(QualifiedImportStatement)pc])*
+        |       {pc=new NormalImportStatement(el);}
+            importPart3[(NormalImportStatement)pc] (COMMA importPart3[(NormalImportStatement)pc])*
         ) opt_semi
     ;
-importPart1 [ImportStatement cr] //current rule
+importPart1 [AssigningImportStatement cr] //current rule
 		{Qualident q1;}
     : i1:IDENT BECOMES q1=qualident {cr.addAssigningPart(i1,q1);}
     ;
-importPart2 [ImportStatement cr] //current rule
+importPart2 [QualifiedImportStatement cr] //current rule
 		{Qualident q3;IdentList il=null;}
-    : q3=qualident LCURLY { il=cr.addSelectivePart(q3);} identList[il] RCURLY
+    : q3=qualident LCURLY identList[il] { cr.addSelectivePart(q3, il);} RCURLY
     ;
-importPart3 [ImportStatement cr] //current rule
+importPart3 [NormalImportStatement cr] //current rule
 		{Qualident q2;}
     : q2=qualident {cr.addNormalPart(q2);}
     ;
@@ -176,8 +184,9 @@ functionDef[FunctionDef fd]:
     | (LCURLY docstrings[null])=> LCURLY docstrings[fd.scope()] "abstract" {fd.setAbstract(true);} RCURLY // TODO what about pre/post??
     )
     ;
-programStatement[ProgramClosure pc, OS_Element cont]:
-    importStatement[pc.importStatement(cont)]
+programStatement[ProgramClosure pc, OS_Element cont]
+		{ImportStatement imp=null;}
+    : imp=importStatement[cont] {pc.addImportStatement(imp);}
     | namespaceStatement[pc.namespaceStatement(cont)]
     | classStatement[pc.classStatement(cont)]
     | aliasStatement[pc.aliasStatement(cont)]
@@ -734,7 +743,8 @@ funcTypeExpr[TypeName pc]
 	  (LPAREN typeNameList[pc.argList()] RPAREN)?
 	  ((TOK_ARROW|TOK_COLON) typeName[pc.returnValue()] )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
-?)
+	  (LPAREN typeNameList[pc.argList()] RPAREN)?
+	)
 	;
 formalArgList[FormalArgList fal]
 	: (formalArgListItem_priv[fal.next()]
