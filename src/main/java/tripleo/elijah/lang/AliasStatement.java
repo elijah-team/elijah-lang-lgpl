@@ -20,6 +20,11 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 
     public AliasStatement(OS_Element aParent) {
         this.parent = aParent;
+	    if (parent instanceof OS_Container) {
+		    ((OS_Container) parent).add(this);
+	    } else {
+		    throw new IllegalStateException("adding AliasStatement to "+aParent.getClass().getName());
+	    }
     }
 
 	public void setExpression(IExpression expr) {
