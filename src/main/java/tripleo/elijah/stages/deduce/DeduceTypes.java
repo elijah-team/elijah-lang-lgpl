@@ -501,6 +501,8 @@ public class DeduceTypes {
 	}
 
 	private void deduceProcedureCall_ARGS(ProcedureCallExpression pce, final Context ctx) {
+		if (pce.getArgs() == null) return;
+		//
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
 /*
 		List<OS_Type> q = expressions.stream()
