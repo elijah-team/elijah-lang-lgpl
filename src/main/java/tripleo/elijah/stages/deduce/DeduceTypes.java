@@ -286,6 +286,12 @@ public class DeduceTypes {
 		}
 	}
 
+	/**
+	 *
+	 * @param pce
+	 * @param ctx
+	 * @return true if we found a type
+	 */
 	private boolean deduceProcedureCall_LEFT(final ProcedureCallExpression pce, Context ctx) {
 		IExpression de;
 		if (pce.getLeft() instanceof Qualident) {
@@ -296,8 +302,7 @@ public class DeduceTypes {
 			de = pce.getLeft();
 		}
 
-		OS_Type t = null;//deduceExpression(de, ctx);
-//		int y=2;
+		OS_Type t = null;
 		{
 			LookupResultList lrl;
 			if (de instanceof DotExpression)
