@@ -34,6 +34,7 @@ public class NamespaceContext extends Context {
 			if (!(item instanceof ClassStatement) &&
 					    !(item instanceof NamespaceStatement) &&
 					    !(item instanceof VariableSequence) &&
+					    !(item instanceof AliasStatement) &&
 						!(item instanceof FunctionDef)
 			) continue;
 			if (item instanceof OS_Element2) {

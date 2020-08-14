@@ -11,6 +11,9 @@ package tripleo.elijah.lang;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * Created on 5/3/2019 at 21:41
  *
@@ -20,6 +23,10 @@ import tripleo.elijah.util.NotImplementedException;
 public class OS_Package implements OS_Element {
 	public static OS_Package default_package = new OS_Package(null, 0);
 	private OS_Module _module;
+	private List<OS_Element> elements = new ArrayList<OS_Element>();
+
+	int _code;
+	Qualident _name;
 
 	@Override
 	public void visitGen(ICodeGen visit) {
@@ -27,20 +34,17 @@ public class OS_Package implements OS_Element {
 	}
 
 	// TODO packages, elements
-	
+
 	public OS_Package(Qualident aName, int aCode) {
 		_code = aCode;
 		_name = aName;
 	}
-	
+
 	public OS_Package(Qualident aName, int aCode, OS_Module module) {
 		_code = aCode;
 		_name = aName;
 		_module = module;
 	}
-	
-	int _code;
-	Qualident _name;
 
 	@Override
 	public OS_Element getParent() {
@@ -53,5 +57,15 @@ public class OS_Package implements OS_Element {
 		return null; //_a._context;
 	}
 
-	
+	//
+	// ELEMENTS
+	//
+
+	public void addElement(OS_Element element) {
+		elements.add(element);
+	}
+
+	public List<OS_Element> getElements() {
+		return elements;
+	}
 }

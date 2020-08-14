@@ -10,6 +10,7 @@ package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,6 +74,19 @@ public class ModuleContext extends Context {
 //				System.err.println("2002 "+importStatement.importList());
 				for (Qualident importStatementItem : importStatement.parts()) {
 //					System.err.println("2005 "+importStatementItem);
+					if (carrier.parent.isPackage(importStatementItem.toString())) {
+						List<OS_Element> l = new ArrayList<>();
+						OS_Package aPackage = carrier.parent.getPackage(importStatementItem);
+						for (OS_Element element : aPackage.getElements()) {
+							System.err.println("4000 "+element);
+							if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
+//				                System.err.println(4103);
+								final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
+								namespaceContext.lookup(name, level, Result, alreadySearched);
+							}
+						}
+
+					}
 				}
 			}
 		}
@@ -81,6 +95,7 @@ public class ModuleContext extends Context {
 			return Result;
 		return carrier.prelude.getContext().lookup(name, level+1, Result, alreadySearched);
 	}
+
 
 }
 

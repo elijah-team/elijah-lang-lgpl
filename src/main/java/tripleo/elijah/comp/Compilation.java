@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.Out;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.lang.OS_Package;
+import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.stages.deduce.DeduceTypes;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
@@ -37,6 +39,8 @@ public class Compilation {
 	public ErrSink eee;
 	private List<OS_Module> modules = new ArrayList<OS_Module>();
 	private Map<String, OS_Module> fn2m = new HashMap<String, OS_Module>();
+	private Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
+	private int _packageCode = 1;
 
 	public Compilation(ErrSink eee, IO io) {
 		this.eee = eee;
@@ -216,6 +220,33 @@ public class Compilation {
 	public int nextFunctionCode() {
 		return _functionCode++;
 	}
+
+	//
+	//  PACKAGES
+	//
+
+	public boolean isPackage(String pkg) {
+		return _packages.containsKey(pkg);
+	}
+
+	public OS_Package getPackage(Qualident pkg_name) {
+		return _packages.get(pkg_name.toString());
+	}
+
+	public OS_Package makePackage(Qualident pkg_name) {
+		if (!isPackage(pkg_name.toString())) {
+			final OS_Package newPackage = new OS_Package(pkg_name, nextPackageCode());
+			_packages.put(pkg_name.toString(), newPackage);
+			return newPackage;
+		} else
+			return _packages.get(pkg_name.toString());
+	}
+
+	private int nextPackageCode() {
+		return _packageCode++;
+	}
+
+
 }
 
 //

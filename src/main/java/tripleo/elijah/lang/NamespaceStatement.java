@@ -41,6 +41,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 			final OS_Module module = (OS_Module) aElement;
 			//
 			this.setPackageName(module.pullPackageName());
+			_packageName.addElement(this);
 			module.add(this);
 		} else if (aElement instanceof OS_Container) {
 			((OS_Container) aElement).add(this);

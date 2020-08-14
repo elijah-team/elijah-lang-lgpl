@@ -170,7 +170,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	public OS_Package pullPackageName() {
 		if (packageNames_q.empty())
 			return OS_Package.default_package;
-		return new OS_Package(packageNames_q.peek(), packageNames_q.size()); // TODO
+		return parent.makePackage(packageNames_q.peek());//new OS_Package(packageNames_q.peek(), packageNames_q.size()); // TODO
 	}
 
 	public void pushPackageName(Qualident xyz) {
