@@ -12,7 +12,7 @@ import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
-public class FormalArgListItem implements OS_Element {
+public class FormalArgListItem implements OS_Element, OS_Element2 {
 	
 	public Token name;
 	public TypeName tn=new RegularTypeName(); // TODO why make the choice for the program?
@@ -45,6 +45,11 @@ public class FormalArgListItem implements OS_Element {
         throw new NotImplementedException();
 //        return null;
     }
+
+	@Override // OS_Element2
+	public String name() {
+		return name.getText();
+	}
 }
 
 //
