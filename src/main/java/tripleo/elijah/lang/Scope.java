@@ -9,12 +9,11 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.Documentable;
-import tripleo.elijah.gen.ICodeGen;
 
 // Referenced classes of package pak2:
 //			StatementClosure, BlockStatement
 
-public interface Scope extends Documentable, OS_Element {
+public interface Scope extends Documentable/*, OS_Element*/ {
 
 	void statementWrapper(IExpression aExpr);
 
@@ -28,6 +27,7 @@ public interface Scope extends Documentable, OS_Element {
 	
 	InvariantStatement invariantStatement();
 	
+/*
 	@Override
 	default Context getContext() {
 		// TODO Auto-generated method stub
@@ -45,7 +45,9 @@ public interface Scope extends Documentable, OS_Element {
 		// TODO Auto-generated method stub
 		
 	}
+*/
 
+	OS_Element getParent();
 	OS_Element getElement();
 }
 

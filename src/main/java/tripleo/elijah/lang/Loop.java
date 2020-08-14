@@ -122,6 +122,11 @@ private Attached _a = new Attached(new LoopContext(this));
 		}
 
 		@Override
+		public OS_Element getParent() {
+			return Loop.this;
+		}
+
+		@Override
 		public OS_Element getElement() {
 			return Loop.this;
 		}

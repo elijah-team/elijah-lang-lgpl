@@ -110,6 +110,11 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 			}
 
 			@Override
+			public OS_Element getParent() {
+				return NamespaceStatement.this;
+			}
+
+			@Override
 			public OS_Element getElement() {
 				return NamespaceStatement.this;
 			}

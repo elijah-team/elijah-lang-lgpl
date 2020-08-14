@@ -81,6 +81,11 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 			}
 
 			@Override
+			public OS_Element getParent() {
+				return realParent;
+			}
+
+			@Override
 			public OS_Element getElement() {
 				return realParent;
 			}

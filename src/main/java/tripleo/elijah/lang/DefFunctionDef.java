@@ -93,6 +93,11 @@ public class DefFunctionDef implements ClassItem {
 		}
 
 		@Override
+		public OS_Element getParent() {
+			return DefFunctionDef.this;
+		}
+
+		@Override
 		public OS_Element getElement() {
 			return DefFunctionDef.this;
 		}

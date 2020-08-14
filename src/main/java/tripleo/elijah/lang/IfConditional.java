@@ -61,6 +61,11 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		}
 
 	    @Override
+	    public OS_Element getParent() {
+		    return IfConditional.this;
+	    }
+
+	    @Override
 	    public OS_Element getElement() {
 		    return IfConditional.this;
 	    }
