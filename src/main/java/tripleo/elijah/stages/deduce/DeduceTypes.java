@@ -18,10 +18,7 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.util.NotImplementedException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -119,7 +116,7 @@ public class DeduceTypes {
 		} else if (element instanceof Loop) {
 			addFunctionItem_Loop((Loop) element, parent);
 		} else if (element instanceof IfConditional) {
-			System.out.println("92 Fount if conditional "+((IfConditional) element).getExpr());
+			System.out.println("92 Fount if conditional "+((IfConditional) element).getExpr()); // TODO lookup expr, wrap with __bool__
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
@@ -189,9 +186,13 @@ public class DeduceTypes {
 //						varname, "vv"+toPart.getText(),  varname));
 //
 //			}
-//			for (StatementItem item : loop.getItems()) {
-//				System.out.println("\t"+item);
-//			}
+			for (StatementItem item : loop.getItems()) {
+				System.out.println("2007 \t"+item);
+				if (item instanceof StatementWrapper) {
+					OS_Type t = deduceExpression(((StatementWrapper) item).getExpr(), parent.getContext());
+					System.out.println("2008 \t"+t);
+				}
+			}
 //			System.out.println("}");
 		} else if (loop.getType() == LoopTypes2.EXPR_TYPE) {
 			addFunctionItem_Loop_EXPR_TYPE(loop, parent);
@@ -220,9 +221,12 @@ public class DeduceTypes {
 		deduceExpression_(toex.getLeft(), parent.getContext());
 		deduceExpression_(toex.getRight(), parent.getContext());
 
-		if (loop.getFromPart() instanceof IdentExpression)
-			loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
-		else if (loop.getFromPart() == null) {
+		if (loop.getFromPart() instanceof IdentExpression) {
+			//
+			//   DON'T MODIFY NAMESPACE
+			//
+//			loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
+		} else if (loop.getFromPart() == null) {
 			System.out.println("88 loop.getFromPart() == null");
 		} else
 			throw new NotImplementedException();
@@ -247,7 +251,8 @@ public class DeduceTypes {
 							deduceExpression_(((BasicBinaryExpression) e).getRight(), loop.getContext());
 							e.setType(e.getLeft().getType());
 						}
-					}
+					} else
+						throw new NotImplementedException();
 
 				}
 //				System.out.println("}");
@@ -263,17 +268,6 @@ public class DeduceTypes {
 	private void deduceExpression_(IExpression expression, Context context) {
 		OS_Type t = deduceExpression(expression, context);
 		expression.setType(t);
-	}
-
-	static class ExpressionPair {
-
-		private final IExpression left;
-		private final IExpression right;
-
-		public ExpressionPair(IExpression left, IExpression right) {
-			this.left=left;
-			this.right=right;
-		}
 	}
 
 	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
@@ -303,7 +297,9 @@ public class DeduceTypes {
 		}
 
 		OS_Type t = null;
-		{
+		if (de.getType() != null) {
+			t = de.getType(); // TODO what about pce.setType?
+		} else {
 			LookupResultList lrl;
 			if (de instanceof DotExpression)
 				lrl = lookup_dot_expression(ctx, (DotExpression) de);
@@ -346,7 +342,7 @@ public class DeduceTypes {
 					}
 				}
 				if (t == null) {
-					System.err.println("89 "+element.getClass().getName());
+					System.err.println("189 "+element.getClass().getName());
 					module.parent.eee.reportError("type not specified: "+ getElementName(element));
 					NotImplementedException.raise();
 					return false;
@@ -508,13 +504,24 @@ public class DeduceTypes {
 
 		if (lrl.results().size() == 1) {
 			LookupResult n = lrl.results().get(0);
-			final OS_FuncType deducedExpression = new OS_FuncType((FunctionDef) n.getElement());
-			pce.getLeft().setType(deducedExpression); // TODO how do we know before looking at args?
-			final TypeName typeName = ((FunctionDef) n.getElement()).returnType();
-			LookupResultList lrl2 = parent.getContext().lookup(typeName.getName());
-			OS_Element best2 = lrl2.results().get(0).getElement();//chooseBest(null); // TODO not using chooseBest here. see why
-			pce.setType(new OS_Type((ClassStatement) best2));
-			deduceProcedureCall_ARGS(pce, parent.getContext());
+			if (n.getElement() instanceof FunctionDef) {
+				final OS_FuncType deducedExpression = new OS_FuncType((FunctionDef) n.getElement());
+				pce.getLeft().setType(deducedExpression); // TODO how do we know before looking at args?
+				if (true) {
+					final TypeName typeName = ((FunctionDef) n.getElement()).returnType();
+					LookupResultList lrl2 = parent.getContext().lookup(typeName.getName());
+					OS_Element best2 = lrl2.results().get(0).getElement();//chooseBest(null); // TODO not using chooseBest here. see why
+					pce.setType(new OS_Type((ClassStatement) best2));
+				} else {
+					pce.setType(deducedExpression);
+				}
+				deduceProcedureCall_ARGS(pce, parent.getContext());
+			} else if (n.getElement() instanceof AliasStatement) {
+				System.err.println("196 "+n.getElement());
+			} else {
+				throw new NotImplementedException();
+			}
+
 		} else {
 			System.err.println("191 too many results");
 		}
@@ -791,6 +798,20 @@ public class DeduceTypes {
 			addModuleItem(element);
 		}
 	}
+
+	public static final class LRUCache<K, V> extends LinkedHashMap<K, V> {
+		private final int maxCacheSize;
+
+		public LRUCache(int initialCapacity, int maxCacheSize) {
+			super(initialCapacity, 0.75F, true);
+			this.maxCacheSize = maxCacheSize;
+		}
+
+		protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+			return this.size() > this.maxCacheSize;
+		}
+	}
+
 }
 
 //
