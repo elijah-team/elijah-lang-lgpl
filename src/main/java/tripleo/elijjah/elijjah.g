@@ -132,10 +132,9 @@ docstrings[Documentable sc]:
     |)
     ;
 classScope[ClassStatement cr]
-        {ConstructorDef cd=null;DestructorDef dd=null;}
     : docstrings[cr]
-    ( ("constructor"|"ctor") (x1:IDENT {cd=cr.addCtor(x1);}|{cd=cr.addCtor(null);}) opfal[cd.fal()] scope[cd.scope()]
-    |    ("destructor"|"dtor") {dd=cr.addDtor();} opfal[dd.fal()] scope[dd.scope()]
+    ( constructorDef[cr]
+    | destructorDef[cr]
     | functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure(), cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
@@ -144,15 +143,30 @@ classScope[ClassStatement cr]
     | invariantStatement[cr.invariantStatement()]
     | accessNotation)*
     ;
+constructorDef[ClassStatement cr]
+        {ConstructorDef cd=null;}
+	: ("constructor"|"ctor")
+		(x1:IDENT   {cd=cr.addCtor(x1);}
+		|           {cd=cr.addCtor(null);}
+		)
+		opfal[cd.fal()]
+		scope[cd.scope()]
+	;
+destructorDef[ClassStatement cr]
+        {DestructorDef dd=null;}
+	: ("destructor"|"dtor") {dd=cr.addDtor();}
+		opfal[dd.fal()]
+		scope[dd.scope()]
+	;
 namespaceScope[NamespaceStatement cr]
         //{Scope sc=null;}
     : docstrings[cr]
-    ( functionDef[cr.funcDef()]
+    (( functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure(), cr]
     | typeAlias[cr.typeAlias()]
     | programStatement[cr.XXX(), cr]
     | invariantStatement[cr.invariantStatement()]
-    | accessNotation)*
+    | accessNotation ) opt_semi )*
     ;
 inhTypeName[TypeName tn]:
     (("const" {tn.set(TypeModifiers.CONST);})? specifiedGenericTypeName_xx[tn]
@@ -175,14 +189,29 @@ scope[Scope sc]
       ) opt_semi )*
       RCURLY
     ;
+functionScope[Scope sc]
+      //{IExpression expr;}
+    : LCURLY docstrings[sc]
+      (
+        (
+            ( statement[sc.statementClosure(), sc.getParent()]
+            | expr=expression {sc.statementWrapper(expr);}
+            | classStatement[new ClassStatement(sc.getParent())]
+            | "continue"
+            | "break" // opt label?
+            | "return" ((expression) => (expr=expression)|)
+            )
+            opt_semi
+        )*
+      | "abstract" opt_semi {((FunctionDef)((FunctionDef.FunctionDefScope)sc).getParent()).setAbstract(true);}
+      ) RCURLY
+    ;
 functionDef[FunctionDef fd]:
     i1:IDENT {fd.setName(i1);}
     ( "const"|"immutable" )?
     opfal[fd.fal()]
     (TOK_ARROW typeName[fd.returnType()])?
-    ( scope[fd.scope()]
-    | (LCURLY docstrings[null])=> LCURLY docstrings[fd.scope()] "abstract" {fd.setAbstract(true);} RCURLY // TODO what about pre/post??
-    )
+    functionScope[fd.scope()] // TODO what about pre/post??
     ;
 programStatement[ProgramClosure pc, OS_Element cont]
 		{ImportStatement imp=null;}
