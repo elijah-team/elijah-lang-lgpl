@@ -43,7 +43,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		_isAbstract = b;
 	}
 
-	private final class FunctionDefScope implements Scope {
+	public final class FunctionDefScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 
