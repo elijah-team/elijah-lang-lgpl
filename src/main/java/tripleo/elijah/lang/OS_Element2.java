@@ -3,6 +3,8 @@
  */
 package tripleo.elijah.lang;
 
+import org.jetbrains.annotations.Contract;
+
 /**
  * @author Tripleo
  *
@@ -16,6 +18,7 @@ public interface OS_Element2 {
 	 *
 	 * @return a String
 	 */
+	@Contract(pure = true)
 	String name();
 
 }
