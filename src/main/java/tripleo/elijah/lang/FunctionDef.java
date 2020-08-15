@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+// TODO FunctionDef is not a Container is it?
 public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
 
 	private boolean _isAbstract;
