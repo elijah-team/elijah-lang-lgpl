@@ -13,7 +13,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.util.NotImplementedException;
@@ -510,13 +509,17 @@ public class DeduceTypes {
 //			Helpers.printXML(n, new TabbedOutputStream(System.out));
 		}
 
-		if (lrl.results().size() == 1) {
-			LookupResult n = lrl.results().get(0);
-			if (n.getElement() instanceof FunctionDef) {
-				final OS_FuncType deducedExpression = new OS_FuncType((FunctionDef) n.getElement());
+//		if (lrl.results().size() == 1) {
+//			LookupResult n = lrl.results().get(0);
+		OS_Element best = lrl.chooseBest(null);
+		if (best != null) {
+			if (best/*n.getElement()*/ instanceof FunctionDef) {
+				final FunctionDef functionDef = (FunctionDef) best;//(FunctionDef) n.getElement();
+				final OS_FuncType deducedExpression = new OS_FuncType(functionDef);
+				//
 				pce.getLeft().setType(deducedExpression); // TODO how do we know before looking at args?
 				if (true) {
-					final TypeName typeName = ((FunctionDef) n.getElement()).returnType();
+					final TypeName typeName = functionDef.returnType();
 					LookupResultList lrl2 = parent.getContext().lookup(typeName.getName());
 					OS_Element best2 = lrl2.results().get(0).getElement();//chooseBest(null); // TODO not using chooseBest here. see why
 					pce.setType(new OS_Type((ClassStatement) best2));
@@ -524,8 +527,8 @@ public class DeduceTypes {
 					pce.setType(deducedExpression);
 				}
 				deduceProcedureCall_ARGS(pce, parent.getContext());
-			} else if (n.getElement() instanceof AliasStatement) {
-				System.err.println("196 "+n.getElement());
+			} else if (best/*n.getElement()*/ instanceof AliasStatement) {
+				System.err.println("196 "+/*n.getElement()*/best);
 			} else {
 				throw new NotImplementedException();
 			}
