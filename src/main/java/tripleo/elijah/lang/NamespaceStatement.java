@@ -182,6 +182,11 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 
 	public NamespaceTypes getKind() { return _kind; }
 
+	@Override
+	public String toString() {
+		return String.format("<Namespace %d %s `%s'>", _a.getCode(), getPackageName()._name, getName());
+	}
+
 	@Override // OS_Container
 	public List<OS_Element2> items() {
 		Collection<ClassItem> c = Collections2.filter(getItems(), new Predicate<ClassItem>() {

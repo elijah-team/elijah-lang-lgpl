@@ -152,7 +152,12 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	public OS_Package getPackageName() {
 		return _packageName;
 	}
-	
+
+	@Override
+	public String toString() {
+		return String.format("<Class %d %s %s>", _a.getCode(), getPackageName()._name, getName());
+	}
+
 	public ConstructorDef addCtor(Token aConstructorName) {
 		return new ConstructorDef(aConstructorName, this);
 	}
