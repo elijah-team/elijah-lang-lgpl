@@ -13,6 +13,9 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.Documentable;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.contexts.NamespaceContext;
@@ -20,6 +23,7 @@ import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -180,8 +184,19 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<ClassItem> c = Collections2.filter(getItems(), new Predicate<ClassItem>() {
+			@Override
+			public boolean apply(@Nullable ClassItem input) {
+				final boolean b = input instanceof OS_Element2;
+//				System.out.println(String.format("%s %b", input, b));
+				return b;
+			}
+		});
+		ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
+		for (ClassItem functionItem : c) {
+			a.add((OS_Element2) functionItem);
+		}
+		return a;
 	}
 
 	@Override // OS_Container
