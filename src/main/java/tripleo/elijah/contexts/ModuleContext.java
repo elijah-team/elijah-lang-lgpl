@@ -92,6 +92,7 @@ public class ModuleContext extends Context {
 					if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
 //		                LogEvent.logEvent(4103, "");
 						final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
+						alreadySearched.add(namespaceContext);
 						namespaceContext.lookup(name, level, Result, alreadySearched, true);
 					}
 				}
