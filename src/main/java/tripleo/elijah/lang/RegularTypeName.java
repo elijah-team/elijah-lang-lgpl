@@ -97,7 +97,7 @@ public void setGeneric(boolean value) {
 			} else
 				sb.append(getName());
 		} else
-			sb.append("Unit");
+			sb.append("<RegularTypeName empty>");
 		return sb.toString();
 	}
 
