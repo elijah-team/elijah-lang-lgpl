@@ -87,8 +87,9 @@ public class ModuleContext extends Context {
 			if (carrier.parent.isPackage(importStatementItem.toString())) {
 				List<OS_Element> l = new ArrayList<>();
 				OS_Package aPackage = carrier.parent.getPackage(importStatementItem);
+				System.err.println("4001 "+aPackage.getElements());
 				for (OS_Element element : aPackage.getElements()) {
-					System.err.println("4000 "+element);
+//					System.err.println("4000 "+element);
 					if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
 //		                System.err.println(4103);
 						final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();

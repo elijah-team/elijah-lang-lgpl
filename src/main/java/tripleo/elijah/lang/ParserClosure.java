@@ -56,7 +56,7 @@ public class ParserClosure extends ProgramClosure {
 
 	@Override
 	public void addImportStatement(ImportStatement imp) {
-		System.err.println("3000 adding import statement to module");
+//		System.err.println("3000 adding import statement to module");
 		module.add(imp); // TODO is this correct?
 	}
 }
