@@ -100,7 +100,10 @@ public class ExpandFunctions {
 			} else throw new NotImplementedException();
 		} else if (element instanceof IfConditional) {
 		} else if (element instanceof ClassStatement) {
-			parent._a.getContext().nameTable().add((OS_Element) element, ((ClassStatement) element).getName(), new OS_Type((ClassStatement) element));
+			//
+			// DON'T MODIFY  NAMETABLE
+			//
+//			parent._a.getContext().nameTable().add((OS_Element) element, ((ClassStatement) element).getName(), new OS_Type((ClassStatement) element));
 		} else {
 			System.out.println("91 "+element);
 			throw new NotImplementedException();
@@ -110,15 +113,22 @@ public class ExpandFunctions {
 	private void addFunctionItem_Loop(Loop loop, FunctionDef parent, FunctionContext fc) {
 
 		if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
-			parent.getContext().add(ie(loop.getIterName()), ie(loop.getIterName()));
+			//
+			// DON'T MODIFY  NAMETABLE
+			//
+//			parent.getContext().add(ie(loop.getIterName()), ie(loop.getIterName()));
+
 //			String varname="vt"+loop.getIterName();
 			ToExpression toex = new ToExpression(loop.getFromPart(), loop.getToPart());
 			deduceExpression_(toex.getLeft(), parent.getContext(), fc);
 			deduceExpression_(toex.getRight(), parent.getContext(), fc);
 
-			if (loop.getFromPart() instanceof IdentExpression)
-				loop.getContext().add((OS_Element) toex.getLeft(), ie(loop.getIterName()), toex.getLeft().getType());
-			else
+			if (loop.getFromPart() instanceof IdentExpression) {
+				//
+				// DON'T MODIFY  NAMETABLE
+				//
+//				loop.getContext().add((OS_Element) toex.getLeft(), ie(loop.getIterName()), toex.getLeft().getType());
+			} else
 				throw new NotImplementedException();
 
 //			final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
@@ -152,9 +162,12 @@ public class ExpandFunctions {
 
 	private void addFunctionItem_Loop_EXPR_TYPE(Loop loop, FunctionDef parent, FunctionContext fc) {
 		if (loop.getIterName() != null) {
-			parent.getContext().add(
-					ie(loop.getIterName()),
-					ie(loop.getIterName()));
+			//
+			// DON'T MODIFY  NAMETABLE
+			//
+//			parent.getContext().add(
+//					ie(loop.getIterName()),
+//					ie(loop.getIterName()));
 		} else {
 			System.out.println("loop.getIterName() == null");
 //				String varname="vt"+loop.getIterName();
@@ -167,9 +180,12 @@ public class ExpandFunctions {
 		deduceExpression_(toex.getLeft(), parent.getContext(), fc);
 		deduceExpression_(toex.getRight(), parent.getContext(), fc);
 
-		if (loop.getFromPart() instanceof IdentExpression)
-			loop.getContext().add((OS_Element) toex.getLeft(), ie(loop.getIterName()), toex.getLeft().getType());
-		else if (loop.getFromPart() == null) {
+		if (loop.getFromPart() instanceof IdentExpression) {
+			//
+			// DON'T MODIFY  NAMETABLE
+			//
+//			loop.getContext().add((OS_Element) toex.getLeft(), ie(loop.getIterName()), toex.getLeft().getType());
+		} else if (loop.getFromPart() == null) {
 			System.out.println("88 loop.getFromPart() == null");
 		} else
 			throw new NotImplementedException();

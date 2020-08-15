@@ -9,13 +9,9 @@
 package tripleo.elijah.lang;
 
 import org.jetbrains.annotations.NotNull;
-import tripleo.elijah.gen.nodes.Helpers;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // TODO is this right, or should be interface??
 public abstract class Context {
@@ -31,64 +27,37 @@ public abstract class Context {
 	
 	public LookupResultList lookup(@NotNull String name) {
 		final LookupResultList Result = new LookupResultList();
-		return lookup(name, 0, Result, new ArrayList<Context>());
+		return lookup(name, 0, Result, new ArrayList<Context>(), false);
 	}
 	
-	public abstract LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched); // {
-//		final LookupResultList Result = new LookupResultList();
+	public abstract LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one); // {
+
+//	@Deprecated public void add(OS_Element element, String name) {
+//		add(element, new IdentExpression(Helpers.makeToken(name)));
+//	}
 //
-//		/*
-//		for (OS_Element2 i : attached.items()) {
-////			if (i.name().equals(name)) {
-////				Result.add (i, i.sig, level);
-////			}
-//		}
-//		*/
-//		if (members.containsKey(name))
-//		{
-//			OS_Element element = members.get(name);
-//			Result.add(name, level, element);
-//			element.getParent().getContext().lookup(name, level);
-//		}
-//		
-////		lookup(name, attached, parent, Result ,level+1);
-//		return Result;
+//	@Deprecated public void add(OS_Element element, String name, OS_Type dtype) {
+//		add(element, new IdentExpression(Helpers.makeToken(name)), dtype);
+//	}
+//
+//	public void add(OS_Element element, IExpression name) {
+//		System.out.println(String.format("104 Context.add: %s %s %s", this, element, name));
+//		members.put(name, element);
 //	}
 	
-	void lookup(String name, OS_Container attached1, OS_Element2 parent, LookupResultList Result, int level) {
-		throw new NotImplementedException();
-	}
-
-	@Deprecated public void add(OS_Element element, String name) {
-		add(element, new IdentExpression(Helpers.makeToken(name)));
-	}
-
-	@Deprecated public void add(OS_Element element, String name, OS_Type dtype) {
-		add(element, new IdentExpression(Helpers.makeToken(name)), dtype);
-	}
-
-	public void add(OS_Element element, IExpression name) {
-		System.out.println(String.format("104 Context.add: %s %s %s", this, element, name));
-		members.put(name, element);
-	}
-	
-//	class TypedElement {
-//		OS_Element element;
-//		OS_Type type;
+//
+//	Map<IExpression, OS_Element> members = new HashMap<IExpression, OS_Element>();
+//	private NameTable nameTable = new NameTable();
+//
+//	public void add(OS_Element element, IExpression name, OS_Type dtype) {
+//		System.out.println(String.format("105 Context.add: %s %s %s %s", this, element, name, dtype));
+////		element.setType(dtype);
+//		members.put(name, element);
 //	}
-	
-	Map<IExpression, OS_Element> members = new HashMap<IExpression, OS_Element>();
-	private NameTable nameTable = new NameTable();
-
-	public void add(OS_Element element, IExpression name, OS_Type dtype) {
-		System.out.println(String.format("105 Context.add: %s %s %s %s", this, element, name, dtype));
-//		element.setType(dtype);
-		members.put(name, element);
-	}
-
-	public NameTable nameTable() {
-		return this.nameTable ;
-	}
+//
+//	public NameTable nameTable() {
+//		return this.nameTable ;
+//	}
 }
 
 //
