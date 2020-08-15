@@ -9,6 +9,7 @@
 package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.*;
+import tripleo.elijah.util.LogEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class ModuleContext extends Context {
 				// TODO what about imports
 			) continue;
 			if (item instanceof OS_Element2) {
-//				System.err.println("102 "+((OS_Element2) item).name());
+//				LogEvent.logEvent(102, ((OS_Element2) item).name());
 				if (((OS_Element2) item).name().equals(name)) {
 					Result.add(name, level, item);
 				} else if (item instanceof ImportStatement) {
@@ -87,11 +88,11 @@ public class ModuleContext extends Context {
 			if (carrier.parent.isPackage(importStatementItem.toString())) {
 				List<OS_Element> l = new ArrayList<>();
 				OS_Package aPackage = carrier.parent.getPackage(importStatementItem);
-				System.err.println("4001 "+aPackage.getElements());
+				LogEvent.logEvent(4001 , ""+aPackage.getElements());
 				for (OS_Element element : aPackage.getElements()) {
 //					System.err.println("4000 "+element);
 					if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
-//		                System.err.println(4103);
+//		                LogEvent.logEvent(4103, "");
 						final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
 						namespaceContext.lookup(name, level, Result, alreadySearched, true);
 					}
