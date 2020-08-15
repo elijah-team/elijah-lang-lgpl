@@ -16,14 +16,14 @@ import java.util.List;
 // TODO is this right, or should be interface??
 public abstract class Context {
 
-	private OS_Container attached;
+//	private OS_Container attached;
 
 	public Context() {
 	}
 	
-	public Context(OS_Container attached) {
-		this.attached = attached;
-	}
+//	public Context(OS_Container attached) {
+//		this.attached = attached;
+//	}
 	
 	public LookupResultList lookup(@NotNull String name) {
 		final LookupResultList Result = new LookupResultList();
