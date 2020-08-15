@@ -56,7 +56,7 @@ public class ClassContext extends Context {
 		}
 		for (TypeName tn : carrier.classInheritance().tns) {
 //			System.out.println("1001 "+tn);
-			LookupResultList tnl = carrier.getParent().getContext().lookup(tn.getName());
+			LookupResultList tnl = carrier.getParent().getContext().lookup(tn.getName()); // TODO why getParent here?
 //			System.out.println("1002 "+tnl.results());
 			OS_Element best = tnl.chooseBest(null);
 			if (best != null) {
