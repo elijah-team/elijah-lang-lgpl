@@ -32,7 +32,7 @@ public class LoopContext extends Context {
 		carrier = loop;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched) {
+	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
 		alreadySearched.add(carrier.getContext());
 		// TODO implement me
 //		throw new NotImplementedException();
@@ -63,8 +63,8 @@ public class LoopContext extends Context {
 
 		if (carrier.getParent() != null) {
 			final Context context = carrier.getParent().getContext();
-			if (!alreadySearched.contains(context))
-				context.lookup(name, level + 1, Result, alreadySearched); // TODO test this
+			if (!alreadySearched.contains(context) || !one)
+				context.lookup(name, level + 1, Result, alreadySearched, false); // TODO test this
 		}
 		return Result;
 		

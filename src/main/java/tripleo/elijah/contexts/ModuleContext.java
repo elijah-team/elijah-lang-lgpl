@@ -26,7 +26,7 @@ public class ModuleContext extends Context {
 		this.carrier = module;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched) {
+	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
 		alreadySearched.add(carrier.getContext());
 		// TODO look all this up in a table, not by iteration
 		for (ModuleItem item: carrier.getItems()) {
@@ -65,7 +65,7 @@ public class ModuleContext extends Context {
 			if (item instanceof NamespaceStatement && ((NamespaceStatement) item).getKind() == NamespaceTypes.MODULE) {
 //				System.err.println(103);
 				final NamespaceContext namespaceContext = (NamespaceContext) item.getContext();
-				namespaceContext.lookup(name, level, Result, alreadySearched);
+				namespaceContext.lookup(name, level, Result, alreadySearched, true);
 			}
 		}
 		for (ModuleItem item : carrier.getItems()) {
@@ -91,9 +91,9 @@ public class ModuleContext extends Context {
 			}
 		}
 //		System.err.println("2003 "+carrier.getItems());
-		if (carrier.prelude == null)
+		if (carrier.prelude == null || !one)
 			return Result;
-		return carrier.prelude.getContext().lookup(name, level+1, Result, alreadySearched);
+		return carrier.prelude.getContext().lookup(name, level+1, Result, alreadySearched, false);
 	}
 
 

@@ -28,7 +28,7 @@ public class NamespaceContext extends Context {
 		carrier = namespaceStatement;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched) {
+	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
 		alreadySearched.add(carrier.getContext());
 		for (ClassItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
@@ -52,8 +52,8 @@ public class NamespaceContext extends Context {
 		}
 		if (carrier.getParent() != null) {
 			final Context context = carrier.getParent().getContext();
-			if (!alreadySearched.contains(context))
-				context.lookup(name, level + 1, Result, alreadySearched);
+			if (!alreadySearched.contains(context) || !one)
+				context.lookup(name, level + 1, Result, alreadySearched, false);
 		}
 		return Result;
 
