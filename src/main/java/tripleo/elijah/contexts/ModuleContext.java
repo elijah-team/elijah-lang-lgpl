@@ -71,23 +71,7 @@ public class ModuleContext extends Context {
 		for (ModuleItem item : carrier.getItems()) {
 			if (item instanceof ImportStatement) {
 				final ImportStatement importStatement = (ImportStatement) item;
-//				System.err.println("2002 "+importStatement.importList());
-				for (Qualident importStatementItem : importStatement.parts()) {
-//					System.err.println("2005 "+importStatementItem);
-					if (carrier.parent.isPackage(importStatementItem.toString())) {
-						List<OS_Element> l = new ArrayList<>();
-						OS_Package aPackage = carrier.parent.getPackage(importStatementItem);
-						for (OS_Element element : aPackage.getElements()) {
-							System.err.println("4000 "+element);
-							if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
-//				                System.err.println(4103);
-								final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
-								namespaceContext.lookup(name, level, Result, alreadySearched);
-							}
-						}
-
-					}
-				}
+				searchImports(name, level, Result, alreadySearched, importStatement);
 			}
 		}
 //		System.err.println("2003 "+carrier.getItems());
@@ -96,6 +80,24 @@ public class ModuleContext extends Context {
 		return carrier.prelude.getContext().lookup(name, level+1, Result, alreadySearched, false);
 	}
 
+	private void searchImports(String name, int level, LookupResultList Result, List<Context> alreadySearched, ImportStatement importStatement) {
+//		System.err.println("2002 "+importStatement.importList());
+		for (Qualident importStatementItem : importStatement.parts()) {
+//			System.err.println("2005 "+importStatementItem);
+			if (carrier.parent.isPackage(importStatementItem.toString())) {
+				List<OS_Element> l = new ArrayList<>();
+				OS_Package aPackage = carrier.parent.getPackage(importStatementItem);
+				for (OS_Element element : aPackage.getElements()) {
+					System.err.println("4000 "+element);
+					if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
+//		                System.err.println(4103);
+						final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
+						namespaceContext.lookup(name, level, Result, alreadySearched, true);
+					}
+				}
+			}
+		}
+	}
 
 }
 
