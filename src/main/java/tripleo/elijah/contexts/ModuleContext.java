@@ -59,8 +59,6 @@ public class ModuleContext extends Context {
 //				LogEvent.logEvent(102, ((OS_Element2) item).name());
 				if (((OS_Element2) item).name().equals(name)) {
 					Result.add(name, level, item);
-				} else if (item instanceof ImportStatement) {
-					System.err.println("ignoring "+item);
 				}
 			}
 			if (item instanceof NamespaceStatement && ((NamespaceStatement) item).getKind() == NamespaceTypes.MODULE) {
