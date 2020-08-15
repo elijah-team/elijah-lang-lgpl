@@ -92,7 +92,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return mDocs;
 	}
 	
-	public OS_Element getParent() {
+	@Override public OS_Element getParent() {
 		return parent;
 	}
 	
