@@ -156,15 +156,22 @@ public class DeduceTypes {
 	private void addFunctionItem_Loop(Loop loop, FunctionDef parent) {
 
 		if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
-			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
+			//
+			//   DON'T MODIFY NAMESPACE
+			//
+//			parent.getContext().add(new IdentExpression(Helpers.makeToken(loop.getIterName())), loop.getIterName());
+
 //			String varname="vt"+loop.getIterName();
 			ToExpression toex = new ToExpression(loop.getFromPart(), loop.getToPart());
 			deduceExpression_(toex.getLeft(), parent.getContext());
 			deduceExpression_(toex.getRight(), parent.getContext());
 
-			if (loop.getFromPart() instanceof IdentExpression)
-				loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
-			else if (loop.getFromPart() instanceof NumericExpression) {
+			if (loop.getFromPart() instanceof IdentExpression) {
+				//
+				//   DON'T MODIFY NAMESPACE
+				//
+//				loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
+			} else if (loop.getFromPart() instanceof NumericExpression) {
 				System.err.println("2007 "+loop.getFromPart());
 			} else {
 				System.err.println("2006 "+loop.getFromPart().getClass().getName());
@@ -226,6 +233,7 @@ public class DeduceTypes {
 			//   DON'T MODIFY NAMESPACE
 			//
 //			loop.getContext().add((OS_Element) toex.getLeft(), loop.getIterName(), toex.getLeft().getType());
+			NotImplementedException.raise();
 		} else if (loop.getFromPart() == null) {
 			System.out.println("88 loop.getFromPart() == null");
 		} else
