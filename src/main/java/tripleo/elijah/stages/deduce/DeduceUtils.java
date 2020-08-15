@@ -1,19 +1,20 @@
 package tripleo.elijah.stages.deduce;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * Created 8/3/20 8:41 AM
  */
 public class DeduceUtils {
-	static class MatchArgs implements Predicate {
+	static class MatchArgs implements Predicate<OS_Element2> {
 
 		private final ExpressionList args;
 
@@ -22,11 +23,15 @@ public class DeduceUtils {
 		}
 
 		@Override
-		public boolean test(@Nullable Object input) {
-			if (args == null && ((ConstructorDef)input).fal().falis.size() == 0)
+		public boolean apply(@Nullable OS_Element2 input) {
+			if (!(input instanceof FunctionDef)) return false;
+			//
+			if (args == null && ((FunctionDef)input).fal().falis.size() == 0)
 				return true;
-			else
-				return false;
+			else {
+				NotImplementedException.raise();
+				return false; // TODO implement me
+			}
 		}
 	}
 
