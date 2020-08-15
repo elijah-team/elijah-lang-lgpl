@@ -12,11 +12,7 @@ import java.util.List;
  */
 public interface OS_Container {
 
-	public List<OS_Element2> items();
-//	{
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	List<OS_Element2> items();
 
 	void add(OS_Element anElement);
 }
