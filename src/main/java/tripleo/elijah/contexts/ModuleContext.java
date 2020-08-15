@@ -74,7 +74,7 @@ public class ModuleContext extends Context {
 			}
 		}
 //		System.err.println("2003 "+carrier.getItems());
-		if (carrier.prelude == null || !one)
+		if (carrier.prelude == null || one)
 			return Result;
 		return carrier.prelude.getContext().lookup(name, level+1, Result, alreadySearched, false);
 	}
