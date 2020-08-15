@@ -15,6 +15,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.util.LogEvent;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.*;
@@ -532,7 +533,9 @@ public class DeduceTypes {
 				}
 				deduceProcedureCall_ARGS(pce, parent.getContext());
 			} else if (best/*n.getElement()*/ instanceof AliasStatement) {
-				System.err.println("196 "+/*n.getElement()*/best);
+//				System.err.println("196 "+/*n.getElement()*/best);
+				OS_Type t = deduceExpression(((AliasStatement) best).getExpression(), parent.getContext());
+				LogEvent.logEvent(199,  ""+ t);
 			} else {
 				throw new NotImplementedException();
 			}
