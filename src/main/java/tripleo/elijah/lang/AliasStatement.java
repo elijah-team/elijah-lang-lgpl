@@ -38,6 +38,10 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 		this.expr = expr;
 	}
 
+	public IExpression getExpression() {
+		return expr;
+	}
+
 	public void setName(@NotNull Token i1) {
 		this.name = i1.getText();
 	}
