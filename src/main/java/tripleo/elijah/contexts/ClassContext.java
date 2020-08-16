@@ -57,10 +57,15 @@ public class ClassContext extends Context {
 		}
 		for (TypeName tn : carrier.classInheritance().tns) {
 //			System.out.println("1001 "+tn);
-			LookupResultList tnl = carrier.getParent().getContext().lookup(tn.getName()); // TODO why getParent here?
-//			System.out.println("1002 "+tnl.results());
-			OS_Element best = tnl.chooseBest(null);
+			OS_Element best;
+			if (!tn.hasResolvedElement()) {
+				LookupResultList tnl = carrier.getParent().getContext().lookup(tn.getName()); // TODO why getParent here?
+//	    		System.out.println("1002 "+tnl.results());
+				best = tnl.chooseBest(null);
+			} else
+				best = tn.getResolvedElement();
 			if (best != null) {
+				tn.setResolvedElement(best);
 				LookupResultList lrl2 = best.getContext().lookup(name);
 				OS_Element best2 = lrl2.chooseBest(null);
 				if (best2 != null)
