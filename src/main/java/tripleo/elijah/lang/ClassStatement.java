@@ -12,7 +12,6 @@ import antlr.Token;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.Documentable;
 import tripleo.elijah.ProgramClosure;
 import tripleo.elijah.contexts.ClassContext;
@@ -81,7 +80,9 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 	
 	public String getName() {
-		return clsName;
+		if (clsName == null)
+			return "";
+		return clsName.getText();
 	}
 	
 	public List<ClassItem> getItems() {
@@ -96,8 +97,8 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return parent;
 	}
 	
-	public void setName(@NotNull Token aText) {
-		clsName=aText.getText();
+	public void setName(IdentExpression aText) {
+		clsName = aText;
 	}
 
 //	@Override
@@ -105,15 +106,15 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return new AbstractStatementClosure(this);
 	}
 
-	public String clsName;
+	public IdentExpression clsName;
 
 	private final List<ClassItem> items=new ArrayList<ClassItem>();
 	private final List<String> mDocs = new ArrayList<String>();
-	private final List<IExpression> mExprs = new ArrayList<IExpression>();
+//	private final List<IExpression> mExprs = new ArrayList<IExpression>();
 
 	public /*final*/ OS_Element parent;
 
-	public Attached _a = new Attached(new ClassContext(this));
+	public Attached _a = new Attached();
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
@@ -158,7 +159,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return String.format("<Class %d %s %s>", _a.getCode(), getPackageName()._name, getName());
 	}
 
-	public ConstructorDef addCtor(Token aConstructorName) {
+	public ConstructorDef addCtor(IdentExpression aConstructorName) {
 		return new ConstructorDef(aConstructorName, this);
 	}
 	
@@ -207,6 +208,21 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	@Override
 	public void addImportStatement(ImportStatement imp) {
 		add(imp);
+	}
+
+	public void setContext(ClassContext ctx) {
+		_a.setContext(ctx);
+	}
+
+	public void postConstruct() { // TODO
+	}
+
+	List<AnnotationClause> annotations = null;
+
+	public void addAnnotation(AnnotationClause a) {
+		if (annotations == null)
+			annotations = new ArrayList<AnnotationClause>();
+		annotations.add(a);
 	}
 }
 

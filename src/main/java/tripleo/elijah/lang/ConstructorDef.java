@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
 import tripleo.elijah.gen.nodes.Helpers;
 
 /**
@@ -18,11 +17,11 @@ import tripleo.elijah.gen.nodes.Helpers;
  */
 public class ConstructorDef extends FunctionDef {
 
-	public ConstructorDef(Token aConstructorName, ClassStatement aParent) {
+	public ConstructorDef(IdentExpression aConstructorName, ClassStatement aParent) {
 		super(aParent);
 		if (aConstructorName != null)
 			setName(aConstructorName);
-		else setName(Helpers.makeToken("<>")); // hack for Context#lookup
+		else setName(new IdentExpression(Helpers.makeToken("<>"))); // hack for Context#lookup
 	}
 
 }

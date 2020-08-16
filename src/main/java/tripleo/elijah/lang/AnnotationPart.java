@@ -8,8 +8,20 @@
  */
 package tripleo.elijah.lang;
 
-public enum ClassTypes {
-	NORMAL, STRUCTURE, SIGNATURE, ABSTRACT, INTERFACE
+/**
+ * Created 8/15/20 6:45 PM
+ */
+public class AnnotationPart {
+	private Qualident _class;
+	private ExpressionList _exprs;
+
+	public void setClass(Qualident q) {
+		_class = q;
+	}
+
+	public void setExprs(ExpressionList el) {
+		_exprs = el;
+	}
 }
 
 //

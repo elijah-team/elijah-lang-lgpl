@@ -53,16 +53,7 @@ public interface TypeName {
 
     void setNullable();
 
-//	public static final int NORMAL = 0;
-//	public static final int CONST = 1;
-//	public static final int GC = 2;
-//	public static final int TAGGED = 3;
-//	public static final int POOLED = 4;
-//	public static final int MANUAL = 5;
-//	public static final int LOCAL = 6;
-//	public static final int ONCE = 7;
-//	public static final int PROCEDURE = 32;
-//	public static final int FUNCTION = 33;
+	void setContext(Context cur);
 
 }
 

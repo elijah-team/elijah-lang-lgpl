@@ -23,11 +23,13 @@ import java.util.List;
 public class FunctionContext extends Context {
 
 	private final FunctionDef carrier;
+	private final Context _parent;
 	public List<FunctionPrelimInstruction> functionPrelimInstructions = new ArrayList<FunctionPrelimInstruction>();
 	private int functionPrelimInstructionsNumber = 1;
 
-	public FunctionContext(FunctionDef functionDef) {
-		carrier = functionDef;
+	public FunctionContext(Context aParent, FunctionDef fd) {
+		_parent = aParent;
+		carrier = fd;
 	}
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {

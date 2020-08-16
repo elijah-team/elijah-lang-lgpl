@@ -21,15 +21,16 @@ import java.util.List;
 public class ClassContext extends Context {
 
 	private final ClassStatement carrier;
+	private final Context _parent;
 
-	public ClassContext(ClassStatement classStatement) {
-		carrier = classStatement;
-//		super(classStatement);
-	}
+//	public ClassContext(ClassStatement classStatement) {
+//		carrier = classStatement;
+////		super(classStatement);
+//	}
 
-	public void add(FunctionDef fd, String funName) {
-		// TODO Auto-generated method stub
-		
+	public ClassContext(Context aParent, ClassStatement cls) {
+		_parent = aParent;
+		carrier = cls;
 	}
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
@@ -78,5 +79,9 @@ public class ClassContext extends Context {
 		}
 		return Result;
 		
+	}
+
+	public Context getParent() {
+		return _parent;
 	}
 }

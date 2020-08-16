@@ -20,6 +20,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.Documentable;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +30,7 @@ import java.util.List;
 public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
 
 	private boolean _isAbstract;
+	private FunctionModifiers _mod;
 
 	public Iterable<FormalArgListItem> getArgs() {
 		return mFal.items();
@@ -42,11 +44,16 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	public void setAbstract(boolean b) {
 		_isAbstract = b;
+		if (b) {this.set(FunctionModifiers.ABSTRACT);}
+	}
+
+	public void set(FunctionModifiers mod) {
+		_mod = mod;
 	}
 
 	public final class FunctionDefScope implements Scope {
 
-		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
+		private final AbstractStatementClosure asc = new AbstractStatementClosure(this, getParent());
 
 		@Override
 		public void add(StatementItem aItem) {
@@ -105,10 +112,10 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	}
 
-	public Attached _a = new Attached(new FunctionContext(this));
+	public Attached _a = new Attached();
 	private TypeName _returnType = new RegularTypeName();
 	private List<String> docstrings = new ArrayList<String>();
-	public String funName;
+	public IdentExpression funName;
 	private List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
 	private final FunctionDefScope mScope2 = new FunctionDefScope();
@@ -178,8 +185,8 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		return mScope2;
 	}
 
-	public void setName(Token aText) {
-		funName = aText.getText();
+	public void setName(IdentExpression aText) {
+		funName = aText;
 	}
 
 //	public void visit(JavaCodeGen gen) {
@@ -191,14 +198,30 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	@Override
 	public void visitGen(ICodeGen visit) {
 		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException();
 	}
 
 	@Override // OS_Element2
 	public String name() {
-		return funName;
+		if (funName == null)
+			return "";
+		return funName.getText();
 	}
 
+	public void setContext(FunctionContext ctx) {
+		_a.setContext(ctx);
+	}
+
+	public void postConstruct() { // TODO
+	}
+
+	List<AnnotationClause> annotations = null;
+
+	public void addAnnotation(AnnotationClause a) {
+		if (annotations == null)
+			annotations = new ArrayList<AnnotationClause>();
+		annotations.add(a);
+	}
 }
 
 //

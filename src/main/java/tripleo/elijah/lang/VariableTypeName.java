@@ -21,6 +21,7 @@ import java.util.Objects;
 public class VariableTypeName extends AbstractTypeName implements TypeName {
 
 	private TypeName genericPart = null;
+	private Context _ctx;
 
 	@Override
 	public TypeName returnValue() {
@@ -94,6 +95,11 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 	public void setGeneric(boolean value) {
 		throw new NotImplementedException();
 //		NotImplementedException.raise();
+	}
+
+	@Override
+	public void setContext(Context ctx) {
+		_ctx = ctx;
 	}
 
 	@Override

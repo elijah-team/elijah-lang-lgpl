@@ -19,6 +19,8 @@ import tripleo.elijah.util.NotImplementedException;
 public class RegularTypeName extends AbstractTypeName2 implements TypeName {
 
 	private TypeName genericPart = null;
+	private Context _ctx;
+	private OS_Type _resolved;
 
 	@Override
 	public void addGenericPart(TypeName tn2) {
@@ -60,6 +62,12 @@ public void set(TypeModifiers aModifiers) {
 public void setGeneric(boolean value) {
 	_ltm.add(TypeModifiers.GENERIC);
 }
+
+	@Override
+	public void setContext(Context ctx) {
+//		_a.setContext(ctx);
+		_ctx = ctx;
+	}
 
 
 	public void setName(Qualident aS) {

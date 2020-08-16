@@ -4,6 +4,7 @@ header {
 
 {
 import tripleo.elijah.lang.*;
+import tripleo.elijah.contexts.*;
 import tripleo.elijah.lang.imports.*;
 import tripleo.elijah.lang2.*;
 import tripleo.elijah.*;
@@ -26,14 +27,15 @@ tokens {
 Qualident xy;
 public Out out;
 IExpression expr;
+Context cur;
 }
 
 program
-        {ParserClosure pc = out.closure();}
+        {ParserClosure pc = out.closure();out.module().setContext(new ModuleContext(out.module()));}
     : (( indexingStatement[pc.indexingStatement()]
-	  |"package" xy=qualident {pc.packageName(xy);}
+	  |"package" xy=qualident opt_semi {pc.packageName(xy);cur=new PackageContext(cur);}
 	  |programStatement[pc, out.module()]) opt_semi)*
-	  EOF {out.FinishModule();}
+	  EOF {out.module().postConstruct();out.FinishModule();}
 	;
 indexingStatement[IndexingStatement idx]
 		{ExpressionList el=null;}
@@ -63,14 +65,15 @@ qualident returns [Qualident q]
      r1:IDENT /*ident2 */ {q.append(r1);}
       (d1:DOT r2:IDENT {q.appendDot(d1); q.append(r2);})*
     ;
-classStatement [ClassStatement cls]:
-    (annotation_clause)*
-    "class"
-            ("interface" {cls.setType(ClassTypes.INTERFACE);}
-            |"struct"    {cls.setType(ClassTypes.STRUCTURE);}
-            |"signature" {cls.setType(ClassTypes.SIGNATURE);}
-            |"abstract"  {cls.setType(ClassTypes.ABSTRACT);})?
-      i1:IDENT {cls.setName(i1);}
+classStatement [ClassStatement cls]
+		{AnnotationClause a=null;ClassContext ctx=null;IdentExpression i1=null;}
+	: (a=annotation_clause  {cls.addAnnotation(a);})*
+    "class"                 {ctx=new ClassContext(cur, cls);cls.setContext(ctx);cur=ctx;}
+            ("interface"    {cls.setType(ClassTypes.INTERFACE);}
+            |"struct"       {cls.setType(ClassTypes.STRUCTURE);}
+            |"signature"    {cls.setType(ClassTypes.SIGNATURE);}
+            |"abstract"     {cls.setType(ClassTypes.ABSTRACT);})?
+      i1=ident {cls.setName(i1);}
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
     LCURLY
@@ -78,33 +81,40 @@ classStatement [ClassStatement cls]:
      |"abstract"         {cls.setType(ClassTypes.ABSTRACT);}
       (invariantStatement[cls.invariantStatement()])?
      )
-    RCURLY
+    RCURLY {cls.postConstruct();cur=ctx.getParent();}
     ;
-annotation_clause
-		{Qualident q=null;ExpressionList el=null;}
-	: ANNOT (q=qualident (LPAREN {el=new ExpressionList();} expressionList[el] RPAREN)?)+ RBRACK
+annotation_clause returns [AnnotationClause a]
+		{Qualident q=null;ExpressionList el=null;a=new AnnotationClause();AnnotationPart ap=null;}
+	: ANNOT
+		(                                       {ap=new AnnotationPart();}
+		 q=qualident                            {ap.setClass(q);}
+			(LPAREN el=expressionList2 RPAREN   {ap.setExprs(el);}
+			)?                                  {a.add(ap);}
+		)+ RBRACK
 	;
-namespaceStatement [NamespaceStatement cls]:
-    "namespace" 
-    (  i1:IDENT  	{cls.setName(i1);/*cls.findType();*/}
-    | 				{cls.setType(NamespaceTypes.MODULE);}
+namespaceStatement [NamespaceStatement cls]
+		{AnnotationClause a=null;NamespaceContext ctx=null;IdentExpression i1=null;}
+	: (a=annotation_clause      {cls.addAnnotation(a);})*
+    "namespace"                 {ctx=new NamespaceContext(cur, cls);cls.setContext(ctx);cur=ctx;}
+    (  i1=ident  	            {cls.setName(i1);}
+    | 				            {cls.setType(NamespaceTypes.MODULE);}
     )?
     LCURLY
      namespaceScope[cls]
-    RCURLY
+    RCURLY {cls.postConstruct();cur=ctx.getParent();}
     ;
 importStatement[OS_Element el] returns [ImportStatement pc]
-	 {pc=null;}
-    : "from" {pc=new RootedImportStatement(el);}
+	 {pc=null;ImportContext ctx=null;}
+    : "from" {pc=new RootedImportStatement(el);ctx=new ImportContext(cur, pc);pc.setContext(ctx);cur=ctx;}
         xy=qualident "import" qualidentList[((RootedImportStatement)pc).importList()] {((RootedImportStatement)pc).importRoot(xy);} opt_semi
     | "import"
         ( (IDENT BECOMES) =>
-                {pc=new AssigningImportStatement(el);}
+                {pc=new AssigningImportStatement(el);ctx=new ImportContext(cur, pc);pc.setContext(ctx);cur=ctx;}
             importPart1[(AssigningImportStatement)pc] (COMMA importPart1[(AssigningImportStatement)pc])*
         | (qualident /*DOT*/ LCURLY) =>
-                {pc=new QualifiedImportStatement(el);}
+                {pc=new QualifiedImportStatement(el);ctx=new ImportContext(cur, pc);pc.setContext(ctx);cur=ctx;}
             importPart2[(QualifiedImportStatement)pc] (COMMA importPart2[(QualifiedImportStatement)pc])*
-        |       {pc=new NormalImportStatement(el);}
+        |       {pc=new NormalImportStatement(el);ctx=new ImportContext(cur, pc);pc.setContext(ctx);cur=ctx;}
             importPart3[(NormalImportStatement)pc] (COMMA importPart3[(NormalImportStatement)pc])*
         ) opt_semi
     ;
@@ -144,19 +154,21 @@ classScope[ClassStatement cr]
     | accessNotation)*
     ;
 constructorDef[ClassStatement cr]
-        {ConstructorDef cd=null;}
+        {ConstructorDef cd=null;IdentExpression x1=null;}
 	: ("constructor"|"ctor")
-		(x1:IDENT   {cd=cr.addCtor(x1);}
+		(x1=ident   {cd=cr.addCtor(x1);}
 		|           {cd=cr.addCtor(null);}
 		)
 		opfal[cd.fal()]
 		scope[cd.scope()]
+					{cd.postConstruct();}
 	;
 destructorDef[ClassStatement cr]
         {DestructorDef dd=null;}
 	: ("destructor"|"dtor") {dd=cr.addDtor();}
 		opfal[dd.fal()]
 		scope[dd.scope()]
+					{dd.postConstruct();}
 	;
 namespaceScope[NamespaceStatement cr]
         //{Scope sc=null;}
@@ -170,18 +182,20 @@ namespaceScope[NamespaceStatement cr]
     ;
 inhTypeName[TypeName tn]:
     (("const" {tn.set(TypeModifiers.CONST);})? specifiedGenericTypeName_xx[tn]
-    | "typeof" xy=qualident {tn.typeof(xy);})
+    | "typeof" xy=qualident {tn.typeof(xy);}
+    ) {tn.setContext(cur);}
     ;
 typeName[TypeName cr]:
-      structTypeName[cr]
+    ( structTypeName[cr]
     | funcTypeExpr[cr]
     | simpleTypeName_xx[cr]
+    ) {cr.setContext(cur);}
     ;
 scope[Scope sc]
       //{IExpression expr;}
     : LCURLY docstrings[sc]
       ((statement[sc.statementClosure(), sc.getParent()]
-      | expr=expression {sc.statementWrapper(expr);}
+      | expr=expression {sc.statementWrapper(expr);} //expr.setContext(cur);
       | classStatement[new ClassStatement(sc.getParent())]
       | "continue"
       | "break" // opt label?
@@ -206,12 +220,18 @@ functionScope[Scope sc]
       | "abstract" opt_semi {((FunctionDef)((FunctionDef.FunctionDefScope)sc).getParent()).setAbstract(true);}
       ) RCURLY
     ;
-functionDef[FunctionDef fd]:
-    i1:IDENT {fd.setName(i1);}
-    ( "const"|"immutable" )?
+
+functionDef[FunctionDef fd]
+    	{AnnotationClause a=null;FunctionContext ctx=null;IdentExpression i1=null;}
+    : (a=annotation_clause      {fd.addAnnotation(a);})*
+    i1=ident                    {fd.setName(i1);}
+                                {ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
+    ( "const"                   {fd.set(FunctionModifiers.CONST);}
+    | "immutable"               {fd.set(FunctionModifiers.IMMUTABLE);})?
     opfal[fd.fal()]
     (TOK_ARROW typeName[fd.returnType()])?
     functionScope[fd.scope()] // TODO what about pre/post??
+    {fd.postConstruct();}
     ;
 programStatement[ProgramClosure pc, OS_Element cont]
 		{ImportStatement imp=null;}
@@ -222,8 +242,8 @@ programStatement[ProgramClosure pc, OS_Element cont]
     ;
 varStmt[StatementClosure cr, OS_Element aParent]
         {VariableSequence vsq=null;}
-    : ("var" {vsq=cr.varSeq();}
-    | ("const"|"val") {vsq=cr.varSeq();vsq.defaultModifiers(TypeModifiers.CONST);})
+    : ("var" {vsq=cr.varSeq(cur);}
+    | ("const"|"val") {vsq=cr.varSeq(cur);vsq.defaultModifiers(TypeModifiers.CONST);})
     ( varStmt_i[vsq.next()] (COMMA varStmt_i[vsq.next()])*
   //    LPAREN identList[cr.identList()] RPAREN BECOMES eee=expression // TODO what is this?
     )

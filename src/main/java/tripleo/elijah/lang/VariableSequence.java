@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +18,10 @@ import java.util.List;
 //import java.util.stream.Collectors;
 
 public class VariableSequence implements StatementItem, FunctionItem, ClassItem {
+
+	private Context _ctx;
+	private OS_Element parent;
+	List<VariableStatement> stmts;
 
 	public VariableSequence() {
 		stmts = new ArrayList<VariableStatement>();
@@ -33,9 +38,6 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 		return st;
 	}
 
-	List<VariableStatement> stmts;
-	private OS_Element parent;
-
 	public Collection<VariableStatement> items() {
 		return stmts;
 	}
@@ -43,7 +45,7 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 	@Override
 	public void visitGen(ICodeGen visit) {
 		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException();
 	}
 
 	@Override
@@ -57,8 +59,11 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 
 	@Override
 	public Context getContext() {
-		// TODO Auto-generated method stub
-		return null;
+		return _ctx;
+	}
+
+	public void setContext(Context ctx) {
+		_ctx = ctx;
 	}
 
 	@Override public String toString() {

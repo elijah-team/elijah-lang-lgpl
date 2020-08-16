@@ -29,6 +29,7 @@ public class ClassInheritance {
 	
 	public TypeName next() {
 		TypeName tn = new RegularTypeName();
+		tn.setContext(parent.getContext());
 		tns.add(tn);
 		return tn;
 	}

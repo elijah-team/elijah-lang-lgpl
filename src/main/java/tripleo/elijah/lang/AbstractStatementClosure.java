@@ -23,17 +23,17 @@ import java.util.List;
 
 public final class AbstractStatementClosure implements StatementClosure, StatementItem {
 
-	private ClassStatement realParent;
+	private OS_Element _parent;
 
 	public AbstractStatementClosure(Scope aParent) {
 		// TODO Auto-generated constructor stub
-		parent = aParent;
+		parent_scope = aParent;
 	}
 
 	public AbstractStatementClosure(final ClassStatement classStatement) {
 		// TODO check final member
-		realParent = classStatement;
-		parent = new Scope() {
+		_parent = classStatement;
+		parent_scope = new Scope() {
 
 			@Override
 			public void addDocString(Token s1) {
@@ -82,25 +82,30 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 			@Override
 			public OS_Element getParent() {
-				return realParent;
+				return _parent;
 			}
 
 			@Override
 			public OS_Element getElement() {
-				return realParent;
+				return _parent;
 			}
 
 		};
 	}
 
+	public AbstractStatementClosure(Scope scope, OS_Element parent1) {
+		parent_scope = scope;
+		_parent = parent1;
+	}
+
 	@Override
 	public BlockStatement blockClosure() {
-		bs=new BlockStatement(this.parent);
+		bs=new BlockStatement(this.parent_scope);
 		add(bs);
 		return bs;
 	}
 	public IExpression constructExpression() {
-		ctex=new ConstructExpression(this.parent); 
+		ctex=new ConstructExpression(this.parent_scope);
 		add(ctex);
 		return ctex;
 	}
@@ -110,13 +115,13 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	}
 	@Override
  	public IfConditional ifConditional() {
-		ifex=new IfConditional(this.parent);
+		ifex=new IfConditional(this.parent_scope);
 		add(ifex);
 		return ifex;
 	}
 	@Override
 	public Loop loop() {
-		loop = new Loop(this.parent.getElement());
+		loop = new Loop(this.parent_scope.getElement());
 		add(loop);
 		return loop;
 	}
@@ -137,14 +142,15 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	}
 
 	@Override
-	public VariableSequence varSeq() {
+	public VariableSequence varSeq(Context ctx) {
 		vsq=new VariableSequence();
-		vsq.setParent(parent.getParent()/*this.getParent()*/);
+		vsq.setParent(parent_scope.getParent()/*this.getParent()*/); // TODO look at this
+		vsq.setContext(ctx);
 		return (VariableSequence) add(vsq);
 	}
 
 	private OS_Element getParent() {
-		return realParent;
+		return _parent;
 	}
 
 	@Override
@@ -154,7 +160,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	@Contract("_ -> param1")
 	private StatementItem add(StatementItem aItem) {
-		parent.add(aItem);
+		parent_scope.add(aItem);
 		return aItem;
 	}
 	
@@ -170,7 +176,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	final List<StatementItem> items =new ArrayList<StatementItem>();
 
-	final Scope parent;
+	final Scope parent_scope;
 
 	@Override
 	public CaseConditional caseConditional() {
@@ -188,7 +194,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	@Override
 	public void statementWrapper(IExpression expr) {
-		parent.statementWrapper(expr);
+		parent_scope.statementWrapper(expr);
 	}
 }
 

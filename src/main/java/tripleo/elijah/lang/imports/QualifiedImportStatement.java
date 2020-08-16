@@ -1,5 +1,6 @@
 package tripleo.elijah.lang.imports;
 
+import tripleo.elijah.contexts.ImportContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -12,6 +13,7 @@ import java.util.List;
 public class QualifiedImportStatement implements ImportStatement {
 	final OS_Element parent;
 	private List<Part> _parts = new ArrayList<Part>();
+	private Context _ctx;
 
 	class Part {
 		public Qualident base;
@@ -55,4 +57,13 @@ public class QualifiedImportStatement implements ImportStatement {
 		}
 		return r;
 	}
+
+	public void setContext(ImportContext ctx) {
+		_ctx = ctx;
+	}
+
 }
+
+//
+//
+//

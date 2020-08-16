@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.contexts.ImportContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -16,30 +17,14 @@ import java.util.List;
 public interface ImportStatement extends ModuleItem {
 
 	@Override
-	default public void visitGen(ICodeGen visit) {
+	default void visitGen(ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
 
-	public List<Qualident> parts();// {
-//		return importList.parts;
-//	}
+	List<Qualident> parts();
 
-//	public Iterable<? extends Qualident> getItemNames() {
-//		List<Qualident> a = new ArrayList<Qualident>();
-//		if (parts() == null) {
-//			if (getRoot() != null) {
-//				a.add(getRoot());
-//			} else
-//				throw new NotImplementedException();
-//		} else {
-//			for (Qualident part : parts()) {
-//				System.err.println("2004 "+part);
-//				a.add(part);
-//			}
-//		}
-//		return a;
-//	}
+	void setContext(ImportContext ctx);
 }
 
 //

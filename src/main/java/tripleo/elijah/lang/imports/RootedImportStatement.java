@@ -1,6 +1,7 @@
 package tripleo.elijah.lang.imports;
 
 import antlr.Token;
+import tripleo.elijah.contexts.ImportContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -17,6 +18,7 @@ public class RootedImportStatement implements ImportStatement {
 	 * @category from
 	 */
 	private Qualident root;
+	private Context _ctx;
 
 	public RootedImportStatement(OS_Element aParent) {
 		parent = aParent;
@@ -70,4 +72,9 @@ public class RootedImportStatement implements ImportStatement {
 		}
 		return r;
 	}
+
+	public void setContext(ImportContext ctx) {
+		_ctx = ctx;
+	}
+
 }

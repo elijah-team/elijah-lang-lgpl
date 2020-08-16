@@ -10,7 +10,7 @@ package tripleo.elijah.lang;
 
 public interface StatementClosure {
 
-	VariableSequence varSeq();
+	VariableSequence varSeq(Context ctx);
 
 	ProcedureCallExpression procedureCallExpression();
 

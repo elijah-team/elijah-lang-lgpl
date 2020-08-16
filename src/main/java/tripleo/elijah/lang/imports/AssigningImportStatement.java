@@ -1,6 +1,7 @@
 package tripleo.elijah.lang.imports;
 
 import antlr.Token;
+import tripleo.elijah.contexts.ImportContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class AssigningImportStatement implements ImportStatement {
 	final OS_Element parent;
 	private List<Part> _parts = new ArrayList<Part>();
+	private Context _ctx;
 
 	class Part {
 		Token name;
@@ -57,9 +59,18 @@ public class AssigningImportStatement implements ImportStatement {
 		return r;
 	}
 
+	public void setContext(ImportContext ctx) {
+		_ctx = ctx;
+	}
+
 	private static Qualident tokenToQualident(Token token) {
 		Qualident r = new Qualident();
 		r.append(token);
 		return r;
 	}
+
 }
+
+//
+//
+//

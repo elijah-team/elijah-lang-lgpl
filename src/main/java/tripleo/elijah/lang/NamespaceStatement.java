@@ -6,10 +6,6 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  * 
  */
-/**
- * Created Apr 2, 2019 at 11:08:12 AM
- *
- */
 package tripleo.elijah.lang;
 
 import antlr.Token;
@@ -29,13 +25,14 @@ import java.util.List;
 /**
  * @author Tripleo(sb)
  *
+ * Created Apr 2, 2019 at 11:08:12 AM
  */
 public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, StatementItem, FunctionItem, OS_Container, OS_Element2 {
 
-	private Token nsName;
-	private OS_Element parent;
-	public Attached _a = new Attached(new NamespaceContext(this));
-	private List<ClassItem> items = new ArrayList<ClassItem>();
+	private IdentExpression nsName;
+	private final OS_Element parent;
+	public Attached _a = new Attached();
+	private final List<ClassItem> items = new ArrayList<ClassItem>();
 	private NamespaceTypes _kind;
 	private OS_Package _packageName;
 
@@ -62,15 +59,9 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		return _packageName;
 	}
 
-	public void setName(Token i1) {
+	public void setName(IdentExpression i1) {
 		nsName = i1;
 	}
-
-//	@Override
-//	public void statementWrapper(IExpression aExpr) {
-//		// TODO Auto-generated method stub
-//		
-//	}
 
 	private final List<String> mDocs = new ArrayList<String>();
 
@@ -216,6 +207,31 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	public String name() {
 		return getName();
 	}
+
+	public void setContext(NamespaceContext ctx) {
+		_a.setContext(ctx);
+	}
+
+	List<AnnotationClause> annotations = null;
+
+	public void addAnnotation(AnnotationClause a) {
+		if (annotations == null)
+			annotations = new ArrayList<AnnotationClause>();
+		annotations.add(a);
+	}
+
+	public void postConstruct() {
+		if (nsName == null || nsName.getText().equals("")) {
+			setType(NamespaceTypes.MODULE);
+		} else if (nsName.getText().equals("_")) {
+			setType(NamespaceTypes.PRIVATE);
+		} else if (nsName.getText().equals("__package__")) {
+			setType(NamespaceTypes.PACKAGE);
+		} else {
+			setType(NamespaceTypes.NAMED);
+		}
+	}
+
 }
 
 //

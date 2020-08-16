@@ -22,10 +22,16 @@ import java.util.List;
  */
 public class NamespaceContext extends Context {
 
+	private final Context _parent;
 	public NamespaceStatement carrier;
 
-	public NamespaceContext(NamespaceStatement namespaceStatement) {
-		carrier = namespaceStatement;
+//	public NamespaceContext(NamespaceStatement namespaceStatement) {
+//		carrier = namespaceStatement;
+//	}
+
+	public NamespaceContext(Context aParent, NamespaceStatement ns) {
+		_parent = aParent;
+		carrier = ns;
 	}
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
@@ -59,4 +65,7 @@ public class NamespaceContext extends Context {
 
 	}
 
+	public Context getParent() {
+		return _parent;
+	}
 }

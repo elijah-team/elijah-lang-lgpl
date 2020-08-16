@@ -8,8 +8,11 @@
  */
 package tripleo.elijah.lang;
 
-public enum ClassTypes {
-	NORMAL, STRUCTURE, SIGNATURE, ABSTRACT, INTERFACE
+/**
+ * Created 8/15/20 6:27 PM
+ */
+public enum FunctionModifiers {
+	NORMAL, ABSTRACT, IMMUTABLE, CONST
 }
 
 //

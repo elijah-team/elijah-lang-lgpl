@@ -8,8 +8,18 @@
  */
 package tripleo.elijah.lang;
 
-public enum ClassTypes {
-	NORMAL, STRUCTURE, SIGNATURE, ABSTRACT, INTERFACE
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created 8/15/20 6:31 PM
+ */
+public class AnnotationClause {
+	List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
+
+	public void add(AnnotationPart ap) {
+		aps.add(ap);
+	}
 }
 
 //
