@@ -15,9 +15,9 @@ import tripleo.elijah.util.NotImplementedException;
 public class FormalArgListItem implements OS_Element, OS_Element2 {
 	
 	public Token name;
-	public TypeName tn=new RegularTypeName(); // TODO why make the choice for the program?
+	public NormalTypeName tn=new RegularTypeName(); // TODO why make the choice for the program?
 
-	public TypeName typeName() {
+	public NormalTypeName typeName() {
 		return tn;
 	}
 

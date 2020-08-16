@@ -131,7 +131,7 @@ public class DefFunctionDef implements ClassItem {
 //	private FunctionDefScope mScope;
 	private OS_Element/*ClassStatement*/ parent;
 	private final DefFunctionDefScope mScope2 = new DefFunctionDefScope();
-	private TypeName _returnType = new RegularTypeName();
+	private NormalTypeName _returnType = new RegularTypeName();
 	private Attached _a = new Attached(new DefFunctionContext(this));
 
 	public DefFunctionDef(OS_Element aStatement) {
@@ -168,7 +168,7 @@ public class DefFunctionDef implements ClassItem {
 		
 	}
 
-	public TypeName returnType() {
+	public NormalTypeName returnType() {
 		// TODO Auto-generated method stub
 		return _returnType ;
 	}

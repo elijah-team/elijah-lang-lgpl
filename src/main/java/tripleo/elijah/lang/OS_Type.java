@@ -79,7 +79,7 @@ public class OS_Type {
 	private BuiltInTypes type;
 	private Type type_of_type;
 	private OS_Element etype;
-	private TypeName ttype;
+	private NormalTypeName ttype;
 
 	/*@ ensures type_of_type = Type.BUILT_IN; */
 	public OS_Type(BuiltInTypes aType) {
@@ -95,7 +95,7 @@ public class OS_Type {
 	}
 
 	/*@ ensures type_of_type = Type.USER; */
-	public OS_Type(TypeName typeName) {
+	public OS_Type(NormalTypeName typeName) {
 		this.ttype = typeName;
 		this.type_of_type = Type.USER;
 	}
@@ -114,7 +114,7 @@ public class OS_Type {
 	}
 
 	/*@ requires type_of_type = Type.USER; */
-	public TypeName getTypeName() {
+	public NormalTypeName getTypeName() {
 		return ttype;
 	}
 

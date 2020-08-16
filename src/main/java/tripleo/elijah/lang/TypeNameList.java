@@ -13,9 +13,9 @@ import java.util.List;
 
 public class TypeNameList {
 
-	List<TypeName> p = new ArrayList<TypeName>();
+	List<NormalTypeName> p = new ArrayList<NormalTypeName>(); // TODO should be TypeName
 
-	public TypeName next() {
+	public NormalTypeName next() {
 		RegularTypeName t = new RegularTypeName();
 		p.add(t);
 		return t;

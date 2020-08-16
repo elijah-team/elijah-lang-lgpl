@@ -170,7 +170,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 			this.ident = i1;
 		}
 
-		public TypeName typeName() {
+		public NormalTypeName typeName() {
 			return tn;
 		}
 

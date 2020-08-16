@@ -55,7 +55,7 @@ public class ClassContext extends Context {
 				}
 			}
 		}
-		for (TypeName tn : carrier.classInheritance().tns) {
+		for (NormalTypeName tn : carrier.classInheritance().tns) {
 //			System.out.println("1001 "+tn);
 			OS_Element best;
 			if (!tn.hasResolvedElement()) {

@@ -332,7 +332,7 @@ public class DeduceTypes {
 					} else
 						t = deduceTypeName((VariableStatement) element, ctx);
 				} else if (element instanceof FormalArgListItem) {
-					final TypeName typeName = ((FormalArgListItem) element).tn;
+					final NormalTypeName typeName = ((FormalArgListItem) element).tn;
 					if (typeName != null) {
 						t = new OS_Type(typeName);
 					} else
@@ -341,7 +341,7 @@ public class DeduceTypes {
 					t = new OS_Type((ClassStatement) element);
 				} else if (element instanceof FunctionDef) {
 					if (true) {
-						final TypeName typeName = ((FunctionDef) element).returnType();
+						final NormalTypeName typeName = ((FunctionDef) element).returnType();
 						if (typeName != null && typeName.getName() != null) {
 							LookupResultList lrl3 = ctx.lookup(typeName.getName());
 							final ClassStatement klass = (ClassStatement) lrl3.chooseBest(null);
@@ -418,7 +418,7 @@ public class DeduceTypes {
 				final OS_Type t = new OS_FuncType(((FunctionDef) best));
 				exp.setType(t);
 			} else if (best instanceof VariableStatement) {
-				final TypeName typeName = ((VariableStatement) best).typeName();
+				final NormalTypeName typeName = ((VariableStatement) best).typeName();
 				OS_Type t;
 				if (typeName.isNull()) {
 					//deduceProcedureCall((ProcedureCallExpression) ((VariableStatement) best).initialValue(), ctx);
@@ -524,7 +524,7 @@ public class DeduceTypes {
 				//
 				pce.getLeft().setType(deducedExpression); // TODO how do we know before looking at args?
 				if (true) {
-					final TypeName typeName = functionDef.returnType();
+					final NormalTypeName typeName = functionDef.returnType();
 					LookupResultList lrl2 = parent.getContext().lookup(typeName.getName());
 					OS_Element best2 = lrl2.results().get(0).getElement();//chooseBest(null); // TODO not using chooseBest here. see why
 					pce.setType(new OS_Type((ClassStatement) best2));
@@ -688,13 +688,13 @@ public class DeduceTypes {
 		if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
 			final OS_Element element = lrl.results().get(0).getElement();
 			if (element instanceof VariableStatement) {
-				final TypeName tn = ((VariableStatement) element).typeName();
+				final NormalTypeName tn = ((VariableStatement) element).typeName();
 				if (!tn.isNull())
 					return new OS_Type(((VariableStatement) element).typeName());
 				else
 					return deduceTypeName((VariableStatement) element, context);
 			} else if (element instanceof FormalArgListItem) {
-				final TypeName typeName = ((FormalArgListItem) element).tn;
+				final NormalTypeName typeName = ((FormalArgListItem) element).tn;
 				if (typeName != null) {
 					OS_Type t = deduceTypeName(typeName, context);
 					return t;
@@ -727,7 +727,7 @@ public class DeduceTypes {
 		return null;
 	}
 
-	private OS_Type deduceTypeName(TypeName typeName, Context ctx) {
+	private OS_Type deduceTypeName(NormalTypeName typeName, Context ctx) {
 //		if (vs.typeName().isNull())
 //			if (vs.initialValue() instanceof NumericExpression)
 //				return new OS_Type(BuiltInTypes.SystemInteger);

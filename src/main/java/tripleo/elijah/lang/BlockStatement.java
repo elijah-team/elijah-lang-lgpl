@@ -14,7 +14,7 @@ package tripleo.elijah.lang;
 public class BlockStatement implements Statement, StatementItem {
 
 	final private Scope parent;
-	private TypeName tn=new RegularTypeName();
+	private NormalTypeName tn=new RegularTypeName();
 	private FormalArgList fal=new FormalArgList();
 	private StatementClosure scope;
 	
@@ -31,7 +31,7 @@ public class BlockStatement implements Statement, StatementItem {
 		return fal;
 	}
 
-	public TypeName returnType() {
+	public NormalTypeName returnType() {
 		return tn;
 	}
 }

@@ -25,10 +25,10 @@ public class ClassInheritance {
 		parent=aStatement;
 	}
 
-	public List<TypeName> tns=new ArrayList<TypeName>();
+	public List<NormalTypeName> tns=new ArrayList<NormalTypeName>();
 	
-	public TypeName next() {
-		TypeName tn = new RegularTypeName();
+	public NormalTypeName next() {
+		NormalTypeName tn = new RegularTypeName();
 		tn.setContext(parent.getContext());
 		tns.add(tn);
 		return tn;

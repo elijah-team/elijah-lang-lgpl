@@ -10,7 +10,7 @@ package tripleo.elijah.lang;
 
 import java.util.Objects;
 
-public abstract class AbstractTypeName implements TypeName {
+public abstract class AbstractTypeName implements NormalTypeName {
 
 	private boolean isNullable = false;
 

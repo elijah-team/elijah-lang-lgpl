@@ -18,20 +18,12 @@ import tripleo.elijah.util.NotImplementedException;
 
 import java.util.Objects;
 
-public class VariableTypeName extends AbstractTypeName implements TypeName {
+public class VariableTypeName extends AbstractTypeName implements NormalTypeName {
 
-	private TypeName genericPart = null;
+	private NormalTypeName genericPart = null;
 	private Context _ctx;
 	//private OS_Type _resolved;
 	private OS_Element _resolvedElement;
-
-	@Override
-	public TypeName returnValue() {
-		throw new NotImplementedException();
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-//		return null;
-	}
 
 	public void type(int aI) {
 		throw new NotImplementedException();
@@ -40,11 +32,8 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 	}
 
 	@Override
-	public TypeNameList argList() {
-		throw new NotImplementedException();
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-//		return null;
+	public Type kindOfType() {
+		return Type.NORMAL;
 	}
 
 	@Override
@@ -55,7 +44,7 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 	}
 
 	@Override
-	public void addGenericPart(TypeName tn2) {
+	public void addGenericPart(NormalTypeName tn2) {
 		genericPart = tn2;
 	}
 

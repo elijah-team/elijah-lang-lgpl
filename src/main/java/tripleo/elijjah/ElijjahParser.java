@@ -1479,7 +1479,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void inhTypeName(
-		TypeName tn
+		NormalTypeName tn
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -2076,7 +2076,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void specifiedGenericTypeName_xx(
-		TypeName tn
+		NormalTypeName tn
 	) throws RecognitionException, TokenStreamException {
 		
 		RegularTypeName rtn=new RegularTypeName();
@@ -2223,7 +2223,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void typeName(
-		TypeName cr
+		NormalTypeName cr
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -2233,7 +2233,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				structTypeName(cr);
 			}
 			else if ((LA(1)==LITERAL_function||LA(1)==LITERAL_procedure)) {
-				funcTypeExpr(cr);
+				funcTypeExpr((FuncTypeName) cr);
 			}
 			else if ((LA(1)==IDENT) && (_tokenSet_9.member(LA(2)))) {
 				simpleTypeName_xx(cr);
@@ -2259,7 +2259,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void structTypeName(
-		TypeName cr
+		NormalTypeName cr
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -2322,7 +2322,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void funcTypeExpr(
-		TypeName pc
+		FuncTypeName pc
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -2419,7 +2419,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void simpleTypeName_xx(
-		TypeName tn
+		NormalTypeName tn
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -3619,7 +3619,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void variableQualifiers(
-		TypeName cr
+		NormalTypeName cr
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -3701,7 +3701,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void regularQualifiers(
-		TypeName fp
+		NormalTypeName fp
 	) throws RecognitionException, TokenStreamException {
 		
 		Token  i2 = null;
@@ -4167,7 +4167,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		ee=null;
 				ExpressionKind e2=null; // should never be null (below)
 				IExpression e3=null;
-				TypeName tn=new RegularTypeName();
+				NormalTypeName tn=new RegularTypeName();
 		
 		try {      // for error handling
 			ee=shiftExpression();
@@ -5041,7 +5041,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void genericQualifiers(
-		TypeName cr
+		NormalTypeName cr
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -5104,7 +5104,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void abstractGenericTypeName_xx(
-		TypeName tn
+		NormalTypeName tn
 	) throws RecognitionException, TokenStreamException {
 		
 		
@@ -5146,7 +5146,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void formalArgTypeName(
-		TypeName tn
+		NormalTypeName tn
 	) throws RecognitionException, TokenStreamException {
 		
 		

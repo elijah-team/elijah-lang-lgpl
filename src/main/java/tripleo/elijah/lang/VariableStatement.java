@@ -22,7 +22,7 @@ public class VariableStatement implements OS_Element {
 	
 	private IExpression initialValue = IExpression.UNASSIGNED;
 	private TypeModifiers typeModifiers;
-	private TypeName typeName = new VariableTypeName();
+	private NormalTypeName typeName = new VariableTypeName();
 
 	public VariableStatement(VariableSequence aSequence) {
 		_parent = aSequence;
@@ -54,7 +54,7 @@ public class VariableStatement implements OS_Element {
 		typeModifiers = y;
 	}
 
-	public TypeName typeName() {
+	public NormalTypeName typeName() {
 		return typeName;
 	}
 	

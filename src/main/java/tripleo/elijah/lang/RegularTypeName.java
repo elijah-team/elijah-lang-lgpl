@@ -16,24 +16,16 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
 
-public class RegularTypeName extends AbstractTypeName2 implements TypeName {
+public class RegularTypeName extends AbstractTypeName2 implements NormalTypeName {
 
-	private TypeName genericPart = null;
+	private NormalTypeName genericPart = null;
 	private Context _ctx;
 	private OS_Type _resolved;
 	private OS_Element _resolvedElement;
 
 	@Override
-	public void addGenericPart(TypeName tn2) {
+	public void addGenericPart(NormalTypeName tn2) {
 		genericPart = tn2;
-	}
-
-	@Override
-	public TypeNameList argList() {
-		throw new NotImplementedException();
-	//	// TODO Auto-generated method stub
-	//	NotImplementedException.raise();
-	//	return null;
 	}
 
 public String getName() {
@@ -45,14 +37,6 @@ public String getName() {
 public String getTypeName() {
 	return this.typeName.toString();
 }  // TODO is this right?
-	
-@Override
-public TypeName returnValue() {
-	throw new NotImplementedException();
-//	// TODO Auto-generated method stub
-//	NotImplementedException.raise();
-//	return null;
-}
 
 @Override
 public void set(TypeModifiers aModifiers) {
@@ -130,7 +114,12 @@ public void type(TypeModifiers atm) {
 tm=atm;		
 }
 
-@Override
+	@Override
+	public Type kindOfType() {
+		return Type.NORMAL;
+	}
+
+	@Override
 public void typeName(Qualident xy) {
 	// TODO Auto-generated method stub
 //	NotImplementedException.raise();

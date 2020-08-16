@@ -17,7 +17,7 @@ package tripleo.elijah.lang;
 
 public class TypeNameExpression extends BasicBinaryExpression {
 
-	public TypeNameExpression(TypeName aVr) {
+	public TypeNameExpression(NormalTypeName aVr) {
 		// TODO Auto-generated constructor stub
 	}
 

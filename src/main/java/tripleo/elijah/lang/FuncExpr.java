@@ -35,7 +35,7 @@ public class FuncExpr implements IExpression, OS_Element {
 		return argList;
 	}
 
-	public TypeName returnType() {
+	public NormalTypeName returnType() {
 		return _returnType;
 	}
 

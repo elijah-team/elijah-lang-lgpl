@@ -8,10 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.TabbedOutputStream;
-
-import java.io.IOException;
-
 /**
  * @author olu
  *
@@ -36,7 +32,7 @@ public class TypeCastExpression extends AbstractExpression implements IExpressio
 
 	RegularTypeName tn = new RegularTypeName();
 	
-	public TypeName typeName() {
+	public NormalTypeName typeName() {
 		return tn;
 	}
 }

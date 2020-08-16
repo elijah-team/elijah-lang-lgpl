@@ -16,7 +16,7 @@ import java.util.*;
  * $$Id$
  *
  */
-public abstract class AbstractTypeName2 implements TypeName {
+public abstract class AbstractTypeName2 implements NormalTypeName {
 	
 	protected Collection<TypeModifiers> _ltm = new LinkedHashSet<TypeModifiers>();
 	protected TypeModifiers tm;
