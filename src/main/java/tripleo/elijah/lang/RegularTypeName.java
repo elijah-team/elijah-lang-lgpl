@@ -21,6 +21,7 @@ public class RegularTypeName extends AbstractTypeName2 implements TypeName {
 	private TypeName genericPart = null;
 	private Context _ctx;
 	private OS_Type _resolved;
+	private OS_Element _resolvedElement;
 
 	@Override
 	public void addGenericPart(TypeName tn2) {
@@ -67,6 +68,21 @@ public void setGeneric(boolean value) {
 	public void setContext(Context ctx) {
 //		_a.setContext(ctx);
 		_ctx = ctx;
+	}
+
+	@Override
+	public boolean hasResolvedElement() {
+		return _resolvedElement != null;
+	}
+
+	@Override
+	public OS_Element getResolvedElement() {
+		return _resolvedElement;
+	}
+
+	@Override
+	public void setResolvedElement(OS_Element element) {
+		_resolvedElement = element;
 	}
 
 

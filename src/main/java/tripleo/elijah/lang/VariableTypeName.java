@@ -22,6 +22,8 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 
 	private TypeName genericPart = null;
 	private Context _ctx;
+	//private OS_Type _resolved;
+	private OS_Element _resolvedElement;
 
 	@Override
 	public TypeName returnValue() {
@@ -100,6 +102,21 @@ public class VariableTypeName extends AbstractTypeName implements TypeName {
 	@Override
 	public void setContext(Context ctx) {
 		_ctx = ctx;
+	}
+
+	@Override
+	public boolean hasResolvedElement() {
+		return _resolvedElement != null;
+	}
+
+	@Override
+	public OS_Element getResolvedElement() {
+		return _resolvedElement;
+	}
+
+	@Override
+	public void setResolvedElement(OS_Element element) {
+		_resolvedElement = element;
 	}
 
 	@Override

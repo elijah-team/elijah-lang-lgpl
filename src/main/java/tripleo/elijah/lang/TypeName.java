@@ -55,6 +55,11 @@ public interface TypeName {
 
 	void setContext(Context cur);
 
+	boolean hasResolvedElement();
+
+	OS_Element getResolvedElement();
+
+	void setResolvedElement(OS_Element element);
 }
 
 //
