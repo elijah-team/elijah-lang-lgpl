@@ -2958,7 +2958,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		StatementClosure cr
 	) throws RecognitionException, TokenStreamException {
 		
-		Loop loop=cr.loop();
+		Loop loop=cr.loop();LoopContext ctx;
 		
 		try {      // for error handling
 			{
@@ -2973,6 +2973,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				if ( inputState.guessing==0 ) {
 					loop.expr(expr);
 				}
+				if ( inputState.guessing==0 ) {
+					ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;
+				}
 				scope(loop.scope());
 				break;
 			}
@@ -2981,6 +2984,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				match(LITERAL_do);
 				if ( inputState.guessing==0 ) {
 					loop.type(LoopTypes2.DO_WHILE);
+				}
+				if ( inputState.guessing==0 ) {
+					ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;
 				}
 				scope(loop.scope());
 				match(LITERAL_while);
@@ -3015,7 +3021,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		Token  i1 = null;
 		Token  i2 = null;
 		Token  i3 = null;
-		Loop loop=cr.loop();
+		Loop loop=cr.loop();LoopContext ctx=null;
 		
 		try {      // for error handling
 			match(LITERAL_iterate);
@@ -3150,6 +3156,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				throw new NoViableAltException(LT(1), getFilename());
 			}
 			}
+			}
+			if ( inputState.guessing==0 ) {
+				ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;
 			}
 			scope(loop.scope());
 		}
