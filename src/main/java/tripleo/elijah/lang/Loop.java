@@ -66,7 +66,7 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, 
 
 private IExpression topart,frompart;
 private IExpression expr;
-private Attached _a = new Attached(new LoopContext(this));
+private Attached _a = new Attached();
 
 	public List<StatementItem> getItems() {
 		return items;
@@ -95,6 +95,10 @@ private Attached _a = new Attached(new LoopContext(this));
 	
 	public IExpression getFromPart() {
 		return frompart;
+	}
+
+	public void setContext(LoopContext ctx) {
+		_a.setContext(ctx);
 	}
 
 	private final class LoopScope implements Scope {
@@ -153,12 +157,12 @@ private Attached _a = new Attached(new LoopContext(this));
 		}
 	}
 
-//	@Override
+	@Override
 	public OS_Element getParent() {
 		return parent;
 	}
 
-//	@Override
+	@Override
 	public Context getContext() {
 		return _a ._context;
 	}
