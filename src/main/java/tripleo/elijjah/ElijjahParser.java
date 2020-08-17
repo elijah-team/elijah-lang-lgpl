@@ -59,7 +59,7 @@ public ElijjahParser(ParserSharedInputState state) {
 
 	public final void program() throws RecognitionException, TokenStreamException {
 		
-		ParserClosure pc = out.closure();out.module().setContext(new ModuleContext(out.module()));
+		ParserClosure pc = out.closure();cur=new ModuleContext(out.module());out.module().setContext((ModuleContext) cur);
 		
 		try {      // for error handling
 			{

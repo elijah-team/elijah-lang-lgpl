@@ -31,7 +31,7 @@ Context cur;
 }
 
 program
-        {ParserClosure pc = out.closure();out.module().setContext(new ModuleContext(out.module()));}
+        {ParserClosure pc = out.closure();cur=new ModuleContext(out.module());out.module().setContext((ModuleContext)cur);}
     : (( indexingStatement[pc.indexingStatement()]
 	  |"package" xy=qualident opt_semi {pc.packageName(xy);cur=new PackageContext(cur);}
 	  |programStatement[pc, out.module()]) opt_semi)*
