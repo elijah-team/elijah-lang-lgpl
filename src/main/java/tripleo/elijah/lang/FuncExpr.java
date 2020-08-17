@@ -1,5 +1,10 @@
-/**
- * 
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ *
+ * The contents of this library are released under the LGPL licence v3,
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ *
  */
 package tripleo.elijah.lang;
 
@@ -22,7 +27,7 @@ public class FuncExpr implements IExpression, OS_Element {
 	//	private final TypeNameList argList = new TypeNameList();
 	private final FormalArgList argList = new FormalArgList();
 	private final FuncExprScope funcExprScope = new FuncExprScope(this);
-	private final RegularTypeName _returnType = new RegularTypeName();
+	private TypeName _returnType = null/*new RegularTypeName()*/;
 	private OS_Type _type;
 
 
@@ -35,12 +40,16 @@ public class FuncExpr implements IExpression, OS_Element {
 		return argList;
 	}
 
-	public NormalTypeName returnType() {
+	public TypeName returnType() {
 		return _returnType;
 	}
 
 	public Scope scope() {
 		return funcExprScope;
+	}
+
+	public void setReturnType(TypeName tn) {
+		_returnType = tn;
 	}
 
 	final static class FuncExprScope implements Scope {

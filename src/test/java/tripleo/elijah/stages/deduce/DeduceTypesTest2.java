@@ -41,7 +41,7 @@ public class DeduceTypesTest2 {
 		vs.setName(Helpers.makeToken("x"));
 		final Qualident qu = new Qualident();
 		qu.append(Helpers.makeToken("Integer"));
-		vs.typeName().setName(qu);
+		((NormalTypeName)vs.typeName()).setName(qu);
 		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		OS_Type x = d.deduceExpression(new IdentExpression(Helpers.makeToken("x")), fc);
 		System.out.println(x);

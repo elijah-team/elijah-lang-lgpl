@@ -163,14 +163,14 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		private List<String> docstrings = new ArrayList<String>();
 		private List<FunctionItem> items = new ArrayList<FunctionItem>();
 
-		RegularTypeName tn = new RegularTypeName();
+		TypeName tn = new RegularTypeName();
 		private Token ident;
 
 		public void ident(Token i1) {
 			this.ident = i1;
 		}
 
-		public NormalTypeName typeName() {
+		public TypeName typeName() {
 			return tn;
 		}
 
@@ -186,6 +186,10 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		@Override
 		public void addDocString(String text) {
 			docstrings.add(text);
+		}
+
+		public void setTypeName(TypeName typeName) {
+			tn = typeName;
 		}
 	}
 

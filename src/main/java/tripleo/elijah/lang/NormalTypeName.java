@@ -37,7 +37,7 @@ public interface NormalTypeName extends TypeName {
 	void type(TypeModifiers modifiers);
 
 	// TODO new
-	void addGenericPart(NormalTypeName tn2);
+	void addGenericPart(TypeName tn2);
 
 	// TODO new
 	void typeName(Qualident xy);

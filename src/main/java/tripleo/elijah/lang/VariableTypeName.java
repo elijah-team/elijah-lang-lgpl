@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class VariableTypeName extends AbstractTypeName implements NormalTypeName {
 
-	private NormalTypeName genericPart = null;
+	private TypeName genericPart = null;
 	private Context _ctx;
 	//private OS_Type _resolved;
 	private OS_Element _resolvedElement;
@@ -44,7 +44,7 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
-	public void addGenericPart(NormalTypeName tn2) {
+	public void addGenericPart(TypeName tn2) {
 		genericPart = tn2;
 	}
 

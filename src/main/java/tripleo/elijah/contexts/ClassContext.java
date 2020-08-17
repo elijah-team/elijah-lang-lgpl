@@ -55,8 +55,9 @@ public class ClassContext extends Context {
 				}
 			}
 		}
-		for (NormalTypeName tn : carrier.classInheritance().tns) {
+		for (TypeName tn1 : carrier.classInheritance().tns) {
 //			System.out.println("1001 "+tn);
+			NormalTypeName tn = (NormalTypeName)tn1;
 			OS_Element best;
 			if (!tn.hasResolvedElement()) {
 				LookupResultList tnl = carrier.getParent().getContext().lookup(tn.getName()); // TODO why getParent here?

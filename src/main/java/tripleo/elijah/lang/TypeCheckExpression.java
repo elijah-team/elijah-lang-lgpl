@@ -17,9 +17,9 @@ import tripleo.elijah.lang2.BuiltInTypes;
  */
 public class TypeCheckExpression extends AbstractExpression implements IExpression {
     private final IExpression checking;
-    private final NormalTypeName checkfor;
+    private final TypeName checkfor;
 
-    public TypeCheckExpression(IExpression ee, NormalTypeName p1) {
+    public TypeCheckExpression(IExpression ee, TypeName p1) {
         this.checking = ee;
         this.checkfor = p1;
     }

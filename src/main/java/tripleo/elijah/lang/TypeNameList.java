@@ -13,12 +13,16 @@ import java.util.List;
 
 public class TypeNameList {
 
-	List<NormalTypeName> p = new ArrayList<NormalTypeName>(); // TODO should be TypeName
+	List<TypeName> p = new ArrayList<TypeName>();
 
 	public NormalTypeName next() {
 		RegularTypeName t = new RegularTypeName();
 		p.add(t);
 		return t;
+	}
+
+	public void add(TypeName tn) {
+		p.add(tn);
 	}
 }
 

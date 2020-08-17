@@ -333,7 +333,7 @@ public class ExpandFunctions {
 //						return new OS_Type(((VariableStatement) element).typeName());
 					}
 				} else if (element instanceof FormalArgListItem) {
-					final NormalTypeName typeName = ((FormalArgListItem) element).tn;
+					final NormalTypeName typeName = (NormalTypeName) ((FormalArgListItem) element).tn;
 					if (typeName != null) {
 //						return new OS_Type(typeName);
 					}

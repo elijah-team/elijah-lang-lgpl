@@ -51,6 +51,10 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		_mod = mod;
 	}
 
+	public void setReturnType(TypeName tn) {
+		this._returnType = tn;
+	}
+
 	public final class FunctionDefScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this, getParent());
@@ -113,7 +117,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	}
 
 	public Attached _a = new Attached();
-	private NormalTypeName _returnType = new RegularTypeName();
+	private TypeName _returnType = null/*new RegularTypeName()*/;
 	private List<String> docstrings = new ArrayList<String>();
 	public IdentExpression funName;
 	private List<FunctionItem> items = new ArrayList<FunctionItem>();
@@ -174,7 +178,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 			throw new IllegalStateException(String.format("Cant add %s to FunctionDef", anElement));
 	}
 
-	public NormalTypeName returnType() {
+	public TypeName returnType() {
 		// TODO Auto-generated method stub
 //		if (_returnType.isNull()) System.err.println("101 NULL (Unresolved) returnType");
 		return _returnType;

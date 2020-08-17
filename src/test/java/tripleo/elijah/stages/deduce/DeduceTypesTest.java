@@ -44,7 +44,7 @@ public class DeduceTypesTest {
 		vs.setName(Helpers.makeToken("x"));
 		final Qualident qu = new Qualident();
 		qu.append(Helpers.makeToken("Integer"));
-		vs.typeName().setName(qu);
+		((NormalTypeName)vs.typeName()).setName(qu);
 		fd.postConstruct();
 		cs.postConstruct();
 		mod.postConstruct();

@@ -130,9 +130,11 @@ importPart3 [NormalImportStatement cr] //current rule
 		{Qualident q2;}
     : q2=qualident {cr.addNormalPart(q2);}
     ;
-classInheritance_[ClassInheritance ci]:
-    inhTypeName[ci.next()]
-      (COMMA inhTypeName[ci.next()])*
+classInheritance_[ClassInheritance ci]
+		{TypeName tn=null;}
+	:
+    tn=inhTypeName {ci.add(tn);}
+      (COMMA tn=inhTypeName {ci.add(tn);})*
     ;
 classInheritanceRuby[ClassInheritance ci]:
     LT_ classInheritance_[ci]
@@ -180,17 +182,6 @@ namespaceScope[NamespaceStatement cr]
     | invariantStatement[cr.invariantStatement()]
     | accessNotation ) opt_semi )*
     ;
-inhTypeName[NormalTypeName tn]:
-    (("const" {tn.set(TypeModifiers.CONST);})? specifiedGenericTypeName_xx[tn]
-    | "typeof" xy=qualident {tn.typeof(xy);}
-    ) {tn.setContext(cur);}
-    ;
-typeName[NormalTypeName cr]:
-    ( structTypeName[cr]
-    | funcTypeExpr[cr]
-    | simpleTypeName_xx[cr]
-    ) {cr.setContext(cur);}
-    ;
 scope[Scope sc]
       //{IExpression expr;}
     : LCURLY docstrings[sc]
@@ -222,14 +213,14 @@ functionScope[Scope sc]
     ;
 
 functionDef[FunctionDef fd]
-    	{AnnotationClause a=null;FunctionContext ctx=null;IdentExpression i1=null;}
+    	{AnnotationClause a=null;FunctionContext ctx=null;IdentExpression i1=null;TypeName tn=null;}
     : (a=annotation_clause      {fd.addAnnotation(a);})*
     i1=ident                    {fd.setName(i1);}
                                 {ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
     ( "const"                   {fd.set(FunctionModifiers.CONST);}
     | "immutable"               {fd.set(FunctionModifiers.IMMUTABLE);})?
     opfal[fd.fal()]
-    (TOK_ARROW typeName[fd.returnType()])?
+    (TOK_ARROW tn=typeName2 {fd.setReturnType(tn);})?
     functionScope[fd.scope()] // TODO what about pre/post??
     {fd.postConstruct();}
     ;
@@ -287,39 +278,13 @@ expression returns [IExpression ee]
 		{ee=null;}
 	: ee=assignmentExpression
 	;
-variableQualifiers[NormalTypeName cr]:
-	( "once"  {cr.set(TypeModifiers.ONCE);}
-	| "local"  {cr.set(TypeModifiers.LOCAL);}
-	| "tagged"  {cr.set(TypeModifiers.TAGGED);}
-	| "const"  {cr.set(TypeModifiers.CONST);}
-	| "pooled"  {cr.set(TypeModifiers.POOLED);}
-	| "manual"  {cr.set(TypeModifiers.MANUAL);}
-	| "gc"  {cr.set(TypeModifiers.GC);})
-	;
-regularQualifiers[NormalTypeName fp]
-		{IdentExpression i1=null;}
-	:
-	( "in"            {fp.setIn(true);}
-	| "out"           {fp.setOut(true);})?
-	( ("const"        {fp.setConstant(true);}
-	   ("ref"		  {fp.setReference(true);})?)
-	| "ref"           {fp.setReference(true);} 
-	| "generic" i2:IDENT 	  {fp.setGeneric(true);
-        RegularTypeName rtn = new RegularTypeName();
-        Qualident q = new Qualident();
-        q.append(i2);
-        rtn.setName(q);
-        fp.addGenericPart(rtn);}
-	)
-	;
-typeNameList[TypeNameList cr]:
-	typeName [cr.next()] (COMMA typeName [cr.next()])*
-	;
+/*
 ident2 returns [String ident]
 		{ident=null;}
 	:
 	r1:IDENT {ident=r1.getText();}
 	;
+*/
 aliasStatement[AliasStatement pc]
 	: "alias" i1:IDENT {pc.setName(i1);} BECOMES xy=qualident {pc.setExpression(xy);}
 	;
@@ -494,7 +459,7 @@ relationalExpression returns [IExpression ee]
 		{ee=null;
 		ExpressionKind e2=null; // should never be null (below)
 		IExpression e3=null;
-		NormalTypeName tn=new RegularTypeName();}
+		TypeName tn=null;}
 
 	:	ee=shiftExpression
 		(	(	(	LT_/*^*/            {e2=ExpressionKind.LT_;}
@@ -505,7 +470,7 @@ relationalExpression returns [IExpression ee]
 				e3=shiftExpression      {ee=ExpressionBuilder.build(ee,e2,e3);
 										ee.setType(new OS_Type(BuiltInTypes.Boolean));}
 			)*
-		|	"is_a"/*^*/ typeName[tn] //typeSpec[true]
+		|	"is_a"/*^*/ tn=typeName2 //typeSpec[true]
 										{ee=new TypeCheckExpression(ee, tn);}
 		)
 	;
@@ -566,7 +531,7 @@ unaryExpressionNotPlusMinus returns [IExpression ee]
 
 // qualified names, array expressions, method invocation, post inc/dec
 postfixExpression returns [IExpression ee]
-		{ee=null;TypeCastExpression tc=null;
+		{ee=null;TypeCastExpression tc=null;TypeName tn=null;
 		IExpression e3=null;ExpressionList el=null;}
 	:	ee=primaryExpression // start with a primary
 
@@ -608,7 +573,7 @@ ee=pce;}
 		|	// nothing
 		)
 
-		( (AS|CAST_TO) {tc=new TypeCastExpression();ee=tc;} typeName[tc.typeName()])?
+		( (AS|CAST_TO) {tc=new TypeCastExpression();ee=tc;} tn=typeName2 {tc.setTypeName(tn);})?
 		
 		// look for int.class and int[].class
 //	|	builtInType
@@ -649,11 +614,11 @@ primaryExpression returns [IExpression ee]
 	|   {ppc=new FuncExpr();} funcExpr[ppc] {ee=ppc;}
 	;
 funcExpr[FuncExpr pc] // remove scope to use in `typeName's
-		{Scope0 sc = new Scope0(pc);}
+		{Scope0 sc = new Scope0(pc);TypeName tn=null;}
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
 	  (opfal[pc.argList()]) scope[pc.scope()]
-	  ((TOK_ARROW|TOK_COLON) typeName[pc.returnType()] )?
+	  ((TOK_ARROW|TOK_COLON) tn=typeName2 {pc.setReturnType(tn);} )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
 	  (opfal[pc.argList()]) scope[pc.scope()]
 	| 
@@ -666,18 +631,6 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 	
 	)
 	;
-
-//// A builtin type specification is a builtin type with possible brackets
-//// afterwards (which would make it an array type).
-//builtInTypeSpec[boolean addImagNode]
-//	:	builtInType (lb:LBRACK/*^*/ /*{#lb.setType(ARRAY_DECLARATOR);}*/ RBRACK/*!*/)*
-//		{
-//			if ( addImagNode ) {
-////				#builtInTypeSpec = #(#[TYPE,"TYPE"], #builtInTypeSpec);
-//			}
-//		}
-//	;
-
 
 
 
@@ -696,11 +649,12 @@ ifConditional[IfConditional ifex]
 	;
 matchConditional[MatchConditional mc, OS_Element aParent]
 		{MatchConditional.MatchConditionalPart1 mcp1=null;
-		 MatchConditional.MatchConditionalPart2 mcp2=null;}
+		 MatchConditional.MatchConditionalPart2 mcp2=null;
+		 TypeName tn=null;}
     : "match" expr=expression {mc.setParent(aParent);mc.expr(expr);}
-      LCURLY
+      LCURLY // TODO MatchContext
       ( { mcp1 = mc.typeMatch();} 
-      		i1:IDENT {mcp1.ident(i1);} TOK_COLON typeName[mcp1.typeName()] scope[mcp1.scope()]
+      		i1:IDENT {mcp1.ident(i1);} TOK_COLON tn=typeName2 {mcp1.setTypeName(tn);} scope[mcp1.scope()]
       | { mcp2 = mc.normal();}
       		expr=expression {mcp2.expr(expr);} scope[mcp2.scope()]
       )+
@@ -744,14 +698,52 @@ procCallEx[ProcedureCallExpression pce]
 	: LPAREN (expressionList[pce.exprList()])? RPAREN
 	;
 varStmt_i[VariableStatement vs]
-	: i:IDENT                  {vs.setName(i);}
-	( TOK_COLON typeName[vs.typeName()])?
-	( BECOMES expr=expression  {vs.initial(expr);})?
+		{TypeName tn=null;}
+	: i:IDENT                   {vs.setName(i);}
+	( TOK_COLON tn=typeName2    {vs.setTypeName(tn);})?
+	( BECOMES expr=expression   {vs.initial(expr);})?
 	;
 elseif_part[IfConditional ifex]
 	: ("elseif" | "else" "if") expr=expression {ifex.expr(expr);}
 	scope[ifex.scope()]
 	;
+
+//
+// TYPENAMES
+//
+/*
+variableQualifiers[NormalTypeName cr]:
+	( "once"  {cr.set(TypeModifiers.ONCE);}
+	| "local"  {cr.set(TypeModifiers.LOCAL);}
+	| "tagged"  {cr.set(TypeModifiers.TAGGED);}
+	| "const"  {cr.set(TypeModifiers.CONST);}
+	| "pooled"  {cr.set(TypeModifiers.POOLED);}
+	| "manual"  {cr.set(TypeModifiers.MANUAL);}
+	| "gc"  {cr.set(TypeModifiers.GC);})
+	;
+regularQualifiers[NormalTypeName fp]
+		{IdentExpression i1=null;}
+	:
+	( "in"            {fp.setIn(true);}
+	| "out"           {fp.setOut(true);})?
+	( ("const"        {fp.setConstant(true);}
+	   ("ref"		  {fp.setReference(true);})?)
+	| "ref"           {fp.setReference(true);}
+	| "generic" i2:IDENT 	  {fp.setGeneric(true);
+        RegularTypeName rtn = new RegularTypeName();
+        Qualident q = new Qualident();
+        q.append(i2);
+        rtn.setName(q);
+        fp.addGenericPart(rtn);}
+	)
+	;
+
+typeName[NormalTypeName cr]:
+    ( structTypeName[cr]
+//    | funcTypeExpr[cr]
+    | simpleTypeName_xx[cr]
+    ) {cr.setContext(cur);}
+    ;
 structTypeName[NormalTypeName cr]
 	:
 	( genericQualifiers[cr]
@@ -764,6 +756,7 @@ genericQualifiers[NormalTypeName cr]
 	: ( "const"    {cr.set(TypeModifiers.CONST);})?
 	  ( "ref"      {cr.set(TypeModifiers.REFPAR);})?
 	;
+
 abstractGenericTypeName_xx[NormalTypeName tn]
 	: "generic" xy=qualident {tn.typeName(xy); tn.set(TypeModifiers.GENERIC);}
 	| QUESTION xy=qualident {tn.typeName(xy); tn.set(TypeModifiers.GENERIC);}
@@ -776,16 +769,29 @@ specifiedGenericTypeName_xx[NormalTypeName tn]
 	;
 formalArgTypeName[NormalTypeName tn]
 	: structTypeName[tn]
-	| funcTypeExpr[tn]
+//	| funcTypeExpr[null/*tn* /]
 	;
 simpleTypeName_xx[NormalTypeName tn]
 	: xy=qualident  {tn.setName(xy);}
 	;
-defFunctionDef[DefFunctionDef fd]
-		{FormalArgList op=null;}
-	: "def" i1:IDENT op=opfal2/*[fd.fal()]*/  BECOMES expr=expression
-	   {fd.setType(DefFunctionDef.DEF_FUN); fd.setName(i1); fd.setOpfal(op); fd.setExpr(expr); }
+
+typeNameList[TypeNameList cr]:
+	typeName [cr.next()] (COMMA typeName [cr.next()])*
 	;
+*/
+inhTypeName returns [TypeName tn]
+		{tn=null;}
+	:
+	( tn=typeOfTypeName2
+	| tn=normalTypeName2
+	)
+/*    (("const" {tn.set(TypeModifiers.CONST);})? specifiedGenericTypeName_xx[tn]
+    | "typeof" xy=qualident {tn.typeof(xy);}
+    )
+*/
+        {tn.setContext(cur);}
+    ;
+/*
 funcTypeExpr[FuncTypeName pc]
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
@@ -795,16 +801,77 @@ funcTypeExpr[FuncTypeName pc]
 	  (LPAREN typeNameList[pc.argList()] RPAREN)?
 	)
 	;
+*/
+
+typeName2 returns [TypeName cr]
+		{cr=null;}
+	: cr=genericTypeName2
+	| cr=typeOfTypeName2
+	| cr=normalTypeName2
+	| cr=functionTypeName2
+	;
+genericTypeName2 returns [GenericTypeName tn]
+		{tn=new GenericTypeName(cur);}
+	: ("generic"|QUESTION) xy=qualident
+		{tn.typeName(xy); tn.set(TypeModifiers.GENERIC);}
+	;
+typeOfTypeName2 returns [TypeOfTypeName tn]
+		{tn=new TypeOfTypeName(cur);}
+	: "typeof" xy=qualident
+		{tn.typeOf(xy); tn.set(TypeModifiers.TYPE_OF);}
+	;
+normalTypeName2 returns [NormalTypeName tn]
+		{tn=new RegularTypeName(cur); TypeName rtn=null;}
+	: regularQualifiers2[tn]
+	  xy=qualident          {tn.setName(xy);}
+	  (LBRACK rtn=typeName2 {tn.addGenericPart(rtn);} RBRACK)? // TODO what about  multi-generics?
+	  (QUESTION {tn.setNullable();})?
+	;
+functionTypeName2 returns [FuncTypeName tn]
+		{tn=new FuncTypeName(cur); TypeName rtn=null; TypeNameList tnl=new TypeNameList();}
+	: ( ("function"|"func")                         { tn.type(TypeModifiers.FUNCTION); }
+	  (LPAREN tnl=typeNameList2 RPAREN)            { tn.argList(tnl); }
+	  ((TOK_ARROW|TOK_COLON) rtn=typeName2          { tn.returnValue(rtn);} )?
+	| ("procedure"|"proc")                          { tn.type(TypeModifiers.PROCEDURE);	}
+	  (LPAREN tnl=typeNameList2 RPAREN)            { tn.argList(tnl); }
+	)
+	;
+regularQualifiers2[NormalTypeName fp]
+	:
+	( "in"            {fp.setIn(true);}
+	| "out"           {fp.setOut(true);})?
+	( ("const"        {fp.setConstant(true);}
+	   ("ref"		  {fp.setReference(true);})?)
+	| "ref"           {fp.setReference(true);}
+	)?
+	;
+typeNameList2 returns [TypeNameList cr]
+		{TypeName tn=null;cr=new TypeNameList();}
+	: tn=typeName2                  {cr.add(tn);}
+	    (COMMA tn=typeName2)*       {cr.add(tn);}
+	;
+
+//
+//
+//
+
+defFunctionDef[DefFunctionDef fd]
+		{FormalArgList op=null;}
+	: "def" i1:IDENT op=opfal2/*[fd.fal()]*/  BECOMES expr=expression
+	   {fd.setType(DefFunctionDef.DEF_FUN); fd.setName(i1); fd.setOpfal(op); fd.setExpr(expr); }
+	;
 formalArgList[FormalArgList fal]
 	: (formalArgListItem_priv[fal.next()]
 	  (COMMA formalArgListItem_priv[fal.next()])*)?
 	;
 formalArgListItem_priv[FormalArgListItem fali]
+		{ TypeName tn=null; }
 	:
-		( (regularQualifiers[fali.typeName()])?
+		( (regularQualifiers2[(NormalTypeName)fali.typeName()])?
 		  i:IDENT  {	fali.setName(i);	}
-		  ( TOK_COLON formalArgTypeName[fali.typeName()])?
-		| abstractGenericTypeName_xx[fali.typeName()]
+		  ( TOK_COLON tn=typeName2  { fali.setTypeName(tn); } )?
+//		  ( TOK_COLON formalArgTypeName[fali.typeName()])?
+//		| abstractGenericTypeName_xx[fali.typeName()]
 		)
 	;
 

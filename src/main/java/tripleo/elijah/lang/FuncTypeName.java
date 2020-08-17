@@ -1,15 +1,22 @@
 package tripleo.elijah.lang;
 
+import tripleo.elijah.util.NotImplementedException;
+
 /**
  * Created 8/16/20 2:16 AM
  */
 public class FuncTypeName implements TypeName {
+	private final Context _ctx;
 	private TypeModifiers _modifiers;
-	private TypeNameList _arglist = new TypeNameList();
-	private NormalTypeName _returnValue = new RegularTypeName(); // TODO warning
+	private TypeNameList _arglist = null/*new TypeNameList()*/;
+	private TypeName _returnValue = null /*new RegularTypeName()*/; // TODO warning
 
-	public TypeNameList argList() {
-		return _arglist;
+	public FuncTypeName(Context cur) {
+		_ctx = cur;
+	}
+
+	public void argList(TypeNameList tnl) {
+		_arglist = tnl;
 	}
 
 	@Override
@@ -22,7 +29,12 @@ public class FuncTypeName implements TypeName {
 		return Type.FUNCTION;
 	}
 
-	public NormalTypeName returnValue() {
-		return _returnValue;
+	public void returnValue(TypeName rtn) {
+		_returnValue = rtn;
+	}
+
+	@Override
+	public void setContext(Context context) {
+		throw new NotImplementedException();
 	}
 }
