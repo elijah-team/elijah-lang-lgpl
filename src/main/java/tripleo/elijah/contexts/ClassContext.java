@@ -82,7 +82,7 @@ public class ClassContext extends Context {
 		return Result;
 	}
 
-	public Context getParent() {
+	@Override public Context getParent() {
 		return _parent;
 	}
 }

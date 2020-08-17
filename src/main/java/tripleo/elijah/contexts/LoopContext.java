@@ -70,6 +70,11 @@ public class LoopContext extends Context {
 		
 	}
 
+	@Override
+	public Context getParent() {
+		return _parent;
+	}
+
 }
 
 //

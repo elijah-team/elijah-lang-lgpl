@@ -65,6 +65,11 @@ public class FunctionContext extends Context {
 		return Result;
 	}
 
+	@Override
+	public Context getParent() {
+		return _parent;
+	}
+
 	public IntroducedVariable introduceVariable(IExpression variable) {
 //		System.out.println("[#introduceVariable] "+variable);
 		final IntroducedVariable introducedVariable = new IntroducedVariable(variable);

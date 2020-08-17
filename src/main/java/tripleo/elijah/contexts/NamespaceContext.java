@@ -65,7 +65,7 @@ public class NamespaceContext extends Context {
 
 	}
 
-	public Context getParent() {
+	@Override public Context getParent() {
 		return _parent;
 	}
 }

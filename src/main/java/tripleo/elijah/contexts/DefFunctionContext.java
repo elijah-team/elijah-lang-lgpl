@@ -41,5 +41,9 @@ public class DefFunctionContext extends Context {
 		return Result;
 	}
 
+	@Override
+	public Context getParent() {
+		return null;
+	}
 
 }

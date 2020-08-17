@@ -27,6 +27,11 @@ public class PackageContext extends Context {
 	public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
 		return null;
 	}
+
+	@Override
+	public Context getParent() {
+		return _parent;
+	}
 }
 
 //

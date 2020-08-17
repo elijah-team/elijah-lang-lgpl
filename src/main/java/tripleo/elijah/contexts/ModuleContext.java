@@ -81,6 +81,11 @@ public class ModuleContext extends Context {
 		return carrier.prelude.getContext().lookup(name, level+1, Result, alreadySearched, false);
 	}
 
+	@Override
+	public Context getParent() {
+		return null;
+	}
+
 	private void searchImports(String name, int level, LookupResultList Result, List<Context> alreadySearched, ImportStatement importStatement) {
 //		System.err.println("2002 "+importStatement.importList());
 		for (Qualident importStatementItem : importStatement.parts()) {
