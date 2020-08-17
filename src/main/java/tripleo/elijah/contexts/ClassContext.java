@@ -74,17 +74,12 @@ public class ClassContext extends Context {
 			}
 //			System.out.println("1003 "+name+" "+Result.results());
 		}
-		// search inherited classes, tho this might be being done above
-//		for (Context context : carrier.classInheritance().) {
-//
-//		}
 		if (carrier.getParent() != null) {
 			final Context context = carrier.getParent().getContext();
 			if (!alreadySearched.contains(context) || !one)
 				return context.lookup(name, level + 1, Result, alreadySearched, false);
 		}
 		return Result;
-		
 	}
 
 	public Context getParent() {
