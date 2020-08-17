@@ -68,15 +68,15 @@ qualident returns [Qualident q]
 classStatement [ClassStatement cls]
 		{AnnotationClause a=null;ClassContext ctx=null;IdentExpression i1=null;}
 	: (a=annotation_clause  {cls.addAnnotation(a);})*
-    "class"                 {ctx=new ClassContext(cur, cls);cls.setContext(ctx);cur=ctx;}
+    "class"
             ("interface"    {cls.setType(ClassTypes.INTERFACE);}
             |"struct"       {cls.setType(ClassTypes.STRUCTURE);}
             |"signature"    {cls.setType(ClassTypes.SIGNATURE);}
             |"abstract"     {cls.setType(ClassTypes.ABSTRACT);})?
-      i1=ident {cls.setName(i1);}
+      i1=ident              {cls.setName(i1);}
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
-    LCURLY
+    LCURLY                  {ctx=new ClassContext(cur, cls);cls.setContext(ctx);cur=ctx;}
      (classScope[cls]
      |"abstract"         {cls.setType(ClassTypes.ABSTRACT);}
       (invariantStatement[cls.invariantStatement()])?

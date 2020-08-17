@@ -565,9 +565,6 @@ public ElijjahParser(ParserSharedInputState state) {
 			} while (true);
 			}
 			match(LITERAL_class);
-			if ( inputState.guessing==0 ) {
-				ctx=new ClassContext(cur, cls);cls.setContext(ctx);cur=ctx;
-			}
 			{
 			switch ( LA(1)) {
 			case LITERAL_interface:
@@ -643,6 +640,9 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			}
 			match(LCURLY);
+			if ( inputState.guessing==0 ) {
+				ctx=new ClassContext(cur, cls);cls.setContext(ctx);cur=ctx;
+			}
 			{
 			switch ( LA(1)) {
 			case IDENT:
@@ -793,7 +793,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			r1 = LT(1);
 			match(IDENT);
 			if ( inputState.guessing==0 ) {
-				id=new IdentExpression(r1);id.setContext(cur);
+				id=new IdentExpression(r1, cur);
 			}
 		}
 		catch (RecognitionException ex) {
