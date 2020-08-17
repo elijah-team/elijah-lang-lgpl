@@ -294,7 +294,7 @@ qualidentList[QualidentList qal]
 	;
 ident returns [IdentExpression id]
 		{id=null;}
-	: r1:IDENT {id=new IdentExpression(r1);}
+	: r1:IDENT {id=new IdentExpression(r1, cur);}
 	;
 expressionList[ExpressionList el]
 	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*

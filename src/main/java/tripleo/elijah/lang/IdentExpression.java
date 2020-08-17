@@ -27,7 +27,13 @@ public class IdentExpression implements IExpression, OS_Element {
 
 	public IdentExpression(Token r1) {
 		this.text = r1;
-		this._a = new Attached(); // remember to do something fancy with Context
+		this._a = new Attached();
+	}
+
+	public IdentExpression(Token r1, Context cur) {
+		this.text = r1;
+		this._a = new Attached();
+		setContext(cur);
 	}
 
 	@Override
@@ -105,6 +111,9 @@ public class IdentExpression implements IExpression, OS_Element {
     	return _type;
 	}
 
+	public void setContext(Context cur) {
+		_a.setContext(cur);
+	}
 }
 
 //

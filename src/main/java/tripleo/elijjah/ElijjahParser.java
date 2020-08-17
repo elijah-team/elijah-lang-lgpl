@@ -793,7 +793,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			r1 = LT(1);
 			match(IDENT);
 			if ( inputState.guessing==0 ) {
-				id=new IdentExpression(r1);
+				id=new IdentExpression(r1);id.setContext(cur);
 			}
 		}
 		catch (RecognitionException ex) {
@@ -1486,8 +1486,9 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final TypeName  inhTypeName() throws RecognitionException, TokenStreamException {
-		TypeName tn = null;
+		TypeName tn;
 		
+		tn=null;
 		
 		try {      // for error handling
 			{
@@ -4999,7 +5000,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 			{
 			if ((_tokenSet_52.member(LA(1))) && (_tokenSet_53.member(LA(2)))) {
-				regularQualifiers2((NormalTypeName) fali.typeName());
+				regularQualifiers2((NormalTypeName)fali.typeName());
 			}
 			else if ((LA(1)==IDENT) && (_tokenSet_54.member(LA(2)))) {
 			}
