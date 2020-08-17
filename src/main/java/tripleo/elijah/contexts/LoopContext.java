@@ -27,9 +27,11 @@ import java.util.List;
 public class LoopContext extends Context {
 
 	private final Loop carrier;
+	private final Context _parent;
 
-	public LoopContext(Loop loop) {
+	public LoopContext(Context cur, Loop loop) {
 		carrier = loop;
+		_parent = cur;
 	}
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
