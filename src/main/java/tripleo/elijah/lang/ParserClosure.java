@@ -54,10 +54,5 @@ public class ParserClosure extends ProgramClosure {
 		return new IndexingStatement(module());
 	}
 
-	@Override
-	public void addImportStatement(ImportStatement imp) {
-//		System.err.println("3000 adding import statement to module");
-		module.add(imp); // TODO is this correct?
-	}
 }
 

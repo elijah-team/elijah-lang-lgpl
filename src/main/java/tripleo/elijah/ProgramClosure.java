@@ -31,8 +31,6 @@ public abstract class ProgramClosure {
 		return aliasStatement;
 	}
 
-	public abstract void addImportStatement(ImportStatement imp);
-
 }
 
 //
