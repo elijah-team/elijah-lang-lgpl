@@ -27,6 +27,10 @@ public class LookupResultList {
 	private List<LookupResult> _results = new ArrayList<LookupResult>();
 
 	public void add(String name, int level, OS_Element element) {
+		for (LookupResult result : _results) {
+			if (result.getElement() == element)
+				return; // TODO hack for bad algorithm
+		}
 		_results.add(new LookupResult(name, element, level));
 	}
 
