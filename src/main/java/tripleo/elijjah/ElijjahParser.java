@@ -59,7 +59,7 @@ public ElijjahParser(ParserSharedInputState state) {
 
 	public final void program() throws RecognitionException, TokenStreamException {
 		
-		ParserClosure pc = out.closure();cur=new ModuleContext(out.module());out.module().setContext((ModuleContext) cur);
+		ParserClosure pc = out.closure();cur=new ModuleContext(out.module());out.module().setContext((ModuleContext)cur);
 		
 		try {      // for error handling
 			{
@@ -252,9 +252,6 @@ public ElijjahParser(ParserSharedInputState state) {
 			case LITERAL_import:
 			{
 				imp=importStatement(cont);
-				if ( inputState.guessing==0 ) {
-					pc.addImportStatement(imp);
-				}
 				break;
 			}
 			case LITERAL_alias:
@@ -1074,9 +1071,6 @@ public ElijjahParser(ParserSharedInputState state) {
 			} while (true);
 			}
 			match(LITERAL_namespace);
-			if ( inputState.guessing==0 ) {
-				ctx=new NamespaceContext(cur, cls);cls.setContext(ctx);cur=ctx;
-			}
 			{
 			if ((LA(1)==IDENT)) {
 				i1=ident();
@@ -1097,6 +1091,9 @@ public ElijjahParser(ParserSharedInputState state) {
 			
 			}
 			match(LCURLY);
+			if ( inputState.guessing==0 ) {
+				ctx=new NamespaceContext(cur, cls);cls.setContext(ctx);cur=ctx;
+			}
 			namespaceScope(cls);
 			match(RCURLY);
 			if ( inputState.guessing==0 ) {
@@ -1728,9 +1725,6 @@ public ElijjahParser(ParserSharedInputState state) {
 			if ( inputState.guessing==0 ) {
 				fd.setName(i1);
 			}
-			if ( inputState.guessing==0 ) {
-				ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;
-			}
 			{
 			switch ( LA(1)) {
 			case LITERAL_const:
@@ -1780,6 +1774,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				throw new NoViableAltException(LT(1), getFilename());
 			}
 			}
+			}
+			if ( inputState.guessing==0 ) {
+				ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;
 			}
 			functionScope(fd.scope());
 			if ( inputState.guessing==0 ) {

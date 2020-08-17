@@ -95,11 +95,11 @@ annotation_clause returns [AnnotationClause a]
 namespaceStatement [NamespaceStatement cls]
 		{AnnotationClause a=null;NamespaceContext ctx=null;IdentExpression i1=null;}
 	: (a=annotation_clause      {cls.addAnnotation(a);})*
-    "namespace"                 {ctx=new NamespaceContext(cur, cls);cls.setContext(ctx);cur=ctx;}
+    "namespace"
     (  i1=ident  	            {cls.setName(i1);}
     | 				            {cls.setType(NamespaceTypes.MODULE);}
     )?
-    LCURLY
+    LCURLY                      {ctx=new NamespaceContext(cur, cls);cls.setContext(ctx);cur=ctx;}
      namespaceScope[cls]
     RCURLY {cls.postConstruct();cur=ctx.getParent();}
     ;
@@ -216,17 +216,17 @@ functionDef[FunctionDef fd]
     	{AnnotationClause a=null;FunctionContext ctx=null;IdentExpression i1=null;TypeName tn=null;}
     : (a=annotation_clause      {fd.addAnnotation(a);})*
     i1=ident                    {fd.setName(i1);}
-                                {ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
     ( "const"                   {fd.set(FunctionModifiers.CONST);}
     | "immutable"               {fd.set(FunctionModifiers.IMMUTABLE);})?
     opfal[fd.fal()]
     (TOK_ARROW tn=typeName2 {fd.setReturnType(tn);})?
+                                {ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
     functionScope[fd.scope()] // TODO what about pre/post??
     {fd.postConstruct();}
     ;
 programStatement[ProgramClosure pc, OS_Element cont]
 		{ImportStatement imp=null;}
-    : imp=importStatement[cont] {pc.addImportStatement(imp);}
+    : imp=importStatement[cont]
     | namespaceStatement[pc.namespaceStatement(cont)]
     | classStatement[pc.classStatement(cont)]
     | aliasStatement[pc.aliasStatement(cont)]
