@@ -205,11 +205,6 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		_type = aType;
 	}
 
-	@Override
-	public void addImportStatement(ImportStatement imp) {
-		add(imp);
-	}
-
 	public void setContext(ClassContext ctx) {
 		_a.setContext(ctx);
 	}
