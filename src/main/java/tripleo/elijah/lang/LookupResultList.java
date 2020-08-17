@@ -44,21 +44,21 @@ public class LookupResultList {
 		//
 		if (r.size() == 1)
 			return r.get(0).getElement();
-		else if (r.size() == 2) {
-			if (r.get(0).getElement() == r.get(1).getElement()) {
-//				r.remove(1);
-				return r.get(0).getElement();
-			} else {
-				return null;
-			}
-		} else if (r.size() == 3) {
-			if (r.get(0).getElement() == r.get(1).getElement()
-			&& (r.get(1).getElement() == r.get(2).getElement())) {
-//				r.remove(1);
-//				r.remove(2);
-				return r.get(0).getElement();
-			}
-		}
+//		else if (r.size() == 2) {
+//			if (r.get(0).getElement() == r.get(1).getElement()) {
+////				r.remove(1);
+//				return r.get(0).getElement();
+//			} else {
+//				return null;
+//			}
+//		} else if (r.size() == 3) {
+//			if (r.get(0).getElement() == r.get(1).getElement()
+//			&& (r.get(1).getElement() == r.get(2).getElement())) {
+////				r.remove(1);
+////				r.remove(2);
+//				return r.get(0).getElement();
+//			}
+//		}
 		return null; //throw new NotImplementedException();
 	}
 
