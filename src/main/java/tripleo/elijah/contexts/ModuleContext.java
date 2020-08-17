@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ModuleContext extends Context {
 
-	private OS_Module carrier;
+	OS_Module carrier;
 
 	public ModuleContext(OS_Module module) {
 		this.carrier = module;

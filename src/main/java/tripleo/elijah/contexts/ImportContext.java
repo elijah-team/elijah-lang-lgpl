@@ -8,10 +8,11 @@
  */
 package tripleo.elijah.contexts;
 
-import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.ImportStatement;
-import tripleo.elijah.lang.LookupResultList;
+import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.lang.*;
+import tripleo.elijah.util.LogEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,43 @@ public class ImportContext extends Context {
 
 	@Override
 	public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
-		return null;
+		alreadySearched.add(this);
+//		System.err.println("2002 "+importStatement.importList());
+		for (Qualident importStatementItem : carrier.parts()) {
+//			System.err.println("2005 "+importStatementItem);
+			if (module().isPackage(importStatementItem.toString())) {
+				List<OS_Element> l = new ArrayList<>();
+				OS_Package aPackage = module().getPackage(importStatementItem);
+				LogEvent.logEvent(4001 , ""+aPackage.getElements());
+				for (OS_Element element : aPackage.getElements()) {
+//					System.err.println("4000 "+element);
+					if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
+//		                LogEvent.logEvent(4103, "");
+						final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
+						alreadySearched.add(namespaceContext);
+						namespaceContext.lookup(name, level, Result, alreadySearched, true);
+					}
+				}
+			}
+		}
+		if (carrier.getParent() != null) {
+			final Context context = carrier.getParent().getContext();
+			if (!alreadySearched.contains(context) || !one)
+				return context.lookup(name, level + 1, Result, alreadySearched, false);
+		}
+		return Result;
+	}
+
+	@Override
+	public Context getParent() {
+		return _parent;
+	}
+
+	private Compilation module() {
+		Context ctx = _parent;
+		while (!(ctx instanceof ModuleContext))
+			ctx = ctx.getParent();
+		return ((ModuleContext) ctx).carrier.parent;
 	}
 }
 
