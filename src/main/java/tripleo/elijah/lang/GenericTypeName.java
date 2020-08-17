@@ -44,6 +44,11 @@ public class GenericTypeName implements TypeName {
 	}
 
 	@Override
+	public Context getContext() {
+		return _ctx;
+	}
+
+	@Override
 	public void type(TypeModifiers typeModifiers) {
 		modifiers = typeModifiers;
 	}

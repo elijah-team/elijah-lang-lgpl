@@ -65,6 +65,11 @@ public void setGeneric(boolean value) {
 	}
 
 	@Override
+	public Context getContext() {
+		return _ctx;
+	}
+
+	@Override
 	public boolean hasResolvedElement() {
 		return _resolvedElement != null;
 	}

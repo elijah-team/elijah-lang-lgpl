@@ -34,7 +34,17 @@ public class FuncTypeName implements TypeName {
 	}
 
 	@Override
+	public boolean isNull() {
+		return _arglist == null && _returnValue == null;
+	}
+
+	@Override
 	public void setContext(Context context) {
 		throw new NotImplementedException();
+	}
+
+	@Override
+	public Context getContext() {
+		return _ctx;
 	}
 }

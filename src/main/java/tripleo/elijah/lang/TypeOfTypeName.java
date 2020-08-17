@@ -36,4 +36,9 @@ public class TypeOfTypeName implements TypeName {
 	public void setContext(Context context) {
 		throw new NotImplementedException();
 	}
+
+	@Override
+	public Context getContext() {
+		return _ctx;
+	}
 }

@@ -94,6 +94,11 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
+	public Context getContext() {
+		return _ctx;
+	}
+
+	@Override
 	public boolean hasResolvedElement() {
 		return _resolvedElement != null;
 	}

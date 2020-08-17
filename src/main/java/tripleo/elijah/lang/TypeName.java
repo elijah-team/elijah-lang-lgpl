@@ -8,6 +8,8 @@ public interface TypeName {
 
 	void setContext(Context context);
 
+	Context getContext();
+
 	public enum Type {
 		NORMAL, GENERIC, TYPE_OF, FUNCTION
 	}
