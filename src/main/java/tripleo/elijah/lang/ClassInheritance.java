@@ -27,15 +27,15 @@ public class ClassInheritance {
 
 	public List<TypeName> tns=new ArrayList<TypeName>();
 	
-	public NormalTypeName next() {
-		NormalTypeName tn = new RegularTypeName();
-		tn.setContext(parent.getContext());
-		tns.add(tn);
-		return tn;
-	}
+//	public NormalTypeName next() {
+//		NormalTypeName tn = new RegularTypeName();
+//		tn.setContext(parent.getContext());
+//		tns.add(tn);
+//		return tn;
+//	}
 
 	public void add(TypeName tn) {
-		tn.setContext(parent.getContext());
+//		tn.setContext(parent.getContext());
 		tns.add(tn);
 	}
 }
