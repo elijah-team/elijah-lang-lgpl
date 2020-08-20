@@ -13,6 +13,7 @@ package tripleo.elijah.lang;
 
 public interface NormalTypeName extends TypeName {
 
+	@Override
 	boolean isNull();
 
 	boolean getConstant();
@@ -34,6 +35,7 @@ public interface NormalTypeName extends TypeName {
 
 	/*@ requires modifiers = TypeModifiers.PROCEDURE
 			  || modifiers = TypeModifiers.FUNCTION; */
+	@Override
 	void type(TypeModifiers modifiers);
 
 	// TODO new
@@ -49,6 +51,7 @@ public interface NormalTypeName extends TypeName {
 
     void setNullable();
 
+	@Override
 	void setContext(Context cur);
 
 	boolean hasResolvedElement();

@@ -18,6 +18,7 @@ public class IntroducedFunction implements FunctionPrelimInstruction {
         return _inst;
     }
     private int _inst;
+    @Override
     public void setInstructionNumber(int i) {_inst = i;}
 
     public void setName(String s) {

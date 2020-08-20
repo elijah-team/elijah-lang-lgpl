@@ -63,7 +63,7 @@ public class Out {
 		System.out.println(s);
 	}
 
-	private ParserClosure pc;
+	private final ParserClosure pc;
 
 	public ParserClosure closure() {
 		return pc;

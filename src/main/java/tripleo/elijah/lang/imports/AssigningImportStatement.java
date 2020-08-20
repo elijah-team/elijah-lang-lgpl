@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class AssigningImportStatement implements ImportStatement {
 	final OS_Element parent;
-	private List<Part> _parts = new ArrayList<Part>();
+	private final List<Part> _parts = new ArrayList<Part>();
 	private Context _ctx;
 
 	class Part {
@@ -59,6 +59,7 @@ public class AssigningImportStatement implements ImportStatement {
 		return r;
 	}
 
+	@Override
 	public void setContext(ImportContext ctx) {
 		_ctx = ctx;
 	}

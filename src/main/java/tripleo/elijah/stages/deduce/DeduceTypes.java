@@ -534,7 +534,7 @@ public class DeduceTypes {
 				deduceProcedureCall_ARGS(pce, parent.getContext());
 			} else if (best/*n.getElement()*/ instanceof AliasStatement) {
 //				System.err.println("196 "+/*n.getElement()*/best);
-				OS_Type t = deduceExpression(((AliasStatement) best).getExpression(), parent.getContext());
+				OS_Type t = deduceExpression(((AliasStatement) best).getExpression(), best.getParent().getContext()); // since AliasStatement doesnt have getContext
 				LogEvent.logEvent(199,  ""+ t);
 			} else {
 				throw new NotImplementedException();
@@ -825,6 +825,7 @@ public class DeduceTypes {
 			this.maxCacheSize = maxCacheSize;
 		}
 
+		@Override
 		protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
 			return this.size() > this.maxCacheSize;
 		}

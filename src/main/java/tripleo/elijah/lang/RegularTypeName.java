@@ -38,6 +38,7 @@ public class RegularTypeName extends AbstractTypeName2 implements NormalTypeName
 		genericPart = tn2;
 	}
 
+@Override
 public String getName() {
 	if (typeName == null) return null;
 	return this.typeName.asSimpleString();
@@ -85,6 +86,7 @@ public void setGeneric(boolean value) {
 	}
 
 
+	@Override
 	public void setName(Qualident aS) {
 		this.typeName=aS;
 	}

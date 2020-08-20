@@ -21,10 +21,10 @@ import java.util.List;
 
 public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, OS_Element {
 
-	private Scope _scope = new LoopScope();
-	private List<String> docstrings = new ArrayList<String>();
-	private List<StatementItem> items = new ArrayList<StatementItem>();
-	private OS_Element parent;
+	private final Scope _scope = new LoopScope();
+	private final List<String> docstrings = new ArrayList<String>();
+	private final List<StatementItem> items = new ArrayList<StatementItem>();
+	private final OS_Element parent;
 
 	public Loop(OS_Element aParent) {
 		// document assumption
@@ -66,7 +66,7 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, 
 
 private IExpression topart,frompart;
 private IExpression expr;
-private Attached _a = new Attached();
+private final Attached _a = new Attached();
 
 	public List<StatementItem> getItems() {
 		return items;

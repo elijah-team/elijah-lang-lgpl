@@ -16,8 +16,8 @@ package tripleo.util.io;
  *
  */
 public interface CharSource {
-	public int available();
-	public String get(int n);
+	int available();
+	String get(int n);
 }
 
 //

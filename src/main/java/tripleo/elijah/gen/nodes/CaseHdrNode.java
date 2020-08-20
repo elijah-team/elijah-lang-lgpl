@@ -51,7 +51,7 @@ public class CaseHdrNode implements Node {
 			return ((VariableReference) expr.getExpr()).getName();
 		}
 		if (expr/*.getExpr()*/ instanceof VariableReferenceNode2) {
-			return ((VariableReferenceNode2) expr).genText();
+			return expr.genText();
 		}
 		throw new IllegalStateException("no implementation");
 //		NotImplementedException.raise();

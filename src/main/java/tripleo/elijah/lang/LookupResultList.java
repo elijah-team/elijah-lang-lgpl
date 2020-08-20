@@ -24,7 +24,7 @@ import java.util.function.Predicate;
  */
 public class LookupResultList {
 
-	private List<LookupResult> _results = new ArrayList<LookupResult>();
+	private final List<LookupResult> _results = new ArrayList<LookupResult>();
 
 	public void add(String name, int level, OS_Element element) {
 		for (LookupResult result : _results) {

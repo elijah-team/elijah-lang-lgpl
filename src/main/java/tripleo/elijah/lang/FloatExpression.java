@@ -20,7 +20,7 @@ import tripleo.elijah.util.NotImplementedException;
 public class FloatExpression implements IExpression {
 
 	float carrier;
-	private Token n;
+	private final Token n;
 
 	public FloatExpression(Token n) {
 		this.n = n;
@@ -64,10 +64,12 @@ public class FloatExpression implements IExpression {
 	}
 	OS_Type _type;
 
+	@Override
 	public void setType(OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
+	@Override
 	public OS_Type getType() {
     	return _type;
 	}

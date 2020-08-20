@@ -37,9 +37,9 @@ public class Compilation {
 
 	private IO io;
 	public ErrSink eee;
-	private List<OS_Module> modules = new ArrayList<OS_Module>();
-	private Map<String, OS_Module> fn2m = new HashMap<String, OS_Module>();
-	private Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
+	private final List<OS_Module> modules = new ArrayList<OS_Module>();
+	private final Map<String, OS_Module> fn2m = new HashMap<String, OS_Module>();
+	private final Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
 	private int _packageCode = 1;
 
 	public Compilation(ErrSink eee, IO io) {
@@ -124,13 +124,13 @@ public class Compilation {
 //			if (f.isDirectory()) return; // TODO testing idea tools (failed)
 			if (!matches) return;
 			//
-			System.out.println((String.format("   %s", f.getAbsolutePath().toString())));
+			System.out.println((String.format("   %s", f.getAbsolutePath())));
 			if (f.exists()) {
 				OS_Module m = parseFile(file_name, io.readFile(f), f, do_out);
 				m.prelude = this.findPrelude("c"); // TODO we dont know which prelude to find yet
 			} else {
 				errSink.reportError(
-						"File doesn't exist " + f.getAbsolutePath().toString());
+						"File doesn't exist " + f.getAbsolutePath());
 			}
 		}
 	}

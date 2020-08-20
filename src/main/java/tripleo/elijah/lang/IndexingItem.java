@@ -20,8 +20,8 @@ import antlr.Token;
  */
 public class IndexingItem {
 
-	private IExpression expr;
-	private Token       token;
+	private final IExpression expr;
+	private final Token       token;
 
 	public IndexingItem(Token i1, IExpression c1) {
 		this.token = i1;

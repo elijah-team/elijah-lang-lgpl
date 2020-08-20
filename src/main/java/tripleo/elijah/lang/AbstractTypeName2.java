@@ -22,40 +22,49 @@ public abstract class AbstractTypeName2 implements NormalTypeName {
 	protected TypeModifiers tm;
 	protected Qualident typeName;
 	
+	@Override
 	public boolean isNull() {
 		//return tm == null && (typeName == null /*|| typeName.isNull()*/);
 		if (typeName == null) return false;
 		return _ltm.isEmpty() && typeName == null; // TODO check for correctness
 	}
 	
+	@Override
 	public boolean getConstant() {
 		return _ltm.contains(TypeModifiers.CONST);
 	}
 	
+	@Override
 	public void setConstant(boolean aFlag) {
 		_ltm.add(TypeModifiers.CONST);
 	}
 	
+	@Override
 	public boolean getReference() {
 		return _ltm.contains(TypeModifiers.REFPAR);
 	}
 	
+	@Override
 	public void setReference(boolean aFlag) {
 		_ltm.add(TypeModifiers.REFPAR);
 	}
 	
+	@Override
 	public boolean getOut() {
 		return _ltm.contains(TypeModifiers.OUTPAR);
 	}
 	
+	@Override
 	public void setOut(boolean aFlag) {
 		_ltm.add(TypeModifiers.OUTPAR);
 	}
 	
+	@Override
 	public boolean getIn() {
 		return _ltm.contains(TypeModifiers.INPAR);
 	}
 	
+	@Override
 	public void setIn(boolean aFlag) {
 		_ltm.add(TypeModifiers.INPAR);
 	}

@@ -22,8 +22,8 @@ import java.util.Map;
 
 public class GenBuffer {
 
-	private Map<String, Buffer> hdr_bufs = new HashMap<String, Buffer>();
-	private Map<String, Buffer> reg_bufs = new HashMap<String, Buffer>();
+	private final Map<String, Buffer> hdr_bufs = new HashMap<String, Buffer>();
+	private final Map<String, Buffer> reg_bufs = new HashMap<String, Buffer>();
 
 	public void GenImportStmt(CompilerContext cctx, ImportNode impn) {
 		// TODO Auto-generated method stub

@@ -21,7 +21,7 @@ public class IndexingStatement {
 
 	private Token name;
 	private ExpressionList exprs;
-	private OS_Module parent;
+	private final OS_Module parent;
 
 	public IndexingStatement(OS_Module module) {
 		this.parent = module;

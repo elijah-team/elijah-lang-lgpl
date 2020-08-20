@@ -47,10 +47,12 @@ set(g.getText());
 
 	OS_Type _type;
 
+	@Override
 	public void setType(OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
+	@Override
 	public OS_Type getType() {
     	return _type;
 	}

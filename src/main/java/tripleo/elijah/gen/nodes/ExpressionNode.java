@@ -93,7 +93,7 @@ public class ExpressionNode implements IExpressionNode {
 	@Override
 	public boolean is_simple() {
 		if (iex !=null && iex instanceof VariableReference) {
-			return ((VariableReference) iex).is_simple();
+			return iex.is_simple();
 		}
 		return is_const_expr() || is_underscore();
 	}

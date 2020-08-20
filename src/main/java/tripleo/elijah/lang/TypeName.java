@@ -10,7 +10,7 @@ public interface TypeName {
 
 	Context getContext();
 
-	public enum Type {
+	enum Type {
 		NORMAL, GENERIC, TYPE_OF, FUNCTION
 	}
 

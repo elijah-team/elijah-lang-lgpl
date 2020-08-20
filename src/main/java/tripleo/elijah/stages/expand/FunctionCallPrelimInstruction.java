@@ -22,5 +22,6 @@ public class FunctionCallPrelimInstruction implements FunctionPrelimInstruction 
         return _inst;
     }
     private int _inst;
+    @Override
     public void setInstructionNumber(int i) {_inst = i;}
 }

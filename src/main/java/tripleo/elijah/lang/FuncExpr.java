@@ -22,8 +22,8 @@ import java.util.List;
  */
 public class FuncExpr implements IExpression, OS_Element {
 
-	private List<String> docstrings = new ArrayList<String>();
-	private List<FunctionItem> items = new ArrayList<FunctionItem>();
+	private final List<String> docstrings = new ArrayList<String>();
+	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 	//	private final TypeNameList argList = new TypeNameList();
 	private final FormalArgList argList = new FormalArgList();
 	private final FuncExprScope funcExprScope = new FuncExprScope(this);

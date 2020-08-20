@@ -49,6 +49,7 @@ public class VariableReferenceNode2 extends ExpressionNode {
 //		return null;
 //	}
 	
+	@Override
 	public String genText() {
 		if (_perm) return _declared;
 		NotImplementedException.raise();

@@ -91,12 +91,12 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 	
 	private int order = 0;
 	
-	private Scope parent_scope;
+	private final Scope parent_scope;
 	private final IfConditional sibling;
 //	private final IfExpression if_parent;
 
 	private IExpression expr;
-	private List<IfConditional> parts = new ArrayList<IfConditional>();
+	private final List<IfConditional> parts = new ArrayList<IfConditional>();
 
 	public IfConditional(IfConditional ifExpression) {
 		this.sibling = ifExpression;

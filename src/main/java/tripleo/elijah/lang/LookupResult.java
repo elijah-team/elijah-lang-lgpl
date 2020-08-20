@@ -62,6 +62,7 @@ public class LookupResult {
 		this.level = level;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("<%s %s %d>", element, name, level);
 	}

@@ -48,7 +48,7 @@ public class TabbedOutputStream {
 	}
 	
 	public void put_string(String s)
-			throws InvalidObjectException, IOException {
+			throws IOException {
 		if (!is_connected())
 			throw new InvalidObjectException("is_connected assertion failed");
 		

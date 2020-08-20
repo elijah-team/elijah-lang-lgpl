@@ -95,10 +95,12 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 
 	OS_Type _type;
 
+	@Override
 	public void setType(OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
+	@Override
 	public OS_Type getType() {
     	return _type;
 	}
@@ -141,7 +143,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	class VR_ArrayPart implements VR_Parts {
 
 		@NonNull
-		private IExpression p;
+		private final IExpression p;
 
 		public VR_ArrayPart(IExpression p) {
 			// TODO Auto-generated constructor stub
@@ -171,7 +173,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	class VR_IdentPart implements VR_Parts {
 
 		@NonNull
-		private String s;
+		private final String s;
 
 		public VR_IdentPart(String s) {
 			// TODO Auto-generated constructor stub
@@ -184,7 +186,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	class VR_ColonIdentPart implements VR_Parts {
 
 		@NonNull
-		private String text;
+		private final String text;
 
 		public VR_ColonIdentPart(String aText) {
 			// TODO Auto-generated constructor stub

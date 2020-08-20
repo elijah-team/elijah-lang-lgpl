@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class RootedImportStatement implements ImportStatement {
 	final OS_Element parent;
-	private QualidentList importList = new QualidentList();
+	private final QualidentList importList = new QualidentList();
 	/** Used in from syntax
 	 * @category from
 	 */
@@ -73,6 +73,7 @@ public class RootedImportStatement implements ImportStatement {
 		return r;
 	}
 
+	@Override
 	public void setContext(ImportContext ctx) {
 		_ctx = ctx;
 	}

@@ -27,6 +27,7 @@ public class VariableReferenceNode3 implements IExpressionNode {
 		this._container = container;
 	}
 	
+	@Override
 	public TypeRef getType() {
 //		NotImplementedException.raise();
 		return _typeRef;
@@ -39,6 +40,7 @@ public class VariableReferenceNode3 implements IExpressionNode {
 	}
 	
 	
+	@Override
 	public String genText() {
 //		NotImplementedException.raise();
 		return String.format("v%c%s", a(), _name);

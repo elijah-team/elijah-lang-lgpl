@@ -16,8 +16,8 @@ import java.util.List;
 
 public class Scope0 implements Scope {
 	private final FuncExpr funcExpr;
-	private List<String> docstrings = new ArrayList<String>();
-	private List<FunctionItem> items = new ArrayList<FunctionItem>();
+	private final List<String> docstrings = new ArrayList<String>();
+	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 
 	private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 

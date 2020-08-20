@@ -20,7 +20,7 @@ import antlr.Token;
  */
 public class CharLitExpression implements IExpression {
 
-	private Token char_lit_raw;
+	private final Token char_lit_raw;
 
 	public CharLitExpression(Token c) {
 		// TODO Auto-generated constructor stub
@@ -79,10 +79,12 @@ public class CharLitExpression implements IExpression {
 
 	OS_Type _type;
 
+	@Override
 	public void setType(OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
+	@Override
 	public OS_Type getType() {
     	return _type;
 	}

@@ -19,7 +19,7 @@ import tripleo.elijah.util.NotImplementedException;
 
 public class SubExpression extends AbstractExpression {
 
-	private IExpression carrier;
+	private final IExpression carrier;
 
 	public SubExpression(IExpression ee) {
 		carrier=ee;

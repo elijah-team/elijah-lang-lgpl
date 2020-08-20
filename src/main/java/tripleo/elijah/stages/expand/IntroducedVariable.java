@@ -57,6 +57,7 @@ public class IntroducedVariable implements FunctionPrelimInstruction {
         return String.format("[IntroducedVariable#toString] %s %s %s %s", variable, vardecl, kind, args == null ? args2 : args);
     }
 
+    @Override
     public void setInstructionNumber(int i) {_inst = i;}
     @Override
     public int instructionNumber() {

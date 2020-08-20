@@ -19,7 +19,7 @@ import java.util.List;
 
 public class ClassInheritance {
 
-	private ClassStatement parent;
+	private final ClassStatement parent;
 
 	public ClassInheritance(ClassStatement aStatement) {
 		parent=aStatement;

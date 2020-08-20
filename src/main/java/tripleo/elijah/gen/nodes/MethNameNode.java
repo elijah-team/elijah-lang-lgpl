@@ -17,8 +17,8 @@ package tripleo.elijah.gen.nodes;
  */
 public class MethNameNode {
 
-	private MethHdrNode _header;
-	private String ident;
+	private final MethHdrNode _header;
+	private final String ident;
 	public String genName;
 
 	public MethNameNode(String method_name, MethHdrNode header) {

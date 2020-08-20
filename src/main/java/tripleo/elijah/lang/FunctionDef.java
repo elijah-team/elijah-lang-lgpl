@@ -118,13 +118,13 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	public Attached _a = new Attached();
 	private TypeName _returnType = null/*new RegularTypeName()*/;
-	private List<String> docstrings = new ArrayList<String>();
+	private final List<String> docstrings = new ArrayList<String>();
 	public IdentExpression funName;
-	private List<FunctionItem> items = new ArrayList<FunctionItem>();
+	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
 	private final FunctionDefScope mScope2 = new FunctionDefScope();
 	//	private FunctionDefScope mScope;
-	private OS_Element/*ClassStatement*/ parent;
+	private final OS_Element/*ClassStatement*/ parent;
 
 	public FunctionDef(OS_Element aElement) {
 		parent = aElement;

@@ -34,7 +34,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	public OS_Module prelude;
 
 	public Compilation parent;
-	private List<IndexingItem> indexingItems = new ArrayList<IndexingItem>();
+	private final List<IndexingItem> indexingItems = new ArrayList<IndexingItem>();
 	private String _fileName;
 
 //	public void addIndexingItem(Token i1, IExpression c1) {

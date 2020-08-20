@@ -134,8 +134,8 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 	public class MatchConditionalPart2 implements MC1 {
 
-		private List<String> docstrings = new ArrayList<String>();
-		private List<FunctionItem> items = new ArrayList<FunctionItem>();
+		private final List<String> docstrings = new ArrayList<String>();
+		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 
 		private IExpression expr2;
 
@@ -160,8 +160,8 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 	public class MatchConditionalPart1 implements MC1 {
 
-		private List<String> docstrings = new ArrayList<String>();
-		private List<FunctionItem> items = new ArrayList<FunctionItem>();
+		private final List<String> docstrings = new ArrayList<String>();
+		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 
 		TypeName tn = new RegularTypeName();
 		private Token ident;

@@ -20,8 +20,8 @@ import tripleo.elijah.lang.NumericExpression;
  *
  */
 public class IntegerNode implements IExpressionNode {
-	private IExpression _expr;
-	private TypeRef _type;
+	private final IExpression _expr;
+	private final TypeRef _type;
 	
 	public IntegerNode(NumericExpression aInteger, TypeRef aTypeRef) {
 		_expr = aInteger;

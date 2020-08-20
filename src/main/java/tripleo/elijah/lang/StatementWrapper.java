@@ -2,7 +2,7 @@ package tripleo.elijah.lang;
 
 public class StatementWrapper implements StatementItem, FunctionItem {
 
-    private IExpression expr;
+    private final IExpression expr;
 
     public StatementWrapper(IExpression aexpr) {
         expr = aexpr;

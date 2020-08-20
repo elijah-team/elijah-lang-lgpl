@@ -34,7 +34,7 @@ public class MethHdrNode implements Node {
 	public int argCount;
 	final public MethNameNode methName;
 	public TypeNameNode returnType;
-	private List<ArgumentNode> argument_types;
+	private final List<ArgumentNode> argument_types;
 	private final int _code;
 	
 	public MethHdrNode(Node parent, @NonNull IdentExpression return_type, String method_name, List<ArgumentNode> argument_types, int code) {
@@ -96,7 +96,7 @@ public class MethHdrNode implements Node {
 						return node.argument(c++);
 					}
 				};
-			};
+			}
 		};
 	}
 	
@@ -104,6 +104,7 @@ public class MethHdrNode implements Node {
 		return returnType2;
 	}
 	
+	@Override
 	public int getCode() {
 		return _code;
 	}

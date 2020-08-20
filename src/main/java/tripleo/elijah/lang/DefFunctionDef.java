@@ -42,7 +42,7 @@ public class DefFunctionDef implements ClassItem {
 	
 	static class StatementWrapper implements StatementItem, FunctionItem {
 
-		private IExpression expr;
+		private final IExpression expr;
 
 		public StatementWrapper(IExpression aexpr) {
 			expr = aexpr;
@@ -124,15 +124,15 @@ public class DefFunctionDef implements ClassItem {
 		}
 	}
 
-	private List<String> docstrings = new ArrayList<String>(); // TODO do we allow this?
+	private final List<String> docstrings = new ArrayList<String>(); // TODO do we allow this?
 	public String funName;
-	private List<FunctionItem> items = new ArrayList<FunctionItem>();
+	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
 //	private FunctionDefScope mScope;
-	private OS_Element/*ClassStatement*/ parent;
+	private final OS_Element/*ClassStatement*/ parent;
 	private final DefFunctionDefScope mScope2 = new DefFunctionDefScope();
-	private NormalTypeName _returnType = new RegularTypeName();
-	private Attached _a = new Attached(new DefFunctionContext(this));
+	private final NormalTypeName _returnType = new RegularTypeName();
+	private final Attached _a = new Attached(new DefFunctionContext(this));
 
 	public DefFunctionDef(OS_Element aStatement) {
 		parent = aStatement;

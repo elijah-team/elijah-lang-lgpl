@@ -33,7 +33,7 @@ public class Qualident  implements IExpression {
 //		parts.add(d1);
 	}
 	
-	private List<Token> parts = new ArrayList<Token>();
+	private final List<Token> parts = new ArrayList<Token>();
 
 	@Override
 	public String toString() {
@@ -86,10 +86,12 @@ public class Qualident  implements IExpression {
 
 	OS_Type _type;
 
+	@Override
 	public void setType(OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
+	@Override
 	public OS_Type getType() {
     	return _type;
 	}
@@ -111,9 +113,7 @@ public class Qualident  implements IExpression {
 //				return false;
 		}
 //		if (Objects.equals(parts, qualident.parts))
-			if (Objects.equals(_type, qualident._type))
-				return true;
-		return false;
+		return Objects.equals(_type, qualident._type);
 	}
 
 	private static boolean equivalentTokens(Token token1, Token token2) {

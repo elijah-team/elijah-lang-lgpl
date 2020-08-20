@@ -57,9 +57,8 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 	}
 
 	@Override // OS_Element
-	public @NotNull Context getContext() {
-		throw new NotImplementedException();
-//		return null;
+	public Context getContext() {
+		return getParent().getContext();
 	}
 
 	@Override // OS_Element2

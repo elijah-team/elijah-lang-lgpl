@@ -17,7 +17,7 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		BasicBinaryExpression abe = (BasicBinaryExpression)this;
+		BasicBinaryExpression abe = this;
 		switch (abe.getKind()) {
 			case ASSIGNMENT:
 				sb.append(abe.getLeft().toString());
@@ -347,10 +347,12 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 
 	OS_Type _type;
 
+	@Override
 	public void setType(OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
+	@Override
 	public OS_Type getType() {
     	return _type;
 	}

@@ -98,6 +98,7 @@ caseSensitiveLiterals = true;
 setCaseSensitive(true);
 }
 
+@Override
 public Token nextToken() throws TokenStreamException {
 	Token theRetToken=null;
 tryAgain:
@@ -377,7 +378,7 @@ tryAgain:
 					}
 				else {
 					if (LA(1)==EOF_CHAR) {uponEOF(); _returnToken = makeToken(Token.EOF_TYPE);}
-				else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+				else {throw new NoViableAltForCharException(LA(1), getFilename(), getLine());}
 				}
 				}
 				if ( _returnToken==null ) continue tryAgain; // found SKIP token
@@ -1055,7 +1056,7 @@ tryAgain:
 				match('\n');
 			}
 			else {
-				throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+				throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 			}
 			
 			}
@@ -1064,7 +1065,7 @@ tryAgain:
 		}
 		default:
 		{
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		}
 		}
@@ -1118,7 +1119,7 @@ tryAgain:
 		}
 		default:
 		{
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		}
 		}
@@ -1189,7 +1190,7 @@ tryAgain:
 			matchNot('\'');
 		}
 		else {
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		
 		}
@@ -1259,7 +1260,7 @@ tryAgain:
 					match('u');
 				}
 				else {
-					if ( _cnt317>=1 ) { break _loop317; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+					if ( _cnt317>=1 ) { break _loop317; } else {throw new NoViableAltForCharException(LA(1), getFilename(), getLine());}
 				}
 				
 				_cnt317++;
@@ -1288,7 +1289,7 @@ tryAgain:
 				else if (((LA(1) >= '\u0003' && LA(1) <= '\u00ff')) && (true) && (true) && (true)) {
 				}
 				else {
-					throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+					throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 				}
 				
 				}
@@ -1296,7 +1297,7 @@ tryAgain:
 			else if (((LA(1) >= '\u0003' && LA(1) <= '\u00ff')) && (true) && (true) && (true)) {
 			}
 			else {
-				throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+				throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 			}
 			
 			}
@@ -1316,7 +1317,7 @@ tryAgain:
 			else if (((LA(1) >= '\u0003' && LA(1) <= '\u00ff')) && (true) && (true) && (true)) {
 			}
 			else {
-				throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+				throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 			}
 			
 			}
@@ -1324,7 +1325,7 @@ tryAgain:
 		}
 		default:
 		{
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		}
 		}
@@ -1394,7 +1395,7 @@ tryAgain:
 		}
 		default:
 		{
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		}
 		}
@@ -1459,7 +1460,7 @@ tryAgain:
 		}
 		default:
 		{
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		}
 		}
@@ -1542,7 +1543,7 @@ tryAgain:
 						matchRange('0','9');
 					}
 					else {
-						if ( _cnt335>=1 ) { break _loop335; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+						if ( _cnt335>=1 ) { break _loop335; } else {throw new NoViableAltForCharException(LA(1), getFilename(), getLine());}
 					}
 					
 					_cnt335++;
@@ -1600,7 +1601,7 @@ tryAgain:
 					}
 					default:
 					{
-						throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+						throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 					}
 					}
 					}
@@ -1612,7 +1613,7 @@ tryAgain:
 							mHEX_DIGIT(false);
 						}
 						else {
-							if ( _cnt342>=1 ) { break _loop342; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+							if ( _cnt342>=1 ) { break _loop342; } else {throw new NoViableAltForCharException(LA(1), getFilename(), getLine());}
 						}
 						
 						_cnt342++;
@@ -1631,7 +1632,7 @@ tryAgain:
 							matchRange('0','7');
 						}
 						else {
-							if ( _cnt344>=1 ) { break _loop344; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+							if ( _cnt344>=1 ) { break _loop344; } else {throw new NoViableAltForCharException(LA(1), getFilename(), getLine());}
 						}
 						
 						_cnt344++;
@@ -1681,7 +1682,7 @@ tryAgain:
 			}
 			default:
 			{
-				throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+				throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 			}
 			}
 			}
@@ -1703,7 +1704,7 @@ tryAgain:
 				}
 				default:
 				{
-					throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+					throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 				}
 				}
 				}
@@ -1725,7 +1726,7 @@ tryAgain:
 				}
 				default:
 				{
-					throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+					throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 				}
 				}
 				}
@@ -1758,7 +1759,7 @@ tryAgain:
 				}
 				default:
 				{
-					throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+					throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 				}
 				}
 				}
@@ -1821,7 +1822,7 @@ tryAgain:
 					}
 					default:
 					{
-						throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+						throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 					}
 					}
 					}
@@ -1835,7 +1836,7 @@ tryAgain:
 		}
 		default:
 		{
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		}
 		if ( _createToken && _token==null && _ttype!=Token.SKIP ) {
@@ -1864,7 +1865,7 @@ tryAgain:
 		}
 		default:
 		{
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		}
 		}
@@ -1888,7 +1889,7 @@ tryAgain:
 		}
 		default:
 		{
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		}
 		}
@@ -1900,7 +1901,7 @@ tryAgain:
 				matchRange('0','9');
 			}
 			else {
-				if ( _cnt362>=1 ) { break _loop362; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());}
+				if ( _cnt362>=1 ) { break _loop362; } else {throw new NoViableAltForCharException(LA(1), getFilename(), getLine());}
 			}
 			
 			_cnt362++;
@@ -1941,7 +1942,7 @@ tryAgain:
 		}
 		default:
 		{
-			throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine());
+			throw new NoViableAltForCharException(LA(1), getFilename(), getLine());
 		}
 		}
 		if ( _createToken && _token==null && _ttype!=Token.SKIP ) {
@@ -1952,19 +1953,19 @@ tryAgain:
 	}
 	
 	
-	private static final long _tokenSet_0_data_[] = { -9224L, -1L, -1L, -1L, 0L, 0L, 0L, 0L };
+	private static final long[] _tokenSet_0_data_ = { -9224L, -1L, -1L, -1L, 0L, 0L, 0L, 0L };
 	public static final BitSet _tokenSet_0 = new BitSet(_tokenSet_0_data_);
-	private static final long _tokenSet_1_data_[] = { -4398046520328L, -1L, -1L, -1L, 0L, 0L, 0L, 0L };
+	private static final long[] _tokenSet_1_data_ = { -4398046520328L, -1L, -1L, -1L, 0L, 0L, 0L, 0L };
 	public static final BitSet _tokenSet_1 = new BitSet(_tokenSet_1_data_);
-	private static final long _tokenSet_2_data_[] = { -549755813896L, -268435457L, -1L, -1L, 0L, 0L, 0L, 0L };
+	private static final long[] _tokenSet_2_data_ = { -549755813896L, -268435457L, -1L, -1L, 0L, 0L, 0L, 0L };
 	public static final BitSet _tokenSet_2 = new BitSet(_tokenSet_2_data_);
-	private static final long _tokenSet_3_data_[] = { -17179869192L, -268435457L, -1L, -1L, 0L, 0L, 0L, 0L };
+	private static final long[] _tokenSet_3_data_ = { -17179869192L, -268435457L, -1L, -1L, 0L, 0L, 0L, 0L };
 	public static final BitSet _tokenSet_3 = new BitSet(_tokenSet_3_data_);
-	private static final long _tokenSet_4_data_[] = { 0L, 343597383760L, 0L, 0L, 0L };
+	private static final long[] _tokenSet_4_data_ = { 0L, 343597383760L, 0L, 0L, 0L };
 	public static final BitSet _tokenSet_4 = new BitSet(_tokenSet_4_data_);
-	private static final long _tokenSet_5_data_[] = { 287948901175001088L, 541165879422L, 0L, 0L, 0L };
+	private static final long[] _tokenSet_5_data_ = { 287948901175001088L, 541165879422L, 0L, 0L, 0L };
 	public static final BitSet _tokenSet_5 = new BitSet(_tokenSet_5_data_);
-	private static final long _tokenSet_6_data_[] = { 70368744177664L, 481036337264L, 0L, 0L, 0L };
+	private static final long[] _tokenSet_6_data_ = { 70368744177664L, 481036337264L, 0L, 0L, 0L };
 	public static final BitSet _tokenSet_6 = new BitSet(_tokenSet_6_data_);
 	
 	}

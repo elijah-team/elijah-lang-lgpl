@@ -17,7 +17,7 @@ import antlr.Token;
  */
 public class GetItemExpression extends AbstractExpression { // TODO binary?
 
-	public IExpression index;;
+	public IExpression index;
 
 	public GetItemExpression(IExpression ee, IExpression expr) {
 		this.left    = ee;
@@ -43,10 +43,12 @@ public class GetItemExpression extends AbstractExpression { // TODO binary?
 
 	OS_Type _type;
 
+	@Override
 	public void setType(OS_Type deducedExpression) {
 		_type = deducedExpression;
 	}
 
+	@Override
 	public OS_Type getType() {
 		return _type;
 	}

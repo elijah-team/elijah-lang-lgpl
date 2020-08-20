@@ -21,7 +21,7 @@ public interface ErrSink {
 
     void info(String format);
 
-    public enum Errors {
+    enum Errors {
         ERROR, WARNING, INFO
     }
 }
