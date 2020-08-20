@@ -640,6 +640,8 @@ public class DeduceTypes {
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
 			deduceProcedureCall((ProcedureCallExpression) n, context);
 			return n.getType();
+		} else if (n.getKind() == ExpressionKind.QIDENT) {
+			return deduceIdentExpression((IdentExpression)qualidentToDotExpression2(((Qualident)n).parts()), context);
 		}
 		
 		return null;
