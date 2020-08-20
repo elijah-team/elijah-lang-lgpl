@@ -48,8 +48,6 @@ public class Compilation {
 	}
 
 	public void feedCmdLine(List<String> args) {
-		// TODO Auto-generated method stub
-		//throw new NotImplementedException();
 		main(args, new StdErrSink());
 	}
 
