@@ -36,31 +36,13 @@ public class LoopContext extends Context {
 
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
 		alreadySearched.add(carrier.getContext());
-		// TODO implement me
-//		throw new NotImplementedException();
-//		final LookupResultList Result = new LookupResultList();
 
-//		for (FunctionItem item: carrier.getItems()) {
-//			if (!(item instanceof ClassStatement) &&
-//				!(item instanceof NamespaceStatement) &&
-//				!(item instanceof VariableSequence)
-//			) continue;
-//			if (item instanceof VariableSequence) {
-//				System.out.println("101 "+item);
-//				for (VariableStatement vs : ((VariableSequence) item).items()) {
-//					if (vs.getName().equals(name))
-//						Result.add(name, level, vs);
-//				}
-//			} else if (((OS_Element2)item).name() != null) {
-//				if (((OS_Element2)item).name().equals(name)) {
-//					Result.add(name, level, item);
-//				}
-//			}
-//		}
-		if (name.equals(carrier.getIterName())) { // reversed to prevent NPEs
-			String iterName = carrier.getIterName();
-			IdentExpression ie = new IdentExpression(Helpers.makeToken(iterName));
-			Result.add(name, level, ie); // TODO just made ie
+		if (carrier.getIterName() != null) {
+			if (name.equals(carrier.getIterName())) { // reversed to prevent NPEs
+				String iterName = carrier.getIterName();
+				IdentExpression ie = new IdentExpression(Helpers.makeToken(iterName));
+				Result.add(name, level, ie); // TODO getIterNameToken
+			}
 		}
 
 		if (carrier.getParent() != null) {
