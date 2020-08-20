@@ -9,9 +9,7 @@
 package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.*;
-import tripleo.elijah.util.LogEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,12 +65,12 @@ public class ModuleContext extends Context {
 				namespaceContext.lookup(name, level, Result, alreadySearched, true);
 			}
 		}
-		for (ModuleItem item : carrier.getItems()) {
+		/*for (ModuleItem item : carrier.getItems()) {
 			if (item instanceof ImportStatement) {
 				final ImportStatement importStatement = (ImportStatement) item;
 				searchImports(name, level, Result, alreadySearched, importStatement);
 			}
-		}
+		}*/
 //		System.err.println("2003 "+carrier.getItems());
 		if (carrier.prelude != null && alreadySearched.contains(carrier.prelude.getContext()))
 			return Result;
@@ -86,7 +84,7 @@ public class ModuleContext extends Context {
 		return null;
 	}
 
-	private void searchImports(String name, int level, LookupResultList Result, List<Context> alreadySearched, ImportStatement importStatement) {
+	/*private void searchImports(String name, int level, LookupResultList Result, List<Context> alreadySearched, ImportStatement importStatement) {
 //		System.err.println("2002 "+importStatement.importList());
 		for (Qualident importStatementItem : importStatement.parts()) {
 //			System.err.println("2005 "+importStatementItem);
@@ -105,7 +103,7 @@ public class ModuleContext extends Context {
 				}
 			}
 		}
-	}
+	}*/
 
 }
 
