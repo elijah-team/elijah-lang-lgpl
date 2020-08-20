@@ -56,7 +56,7 @@ public class NamespaceContext extends Context {
 				}
 			}
 		}
-		if (carrier.getParent() != null) {
+		if (getParent() != null) {
 			final Context context = getParent();
 			if (!alreadySearched.contains(context) || !one)
 				return context.lookup(name, level + 1, Result, alreadySearched, false);

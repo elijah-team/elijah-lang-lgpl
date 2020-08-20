@@ -74,7 +74,7 @@ public class ClassContext extends Context {
 			}
 //			System.out.println("1003 "+name+" "+Result.results());
 		}
-		if (carrier.getParent() != null) {
+		if (getParent() != null) {
 			final Context context = getParent();
 			if (!alreadySearched.contains(context) || !one)
 				return context.lookup(name, level + 1, Result, alreadySearched, false);
