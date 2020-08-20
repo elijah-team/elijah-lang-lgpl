@@ -25,7 +25,10 @@ public class PackageContext extends Context {
 
 	@Override
 	public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
-		return null;
+		// TODO since we are not maintaining an item list, pass to parent
+		// TODO implement me
+		alreadySearched.add(this);
+		return getParent().lookup(name, level, Result, alreadySearched, one);
 	}
 
 	@Override

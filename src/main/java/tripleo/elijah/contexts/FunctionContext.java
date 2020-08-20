@@ -58,7 +58,7 @@ public class FunctionContext extends Context {
 			}
 		}
 		if (carrier.getParent() != null) {
-			final Context context = carrier.getParent().getContext();
+			final Context context = getParent()/*carrier.getParent().getContext()*/;
 			if (!alreadySearched.contains(context) || !one)
 				return context.lookup(name, level + 1, Result, alreadySearched, false);
 		}

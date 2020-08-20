@@ -38,7 +38,7 @@ public class DefFunctionContext extends Context {
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
 //		final LookupResultList Result = new LookupResultList();
 		alreadySearched.add(carrier.getContext());
-		return Result;
+		return getParent().lookup(name, level, Result, alreadySearched, one);
 	}
 
 	@Override
