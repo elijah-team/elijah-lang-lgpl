@@ -62,6 +62,7 @@ public class NumericExpression implements IExpression {
 		return String.format("NumericExpression (%d)", carrier);
 	}
 
+	@Override
 	public boolean is_simple() {
 		return true;
 	}

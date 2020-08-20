@@ -12,10 +12,7 @@
  */
 package tripleo.elijah.lang;
 
-import java.io.IOException;
-
 import antlr.Token;
-import tripleo.elijah.util.TabbedOutputStream;
 
 /**
  * @author Tripleo(sb)
@@ -75,6 +72,7 @@ public class CharLitExpression implements IExpression {
 		return null;
 	}
 
+	@Override
 	public boolean is_simple() {
 		return true;
 	}

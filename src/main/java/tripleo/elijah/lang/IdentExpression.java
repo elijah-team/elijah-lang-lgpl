@@ -79,6 +79,7 @@ public class IdentExpression implements IExpression, OS_Element {
 		return text.getText();
 	}
 
+	@Override
 	public boolean is_simple() {
 		return true;
 	}

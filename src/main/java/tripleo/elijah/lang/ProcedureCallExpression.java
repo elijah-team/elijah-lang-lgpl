@@ -113,6 +113,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 		return String.format("ProcedureCallExpression{%s %s}", getLeft(), args != null ? args.toString() : "()");
 	}
 
+	@Override
 	public boolean is_simple() {
 		return false; // TODO is this correct?
 	}
@@ -123,10 +124,12 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 
 	OS_Type _type;
 
+	@Override
 	public void setType(OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
+	@Override
 	public OS_Type getType() {
     	return _type;
 	}

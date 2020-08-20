@@ -9,10 +9,6 @@
 
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.TabbedOutputStream;
-
-import java.io.IOException;
-
 public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 
 	/* (non-Javadoc)
@@ -344,6 +340,7 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 		_kind =aIncrement;
 	}
 
+	@Override
 	public boolean is_simple() {
 		throw new IllegalStateException("Implement me");
 	}

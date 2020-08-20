@@ -58,6 +58,7 @@ public class FloatExpression implements IExpression {
 		return String.format("FloatExpression (%f)", carrier);
 	}
 
+	@Override
 	public boolean is_simple() {
 		return true;
 	}
