@@ -322,8 +322,9 @@ procCallEx2 returns [ProcedureCallExpression pce]
 invariantStatement[InvariantStatement cr]
         {InvariantStatementPart isp=null;}
 	: "invariant"
-        ((i1:IDENT)? 		{isp = new InvariantStatementPart(cr, i1);}
-         TOK_COLON 			//{el=new ExpressionList();}
+        (            		{isp = new InvariantStatementPart(cr, i1);}
+         (i1:IDENT
+         TOK_COLON)?
          expr=expression    {isp.setExpr(expr);})*
     ;
 accessNotation
