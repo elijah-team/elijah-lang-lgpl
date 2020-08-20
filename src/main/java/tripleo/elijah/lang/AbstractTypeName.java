@@ -80,10 +80,6 @@ tm=atm;
 		this.isNullable = true;
 	}
 
-	public void set(int aType) {
-		type = aType;		// TODO where is this used at?
-	}
-	
 	private TypeModifiers tm;
 	
 	protected boolean pr_constant;

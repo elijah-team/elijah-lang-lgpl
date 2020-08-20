@@ -26,7 +26,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	private OS_Element _parent;
 
 	public AbstractStatementClosure(Scope aParent) {
-		// TODO Auto-generated constructor stub
+		// TODO doesn't set _parent
 		parent_scope = aParent;
 	}
 
@@ -48,36 +48,26 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 			@Override
 			public StatementClosure statementClosure() {
 				throw new NotImplementedException();
-//				// TODO Auto-generated method stub
-//				return null;
 			}
 
 			@Override
 			public BlockStatement blockStatement() {
 				throw new NotImplementedException();
-//				// TODO Auto-generated method stub
-//				return null;
 			}
 
 			@Override
 			public void add(StatementItem aItem) {
-				// TODO Auto-generated method stub
-//				NotImplementedException.raise();
 				classStatement.add((ClassItem) aItem);
 			}
 
 			@Override
 			public TypeAliasExpression typeAlias() {
 				throw new NotImplementedException();
-//				// TODO Auto-generated method stub
-//				return null;
 			}
 
 			@Override
 			public InvariantStatement invariantStatement() {
 				throw new NotImplementedException();
-//				// TODO Auto-generated method stub
-//				return null;
 			}
 
 			@Override
@@ -125,14 +115,6 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		add(loop);
 		return loop;
 	}
-/*
-	@Override
-	public StatementClosure procCallExpr() {
-		pcex=new AbstractStatementClosure(parent); //TODO:
-//		add(pcex);
-		return pcex;
-	}
-*/
 
 	@Override
 	public ProcedureCallExpression procedureCallExpression() {

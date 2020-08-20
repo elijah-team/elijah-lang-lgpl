@@ -36,23 +36,10 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 		return String.format("<Expression %s %s>", left,_kind);
 	}
 
-//	@Override
-//	public void set(IBinaryExpression aEx) {
-//		left=aEx.getLeft();
-//		type=aEx.getType();
-//	}
-
 	@Override
 	public void setLeft(IExpression aLeft) {
 		left = aLeft;
 	}
-
-//	@Override
-//	public void shift(ExpressionType aType) {
-//		left=new AbstractExpression(left,type,right); //TODO
-//		type=aType;
-//		right=null;
-//	}
 
 	public IExpression left;
 	public ExpressionKind _kind;
