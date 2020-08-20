@@ -278,13 +278,6 @@ expression returns [IExpression ee]
 		{ee=null;}
 	: ee=assignmentExpression
 	;
-/*
-ident2 returns [String ident]
-		{ident=null;}
-	:
-	r1:IDENT {ident=r1.getText();}
-	;
-*/
 aliasStatement[AliasStatement pc]
 	: "alias" i1:IDENT {pc.setName(i1);} BECOMES xy=qualident {pc.setExpression(xy);}
 	;
@@ -314,10 +307,6 @@ variableReference returns [IExpression ee]
       pce.setArgs(el);
       ee=pce;} RPAREN
 	)
-	;
-procCallEx2 returns [ProcedureCallExpression pce]
-		{pce=null;ExpressionList el=null;}
-	: lp:LPAREN el=expressionList2 rp:RPAREN {pce=new ProcedureCallExpression(lp,el,rp);}
 	;
 invariantStatement[InvariantStatement cr]
         {InvariantStatementPart isp=null;}
