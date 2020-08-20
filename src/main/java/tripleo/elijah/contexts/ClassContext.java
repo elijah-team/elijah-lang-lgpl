@@ -60,7 +60,7 @@ public class ClassContext extends Context {
 			NormalTypeName tn = (NormalTypeName)tn1;
 			OS_Element best;
 			if (!tn.hasResolvedElement()) {
-				LookupResultList tnl = tn.getContext().lookup(tn.getName()); // TODO why getParent here?
+				LookupResultList tnl = tn.getContext().lookup(tn.getName());
 //	    		System.out.println("1002 "+tnl.results());
 				best = tnl.chooseBest(null);
 			} else
