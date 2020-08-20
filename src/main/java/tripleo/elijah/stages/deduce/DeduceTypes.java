@@ -144,7 +144,7 @@ public class DeduceTypes {
 //			parent._a.getContext().nameTable().add((OS_Element) element, ((ClassStatement) element).getName(), new OS_Type((ClassStatement) element));
 		} else if (element instanceof CaseConditional) {
 			CaseConditional cc = (CaseConditional) element;
-			int y=2;
+			NotImplementedException.raise();
 		} else {
 			System.out.println("91 "+element);
 			throw new NotImplementedException();
@@ -152,7 +152,7 @@ public class DeduceTypes {
 	}
 
 	private OS_FuncExprType deduceFuncExpr(FuncExpr funcExpr, Context ctx) {
-		int y=2;
+		NotImplementedException.raise();
 		return new OS_FuncExprType(funcExpr);
 	}
 
@@ -382,7 +382,7 @@ public class DeduceTypes {
 			s.pop();
 		}
 		if (t == null) {
-			int y=2;
+			NotImplementedException.raise();
 			return new LookupResultList();
 		} else
 			return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
@@ -422,7 +422,7 @@ public class DeduceTypes {
 				if (typeName.isNull()) {
 					//deduceProcedureCall((ProcedureCallExpression) ((VariableStatement) best).initialValue(), ctx);
 					t = deduceExpression(((VariableStatement) best).initialValue(), ctx);
-					int y=2;
+					NotImplementedException.raise();
 				} else
 					t = new OS_Type(typeName);
 				exp.setType(t);
@@ -636,7 +636,7 @@ public class DeduceTypes {
 			LookupResultList lrl = lookup_dot_expression(context, de);
 			OS_Type left_type = deduceExpression(de.getLeft(), context);
 			OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
-			int y=2;
+			NotImplementedException.raise();
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
 			deduceProcedureCall((ProcedureCallExpression) n, context);
 			return n.getType();
