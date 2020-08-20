@@ -77,7 +77,7 @@ public class OS_Type {
 	}
 
 	private BuiltInTypes type;
-	private Type type_of_type;
+	protected Type type_of_type;
 	private OS_Element etype;
 	private TypeName ttype;
 
