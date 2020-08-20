@@ -80,7 +80,6 @@ public class Qualident  implements IExpression {
 	
 	@Override
 	public boolean is_simple() {
-		// TODO Auto-generated method stub
 		return true;  // TODO is this true?
 	}
 
