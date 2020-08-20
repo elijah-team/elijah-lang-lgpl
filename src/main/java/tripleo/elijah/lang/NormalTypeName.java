@@ -11,7 +11,7 @@ package tripleo.elijah.lang;
 // Referenced classes of package pak2:
 //			TypeNameList
 
-public interface NormalTypeName extends TypeName {
+public interface NormalTypeName extends TypeName, Resolvable {
 
 	@Override
 	boolean isNull();
@@ -44,9 +44,6 @@ public interface NormalTypeName extends TypeName {
 	// TODO new
 	void typeName(Qualident xy);
 
-	// TODO new
-	void typeof(Qualident xyz);
-	
 	void setGeneric(boolean value);
 
     void setNullable();
@@ -54,11 +51,6 @@ public interface NormalTypeName extends TypeName {
 	@Override
 	void setContext(Context cur);
 
-	boolean hasResolvedElement();
-
-	OS_Element getResolvedElement();
-
-	void setResolvedElement(OS_Element element);
 }
 
 //

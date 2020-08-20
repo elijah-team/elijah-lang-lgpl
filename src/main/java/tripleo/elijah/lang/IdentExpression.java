@@ -20,10 +20,11 @@ import tripleo.elijah.util.NotImplementedException;
  * @author Tripleo(sb)
  *
  */
-public class IdentExpression implements IExpression, OS_Element {
+public class IdentExpression implements IExpression, OS_Element, Resolvable {
 
 	private Token text;
 	public  Attached _a;
+	private OS_Element _resolvedElement;
 
 	public IdentExpression(Token r1) {
 		this.text = r1;
@@ -62,12 +63,12 @@ public class IdentExpression implements IExpression, OS_Element {
 
 	@Override
 	public void setLeft(IExpression iexpression) {
-		if (iexpression instanceof IdentExpression) {
-			text = ((IdentExpression) iexpression).text;
-		} else {
-			// NOTE was System.err.println
+//		if (iexpression instanceof IdentExpression) {
+//			text = ((IdentExpression) iexpression).text;
+//		} else {
+//			// NOTE was System.err.println
 			throw new IllegalArgumentException("Trying to set left-side of IdentExpression to " + iexpression.toString());
-		}
+//		}
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public class IdentExpression implements IExpression, OS_Element {
 	@Override
 	public void visitGen(ICodeGen visit) {
 		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException();
 	}
 
 	@Override
@@ -116,6 +117,21 @@ public class IdentExpression implements IExpression, OS_Element {
 
 	public void setContext(Context cur) {
 		_a.setContext(cur);
+	}
+
+	@Override
+	public boolean hasResolvedElement() {
+		return _resolvedElement != null;
+	}
+
+	@Override
+	public OS_Element getResolvedElement() {
+		return _resolvedElement;
+	}
+
+	@Override
+	public void setResolvedElement(OS_Element element) {
+		_resolvedElement = element;
 	}
 }
 
