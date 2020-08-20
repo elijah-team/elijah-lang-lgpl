@@ -525,7 +525,7 @@ public class DeduceTypes {
 				pce.getLeft().setType(deducedExpression); // TODO how do we know before looking at args?
 				if (true) {
 					final NormalTypeName typeName = (NormalTypeName) functionDef.returnType();
-					LookupResultList lrl2 = parent.getContext().lookup(typeName.getName());
+					LookupResultList lrl2 = typeName.getContext().lookup(typeName.getName());
 					OS_Element best2 = lrl2.results().get(0).getElement();//chooseBest(null); // TODO not using chooseBest here. see why
 					pce.setType(new OS_Type((ClassStatement) best2));
 				} else {
