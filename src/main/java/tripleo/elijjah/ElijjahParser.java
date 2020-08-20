@@ -439,26 +439,22 @@ public ElijjahParser(ParserSharedInputState state) {
 	public final IExpression  variableReference() throws RecognitionException, TokenStreamException {
 		IExpression ee;
 		
-		Token  r1 = null;
-		Token  r2 = null;
 		Token  lp = null;
-		ProcedureCallExpression pcx;ExpressionList el=null;ee=null;
+		ProcedureCallExpression pcx;ExpressionList el=null;ee=null;IdentExpression r1=null, r2=null;
 		
 		try {      // for error handling
-			r1 = LT(1);
-			match(IDENT);
+			r1=ident();
 			if ( inputState.guessing==0 ) {
-				ee=new IdentExpression(r1);
+				ee=r1;
 			}
 			{
 			switch ( LA(1)) {
 			case DOT:
 			{
 				match(DOT);
-				r2 = LT(1);
-				match(IDENT);
+				r2=ident();
 				if ( inputState.guessing==0 ) {
-					ee=new DotExpression(ee, new IdentExpression(r2));
+					ee=new DotExpression(ee, r2);
 				}
 				break;
 			}
@@ -1444,24 +1440,21 @@ public ElijjahParser(ParserSharedInputState state) {
 		IdentList ail
 	) throws RecognitionException, TokenStreamException {
 		
-		Token  s = null;
-		Token  s2 = null;
+		IdentExpression s=null;
 		
 		try {      // for error handling
-			s = LT(1);
-			match(IDENT);
+			s=ident();
 			if ( inputState.guessing==0 ) {
-				ail.push(new IdentExpression(s));
+				ail.push(s);
 			}
 			{
 			_loop106:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
-					s2 = LT(1);
-					match(IDENT);
+					s=ident();
 					if ( inputState.guessing==0 ) {
-						ail.push(new IdentExpression(s2));
+						ail.push(s);
 					}
 				}
 				else {
@@ -4039,17 +4032,15 @@ public ElijjahParser(ParserSharedInputState state) {
 	public final IExpression  primaryExpression() throws RecognitionException, TokenStreamException {
 		IExpression ee;
 		
-		Token  e = null;
-		ee=null;FuncExpr ppc=null;
+		ee=null;FuncExpr ppc=null;IdentExpression e=null;
 		
 		try {      // for error handling
 			switch ( LA(1)) {
 			case IDENT:
 			{
-				e = LT(1);
-				match(IDENT);
+				e=ident();
 				if ( inputState.guessing==0 ) {
-					ee=new IdentExpression(e);
+					ee=e;
 				}
 				break;
 			}
@@ -4127,15 +4118,13 @@ public ElijjahParser(ParserSharedInputState state) {
 	) throws RecognitionException, TokenStreamException {
 		IExpression ee;
 		
-		Token  e = null;
 		Token  lp2 = null;
-		ee=null;ExpressionList el=null;
+		ee=null;ExpressionList el=null;IdentExpression e=null;
 		
 		try {      // for error handling
-			e = LT(1);
-			match(IDENT);
+			e=ident();
 			if ( inputState.guessing==0 ) {
-				ee=new DotExpression(e1, new IdentExpression(e));
+				ee=new DotExpression(e1, e);
 			}
 			{
 			if ((LA(1)==LPAREN) && (_tokenSet_43.member(LA(2)))) {
@@ -5201,7 +5190,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	public static final BitSet _tokenSet_9 = new BitSet(_tokenSet_9_data_);
 	private static final long _tokenSet_10_data_[] = { 201457920L, 0L };
 	public static final BitSet _tokenSet_10 = new BitSet(_tokenSet_10_data_);
-	private static final long _tokenSet_11_data_[] = { 13198455472128L, 0L };
+	private static final long _tokenSet_11_data_[] = { -17592189452302L, 136902082559L, 0L, 0L };
 	public static final BitSet _tokenSet_11 = new BitSet(_tokenSet_11_data_);
 	private static final long _tokenSet_12_data_[] = { 25165824L, 0L };
 	public static final BitSet _tokenSet_12 = new BitSet(_tokenSet_12_data_);

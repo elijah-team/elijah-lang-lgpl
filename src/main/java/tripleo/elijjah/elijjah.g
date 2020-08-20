@@ -270,9 +270,9 @@ statement[StatementClosure cr, OS_Element aParent]
 	;
 opt_semi: (SEMI|);
 identList[IdentList ail]
-		//{String s=null;}
-	: s:IDENT {ail.push(new IdentExpression(s));}
-	(COMMA s2:IDENT {ail.push(new IdentExpression(s2));})*
+		{IdentExpression s=null;}
+	: s=ident {ail.push(s);}
+		(COMMA s=ident {ail.push(s);})*
 	;
 expression returns [IExpression ee]
 		{ee=null;}
@@ -304,18 +304,16 @@ expressionList2 returns [ExpressionList el]
 	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
 	;
 variableReference returns [IExpression ee]
-		{ProcedureCallExpression pcx;ExpressionList el=null;ee=null;}
-	: r1:IDENT  {ee=new IdentExpression(r1);}
-	( DOT r2:IDENT {ee=new DotExpression(ee, new IdentExpression(r2));}
+		{ProcedureCallExpression pcx;ExpressionList el=null;ee=null;IdentExpression r1=null, r2=null;}
+	: r1=ident  {ee=r1;}
+	( DOT r2=ident {ee=new DotExpression(ee, r2);}
 	| LBRACK expr=expression RBRACK {ee=new GetItemExpression(ee, expr);}
 	| lp:LPAREN	(el=expressionList2)?
       {ProcedureCallExpression pce=new ProcedureCallExpression();
       pce.identifier(ee);
       pce.setArgs(el);
       ee=pce;} RPAREN
-
-	//pcx=procCallEx2 {pcx.setLeft(ee);ee=pcx;}
-	) //{ee=vr;}
+	)
 	;
 procCallEx2 returns [ProcedureCallExpression pce]
 		{pce=null;ExpressionList el=null;}
@@ -584,8 +582,8 @@ ee=pce;}
 
 
 dot_expression_or_procedure_call [IExpression e1] returns [IExpression ee]
-		{ee=null;ExpressionList el=null;}
-	: e:IDENT {ee=new DotExpression(e1, new IdentExpression(e));}
+		{ee=null;ExpressionList el=null;IdentExpression e=null;}
+	: e=ident {ee=new DotExpression(e1, e);}
 
     ( lp2:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
       (el=expressionList2)?
@@ -600,9 +598,9 @@ dot_expression_or_procedure_call [IExpression e1] returns [IExpression ee]
 
 // the basic element of an expression
 primaryExpression returns [IExpression ee]
-		{ee=null;FuncExpr ppc=null;}
+		{ee=null;FuncExpr ppc=null;IdentExpression e=null;}
 		//IExpression e3=null;*/}
-	:	e:IDENT {ee=new IdentExpression(e);}
+	:	e=ident {ee=e;}
 //	|	newExpression
 	|	ee=constantValue
 //	|	"super"
