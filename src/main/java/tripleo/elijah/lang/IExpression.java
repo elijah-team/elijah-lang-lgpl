@@ -15,8 +15,11 @@
  */
 package tripleo.elijah.lang;
 
+import org.jetbrains.annotations.Contract;
+
 public interface IExpression {
 
+	@Contract(pure = true)
 	ExpressionKind getKind();
 
 	void setKind(ExpressionKind aKind);
