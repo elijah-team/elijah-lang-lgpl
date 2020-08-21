@@ -115,7 +115,11 @@ public class DeduceTypes {
 		} else if (element instanceof Loop) {
 			addFunctionItem_Loop((Loop) element, parent);
 		} else if (element instanceof IfConditional) {
-			System.out.println("92 Fount if conditional "+((IfConditional) element).getExpr()); // TODO lookup expr, wrap with __bool__
+			final IExpression expr = ((IfConditional) element).getExpr();
+			System.out.println("92 Fount if conditional "+ expr); // TODO lookup expr, wrap with __bool__
+			for (OS_Element item : ((IfConditional) element).getItems()) {
+				System.out.println("93 \t"+ expr);
+			}
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
