@@ -42,6 +42,8 @@ class Arguments {
     }
 }
 
+/*type*/ alias u64 = Integer64
+
 //
 //
 //
