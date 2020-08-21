@@ -100,7 +100,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		@Override
 		public void statementWrapper(IExpression aExpr) {
 			//if (parent_scope == null) throw new IllegalStateException("parent is null");
-			add(new StatementWrapper(aExpr, ctx, parent));
+			add(new StatementWrapper(aExpr, getContext(), getParent()));
 		}
 
 	    @Override
