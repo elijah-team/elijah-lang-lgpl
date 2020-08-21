@@ -326,8 +326,10 @@ public class DeduceTypes {
 			if (best != null){
 				final OS_Element element = best;
 				if (element instanceof VariableStatement) {
-					if (((VariableStatement) element).typeName() != null) {
-						t = new OS_Type(((VariableStatement) element).typeName());
+					final TypeName typeName = ((VariableStatement) element).typeName();
+					if (typeName != null) {
+						// TODO lookup typename.
+						t = new OS_Type(typeName);
 					} else
 						t = deduceTypeName((VariableStatement) element, ctx);
 				} else if (element instanceof FormalArgListItem) {
@@ -339,18 +341,7 @@ public class DeduceTypes {
 				} else if (element instanceof ClassStatement) {
 					t = new OS_Type((ClassStatement) element);
 				} else if (element instanceof FunctionDef) {
-					if (true) {
-						final NormalTypeName typeName = (NormalTypeName) ((FunctionDef) element).returnType();
-						if (typeName != null && typeName.getName() != null) {
-							LookupResultList lrl3 = ctx.lookup(typeName.getName());
-							final ClassStatement klass = (ClassStatement) lrl3.chooseBest(null);
-							if (klass != null)
-								t = new OS_Type(klass);
-						} else
-							t = null;
-					} else {
-						t = new OS_FuncType((FunctionDef) element);
-					}
+					t = deduceFunctionReturnType((FunctionDef) element, ctx);
 				}
 				if (t == null) {
 					System.err.println("189 "+element.getClass().getName());
@@ -367,6 +358,30 @@ public class DeduceTypes {
 			}
 		}
 		return true;
+	}
+
+	@org.jetbrains.annotations.Nullable
+	private OS_Type deduceFunctionReturnType(FunctionDef element, Context ctx) {
+		OS_Type t = null;
+		if (true) {
+			final NormalTypeName typeName = (NormalTypeName) element.returnType();
+			if (typeName != null && typeName.getName() != null) {
+				LookupResultList lrl3 = ctx.lookup(typeName.getName());
+				final ClassStatement klass = (ClassStatement) lrl3.chooseBest(null);
+				if (klass != null)
+					t = new OS_Type(klass);
+			} else {
+				t = null; // TODO build a control flow graph her and search for exit types
+				for (FunctionItem item : element.getItems()) {
+					if (item instanceof StatementWrapper) {
+						NotImplementedException.raise();
+					}
+				}
+			}
+		} else {
+			t = new OS_FuncType(element);
+		}
+		return t;
 	}
 
 	private LookupResultList lookup_dot_expression(Context ctx, DotExpression de) {
@@ -474,7 +489,7 @@ public class DeduceTypes {
 //			LookupResult n = lrl.results().get(0);
 		OS_Element best = lrl.chooseBest(null);
 		if (best != null) {
-			if (best/*n.getElement()*/ instanceof FunctionDef) {
+			if (best instanceof FunctionDef) {
 				final FunctionDef functionDef = (FunctionDef) best;//(FunctionDef) n.getElement();
 				final OS_FuncType deducedExpression = new OS_FuncType(functionDef);
 				//
@@ -488,9 +503,17 @@ public class DeduceTypes {
 					pce.setType(deducedExpression);
 				}
 				deduceProcedureCall_ARGS(pce, parent.getContext());
-			} else if (best/*n.getElement()*/ instanceof AliasStatement) {
-//				System.err.println("196 "+/*n.getElement()*/best);
-				OS_Type t = deduceExpression(((AliasStatement) best).getExpression(), best.getParent().getContext()); // since AliasStatement doesnt have getContext
+			} else if (best instanceof AliasStatement) {
+//				System.err.println("196 "+best);
+//				left.setResolvedElement(best); // TODO
+				OS_Element element = resolveAlias((AliasStatement) best);
+				OS_Type t;
+				if (element instanceof FunctionDef) {
+					t = findFunctionType((FunctionDef) element);
+				} else {
+					t = deduceExpression(((AliasStatement) best).getExpression(), best.getContext());
+				}
+//				lrl=best.getContext().lookup(((AliasStatement) best).getExpression());
 				LogEvent.logEvent(199,  ""+ t);
 			} else {
 				throw new NotImplementedException();
@@ -500,6 +523,65 @@ public class DeduceTypes {
 			System.err.println("191 too many results");
 		}
 //		NotImplementedException.raise();
+	}
+
+	private OS_Type findFunctionType(FunctionDef fd) {
+		NotImplementedException.raise();
+		final TypeName typeName1 = fd.returnType();
+		if (typeName1 != null) {
+			if (typeName1 instanceof NormalTypeName) {
+				NormalTypeName typeName = (NormalTypeName) typeName1;
+				if (typeName.hasResolvedElement()) {
+					if (typeName.getResolvedElement() instanceof ClassStatement) {
+						return new OS_Type((ClassStatement) typeName.getResolvedElement());
+					}
+					if (typeName.getResolvedElement() instanceof FunctionDef) {
+						return new OS_FuncType((FunctionDef) typeName.getResolvedElement());
+					}
+				} else {
+					String s = typeName.getName();
+					LookupResultList lrl = fd.getContext().lookup(s);
+					OS_Element best = lrl.chooseBest(null);
+					if (best != null) {
+						NotImplementedException.raise();
+						System.err.println("5000 "+best);
+						//return best; // TODO dont return here
+						OS_Element x;
+						if (best instanceof AliasStatement) {
+							x = resolveAlias((AliasStatement) best);
+						} else
+							x = best;
+
+						if (x instanceof ClassStatement) {
+							return new OS_Type((ClassStatement) x);
+						} else
+							throw new NotImplementedException();
+					} else
+						module.parent.eee.reportError("(5001) type not found " + s);
+				}
+			}
+		}
+		return null;
+	}
+
+	private OS_Element resolveAlias(AliasStatement best) {
+		LookupResultList lrl2;
+		if (best.getExpression() instanceof Qualident) {
+			IExpression de = qualidentToDotExpression2(((Qualident) ((AliasStatement) best).getExpression()).parts());
+			if (de instanceof DotExpression)
+				lrl2 = lookup_dot_expression(best.getContext(), (DotExpression) de);
+			else
+				lrl2 = best.getContext().lookup(((IdentExpression) de).getText());
+			return lrl2.chooseBest(null);
+		}
+		// TODO what about when DotExpression is not just simple x.y.z? then alias equivalent to val
+		if (best.getExpression() instanceof DotExpression) {
+			IExpression de =  best.getExpression();
+			lrl2 = lookup_dot_expression(best.getContext(), (DotExpression) de);
+			return lrl2.chooseBest(null);
+		}
+		lrl2 = best.getContext().lookup(((IdentExpression) best.getExpression()).getText());
+		return lrl2.chooseBest(null);
 	}
 
 	private void deduceProcedureCall_ARGS(ProcedureCallExpression pce, final Context ctx) {
@@ -570,35 +652,39 @@ public class DeduceTypes {
 	}
 
 	public OS_Type deduceIdentExpression(@NotNull IdentExpression n, Context context) {
-		LookupResultList lrl = context.lookup(n.getText());
-		if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
-			final OS_Element element = lrl.results().get(0).getElement();
-			if (element instanceof VariableStatement) {
-				final NormalTypeName tn = (NormalTypeName) ((VariableStatement) element).typeName();
-				if (!tn.isNull())
-					return new OS_Type(((VariableStatement) element).typeName());
-				else
-					return deduceTypeName((VariableStatement) element, context);
-			} else if (element instanceof FormalArgListItem) {
-				final NormalTypeName typeName = (NormalTypeName) ((FormalArgListItem) element).tn;
-				if (typeName != null) {
-					OS_Type t = deduceTypeName(typeName, context);
-					return t;
-				} else
-					return null;
-			} else if (element instanceof ClassStatement) {
-				return new OS_Type((ClassStatement) element);
-			} else if (element instanceof FunctionDef) {
-				return new OS_FuncType((FunctionDef) element);
+//		if (n.hasResolvedElement()) {
+//		} else
+		{
+			LookupResultList lrl = context.lookup(n.getText());
+			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
+				final OS_Element element = lrl.results().get(0).getElement();
+				if (element instanceof VariableStatement) {
+					final NormalTypeName tn = (NormalTypeName) ((VariableStatement) element).typeName();
+					if (!tn.isNull())
+						return new OS_Type(((VariableStatement) element).typeName());
+					else
+						return deduceTypeName((VariableStatement) element, context);
+				} else if (element instanceof FormalArgListItem) {
+					final NormalTypeName typeName = (NormalTypeName) ((FormalArgListItem) element).tn;
+					if (typeName != null) {
+						OS_Type t = deduceTypeName(typeName, context);
+						return t;
+					} else
+						return null;
+				} else if (element instanceof ClassStatement) {
+					return new OS_Type((ClassStatement) element);
+				} else if (element instanceof FunctionDef) {
+					return new OS_FuncType((FunctionDef) element);
+				}
+				System.err.println("89 " + element.getClass().getName());
+				module.parent.eee.reportError("type not specified: " + getElementName(element));
+				return null;
+			} else {
+				// TODO what to do here??
+				module.parent.eee.reportError("1002 IDENT not found: " + n.getText());
+				NotImplementedException.raise();
+				return null;
 			}
-			System.err.println("89 " + element.getClass().getName());
-			module.parent.eee.reportError("type not specified: " + getElementName(element));
-			return null;
-		} else {
-			// TODO what to do here??
-			module.parent.eee.reportError("1002 IDENT not found: " + n.getText());
-			NotImplementedException.raise();
-			return null;
 		}
 	}
 
@@ -641,7 +727,8 @@ public class DeduceTypes {
 			deduceProcedureCall((ProcedureCallExpression) n, context);
 			return n.getType();
 		} else if (n.getKind() == ExpressionKind.QIDENT) {
-			return deduceIdentExpression((IdentExpression)qualidentToDotExpression2(((Qualident)n).parts()), context);
+			final IExpression expression = qualidentToDotExpression2(((Qualident) n).parts());
+			return deduceExpression(expression, context);
 		}
 		
 		return null;
