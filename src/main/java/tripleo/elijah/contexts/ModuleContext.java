@@ -49,7 +49,8 @@ public class ModuleContext extends Context {
 //			System.err.println("101 Searching "+items.toString()+" for "+name);
 			//
 			if (!(item instanceof ClassStatement) &&
-				!(item instanceof NamespaceStatement) //&&
+				!(item instanceof NamespaceStatement) &&
+				!(item instanceof AliasStatement) //&&
 //				!(item instanceof VariableSequence)
 				// TODO what about imports
 			) continue;
