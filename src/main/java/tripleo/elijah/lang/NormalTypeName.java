@@ -35,16 +35,11 @@ public interface NormalTypeName extends TypeName, Resolvable {
 
 	/*@ requires modifiers = TypeModifiers.PROCEDURE
 			  || modifiers = TypeModifiers.FUNCTION; */
-	@Override
-	void type(TypeModifiers modifiers);
+//	@Override
+//	void type(TypeModifiers modifiers);
 
 	// TODO new
 	void addGenericPart(TypeName tn2);
-
-	// TODO new
-	void typeName(Qualident xy);
-
-	void setGeneric(boolean value);
 
     void setNullable();
 

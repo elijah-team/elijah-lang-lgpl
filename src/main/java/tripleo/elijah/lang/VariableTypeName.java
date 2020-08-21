@@ -69,26 +69,6 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
-	public void typeName(Qualident xy) {
-		throw new NotImplementedException();
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-	}
-
-	@Override
-	public void typeof(Qualident xyz) {
-		throw new NotImplementedException();
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-	}
-	
-	@Override
-	public void setGeneric(boolean value) {
-		throw new NotImplementedException();
-//		NotImplementedException.raise();
-	}
-
-	@Override
 	public void setContext(Context ctx) {
 		_ctx = ctx;
 	}

@@ -14,8 +14,6 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.NotImplementedException;
-
 public class RegularTypeName extends AbstractTypeName2 implements NormalTypeName {
 
 	private /*Normal*/TypeName genericPart = null;
@@ -54,10 +52,10 @@ public void set(TypeModifiers aModifiers) {
 	_ltm.add(aModifiers);
 }
 
-@Override
-public void setGeneric(boolean value) {
-	_ltm.add(TypeModifiers.GENERIC);
-}
+//@Override
+//public void setGeneric(boolean value) {
+//	_ltm.add(TypeModifiers.GENERIC);
+//}
 
 	@Override
 	public void setContext(Context ctx) {
@@ -126,30 +124,16 @@ public void setGeneric(boolean value) {
 		return sb.toString();
 	}
 
-@Override
-public void type(TypeModifiers atm) {
-tm=atm;		
-}
+	@Override
+	public void type(TypeModifiers atm) {
+	tm=atm;
+	}
 
 	@Override
 	public Type kindOfType() {
 		return Type.NORMAL;
 	}
 
-	@Override
-public void typeName(Qualident xy) {
-	// TODO Auto-generated method stub
-//	NotImplementedException.raise();
-	this.typeName = xy;
-}
-	
-
-@Override
-public void typeof(Qualident xyz) {
-	throw new NotImplementedException();
-// //	 TODO Auto-generated method stub
-	
-}
 }
 
 //
