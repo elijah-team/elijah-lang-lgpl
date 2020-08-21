@@ -13,24 +13,25 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
-public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_Element2 {
-    private final OS_Element parent;
+public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_Element2, Resolvable {
+	private final OS_Element parent;
 	private IExpression expr;
 	private String name;
+	private OS_Element _resolvedElement;
 
-    public AliasStatement(OS_Element aParent) {
-        this.parent = aParent;
-	    if (parent instanceof OS_Container) {
-		    ((OS_Container) parent).add(this);
-	    } else {
-		    throw new IllegalStateException("adding AliasStatement to "+aParent.getClass().getName());
-	    }
-    }
+	public AliasStatement(OS_Element aParent) {
+		this.parent = aParent;
+		if (parent instanceof OS_Container) {
+			((OS_Container) parent).add(this);
+		} else {
+			throw new IllegalStateException("adding AliasStatement to " + aParent.getClass().getName());
+		}
+	}
 
 	public void setExpression(IExpression expr) {
 		if (expr.getKind() != ExpressionKind.IDENT &&
-			expr.getKind() != ExpressionKind.QIDENT &&
-			expr.getKind() != ExpressionKind.DOT_EXP) // TODO need DOT_EXP to QIDENT
+				    expr.getKind() != ExpressionKind.QIDENT &&
+				    expr.getKind() != ExpressionKind.DOT_EXP) // TODO need DOT_EXP to QIDENT
 		{
 			throw new NotImplementedException();
 //			System.out.println(String.format("[AliasStatement#setExpression] %s %s", expr, expr.getKind()));
@@ -48,7 +49,7 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 
 	@Override // OS_Element
 	public void visitGen(ICodeGen visit) {
-    	throw new NotImplementedException();
+		throw new NotImplementedException();
 	}
 
 	@Override // OS_Element
@@ -64,6 +65,21 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 	@Override // OS_Element2
 	public String name() {
 		return this.name;
+	}
+
+	@Override
+	public boolean hasResolvedElement() {
+		return _resolvedElement != null;
+	}
+
+	@Override
+	public OS_Element getResolvedElement() {
+		return _resolvedElement;
+	}
+
+	@Override
+	public void setResolvedElement(OS_Element element) {
+		_resolvedElement = element;
 	}
 }
 
