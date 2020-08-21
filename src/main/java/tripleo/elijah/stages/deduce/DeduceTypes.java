@@ -564,23 +564,23 @@ public class DeduceTypes {
 		return null;
 	}
 
-	private OS_Element resolveAlias(AliasStatement best) {
+	private OS_Element resolveAlias(AliasStatement aliasStatement) {
 		LookupResultList lrl2;
-		if (best.getExpression() instanceof Qualident) {
-			IExpression de = qualidentToDotExpression2(((Qualident) ((AliasStatement) best).getExpression()).parts());
+		if (aliasStatement.getExpression() instanceof Qualident) {
+			IExpression de = qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()).parts());
 			if (de instanceof DotExpression)
-				lrl2 = lookup_dot_expression(best.getContext(), (DotExpression) de);
+				lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
 			else
-				lrl2 = best.getContext().lookup(((IdentExpression) de).getText());
+				lrl2 = aliasStatement.getContext().lookup(((IdentExpression) de).getText());
 			return lrl2.chooseBest(null);
 		}
 		// TODO what about when DotExpression is not just simple x.y.z? then alias equivalent to val
-		if (best.getExpression() instanceof DotExpression) {
-			IExpression de =  best.getExpression();
-			lrl2 = lookup_dot_expression(best.getContext(), (DotExpression) de);
+		if (aliasStatement.getExpression() instanceof DotExpression) {
+			IExpression de =  aliasStatement.getExpression();
+			lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
 			return lrl2.chooseBest(null);
 		}
-		lrl2 = best.getContext().lookup(((IdentExpression) best.getExpression()).getText());
+		lrl2 = aliasStatement.getContext().lookup(((IdentExpression) aliasStatement.getExpression()).getText());
 		return lrl2.chooseBest(null);
 	}
 
