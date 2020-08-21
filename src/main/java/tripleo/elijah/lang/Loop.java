@@ -152,7 +152,7 @@ private final Attached _a = new Attached();
 
 		@Override
 		public void statementWrapper(IExpression aExpr) {
-			add(new StatementWrapper(aExpr));
+			add(new StatementWrapper(aExpr, getContext(), getParent()));
 //			throw new NotImplementedException(); // TODO
 		}
 	}

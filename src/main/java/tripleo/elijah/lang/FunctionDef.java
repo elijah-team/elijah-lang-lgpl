@@ -90,7 +90,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 		@Override
 		public void statementWrapper(IExpression aExpr) {
-			add(new StatementWrapper(aExpr));
+			add(new StatementWrapper(aExpr, getContext(), getParent()));
 //			throw new NotImplementedException(); // TODO
 		}
 

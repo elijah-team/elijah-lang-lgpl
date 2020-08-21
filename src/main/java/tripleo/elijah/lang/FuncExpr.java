@@ -97,7 +97,7 @@ public class FuncExpr implements IExpression, OS_Element {
 
 		@Override
 		public void statementWrapper(IExpression aExpr) {
-			add(new StatementWrapper(aExpr));
+			add(new StatementWrapper(aExpr, getParent().getContext(), getParent()));
 //			throw new NotImplementedException(); // TODO
 		}
 

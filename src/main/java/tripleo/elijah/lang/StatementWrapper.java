@@ -1,32 +1,33 @@
 package tripleo.elijah.lang;
 
-public class StatementWrapper implements StatementItem, FunctionItem {
+import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
+
+public class StatementWrapper implements StatementItem, FunctionItem, OS_Element {
 
     private final IExpression expr;
+    private Context _ctx;
+    private OS_Element _parent;
 
-    public StatementWrapper(IExpression aexpr) {
+    public StatementWrapper(IExpression aexpr, Context ctx, OS_Element parent) {
         expr = aexpr;
+        _ctx = ctx;
+        _parent = parent;
     }
 
-//		@Override
-//		public Context getContext() {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-//
-//		@Override
-//		public OS_Element getParent() {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
+    @Override
+    public Context getContext() {
+        return _ctx;
+    }
+
+    @Override
+    public OS_Element getParent() {
+        return _parent;
+    }
 
     @Override
     public String toString() {
-//        StringBuilder sb = new StringBuilder();
-//        if (expr instanceof AbstractBinaryExpression) {
-            return expr.toString();
-//        } else throw new NotImplementedException();
-        //return sb.toString();
+        return expr.toString();
     }
 
     /**
@@ -36,10 +37,13 @@ public class StatementWrapper implements StatementItem, FunctionItem {
         return expr;
     }
 
-//		@Override
-//		public void visitGen(ICodeGen visit) {
-//			// TODO Auto-generated method stub
-//
-//		}
+    @Override
+    public void visitGen(ICodeGen visit) {
+        throw new NotImplementedException();
+    }
 
 }
+
+//
+//
+//

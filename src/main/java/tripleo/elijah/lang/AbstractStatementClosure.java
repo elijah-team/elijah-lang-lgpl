@@ -119,7 +119,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	@Override
 	public ProcedureCallExpression procedureCallExpression() {
 		pce=new ProcedureCallExpression();
-		add(new StatementWrapper(pce));
+		add(new StatementWrapper(pce, getParent().getContext(), getParent()));
 		return pce;
 	}
 

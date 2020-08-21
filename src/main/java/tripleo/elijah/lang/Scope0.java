@@ -58,7 +58,7 @@ public class Scope0 implements Scope {
 
 	@Override
 	public void statementWrapper(IExpression aExpr) {
-		add(new StatementWrapper(aExpr));
+		add(new StatementWrapper(aExpr, getParent().getContext(), getParent()));
 //			throw new NotImplementedException(); // TODO
 	}
 
