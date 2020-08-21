@@ -490,39 +490,49 @@ public class DeduceTypes {
 		OS_Element best = lrl.chooseBest(null);
 		if (best != null) {
 			if (best instanceof FunctionDef) {
-				final FunctionDef functionDef = (FunctionDef) best;//(FunctionDef) n.getElement();
-				final OS_FuncType deducedExpression = new OS_FuncType(functionDef);
-				//
-				pce.getLeft().setType(deducedExpression); // TODO how do we know before looking at args?
-				if (true) {
-					final NormalTypeName typeName = (NormalTypeName) functionDef.returnType();
-					LookupResultList lrl2 = typeName.getContext().lookup(typeName.getName());
-					OS_Element best2 = lrl2.results().get(0).getElement();//chooseBest(null); // TODO not using chooseBest here. see why
-					pce.setType(new OS_Type((ClassStatement) best2));
-				} else {
-					pce.setType(deducedExpression);
-				}
-				deduceProcedureCall_ARGS(pce, parent.getContext());
+				final FunctionDef functionDef = (FunctionDef) best;
+				deduceVariableStatement_procedureCallExpression_functionDef(parent, pce, functionDef);
 			} else if (best instanceof AliasStatement) {
-//				System.err.println("196 "+best);
-//				left.setResolvedElement(best); // TODO
-				OS_Element element = resolveAlias((AliasStatement) best);
-				OS_Type t;
-				if (element instanceof FunctionDef) {
-					t = findFunctionType((FunctionDef) element);
-				} else {
-					t = deduceExpression(((AliasStatement) best).getExpression(), best.getContext());
-				}
-//				lrl=best.getContext().lookup(((AliasStatement) best).getExpression());
-				LogEvent.logEvent(199,  ""+ t);
+				deduceVariableStatement_procedureCallExpression_aliasStatement((AliasStatement) best);
 			} else {
 				throw new NotImplementedException();
 			}
-
 		} else {
 			System.err.println("191 too many results");
 		}
 //		NotImplementedException.raise();
+	}
+
+	private void deduceVariableStatement_procedureCallExpression_aliasStatement(AliasStatement best) {
+//		System.err.println("196 "+best);
+//		left.setResolvedElement(best); // TODO
+		OS_Element element = resolveAlias(best);
+		OS_Type t;
+		if (element instanceof FunctionDef) {
+			t = findFunctionType((FunctionDef) element);
+		} else {
+			t = deduceExpression(best.getExpression(), best.getContext());
+		}
+		LogEvent.logEvent(199,  ""+ t);
+	}
+
+	private void deduceVariableStatement_procedureCallExpression_functionDef(
+			@NotNull OS_Element parent, ProcedureCallExpression pce, FunctionDef functionDef) {
+		final OS_FuncType deducedExpression = new OS_FuncType(functionDef);
+		//
+		pce.getLeft().setType(deducedExpression); // TODO how do we know before looking at args?
+		OS_Element best2;
+		final NormalTypeName typeName = (NormalTypeName) functionDef.returnType();
+		if (typeName.hasResolvedElement()) {
+			best2 = typeName.getResolvedElement();
+		} else {
+			LookupResultList lrl2 = typeName.getContext().lookup(typeName.getName());
+			//chooseBest(null); // TODO not using chooseBest here. see why
+			best2 = lrl2.results().get(0).getElement();
+			typeName.setResolvedElement(best2);
+		}
+		pce.setType(new OS_Type((ClassStatement) best2));
+		deduceProcedureCall_ARGS(pce, parent.getContext());
 	}
 
 	private OS_Type findFunctionType(FunctionDef fd) {
