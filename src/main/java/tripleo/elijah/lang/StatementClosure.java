@@ -22,7 +22,7 @@ public interface StatementClosure {
 
 	void yield(IExpression aExpr);
 
-	IfConditional ifConditional();
+	IfConditional ifConditional(OS_Element aParent, Context aCtx);
 
 	BlockStatement blockClosure();
 

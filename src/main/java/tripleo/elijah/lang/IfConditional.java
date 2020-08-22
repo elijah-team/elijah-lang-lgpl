@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.contexts.IfConditionalContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -22,19 +23,31 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 	private final List<IfConditional> parts = new ArrayList<IfConditional>();
 	private int order = 0;
 	private IExpression expr;
-	private List<OS_Element> _items = new ArrayList<OS_Element>();
+	private final List<OS_Element> _items = new ArrayList<OS_Element>();
+	final IfConditionalScope _scope = new IfConditionalScope();
+	private final OS_Element _parent;
+	private Context _ctx;
 //	private final IfExpression if_parent;
+
+	public IfConditional(OS_Element _parent) {
+		this._parent = _parent;
+		this._ctx = null;
+		this.sibling = null;
+	}
 
 	public IfConditional(IfConditional ifExpression) {
 		this.sibling = ifExpression;
 		this.order = ++sibling/*if_parent*/.order;
-		this.parent_scope = this.sibling.parent_scope;
+		//
+		this._ctx = ifExpression._ctx;
+		this._parent = ifExpression._parent;
+//		this.parent_scope = this.sibling.parent_scope;
 	}
 	
-	public IfConditional(Scope aClosure) {
-		this.parent_scope = aClosure;
-		this.sibling = null; // top
-	}
+//	public IfConditional(Scope aClosure) {
+//		this.parent_scope = aClosure;
+//		this.sibling = null; // top
+//	}
 
 	@Override
 	public void visitGen(ICodeGen visit) {
@@ -43,14 +56,12 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 
 	@Override
 	public OS_Element getParent() {
-		throw new NotImplementedException();
-//		return null;
+		return _parent;
 	}
 
 	@Override
 	public Context getContext() {
-		throw new NotImplementedException();
-//		return null;
+		return _ctx;
 	}
 
 	public IExpression getExpr() {
@@ -83,14 +94,18 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 	 *
 	 */
 	public Scope scope() {
-		return new IfConditionalScope();
+		return _scope;
 	}
 	
 	public List<OS_Element> getItems() {
 		return _items;
 	}
 
-    private class IfConditionalScope implements Scope {
+	public void setContext(IfConditionalContext ifConditionalContext) {
+		_ctx = ifConditionalContext;
+	}
+
+	private class IfConditionalScope implements Scope {
 		@Override
 		public void addDocString(Token s) {
 			addDocString(s);
