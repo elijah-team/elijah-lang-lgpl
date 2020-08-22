@@ -18,7 +18,7 @@ import java.util.List;
 
 public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 
-	private final Scope parent_scope;
+//	private final Scope parent_scope;
 	private final IfConditional sibling;
 	private final List<IfConditional> parts = new ArrayList<IfConditional>();
 	private int order = 0;
