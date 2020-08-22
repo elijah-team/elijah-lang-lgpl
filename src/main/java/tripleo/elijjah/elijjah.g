@@ -258,7 +258,7 @@ statement[StatementClosure cr, OS_Element aParent]
 	:
 	( expr=postfixExpression {cr.statementWrapper(expr);}
 	//procedureCallStatement[cr.procCallExpr()]
-	| ifConditional[cr.ifConditional()]
+	| ifConditional[cr.ifConditional(aParent, cur)]
 	| matchConditional[cr.matchConditional(), aParent]
 	| caseConditional[cr.caseConditional()]
 	| varStmt[cr, aParent]
@@ -602,22 +602,27 @@ primaryExpression returns [IExpression ee]
 	|   {ppc=new FuncExpr();} funcExpr[ppc] {ee=ppc;}
 	;
 funcExpr[FuncExpr pc] // remove scope to use in `typeName's
-		{Scope0 sc = new Scope0(pc);TypeName tn=null;}
+		{Scope0 sc = new Scope0(pc);TypeName tn=null;FuncExprContext ctx=null;}
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
-	  (opfal[pc.argList()]) scope[pc.scope()]
+	  (opfal[pc.argList()])
+                              {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
+	  scope[pc.scope()]
 	  ((TOK_ARROW|TOK_COLON) tn=typeName2 {pc.setReturnType(tn);} )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
-	  (opfal[pc.argList()]) scope[pc.scope()]
+	  (opfal[pc.argList()])
+				              {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
+	  scope[pc.scope()]
 	| 
-	  LCURLY ( BOR formalArgList[sc.fal()] BOR )? 
+      LCURLY                  {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
+	   ( BOR formalArgList[sc.fal()] BOR )?
 	  (statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);}
       | classStatement[new ClassStatement(sc.getParent())]
       )*
       RCURLY
 	
-	)
+	) {pc.postConstruct();cur=cur.getParent();}
 	;
 
 

@@ -2080,7 +2080,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			case LITERAL_if:
 			{
-				ifConditional(cr.ifConditional());
+				ifConditional(cr.ifConditional(aParent, cur));
 				break;
 			}
 			case LITERAL_match:
@@ -4162,7 +4162,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		FuncExpr pc
 	) throws RecognitionException, TokenStreamException {
 		
-		Scope0 sc = new Scope0(pc);TypeName tn=null;
+		Scope0 sc = new Scope0(pc);TypeName tn=null;FuncExprContext ctx=null;
 		
 		try {      // for error handling
 			{
@@ -4175,6 +4175,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				{
 				opfal(pc.argList());
+				}
+				if ( inputState.guessing==0 ) {
+					ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;
 				}
 				scope(pc.scope());
 				{
@@ -4317,12 +4320,18 @@ public ElijjahParser(ParserSharedInputState state) {
 				{
 				opfal(pc.argList());
 				}
+				if ( inputState.guessing==0 ) {
+					ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;
+				}
 				scope(pc.scope());
 				break;
 			}
 			case LCURLY:
 			{
 				match(LCURLY);
+				if ( inputState.guessing==0 ) {
+					ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;
+				}
 				{
 				switch ( LA(1)) {
 				case BOR:
@@ -4403,6 +4412,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				throw new NoViableAltException(LT(1), getFilename());
 			}
 			}
+			}
+			if ( inputState.guessing==0 ) {
+				pc.postConstruct();cur=cur.getParent();
 			}
 		}
 		catch (RecognitionException ex) {

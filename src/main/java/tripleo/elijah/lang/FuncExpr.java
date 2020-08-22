@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.contexts.FuncExprContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -29,6 +30,7 @@ public class FuncExpr implements IExpression, OS_Element {
 	private final FuncExprScope funcExprScope = new FuncExprScope(this);
 	private TypeName _returnType = null/*new RegularTypeName()*/;
 	private OS_Type _type;
+	private FuncExprContext _ctx;
 
 
 	public void type(TypeModifiers function) {
@@ -50,6 +52,22 @@ public class FuncExpr implements IExpression, OS_Element {
 
 	public void setReturnType(TypeName tn) {
 		_returnType = tn;
+	}
+
+	public List<FunctionItem> getItems() {
+		return items;
+	}
+
+	public void setContext(FuncExprContext ctx) {
+		_ctx = ctx;
+	}
+
+	public void postConstruct() {
+		// nop
+	}
+
+	public List<FormalArgListItem> getArgs() {
+		return argList.falis;
 	}
 
 	final static class FuncExprScope implements Scope {
