@@ -95,15 +95,17 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 		add(bs);
 		return bs;
 	}
-	public IExpression constructExpression() {
-		ctex=new ConstructExpression(this.parent_scope);
-		add(ctex);
-		return ctex;
-	}
+//	public IExpression constructExpression() {
+//		ctex=new ConstructExpression(this.parent_scope);
+//		add(ctex);
+//		return ctex;
+//	}
+
 	@Override
 	public void constructExpression(IExpression aExpr, FormalArgList aO) {
-		add((StatementItem) aExpr);
+		add(new ConstructExpression(aExpr, aO));
 	}
+
 	@Override
  	public IfConditional ifConditional(OS_Element aParent, Context cur) {
 		ifex=new IfConditional(aParent);

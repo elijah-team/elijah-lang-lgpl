@@ -15,8 +15,31 @@
 package tripleo.elijah.lang;
 
 
-public class ConstructExpression extends BasicBinaryExpression implements StatementItem {
+public class ConstructExpression extends AbstractExpression implements StatementItem {
+	private final IExpression _expr;
+	private final FormalArgList _args;
+	private OS_Type _type;
 
-	public ConstructExpression(Scope aScope) {
+//	public ConstructExpression(Scope aScope) {
+//	}
+
+	public ConstructExpression(IExpression aExpr, FormalArgList aO) {
+		_expr = aExpr;
+		_args = aO;
+	}
+
+	@Override
+	public boolean is_simple() {
+		return false;
+	}
+
+	@Override
+	public void setType(OS_Type deducedExpression) {
+		_type = deducedExpression;
+	}
+
+	@Override
+	public OS_Type getType() {
+		return _type;
 	}
 }
