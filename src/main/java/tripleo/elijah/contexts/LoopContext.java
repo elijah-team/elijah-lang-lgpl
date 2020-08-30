@@ -41,7 +41,7 @@ public class LoopContext extends Context {
 			if (name.equals(carrier.getIterName())) { // reversed to prevent NPEs
 				String iterName = carrier.getIterName();
 				IdentExpression ie = new IdentExpression(Helpers.makeToken(iterName));
-				Result.add(name, level, ie); // TODO getIterNameToken
+				Result.add(name, level, ie, this); // TODO getIterNameToken
 			}
 		}
 

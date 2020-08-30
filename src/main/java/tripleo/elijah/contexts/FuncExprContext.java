@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.contexts;
 
-import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.expand.*;
 
@@ -40,19 +39,19 @@ public class FuncExprContext extends Context {
 			) continue;
 			if (item instanceof OS_Element2) {
 				if (((OS_Element2) item).name().equals(name)) {
-					Result.add(name, level, (OS_Element) item);
+					Result.add(name, level, (OS_Element) item, this);
 				}
 			} else if (item instanceof VariableSequence) {
 //				System.out.println("[FunctionContext#lookup] VariableSequence "+item);
 				for (VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
-						Result.add(name, level, vs);
+						Result.add(name, level, vs, this);
 				}
 			}
 		}
 		for (FormalArgListItem arg : carrier.getArgs()) {
 			if (arg.name.getText().equals(name)) {
-				Result.add(name, level, arg);
+				Result.add(name, level, arg, this);
 			}
 		}
 		if (carrier.getParent() != null) {

@@ -32,7 +32,7 @@ public class VarContext extends Context {
 		for (VariableStatement vs : carrier.items()) {
 			if (vs.getName().equals(name)) {
 				IdentExpression ie = new IdentExpression(Helpers.makeToken(vs.getName()));
-				Result.add(name, level, ie); // TODO getNameToken
+				Result.add(name, level, ie, this); // TODO getNameToken
 			}
 		}
 

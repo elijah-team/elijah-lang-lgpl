@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package tripleo.elijah.lang;
 
@@ -9,6 +9,22 @@ package tripleo.elijah.lang;
  * Created 	Mar 26, 2020 at 9:16:07 PM
  */
 public class LookupResult {
+
+	private final Context context;
+	private String name;
+	private OS_Element element;
+	private int level;
+
+	public LookupResult(String name, OS_Element element, int level, Context aContext) {
+		this.name = name;
+		this.element = element;
+		this.level = level;
+		this.context = aContext;
+	}
+
+	public Context getContext() {
+		return context;
+	}
 
 	/**
 	 * @return the name
@@ -49,16 +65,6 @@ public class LookupResult {
 	 * @param level the level to set
 	 */
 	public void setLevel(int level) {
-		this.level = level;
-	}
-
-	private String name;
-	private OS_Element element;
-	private int level;
-
-	public LookupResult(String name, OS_Element element, int level) {
-		this.name = name;
-		this.element = element;
 		this.level = level;
 	}
 

@@ -44,14 +44,14 @@ public class ClassContext extends Context {
 			) continue;
 			if (item instanceof OS_Element2) {
 				if (((OS_Element2) item).name().equals(name)) {
-					Result.add(name, level, item);
+					Result.add(name, level, item, this);
 				}
 			}
 			if (item instanceof VariableSequence) {
 				System.out.println("102 "+item);
 				for (VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
-						Result.add(name, level, vs);
+						Result.add(name, level, vs, this);
 				}
 			}
 		}
@@ -70,7 +70,7 @@ public class ClassContext extends Context {
 				LookupResultList lrl2 = best.getContext().lookup(name);
 				OS_Element best2 = lrl2.chooseBest(null);
 				if (best2 != null)
-					Result.add(name, level, best2);
+					Result.add(name, level, best2, this);
 			}
 //			System.out.println("1003 "+name+" "+Result.results());
 		}

@@ -26,12 +26,12 @@ public class LookupResultList {
 
 	private final List<LookupResult> _results = new ArrayList<LookupResult>();
 
-	public void add(String name, int level, OS_Element element) {
+	public void add(String name, int level, OS_Element element, Context aContext) {
 		for (LookupResult result : _results) {
 			if (result.getElement() == element)
 				return; // TODO hack for bad algorithm
 		}
-		_results.add(new LookupResult(name, element, level));
+		_results.add(new LookupResult(name, element, level, aContext));
 	}
 
 	public OS_Element chooseBest(List<Predicate> l) {

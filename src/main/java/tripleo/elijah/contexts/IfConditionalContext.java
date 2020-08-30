@@ -36,14 +36,14 @@ public class IfConditionalContext extends Context {
 			) continue;
 			if (item instanceof OS_Element2) {
 				if (((OS_Element2) item).name().equals(name)) {
-					Result.add(name, level, item);
+					Result.add(name, level, item, this);
 				}
 			}
 			if (item instanceof VariableSequence) {
 				System.out.println("1102 "+item);
 				for (VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
-						Result.add(name, level, vs);
+						Result.add(name, level, vs, this);
 				}
 			}
 		}
