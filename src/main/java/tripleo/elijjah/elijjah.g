@@ -197,17 +197,17 @@ scope[Scope sc]
       RCURLY
     ;
 withStatement[OS_Element aParent]
-		{WithStatement ws=new WithStatement(aParent);}
+		{WithStatement ws=new WithStatement(aParent);WithContext ctx=null;}
 	: "with" varStmt_i[ws.nextVarStmt()] (COMMA varStmt_i[ws.nextVarStmt()])
-	                            {ctx=new WithContext(cur, loop);loop.setContext((WithContext)ctx);cur=ctx;}
-       scope
+	                            {ctx=new WithContext(ws, cur);ws.setContext(ctx);cur=ctx;}
+       scope[ws.scope()]
                                 {ws.postConstruct();cur=cur.getParent();}
 	;
 syntacticBlockScope[OS_Element aParent]
-		{SyntacticBlock sb=new SyntacticBlock(aParent);}
-	: 	                            {ctx=new SyntacticBlockContext(cur, sb);sb.setContext((SyntacticBlockContext)ctx);cur=ctx;}
+		{SyntacticBlock sb=new SyntacticBlock(aParent);SyntacticBlockContext ctx=null;}
+	: 	                            {ctx=new SyntacticBlockContext(sb, cur);sb.setContext(ctx);cur=ctx;}
 
-		scope
+		scope[sb.scope()]
 									{sb.postConstruct();cur=cur.getParent();}
 	;
 functionScope[Scope sc]

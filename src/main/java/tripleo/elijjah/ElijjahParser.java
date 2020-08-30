@@ -2181,7 +2181,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		OS_Element aParent
 	) throws RecognitionException, TokenStreamException {
 		
-		WithStatement ws=new WithStatement(aParent);
+		WithStatement ws=new WithStatement(aParent);WithContext ctx=null;
 		
 		try {      // for error handling
 			match(LITERAL_with);
@@ -2191,9 +2191,9 @@ public ElijjahParser(ParserSharedInputState state) {
 			varStmt_i(ws.nextVarStmt());
 			}
 			if ( inputState.guessing==0 ) {
-				ctx=new WithContext(cur, loop);loop.setContext((WithContext)ctx);cur=ctx;
+				ctx=new WithContext(ws, cur);ws.setContext(ctx);cur=ctx;
 			}
-			scope();
+			scope(ws.scope());
 			if ( inputState.guessing==0 ) {
 				ws.postConstruct();cur=cur.getParent();
 			}
@@ -2213,13 +2213,13 @@ public ElijjahParser(ParserSharedInputState state) {
 		OS_Element aParent
 	) throws RecognitionException, TokenStreamException {
 		
-		SyntacticBlock sb=new SyntacticBlock(aParent);
+		SyntacticBlock sb=new SyntacticBlock(aParent);SyntacticBlockContext ctx=null;
 		
 		try {      // for error handling
 			if ( inputState.guessing==0 ) {
-				ctx=new SyntacticBlockContext(cur, sb);sb.setContext((SyntacticBlockContext)ctx);cur=ctx;
+				ctx=new SyntacticBlockContext(sb, cur);sb.setContext(ctx);cur=ctx;
 			}
-			scope();
+			scope(sb.scope());
 			if ( inputState.guessing==0 ) {
 				sb.postConstruct();cur=cur.getParent();
 			}
