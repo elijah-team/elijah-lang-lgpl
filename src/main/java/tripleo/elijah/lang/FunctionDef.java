@@ -61,11 +61,11 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 		@Override
 		public void add(StatementItem aItem) {
-			if (aItem instanceof FunctionItem)
-				items.add((FunctionItem) aItem);
-			else
-				System.err.println(String.format("adding false StatementItem %s",
-					aItem.getClass().getName()));
+			if (!(aItem instanceof FunctionItem)) {
+				System.err.println(String.format("adding false FunctionItem %s", aItem.getClass().getName()));
+				return;
+			}
+			items.add((FunctionItem) aItem);
 		}
 		
 		@Override
