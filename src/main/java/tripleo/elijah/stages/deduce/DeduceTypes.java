@@ -100,6 +100,10 @@ public class DeduceTypes {
 	}
 	
 	public void addFunctionItem(FunctionItem element, FunctionDef parent) {
+		addItem((OS_Element) element, parent);
+	}
+
+	public void addItem(OS_Element element, OS_Element parent) {
 		if (element instanceof VariableSequence) {
 //			fd._a.setCode(nextFunctionCode());
 //			parent._a.getContext().add(element, null);
@@ -113,14 +117,20 @@ public class DeduceTypes {
 			ProcedureCallExpression pce = (ProcedureCallExpression) element;
 			System.out.println(String.format("91.5 %s(%s);", pce./*target*/getLeft(), pce.exprList()));
 		} else if (element instanceof Loop) {
-			addFunctionItem_Loop((Loop) element, parent);
+			addFunctionItem_Loop((Loop) element, (FunctionDef) parent);
 		} else if (element instanceof IfConditional) {
 			final IExpression expr = ((IfConditional) element).getExpr();
 			System.out.println("92 Fount if conditional "+ expr); // TODO lookup expr, wrap with __bool__
 			for (OS_Element item : ((IfConditional) element).getItems()) {
 				System.out.println("93 \t"+ item);
+				deduceExpression_(expr, ((IfConditional) element).getContext());
+/*
 				if (item instanceof IExpression)
-					deduceExpression((IExpression)item, ((IfConditional) element).getContext());
+					deduceExpression_((IExpression)item, ((IfConditional) element).getContext());
+				else if (item instanceof ProcedureCallExpression)
+					deduceProcedureCall((ProcedureCallExpression) item, ((IfConditional) element).getContext());
+*/
+				addItem(item, parent);
 			}
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
@@ -652,7 +662,7 @@ public class DeduceTypes {
 						if (left.getKind() == ExpressionKind.IDENT) {
 							deduceVariableStatement_procedureCallExpression(parent, iv, pce, (IdentExpression) left);
 							dtype = pce.getType();
-						}
+						} else throw new NotImplementedException();
 					}
 					if (dtype != null) {
 						iv.setType(dtype);
