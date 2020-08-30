@@ -186,16 +186,12 @@ public class FuncExpr implements IExpression, OS_Element {
 
 	@Override
 	public OS_Element getParent() {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
-//		return null;
+		return null; // getContext().getParent().carrier() except if it is an Expression; but Expression is not an Element
 	}
 
 	@Override
 	public Context getContext() {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
-//		return null;
+		return _ctx;
 	}
 }
 
