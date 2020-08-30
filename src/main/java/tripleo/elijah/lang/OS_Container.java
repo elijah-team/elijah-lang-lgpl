@@ -3,6 +3,8 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.Documentable;
+
 import java.util.List;
 
 /**
@@ -10,7 +12,7 @@ import java.util.List;
  *
  * Created 	Dec 9, 2019 at 3:32:14 PM
  */
-public interface OS_Container {
+public interface OS_Container extends Documentable {
 
 	List<OS_Element2> items();
 
