@@ -118,7 +118,9 @@ public class DeduceTypes {
 			final IExpression expr = ((IfConditional) element).getExpr();
 			System.out.println("92 Fount if conditional "+ expr); // TODO lookup expr, wrap with __bool__
 			for (OS_Element item : ((IfConditional) element).getItems()) {
-				System.out.println("93 \t"+ expr);
+				System.out.println("93 \t"+ item);
+				if (item instanceof IExpression)
+					deduceExpression((IExpression)item, ((IfConditional) element).getContext());
 			}
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
