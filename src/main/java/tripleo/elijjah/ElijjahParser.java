@@ -2412,12 +2412,10 @@ public ElijjahParser(ParserSharedInputState state) {
 		VariableStatement vs
 	) throws RecognitionException, TokenStreamException {
 		
-		Token  i = null;
-		TypeName tn=null;
+		TypeName tn=null;IdentExpression i=null;
 		
 		try {      // for error handling
-			i = LT(1);
-			match(IDENT);
+			i=ident();
 			if ( inputState.guessing==0 ) {
 				vs.setName(i);
 			}
@@ -5360,7 +5358,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	public static final BitSet _tokenSet_9 = new BitSet(_tokenSet_9_data_);
 	private static final long _tokenSet_10_data_[] = { 201457920L, 0L };
 	public static final BitSet _tokenSet_10 = new BitSet(_tokenSet_10_data_);
-	private static final long _tokenSet_11_data_[] = { -17592189452814L, 136902082559L, 0L, 0L };
+	private static final long _tokenSet_11_data_[] = { -17592189452302L, 136902082559L, 0L, 0L };
 	public static final BitSet _tokenSet_11 = new BitSet(_tokenSet_11_data_);
 	private static final long _tokenSet_12_data_[] = { 25165824L, 0L };
 	public static final BitSet _tokenSet_12 = new BitSet(_tokenSet_12_data_);

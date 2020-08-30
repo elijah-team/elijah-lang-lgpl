@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -18,7 +17,7 @@ import tripleo.elijah.util.NotImplementedException;
 public class VariableStatement implements OS_Element {
 
 	private final VariableSequence _parent;
-	public Token name;
+	public IdentExpression name;
 	
 	private IExpression initialValue = IExpression.UNASSIGNED;
 	private TypeModifiers typeModifiers;
@@ -31,8 +30,12 @@ public class VariableStatement implements OS_Element {
 	public String getName() {
 		return name.getText();
 	}
-	
-	public void setName(Token s) {
+
+	public IdentExpression getNameToken() {
+		return name;
+	}
+
+	public void setName(IdentExpression s) {
 		name = s;
 	}
 

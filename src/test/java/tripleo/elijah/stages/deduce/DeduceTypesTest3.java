@@ -45,7 +45,7 @@ public class DeduceTypesTest3 {
 		fd.setContext(fctx);
 		VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
 		final VariableStatement vs = vss.next();
-		vs.setName(Helpers.makeToken("x"));
+		vs.setName(new IdentExpression(Helpers.makeToken("x")));
 		final Qualident qu = new Qualident();
 		qu.append(Helpers.makeToken("Foo"));
 		((NormalTypeName)vs.typeName()).setName(qu);

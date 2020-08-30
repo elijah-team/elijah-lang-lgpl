@@ -236,7 +236,6 @@ varStmt[StatementClosure cr, OS_Element aParent]
     : ("var" {vsq=cr.varSeq(cur);}
     | ("const"|"val") {vsq=cr.varSeq(cur);vsq.defaultModifiers(TypeModifiers.CONST);})
     ( varStmt_i[vsq.next()] (COMMA varStmt_i[vsq.next()])*
-  //    LPAREN identList[cr.identList()] RPAREN BECOMES eee=expression // TODO what is this?
     )
     ;
 typeAlias[TypeAliasExpression cr]
@@ -696,8 +695,8 @@ procCallEx[ProcedureCallExpression pce]
 	: LPAREN (expressionList[pce.exprList()])? RPAREN
 	;
 varStmt_i[VariableStatement vs]
-		{TypeName tn=null;}
-	: i:IDENT                   {vs.setName(i);}
+		{TypeName tn=null;IdentExpression i=null;}
+	: i=ident                   {vs.setName(i);}
 	( TOK_COLON tn=typeName2    {vs.setTypeName(tn);})?
 	( BECOMES expr=expression   {vs.initial(expr);})?
 	;
