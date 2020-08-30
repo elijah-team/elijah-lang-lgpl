@@ -191,9 +191,25 @@ scope[Scope sc]
       | "continue"
       | "break" // opt label?
       | "return" ((expression) => (expr=expression)|)
+      | withStatement[sc.getParent()]
+      | syntacticBlockScope[sc.getParent()]
       ) opt_semi )*
       RCURLY
     ;
+withStatement[OS_Element aParent]
+		{WithStatement ws=new WithStatement(aParent);}
+	: "with" varStmt_i[ws.nextVarStmt()] (COMMA varStmt_i[ws.nextVarStmt()])
+	                            {ctx=new WithContext(cur, loop);loop.setContext((WithContext)ctx);cur=ctx;}
+       scope
+                                {ws.postConstruct();cur=cur.getParent();}
+	;
+syntacticBlockScope[OS_Element aParent]
+		{SyntacticBlock sb=new SyntacticBlock(aParent);}
+	: 	                            {ctx=new SyntacticBlockContext(cur, sb);sb.setContext((SyntacticBlockContext)ctx);cur=ctx;}
+
+		scope
+									{sb.postConstruct();cur=cur.getParent();}
+	;
 functionScope[Scope sc]
       //{IExpression expr;}
     : LCURLY docstrings[sc]
