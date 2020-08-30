@@ -14,6 +14,7 @@
  */
 package tripleo.elijah.lang;
 
+import antlr.Token;
 import org.eclipse.jdt.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.comp.Compilation;
@@ -198,6 +199,11 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	public void setContext(ModuleContext mctx) {
 		_a.setContext(mctx);
+	}
+
+	@Override
+	public void addDocString(Token s1) {
+		throw new NotImplementedException();
 	}
 }
 
