@@ -10,7 +10,6 @@ package tripleo.elijah.contexts;
 
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.util.LogEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +35,9 @@ public class ImportContext extends Context {
 			if (module().isPackage(importStatementItem.toString())) {
 				List<OS_Element> l = new ArrayList<>();
 				OS_Package aPackage = module().getPackage(importStatementItem);
-				LogEvent.logEvent(4001 , ""+aPackage.getElements());
+//				LogEvent.logEvent(4003 , ""+aPackage.getElements());
 				for (OS_Element element : aPackage.getElements()) {
-//					System.err.println("4000 "+element);
+//					System.err.println("4002 "+element);
 					if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
 //		                LogEvent.logEvent(4103, "");
 						final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();

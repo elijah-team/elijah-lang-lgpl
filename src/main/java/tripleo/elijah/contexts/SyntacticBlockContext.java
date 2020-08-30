@@ -30,9 +30,9 @@ public class SyntacticBlockContext extends Context {
 
 		for (FunctionItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
-					    !(item instanceof NamespaceStatement) &&
-					    !(item instanceof FunctionDef) &&
-					    !(item instanceof VariableSequence)
+			    !(item instanceof NamespaceStatement) &&
+			    !(item instanceof FunctionDef) &&
+			    !(item instanceof VariableSequence)
 			) continue;
 			if (item instanceof OS_Element2) {
 				if (((OS_Element2) item).name().equals(name)) {

@@ -560,7 +560,7 @@ public class DeduceTypes {
 					OS_Element best = lrl.chooseBest(null);
 					if (best != null) {
 						NotImplementedException.raise();
-						System.err.println("5000 "+best);
+//						System.err.println("5000 "+best);
 						//return best; // TODO dont return here
 						OS_Element x;
 						if (best instanceof AliasStatement) {
