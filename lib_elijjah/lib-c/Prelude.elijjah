@@ -3,6 +3,8 @@ package Prelude;
 class interface String {
     to_int() -> Integer {
     }
+    isInt() -> Boolean {
+    }
 }
 class interface Integer {
 }
