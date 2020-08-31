@@ -676,7 +676,19 @@ public class DeduceTypes {
 						if (left.getKind() == ExpressionKind.IDENT) {
 							deduceVariableStatement_procedureCallExpression(iv, pce, (IdentExpression) left, parent.getContext());
 							dtype = pce.getType();
-						} else throw new NotImplementedException();
+						} else if (left.getKind() == ExpressionKind.DOT_EXP) {
+							LookupResultList lrl = lookup_dot_expression(parent.getContext(), (DotExpression) left);
+							for (LookupResult result : lrl.results()) {
+								System.err.println("999 "+result);
+							}
+							OS_Element best = lrl.chooseBest(null);
+							if (best != null) {
+								System.err.println("997 "+best);
+							} else {
+								System.err.println("998 no results for "+left);
+							}
+						} else
+							throw new NotImplementedException();
 					}
 					if (dtype != null) {
 						iv.setType(dtype);
