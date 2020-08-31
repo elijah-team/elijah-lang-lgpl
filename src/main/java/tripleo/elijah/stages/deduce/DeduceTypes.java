@@ -159,8 +159,21 @@ public class DeduceTypes {
 
 //			parent._a.getContext().nameTable().add((OS_Element) element, ((ClassStatement) element).getName(), new OS_Type((ClassStatement) element));
 		} else if (element instanceof CaseConditional) {
-			CaseConditional cc = (CaseConditional) element;
 			NotImplementedException.raise();
+			CaseConditional cc = (CaseConditional) element;
+			HashMap<IExpression, CaseConditional.CaseScope> scopes = cc.getScopes();
+			Set<IExpression> ks = scopes.keySet();
+			for (IExpression k : ks) {
+				OS_Type t = deduceExpression(k, cc.getContext());
+				if (t == null) {
+					System.err.println("996 nil type for "+k);
+//					if (k instanceof IdentExpression) {// TODO check if already set
+//						((SingleIdentContext) cc.getContext()).setString((IdentExpression) k);
+//						t = deduceExpression(cc.getExpr(), cc.getContext()); // TODO CaseTypeExpr
+//					}
+				}
+				k.setType(t);
+			}
 		} else {
 			System.out.println("91 "+element);
 			throw new NotImplementedException();

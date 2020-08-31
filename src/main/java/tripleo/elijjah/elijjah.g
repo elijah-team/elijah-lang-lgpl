@@ -274,8 +274,8 @@ statement[StatementClosure cr, OS_Element aParent]
 	( expr=postfixExpression {cr.statementWrapper(expr);}
 	//procedureCallStatement[cr.procCallExpr()]
 	| ifConditional[cr.ifConditional(aParent, cur)]
-	| matchConditional[cr.matchConditional(), aParent]
-	| caseConditional[cr.caseConditional()]
+	| matchConditional[cr.matchConditional(cur), aParent]
+	| caseConditional[cr.caseConditional(cur)]
 	| varStmt[cr, aParent]
 	| whileLoop[cr]
 	| frobeIteration[cr]
@@ -658,24 +658,26 @@ ifConditional[IfConditional ifex]
 matchConditional[MatchConditional mc, OS_Element aParent]
 		{MatchConditional.MatchConditionalPart1 mcp1=null;
 		 MatchConditional.MatchConditionalPart2 mcp2=null;
-		 TypeName tn=null;}
-    : "match" expr=expression {mc.setParent(aParent);mc.expr(expr);}
-      LCURLY // TODO MatchContext
+		 MatchConditional.MatchConditionalPart3 mcp3=null;
+		 TypeName tn=null;
+		 IdentExpression i1=null;}
+    : "match" expr=expression {/*mc.setParent(aParent);*/mc.expr(expr);}
+      LCURLY
       ( { mcp1 = mc.typeMatch();} 
-      		i1:IDENT {mcp1.ident(i1);} TOK_COLON tn=typeName2 {mcp1.setTypeName(tn);} scope[mcp1.scope()]
+      		i1=ident {mcp1.ident(i1);} TOK_COLON tn=typeName2 {mcp1.setTypeName(tn);} scope[mcp1.scope()]
       | { mcp2 = mc.normal();}
       		expr=expression {mcp2.expr(expr);} scope[mcp2.scope()]
+      | { mcp3 = mc.valNormal();}
+      		"val" i1=ident {mcp3.expr(i1);} scope[mcp3.scope()]
       )+
-      RCURLY
+      RCURLY {mc.postConstruct();}
     ;
 caseConditional[CaseConditional mc]
     : "case" expr=expression {mc.expr(expr);}
-/*      LCURLY
-      ( i1:IDENT TOK_COLON typeName scope
-      | expression scope
-      )
-      RCURLY
-*/    ;
+      LCURLY
+      ( expr=expression scope[mc.scope(expr)] )*
+      RCURLY {mc.postConstruct();}
+    ;
 
 whileLoop[StatementClosure cr]
 	 {Loop loop=cr.loop();LoopContext ctx;}

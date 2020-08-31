@@ -26,9 +26,9 @@ public interface StatementClosure {
 
 	BlockStatement blockClosure();
 
-	CaseConditional caseConditional();
+	CaseConditional caseConditional(Context parentContext);
 
-	MatchConditional matchConditional();
+	MatchConditional matchConditional(Context parentContext);
 
     void statementWrapper(IExpression expr);
 

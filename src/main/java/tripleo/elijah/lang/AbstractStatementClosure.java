@@ -166,15 +166,15 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	final Scope parent_scope;
 
 	@Override
-	public CaseConditional caseConditional() {
-		final CaseConditional caseConditional = new CaseConditional(getParent());
+	public CaseConditional caseConditional(Context parentContext) {
+		final CaseConditional caseConditional = new CaseConditional(getParent(), parentContext);
 		add(caseConditional);
 		return caseConditional;
 	}
 
 	@Override
-	public MatchConditional matchConditional() {
-		final MatchConditional matchConditional = new MatchConditional(getParent());
+	public MatchConditional matchConditional(Context parentContext) {
+		final MatchConditional matchConditional = new MatchConditional(getParent(), parentContext);
 		add(matchConditional);
 		return matchConditional;
 	}

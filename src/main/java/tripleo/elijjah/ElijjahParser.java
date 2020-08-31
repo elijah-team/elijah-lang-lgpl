@@ -2093,12 +2093,12 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			case LITERAL_match:
 			{
-				matchConditional(cr.matchConditional(), aParent);
+				matchConditional(cr.matchConditional(cur), aParent);
 				break;
 			}
 			case LITERAL_case:
 			{
-				caseConditional(cr.caseConditional());
+				caseConditional(cr.caseConditional(cur));
 				break;
 			}
 			case LITERAL_const:
@@ -2656,14 +2656,14 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				formalArgListItem_priv(fal.next());
 				{
-				_loop245:
+				_loop247:
 				do {
 					if ((LA(1)==COMMA)) {
 						match(COMMA);
 						formalArgListItem_priv(fal.next());
 					}
 					else {
-						break _loop245;
+						break _loop247;
 					}
 					
 				} while (true);
@@ -2922,16 +2922,17 @@ public ElijjahParser(ParserSharedInputState state) {
 		MatchConditional mc, OS_Element aParent
 	) throws RecognitionException, TokenStreamException {
 		
-		Token  i1 = null;
 		MatchConditional.MatchConditionalPart1 mcp1=null;
 				 MatchConditional.MatchConditionalPart2 mcp2=null;
+				 MatchConditional.MatchConditionalPart3 mcp3=null;
 				 TypeName tn=null;
+				 IdentExpression i1=null;
 		
 		try {      // for error handling
 			match(LITERAL_match);
 			expr=expression();
 			if ( inputState.guessing==0 ) {
-				mc.setParent(aParent);mc.expr(expr);
+				/*mc.setParent(aParent);*/mc.expr(expr);
 			}
 			match(LCURLY);
 			{
@@ -2942,8 +2943,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					if ( inputState.guessing==0 ) {
 						mcp1 = mc.typeMatch();
 					}
-					i1 = LT(1);
-					match(IDENT);
+					i1=ident();
 					if ( inputState.guessing==0 ) {
 						mcp1.ident(i1);
 					}
@@ -2964,6 +2964,17 @@ public ElijjahParser(ParserSharedInputState state) {
 					}
 					scope(mcp2.scope());
 				}
+				else if ((LA(1)==LITERAL_val)) {
+					if ( inputState.guessing==0 ) {
+						mcp3 = mc.valNormal();
+					}
+					match(LITERAL_val);
+					i1=ident();
+					if ( inputState.guessing==0 ) {
+						mcp3.expr(i1);
+					}
+					scope(mcp3.scope());
+				}
 				else {
 					if ( _cnt200>=1 ) { break _loop200; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
@@ -2972,6 +2983,9 @@ public ElijjahParser(ParserSharedInputState state) {
 			} while (true);
 			}
 			match(RCURLY);
+			if ( inputState.guessing==0 ) {
+				mc.postConstruct();
+			}
 		}
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
@@ -2994,6 +3008,24 @@ public ElijjahParser(ParserSharedInputState state) {
 			expr=expression();
 			if ( inputState.guessing==0 ) {
 				mc.expr(expr);
+			}
+			match(LCURLY);
+			{
+			_loop203:
+			do {
+				if ((_tokenSet_18.member(LA(1)))) {
+					expr=expression();
+					scope(mc.scope(expr));
+				}
+				else {
+					break _loop203;
+				}
+				
+			} while (true);
+			}
+			match(RCURLY);
+			if ( inputState.guessing==0 ) {
+				mc.postConstruct();
 			}
 		}
 		catch (RecognitionException ex) {
@@ -5163,14 +5195,14 @@ public ElijjahParser(ParserSharedInputState state) {
 				cr.add(tn);
 			}
 			{
-			_loop240:
+			_loop242:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
 					tn=typeName2();
 				}
 				else {
-					break _loop240;
+					break _loop242;
 				}
 				
 			} while (true);

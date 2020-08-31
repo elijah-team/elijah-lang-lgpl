@@ -12,6 +12,8 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.Documentable;
+import tripleo.elijah.contexts.SingleIdentContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -25,11 +27,13 @@ import java.util.List;
  */
 public class MatchConditional implements OS_Element, StatementItem, FunctionItem {
 
+	private final SingleIdentContext _ctx;
 	private IExpression expr;
 	private OS_Element parent;
 
-	public MatchConditional(OS_Element parent) {
+	public MatchConditional(OS_Element parent, Context parentContext) {
 		this.parent = parent;
+		this._ctx = new SingleIdentContext(parentContext, this);
 	}
 
 
@@ -63,10 +67,13 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		this.parent = aParent;
 	}
 
-	interface MC1 {
+	public void postConstruct() {
+	}
+
+	interface MC1 extends Documentable {
 		void add(FunctionItem aItem);
 
-		void addDocString(String text);
+//		void addDocString(String text);
 	}
 
 	private final class MatchConditionalScope implements Scope {
@@ -89,7 +96,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 		@Override
 		public void addDocString(Token aS) {
-			element.addDocString(aS.getText());
+			element.addDocString(aS);
 		}
 
 		@Override
@@ -132,15 +139,15 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 	}
 
-	public class MatchConditionalPart2 implements MC1 {
+	public class MatchConditionalPart3 implements MC1 {
 
-		private final List<String> docstrings = new ArrayList<String>();
+		private List<Token> docstrings = null;
 		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 
-		private IExpression expr2;
+		private IdentExpression matching_expression;
 
-		public void expr(IExpression expr) {
-			this.expr2 = expr;
+		public void expr(IdentExpression expr) {
+			this.matching_expression = expr;
 		}
 
 		public Scope scope() {
@@ -153,26 +160,56 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public void addDocString(String text) {
+		public void addDocString(Token text) {
+			if (docstrings == null)
+				docstrings = new ArrayList<Token>();
+			docstrings.add(text);
+		}
+	}
+
+	public class MatchConditionalPart2 implements MC1 {
+
+		private List<Token> docstrings = new ArrayList<Token>();
+		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+
+		private IExpression matching_expression;
+
+		public void expr(IExpression expr) {
+			this.matching_expression = expr;
+		}
+
+		public Scope scope() {
+			return new MatchConditionalScope(this);
+		}
+
+		@Override
+		public void add(FunctionItem aItem) {
+			items.add(aItem);
+		}
+
+		@Override
+		public void addDocString(Token text) {
+			if (docstrings == null)
+				docstrings = new ArrayList<Token>();
 			docstrings.add(text);
 		}
 	}
 
 	public class MatchConditionalPart1 implements MC1 {
 
-		private final List<String> docstrings = new ArrayList<String>();
+		private List<Token> docstrings = new ArrayList<Token>();
 		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 
-		TypeName tn = new RegularTypeName();
-		private Token ident;
+		TypeName tn /*= new RegularTypeName()*/;
+		private IdentExpression ident;
 
-		public void ident(Token i1) {
+		public void ident(IdentExpression i1) {
 			this.ident = i1;
 		}
 
-		public TypeName typeName() {
-			return tn;
-		}
+//		public TypeName typeName() {
+//			return tn;
+//		}
 
 		public Scope scope() {
 			return new MatchConditionalScope(this);
@@ -184,7 +221,9 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public void addDocString(String text) {
+		public void addDocString(Token text) {
+			if (docstrings == null)
+				docstrings = new ArrayList<Token>();
 			docstrings.add(text);
 		}
 
@@ -203,6 +242,10 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 	public MatchConditionalPart2 normal() {
 		return new MatchConditionalPart2();
+	}
+
+	public MatchConditionalPart3 valNormal() {
+		return new MatchConditionalPart3();
 	}
 
 }
