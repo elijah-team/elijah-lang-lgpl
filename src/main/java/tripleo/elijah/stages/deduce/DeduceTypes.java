@@ -353,34 +353,33 @@ public class DeduceTypes {
 			pl.add(new DeduceUtils.MatchFunctionArgs(pce));
 			final OS_Element best = lrl.chooseBest(pl);
 			if (best != null){
-				final OS_Element element = best;
-				if (element instanceof VariableStatement) {
-					final TypeName typeName = ((VariableStatement) element).typeName();
+				if (best instanceof VariableStatement) {
+					final TypeName typeName = ((VariableStatement) best).typeName();
 					if (typeName != null) {
 						// TODO lookup typename.
 						t = new OS_Type(typeName);
 					} else
-						t = deduceTypeName((VariableStatement) element, ctx);
-				} else if (element instanceof FormalArgListItem) {
-					final NormalTypeName typeName = (NormalTypeName) ((FormalArgListItem) element).tn;
+						t = deduceTypeName((VariableStatement) best, ctx);
+				} else if (best instanceof FormalArgListItem) {
+					final NormalTypeName typeName = (NormalTypeName) ((FormalArgListItem) best).tn;
 					if (typeName != null) {
 						t = new OS_Type(typeName);
 					} else
 						throw new NotImplementedException();
-				} else if (element instanceof ClassStatement) {
-					t = new OS_Type((ClassStatement) element);
-				} else if (element instanceof FunctionDef) {
-					t = deduceFunctionReturnType((FunctionDef) element, ctx);
+				} else if (best instanceof ClassStatement) {
+					t = new OS_Type((ClassStatement) best);
+				} else if (best instanceof FunctionDef) {
+					t = deduceFunctionReturnType((FunctionDef) best, ctx);
 				}
 				if (t == null) {
-					System.err.println("189 "+element.getClass().getName());
-					module.parent.eee.reportError("type not specified: "+ getElementName(element));
+					System.err.println("189 "+ best.getClass().getName());
+					module.parent.eee.reportError("type not specified: "+ getElementName(best));
 					NotImplementedException.raise();
 					return false;
 				}
 				pce.setType(t);
 			} else {
-				if (!(de instanceof IdentExpression)) System.err.println("100 "+de.getClass().getName());
+				if (!(de instanceof IdentExpression)) System.err.println("1002 "+de.getClass().getName()+" "+de);
 				module.parent.eee.reportError(String.format("1001 IDENT not found: %s", de));
 				NotImplementedException.raise();
 				return false;
