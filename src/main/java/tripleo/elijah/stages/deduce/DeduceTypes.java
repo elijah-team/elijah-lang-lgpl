@@ -499,11 +499,10 @@ public class DeduceTypes {
 		return r;
 	}
 
-	private void /*addFunctionItem_*/deduceVariableStatement_procedureCallExpression(
-			@NotNull final /*FunctionDef*/OS_Element parent, IExpression iv,
-			ProcedureCallExpression pce, @NotNull IdentExpression left) {
+	private void deduceVariableStatement_procedureCallExpression(
+			IExpression iv,	ProcedureCallExpression pce, @NotNull IdentExpression left, Context context) {
 		final String text = left.getText();
-		final LookupResultList lrl = parent.getContext().lookup(text);
+		final LookupResultList lrl = context.lookup(text);
 		System.out.println("198 "+/*n*/iv);
 		if (lrl.results().size() == 0 ) {
 			System.err.println("196 no results for "+text);
@@ -522,7 +521,7 @@ public class DeduceTypes {
 		if (best != null) {
 			if (best instanceof FunctionDef) {
 				final FunctionDef functionDef = (FunctionDef) best;
-				deduceVariableStatement_procedureCallExpression_functionDef(parent, pce, functionDef);
+				deduceVariableStatement_procedureCallExpression_functionDef(pce, functionDef, context);
 			} else if (best instanceof AliasStatement) {
 				deduceVariableStatement_procedureCallExpression_aliasStatement((AliasStatement) best);
 			} else {
@@ -548,7 +547,7 @@ public class DeduceTypes {
 	}
 
 	private void deduceVariableStatement_procedureCallExpression_functionDef(
-			@NotNull OS_Element parent, ProcedureCallExpression pce, FunctionDef functionDef) {
+			ProcedureCallExpression pce, FunctionDef functionDef, Context context) {
 		final OS_FuncType deducedExpression = new OS_FuncType(functionDef);
 		//
 		pce.getLeft().setType(deducedExpression); // TODO how do we know before looking at args?
@@ -563,7 +562,7 @@ public class DeduceTypes {
 			typeName.setResolvedElement(best2);
 		}
 		pce.setType(new OS_Type((ClassStatement) best2));
-		deduceProcedureCall_ARGS(pce, parent.getContext());
+		deduceProcedureCall_ARGS(pce, context);
 	}
 
 	private OS_Type findFunctionType(FunctionDef fd) {
@@ -675,7 +674,7 @@ public class DeduceTypes {
 						final ProcedureCallExpression pce = (ProcedureCallExpression) iv;
 						final IExpression left = pce.getLeft();
 						if (left.getKind() == ExpressionKind.IDENT) {
-							deduceVariableStatement_procedureCallExpression(parent, iv, pce, (IdentExpression) left);
+							deduceVariableStatement_procedureCallExpression(iv, pce, (IdentExpression) left, parent.getContext());
 							dtype = pce.getType();
 						} else throw new NotImplementedException();
 					}
