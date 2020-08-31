@@ -65,7 +65,7 @@ public class VariableStatement implements OS_Element {
 		return initialValue;
 	}
 	
-	public String initialValueType() {
+/*	public String initialValueType() {
 		if (initialValue instanceof NumericExpression)
 			return "int";
 		else if (initialValue instanceof ProcedureCallExpression)
@@ -92,7 +92,7 @@ public class VariableStatement implements OS_Element {
 		
 		else
 			return "Z0*";
-	}
+	}*/
 
 	@Override
 	public void visitGen(ICodeGen visit) {
