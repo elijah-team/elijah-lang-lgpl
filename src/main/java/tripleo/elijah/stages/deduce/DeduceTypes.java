@@ -394,6 +394,8 @@ public class DeduceTypes {
 		OS_Type t = null;
 		if (true) {
 			final NormalTypeName typeName = (NormalTypeName) element.returnType();
+			if (typeName != null && typeName.hasResolvedElement())
+				return new OS_Type((ClassStatement) typeName.getResolvedElement());
 			if (typeName != null && typeName.getName() != null) {
 				LookupResultList lrl3 = ctx.lookup(typeName.getName());
 				final ClassStatement klass = (ClassStatement) lrl3.chooseBest(null);
