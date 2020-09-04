@@ -20,8 +20,10 @@ See [Language Overview](elijjah.md) for more details on the language.
 
 All of this is a work in progress and your support would be appreciated.
 
-tripleo+elijah (at) gmail.com
+oluoluolu+elijah (at) gmail.com
 
 [google group](https://groups.google.com/forum/#!forum/elijjah)
 
 [wiki](https://gitlab.com/elijah-team/elijah-lang/-/wikis/home)
+
+[GitBook: The Elijjah Book](https://oluoluolu-gh.gitbook.io/elijjah-book/)
