@@ -88,8 +88,6 @@ tm=atm;
 	protected boolean pr_in;
 	protected Qualident pr_name;
 
-	int type;
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
