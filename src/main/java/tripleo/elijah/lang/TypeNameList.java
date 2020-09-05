@@ -15,15 +15,10 @@ public class TypeNameList {
 
 	List<TypeName> p = new ArrayList<TypeName>();
 
-	public NormalTypeName next() {
-		RegularTypeName t = new RegularTypeName();
-		p.add(t);
-		return t;
-	}
-
 	public void add(TypeName tn) {
 		p.add(tn);
 	}
+
 }
 
 //
