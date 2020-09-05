@@ -17,11 +17,9 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.Out;
-import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.lang.OS_Package;
-import tripleo.elijah.lang.Qualident;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes;
+import tripleo.elijah.stages.translate.TranslateModule;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
 
@@ -97,6 +95,11 @@ public class Compilation {
 				} else {
 					for (OS_Module module : modules) {
 						new DeduceTypes(module).deduce();
+						for (OS_Element2 item : module.items()) {
+							if (item instanceof ClassStatement || item instanceof NamespaceStatement)
+								System.err.println("8001 "+item);
+						}
+						new TranslateModule(module).translate();
 //						new ExpandFunctions(module).expand();
 //
 //      				final JavaCodeGen visit = new JavaCodeGen();
