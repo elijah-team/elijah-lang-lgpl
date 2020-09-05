@@ -398,8 +398,11 @@ public class DeduceTypes {
 			if (typeName != null && typeName.getName() != null) {
 				LookupResultList lrl3 = ctx.lookup(typeName.getName()); // TODO why not typeName.getContext().lookup(typeName.getName()) ??
 				final ClassStatement klass = (ClassStatement) lrl3.chooseBest(null);
-				if (klass != null)
+				if (klass != null) {
 					t = new OS_Type(klass);
+					typeName.setResolvedElement(klass);
+				} else
+					System.out.println("8003 klass == null for "+typeName.getName());
 			} else {
 				t = null; // TODO build a control flow graph her and search for exit types
 				for (FunctionItem item : element.getItems()) {
