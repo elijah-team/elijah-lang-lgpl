@@ -396,7 +396,7 @@ public class DeduceTypes {
 			if (typeName != null && typeName.hasResolvedElement())
 				return new OS_Type((ClassStatement) typeName.getResolvedElement());
 			if (typeName != null && typeName.getName() != null) {
-				LookupResultList lrl3 = ctx.lookup(typeName.getName());
+				LookupResultList lrl3 = ctx.lookup(typeName.getName()); // TODO why not typeName.getContext().lookup(typeName.getName()) ??
 				final ClassStatement klass = (ClassStatement) lrl3.chooseBest(null);
 				if (klass != null)
 					t = new OS_Type(klass);
