@@ -15,6 +15,8 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import org.eclipse.jdt.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.comp.Compilation;
@@ -80,8 +82,18 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
-		throw new NotImplementedException();
-//		return null;
+		Collection<ModuleItem> c = Collections2.filter(getItems(), new Predicate<ModuleItem>() {
+			@Override
+			public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable ModuleItem input) {
+				final boolean b = input instanceof OS_Element2;
+				return b;
+			}
+		});
+		ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
+		for (ModuleItem moduleItem : c) {
+			a.add((OS_Element2) moduleItem);
+		}
+		return a;
 	}
 
 	@Override
