@@ -80,7 +80,7 @@ tm=atm;
 		this.isNullable = true;
 	}
 
-	private TypeModifiers tm;
+	protected TypeModifiers tm;
 	
 	protected boolean pr_constant;
 	protected boolean pr_reference;
@@ -93,20 +93,20 @@ tm=atm;
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof AbstractTypeName)) return false;
-		AbstractTypeName that = (AbstractTypeName) o;
-		return pr_constant == that.pr_constant &&
-				pr_reference == that.pr_reference &&
-				pr_out == that.pr_out &&
-				pr_in == that.pr_in &&
-				type == that.type &&
-				tm == that.tm &&
-				pr_name.equals(that.pr_name);
+		if (!(o instanceof NormalTypeName)) return false;
+		NormalTypeName that = (NormalTypeName) o;
+		return getConstant() == that.getConstant() &&
+				getReference() == that.getReference() &&
+				getOut() == that.getOut() &&
+				getIn() == that.getIn() &&
+//				type == that.type &&
+				getModifiers().equals(that.getModifiers()) &&
+				getName().equals(that.getName());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(tm, pr_constant, pr_reference, pr_out, pr_in, pr_name, type);
+		return Objects.hash(tm, pr_constant, pr_reference, pr_out, pr_in, pr_name, isNullable);
 	}
 }
 

@@ -16,6 +16,8 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 public class VariableTypeName extends AbstractTypeName implements NormalTypeName {
@@ -71,6 +73,11 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	@Override
 	public void setContext(Context ctx) {
 		_ctx = ctx;
+	}
+
+	@Override
+	public Collection<TypeModifiers> getModifiers() {
+		return List.of(tm);
 	}
 
 	@Override

@@ -74,6 +74,11 @@ public abstract class AbstractTypeName2 implements NormalTypeName {
 		_ltm.add(TypeModifiers.NULLABLE);
 	}
 
+	@Override
+	public Collection<TypeModifiers> getModifiers() {
+		return _ltm;
+	}
+
 }
 
 //
