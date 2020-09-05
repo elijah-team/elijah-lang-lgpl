@@ -125,7 +125,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 
 		@Override
 		public BlockStatement blockStatement() {
-			return blockStatement(); // TODO
+			return new BlockStatement(this); // TODO
 		}
 
 		@Override
