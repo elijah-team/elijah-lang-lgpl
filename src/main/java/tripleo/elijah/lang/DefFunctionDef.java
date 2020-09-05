@@ -131,7 +131,7 @@ public class DefFunctionDef implements ClassItem {
 //	private FunctionDefScope mScope;
 	private final OS_Element/*ClassStatement*/ parent;
 	private final DefFunctionDefScope mScope2 = new DefFunctionDefScope();
-	private final NormalTypeName _returnType = new RegularTypeName();
+	private final NormalTypeName _returnType = new RegularTypeName(); // FIXME
 	private final Attached _a = new Attached(new DefFunctionContext(this));
 
 	public DefFunctionDef(OS_Element aStatement) {

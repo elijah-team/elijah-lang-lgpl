@@ -14,7 +14,7 @@ package tripleo.elijah.lang;
 public class BlockStatement implements Statement, StatementItem {
 
 	final private Scope parent;
-	private final NormalTypeName tn=new RegularTypeName();
+	private final NormalTypeName tn=new RegularTypeName(); // FIXME
 	private final FormalArgList fal=new FormalArgList();
 	private final StatementClosure scope;
 	

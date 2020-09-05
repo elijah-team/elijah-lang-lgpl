@@ -26,7 +26,7 @@ public class RegularTypeName extends AbstractTypeName2 implements NormalTypeName
 		_ctx = cur;
 	}
 
-	public RegularTypeName() {
+	@Deprecated public RegularTypeName() { // TODO remove this
 		super();
 		_ctx = null;
 	}

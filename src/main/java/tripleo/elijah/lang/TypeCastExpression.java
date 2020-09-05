@@ -30,7 +30,7 @@ public class TypeCastExpression extends AbstractExpression implements IExpressio
         return null;
     }
 
-	TypeName tn = new RegularTypeName();
+	TypeName tn;
 	
 	public TypeName typeName() {
 		return tn;
