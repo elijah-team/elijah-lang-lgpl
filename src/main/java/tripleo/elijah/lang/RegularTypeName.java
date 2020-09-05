@@ -47,11 +47,6 @@ public String getTypeName() {
 	return this.typeName.toString();
 }  // TODO is this right?
 
-@Override
-public void set(TypeModifiers aModifiers) {
-	_ltm.add(aModifiers);
-}
-
 //@Override
 //public void setGeneric(boolean value) {
 //	_ltm.add(TypeModifiers.GENERIC);

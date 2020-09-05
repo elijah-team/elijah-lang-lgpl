@@ -39,13 +39,6 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
-	public void set(TypeModifiers aModifiers) {
-		throw new NotImplementedException();
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-	}
-
-	@Override
 	public void addGenericPart(TypeName tn2) {
 		genericPart = tn2;
 	}

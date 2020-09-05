@@ -31,8 +31,6 @@ public interface NormalTypeName extends TypeName, Resolvable {
 	String getName();
 	void setName(Qualident s);
 
-	void set(TypeModifiers aModifiers);
-
 	/*@ requires modifiers = TypeModifiers.PROCEDURE
 			  || modifiers = TypeModifiers.FUNCTION; */
 //	@Override
