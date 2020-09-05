@@ -27,3 +27,6 @@ oluoluolu+elijah (at) gmail.com
 [wiki](https://gitlab.com/elijah-team/elijah-lang/-/wikis/home)
 
 [GitBook: The Elijjah Book](https://oluoluolu-gh.gitbook.io/elijjah-book/)
+
+[Elijjah by Example](https://elijjah-by-example.github.io)
+
