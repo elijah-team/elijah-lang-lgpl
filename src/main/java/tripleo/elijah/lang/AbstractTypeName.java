@@ -71,11 +71,6 @@ public abstract class AbstractTypeName implements NormalTypeName {
 	}
 	
 	@Override
-	public void type(TypeModifiers atm) {
-tm=atm;		
-	}
-
-	@Override
 	public void setNullable() {
 		this.isNullable = true;
 	}

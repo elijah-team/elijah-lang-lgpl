@@ -49,11 +49,6 @@ public class GenericTypeName implements TypeName {
 	}
 
 	@Override
-	public void type(TypeModifiers typeModifiers) {
-		modifiers = typeModifiers;
-	}
-
-	@Override
 	public Type kindOfType() {
 		return Type.GENERIC;
 	}

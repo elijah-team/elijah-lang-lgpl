@@ -19,7 +19,7 @@ public class FuncTypeName implements TypeName {
 		_arglist = tnl;
 	}
 
-	@Override
+//	@Override
 	public void type(TypeModifiers typeModifiers) {
 		_modifiers = typeModifiers;
 	}

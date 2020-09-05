@@ -14,6 +14,6 @@ public interface TypeName {
 		NORMAL, GENERIC, TYPE_OF, FUNCTION
 	}
 
-	void type(TypeModifiers typeModifiers);
+//	void type(TypeModifiers typeModifiers);
 	Type kindOfType();
 }

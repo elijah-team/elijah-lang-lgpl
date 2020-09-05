@@ -43,9 +43,9 @@ public String getName() {
 }
 
 //	@Override
-public String getTypeName() {
-	return this.typeName.toString();
-}  // TODO is this right?
+//public String getTypeName() {
+//	return this.typeName.toString();
+//}  // TODO is this right?
 
 //@Override
 //public void setGeneric(boolean value) {
@@ -54,7 +54,6 @@ public String getTypeName() {
 
 	@Override
 	public void setContext(Context ctx) {
-//		_a.setContext(ctx);
 		_ctx = ctx;
 	}
 
@@ -117,11 +116,6 @@ public String getTypeName() {
 		} else
 			sb.append("<RegularTypeName empty>");
 		return sb.toString();
-	}
-
-	@Override
-	public void type(TypeModifiers atm) {
-	tm=atm;
 	}
 
 	@Override
