@@ -1,6 +1,6 @@
 package wprust.demo.fact
 
-class Main {
+class FactDemo {
   main() {
     const kl = 3
     const f1 = factorial(k1)
