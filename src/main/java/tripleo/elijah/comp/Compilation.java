@@ -155,7 +155,12 @@ public class Compilation {
 		};
 		for (String file_name : directory.list(f)) {
 			try {
-				R.add(parseEzFile(new File(directory, file_name), file_name, eee));
+				final File file = new File(directory, file_name);
+				final CompilerInstructions ezFile = parseEzFile(file, file.toString(), eee);
+				if (ezFile != null)
+					R.add(ezFile);
+				else
+					eee.reportError("9995 ezFile is null "+file.toString());
 			} catch (Exception e) {
 				eee.exception(e);
 			}
@@ -171,24 +176,29 @@ public class Compilation {
 		for (LibraryStatementPart lsp : compilerInstructions.lsps) {
 			String dir_name = lsp.getDirName().substring(1, lsp.getDirName().length()-1);
 			File dir = new File(dir_name);
-//			if (dir_name.equals(".."))
-//				dir = new File(".").getAbsoluteFile().getParentFile(); // README java11 balks
+			if (dir_name.equals(".."))
+				dir = new File(compilerInstructions.getFilename()).getParentFile()/*.getAbsoluteFile()*/.getParentFile();
 			if (dir.isDirectory()) {
-				final FilenameFilter accept_source_files = new FilenameFilter() {
-					@Override
-					public boolean accept(File file, String file_name) {
-						final boolean matches = Pattern.matches(".+\\.elijah$", file_name)
-								             || Pattern.matches(".+\\.elijjah$", file_name);
-						return matches;
-					}
-				};
-				for (File file : dir.listFiles(accept_source_files)) {
-					parseElijjahFile(file, file.getName(), eee, do_out);
-				}
+				use_internal(dir, do_out);
 			} else
 				eee.reportError("9997 Not a directory " + dir_name);
 		}
-		int y=2;
+		use_internal(new File(compilerInstructions.getFilename()).getParentFile(), do_out);
+	}
+
+	private void use_internal(File dir, boolean do_out) throws Exception {
+		assert dir.isDirectory();
+		final FilenameFilter accept_source_files = new FilenameFilter() {
+			@Override
+			public boolean accept(File directory, String file_name) {
+				final boolean matches = Pattern.matches(".+\\.elijah$", file_name)
+						             || Pattern.matches(".+\\.elijjah$", file_name);
+				return matches;
+			}
+		};
+		for (File file : dir.listFiles(accept_source_files)) {
+			parseElijjahFile(file, file.getName(), eee, do_out);
+		}
 	}
 
 /*
@@ -266,6 +276,7 @@ public class Compilation {
 		}
 		try {
 			CompilerInstructions R = parseEzFile_(f, s);
+			R.setFilename(file.toString());
 			s.close();
 			fn2ci.put(f, R);
 			return R;
