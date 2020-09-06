@@ -513,15 +513,10 @@ public class DeduceTypes {
 			System.err.println("196 no results for "+text);
 			return;
 		}
-		for (LookupResult n: lrl.results()) {
-			System.out.println("197 "+n);
-//			return ((FunctionDef)n.getElement()).returnType().decoded(); // TODO loookup OS_Type from typename
-//			Helpers.printXML(iv, new TabbedOutputStream(System.out));
-//			Helpers.printXML(n, new TabbedOutputStream(System.out));
-		}
+//		for (LookupResult n: lrl.results()) {
+//			System.out.println("197 "+n);
+//		}
 
-//		if (lrl.results().size() == 1) {
-//			LookupResult n = lrl.results().get(0);
 		OS_Element best = lrl.chooseBest(null);
 		if (best != null) {
 			if (best instanceof FunctionDef) {
