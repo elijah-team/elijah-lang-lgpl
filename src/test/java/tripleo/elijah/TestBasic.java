@@ -8,6 +8,8 @@
  */
 package tripleo.elijah;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import org.junit.Assert;
 import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
@@ -15,9 +17,10 @@ import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-
-import static tripleo.elijah.gen.nodes.Helpers.List_of;
 
 /**
  * @author Tripleo(envy)
@@ -26,8 +29,11 @@ import static tripleo.elijah.gen.nodes.Helpers.List_of;
 public class TestBasic {
 
 	@Test
-	public final void testBasicParse() {
-		List<String> args = List_of("test/basic", "-sE");
+	public final void testBasicParse() throws IOException {
+		List<String> ez_files = Files.readLines(new File("test/basic/ez_files.txt"), Charsets.UTF_8);
+		List<String> args = new ArrayList<String>();
+		args.addAll(ez_files);
+		args.add("-sE");
 		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
@@ -37,8 +43,12 @@ public class TestBasic {
 	}
 
 	@Test
-	public final void testBasic() {
-		List<String> args = List_of("test/basic", "-sO"/*, "-out"*/);
+	public final void testBasic() throws IOException {
+		List<String> ez_files = Files.readLines(new File("test/basic/ez_files.txt"), Charsets.UTF_8);
+		List<String> args = new ArrayList<String>();
+		args.addAll(ez_files);
+		args.add("-sO");
+//		List<String> args = List_of("test/basic", "-sO"/*, "-out"*/);
 		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 
