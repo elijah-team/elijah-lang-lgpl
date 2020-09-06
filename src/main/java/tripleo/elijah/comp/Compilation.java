@@ -169,10 +169,24 @@ public class Compilation {
 
 	private void use(CompilerInstructions compilerInstructions, boolean do_out) throws Exception {
 		for (LibraryStatementPart lsp : compilerInstructions.lsps) {
-			String dir_name = lsp.getDirName();
+			String dir_name = lsp.getDirName().substring(1, lsp.getDirName().length()-1);
 			File dir = new File(dir_name);
-			if (dir.isDirectory())
-				doDirectory(dir, eee, do_out);
+//			if (dir_name.equals(".."))
+//				dir = new File(".").getAbsoluteFile().getParentFile(); // README java11 balks
+			if (dir.isDirectory()) {
+				final FilenameFilter accept_source_files = new FilenameFilter() {
+					@Override
+					public boolean accept(File file, String file_name) {
+						final boolean matches = Pattern.matches(".+\\.elijah$", file_name)
+								             || Pattern.matches(".+\\.elijjah$", file_name);
+						return matches;
+					}
+				};
+				for (File file : dir.listFiles(accept_source_files)) {
+					parseElijjahFile(file, file.getName(), eee, do_out);
+				}
+			} else
+				eee.reportError("9997 Not a directory " + dir_name);
 		}
 		int y=2;
 	}
