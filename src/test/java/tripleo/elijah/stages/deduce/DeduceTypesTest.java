@@ -41,7 +41,9 @@ public class DeduceTypesTest {
 		fd.setContext(fctx);
 		VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
 		final VariableStatement vs = vss.next();
-		vs.setName(new IdentExpression(Helpers.makeToken("x")));
+		final IdentExpression x = new IdentExpression(Helpers.makeToken("x"));
+		x.setContext(fctx);
+		vs.setName(x);
 		final Qualident qu = new Qualident();
 		qu.append(Helpers.makeToken("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
@@ -49,8 +51,10 @@ public class DeduceTypesTest {
 		cs.postConstruct();
 		mod.postConstruct();
 		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
-		x = d.deduceExpression(new IdentExpression(Helpers.makeToken("x")), fc);
-		System.out.println(x);
+		final IdentExpression x1 = new IdentExpression(Helpers.makeToken("x"));
+		x1.setContext(fc);
+		this.x = d.deduceExpression(x1, fc);
+		System.out.println(this.x);
 	}
 	/** TODO This test fails beacause we are comparing a BUILT_IN vs a USER OS_Type.
 	 *  Eventually it should pass when we resolve the primitive types.
