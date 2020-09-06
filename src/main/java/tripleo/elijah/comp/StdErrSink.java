@@ -46,7 +46,7 @@ public class StdErrSink implements ErrSink {
 
 	@Override
 	public void info(String message) {
-		System.err.println(String.format("INFO: %message", message));
+		System.err.println(String.format("INFO: %s", message));
 	}
 }
 
