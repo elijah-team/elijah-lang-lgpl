@@ -401,8 +401,11 @@ public class DeduceTypes {
 				if (klass != null) {
 					t = new OS_Type(klass);
 					typeName.setResolvedElement(klass);
-				} else
-					System.out.println("8003 klass == null for "+typeName.getName());
+				} else {
+					System.out.println("8003 klass == null for " + typeName.getName());
+					// TODO should produce module error here
+					//  - module.parent.eee.reportError(...)
+				}
 			} else {
 				t = null; // TODO build a control flow graph her and search for exit types
 				for (FunctionItem item : element.getItems()) {
