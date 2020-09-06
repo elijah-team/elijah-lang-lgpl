@@ -704,10 +704,10 @@ public class DeduceTypes {
 	}
 
 	public OS_Type deduceIdentExpression(@NotNull IdentExpression n, Context context) {
-//		if (n.hasResolvedElement()) {
-//		} else
-		{
-			LookupResultList lrl = context.lookup(n.getText());
+		if (n.hasResolvedElement()) {
+			return ((IdentExpression)n.getResolvedElement()).getType();
+		} else {
+			LookupResultList lrl = n.getContext().lookup(n.getText());
 			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
 				final OS_Element element = lrl.results().get(0).getElement();
 				if (element instanceof VariableStatement) {
