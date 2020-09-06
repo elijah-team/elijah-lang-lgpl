@@ -2,7 +2,7 @@
 PROJECT=$HOME/IdeaProjects/elijah-lang
 REPOSITORY=$HOME/.m2/repository
 
-$JAVA_HOME/bin/java -classpath $PROJECT/out/test/test:\
+$JAVA_HOME/bin/java -classpath $PROJECT/target/classes:$PROJECT/out/test/test:\
 $PROJECT/out/production/main:$PROJECT/lib/javassist-3.1/javassist.jar:\
 $PROJECT/lib/org.eclipse.jdt.annotation_2.2.200.v20180921-1416.jar:\
 $PROJECT/lib/annotations-16.0.2.jar:\
