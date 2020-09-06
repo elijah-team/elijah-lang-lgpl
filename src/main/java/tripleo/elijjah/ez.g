@@ -30,7 +30,7 @@ options {
 //public Out out;
 IExpression expr;
 Context cur=null;
-CompilerInstructions ci = new CompilerInstructions();
+public CompilerInstructions ci = new CompilerInstructions();
 }
 
 program
@@ -51,7 +51,7 @@ library_statement
 library_statement_part returns [LibraryStatementPart lsp]
 		{lsp=new LibraryStatementPart();}
 	: (i1:IDENT TOK_COLON                       {lsp.setName(i1);})?
-	  dirname:STRING_LITERAL                    {lsp.setDirName(s1);}
+	  dirname:STRING_LITERAL                    {lsp.setDirName(dirname);}
 		(LBRACK
 		  (i2:IDENT TOK_COLON expr=expression)* {lsp.addDirective(i2, expr);}
 		RBRACK)?
@@ -59,7 +59,7 @@ library_statement_part returns [LibraryStatementPart lsp]
 generate_statement returns [GenerateStatement gen]
 		{gen=new GenerateStatement();}
 	: "generate"
-		(i1:IDENT TOK_COLON expr=expression)*   {gen.addDirective(i1, expr);}
+		(i1:IDENT TOK_COLON expr=expression   {gen.addDirective(i1, expr);} )*
 	;
 indexingStatement[IndexingStatement idx]
 		{ExpressionList el=null;}

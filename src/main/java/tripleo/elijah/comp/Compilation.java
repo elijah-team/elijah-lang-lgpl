@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.Out;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.LibraryStatementPart;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes;
 import tripleo.elijah.stages.translate.TranslateModule;
@@ -46,7 +45,7 @@ public class Compilation {
 	private final Map<String, CompilerInstructions> fn2ci = new HashMap<String, CompilerInstructions>();
 	private final Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
 	private int _packageCode = 1;
-	final private List<CompilerInstructions> cis = new ArrayList<CompilerInstructions>();
+	public final List<CompilerInstructions> cis = new ArrayList<CompilerInstructions>();
 
 	public Compilation(ErrSink eee, IO io) {
 		this.eee = eee;
@@ -95,18 +94,25 @@ public class Compilation {
 				final String[] args2 = cmd.getArgs();
 
 				for (int i = 0; i < args2.length; i++) {
-					final File f = new File(args2[i]);
-					if (f.isDirectory()) {
-						List<CompilerInstructions> ez_files = searchEzFiles(f);
-						if (ez_files.size() > 1) {
-							eee.reportError("9999 Too many .ez files found, using first");
-							use(ez_files.get(0), do_out);
-						} else if (ez_files.size() == 0) {
-							eee.info("9998 No .ez files found. Using defaults");
-							useDefaults(args2);
+					final String file_name = args2[i];
+					final File f = new File(file_name);
+					final boolean matches2 = Pattern.matches(".+\\.ez$", file_name);
+					if (matches2)
+						add_ci(parseEzFile(f, file_name, eee));
+					else {
+//						eee.reportError("9996 Not an .ez file "+file_name);
+						if (f.isDirectory()) {
+							List<CompilerInstructions> ezs = searchEzFiles(f);
+							if (ezs.size() > 1) {
+								eee.reportError("9998 Too many .ez files, using first.");
+								add_ci(ezs.get(0));
+							} else if (ezs.size() == 0) {
+								eee.reportError("9999 No .ez files found.");
+							} else {
+								add_ci(ezs.get(0));
+							}
 						}
 					}
-//					doFile(f, errSink, do_out);
 				}
 
 				for (CompilerInstructions ci : cis) {
@@ -138,30 +144,6 @@ public class Compilation {
 		}
 	}
 
-	private void useDefaults(String[] args2) {
-		CompilerInstructions ci = new CompilerInstructions();
-		final LibraryStatementPart lsp = new LibraryStatementPart();
-		for (String s : args2) {
-			lsp.setDirName(Helpers.makeToken(s));
-		}
-		ci.add(lsp);
-		add_ci(ci);
-	}
-
-	private void add_ci(CompilerInstructions ci) {
-		cis.add(ci);
-	}
-
-	private void use(CompilerInstructions compilerInstructions, boolean do_out) throws Exception {
-		for (LibraryStatementPart lsp : compilerInstructions.lsps) {
-			String dir_name = lsp.getDirName();
-			File dir = new File(dir_name);
-			if (dir.isDirectory())
-				doDirectory(dir, eee, do_out);
-		}
-		int y=2;
-	}
-
 	private List<CompilerInstructions> searchEzFiles(File directory) {
 		final List<CompilerInstructions> R = new ArrayList<CompilerInstructions>();
 		final FilenameFilter f = new FilenameFilter() {
@@ -179,6 +161,20 @@ public class Compilation {
 			}
 		}
 		return R;
+	}
+
+	private void add_ci(CompilerInstructions ci) {
+		cis.add(ci);
+	}
+
+	private void use(CompilerInstructions compilerInstructions, boolean do_out) throws Exception {
+		for (LibraryStatementPart lsp : compilerInstructions.lsps) {
+			String dir_name = lsp.getDirName();
+			File dir = new File(dir_name);
+			if (dir.isDirectory())
+				doDirectory(dir, eee, do_out);
+		}
+		int y=2;
 	}
 
 	public void doFile(@NotNull File f, ErrSink errSink, boolean do_out) throws Exception {

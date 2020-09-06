@@ -2,28 +2,14 @@
 
   package tripleo.elijjah;
 
-import antlr.TokenBuffer;
-import antlr.TokenStreamException;
-import antlr.TokenStreamIOException;
-import antlr.ANTLRException;
-import antlr.LLkParser;
-import antlr.Token;
-import antlr.TokenStream;
-import antlr.RecognitionException;
-import antlr.NoViableAltException;
-import antlr.MismatchedTokenException;
-import antlr.SemanticException;
-import antlr.ParserSharedInputState;
+import antlr.*;
 import antlr.collections.impl.BitSet;
-import antlr.collections.AST;
-import antlr.ASTPair;
-import antlr.collections.impl.ASTArray;
-
+import tripleo.elijah.Documentable;
+import tripleo.elijah.ci.CompilerInstructions;
+import tripleo.elijah.ci.GenerateStatement;
+import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.contexts.*;
-import tripleo.elijah.ci.*;
-import tripleo.elijah.lang2.*;
-import tripleo.elijah.*;
+import tripleo.elijah.lang2.BuiltInTypes;
 
 public class EzParser extends antlr.LLkParser
        implements EzTokenTypes
@@ -238,15 +224,15 @@ public EzParser(ParserSharedInputState state) {
 					match(IDENT);
 					match(TOK_COLON);
 					expr=expression();
+					if ( inputState.guessing==0 ) {
+						gen.addDirective(i1, expr);
+					}
 				}
 				else {
 					break _loop15;
 				}
 				
 			} while (true);
-			}
-			if ( inputState.guessing==0 ) {
-				gen.addDirective(i1, expr);
 			}
 		}
 		catch (RecognitionException ex) {
