@@ -507,8 +507,8 @@ public class DeduceTypes {
 	private void deduceVariableStatement_procedureCallExpression(
 			IExpression iv,	ProcedureCallExpression pce, @NotNull IdentExpression left, Context context) {
 		final String text = left.getText();
-		final LookupResultList lrl = context.lookup(text);
-		System.out.println("198 "+/*n*/iv);
+		final LookupResultList lrl = left.getContext().lookup(text);
+//		System.out.println("198 "+/*n*/iv);
 		if (lrl.results().size() == 0 ) {
 			System.err.println("196 no results for "+text);
 			return;
