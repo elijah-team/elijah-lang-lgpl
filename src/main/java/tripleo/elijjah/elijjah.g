@@ -255,11 +255,11 @@ varStmt[StatementClosure cr, OS_Element aParent]
     )
     ;
 typeAlias[TypeAliasExpression cr]
-		{Qualident q=null;}
+		{Qualident q=null;IdentExpression i=null;}
 	:
-	"type" "alias" i:IDENT {cr.setIdent(i);}
+	"type" "alias" i=ident {cr.setIdent(i);}
 		BECOMES q=qualident {cr.setBecomes(q);}
-	| "struct" name:IDENT opfal[null] scope[null] // TODO shouldnt be here
+//	| "struct" name:IDENT opfal[null] scope[null] // TODO shouldnt be here
 	;
 opfal[FormalArgList fal]:
 	LPAREN formalArgList[fal] RPAREN
@@ -726,97 +726,15 @@ elseif_part[IfConditional ifex]
 //
 // TYPENAMES
 //
-/*
-variableQualifiers[NormalTypeName cr]:
-	( "once"  {cr.set(TypeModifiers.ONCE);}
-	| "local"  {cr.set(TypeModifiers.LOCAL);}
-	| "tagged"  {cr.set(TypeModifiers.TAGGED);}
-	| "const"  {cr.set(TypeModifiers.CONST);}
-	| "pooled"  {cr.set(TypeModifiers.POOLED);}
-	| "manual"  {cr.set(TypeModifiers.MANUAL);}
-	| "gc"  {cr.set(TypeModifiers.GC);})
-	;
-regularQualifiers[NormalTypeName fp]
-		{IdentExpression i1=null;}
-	:
-	( "in"            {fp.setIn(true);}
-	| "out"           {fp.setOut(true);})?
-	( ("const"        {fp.setConstant(true);}
-	   ("ref"		  {fp.setReference(true);})?)
-	| "ref"           {fp.setReference(true);}
-	| "generic" i2:IDENT 	  {fp.setGeneric(true);
-        RegularTypeName rtn = new RegularTypeName();
-        Qualident q = new Qualident();
-        q.append(i2);
-        rtn.setName(q);
-        fp.addGenericPart(rtn);}
-	)
-	;
 
-typeName[NormalTypeName cr]:
-    ( structTypeName[cr]
-//    | funcTypeExpr[cr]
-    | simpleTypeName_xx[cr]
-    ) {cr.setContext(cur);}
-    ;
-structTypeName[NormalTypeName cr]
-	:
-	( genericQualifiers[cr]
-	  ( abstractGenericTypeName_xx[cr]
-	  | specifiedGenericTypeName_xx[cr] )
-	| "typeof" xy=qualident {cr.typeof(xy);}
-	)
-	;
-genericQualifiers[NormalTypeName cr]
-	: ( "const"    {cr.set(TypeModifiers.CONST);})?
-	  ( "ref"      {cr.set(TypeModifiers.REFPAR);})?
-	;
-
-abstractGenericTypeName_xx[NormalTypeName tn]
-	: "generic" xy=qualident {tn.typeName(xy); tn.set(TypeModifiers.GENERIC);}
-	| QUESTION xy=qualident {tn.typeName(xy); tn.set(TypeModifiers.GENERIC);}
-	;
-specifiedGenericTypeName_xx[NormalTypeName tn]
-		{RegularTypeName rtn=new RegularTypeName();}
-	: simpleTypeName_xx [tn]
-	  (LBRACK typeName[rtn] {tn.addGenericPart(rtn);} RBRACK)? // TODO what about  multi-generics?
-	  (QUESTION {tn.setNullable();})?
-	;
-formalArgTypeName[NormalTypeName tn]
-	: structTypeName[tn]
-//	| funcTypeExpr[null/*tn* /]
-	;
-simpleTypeName_xx[NormalTypeName tn]
-	: xy=qualident  {tn.setName(xy);}
-	;
-
-typeNameList[TypeNameList cr]:
-	typeName [cr.next()] (COMMA typeName [cr.next()])*
-	;
-*/
 inhTypeName returns [TypeName tn]
 		{tn=null;}
 	:
 	( tn=typeOfTypeName2
 	| tn=normalTypeName2
 	)
-/*    (("const" {tn.set(TypeModifiers.CONST);})? specifiedGenericTypeName_xx[tn]
-    | "typeof" xy=qualident {tn.typeof(xy);}
-    )
-*/
         {tn.setContext(cur);}
     ;
-/*
-funcTypeExpr[FuncTypeName pc]
-	:
-	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
-	  (LPAREN typeNameList[pc.argList()] RPAREN)?
-	  ((TOK_ARROW|TOK_COLON) typeName[pc.returnValue()] )?
-	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
-	  (LPAREN typeNameList[pc.argList()] RPAREN)?
-	)
-	;
-*/
 
 typeName2 returns [TypeName cr]
 		{cr=null;}
