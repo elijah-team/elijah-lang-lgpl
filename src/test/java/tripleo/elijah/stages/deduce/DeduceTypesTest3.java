@@ -55,8 +55,10 @@ public class DeduceTypesTest3 {
 		mod.postConstruct();
 		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		assert fc == fctx;
-		x = d.deduceExpression(new IdentExpression(Helpers.makeToken("x")), fc);
-		System.out.println(x);
+		final IdentExpression x1 = new IdentExpression(Helpers.makeToken("x"));
+		x1.setContext(fc);
+		this.x = d.deduceExpression(x1, fc);
+		System.out.println(this.x);
 	}
 
 //	/**

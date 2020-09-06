@@ -43,7 +43,9 @@ public class DeduceTypesTest2 {
 		qu.append(Helpers.makeToken("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
 		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
-		OS_Type x = d.deduceExpression(new IdentExpression(Helpers.makeToken("x")), fc);
+		final IdentExpression x1 = new IdentExpression(Helpers.makeToken("x"));
+		x1.setContext(fc);
+		OS_Type x = d.deduceExpression(x1, fc);
 		System.out.println(x);
 //		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());
 //		final RegularTypeName tn = new RegularTypeName();
