@@ -16,6 +16,7 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -70,7 +71,7 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 
 	@Override
 	public Collection<TypeModifiers> getModifiers() {
-		return List.of(tm);
+		return (tm != null ? List.of(tm)  : new ArrayList<TypeModifiers>());
 	}
 
 	@Override
