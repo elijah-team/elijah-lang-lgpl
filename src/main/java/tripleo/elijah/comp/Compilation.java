@@ -191,6 +191,7 @@ public class Compilation {
 		int y=2;
 	}
 
+/*
 	public void doFile(@NotNull File f, ErrSink errSink, boolean do_out) throws Exception {
 		if (f.isDirectory()) {
 			doDirectory(f, errSink, do_out);
@@ -216,6 +217,7 @@ public class Compilation {
 		for (int i = 0; i < files.length; i++)
 			doFile(new File(f, files[i]), errSink, do_out); // recursion, backpressure
 	}
+*/
 
 	private CompilerInstructions parseEzFile(File f, String file_name, ErrSink errSink) throws Exception {
 		System.out.println((String.format("   %s", f.getAbsolutePath())));
