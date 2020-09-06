@@ -20,6 +20,7 @@ public class CompilerInstructions {
 	private IndexingStatement _idx;
 	private List<GenerateStatement> gens = new ArrayList<GenerateStatement>();
 	public List<LibraryStatementPart> lsps = new ArrayList<LibraryStatementPart>();
+	private String filename;
 
 	public IndexingStatement indexingStatement() {
 		if (_idx == null)
@@ -34,6 +35,14 @@ public class CompilerInstructions {
 
 	public void add(LibraryStatementPart libraryStatementPart) {
 		lsps.add(libraryStatementPart);
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public String getFilename() {
+		return filename;
 	}
 }
 
