@@ -208,34 +208,6 @@ public class Compilation {
 		}
 	}
 
-/*
-	public void doFile(@NotNull File f, ErrSink errSink, boolean do_out) throws Exception {
-		if (f.isDirectory()) {
-			doDirectory(f, errSink, do_out);
-		} else {
-			final String file_name = f.toString();
-			final boolean matches = Pattern.matches(".+\\.elijah$", file_name)
-					                        || Pattern.matches(".+\\.elijjah$", file_name);
-//			if (f.isDirectory()) return; // TODO testing idea tools (failed)
-			if (matches) {
-				parseElijjahFile(f, file_name, errSink, do_out);
-				return;
-			}
-
-			final boolean matches2 = Pattern.matches(".+\\.ez$", file_name);
-			if (matches2) {
-				parseEzFile(f, file_name, errSink);
-			}
-		}
-	}
-
-	private void doDirectory(@NotNull File f, ErrSink errSink, boolean do_out) throws Exception {
-		String[] files = f.list();
-		for (int i = 0; i < files.length; i++)
-			doFile(new File(f, files[i]), errSink, do_out); // recursion, backpressure
-	}
-*/
-
 	private CompilerInstructions parseEzFile(File f, String file_name, ErrSink errSink) throws Exception {
 		System.out.println((String.format("   %s", f.getAbsolutePath())));
 		if (f.exists()) {
