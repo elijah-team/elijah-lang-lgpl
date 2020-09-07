@@ -161,18 +161,38 @@ public class DeduceTypes {
 		} else if (element instanceof CaseConditional) {
 			NotImplementedException.raise();
 			CaseConditional cc = (CaseConditional) element;
+			deduceExpression_(cc.getExpr(), cc.getContext());
 			HashMap<IExpression, CaseConditional.CaseScope> scopes = cc.getScopes();
 			Set<IExpression> ks = scopes.keySet();
 			for (IExpression k : ks) {
-				OS_Type t = deduceExpression(k, cc.getContext());
-				if (t == null) {
-					System.err.println("996 nil type for "+k);
-//					if (k instanceof IdentExpression) {// TODO check if already set
-//						((SingleIdentContext) cc.getContext()).setString((IdentExpression) k);
-//						t = deduceExpression(cc.getExpr(), cc.getContext()); // TODO CaseTypeExpr
-//					}
+				if (k instanceof IdentExpression) {
+					final IdentExpression ident_k = (IdentExpression) k;
+					final String identKText = ident_k.getText();
+					IExpression found_default = null;
+					if (identKText.equals("_")) {
+						if (found_default != null)
+							module.parent.eee.reportError("Already found default "+ found_default);
+						else
+							found_default = k;
+					} else {
+						LookupResultList lrl = ident_k.getContext().lookup(identKText);
+						if (lrl.results().size() == 0) {
+							k.setType(cc.getExpr().getType());
+							if (found_default != null)
+								module.parent.eee.reportError("Already found default "+ found_default);
+							else
+								found_default = k;
+						}
+					}
+					if (k != null)
+						scopes.get(k).setDefault();
+				} else {
+					OS_Type t = deduceExpression(k, cc.getContext());
+					if (t == null) {
+						System.err.println("996 nil type for " + k);
+					}
+					k.setType(t);
 				}
-				k.setType(t);
 			}
 		} else {
 			System.out.println("91 "+element);

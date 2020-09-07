@@ -32,6 +32,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
     private IExpression expr;
 	private SingleIdentContext _ctx = null;
 	private HashMap<IExpression, CaseScope> scopes = new LinkedHashMap<IExpression, CaseScope>();
+	private CaseScope default_case_scope = null;
 
 	public CaseConditional(OS_Element parent, Context parentContext) {
         this.parent = parent;
@@ -80,6 +81,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		private final IExpression expr;
 		private List<OS_Element> _items = new ArrayList<OS_Element>();
 		private ArrayList<Token> mDocs = null;
+		private boolean _isDefault = false;
 
 		public CaseScope(IExpression expression) {
 			this.expr = expression;
@@ -120,6 +122,11 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		@Override
 		public Context getContext() {
 			return getParent().getContext();
+		}
+
+		public void setDefault() {
+			_isDefault = true;
+			default_case_scope = this;
 		}
 	}
 
