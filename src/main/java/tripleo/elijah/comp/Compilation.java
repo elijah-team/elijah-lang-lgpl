@@ -175,13 +175,18 @@ public class Compilation {
 	private void use(CompilerInstructions compilerInstructions, boolean do_out) throws Exception {
 		final File instruction_dir = new File(compilerInstructions.getFilename()).getParentFile();
 		for (LibraryStatementPart lsp : compilerInstructions.lsps) {
-			String dir_name = lsp.getDirName().substring(1, lsp.getDirName().length()-1);
+			String dir_name = string_expression_to_string(lsp.getDirName());
 			File dir = new File(dir_name);
 			if (dir_name.equals(".."))
 				dir = instruction_dir/*.getAbsoluteFile()*/.getParentFile();
 			use_internal(dir, do_out);
 		}
 		use_internal(instruction_dir, do_out);
+	}
+
+	@NotNull
+	private static String string_expression_to_string(String s) {
+		return s.substring(1, s.length()-1);
 	}
 
 	private void use_internal(File dir, boolean do_out) throws Exception {
@@ -199,7 +204,7 @@ public class Compilation {
 			}
 		};
 		for (File file : dir.listFiles(accept_source_files)) {
-			parseElijjahFile(file, file.getName(), eee, do_out);
+			parseElijjahFile(file, file.toString(), eee, do_out);
 		}
 	}
 
