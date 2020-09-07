@@ -173,21 +173,23 @@ public class Compilation {
 	}
 
 	private void use(CompilerInstructions compilerInstructions, boolean do_out) throws Exception {
+		final File instruction_dir = new File(compilerInstructions.getFilename()).getParentFile();
 		for (LibraryStatementPart lsp : compilerInstructions.lsps) {
 			String dir_name = lsp.getDirName().substring(1, lsp.getDirName().length()-1);
 			File dir = new File(dir_name);
 			if (dir_name.equals(".."))
-				dir = new File(compilerInstructions.getFilename()).getParentFile()/*.getAbsoluteFile()*/.getParentFile();
-			if (dir.isDirectory()) {
-				use_internal(dir, do_out);
-			} else
-				eee.reportError("9997 Not a directory " + dir_name);
+				dir = instruction_dir/*.getAbsoluteFile()*/.getParentFile();
+			use_internal(dir, do_out);
 		}
-		use_internal(new File(compilerInstructions.getFilename()).getParentFile(), do_out);
+		use_internal(instruction_dir, do_out);
 	}
 
 	private void use_internal(File dir, boolean do_out) throws Exception {
-		assert dir.isDirectory();
+		if (!dir.isDirectory()) {
+			eee.reportError("9997 Not a directory " + dir.toString());
+			return;
+		}
+		//
 		final FilenameFilter accept_source_files = new FilenameFilter() {
 			@Override
 			public boolean accept(File directory, String file_name) {
