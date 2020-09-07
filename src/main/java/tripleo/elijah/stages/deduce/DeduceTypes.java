@@ -553,17 +553,24 @@ public class DeduceTypes {
 //		NotImplementedException.raise();
 	}
 
-	private void deduceVariableStatement_procedureCallExpression_aliasStatement(AliasStatement best) {
-//		System.err.println("196 "+best);
-//		left.setResolvedElement(best); // TODO
-		OS_Element element = resolveAlias(best);
+	private OS_Type deduceVariableStatement_procedureCallExpression_aliasStatement(AliasStatement best) {
+		LogEvent.logEvent(196,  ""+ best);
 		OS_Type t;
+		OS_Element element;
+		//
+		if (!(best.hasResolvedElement())) {
+			element = resolveAlias(best);
+			best.setResolvedElement(element);
+		} else {
+			element = best.getResolvedElement();
+		}
 		if (element instanceof FunctionDef) {
 			t = findFunctionType((FunctionDef) element);
 		} else {
 			t = deduceExpression(best.getExpression(), best.getContext());
 		}
 		LogEvent.logEvent(199,  ""+ t);
+		return t;
 	}
 
 	private void deduceVariableStatement_procedureCallExpression_functionDef(
@@ -609,6 +616,7 @@ public class DeduceTypes {
 						OS_Element x;
 						if (best instanceof AliasStatement) {
 							x = resolveAlias((AliasStatement) best);
+							((AliasStatement) best).setResolvedElement(x);
 						} else
 							x = best;
 
