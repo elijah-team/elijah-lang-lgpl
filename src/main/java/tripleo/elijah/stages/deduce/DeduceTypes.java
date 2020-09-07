@@ -607,7 +607,7 @@ public class DeduceTypes {
 					}
 				} else {
 					String s = typeName.getName();
-					LookupResultList lrl = fd.getContext().lookup(s);
+					LookupResultList lrl = fd.getContext().lookup(s); // TODO why not typeName.getContext().lookup ??
 					OS_Element best = lrl.chooseBest(null);
 					if (best != null) {
 						NotImplementedException.raise();
