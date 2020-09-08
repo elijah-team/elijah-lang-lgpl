@@ -401,6 +401,8 @@ public class DeduceTypes {
 					NotImplementedException.raise();
 					return false;
 				}
+				if (pce.getLeft() instanceof IdentExpression)
+					((IdentExpression) pce.getLeft()).setResolvedElement(best);
 				pce.setType(t);
 			} else {
 				if (!(de instanceof IdentExpression)) System.err.println("1002 "+de.getClass().getName()+" "+de);
@@ -528,33 +530,46 @@ public class DeduceTypes {
 		return r;
 	}
 
-	private void deduceVariableStatement_procedureCallExpression(
-			IExpression iv,	ProcedureCallExpression pce, @NotNull IdentExpression left, Context context) {
+	private OS_Element lookup_ident_to_element(@NotNull IdentExpression left) {
+		OS_Element best;
 		final String text = left.getText();
 		final LookupResultList lrl = left.getContext().lookup(text);
 //		System.out.println("198 "+/*n*/iv);
-		if (lrl.results().size() == 0 ) {
-			System.err.println("196 no results for "+text);
-			return;
+		if (lrl.results().size() == 0) {
+			System.err.println("196 no results for " + text);
+			return null;
 		}
 //		for (LookupResult n: lrl.results()) {
 //			System.out.println("197 "+n);
 //		}
 
-		OS_Element best = lrl.chooseBest(null);
+		best = lrl.chooseBest(null);
 		if (best != null) {
-			if (best instanceof FunctionDef) {
-				final FunctionDef functionDef = (FunctionDef) best;
-				deduceVariableStatement_procedureCallExpression_functionDef(pce, functionDef, context);
-			} else if (best instanceof AliasStatement) {
-				deduceVariableStatement_procedureCallExpression_aliasStatement((AliasStatement) best);
-			} else {
-				throw new NotImplementedException();
-			}
+			left.setResolvedElement(best);
 		} else {
 			System.err.println("191 too many results");
+			return null;
 		}
-//		NotImplementedException.raise();
+		return best;
+	}
+
+	private void deduceVariableStatement_procedureCallExpression(
+			ProcedureCallExpression pce, @NotNull IdentExpression left, Context context) {
+		OS_Element best;
+		if (!(left.hasResolvedElement())) {
+			best = lookup_ident_to_element(left);
+		} else {
+			best = left.getResolvedElement();
+		}
+
+		if (best instanceof FunctionDef) {
+			final FunctionDef functionDef = (FunctionDef) best;
+			deduceVariableStatement_procedureCallExpression_functionDef(pce, functionDef, context);
+		} else if (best instanceof AliasStatement) {
+			deduceVariableStatement_procedureCallExpression_aliasStatement((AliasStatement) best);
+		} else {
+			throw new NotImplementedException();
+		}
 	}
 
 	private OS_Type deduceVariableStatement_procedureCallExpression_aliasStatement(AliasStatement best) {
@@ -637,6 +652,14 @@ public class DeduceTypes {
 	}
 
 	private OS_Element resolveAlias(AliasStatement aliasStatement) {
+		if (aliasStatement.hasResolvedElement())
+			return aliasStatement.getResolvedElement();
+		OS_Element x = _resolveAlias(aliasStatement);
+		aliasStatement.setResolvedElement(x);
+		return x;
+	}
+
+	private OS_Element _resolveAlias(AliasStatement aliasStatement) {
 		LookupResultList lrl2;
 		if (aliasStatement.getExpression() instanceof Qualident) {
 			IExpression de = qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()).parts());
@@ -648,7 +671,7 @@ public class DeduceTypes {
 		}
 		// TODO what about when DotExpression is not just simple x.y.z? then alias equivalent to val
 		if (aliasStatement.getExpression() instanceof DotExpression) {
-			IExpression de =  aliasStatement.getExpression();
+			IExpression de = aliasStatement.getExpression();
 			lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
 			return lrl2.chooseBest(null);
 		}
@@ -662,7 +685,7 @@ public class DeduceTypes {
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
 /*
 		List<OS_Type> q = expressions.stream()
-				.map(n -> deduceExpression(n, ctx.getContext()))
+				.map(n -> deduceExpression(n, ctx))
 				.collect(Collectors.toList());
 */
 		Collection<OS_Type> qq = Collections2.transform(expressions, new Function<IExpression, OS_Type>() {
@@ -706,7 +729,7 @@ public class DeduceTypes {
 						final ProcedureCallExpression pce = (ProcedureCallExpression) iv;
 						final IExpression left = pce.getLeft();
 						if (left.getKind() == ExpressionKind.IDENT) {
-							deduceVariableStatement_procedureCallExpression(iv, pce, (IdentExpression) left, parent.getContext());
+							deduceVariableStatement_procedureCallExpression(pce, (IdentExpression) left, parent.getContext());
 							dtype = pce.getType();
 						} else if (left.getKind() == ExpressionKind.DOT_EXP) {
 							LookupResultList lrl = lookup_dot_expression(parent.getContext(), (DotExpression) left);
@@ -756,8 +779,10 @@ public class DeduceTypes {
 					} else
 						return null;
 				} else if (element instanceof ClassStatement) {
+					n.setResolvedElement(element);
 					return new OS_Type((ClassStatement) element);
 				} else if (element instanceof FunctionDef) {
+					n.setResolvedElement(element);
 					return new OS_FuncType((FunctionDef) element);
 				}
 				System.err.println("89 " + element.getClass().getName());
