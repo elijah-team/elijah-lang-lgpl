@@ -224,7 +224,7 @@ public class Compilation {
 	private void parseElijjahFile(@NotNull File f, String file_name, ErrSink errSink, boolean do_out) throws Exception {
 		System.out.println((String.format("   %s", f.getAbsolutePath())));
 		if (f.exists()) {
-			OS_Module m = realParseElijjahFile(file_name, io.readFile(f), f, do_out);
+			OS_Module m = realParseElijjahFile(file_name, f, do_out);
 			m.prelude = this.findPrelude("c"); // TODO we dont know which prelude to find yet
 		} else {
 			errSink.reportError(
@@ -232,10 +232,11 @@ public class Compilation {
 		}
 	}
 
-	public OS_Module realParseElijjahFile(String f, InputStream s, File file, boolean do_out) throws Exception {
+	public OS_Module realParseElijjahFile(String f, File file, boolean do_out) throws Exception {
 		if (fn2m.containsKey(f)) { // don't parse twice
 			return fn2m.get(f);
 		}
+		final InputStream s = io.readFile(file);
 		try {
 			OS_Module R = parseFile_(f, s, do_out);
 			s.close();
@@ -313,7 +314,7 @@ public class Compilation {
 		File local_prelude = new File("lib_elijjah/lib-"+prelude_name+"/Prelude.elijjah");
 		if (local_prelude.exists()) {
 			try {
-				return realParseElijjahFile(local_prelude.getName(), io.readFile(local_prelude), local_prelude, false);
+				return realParseElijjahFile(local_prelude.getName(), local_prelude, false);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
