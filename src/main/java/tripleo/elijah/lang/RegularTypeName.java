@@ -16,9 +16,9 @@ package tripleo.elijah.lang;
 
 public class RegularTypeName extends AbstractTypeName2 implements NormalTypeName {
 
-	private /*Normal*/TypeName genericPart = null;
+	private TypeNameList genericPart;
 	private Context _ctx;
-	private OS_Type _resolved;
+//	private OS_Type _resolved;
 	private OS_Element _resolvedElement;
 
 	public RegularTypeName(Context cur) {
@@ -32,7 +32,7 @@ public class RegularTypeName extends AbstractTypeName2 implements NormalTypeName
 	}
 
 	@Override
-	public void addGenericPart(TypeName tn2) {
+	public void addGenericPart(TypeNameList tn2) {
 		genericPart = tn2;
 	}
 

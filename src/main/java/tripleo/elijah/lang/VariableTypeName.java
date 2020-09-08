@@ -14,8 +14,6 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.util.NotImplementedException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,16 +21,10 @@ import java.util.Objects;
 
 public class VariableTypeName extends AbstractTypeName implements NormalTypeName {
 
-	private TypeName genericPart = null;
+	private TypeNameList genericPart;
 	private Context _ctx;
 	//private OS_Type _resolved;
 	private OS_Element _resolvedElement;
-
-	public void type(int aI) {
-		throw new NotImplementedException();
-//		// TODO Auto-generated method stub
-//		NotImplementedException.raise();
-	}
 
 	@Override
 	public Type kindOfType() {
@@ -40,7 +32,7 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
-	public void addGenericPart(TypeName tn2) {
+	public void addGenericPart(TypeNameList tn2) {
 		genericPart = tn2;
 	}
 

@@ -754,10 +754,10 @@ typeOfTypeName2 returns [TypeOfTypeName tn]
 		{tn.typeOf(xy); tn.set(TypeModifiers.TYPE_OF);}
 	;
 normalTypeName2 returns [NormalTypeName tn]
-		{tn=new RegularTypeName(cur); TypeName rtn=null;}
+		{tn=new RegularTypeName(cur); TypeNameList rtn=null;}
 	: regularQualifiers2[tn]
 	  xy=qualident          {tn.setName(xy);}
-	  (LBRACK rtn=typeName2 {tn.addGenericPart(rtn);} RBRACK)? // TODO what about  multi-generics?
+	  (LBRACK rtn=typeNameList2 {tn.addGenericPart(rtn);} RBRACK)?
 	  (QUESTION {tn.setNullable();})?
 	;
 functionTypeName2 returns [FuncTypeName tn]
@@ -771,7 +771,7 @@ functionTypeName2 returns [FuncTypeName tn]
 	;
 regularQualifiers2[NormalTypeName fp]
 	:
-	( "in"            {fp.setIn(true);}
+	( "in"            {fp.setIn(true);} // TODO All parameters are in, must mean in out
 	| "out"           {fp.setOut(true);})?
 	( ("const"        {fp.setConstant(true);}
 	   ("ref"		  {fp.setReference(true);})?)
@@ -802,11 +802,9 @@ formalArgList[FormalArgList fal]
 formalArgListItem_priv[FormalArgListItem fali]
 		{ TypeName tn=null; }
 	:
-		( (regularQualifiers2[(NormalTypeName)fali.typeName()])?
+		( (regularQualifiers2[(NormalTypeName)fali.typeName()])? // TODO there is a problem here not to mention NPE
 		  i:IDENT  {	fali.setName(i);	}
 		  ( TOK_COLON tn=typeName2  { fali.setTypeName(tn); } )?
-//		  ( TOK_COLON formalArgTypeName[fali.typeName()])?
-//		| abstractGenericTypeName_xx[fali.typeName()]
 		)
 	;
 
