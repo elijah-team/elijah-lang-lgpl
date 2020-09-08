@@ -134,23 +134,27 @@ public class DeduceTypes {
 			}
 		}  else if (element instanceof StatementWrapper) {
 			IExpression expr = ((StatementWrapper) element).getExpr();
-			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
-				NotImplementedException.raise();
-				//
-				// TODO doesn't take into account assignment operator
-				//
-				final OS_Type right_type = deduceExpression(((IBinaryExpression) expr).getRight(), parent.getContext());
-				((IBinaryExpression)expr).getRight().setType(right_type);
-				expr.getLeft().setType(right_type);
-				expr.setType(expr.getLeft().getType());
-			} else if (expr.getKind() == ExpressionKind.PROCEDURE_CALL) {
-				deduceProcedureCall((ProcedureCallExpression) expr, parent.getContext());
-			} else if (expr.getKind() == ExpressionKind.FUNC_EXPR) {
-				OS_FuncExprType t = deduceFuncExpr((FuncExpr) expr, parent.getContext());
-				expr.setType(t);
-			}  else {
-				System.out.println(String.format("93 %s %s", expr, expr.getKind()));
-				throw new NotImplementedException();
+			switch (expr.getKind()) {
+				case ASSIGNMENT:
+					NotImplementedException.raise();
+					//
+					// TODO doesn't take into account assignment operator
+					//
+					final OS_Type right_type = deduceExpression(((IBinaryExpression) expr).getRight(), parent.getContext());
+					((IBinaryExpression) expr).getRight().setType(right_type);
+					expr.getLeft().setType(right_type);
+					expr.setType(expr.getLeft().getType());
+					break;
+				case PROCEDURE_CALL:
+					deduceProcedureCall((ProcedureCallExpression) expr, parent.getContext());
+					break;
+				case FUNC_EXPR:
+					OS_FuncExprType t = deduceFuncExpr((FuncExpr) expr, parent.getContext());
+					expr.setType(t);
+					break;
+				default:
+					System.out.println(String.format("93 %s %s", expr, expr.getKind()));
+					throw new NotImplementedException();
 			}
 		} else if (element instanceof ClassStatement) {
 			//
