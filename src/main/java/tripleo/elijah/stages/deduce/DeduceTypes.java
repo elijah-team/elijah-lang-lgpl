@@ -873,7 +873,19 @@ public class DeduceTypes {
 			}
 		} else {
 			for (ClassStatement classStatement : module.entryPoints) {
-				classStatement.findFunction("main");
+				Collection<ClassItem> fn_main = classStatement.findFunction("main");
+				for (ClassItem item : fn_main) {
+					if (!(item instanceof FunctionDef)) {
+						System.err.println("Not a function "+item);
+					} else {
+						FunctionDef fd = (FunctionDef) item;
+						if (fd.fal().falis.size() == 0 /*&& fd.returnType().isNull()*/) {
+							// TODO we dont know for sure the return type
+							// TODO Also check return type is Unit or NoneType
+							addClassItem(fd, classStatement);
+						}
+					}
+				}
 			}
 		}
 	}
