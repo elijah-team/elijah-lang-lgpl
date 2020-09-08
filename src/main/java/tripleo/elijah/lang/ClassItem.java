@@ -11,7 +11,7 @@ package tripleo.elijah.lang;
 /**
  * Marker interface to represent elements that can be added to a class
  *
- * @see {@link ClassStatement#add(ClassItem) }
+ * @see {@link ClassStatement#add(OS_Element) }
  */
 public interface ClassItem extends OS_Element {
 
