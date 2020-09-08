@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created 8/30/20 1:49 PM
  */
-public class SyntacticBlock implements OS_Element, OS_Container {
+public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, StatementItem {
 
 	private final List<FunctionItem> _items = new ArrayList<FunctionItem>();
 	private final OS_Element _parent;

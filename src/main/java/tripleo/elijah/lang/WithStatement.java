@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created 8/30/20 1:51 PM
  */
-public class WithStatement implements OS_Element, OS_Container {
+public class WithStatement implements OS_Element, OS_Container, FunctionItem, StatementItem {
 	private final OS_Element _parent;
 	private WithContext ctx;
 	private final List<FunctionItem> _items = new ArrayList<FunctionItem>();
