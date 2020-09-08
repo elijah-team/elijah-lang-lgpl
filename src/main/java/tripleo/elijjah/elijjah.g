@@ -789,8 +789,10 @@ typeNameList2 returns [TypeNameList cr]
 //
 
 defFunctionDef[DefFunctionDef fd]
-		{FormalArgList op=null;}
-	: "def" i1:IDENT op=opfal2/*[fd.fal()]*/  BECOMES expr=expression
+		{FormalArgList op=null;TypeName tn=null;}
+	: "def" i1:IDENT op=opfal2/*[fd.fal()]*/
+	  ((TOK_COLON|TOK_ARROW) tn=typeName2 {fd.setReturnType(tn);})?
+	  BECOMES expr=expression
 	   {fd.setType(DefFunctionDef.DEF_FUN); fd.setName(i1); fd.setOpfal(op); fd.setExpr(expr); }
 	;
 formalArgList[FormalArgList fal]
