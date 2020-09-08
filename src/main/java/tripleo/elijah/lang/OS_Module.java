@@ -39,6 +39,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	public Compilation parent;
 	private final List<IndexingItem> indexingItems = new ArrayList<IndexingItem>();
 	private String _fileName;
+	public List<ClassStatement> entryPoints = new ArrayList<ClassStatement>();
 
 //	public void addIndexingItem(Token i1, IExpression c1) {
 //		indexingItems.add(new IndexingItem(i1, c1));
@@ -194,7 +195,7 @@ public class OS_Module implements OS_Element, OS_Container {
 //					throw new IllegalArgumentException("element2 with null name");
 					System.err.println(String.format("*** OS_Element2 (%s) with null name", anElement));
 				} else {
-					for (ModuleItem item : items) {
+					for (ModuleItem item : items) { // TODO Use Multimap
 						if (item instanceof OS_Element2 && item != anElement)
 							if (element_name.equals(((OS_Element2) item).name())) {
 								parent.eee.reportWarning(String.format(
@@ -202,6 +203,17 @@ public class OS_Module implements OS_Element, OS_Container {
 										element_name));
 								return;
 							}
+					}
+				}
+			}
+			//
+			// FIND ALL ENTRY POINTS (should only be one per module)
+			//
+			for (ModuleItem item : items) {
+				if (item instanceof ClassStatement) {
+					if (((ClassStatement) item).getPackageName() == OS_Package.default_package) {
+						entryPoints.add((ClassStatement) item);
+						break;
 					}
 				}
 			}
