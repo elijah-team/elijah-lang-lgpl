@@ -17,11 +17,11 @@ import tripleo.elijah.util.NotImplementedException;
 public class VariableStatement implements OS_Element {
 
 	private final VariableSequence _parent;
-	private IdentExpression name;
-	
-	private IExpression initialValue = IExpression.UNASSIGNED;
-	private TypeModifiers typeModifiers;
+
 	private TypeName typeName = new VariableTypeName();
+	private IExpression initialValue = IExpression.UNASSIGNED;
+	private IdentExpression name;
+	private TypeModifiers typeModifiers;
 
 	public VariableStatement(VariableSequence aSequence) {
 		_parent = aSequence;
