@@ -867,8 +867,14 @@ public class DeduceTypes {
 
 	public void deduce() {
 		System.out.println("-------------------------------------------");
-		for (ModuleItem element : module.items) {
-			addModuleItem(element);
+		if (false) {
+			for (ModuleItem element : module.items) {
+				addModuleItem(element);
+			}
+		} else {
+			for (ClassStatement classStatement : module.entryPoints) {
+				classStatement.findFunction("main");
+			}
 		}
 	}
 
@@ -883,6 +889,12 @@ public class DeduceTypes {
 		@Override
 		protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
 			return this.size() > this.maxCacheSize;
+		}
+
+		@Override
+		public V put(K key, V value) {
+//			if (removeEldestEntry())
+			return super.put(key, value);
 		}
 	}
 
