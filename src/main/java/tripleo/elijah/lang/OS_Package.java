@@ -68,4 +68,20 @@ public class OS_Package implements OS_Element {
 	public List<OS_Element> getElements() {
 		return elements;
 	}
+
+	//
+	// NAME
+	//
+
+	public String getName() {
+		if (_name == null) {
+			System.err.println("*** name is null for package");
+			return "";
+		}
+		return _name.toString();
+	}
 }
+
+//
+//
+//
