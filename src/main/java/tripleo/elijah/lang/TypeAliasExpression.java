@@ -12,8 +12,6 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
-
 /**
  * @author Tripleo(sb)
  *
@@ -34,9 +32,8 @@ public class TypeAliasExpression {
 		this.y=y;
 	}
 	
-	public void setIdent(Token aToken) {
-		// TODO
-		x = new IdentExpression(aToken);
+	public void setIdent(IdentExpression aToken) {
+		x = aToken;
 	}
 	
 	public void setBecomes(Qualident qq) {
