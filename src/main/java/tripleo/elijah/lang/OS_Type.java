@@ -22,6 +22,10 @@ import tripleo.elijah.lang2.BuiltInTypes;
 import java.util.Objects;
 
 /**
+ *
+ * TODO What is this class for and do we really need it?  See {@link RegularTypeName#_resolved}
+ *
+ *
  * @author Tripleo(sb)
  *
  */
