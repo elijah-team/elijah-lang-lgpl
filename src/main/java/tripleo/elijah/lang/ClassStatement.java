@@ -192,13 +192,16 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return getName();
 	}
 
-	public FunctionDef findFunction(String name) {
-		for (ClassItem item : items) {
-			if (item instanceof FunctionDef)
-				if (((FunctionDef) item).name().equals(name))
-					return (FunctionDef) item;
-		}
-		return null;
+	public Collection<ClassItem> findFunction(final String name) {
+		return Collections2.filter(items, new Predicate<ClassItem>() {
+			@Override
+			public boolean apply(@Nullable ClassItem item) {
+				if (item instanceof FunctionDef)
+					if (((FunctionDef) item).name().equals(name))
+						return true;
+				return false;
+			}
+		});
 	}
 
 	public void setType(ClassTypes aType) {

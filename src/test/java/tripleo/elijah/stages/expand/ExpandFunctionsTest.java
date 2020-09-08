@@ -8,6 +8,8 @@ import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.*;
 
+import java.util.Collection;
+
 public class ExpandFunctionsTest {
 
 //    @Test
@@ -19,7 +21,8 @@ public class ExpandFunctionsTest {
         OS_Module mod = c.fileNameToModule(file_name);
         Assert.assertTrue(mod != null);
         ClassStatement kl = mod.getClassByName("Main");
-        FunctionDef fd = kl.findFunction("main");
+        Collection<ClassItem> fdl = kl.findFunction("main");
+        FunctionDef fd = (FunctionDef) fdl.iterator().next();
         FunctionContext fc = (FunctionContext) fd.getContext();
         final FunctionPrelimInstruction fi1 = fc.functionPrelimInstructions.get(0);
         assert fi1 instanceof IntroducedVariable;
