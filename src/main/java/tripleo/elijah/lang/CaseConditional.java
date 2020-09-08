@@ -127,6 +127,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		public void setDefault() {
 			_isDefault = true;
 			default_case_scope = this;
+			_ctx.carrier = (IdentExpression) expr;
 		}
 	}
 
