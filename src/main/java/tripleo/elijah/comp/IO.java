@@ -8,6 +8,10 @@
  */
 package tripleo.elijah.comp;
 
+import org.jetbrains.annotations.NotNull;
+import tripleo.util.io.CharSink;
+import tripleo.util.io.CharSource;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,11 +19,6 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
-import tripleo.util.io.CharSink;
-import tripleo.util.io.CharSource;
-import tripleo.elijah.FileOption;
 
 public class IO {
 
