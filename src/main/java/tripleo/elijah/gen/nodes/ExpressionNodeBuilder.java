@@ -125,7 +125,7 @@ public class ExpressionNodeBuilder {
 	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
 		ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
-		return new BasicBinaryExpression(left, middle1, new StringExpression(Helpers.makeToken(right.text()))); // TODO !!!
+		return new BasicBinaryExpression(left, middle1, new StringExpression(tripleo.elijah.util.Helpers.makeToken(right.text()))); // TODO !!!
 	}
 
 	@NotNull
@@ -353,7 +353,7 @@ public class ExpressionNodeBuilder {
 	@Contract("_ -> new")
 	public static IdentExpression ident(String string) {
 		// TODO Parser level elements should not be used here
-		return new IdentExpression(Helpers.makeToken(string));
+		return new IdentExpression(tripleo.elijah.util.Helpers.makeToken(string));
 
 	}
 	

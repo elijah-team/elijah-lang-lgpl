@@ -8,7 +8,7 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.gen.nodes.Helpers;
+import tripleo.elijah.util.Helpers;
 
 /**
  * @author Tripleo

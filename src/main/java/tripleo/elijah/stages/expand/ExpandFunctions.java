@@ -10,9 +10,9 @@ package tripleo.elijah.stages.expand;
 
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.contexts.FunctionContext;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.Collection;
@@ -356,7 +356,7 @@ public class ExpandFunctions {
 			FunctionPrelimInstruction i = fc.introduceFunction(n.getLeft());
 			final IntroducedFunction nn = (IntroducedFunction) i;
 			nn.setName("__getitem__");
-			nn.setArgs(Helpers.List_of(((GetItemExpression)n).index));
+			nn.setArgs(tripleo.elijah.util.Helpers.List_of(((GetItemExpression)n).index));
 			return i;
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
 			return expandProcedureCall((ProcedureCallExpression) n, fc);

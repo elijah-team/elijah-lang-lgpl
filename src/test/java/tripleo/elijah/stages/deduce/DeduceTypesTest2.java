@@ -16,8 +16,8 @@ import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.contexts.ModuleContext;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.util.Helpers;
 
 public class DeduceTypesTest2 {
 
@@ -29,7 +29,7 @@ public class DeduceTypesTest2 {
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		ClassStatement cs = new ClassStatement(mod);
-		cs.setName(new IdentExpression(Helpers.makeToken("Test")));
+		cs.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("Test")));
 		final ClassContext cctx = new ClassContext(mctx, cs);
 		cs.setContext(cctx);
 		final FunctionDef fd = cs.funcDef();
@@ -38,12 +38,12 @@ public class DeduceTypesTest2 {
 		fd.setContext(fctx);
 		VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
 		final VariableStatement vs = vss.next();
-		vs.setName(new IdentExpression(Helpers.makeToken("x")));
+		vs.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("x")));
 		final Qualident qu = new Qualident();
-		qu.append(Helpers.makeToken("Integer"));
+		qu.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
 		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
-		final IdentExpression x1 = new IdentExpression(Helpers.makeToken("x"));
+		final IdentExpression x1 = new IdentExpression(tripleo.elijah.util.Helpers.makeToken("x"));
 		x1.setContext(fc);
 		OS_Type x = d.deduceExpression(x1, fc);
 		System.out.println(x);
@@ -51,7 +51,7 @@ public class DeduceTypesTest2 {
 //		final RegularTypeName tn = new RegularTypeName();
 		final VariableTypeName tn = new VariableTypeName();
 		Qualident tnq = new Qualident();
-		tnq.append(Helpers.makeToken("Integer"));
+		tnq.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 		fd.postConstruct();
 		cs.postConstruct();

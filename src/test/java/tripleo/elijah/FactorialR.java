@@ -24,7 +24,7 @@ import tripleo.util.buffer.XX;
 
 import java.util.List;
 
-import static tripleo.elijah.gen.nodes.Helpers.List_of;
+import static tripleo.elijah.util.Helpers.List_of;
 
 /**
  * @author Tripleo(sb)

@@ -9,9 +9,9 @@
 package tripleo.elijah;
 
 import tripleo.elijah.comp.Compilation;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.ParserClosure;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.FileNotFoundException;

@@ -11,11 +11,11 @@
  */
 package tripleo.elijah.contexts;
 
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.Loop;
+import tripleo.elijah.util.Helpers;
 
 import java.util.List;
 

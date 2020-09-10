@@ -5,8 +5,8 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.contexts.FunctionContext;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.util.Helpers;
 
 import java.util.Collection;
 

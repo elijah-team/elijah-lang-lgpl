@@ -18,7 +18,7 @@ import tripleo.elijah.comp.StdErrSink;
 import java.io.File;
 import java.util.List;
 
-import static tripleo.elijah.gen.nodes.Helpers.List_of;
+import static tripleo.elijah.util.Helpers.List_of;
 
 /**
  * @author Tripleo(sb)

@@ -1,15 +1,11 @@
 package tripleo.elijah.gen.nodes;
 
-import antlr.CommonToken;
-import antlr.Token;
-import com.thoughtworks.xstream.XStream;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.ExpressionKind;
 import tripleo.elijah.lang.ExpressionList;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.VariableReference;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,28 +73,7 @@ public class Helpers {
 		return sb.toString();
 	}
 
-	public static void printXML(Object obj, @NotNull TabbedOutputStream tos) {
-		XStream x= new XStream();
-		//x.setMode(XStream.ID_REFERENCES);
-		x.toXML(obj, tos.getStream());
-	}
-
-	@NotNull
-	public static <E> List<E> List_of(@NotNull E... e1) {
-		List<E> r = new ArrayList<E>();
-		for (E e : e1) {
-			r.add(e);
-		}
-		return r;
-	}
-
-	public static Token makeToken(String aText) {
-		CommonToken t = new CommonToken();
-		t.setText(aText);
-		return t;
-	}
-
-//	public static List<String> List_of(String string, String string2, String string3) {
+	//	public static List<String> List_of(String string, String string2, String string3) {
 //		List<String> r = new ArrayList<String>();
 //		r.add(string);
 //		r.add(string2);

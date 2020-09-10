@@ -8,8 +8,8 @@
  */
 package tripleo.elijah.contexts;
 
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.util.Helpers;
 
 import java.util.List;
 

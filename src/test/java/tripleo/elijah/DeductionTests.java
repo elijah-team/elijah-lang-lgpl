@@ -14,8 +14,8 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.util.Helpers;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class DeductionTests {
 
 	@Test
 	public final void testParseFile() {
-		List<String> args = Helpers.List_of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
+		List<String> args = tripleo.elijah.util.Helpers.List_of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
 		ErrSink eee = new StdErrSink();
 		Compilation c = new Compilation(eee, new IO());
 

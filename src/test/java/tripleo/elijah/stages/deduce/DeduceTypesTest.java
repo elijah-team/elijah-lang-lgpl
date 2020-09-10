@@ -17,8 +17,8 @@ import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.contexts.ModuleContext;
-import tripleo.elijah.gen.nodes.Helpers;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.util.Helpers;
 
 public class DeduceTypesTest {
 
@@ -32,20 +32,20 @@ public class DeduceTypesTest {
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		ClassStatement cs = new ClassStatement(mod);
-		cs.setName(new IdentExpression(Helpers.makeToken("Test")));
+		cs.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("Test")));
 		final ClassContext cctx = new ClassContext(mctx, cs);
 		cs.setContext(cctx);
 		final FunctionDef fd = cs.funcDef();
-		fd.setName(new IdentExpression(Helpers.makeToken("test")));
+		fd.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("test")));
 		final FunctionContext fctx = new FunctionContext(cctx, fd);
 		fd.setContext(fctx);
 		VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
 		final VariableStatement vs = vss.next();
-		final IdentExpression x = new IdentExpression(Helpers.makeToken("x"));
+		final IdentExpression x = new IdentExpression(tripleo.elijah.util.Helpers.makeToken("x"));
 		x.setContext(fctx);
 		vs.setName(x);
 		final Qualident qu = new Qualident();
-		qu.append(Helpers.makeToken("Integer"));
+		qu.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
 		fd.postConstruct();
 		cs.postConstruct();
@@ -78,7 +78,7 @@ public class DeduceTypesTest {
 	public void testDeduceIdentExpression3() {
 		final VariableTypeName tn = new VariableTypeName();
 		Qualident tnq = new Qualident();
-		tnq.append(Helpers.makeToken("Integer"));
+		tnq.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 //		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
 		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
@@ -87,7 +87,7 @@ public class DeduceTypesTest {
 	public void testDeduceIdentExpression3_5() {
 		final VariableTypeName tn = new VariableTypeName();
 		Qualident tnq = new Qualident();
-		tnq.append(Helpers.makeToken("Integer"));
+		tnq.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
 //		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
@@ -96,7 +96,7 @@ public class DeduceTypesTest {
 	public void testDeduceIdentExpression4() {
 		final VariableTypeName tn = new VariableTypeName();
 		Qualident tnq = new Qualident();
-		tnq.append(Helpers.makeToken("Integer"));
+		tnq.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 //		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
 //		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
