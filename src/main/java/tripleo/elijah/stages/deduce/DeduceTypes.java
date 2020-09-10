@@ -721,7 +721,8 @@ public class DeduceTypes {
 					if (iv instanceof NumericExpression) {
 						dtype = new OS_Type(BuiltInTypes.SystemInteger);
 					} else if (iv instanceof IdentExpression) {
-						LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
+						final IdentExpression identExpression = (IdentExpression) iv;
+						LookupResultList lrl = identExpression.getContext().lookup(identExpression.getText());
 						for (LookupResult n: lrl.results()) {
 							System.out.println("99 "+n);
 						}
