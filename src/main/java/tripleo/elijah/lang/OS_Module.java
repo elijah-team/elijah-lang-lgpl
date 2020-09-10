@@ -213,7 +213,7 @@ public class OS_Module implements OS_Element, OS_Container {
 				if (item instanceof ClassStatement) {
 					if (((ClassStatement) item).getPackageName() == OS_Package.default_package) {
 						entryPoints.add((ClassStatement) item);
-						break;
+//						break; // allow for "extend" class
 					}
 				}
 			}
