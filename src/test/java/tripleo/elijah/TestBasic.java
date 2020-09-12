@@ -39,7 +39,7 @@ public class TestBasic {
 
 		c.feedCmdLine(args);
 
-		Assert.assertTrue(c.errorCount() == 0);
+		Assert.assertEquals(0, c.errorCount());
 	}
 
 	@Test
@@ -55,7 +55,7 @@ public class TestBasic {
 		c.feedCmdLine(args);
 
 //		Assert.fail("Not yet implemented"); // TODO
-		Assert.assertTrue(c.errorCount() == 0);
+		Assert.assertEquals(0, c.errorCount());
 	}
 
 }
