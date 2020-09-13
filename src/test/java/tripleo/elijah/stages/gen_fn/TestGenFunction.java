@@ -53,10 +53,11 @@ public class TestGenFunction {
 				Assert.assertEquals(InstructionName.CMP,  gf.getInstruction(4).getName());
 				Assert.assertEquals(InstructionName.JE,   gf.getInstruction(5).getName());
 				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(6).getName());
-				Assert.assertEquals(InstructionName.JMP,  gf.getInstruction(7).getName());
-				Assert.assertEquals(InstructionName.XS,   gf.getInstruction(8).getName());
-				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(9).getName());
-				Assert.assertEquals(InstructionName.X,    gf.getInstruction(10).getName());
+				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(7).getName());
+				Assert.assertEquals(InstructionName.JMP,  gf.getInstruction(8).getName());
+				Assert.assertEquals(InstructionName.XS,   gf.getInstruction(9).getName());
+				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(10).getName());
+				Assert.assertEquals(InstructionName.X,    gf.getInstruction(11).getName());
 			}
 		}
 	}

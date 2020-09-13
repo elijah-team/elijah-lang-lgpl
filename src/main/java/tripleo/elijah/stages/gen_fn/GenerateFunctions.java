@@ -100,7 +100,7 @@ public class GenerateFunctions {
 		GeneratedFunction gf = new GeneratedFunction(fd);
 		if (parent instanceof ClassStatement)
 			addVariableTableEntry("self", VariableTableType.SELF, InstructionType.known(new OS_Type((ClassStatement) parent)), gf);
-		addVariableTableEntry("Result", VariableTableType.RESULT, null, gf); // TODO what about Unit returns?
+		addVariableTableEntry("Result", VariableTableType.RESULT, InstructionType.known(new OS_Type(fd.returnType())), gf); // TODO what about Unit returns?
 		for (FormalArgListItem fali : fd.fal().falis) {
 			addVariableTableEntry(fali.name.getText(), VariableTableType.ARG, InstructionType.known(new OS_Type(fali.typeName())), gf);
 		} // TODO Exception !!??
@@ -221,8 +221,8 @@ public class GenerateFunctions {
 					IExpression iv = vs.initialValue();
 					assign_variable(gf, i, iv);
 				}
-				final OS_Type type = vs.initialValue().getType();
-				final String stype = type == null ? "Unknown" : getTypeString(type);
+//				final OS_Type type = vs.initialValue().getType();
+//				final String stype = type == null ? "Unknown" : getTypeString(type);
 //				System.out.println("8004-1 " + type);
 //				System.out.println(String.format("8004-2 %s %s;", stype, vs.getName()));
 			}
@@ -252,6 +252,10 @@ public class GenerateFunctions {
 					System.out.println("705 "+statementItem);
 					generate_item((OS_Element)statementItem, gf);
 				}
+				CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__preinc__");
+				IdentExpression pre_inc_name = new IdentExpression(t);
+				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(null, null/*getType(left), getType(right)*/), gf);
+				add_i(gf, InstructionName.CALL, List_of(new IntegerIA(pre_inc), new IntegerIA(i)));
 				add_i(gf, InstructionName.JMP, List_of(label_top));
 				gf.place(label_bottom);
 			}
