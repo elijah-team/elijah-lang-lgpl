@@ -336,13 +336,13 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 	public ExpressionKind _kind;
 
 	@Override
-	public void setKind(ExpressionKind aIncrement) {
-		_kind =aIncrement;
+	public void setKind(ExpressionKind aKind) {
+		_kind = aKind;
 	}
 
 	@Override
 	public boolean is_simple() {
-		throw new IllegalStateException("Implement me");
+		return getLeft().is_simple() && getRight().is_simple();
 	}
 
 	OS_Type _type;
