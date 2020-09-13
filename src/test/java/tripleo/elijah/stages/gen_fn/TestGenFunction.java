@@ -14,6 +14,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.stages.instructions.InstructionName;
 
 import java.io.File;
 import java.util.List;
@@ -38,6 +39,15 @@ public class TestGenFunction {
 
 		for (GeneratedFunction gf : lgf) {
 			System.err.println("7000 "+gf);
+
+			if (gf.name().equals("main")) {
+				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
+				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(1).getName());
+				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(2).getName());
+				Assert.assertEquals(InstructionName.X,    gf.getInstruction(3).getName());
+			} else if (gf.name().equals("factorial")) {
+				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
+			}
 		}
 	}
 }

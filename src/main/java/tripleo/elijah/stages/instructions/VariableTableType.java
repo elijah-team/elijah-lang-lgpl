@@ -9,14 +9,10 @@
 package tripleo.elijah.stages.instructions;
 
 /**
- * Created 9/10/20 3:36 PM
+ * Created 9/12/20 5:00 PM
  */
-public class FnCallIA implements InstructionArgument {
-    private final Instruction expression_to_call;
-
-    public FnCallIA(Instruction expression_to_call) {
-        this.expression_to_call = expression_to_call;
-    }
+public enum VariableTableType {
+	VAR, TEMP, SELF, RESULT, ARG;
 }
 
 //

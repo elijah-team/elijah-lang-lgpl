@@ -12,6 +12,22 @@ package tripleo.elijah.stages.instructions;
  * Created 9/10/20 3:35 PM
  */
 public class IntegerIA implements InstructionArgument {
+	@Override
+	public String toString() {
+		return "IntegerIA{" +
+				"index=" + index +
+				'}';
+	}
+
+	private final long index;
+
+	public IntegerIA(long e1) {
+		index = e1;
+	}
+
+	public long getIndex() {
+		return index;
+	}
 }
 
 //

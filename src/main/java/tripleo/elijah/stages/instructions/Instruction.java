@@ -29,6 +29,23 @@ public class Instruction {
 	public void setArgs(List<InstructionArgument> args_) {
 		args = args_;
 	}
+
+	public InstructionName getName() {
+		return name;
+	}
+
+	public long getIndex() {
+		return index;
+	}
+
+	@Override
+	public String toString() {
+		return "Instruction{" +
+				"name=" + name +
+				", index=" + index +
+				", args=" + args +
+				'}';
+	}
 }
 
 //

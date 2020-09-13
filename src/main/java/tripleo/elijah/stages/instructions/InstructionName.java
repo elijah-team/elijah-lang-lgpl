@@ -18,7 +18,8 @@ public enum InstructionName {
 	JE, JL, JMP,
 	CALL, RET, YIELD,
 	TRY,
-	PC
+	PC,
+	DOT
 }
 
 //

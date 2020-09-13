@@ -26,7 +26,13 @@ public class GeneratedFunction {
 	private final DefFunctionDef dfd;
 	private List<Label> labelList = new ArrayList<Label>();
 	public List<Instruction> instructionsList = new ArrayList<>();
-	private long index = 0;
+	private long instruction_index = 0;
+	List<ConstantTableEntry> cte_list = new ArrayList<ConstantTableEntry>();
+	List<VariableTableEntry> vte_list = new ArrayList<VariableTableEntry>();
+	List<ProcTableEntry> prte_list = new ArrayList<ProcTableEntry>();
+	List<TypeTableEntry> tte_list = new ArrayList<TypeTableEntry>();
+	List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
+	List<FuncTableEntry> fte_list = new ArrayList<FuncTableEntry>();
 
 	public GeneratedFunction(FunctionDef functionDef) {
 		fd = functionDef;
@@ -51,15 +57,25 @@ public class GeneratedFunction {
 	}
 
 	public void setLabel(Label l) {
-		l.setIndex(index);
+		l.setIndex(instruction_index);
 	}
 
-	public void add(InstructionName aName, List<InstructionArgument> args_) {
+	public long add(InstructionName aName, List<InstructionArgument> args_) {
 		Instruction i = new Instruction();
-		i.setIndex(index++);
+		i.setIndex(instruction_index++);
 		i.setName(aName);
 		i.setArgs(args_);
 		instructionsList.add(i);
+		return i.getIndex();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("<GeneratedFunction %s>", name());
+	}
+
+	public String name() {
+		return fd != null ? fd.funName.getText() : dfd.funName;
 	}
 }
 
