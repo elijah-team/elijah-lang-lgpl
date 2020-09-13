@@ -12,6 +12,18 @@ package tripleo.elijah.stages.instructions;
  * Created 9/10/20 3:35 PM
  */
 public class ConstTableIA implements InstructionArgument {
+    @Override
+    public String toString() {
+        return "ConstTableIA{" +
+                "index=" + index +
+                '}';
+    }
+
+    private final int index;
+
+    public ConstTableIA(int index) {
+        this.index = index;
+    }
 }
 
 //
