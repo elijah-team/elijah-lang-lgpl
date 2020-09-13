@@ -115,6 +115,10 @@ public class VariableStatement implements OS_Element {
 	public void setTypeName(TypeName tn) {
 		typeName = tn;
 	}
+
+	public TypeModifiers getTypeModifiers() {
+		return typeModifiers;
+	}
 }
 
 //
