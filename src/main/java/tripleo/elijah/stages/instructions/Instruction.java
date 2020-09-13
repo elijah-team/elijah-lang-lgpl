@@ -16,7 +16,7 @@ import java.util.List;
 public class Instruction {
 	private InstructionName name;
 	private long index;
-	private List<InstructionArgument> args;
+	List<InstructionArgument> args;
 
 	public void setName(InstructionName aName) {
 		name = aName;

@@ -14,6 +14,13 @@ package tripleo.elijah.stages.instructions;
 public class FnCallIA implements InstructionArgument {
     private final Instruction expression_to_call;
 
+    @Override
+    public String toString() {
+        return "FnCallIA{" +
+                "expression_to_call=" + expression_to_call.args +
+                '}';
+    }
+
     public FnCallIA(Instruction expression_to_call) {
         this.expression_to_call = expression_to_call;
     }
