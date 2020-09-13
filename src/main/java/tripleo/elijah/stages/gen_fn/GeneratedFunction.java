@@ -32,7 +32,6 @@ public class GeneratedFunction {
 	List<ProcTableEntry> prte_list = new ArrayList<ProcTableEntry>();
 	List<TypeTableEntry> tte_list = new ArrayList<TypeTableEntry>();
 	List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
-	List<FuncTableEntry> fte_list = new ArrayList<FuncTableEntry>();
 
 	public GeneratedFunction(FunctionDef functionDef) {
 		fd = functionDef;

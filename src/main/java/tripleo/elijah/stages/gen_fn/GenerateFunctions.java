@@ -201,7 +201,6 @@ public class GenerateFunctions {
 		System.out.println("ProcTable     "+ gf.prte_list);
 		System.out.println("TypeTable     "+ gf.tte_list);
 		System.out.println("IdentTable    "+ gf.idte_list);
-		System.out.println("FuncTable     "+ gf.fte_list);
 		return gf;
 	}
 
@@ -304,7 +303,7 @@ public class GenerateFunctions {
 			i.setName(InstructionName.CALL);
 			List<InstructionArgument> li = new ArrayList<>();
 //			int ii = addIdentTableEntry((IdentExpression) expression.getLeft(), gf);
-			int ii = addFuncTableEntry((IdentExpression) expression.getLeft(), get_args_types(pce.getArgs(), gf), gf);
+			int ii = addProcTableEntry((IdentExpression) expression.getLeft(), -1, get_args_types(pce.getArgs(), gf), gf);
 			li.add(new IntegerIA(ii));
 			final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf);
 			li.addAll(args_);
@@ -321,12 +320,6 @@ public class GenerateFunctions {
 		}
 //		int i = simplify_expression(expression, gf);
 		return null;
-	}
-
-	private int addFuncTableEntry(IdentExpression name, List<InstructionType> args_types, GeneratedFunction gf) {
-		FuncTableEntry fte = new FuncTableEntry(gf.fte_list.size(), name, args_types);
-		gf.fte_list.add(fte);
-		return fte.index;
 	}
 
 	private int addIdentTableEntry(IdentExpression ident, GeneratedFunction gf) {
