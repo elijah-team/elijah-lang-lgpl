@@ -217,7 +217,7 @@ public class GenerateFunctions {
 		IExpression left = pce.getLeft();
 		ExpressionList args = pce.getArgs();
 		//
-		int i = addProcTableEntry(simplify_expression(left, gf), get_args_types(args, gf), gf);
+		int i = addProcTableEntry(left, simplify_expression(left, gf), get_args_types(args, gf), gf);
 		final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
 		l.add(new IntegerIA(i));
 		l.addAll(simplify_args(args, gf));
@@ -237,8 +237,8 @@ public class GenerateFunctions {
 		return R;
 	}
 
-	private int addProcTableEntry(int expression, List<InstructionType> args, GeneratedFunction gf) {
-		ProcTableEntry pte = new ProcTableEntry(gf.prte_list.size(), expression, args);
+	private int addProcTableEntry(IExpression expression, int expression_num, List<InstructionType> args, GeneratedFunction gf) {
+		ProcTableEntry pte = new ProcTableEntry(gf.prte_list.size(), expression, expression_num, args);
 		gf.prte_list.add(pte);
 		return pte.index;
 	}
