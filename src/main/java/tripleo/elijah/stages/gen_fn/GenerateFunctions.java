@@ -254,7 +254,7 @@ public class GenerateFunctions {
 				}
 				CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__preinc__");
 				IdentExpression pre_inc_name = new IdentExpression(t);
-				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(null/*getType(left), getType(right)*/), gf);
+				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(InstructionType.unknown(null)/*getType(left), getType(right)*/), gf);
 				add_i(gf, InstructionName.CALL, List_of(new IntegerIA(pre_inc), new IntegerIA(i)));
 				add_i(gf, InstructionName.JMP, List_of(label_top));
 				gf.place(label_bottom);
@@ -332,24 +332,31 @@ public class GenerateFunctions {
 	private InstructionArgument simplify_expression(IExpression expression, GeneratedFunction gf) {
 		switch (expression.getKind()) {
 		case PROCEDURE_CALL:
-			break;
-		case DOT_EXP:
+			throw new NotImplementedException();
+		case DOT_EXP: {
 			DotExpression de = (DotExpression) expression;
 			IExpression expr = de.getLeft();
 			do {
 				InstructionArgument i = simplify_expression(expr, gf);
 				VariableTableEntry x = gf.vte_list.get(((IntegerIA) i).getIndex());
-				System.err.println("901 "+expr.getType());
-//				expr =
+				System.err.println("901 "+x+" "+expr.getType());
+				expr = de.getRight();
 			} while (expr != null);
-			break;
+		}
+		break;
 		case QIDENT:
-			break;
+			throw new NotImplementedException();
 		case IDENT:
 			InstructionArgument i = vte_lookup(((IdentExpression) expression).getText(), gf);
 			return i;
+		case NUMERIC:
+			{
+				NumericExpression ne = (NumericExpression) expression;
+				int ii = addConstantTableEntry(null, ne, ne.getType(), gf);
+				return new ConstTableIA(ii, gf);
+			}
 		default:
-			return null;
+			throw new NotImplementedException();
 		}
 		return null;
 	}
