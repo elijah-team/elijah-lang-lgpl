@@ -254,7 +254,7 @@ public class GenerateFunctions {
 				}
 				CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__preinc__");
 				IdentExpression pre_inc_name = new IdentExpression(t);
-				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(null, null/*getType(left), getType(right)*/), gf);
+				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(null/*getType(left), getType(right)*/), gf);
 				add_i(gf, InstructionName.CALL, List_of(new IntegerIA(pre_inc), new IntegerIA(i)));
 				add_i(gf, InstructionName.JMP, List_of(label_top));
 				gf.place(label_bottom);
