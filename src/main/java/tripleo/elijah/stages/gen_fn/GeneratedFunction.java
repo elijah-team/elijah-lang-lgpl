@@ -10,10 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.DefFunctionDef;
 import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.stages.instructions.Instruction;
-import tripleo.elijah.stages.instructions.InstructionArgument;
-import tripleo.elijah.stages.instructions.InstructionName;
-import tripleo.elijah.stages.instructions.Label;
+import tripleo.elijah.stages.instructions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +21,15 @@ import java.util.List;
 public class GeneratedFunction {
 	private final FunctionDef fd;
 	private final DefFunctionDef dfd;
-	private List<Label> labelList = new ArrayList<Label>();
+	private final List<Label> labelList = new ArrayList<Label>();
 	public List<Instruction> instructionsList = new ArrayList<>();
-	private long instruction_index = 0;
-	List<ConstantTableEntry> cte_list = new ArrayList<ConstantTableEntry>();
+	private int instruction_index = 0;
+	public List<ConstantTableEntry> cte_list = new ArrayList<ConstantTableEntry>();
 	List<VariableTableEntry> vte_list = new ArrayList<VariableTableEntry>();
-	List<ProcTableEntry> prte_list = new ArrayList<ProcTableEntry>();
+	public List<ProcTableEntry> prte_list = new ArrayList<ProcTableEntry>();
 	List<TypeTableEntry> tte_list = new ArrayList<TypeTableEntry>();
 	List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
+	private int label_count = 0;
 
 	public GeneratedFunction(FunctionDef functionDef) {
 		fd = functionDef;
@@ -59,7 +57,7 @@ public class GeneratedFunction {
 		l.setIndex(instruction_index);
 	}
 
-	public long add(InstructionName aName, List<InstructionArgument> args_) {
+	public int add(InstructionName aName, List<InstructionArgument> args_) {
 		Instruction i = new Instruction();
 		i.setIndex(instruction_index++);
 		i.setName(aName);
@@ -75,6 +73,22 @@ public class GeneratedFunction {
 
 	public String name() {
 		return fd != null ? fd.funName.getText() : dfd.funName;
+	}
+
+	public Label addLabel(String base_name, boolean append_int) {
+		Label label = new Label();
+		String name;
+		if (append_int) {
+			name = String.format("%s%d", base_name, label_count++);
+		} else
+			name = base_name;
+		label.setName(name);
+		labelList.add(label);
+		return label;
+	}
+
+	public void place(Label label) {
+		label.setIndex(instruction_index);
 	}
 }
 

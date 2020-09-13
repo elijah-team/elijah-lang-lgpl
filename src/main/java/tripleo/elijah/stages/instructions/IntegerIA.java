@@ -19,13 +19,13 @@ public class IntegerIA implements InstructionArgument {
 				'}';
 	}
 
-	private final long index;
+	private final int index;
 
-	public IntegerIA(long e1) {
+	public IntegerIA(int e1) {
 		index = e1;
 	}
 
-	public long getIndex() {
+	public int getIndex() {
 		return index;
 	}
 }

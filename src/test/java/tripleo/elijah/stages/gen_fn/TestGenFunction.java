@@ -38,7 +38,7 @@ public class TestGenFunction {
 		List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
 
 		for (GeneratedFunction gf : lgf) {
-			System.err.println("7000 "+gf);
+//			System.err.println("7000 "+gf);
 
 			if (gf.name().equals("main")) {
 				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
@@ -47,7 +47,21 @@ public class TestGenFunction {
 				Assert.assertEquals(InstructionName.X,    gf.getInstruction(3).getName());
 			} else if (gf.name().equals("factorial")) {
 				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
+				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(1).getName());
+				Assert.assertEquals(InstructionName.ES,   gf.getInstruction(2).getName());
+				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(3).getName());
+				Assert.assertEquals(InstructionName.CMP,  gf.getInstruction(4).getName());
+				Assert.assertEquals(InstructionName.JE,   gf.getInstruction(5).getName());
+				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(6).getName());
+				Assert.assertEquals(InstructionName.JMP,  gf.getInstruction(7).getName());
+				Assert.assertEquals(InstructionName.XS,   gf.getInstruction(8).getName());
+				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(9).getName());
+				Assert.assertEquals(InstructionName.X,    gf.getInstruction(10).getName());
 			}
 		}
 	}
 }
+
+//
+//
+//

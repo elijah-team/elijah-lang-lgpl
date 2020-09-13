@@ -9,27 +9,9 @@
 package tripleo.elijah.stages.instructions;
 
 /**
- * Created 9/10/20 3:17 PM
+ * Created 9/13/20 6:50 AM
  */
-public class Label implements InstructionArgument {
-	String name;
-	long index;
-
-	public Label(String name) {
-		this.name = name;
-	}
-
-	public Label() {
-
-	}
-
-	public void setIndex(long index) {
-		this.index = index;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+public class LabelIA {
 }
 
 //

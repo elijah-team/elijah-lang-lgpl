@@ -15,7 +15,7 @@ import tripleo.elijah.lang.OS_Type;
  * Created 9/10/20 4:47 PM
  */
 public class ConstantTableEntry {
-	private final int index;
+	final int index;
 	private final String name;
 	private final IExpression initialValue;
 	private final OS_Type type;

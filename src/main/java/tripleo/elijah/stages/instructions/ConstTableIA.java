@@ -8,21 +8,23 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+
 /**
  * Created 9/10/20 3:35 PM
  */
 public class ConstTableIA implements InstructionArgument {
-    @Override
-    public String toString() {
-        return "ConstTableIA{" +
-                "index=" + index +
-                '}';
-    }
-
+    private final GeneratedFunction gf;
     private final int index;
 
-    public ConstTableIA(int index) {
+    @Override
+    public String toString() {
+        return String.format("(ct %d) [%s]", index, gf.cte_list.get(index).getName());
+    }
+
+    public ConstTableIA(int index, GeneratedFunction generatedFunction) {
         this.index = index;
+        this.gf = generatedFunction;
     }
 }
 

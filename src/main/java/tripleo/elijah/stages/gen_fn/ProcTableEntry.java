@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.IExpression;
+import tripleo.elijah.stages.instructions.InstructionArgument;
 
 import java.util.List;
 
@@ -28,11 +29,11 @@ public class ProcTableEntry {
 
 
     public final int index;
-    private final int expression_num;
-    private final List<InstructionType> args;
-    private final IExpression expression;
+    private final InstructionArgument expression_num;
+    public final List<InstructionType> args;
+    public final IExpression expression;
 
-    public ProcTableEntry(int index, IExpression iExpression, int expression_num, List<InstructionType> args) {
+    public ProcTableEntry(int index, IExpression iExpression, InstructionArgument expression_num, List<InstructionType> args) {
         this.index = index;
         this.expression = iExpression;
         this.expression_num = expression_num;

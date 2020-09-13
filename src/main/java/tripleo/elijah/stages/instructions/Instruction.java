@@ -15,14 +15,14 @@ import java.util.List;
  */
 public class Instruction {
 	private InstructionName name;
-	private long index;
+	private int index;
 	List<InstructionArgument> args;
 
 	public void setName(InstructionName aName) {
 		name = aName;
 	}
 
-	public void setIndex(long l) {
+	public void setIndex(int l) {
 		index = l;
 	}
 
@@ -34,7 +34,7 @@ public class Instruction {
 		return name;
 	}
 
-	public long getIndex() {
+	public int getIndex() {
 		return index;
 	}
 
