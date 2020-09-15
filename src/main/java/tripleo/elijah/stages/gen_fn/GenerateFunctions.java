@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import antlr.CommonToken;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.stages.instructions.*;
@@ -394,27 +395,34 @@ public class GenerateFunctions {
 		switch (expression.getLeft().getKind()){
 		case IDENT:
 			ProcedureCallExpression pce = (ProcedureCallExpression) expression;
-			Instruction i = new Instruction();
-			i.setName(InstructionName.CALL);
-			List<InstructionArgument> li = new ArrayList<>();
-//			int ii = addIdentTableEntry((IdentExpression) expression.getLeft(), gf);
-			int ii = addProcTableEntry((IdentExpression) expression.getLeft(), null, get_args_types(pce.getArgs(), gf), gf);
-			li.add(new IntegerIA(ii));
-			final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf);
-			li.addAll(args_);
-			i.setArgs(li);
-			return i;
+			return expression_to_call_add_entry(gf, pce, (IdentExpression) expression.getLeft());
 		case QIDENT:
 			simplify_qident((Qualident) expression.getLeft(), gf);
 			break;
-		case DOT_EXP:
+		case DOT_EXP: {
 			simplify_dot_expression((DotExpression) expression.getLeft(), gf);
+//			return expression_to_call_add_entry(gf, pce, i);
+			}
 			break;
 		default:
 			throw new NotImplementedException();
 		}
 //		int i = simplify_expression(expression, gf);
 		return null;
+	}
+
+	@NotNull
+	private Instruction expression_to_call_add_entry(GeneratedFunction gf, ProcedureCallExpression pce, IdentExpression left) {
+		Instruction i = new Instruction();
+		i.setName(InstructionName.CALL);
+		List<InstructionArgument> li = new ArrayList<>();
+//			int ii = addIdentTableEntry((IdentExpression) expression.getLeft(), gf);
+		int ii = addProcTableEntry(left, null, get_args_types(pce.getArgs(), gf), gf);
+		li.add(new IntegerIA(ii));
+		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf);
+		li.addAll(args_);
+		i.setArgs(li);
+		return i;
 	}
 
 	private int addIdentTableEntry(IdentExpression ident, GeneratedFunction gf) {
