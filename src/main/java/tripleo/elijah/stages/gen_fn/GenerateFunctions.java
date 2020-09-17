@@ -242,8 +242,9 @@ public class GenerateFunctions {
 		switch (loop.getType()) {
 		case FROM_TO_TYPE:
 			{
-				String iterName = loop.getIterName();
-				int i = addTempTableEntry(null, iterName, gf); // TODO deduce later
+				IdentExpression iterNameToken = loop.getIterNameToken();
+				String iterName = iterNameToken.getText();
+				int i = addTempTableEntry(null, iterNameToken, gf); // TODO deduce later
 				add_i(gf, InstructionName.AGN, List_of(new IntegerIA(i), simplify_expression(loop.getFromPart(), gf)));
 				Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
@@ -256,7 +257,7 @@ public class GenerateFunctions {
 				}
 				CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__preinc__");
 				IdentExpression pre_inc_name = new IdentExpression(t);
-				TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null);
+				TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
 				add_i(gf, InstructionName.CALL, List_of(new IntegerIA(pre_inc), new IntegerIA(i)));
 				add_i(gf, InstructionName.JMP, List_of(label_top));
@@ -294,7 +295,7 @@ public class GenerateFunctions {
 	}
 
 	private TypeTableEntry getType(IExpression arg, GeneratedFunction gf) {
-		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, arg.getType());
+		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, arg.getType(), arg);
 		return tte;
 	}
 
@@ -352,7 +353,7 @@ public class GenerateFunctions {
 		case NUMERIC:
 			{
 				NumericExpression ne = (NumericExpression) expression;
-				int ii = addConstantTableEntry(null, ne, ne.getType(), gf);
+				int ii = addConstantTableEntry2(null, ne, ne.getType(), gf);
 				return new ConstTableIA(ii, gf);
 			}
 		default:
@@ -476,8 +477,22 @@ public class GenerateFunctions {
 		return vte.index;
 	}
 
+	private int addTempTableEntry(OS_Type type, IdentExpression name, GeneratedFunction gf) {
+		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, name);
+		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, name.getText(), tte);
+		gf.vte_list.add(vte);
+		return vte.index;
+	}
+
 	private int addConstantTableEntry(String name, IExpression initialValue, OS_Type type, GeneratedFunction gf) {
-		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type);
+		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, initialValue);
+		ConstantTableEntry cte = new ConstantTableEntry(gf.cte_list.size(), name, initialValue, tte);
+		gf.cte_list.add(cte);
+		return cte.index;
+	}
+
+	private int addConstantTableEntry2(String name, IExpression initialValue, OS_Type type, GeneratedFunction gf) {
+		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, initialValue);
 		ConstantTableEntry cte = new ConstantTableEntry(gf.cte_list.size(), name, initialValue, tte);
 		gf.cte_list.add(cte);
 		return cte.index;

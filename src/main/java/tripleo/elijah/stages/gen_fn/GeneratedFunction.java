@@ -10,6 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.DefFunctionDef;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.instructions.*;
 
@@ -101,10 +102,15 @@ public class GeneratedFunction {
 	}
 
 	TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type) {
-		final TypeTableEntry typeTableEntry = new TypeTableEntry(tte_list.size(), type1, type);
+		return newTypeTableEntry(type1, type, null);
+	}
+
+	TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type, IExpression expression) {
+		final TypeTableEntry typeTableEntry = new TypeTableEntry(tte_list.size(), type1, type, expression);
 		tte_list.add(typeTableEntry);
 		return typeTableEntry;
 	}
+
 }
 
 //

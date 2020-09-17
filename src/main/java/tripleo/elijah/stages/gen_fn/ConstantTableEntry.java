@@ -40,6 +40,10 @@ public class ConstantTableEntry {
         return name;
     }
 
+	public TypeTableEntry getTypeTableEntry() {
+		return type;
+	}
+
 //    public void setName(String name) {
 //        this.name = name;
 //    }

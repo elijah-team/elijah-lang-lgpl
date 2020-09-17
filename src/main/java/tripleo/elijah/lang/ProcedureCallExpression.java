@@ -12,6 +12,7 @@ import antlr.Token;
 import tripleo.elijah.util.NotImplementedException;
 
 // TODO is ExpressionList an IExpression?
+// TODO Is ProcedureCallExpression a StatementItem?
 public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/ IExpression {
 	
 	private IExpression _left;

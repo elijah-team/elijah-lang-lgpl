@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Type;
 
 /**
@@ -17,14 +18,16 @@ public class TypeTableEntry {
     private final int index;
     private final Type lifetime;
     private final OS_Type attached;
+    private final IExpression expression;
 
-    public TypeTableEntry(int index, Type lifetime, OS_Type attached) {
+    public TypeTableEntry(int index, Type lifetime, OS_Type attached, IExpression expression) {
         this.index = index;
         this.lifetime = lifetime;
         if (attached == null || (attached.getType() == OS_Type.Type.USER && attached.getTypeName() == null))
             this.attached = null;
         else
             this.attached = attached;
+        this.expression = expression;
     }
 
     @Override
@@ -33,6 +36,7 @@ public class TypeTableEntry {
                 "index=" + index +
                 ", lifetime=" + lifetime +
                 ", attached=" + attached +
+                ", expression=" + expression +
                 '}';
     }
 

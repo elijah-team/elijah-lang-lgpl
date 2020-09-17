@@ -16,7 +16,7 @@ import tripleo.elijah.stages.instructions.VariableTableType;
 public class VariableTableEntry {
 	public final int index;
 	private final String name;
-	private final TypeTableEntry type;
+	final TypeTableEntry type;
 	private final VariableTableType vtt;
 
 	public VariableTableEntry(int index, VariableTableType var1, String name, TypeTableEntry type) {
