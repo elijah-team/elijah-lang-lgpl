@@ -90,6 +90,10 @@ public class GeneratedFunction {
 	public void place(Label label) {
 		label.setIndex(instruction_index);
 	}
+
+	public VariableTableEntry getVarTableEntry(int index) {
+		return vte_list.get(index);
+	}
 }
 
 //
