@@ -10,6 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.DefFunctionDef;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.instructions.*;
 
 import java.util.ArrayList;
@@ -93,6 +94,12 @@ public class GeneratedFunction {
 
 	public VariableTableEntry getVarTableEntry(int index) {
 		return vte_list.get(index);
+	}
+
+	TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type) {
+		final TypeTableEntry typeTableEntry = new TypeTableEntry(tte_list.size(), type1, type);
+		tte_list.add(typeTableEntry);
+		return typeTableEntry;
 	}
 }
 

@@ -30,10 +30,10 @@ public class ProcTableEntry {
 
     public final int index;
     private final InstructionArgument expression_num;
-    public final List<InstructionType> args;
+    public final List<TypeTableEntry> args;
     public final IExpression expression;
 
-    public ProcTableEntry(int index, IExpression iExpression, InstructionArgument expression_num, List<InstructionType> args) {
+    public ProcTableEntry(int index, IExpression iExpression, InstructionArgument expression_num, List<TypeTableEntry> args) {
         this.index = index;
         this.expression = iExpression;
         this.expression_num = expression_num;

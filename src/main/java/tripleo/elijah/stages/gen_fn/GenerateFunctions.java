@@ -100,10 +100,10 @@ public class GenerateFunctions {
 		System.err.println("601.1 fn "+fd.funName);
 		GeneratedFunction gf = new GeneratedFunction(fd);
 		if (parent instanceof ClassStatement)
-			addVariableTableEntry("self", VariableTableType.SELF, InstructionType.known(new OS_Type((ClassStatement) parent)), gf);
-		addVariableTableEntry("Result", VariableTableType.RESULT, InstructionType.known(new OS_Type(fd.returnType())), gf); // TODO what about Unit returns?
+			addVariableTableEntry("self", VariableTableType.SELF, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent)), gf);
+		addVariableTableEntry("Result", VariableTableType.RESULT, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fd.returnType())), gf); // TODO what about Unit returns?
 		for (FormalArgListItem fali : fd.fal().falis) {
-			addVariableTableEntry(fali.name.getText(), VariableTableType.ARG, InstructionType.known(new OS_Type(fali.typeName())), gf);
+			addVariableTableEntry(fali.name.getText(), VariableTableType.ARG, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName())), gf);
 		} // TODO Exception !!??
 		//
 		int e1 = add_i(gf, InstructionName.E, null);
@@ -145,7 +145,7 @@ public class GenerateFunctions {
 						final IExpression right1 = bbe.getRight();
 						switch (right1.getKind()) {
 						case PROCEDURE_CALL:
-							int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), getType(bbe), gf);
+							int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType()), gf);
 							add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf), gf)));
 							break;
 						case IDENT:
@@ -213,12 +213,12 @@ public class GenerateFunctions {
 					if (vs.initialValue().is_simple()) {
 						addConstantTableEntry(vs.getName(), vs.initialValue(), vs.initialValue().getType(), gf);
 					} else {
-						int i = addVariableTableEntry(vs.getName(), getType(vs.initialValue()), gf);
+						int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType())), gf);
 						IExpression iv = vs.initialValue();
 						assign_variable(gf, i, iv);
 					}
 				} else {
-					int i = addVariableTableEntry(vs.getName(), getType(vs.initialValue()), gf);
+					int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType())), gf);
 					IExpression iv = vs.initialValue();
 					assign_variable(gf, i, iv);
 				}
@@ -255,7 +255,8 @@ public class GenerateFunctions {
 				}
 				CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__preinc__");
 				IdentExpression pre_inc_name = new IdentExpression(t);
-				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(InstructionType.unknown(null)/*getType(left), getType(right)*/), gf);
+				TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null);
+				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
 				add_i(gf, InstructionName.CALL, List_of(new IntegerIA(pre_inc), new IntegerIA(i)));
 				add_i(gf, InstructionName.JMP, List_of(label_top));
 				gf.place(label_bottom);
@@ -291,12 +292,9 @@ public class GenerateFunctions {
 		}
 	}
 
-	private InstructionType getType(IExpression arg) {
-		OS_Type type = arg.getType();
-		if (type == null)
-			return (InstructionType.unknown(arg));
-		else
-			return (InstructionType.known(type));
+	private TypeTableEntry getType(IExpression arg, GeneratedFunction gf) {
+		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, arg.getType());
+		return tte;
 	}
 
 	private void simplify_procedure_call(ProcedureCallExpression pce, GeneratedFunction gf) {
@@ -324,7 +322,7 @@ public class GenerateFunctions {
 		return R;
 	}
 
-	private int addProcTableEntry(IExpression expression, InstructionArgument expression_num, List<InstructionType> args, GeneratedFunction gf) {
+	private int addProcTableEntry(IExpression expression, InstructionArgument expression_num, List<TypeTableEntry> args, GeneratedFunction gf) {
 		ProcTableEntry pte = new ProcTableEntry(gf.prte_list.size(), expression, expression_num, args);
 		gf.prte_list.add(pte);
 		return pte.index;
@@ -378,12 +376,12 @@ public class GenerateFunctions {
 		return null;
 	}
 
-	private List<InstructionType> get_args_types(ExpressionList args, GeneratedFunction gf) {
-		List<InstructionType> R = new ArrayList<InstructionType>();
+	private List<TypeTableEntry> get_args_types(ExpressionList args, GeneratedFunction gf) {
+		List<TypeTableEntry> R = new ArrayList<>();
 		for (IExpression arg : args) {
 			final OS_Type type = arg.getType();
 			System.err.println(String.format("108 %s %s", arg, type));
-			R.add(getType(arg));
+			R.add(getType(arg, gf));
 		}
 		return R;
 	}
@@ -439,40 +437,33 @@ public class GenerateFunctions {
 		throw new NotImplementedException();
 	}
 
-	private int addVariableTableEntry(String name, InstructionType type, GeneratedFunction gf) {
+	private int addVariableTableEntry(String name, TypeTableEntry type, GeneratedFunction gf) {
 		return addVariableTableEntry(name, VariableTableType.VAR, type, gf);
 	}
 
-	private int addVariableTableEntry(String name, VariableTableType vtt, InstructionType type, GeneratedFunction gf) {
+	private int addVariableTableEntry(String name, VariableTableType vtt, TypeTableEntry type, GeneratedFunction gf) {
 		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), vtt, name, type);
 		gf.vte_list.add(vte);
 		return vte.index;
 	}
 
 	private int addTempTableEntry(OS_Type type, GeneratedFunction gf) {
-		InstructionType ttype;
-		if (type == null)
-			ttype = InstructionType.unknown(null);
-		else
-			ttype = InstructionType.known(type);
-		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, null, ttype);
+		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type);
+		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, null, tte);
 		gf.vte_list.add(vte);
 		return vte.index;
 	}
 
 	private int addTempTableEntry(OS_Type type, String name, GeneratedFunction gf) {
-		InstructionType ttype;
-		if (type == null)
-			ttype = InstructionType.unknown(null);
-		else
-			ttype = InstructionType.known(type);
-		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, name, ttype);
+		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type);
+		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, name, tte);
 		gf.vte_list.add(vte);
 		return vte.index;
 	}
 
 	private int addConstantTableEntry(String name, IExpression initialValue, OS_Type type, GeneratedFunction gf) {
-		ConstantTableEntry cte = new ConstantTableEntry(gf.cte_list.size(), name, initialValue, type);
+		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type);
+		ConstantTableEntry cte = new ConstantTableEntry(gf.cte_list.size(), name, initialValue, tte);
 		gf.cte_list.add(cte);
 		return cte.index;
 	}

@@ -8,10 +8,38 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import tripleo.elijah.lang.OS_Type;
+
 /**
  * Created 9/12/20 10:26 PM
  */
 public class TypeTableEntry {
+    private final int index;
+    private final Type lifetime;
+    private final OS_Type attached;
+
+    public TypeTableEntry(int index, Type lifetime, OS_Type attached) {
+        this.index = index;
+        this.lifetime = lifetime;
+        if (attached == null || (attached.getType() == OS_Type.Type.USER && attached.getTypeName() == null))
+            this.attached = null;
+        else
+            this.attached = attached;
+    }
+
+    @Override
+    public String toString() {
+        return "TypeTableEntry{" +
+                "index=" + index +
+                ", lifetime=" + lifetime +
+                ", attached=" + attached +
+                '}';
+    }
+
+    public enum Type {
+        SPECIFIED, TRANSIENT
+    }
+
 }
 
 //

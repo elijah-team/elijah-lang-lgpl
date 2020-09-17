@@ -9,7 +9,6 @@
 package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.lang.OS_Type;
 
 /**
  * Created 9/10/20 4:47 PM
@@ -18,7 +17,7 @@ public class ConstantTableEntry {
 	final int index;
 	private final String name;
 	private final IExpression initialValue;
-	private final OS_Type type;
+	private final TypeTableEntry type;
 
 	@Override
 	public String toString() {
@@ -30,7 +29,7 @@ public class ConstantTableEntry {
 				'}';
 	}
 
-	public ConstantTableEntry(int index, String name, IExpression initialValue, OS_Type type) {
+	public ConstantTableEntry(int index, String name, IExpression initialValue, TypeTableEntry type) {
 		this.index = index;
 		this.name = name;
 		this.initialValue = initialValue;
