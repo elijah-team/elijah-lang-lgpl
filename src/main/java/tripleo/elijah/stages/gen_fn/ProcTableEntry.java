@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.IExpression;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 
 import java.util.List;
@@ -17,28 +18,32 @@ import java.util.List;
  * Created 9/12/20 10:07 PM
  */
 public class ProcTableEntry {
-    @Override
-    public String toString() {
-        return "ProcTableEntry{" +
-                "index=" + index +
-                ", expression=" + expression +
-                ", expression_num=" + expression_num+
-                ", args=" + args +
-                '}';
-    }
+	public final int index;
+	public final List<TypeTableEntry> args;
+	public final IExpression expression;
+	private final InstructionArgument expression_num;
+	public OS_Element resolved;
 
+	public ProcTableEntry(int index, IExpression iExpression, InstructionArgument expression_num, List<TypeTableEntry> args) {
+		this.index = index;
+		this.expression = iExpression;
+		this.expression_num = expression_num;
+		this.args = args;
+	}
 
-    public final int index;
-    private final InstructionArgument expression_num;
-    public final List<TypeTableEntry> args;
-    public final IExpression expression;
+	@Override
+	public String toString() {
+		return "ProcTableEntry{" +
+				"index=" + index +
+				", expression=" + expression +
+				", expression_num=" + expression_num +
+				", args=" + args +
+				'}';
+	}
 
-    public ProcTableEntry(int index, IExpression iExpression, InstructionArgument expression_num, List<TypeTableEntry> args) {
-        this.index = index;
-        this.expression = iExpression;
-        this.expression_num = expression_num;
-        this.args = args;
-    }
+	public List<TypeTableEntry> getArgs() {
+		return args;
+	}
 }
 
 //
