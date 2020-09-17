@@ -316,7 +316,7 @@ public class Compilation {
 			try {
 				return realParseElijjahFile(local_prelude.getName(), local_prelude, false);
 			} catch (Exception e) {
-				e.printStackTrace();
+				eee.exception(e);
 				return null;
 			}
 		}
