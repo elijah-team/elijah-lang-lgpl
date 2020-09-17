@@ -103,7 +103,8 @@ public class GenerateFunctions {
 			addVariableTableEntry("self", VariableTableType.SELF, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent)), gf);
 		addVariableTableEntry("Result", VariableTableType.RESULT, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fd.returnType())), gf); // TODO what about Unit returns?
 		for (FormalArgListItem fali : fd.fal().falis) {
-			addVariableTableEntry(fali.name.getText(), VariableTableType.ARG, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName())), gf);
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
+			addVariableTableEntry(fali.name.getText(), VariableTableType.ARG, tte, gf);
 		} // TODO Exception !!??
 		//
 		int e1 = add_i(gf, InstructionName.E, null);
@@ -145,7 +146,7 @@ public class GenerateFunctions {
 						final IExpression right1 = bbe.getRight();
 						switch (right1.getKind()) {
 						case PROCEDURE_CALL:
-							int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType()), gf);
+							int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft()), gf);
 							add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf), gf)));
 							break;
 						case IDENT:
@@ -213,12 +214,12 @@ public class GenerateFunctions {
 					if (vs.initialValue().is_simple()) {
 						addConstantTableEntry(vs.getName(), vs.initialValue(), vs.initialValue().getType(), gf);
 					} else {
-						int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType())), gf);
+						int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf);
 						IExpression iv = vs.initialValue();
 						assign_variable(gf, i, iv);
 					}
 				} else {
-					int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType())), gf);
+					int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf);
 					IExpression iv = vs.initialValue();
 					assign_variable(gf, i, iv);
 				}
