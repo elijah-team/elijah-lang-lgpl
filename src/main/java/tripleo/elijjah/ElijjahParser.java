@@ -2630,14 +2630,14 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				formalArgListItem_priv(fal.next());
 				{
-				_loop249:
+				_loop246:
 				do {
 					if ((LA(1)==COMMA)) {
 						match(COMMA);
 						formalArgListItem_priv(fal.next());
 					}
 					else {
-						break _loop249;
+						break _loop246;
 					}
 					
 				} while (true);
@@ -2865,7 +2865,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			scope(ifex.scope());
 			{
-			_loop197:
+			_loop196:
 			do {
 				if ((LA(1)==LITERAL_else) && (LA(2)==LCURLY)) {
 					match(LITERAL_else);
@@ -2875,7 +2875,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					elseif_part(ifex.elseif());
 				}
 				else {
-					break _loop197;
+					break _loop196;
 				}
 				
 			} while (true);
@@ -2910,8 +2910,8 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			match(LCURLY);
 			{
-			int _cnt200=0;
-			_loop200:
+			int _cnt199=0;
+			_loop199:
 			do {
 				if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
 					if ( inputState.guessing==0 ) {
@@ -2950,10 +2950,10 @@ public ElijjahParser(ParserSharedInputState state) {
 					scope(mcp3.scope());
 				}
 				else {
-					if ( _cnt200>=1 ) { break _loop200; } else {throw new NoViableAltException(LT(1), getFilename());}
+					if ( _cnt199>=1 ) { break _loop199; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt200++;
+				_cnt199++;
 			} while (true);
 			}
 			match(RCURLY);
@@ -2985,14 +2985,14 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			match(LCURLY);
 			{
-			_loop203:
+			_loop202:
 			do {
 				if ((_tokenSet_18.member(LA(1)))) {
 					expr=expression();
 					scope(mc.scope(expr));
 				}
 				else {
-					break _loop203;
+					break _loop202;
 				}
 				
 			} while (true);
@@ -4493,85 +4493,6 @@ public ElijjahParser(ParserSharedInputState state) {
 		}
 	}
 	
-	public final void procedureCallStatement(
-		StatementClosure cr
-	) throws RecognitionException, TokenStreamException {
-		
-		ProcedureCallExpression pce=cr.procedureCallExpression();
-		
-		try {      // for error handling
-			xy=qualident();
-			if ( inputState.guessing==0 ) {
-				pce.identifier(xy);
-			}
-			procCallEx(pce);
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_1);
-			} else {
-			  throw ex;
-			}
-		}
-	}
-	
-	public final void procCallEx(
-		ProcedureCallExpression pce
-	) throws RecognitionException, TokenStreamException {
-		
-		
-		try {      // for error handling
-			match(LPAREN);
-			{
-			switch ( LA(1)) {
-			case IDENT:
-			case STRING_LITERAL:
-			case CHAR_LITERAL:
-			case NUM_INT:
-			case NUM_FLOAT:
-			case LPAREN:
-			case LCURLY:
-			case PLUS:
-			case MINUS:
-			case INC:
-			case DEC:
-			case BNOT:
-			case LNOT:
-			case LITERAL_true:
-			case LITERAL_false:
-			case LITERAL_this:
-			case LITERAL_null:
-			case LITERAL_function:
-			case LITERAL_procedure:
-			{
-				expressionList(pce.exprList());
-				break;
-			}
-			case RPAREN:
-			{
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(LT(1), getFilename());
-			}
-			}
-			}
-			match(RPAREN);
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_1);
-			} else {
-			  throw ex;
-			}
-		}
-	}
-	
 	public final void elseif_part(
 		IfConditional ifex
 	) throws RecognitionException, TokenStreamException {
@@ -5160,14 +5081,14 @@ public ElijjahParser(ParserSharedInputState state) {
 				cr.add(tn);
 			}
 			{
-			_loop242:
+			_loop239:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
 					tn=typeName2();
 				}
 				else {
-					break _loop242;
+					break _loop239;
 				}
 				
 			} while (true);
@@ -5454,7 +5375,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	public static final BitSet _tokenSet_6 = new BitSet(_tokenSet_6_data_);
 	private static final long _tokenSet_7_data_[] = { 16264501024391618L, 0L };
 	public static final BitSet _tokenSet_7 = new BitSet(_tokenSet_7_data_);
-	private static final long _tokenSet_8_data_[] = { 2533275805581762L, 0L };
+	private static final long _tokenSet_8_data_[] = { 2533275797193154L, 0L };
 	public static final BitSet _tokenSet_8 = new BitSet(_tokenSet_8_data_);
 	private static final long _tokenSet_9_data_[] = { -52776562065934L, 136365211647L, 0L, 0L };
 	public static final BitSet _tokenSet_9 = new BitSet(_tokenSet_9_data_);

@@ -642,12 +642,11 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 
 
 
-procedureCallStatement[StatementClosure cr]
-	 {ProcedureCallExpression pce=cr.procedureCallExpression();}
-//	 {ProcedureCallStatement pce=cr.procedureCallStatement();}
-	: xy=qualident {pce.identifier(xy);}
-	  procCallEx[pce]
-	;
+//procedureCallStatement[StatementClosure cr]
+//	 {ProcedureCallExpression pce=cr.procedureCallExpression();}
+//	: xy=qualident {pce.identifier(xy);}
+//	  procCallEx[pce]
+//	;
 ifConditional[IfConditional ifex]
 	: "if" expr=expression {ifex.expr(expr);}
 	scope[ifex.scope()]
@@ -709,9 +708,9 @@ frobeIteration[StatementClosure cr]
 	                            {ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;}
     scope[loop.scope()]
     ;
-procCallEx[ProcedureCallExpression pce]
-	: LPAREN (expressionList[pce.exprList()])? RPAREN
-	;
+//procCallEx[ProcedureCallExpression pce]
+//	: LPAREN (expressionList[pce.exprList()])? RPAREN
+//	;
 varStmt_i[VariableStatement vs]
 		{TypeName tn=null;IdentExpression i=null;}
 	: i=ident                   {vs.setName(i);}
