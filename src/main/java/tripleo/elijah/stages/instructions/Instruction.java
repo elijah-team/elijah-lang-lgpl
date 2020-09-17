@@ -46,6 +46,10 @@ public class Instruction {
 				", args=" + args +
 				'}';
 	}
+
+	public InstructionArgument getArg(int i) {
+		return args.get(i);
+	}
 }
 
 //
