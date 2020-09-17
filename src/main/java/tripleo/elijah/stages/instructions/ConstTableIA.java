@@ -26,6 +26,10 @@ public class ConstTableIA implements InstructionArgument {
         this.index = index;
         this.gf = generatedFunction;
     }
+
+    public int getIndex() {
+        return index;
+    }
 }
 
 //

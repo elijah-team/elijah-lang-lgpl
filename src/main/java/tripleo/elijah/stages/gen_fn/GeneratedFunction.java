@@ -96,6 +96,10 @@ public class GeneratedFunction {
 		return vte_list.get(index);
 	}
 
+	public ConstantTableEntry getConstTableEntry(int index) {
+		return cte_list.get(index);
+	}
+
 	TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type) {
 		final TypeTableEntry typeTableEntry = new TypeTableEntry(tte_list.size(), type1, type);
 		tte_list.add(typeTableEntry);

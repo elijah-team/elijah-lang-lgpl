@@ -381,8 +381,22 @@ public class GenerateFunctions {
 		for (IExpression arg : args) {
 			final OS_Type type = arg.getType();
 			System.err.println(String.format("108 %s %s", arg, type));
-			R.add(getType(arg, gf));
+			if (arg instanceof IdentExpression) {
+				InstructionArgument x = vte_lookup(((IdentExpression) arg).getText(), gf);
+				TypeTableEntry tte;
+				if (x instanceof ConstTableIA) {
+					ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) x).getIndex());
+					tte = cte.getTypeTableEntry();
+				} else if (x instanceof IntegerIA) {
+					VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) x).getIndex());
+					tte = vte.type;
+				} else
+					continue; // TODO
+				R.add(tte);
+			} else
+				R.add(getType(arg, gf));
 		}
+		assert R.size() == args.size();
 		return R;
 	}
 

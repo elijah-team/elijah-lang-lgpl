@@ -46,6 +46,10 @@ public class ExpressionList implements Iterable<IExpression> {
 	public void add(IExpression aExpr) {
 		exprs.add(aExpr);
 	}
+
+	public int size() {
+		return exprs.size();
+	}
 }
 
 //
