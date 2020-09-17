@@ -53,12 +53,12 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, 
 		frompart=aExpr;
 	}
 
-	public void iterName(Token s) {
+	public void iterName(IdentExpression s) {
 //		assert type == ITER_TYPE;
-		iterName=s.getText();
+		iterName=s;
 	}
 
-	String iterName;
+	IdentExpression iterName;
 	/**
 	 * @category type
 	 */
@@ -78,7 +78,7 @@ private final Attached _a = new Attached();
 	}
 
 	public String getIterName() {
-		return iterName;
+		return iterName.getText();
 	}
 	
 	public LoopTypes2 getType() {
@@ -101,7 +101,11 @@ private final Attached _a = new Attached();
 		_a.setContext(ctx);
 	}
 
-	private final class LoopScope implements Scope {
+	public IdentExpression getIterNameToken() {
+		return iterName;
+	}
+
+    private final class LoopScope implements Scope {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 

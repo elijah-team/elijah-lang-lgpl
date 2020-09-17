@@ -3077,10 +3077,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		StatementClosure cr
 	) throws RecognitionException, TokenStreamException {
 		
-		Token  i1 = null;
-		Token  i2 = null;
-		Token  i3 = null;
-		Loop loop=cr.loop();LoopContext ctx=null;
+		Loop loop=cr.loop();LoopContext ctx=null;IdentExpression i1=null, i2=null, i3=null;
 		
 		try {      // for error handling
 			match(LITERAL_iterate);
@@ -3106,8 +3103,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				case LITERAL_with:
 				{
 					match(LITERAL_with);
-					i1 = LT(1);
-					match(IDENT);
+					i1=ident();
 					if ( inputState.guessing==0 ) {
 						loop.iterName(i1);
 					}
@@ -3140,8 +3136,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				case LITERAL_with:
 				{
 					match(LITERAL_with);
-					i2 = LT(1);
-					match(IDENT);
+					i2=ident();
 					if ( inputState.guessing==0 ) {
 						loop.iterName(i2);
 					}
@@ -3191,8 +3186,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				case LITERAL_with:
 				{
 					match(LITERAL_with);
-					i3 = LT(1);
-					match(IDENT);
+					i3=ident();
 					if ( inputState.guessing==0 ) {
 						loop.iterName(i3);
 					}

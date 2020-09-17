@@ -693,18 +693,18 @@ whileLoop[StatementClosure cr]
     )
     ;
 frobeIteration[StatementClosure cr]
-	 {Loop loop=cr.loop();LoopContext ctx=null;}
+	 {Loop loop=cr.loop();LoopContext ctx=null;IdentExpression i1=null, i2=null, i3=null;}
 	:"iterate"
 	( "from"                   {loop.type(LoopTypes2.FROM_TO_TYPE);}
 	  expr=expression          {loop.frompart(expr);}
 	  "to" expr=expression     {loop.topart(expr);}
-      	("with" i1:IDENT       {loop.iterName(i1);})?
+      	("with" i1=ident       {loop.iterName(i1);})?
 	| "to"                     {loop.type(LoopTypes2.TO_TYPE);}
 	  expr=expression          {loop.topart(expr);}
-      	("with" i2:IDENT       {loop.iterName(i2);})?
+      	("with" i2=ident       {loop.iterName(i2);})?
 	|                          {loop.type(LoopTypes2.EXPR_TYPE);}
 	  expr=expression          {loop.topart(expr);}
-      	("with" i3:IDENT       {loop.iterName(i3);})?
+      	("with" i3=ident       {loop.iterName(i3);})?
     )
 	                            {ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;}
     scope[loop.scope()]
