@@ -800,10 +800,10 @@ formalArgList[FormalArgList fal]
 	  (COMMA formalArgListItem_priv[fal.next()])*)?
 	;
 formalArgListItem_priv[FormalArgListItem fali]
-		{ TypeName tn=null; }
+		{ TypeName tn=null;IdentExpression i=null; }
 	:
 		( (regularQualifiers2[(NormalTypeName)fali.typeName()])? // TODO there is a problem here not to mention NPE
-		  i:IDENT  {	fali.setName(i);	}
+		  i=ident  {	fali.setName(i);	}
 		  ( TOK_COLON tn=typeName2  { fali.setTypeName(tn); } )?
 		)
 	;

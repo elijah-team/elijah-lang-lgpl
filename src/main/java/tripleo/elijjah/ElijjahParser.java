@@ -5266,8 +5266,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		FormalArgListItem fali
 	) throws RecognitionException, TokenStreamException {
 		
-		Token  i = null;
-		TypeName tn=null;
+		TypeName tn=null;IdentExpression i=null;
 		
 		try {      // for error handling
 			{
@@ -5282,8 +5281,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			
 			}
-			i = LT(1);
-			match(IDENT);
+			i=ident();
 			if ( inputState.guessing==0 ) {
 					fali.setName(i);	
 			}

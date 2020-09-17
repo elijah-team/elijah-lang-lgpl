@@ -8,20 +8,19 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
 public class FormalArgListItem implements OS_Element, OS_Element2 {
 	
-	public Token name;
+	public IdentExpression name;
 	public TypeName tn=null;
 
 	public TypeName typeName() {
 		return tn;
 	}
 
-	public void setName(Token s) {
+	public void setName(IdentExpression s) {
 		name=s;
 	}
 
@@ -45,6 +44,10 @@ public class FormalArgListItem implements OS_Element, OS_Element2 {
 	@Override // OS_Element2
 	public String name() {
 		return name.getText();
+	}
+
+	public IdentExpression getNameToken() {
+		return name;
 	}
 
 	public void setTypeName(TypeName tn1) {
