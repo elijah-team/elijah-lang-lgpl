@@ -107,9 +107,8 @@ public class VariableStatement implements OS_Element {
 
 	@Override
 	public Context getContext() {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
-//		return null;
+		// TODO is this correct?
+		return getParent().getContext();
 	}
 
 	public void setTypeName(TypeName tn) {
