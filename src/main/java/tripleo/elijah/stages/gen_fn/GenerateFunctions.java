@@ -178,7 +178,7 @@ public class GenerateFunctions {
 						CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__aug_mult__");
 						IdentExpression fn_aug_name = new IdentExpression(t);
 						int fn_aug = addProcTableEntry(fn_aug_name, null, List_of(null, null/*getType(left), getType(right)*/), gf);
-						add_i(gf, InstructionName.CALL, List_of(new IntegerIA(fn_aug), left, right));
+						add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(fn_aug), left, right));
 					}
 					break;
 				}
@@ -259,7 +259,7 @@ public class GenerateFunctions {
 				IdentExpression pre_inc_name = new IdentExpression(t);
 				TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
-				add_i(gf, InstructionName.CALL, List_of(new IntegerIA(pre_inc), new IntegerIA(i)));
+				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(i)));
 				add_i(gf, InstructionName.JMP, List_of(label_top));
 				gf.place(label_bottom);
 			}
