@@ -694,6 +694,7 @@ whileLoop[StatementClosure cr]
 frobeIteration[StatementClosure cr]
 	 {Loop loop=cr.loop();LoopContext ctx=null;IdentExpression i1=null, i2=null, i3=null;}
 	:"iterate"
+	                            {ctx=new LoopContext(cur, loop);loop.setContext((ctx);cur=ctx;}
 	( "from"                   {loop.type(LoopTypes2.FROM_TO_TYPE);}
 	  expr=expression          {loop.frompart(expr);}
 	  "to" expr=expression     {loop.topart(expr);}
@@ -705,7 +706,6 @@ frobeIteration[StatementClosure cr]
 	  expr=expression          {loop.topart(expr);}
       	("with" i3=ident       {loop.iterName(i3);})?
     )
-	                            {ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;}
     scope[loop.scope()]
     ;
 //procCallEx[ProcedureCallExpression pce]

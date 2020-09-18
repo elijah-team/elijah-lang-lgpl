@@ -3081,6 +3081,9 @@ public ElijjahParser(ParserSharedInputState state) {
 		
 		try {      // for error handling
 			match(LITERAL_iterate);
+			if ( inputState.guessing==0 ) {
+				ctx=new LoopContext(cur, loop);loop.setContext(ctx);cur=ctx;
+			}
 			{
 			switch ( LA(1)) {
 			case LITERAL_from:
@@ -3209,9 +3212,6 @@ public ElijjahParser(ParserSharedInputState state) {
 				throw new NoViableAltException(LT(1), getFilename());
 			}
 			}
-			}
-			if ( inputState.guessing==0 ) {
-				ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;
 			}
 			scope(loop.scope());
 		}
