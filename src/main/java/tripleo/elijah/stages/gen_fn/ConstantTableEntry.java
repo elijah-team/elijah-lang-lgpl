@@ -16,8 +16,8 @@ import tripleo.elijah.lang.IExpression;
 public class ConstantTableEntry {
 	final int index;
 	private final String name;
-	private final IExpression initialValue;
-	private final TypeTableEntry type;
+	public final IExpression initialValue;
+	public final TypeTableEntry type;
 
 	@Override
 	public String toString() {

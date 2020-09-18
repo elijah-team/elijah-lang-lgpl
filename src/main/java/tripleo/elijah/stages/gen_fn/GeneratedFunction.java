@@ -8,10 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
-import tripleo.elijah.lang.DefFunctionDef;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.instructions.*;
 
 import java.util.ArrayList;
@@ -101,6 +98,10 @@ public class GeneratedFunction {
 		return cte_list.get(index);
 	}
 
+	public ProcTableEntry getProcTableEntry(int index) {
+		return prte_list.get(index);
+	}
+
 	TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type) {
 		return newTypeTableEntry(type1, type, null);
 	}
@@ -111,6 +112,9 @@ public class GeneratedFunction {
 		return typeTableEntry;
 	}
 
+	public OS_Element getFD() {
+		return fd != null ? fd : dfd;
+	}
 }
 
 //

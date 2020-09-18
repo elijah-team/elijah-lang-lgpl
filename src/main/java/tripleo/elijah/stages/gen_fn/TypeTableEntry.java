@@ -17,8 +17,8 @@ import tripleo.elijah.lang.OS_Type;
 public class TypeTableEntry {
     private final int index;
     private final Type lifetime;
-    private final OS_Type attached;
-    private final IExpression expression;
+    public OS_Type attached;
+    public final IExpression expression;
 
     public TypeTableEntry(int index, Type lifetime, OS_Type attached, IExpression expression) {
         this.index = index;
