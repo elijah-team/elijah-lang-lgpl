@@ -16,7 +16,7 @@ public enum InstructionName {
 	AGN, AGNK, AGNT, AGNF,
 	CMP,
 	JE, JL, JMP,
-	CALL, RET, YIELD,
+	CALL, CALLS, RET, YIELD,
 	TRY,
 	PC,
 	DOT
