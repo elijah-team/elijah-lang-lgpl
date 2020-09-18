@@ -35,6 +35,10 @@ public class FnCallArgs implements InstructionArgument {
         this.expression_to_call = expression_to_call;
         this.gf = generatedFunction;
     }
+
+    public InstructionArgument getArg(int i) {
+        return expression_to_call.getArg(i);
+    }
 }
 
 //
