@@ -4,7 +4,7 @@
     <groupId>tripleo.elijah</groupId>
     <artifactId>elijah-v1</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <name>eljc-v1</name>
     <url>http://gitlab.com/elijah-team/elijah-lang/</url>
     <properties>
@@ -14,6 +14,7 @@
         <downloadSources>true</downloadSources>
         <guava.version>29.0-jre</guava.version>
         <buffers.version>0.0.2a</buffers.version>
+        <range.version>0.0.1</range.version>
     </properties>
 
     <dependencies>
@@ -93,6 +94,12 @@
             <version>${buffers.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>tripleo.util.range</groupId>
+            <artifactId>range-v1</artifactId>
+            <version>${buffers.version}</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
@@ -104,7 +111,11 @@
             <id>gitlab-maven-buffers</id>
             <url>https://gitlab.com/api/v4/projects/20346374/packages/maven</url>
         </repository>
-    </repositories>
+        <repository>
+            <id>gitlab-maven-range</id>
+            <url>https://gitlab.com/api/v4/projects/21223510/packages/maven</url>
+        </repository>
+        </repositories>
     <distributionManagement>
         <repository>
             <id>gitlab-maven</id>
