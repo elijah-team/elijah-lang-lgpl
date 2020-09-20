@@ -37,6 +37,7 @@ public class VariableTableEntry {
 				", name='" + name + '\'' +
 				", type=" + type.index +
 				", vtt=" + vtt +
+				", potentialTypes=" + potentialTypes +
 				'}';
 	}
 
