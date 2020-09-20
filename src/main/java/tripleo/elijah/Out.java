@@ -31,6 +31,7 @@ public class Out {
 		this.do_out = do_out;
 	}
 	
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("NM_METHOD_NAMING_CONVENTION")
 	public void FinishModule() {
 		TabbedOutputStream tos;
 		println("** FinishModule");
