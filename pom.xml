@@ -97,7 +97,7 @@
         <dependency>
             <groupId>tripleo.util.range</groupId>
             <artifactId>range-v1</artifactId>
-            <version>${buffers.version}</version>
+            <version>${range.version}</version>
         </dependency>
 
     </dependencies>
@@ -168,6 +168,26 @@
                 <version>3.0.0-M5</version>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+<!--
+                    <outputDirectory>/absolute/path/to/the/output/directory</outputDirectory>
+                    <finalName>filename-of-generated-jar-file</finalName>
+-->
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                <execution>
+                    <id>package</id>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+                </executions>
+            </plugin>
             <!--
               <plugin>
                 <groupId>org.jacoco</groupId>
