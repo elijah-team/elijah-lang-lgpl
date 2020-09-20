@@ -10,6 +10,9 @@ package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.stages.instructions.VariableTableType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created 9/10/20 4:51 PM
  */
@@ -32,7 +35,7 @@ public class VariableTableEntry {
 		return "VariableTableEntry{" +
 				"index=" + index +
 				", name='" + name + '\'' +
-				", type=" + type +
+				", type=" + type.index +
 				", vtt=" + vtt +
 				'}';
 	}

@@ -15,7 +15,7 @@ import tripleo.elijah.lang.OS_Type;
  * Created 9/12/20 10:26 PM
  */
 public class TypeTableEntry {
-    private final int index;
+    final int index;
     private final Type lifetime;
     public OS_Type attached;
     public final IExpression expression;
