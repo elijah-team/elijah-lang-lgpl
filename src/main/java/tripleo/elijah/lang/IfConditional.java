@@ -106,9 +106,13 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 	}
 
 	private class IfConditionalScope implements Scope {
+		private List<Token> mDocs;
+
 		@Override
 		public void addDocString(Token s) {
-			addDocString(s);
+			if (mDocs == null)
+				mDocs = new ArrayList<Token>();
+			mDocs.add(s);
 		}
 
 		/*@ requires parent != null; */
