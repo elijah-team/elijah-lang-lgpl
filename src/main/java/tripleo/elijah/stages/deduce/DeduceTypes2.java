@@ -60,56 +60,32 @@ public class DeduceTypes2 {
 				case XS:
 					break;
 				case AGN:
-				{
-					final IntegerIA arg = (IntegerIA)instruction.getArg(0);
-					VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
-					InstructionArgument i2 = instruction.getArg(1);
-					if (i2 instanceof IntegerIA) {
-						throw new NotImplementedException();
-					} else if (i2 instanceof FnCallArgs) {
-						FnCallArgs fca = (FnCallArgs) i2;
-						ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
-						for (TypeTableEntry tte : pte.getArgs()) {
-							System.out.println("770 "+tte);
-							IExpression e = tte.expression;
-							if (e == null) continue;
-							switch (e.getKind()) {
-							case NUMERIC:
-								tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
-								vte.type = tte;
-								break;
-							case IDENT:
-							{
-								LookupResultList lrl = ctx.lookup(((IdentExpression)e).getText());
-								OS_Element best = lrl.chooseBest(null);
-								int y=2;
-							}
-							break;
-							default:
-								throw new NotImplementedException();
-							}
-						}
-						{
-							LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
-							OS_Element best = lrl.chooseBest(null);
-							if (best != null)
-								pte.resolved = best; // TODO do we need to add a dependency for class?
-							else
-								throw new NotImplementedException();
-						}
-					} else if (i2 instanceof ConstTableIA) {
-						int y=2;
-						if (vte.type.attached != null) {
-							// TODO check types
-						}
-						ConstantTableEntry cte = generatedFunction.getConstTableEntry(((ConstTableIA) i2).getIndex());
-						vte.type = cte.type;
-					} else
-						throw new NotImplementedException();
-
-				}
-				break;
+					{
+						final IntegerIA arg = (IntegerIA)instruction.getArg(0);
+						VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
+						InstructionArgument i2 = instruction.getArg(1);
+						if (i2 instanceof IntegerIA) {
+							VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
+							vte.addPotentialType(instruction.getIndex(), vte2.type);
+//							throw new NotImplementedException();
+						} else if (i2 instanceof FnCallArgs) {
+							FnCallArgs fca = (FnCallArgs) i2;
+							do_assign_call(generatedFunction, ctx, vte, fca);
+						} else if (i2 instanceof ConstTableIA) {
+							int y=2;
+							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
+						} else
+							throw new NotImplementedException();
+					}
+					break;
 				case AGNK:
+					{
+						final IntegerIA arg = (IntegerIA)instruction.getArg(0);
+						VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
+						InstructionArgument i2 = instruction.getArg(1);
+						ConstTableIA ctia = (ConstTableIA) i2;
+						do_assign_constant(generatedFunction, instruction, vte, ctia);
+					}
 					break;
 				case AGNT:
 					break;
@@ -178,6 +154,53 @@ public class DeduceTypes2 {
 					break;
 				}
 			}
+		}
+	}
+
+	private void do_assign_constant(GeneratedFunction generatedFunction, Instruction instruction, VariableTableEntry vte, ConstTableIA i2) {
+		if (vte.type.attached != null) {
+			// TODO check types
+		}
+		ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
+		if (cte.type.attached == null) {
+			System.out.println("Null type in CTE "+cte);
+		}
+//							vte.type = cte.type;
+		vte.addPotentialType(instruction.getIndex(), cte.type);
+	}
+
+	private void do_assign_call(GeneratedFunction generatedFunction, Context ctx, VariableTableEntry vte, FnCallArgs fca) {
+		ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
+		for (TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
+			System.out.println("770 "+tte);
+			IExpression e = tte.expression;
+			if (e == null) continue;
+			switch (e.getKind()) {
+			case NUMERIC:
+				{
+					tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
+					vte.type = tte;
+				}
+				break;
+			case IDENT:
+				{
+					LookupResultList lrl = ctx.lookup(((IdentExpression)e).getText());
+					OS_Element best = lrl.chooseBest(null);
+					int y=2;
+					throw new NotImplementedException();
+				}
+//				break;
+			default:
+				throw new NotImplementedException();
+			}
+		}
+		{
+			LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
+			OS_Element best = lrl.chooseBest(null);
+			if (best != null)
+				pte.resolved = best; // TODO do we need to add a dependency for class?
+			else
+				throw new NotImplementedException();
 		}
 	}
 
