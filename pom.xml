@@ -14,7 +14,7 @@
         <downloadSources>true</downloadSources>
         <guava.version>29.0-jre</guava.version>
         <buffers.version>0.0.2a</buffers.version>
-        <range.version>0.0.1</range.version>
+        <range.version>0.0.3b</range.version>
     </properties>
 
     <dependencies>
