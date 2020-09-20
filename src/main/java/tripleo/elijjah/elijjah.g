@@ -332,7 +332,9 @@ invariantStatement[InvariantStatement cr]
          expr=expression    {isp.setExpr(expr);})*
     ;
 accessNotation
-	: "access" IDENT
+        { TypeNameList tnl=null;}
+	: "access" (STRING_LITERAL (LCURLY tnl=typeNameList2 RCURLY)?
+	           |STRING_LITERAL) opt_semi
 	;
 
 
@@ -342,7 +344,7 @@ accessNotation
 //       nextHigherPrecedenceExpression
 //           (OPERATOR nextHigherPrecedenceExpression)*
 // which is a standard recursive definition for a parsing an expression.
-// The operators in java have the following precedences:
+// The operators in Elijjah have the following precedences:
 //    lowest  (13)  = *= /= %= += -= <<= >>= >>>= &= ^= |=
 //            (12)  ?:
 //            (11)  ||
