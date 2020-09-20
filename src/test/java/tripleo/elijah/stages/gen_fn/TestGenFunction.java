@@ -14,6 +14,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.InstructionName;
 
 import java.io.File;
@@ -60,6 +61,27 @@ public class TestGenFunction {
 				Assert.assertEquals(InstructionName.XS,   gf.getInstruction(9).getName());
 				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(10).getName());
 				Assert.assertEquals(InstructionName.X,    gf.getInstruction(11).getName());
+			}
+		}
+
+		new DeduceTypes2(m).deduceFunctions(lgf);
+		for (GeneratedFunction gf : lgf) {
+			if (gf.name().equals("main")) {
+/*
+				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
+				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(1).getName());
+				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(2).getName());
+				Assert.assertEquals(InstructionName.X,    gf.getInstruction(3).getName());
+*/
+				for (int i = 0; i < gf.vte_list.size(); i++) {
+					VariableTableEntry vte = gf.getVarTableEntry(i);
+					System.out.println("8007 "+vte.type);
+				}
+			} else if (gf.name().equals("factorial")) {
+				for (int i = 0; i < gf.vte_list.size(); i++) {
+					VariableTableEntry vte = gf.getVarTableEntry(i);
+					System.out.println("8008 "+vte.type);
+				}
 			}
 		}
 	}
