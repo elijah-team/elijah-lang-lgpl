@@ -55,3 +55,16 @@ include:
 #  artifacts:
 #    reports:
 #      sast: gl-sast-report.json
+
+pages:
+  image: python:latest
+  stage: deploy
+  only:
+    - master
+  script:
+    - pip install mkdocs-material
+    - pip install mkdocs-git-revision-date-plugin
+    - mkdocs build --site-dir public
+  artifacts:
+    paths:
+      - public

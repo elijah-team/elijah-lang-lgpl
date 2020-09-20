@@ -1,6 +1,8 @@
 all:
-	ecj -g -cp lib/javassist-3.1/javassist.jar \
-    -nowarn src/main/java/ -d bin -Xemacs \
-    -log errors
-# -d /data/data/com.termux/files/home/elijah-lang/target/classes -classpath /data/data/com.termux/files/home/elijah-lang/target/classes:/home/olu/.m2/repository/javassist/javassist/3.1/javassist-3.1.jar:/home/olu/.m2/repository/antlr/antlr/2.7.5/antlr-2.7.5.jar:/home/olu/.m2/repository/com/thoughtworks/xstream/xstream/1.4.11.1/xstream-1.4.11.1.jar:/home/olu/.m2/repository/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar:/home/olu/.m2/repository/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar: -sourcepath /data/data/com.termux/files/home/elijah-lang/src/main/java: -s /data/data/com.termux/files/home/elijah-lang/target/generated-sources/annotations -g -nowarn -target 8 -source 8
-# -d /data/data/com.termux/files/home/elijah-lang/target/classes -classpath /data/data/com.termux/files/home/elijah-lang/target/classes:/home/olu/.m2/repository/javassist/javassist/3.1/javassist-3.1.jar:/home/olu/.m2/repository/antlr/antlr/2.7.5/antlr-2.7.5.jar:/home/olu/.m2/repository/com/thoughtworks/xstream/xstream/1.4.11.1/xstream-1.4.11.1.jar:/home/olu/.m2/repository/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar:/home/olu/.m2/repository/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar:/home/olu/.m2/repository/org/apache/bcel/bcel/6.3.1/bcel-6.3.1.jar: -sourcepath /data/data/com.termux/files/home/elijah-lang/src/main/java:/data/data/com.termux/files/home/elijah-lang/buffer-src/java: -s /data/data/com.termux/files/home/elijah-lang/target/generated-sources/annotations -g -nowarn -target 8 -source 8
+	true
+	
+watchdocs:
+	docker run --rm -it -p 8000:8000 -v ${PWD}:/docs 7d890f99270e serve
+#squidfunk/mkdocs-material
+
+.PHONY: watchdocs all
