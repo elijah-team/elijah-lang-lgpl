@@ -1,4 +1,4 @@
-site_name: Elijjah
+site_name: The Elijjah Programming Language
 theme:
   name: material
   palette:
@@ -7,4 +7,6 @@ theme:
 repo_url: https://gitlab.com/elijah-team/elijah-lang/
 repo_name: elijah-team/elijah-lang
 plugins:
-  - git-revision-date
+  - git-revision-date-localized
+markdown_extensions:
+  - def_list

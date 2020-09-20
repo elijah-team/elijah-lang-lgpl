@@ -1,10 +1,10 @@
 # Keywords
 
 `abstract`
-
+:   ABcde
 
 `access`
-
+:   Used to introduce [an access clause](/access_notation.md)
 
 `alias`
 
@@ -25,7 +25,10 @@
 
 
 `const`
-
+  
+  *   Used to introduce a `const` variable, whose value cannot change and whose type is also `const`-whatever
+  *   Used to introduce a `const` function, in furtherance of const-correctness, which means that a function 
+    cannot change the state of an object
 
 `construct`
 
@@ -37,16 +40,17 @@
 
 
 `ctor`
-
+:   An alias for `constructor`
 
 `def`
-
+:   Used to introduce a `def` function, which contains only one expression.  It still must be called with parentheses, though.
 
 `destructor`
 
 
 `do`
-
+:   Contrary to Rust, **Elijjah** includes a do-while loop.  I don't know for 
+    how long, I may want to do (!) something else with this keyword.
 
 `dtor`
 
@@ -115,7 +119,7 @@
 
 
 `proc`
-
+:   Short for `procedure`
 
 `procedure`
 
@@ -124,7 +128,7 @@
 
 
 `return`
-
+:   Used for early return from functions.  It can return a value.  See [Result](special_words.md#Result)
 
 `signature`
 
