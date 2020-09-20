@@ -9,10 +9,16 @@
 package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.instructions.*;
+import tripleo.elijah.stages.instructions.Instruction;
+import tripleo.elijah.stages.instructions.InstructionArgument;
+import tripleo.elijah.stages.instructions.InstructionName;
+import tripleo.elijah.stages.instructions.Label;
+import tripleo.util.range.Range;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created 9/10/20 2:57 PM
@@ -115,6 +121,22 @@ public class GeneratedFunction {
 	public OS_Element getFD() {
 		return fd != null ? fd : dfd;
 	}
+
+	public void addContext(Context context, Range r) {
+//		contextRangeHashBiMap.put(context, r);
+		contextToRangeMap.put(r, context);
+	}
+
+	public Context getContextFromPC(int pc) {
+		for (Map.Entry<Range, Context> rangeContextEntry : contextToRangeMap.entrySet()) {
+			if (rangeContextEntry.getKey().has(pc))
+				return rangeContextEntry.getValue();
+		}
+		return null;
+	}
+
+	Map<Range, Context> contextToRangeMap = new HashMap<Range, Context>();
+//	BiMap<Context, Range> contextRangeHashBiMap = HashBiMap.create();
 }
 
 //
