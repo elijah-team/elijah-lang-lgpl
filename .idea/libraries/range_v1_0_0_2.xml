@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="range-v1-0.0.1">
+  <library name="range-v1-0.0.2">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../range-java/target/range-v1-0.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../range-java/target/range-v1-0.0.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
