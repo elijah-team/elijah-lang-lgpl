@@ -21,7 +21,7 @@ import java.util.List;
  *
  */
 public class OS_Package implements OS_Element {
-	public static OS_Package default_package = new OS_Package(null, 0);
+	public final static OS_Package default_package = new OS_Package(null, 0);
 	private OS_Module _module;
 	private final List<OS_Element> elements = new ArrayList<OS_Element>();
 
