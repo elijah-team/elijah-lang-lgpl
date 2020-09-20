@@ -15,11 +15,12 @@ import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijjah.ElijjahTokenTypes;
+import tripleo.util.range.Range;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static tripleo.elijah.lang.ExpressionKind.*;
+import static tripleo.elijah.lang.ExpressionKind.PROCEDURE_CALL;
 import static tripleo.elijah.util.Helpers.List_of;
 
 /**
@@ -181,6 +182,8 @@ public class GenerateFunctions {
 						add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(fn_aug), left, right));
 					}
 					break;
+				default:
+					throw new NotImplementedException();
 				}
 			} else {
 				switch (x.getKind()) {
@@ -275,7 +278,9 @@ public class GenerateFunctions {
 		case DO_WHILE:
 			break;
 		}
-		add_i(gf, InstructionName.XS, List_of(new IntegerIA(e2)));
+		int x2 = add_i(gf, InstructionName.XS, List_of(new IntegerIA(e2)));
+		Range r = new Range(e2, x2);
+		gf.addContext(loop.getContext(), r);
 	}
 
 	private void assign_variable(GeneratedFunction gf, int vte, IExpression value) {
