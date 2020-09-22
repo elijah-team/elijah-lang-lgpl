@@ -252,7 +252,9 @@ programStatement[ProgramClosure pc, OS_Element cont]
 varStmt[StatementClosure cr, OS_Element aParent]
         {VariableSequence vsq=null;}
     : ("var" {vsq=cr.varSeq(cur);}
-    | ("const"|"val") {vsq=cr.varSeq(cur);vsq.defaultModifiers(TypeModifiers.CONST);})
+    | ("const" {vsq.defaultModifiers(TypeModifiers.CONST);}
+        |"val"  {vsq.defaultModifiers(TypeModifiers.VAL);})
+        {vsq=cr.varSeq(cur);})
     ( varStmt_i[vsq.next()] (COMMA varStmt_i[vsq.next()])*
     )
     ;
