@@ -14,6 +14,8 @@ import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -184,10 +186,20 @@ public class DeduceTypes2 {
 				break;
 			case IDENT:
 				{
+/*
 					LookupResultList lrl = ctx.lookup(((IdentExpression)e).getText());
 					OS_Element best = lrl.chooseBest(null);
 					int y=2;
-					throw new NotImplementedException();
+*/
+					InstructionArgument yy = generatedFunction.vte_lookup(((IdentExpression) e).getText());
+//					System.out.println("10000 "+yy);
+					Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(yy)).potentialTypes();
+					List<TypeTableEntry> ll = new ArrayList<>(c);
+					if (ll.size() == 1) {
+						tte.attached = ll.get(0).attached;
+						vte.addPotentialType(instructionIndex, ll.get(0));
+					} else
+						throw new NotImplementedException();
 				}
 //				break;
 			default:
