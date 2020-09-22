@@ -35,6 +35,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	private final List<ClassItem> items = new ArrayList<ClassItem>();
 	private NamespaceTypes _kind;
 	private OS_Package _packageName;
+	private List<AccessNotation> accesses = new ArrayList<AccessNotation>();
 
 	public NamespaceStatement(OS_Element aElement) {
 		parent = aElement; // setParent
@@ -227,6 +228,9 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		}
 	}
 
+	public void addAccess(AccessNotation acs) {
+		accesses.add(acs);
+	}
 }
 
 //

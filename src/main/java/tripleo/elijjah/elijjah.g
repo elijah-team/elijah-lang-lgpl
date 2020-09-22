@@ -144,6 +144,7 @@ docstrings[Documentable sc]:
     |)
     ;
 classScope[ClassStatement cr]
+        {AccessNotation acs=null;}
     : docstrings[cr]
     ( constructorDef[cr]
     | destructorDef[cr]
@@ -152,8 +153,9 @@ classScope[ClassStatement cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | typeAlias[cr.typeAlias()]
     | programStatement[cr.XXX(), cr]
-    | invariantStatement[cr.invariantStatement()]
-    | accessNotation)*
+    | acs=accessNotation {cr.addAccess(acs);}
+    )*
+    (invariantStatement[cr.invariantStatement()])?
     ;
 constructorDef[ClassStatement cr]
         {ConstructorDef cd=null;IdentExpression x1=null;}
@@ -173,14 +175,14 @@ destructorDef[ClassStatement cr]
 					{dd.postConstruct();}
 	;
 namespaceScope[NamespaceStatement cr]
-        //{Scope sc=null;}
+        {AccessNotation acs=null;}
     : docstrings[cr]
     (( functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure(), cr]
     | typeAlias[cr.typeAlias()]
     | programStatement[cr.XXX(), cr]
-    | invariantStatement[cr.invariantStatement()]
-    | accessNotation ) opt_semi )*
+    | acs=accessNotation {cr.addAccess(acs);}) opt_semi )*
+    (invariantStatement[cr.invariantStatement()])?
     ;
 scope[Scope sc]
       //{IExpression expr;}
@@ -331,10 +333,16 @@ invariantStatement[InvariantStatement cr]
          TOK_COLON)?
          expr=expression    {isp.setExpr(expr);})*
     ;
-accessNotation
-        { TypeNameList tnl=null;}
-	: "access" (STRING_LITERAL (LCURLY tnl=typeNameList2 RCURLY)?
-	           |STRING_LITERAL) opt_semi
+accessNotation returns [AccessNotation acs]
+        { TypeNameList tnl=null;acs=new AccessNotation();}
+	: "access" (category:STRING_LITERAL (shorthand:IDENT EQUAL)? LCURLY tnl=typeNameList2 RCURLY
+	            {acs.setCategory(category);acs.setShortHand(shorthand);acs.setTypeNames(tnl);}
+	           |category1:STRING_LITERAL
+	            {acs.setCategory(category1);}
+	           |(shorthand1:IDENT EQUAL)? LCURLY tnl=typeNameList2 RCURLY
+	            {acs.setShortHand(shorthand1);acs.setTypeNames(tnl);}
+	           ) opt_semi
+
 	;
 
 
@@ -696,7 +704,7 @@ whileLoop[StatementClosure cr]
 frobeIteration[StatementClosure cr]
 	 {Loop loop=cr.loop();LoopContext ctx=null;IdentExpression i1=null, i2=null, i3=null;}
 	:"iterate"
-	                            {ctx=new LoopContext(cur, loop);loop.setContext((ctx);cur=ctx;}
+	                            {ctx=new LoopContext(cur, loop);loop.setContext(ctx);cur=ctx;}
 	( "from"                   {loop.type(LoopTypes2.FROM_TO_TYPE);}
 	  expr=expression          {loop.frompart(expr);}
 	  "to" expr=expression     {loop.topart(expr);}

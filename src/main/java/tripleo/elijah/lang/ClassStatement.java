@@ -34,6 +34,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	
 	private OS_Package _packageName;
 	private ClassTypes _type;
+	private List<AccessNotation> accesses = new ArrayList<AccessNotation>();
 
 //	/**
 //	 * For XMLBeans. Must use setParent.
@@ -222,6 +223,12 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 			annotations = new ArrayList<AnnotationClause>();
 		annotations.add(a);
 	}
+
+	public void addAccess(AccessNotation acs) {
+		accesses.add(acs);
+	}
+
+
 }
 
 //
