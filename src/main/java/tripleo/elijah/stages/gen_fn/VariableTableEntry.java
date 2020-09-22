@@ -10,6 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.stages.instructions.VariableTableType;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +48,10 @@ public class VariableTableEntry {
 
 	public void addPotentialType(int instructionIndex, TypeTableEntry tte) {
 		potentialTypes.put(instructionIndex, tte);
+	}
+
+	public Collection<TypeTableEntry> potentialTypes() {
+		return potentialTypes.values();
 	}
 }
 
