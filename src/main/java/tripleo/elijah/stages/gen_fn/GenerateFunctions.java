@@ -93,7 +93,7 @@ public class GenerateFunctions {
 		System.out.println(gf.cte_list);
 		System.out.println(gf.prte_list);
 		System.out.println(gf.tte_list);
-		System.out.println(gf.idte_list);
+//		System.out.println(gf.idte_list);
 		return gf;
 	}
 
@@ -122,7 +122,7 @@ public class GenerateFunctions {
 		System.out.println("ConstantTable "+ gf.cte_list);
 		System.out.println("ProcTable     "+ gf.prte_list);
 		System.out.println("TypeTable     "+ gf.tte_list);
-		System.out.println("IdentTable    "+ gf.idte_list);
+//		System.out.println("IdentTable    "+ gf.idte_list);
 		return gf;
 	}
 
@@ -432,9 +432,10 @@ public class GenerateFunctions {
 	}
 
 	private int addIdentTableEntry(IdentExpression ident, GeneratedFunction gf) {
-		IdentTableEntry idte = new IdentTableEntry(gf.idte_list.size(), ident);
-		gf.idte_list.add(idte);
-		return idte.index;
+		throw new NotImplementedException();
+//		IdentTableEntry idte = new IdentTableEntry(gf.idte_list.size(), ident);
+//		gf.idte_list.add(idte);
+//		return idte.index;
 	}
 
 	private void simplify_qident(Qualident left, GeneratedFunction gf) {
