@@ -2,7 +2,6 @@ package tripleo.elijah.lang.imports;
 
 import tripleo.elijah.contexts.ImportContext;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class QualifiedImportStatement implements ImportStatement {
 		if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(this);
 		} else
-			throw new NotImplementedException();
+			throw new IllegalStateException();
 	}
 
 	public void addSelectivePart(Qualident aQualident, IdentList il) {
