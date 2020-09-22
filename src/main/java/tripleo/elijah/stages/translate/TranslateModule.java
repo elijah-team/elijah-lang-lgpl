@@ -53,6 +53,14 @@ public class TranslateModule {
 		final String cls_name = "C"+item.name();
 		final TabbedOutputStream w = stream_for(item.getPackageName().getName(), cls_name);
 		try {
+			{
+				final OS_Package packageName = item.getPackageName();
+				if (!packageName.equals("")) {
+					String pkg_decl = "package " + packageName.getName()+";";
+					w.put_string_ln(pkg_decl);
+					w.put_string_ln("");
+				}
+			}
 			w.put_string_ln("class "+ cls_name + " {");
 			w.incr_tabs();
 			put_class_statement_internal(item, w);
@@ -83,6 +91,14 @@ public class TranslateModule {
 		final String ns_name = ns_name_sb.toString();
 		final TabbedOutputStream w = stream_for(item.getPackageName().getName(), ns_name);
 		try {
+			{
+				final OS_Package packageName = item.getPackageName();
+				if (!packageName.equals("")) {
+					String pkg_decl = "package " + packageName.getName()+";";
+					w.put_string_ln(pkg_decl);
+					w.put_string_ln("");
+				}
+			}
 			w.put_string_ln("class "+ ns_name + " {");
 			w.incr_tabs();
 			put_namespace_statement_internal(item, w);
