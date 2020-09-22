@@ -111,7 +111,8 @@ public class Compilation {
 							} else {
 								add_ci(ezs.get(0));
 							}
-						}
+						} else
+							eee.reportError("9995 Not a directory "+f.getAbsolutePath());
 					}
 				}
 
