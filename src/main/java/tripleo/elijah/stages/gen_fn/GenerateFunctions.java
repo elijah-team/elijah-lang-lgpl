@@ -215,7 +215,10 @@ public class GenerateFunctions {
 //					System.out.println("8004 " + vs);
 				if (vs.getTypeModifiers() == TypeModifiers.CONST) {
 					if (vs.initialValue().is_simple()) {
-						addConstantTableEntry(vs.getName(), vs.initialValue(), vs.initialValue().getType(), gf);
+						int ci = addConstantTableEntry(vs.getName(), vs.initialValue(), vs.initialValue().getType(), gf);
+						int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf);
+						IExpression iv = vs.initialValue();
+						add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(i), new ConstTableIA(ci, gf)));
 					} else {
 						int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf);
 						IExpression iv = vs.initialValue();

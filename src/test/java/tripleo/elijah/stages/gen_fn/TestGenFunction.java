@@ -45,9 +45,10 @@ public class TestGenFunction {
 
 			if (gf.name().equals("main")) {
 				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
-				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(1).getName());
-				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(2).getName());
-				Assert.assertEquals(InstructionName.X,    gf.getInstruction(3).getName());
+				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(1).getName());
+				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(2).getName());
+				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(3).getName());
+				Assert.assertEquals(InstructionName.X,    gf.getInstruction(4).getName());
 			} else if (gf.name().equals("factorial")) {
 				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
 				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(1).getName());
