@@ -34,7 +34,10 @@ public class DeductionTests {
 		c.feedCmdLine(args);
 
 		final List<ClassStatement> aClassList = c.findClass("Main");
-		Assert.assertEquals(aClassList.size(), 1);
+		for (ClassStatement classStatement : aClassList) {
+			System.out.println(classStatement.getPackageName().getName());
+		}
+		Assert.assertEquals(3, aClassList.size());  // NOTE this may change. be aware
 	}
 
 
@@ -47,7 +50,7 @@ public class DeductionTests {
 		c.feedCmdLine(args);
 
 		final List<ClassStatement> aClassList = c.findClass("Main");
-		Assert.assertEquals(aClassList.size(), 1);
+		Assert.assertEquals(1, aClassList.size());
 	}
 
 }
