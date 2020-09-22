@@ -30,132 +30,142 @@ public class DeduceTypes2 {
 
 	public void deduceFunctions(List<GeneratedFunction> lgf) {
 		for (GeneratedFunction generatedFunction : lgf) {
-			OS_Element fd = generatedFunction.getFD();
-			Context ctx = fd.getContext();
-			//
-			for (Instruction instruction : generatedFunction.instructions()) {
-				System.out.println("8006 " + instruction);
-				switch (instruction.getName()) {
-				case E: {
-					//
-					// resolve all cte expressions
-					//
-					for (ConstantTableEntry cte : generatedFunction.cte_list) {
-						IExpression iv = cte.initialValue;
-						switch (iv.getKind()) {
-						case NUMERIC:
-							OS_Type a = cte.getTypeTableEntry().attached;
-							if (a == null) {
-								cte.getTypeTableEntry().attached = new OS_Type(BuiltInTypes.SystemInteger);
-							}
-							break;
-						default:
-							throw new NotImplementedException();
-						}
-					}
-				}
-					break;
-				case X:
-					break;
-				case ES:
-					break;
-				case XS:
-					break;
-				case AGN:
-					{
-						final IntegerIA arg = (IntegerIA)instruction.getArg(0);
-						VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
-						InstructionArgument i2 = instruction.getArg(1);
-						if (i2 instanceof IntegerIA) {
-							VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
-							vte.addPotentialType(instruction.getIndex(), vte2.type);
-//							throw new NotImplementedException();
-						} else if (i2 instanceof FnCallArgs) {
-							FnCallArgs fca = (FnCallArgs) i2;
-							do_assign_call(generatedFunction, ctx, vte, fca, instruction.getIndex());
-						} else if (i2 instanceof ConstTableIA) {
-							int y=2;
-							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
-						} else
-							throw new NotImplementedException();
-					}
-					break;
-				case AGNK:
-					{
-						final IntegerIA arg = (IntegerIA)instruction.getArg(0);
-						VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
-						InstructionArgument i2 = instruction.getArg(1);
-						ConstTableIA ctia = (ConstTableIA) i2;
-						do_assign_constant(generatedFunction, instruction, vte, ctia);
-					}
-					break;
-				case AGNT:
-					break;
-				case AGNF:
-					break;
-				case CMP:
-					break;
-				case JE:
-					break;
-				case JL:
-					break;
-				case JMP:
-					break;
-				case CALL: {
-					int i1 = to_int(instruction.getArg(0));
-					InstructionArgument i2 = (instruction.getArg(1));
-					ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
-					{
-						IExpression pn1 = fn1.expression;
-						if (pn1 instanceof IdentExpression) {
-							String pn = ((IdentExpression) pn1).getText();
-							LookupResultList lrl = ctx.lookup(pn);
-							OS_Element best = lrl.chooseBest(null);
-							if (best != null) {
-								fn1.resolved = best; // TODO check arity and arg matching
-							} else
-								throw new NotImplementedException();
-						} else
-							throw new NotImplementedException();
+			deduce_generated_function(generatedFunction);
+		}
+	}
 
-					}
-					if (i2 instanceof IntegerIA) {
-						int i2i = to_int(i2);
-						VariableTableEntry vte = generatedFunction.getVarTableEntry(i2i);
-						int y =2;
-					} else
+	public void deduce_generated_function(GeneratedFunction generatedFunction) {
+		OS_Element fd = generatedFunction.getFD();
+		Context fd_ctx = fd.getContext();
+		//
+		for (Instruction instruction : generatedFunction.instructions()) {
+			final Context context = generatedFunction.getContextFromPC(instruction.getIndex());
+			System.out.println("8006 " + instruction);
+			switch (instruction.getName()) {
+			case E: {
+				//
+				// resolve all cte expressions
+				//
+				for (ConstantTableEntry cte : generatedFunction.cte_list) {
+					IExpression iv = cte.initialValue;
+					switch (iv.getKind()) {
+					case NUMERIC:
+						OS_Type a = cte.getTypeTableEntry().attached;
+						if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
+							cte.getTypeTableEntry().attached = new OS_Type(BuiltInTypes.SystemInteger).resolve(context);
+						}
+						break;
+					default:
 						throw new NotImplementedException();
-				}
-				break;
-				case CALLS: {
-					int i1 = to_int(instruction.getArg(0));
-					InstructionArgument i2 = (instruction.getArg(1));
-					ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
-					{
-						implement_calls(generatedFunction, ctx, i2, fn1, instruction.getIndex());
 					}
-/*
-					if (i2 instanceof IntegerIA) {
-						int i2i = to_int(i2);
-						VariableTableEntry vte = generatedFunction.getVarTableEntry(i2i);
-						int y =2;
-					} else
-						throw new NotImplementedException();
-*/
-				}
-				break;
-				case RET:
-					break;
-				case YIELD:
-					break;
-				case TRY:
-					break;
-				case PC:
-					break;
-				case DOT:
-					break;
 				}
 			}
+				break;
+			case X:
+				break;
+			case ES:
+				break;
+			case XS:
+				break;
+			case AGN:
+				{
+					final IntegerIA arg = (IntegerIA)instruction.getArg(0);
+					VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
+					InstructionArgument i2 = instruction.getArg(1);
+					if (i2 instanceof IntegerIA) {
+						VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
+						vte.addPotentialType(instruction.getIndex(), vte2.type);
+//							throw new NotImplementedException();
+					} else if (i2 instanceof FnCallArgs) {
+						FnCallArgs fca = (FnCallArgs) i2;
+						do_assign_call(generatedFunction, fd_ctx, vte, fca, instruction.getIndex());
+					} else if (i2 instanceof ConstTableIA) {
+						int y=2;
+						do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
+					} else
+						throw new NotImplementedException();
+				}
+				break;
+			case AGNK:
+				{
+					final IntegerIA arg = (IntegerIA)instruction.getArg(0);
+					VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
+					InstructionArgument i2 = instruction.getArg(1);
+					ConstTableIA ctia = (ConstTableIA) i2;
+					do_assign_constant(generatedFunction, instruction, vte, ctia);
+				}
+				break;
+			case AGNT:
+				break;
+			case AGNF:
+				break;
+			case CMP:
+				break;
+			case JE:
+				break;
+			case JL:
+				break;
+			case JMP:
+				break;
+			case CALL: {
+				int i1 = to_int(instruction.getArg(0));
+				InstructionArgument i2 = (instruction.getArg(1));
+				ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
+				{
+					IExpression pn1 = fn1.expression;
+					if (pn1 instanceof IdentExpression) {
+						String pn = ((IdentExpression) pn1).getText();
+						LookupResultList lrl = fd_ctx.lookup(pn);
+						OS_Element best = lrl.chooseBest(null);
+						if (best != null) {
+							fn1.resolved = best; // TODO check arity and arg matching
+						} else
+							throw new NotImplementedException();
+					} else
+						throw new NotImplementedException();
+
+				}
+				if (i2 instanceof IntegerIA) {
+					int i2i = to_int(i2);
+					VariableTableEntry vte = generatedFunction.getVarTableEntry(i2i);
+					int y =2;
+				} else
+					throw new NotImplementedException();
+			}
+			break;
+			case CALLS: {
+				int i1 = to_int(instruction.getArg(0));
+				InstructionArgument i2 = (instruction.getArg(1));
+				ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
+				{
+					implement_calls(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
+				}
+/*
+				if (i2 instanceof IntegerIA) {
+					int i2i = to_int(i2);
+					VariableTableEntry vte = generatedFunction.getVarTableEntry(i2i);
+					int y =2;
+				} else
+					throw new NotImplementedException();
+*/
+			}
+			break;
+			case RET:
+				break;
+			case YIELD:
+				break;
+			case TRY:
+				break;
+			case PC:
+				break;
+			case DOT:
+				break;
+			}
+		}
+		for (VariableTableEntry vte : generatedFunction.vte_list) {
+			if (vte.type.attached == null)
+				if (vte.potentialTypes().size() == 1)
+					vte.type.attached = new ArrayList<TypeTableEntry>(vte.potentialTypes()).get(0).attached;
 		}
 	}
 
