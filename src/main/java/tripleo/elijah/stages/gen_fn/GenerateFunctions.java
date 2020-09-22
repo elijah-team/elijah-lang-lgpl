@@ -251,7 +251,11 @@ public class GenerateFunctions {
 				IdentExpression iterNameToken = loop.getIterNameToken();
 				String iterName = iterNameToken.getText();
 				int i = addTempTableEntry(null, iterNameToken, gf); // TODO deduce later
-				add_i(gf, InstructionName.AGN, List_of(new IntegerIA(i), simplify_expression(loop.getFromPart(), gf)));
+				final InstructionArgument ia1 = simplify_expression(loop.getFromPart(), gf);
+				if (ia1 instanceof ConstTableIA)
+					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(i), ia1));
+				else
+					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(i), ia1));
 				Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
 				Label label_bottom = gf.addLabel("bottom"+label_top, false);
