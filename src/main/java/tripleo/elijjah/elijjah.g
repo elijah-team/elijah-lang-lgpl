@@ -124,7 +124,7 @@ importPart1 [AssigningImportStatement cr] //current rule
     ;
 importPart2 [QualifiedImportStatement cr] //current rule
 		{Qualident q3;IdentList il=new IdentList();}
-    : q3=qualident /*DOT*/ LCURLY identList[il] { cr.addSelectivePart(q3, il);} RCURLY
+    : q3=qualident /*DOT*/ LCURLY il=identList2 { cr.addSelectivePart(q3, il);} RCURLY
     ;
 importPart3 [NormalImportStatement cr] //current rule
 		{Qualident q2;}
@@ -286,11 +286,11 @@ statement[StatementClosure cr, OS_Element aParent]
 	| frobeIteration[cr]
 	| "construct" q=qualident o=opfal2 {cr.constructExpression(q,o);}
 	| "yield" expr=expression {cr.yield(expr);}
-	) opt_semi
+	) (SEMI|)
 	;
 opt_semi: (SEMI|);
-identList[IdentList ail]
-		{IdentExpression s=null;}
+identList2 returns [IdentList ail]
+		{IdentExpression s=null;ail=new IdentList();}
 	: s=ident {ail.push(s);}
 		(COMMA s=ident {ail.push(s);})*
 	;
