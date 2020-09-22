@@ -152,13 +152,13 @@ public class GenerateFunctions {
 							break;
 						case IDENT:
 							final IdentExpression left = (IdentExpression) bbe.getLeft();
-							InstructionArgument iii = vte_lookup(left.getText(), gf);
+							InstructionArgument iii = gf.vte_lookup(left.getText());
 							int iii4, iii5;
 							if (iii == null) {
 								iii4 = addIdentTableEntry(left, gf);
 							}
 							final IdentExpression right = (IdentExpression) right1;
-							InstructionArgument iiii = vte_lookup(right.getText(), gf);
+							InstructionArgument iiii = gf.vte_lookup(right.getText());
 							if (iiii == null) {
 								iii5 = addIdentTableEntry(right, gf);
 							}
@@ -353,7 +353,7 @@ public class GenerateFunctions {
 		case QIDENT:
 			throw new NotImplementedException();
 		case IDENT:
-			InstructionArgument i = vte_lookup(((IdentExpression) expression).getText(), gf);
+			InstructionArgument i = gf.vte_lookup(((IdentExpression) expression).getText());
 			return i;
 		case NUMERIC:
 			{
@@ -367,29 +367,13 @@ public class GenerateFunctions {
 		return null;
 	}
 
-	private InstructionArgument vte_lookup(String text, GeneratedFunction gf) {
-		int index = 0;
-		for (VariableTableEntry variableTableEntry : gf.vte_list) {
-			if (variableTableEntry.getName().equals(text))
-				return new IntegerIA(index);
-			index++;
-		}
-		index = 0;
-		for (ConstantTableEntry constTableEntry : gf.cte_list) {
-			if (constTableEntry.getName().equals(text))
-				return new ConstTableIA(index, gf);
-			index++;
-		}
-		return null;
-	}
-
 	private List<TypeTableEntry> get_args_types(ExpressionList args, GeneratedFunction gf) {
 		List<TypeTableEntry> R = new ArrayList<>();
 		for (IExpression arg : args) {
 			final OS_Type type = arg.getType();
 			System.err.println(String.format("108 %s %s", arg, type));
 			if (arg instanceof IdentExpression) {
-				InstructionArgument x = vte_lookup(((IdentExpression) arg).getText(), gf);
+				InstructionArgument x = gf.vte_lookup(((IdentExpression) arg).getText());
 				TypeTableEntry tte;
 				if (x instanceof ConstTableIA) {
 					ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) x).getIndex());

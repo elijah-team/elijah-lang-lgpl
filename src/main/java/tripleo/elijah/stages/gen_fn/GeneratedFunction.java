@@ -9,10 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.instructions.Instruction;
-import tripleo.elijah.stages.instructions.InstructionArgument;
-import tripleo.elijah.stages.instructions.InstructionName;
-import tripleo.elijah.stages.instructions.Label;
+import tripleo.elijah.stages.instructions.*;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
@@ -136,6 +133,22 @@ public class GeneratedFunction {
 	}
 
 	Map<Range, Context> contextToRangeMap = new HashMap<Range, Context>();
+
+	public InstructionArgument vte_lookup(String text) {
+		int index = 0;
+		for (VariableTableEntry variableTableEntry : vte_list) {
+			if (variableTableEntry.getName().equals(text))
+				return new IntegerIA(index);
+			index++;
+		}
+		index = 0;
+		for (ConstantTableEntry constTableEntry : cte_list) {
+			if (constTableEntry.getName().equals(text))
+				return new ConstTableIA(index, this);
+			index++;
+		}
+		return null;
+	}
 //	BiMap<Context, Range> contextRangeHashBiMap = HashBiMap.create();
 }
 
