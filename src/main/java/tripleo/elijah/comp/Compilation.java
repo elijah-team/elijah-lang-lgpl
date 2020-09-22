@@ -11,7 +11,6 @@ package tripleo.elijah.comp;
 import antlr.ANTLRException;
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -335,15 +334,13 @@ public class Compilation {
 	//  CLASS AND FUNCTION CODES
 	//
 
-	private static int _classCode = 101;
-	private static int _functionCode = 1001;
+	private int _classCode = 101;
+	private int _functionCode = 1001;
 
-	@SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public int nextClassCode() {
 		return _classCode++;
 	}
 
-	@SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public int nextFunctionCode() {
 		return _functionCode++;
 	}
