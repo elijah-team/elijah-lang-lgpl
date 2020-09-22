@@ -251,10 +251,11 @@ programStatement[ProgramClosure pc, OS_Element cont]
     ;
 varStmt[StatementClosure cr, OS_Element aParent]
         {VariableSequence vsq=null;}
-    : ("var" {vsq=cr.varSeq(cur);}
-    | ("const" {vsq.defaultModifiers(TypeModifiers.CONST);}
-        |"val"  {vsq.defaultModifiers(TypeModifiers.VAL);})
-        {vsq=cr.varSeq(cur);})
+    :                   {vsq=cr.varSeq(cur);}
+    ( "var"
+    | "const"           {vsq.defaultModifiers(TypeModifiers.CONST);}
+    | "val"             {vsq.defaultModifiers(TypeModifiers.VAL);}
+    )
     ( varStmt_i[vsq.next()] (COMMA varStmt_i[vsq.next()])*
     )
     ;
