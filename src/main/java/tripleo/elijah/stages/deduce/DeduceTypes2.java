@@ -72,7 +72,7 @@ public class DeduceTypes2 {
 //							throw new NotImplementedException();
 						} else if (i2 instanceof FnCallArgs) {
 							FnCallArgs fca = (FnCallArgs) i2;
-							do_assign_call(generatedFunction, ctx, vte, fca);
+							do_assign_call(generatedFunction, ctx, vte, fca, instruction.getIndex());
 						} else if (i2 instanceof ConstTableIA) {
 							int y=2;
 							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
@@ -171,7 +171,7 @@ public class DeduceTypes2 {
 		vte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
-	private void do_assign_call(GeneratedFunction generatedFunction, Context ctx, VariableTableEntry vte, FnCallArgs fca) {
+	private void do_assign_call(GeneratedFunction generatedFunction, Context ctx, VariableTableEntry vte, FnCallArgs fca, int instructionIndex) {
 		ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		for (TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
 			System.out.println("770 "+tte);
@@ -201,9 +201,11 @@ public class DeduceTypes2 {
 					} else
 						throw new NotImplementedException();
 				}
-//				break;
+				break;
 			default:
-				throw new NotImplementedException();
+				{
+					throw new NotImplementedException();
+				}
 			}
 		}
 		{
