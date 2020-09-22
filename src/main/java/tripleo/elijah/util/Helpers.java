@@ -12,6 +12,10 @@ import antlr.CommonToken;
 import antlr.Token;
 import com.thoughtworks.xstream.XStream;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.lang.DotExpression;
+import tripleo.elijah.lang.IExpression;
+import tripleo.elijah.lang.IdentExpression;
+import tripleo.elijah.lang.Qualident;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +43,28 @@ public class Helpers {
 		CommonToken t = new CommonToken();
 		t.setText(aText);
 		return t;
+	}
+
+	public static IExpression qualidentToDotExpression2(@NotNull Qualident q) {
+		return qualidentToDotExpression2(q.parts(), 1);
+	}
+
+	public static IExpression qualidentToDotExpression2(@NotNull List<Token> ts) {
+		return qualidentToDotExpression2(ts, 1);
+	}
+
+	public static IExpression qualidentToDotExpression2(@NotNull List<Token> ts, int i) {
+		if (ts.size() == 1) return new IdentExpression(ts.get(0));
+		if (ts.size() == 0) return null;
+		IExpression r = new IdentExpression(ts.get(0));
+//		int i=1;
+		while (ts.size() > i) {
+			final IExpression dotExpression = qualidentToDotExpression2(ts.subList(i++, ts.size()), i+1);
+			if (dotExpression == null) break;
+//			r.setRight(dotExpression);
+			r = new DotExpression(r, dotExpression);
+		}
+		return r;
 	}
 }
 

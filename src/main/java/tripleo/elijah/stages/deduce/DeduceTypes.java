@@ -8,13 +8,13 @@
  */
 package tripleo.elijah.stages.deduce;
 
-import antlr.Token;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.LogEvent;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -353,7 +353,7 @@ public class DeduceTypes {
 	private boolean deduceProcedureCall_LEFT(final ProcedureCallExpression pce, Context ctx) {
 		IExpression de;
 		if (pce.getLeft() instanceof Qualident) {
-			de = qualidentToDotExpression2(((Qualident) pce.getLeft()).parts());
+			de = Helpers.qualidentToDotExpression2(((Qualident) pce.getLeft()));
 			System.out.println("77 "+de);
 			pce.setLeft(de);
 		} else {
@@ -512,24 +512,6 @@ public class DeduceTypes {
 		}
 	}
 
-	public static IExpression qualidentToDotExpression2(@NotNull List<Token> ts) {
-		return qualidentToDotExpression2(ts, 1);
-	}
-
-	public static IExpression qualidentToDotExpression2(@NotNull List<Token> ts, int i) {
-		if (ts.size() == 1) return new IdentExpression(ts.get(0));
-		if (ts.size() == 0) return null;
-		IExpression r = new IdentExpression(ts.get(0));
-//		int i=1;
-		while (ts.size() > i) {
-			final IExpression dotExpression = qualidentToDotExpression2(ts.subList(i++, ts.size()), i+1);
-			if (dotExpression == null) break;
-//			r.setRight(dotExpression);
-			r = new DotExpression(r, dotExpression);
-		}
-		return r;
-	}
-
 	private OS_Element lookup_ident_to_element(@NotNull IdentExpression left) {
 		OS_Element best;
 		final String text = left.getText();
@@ -662,7 +644,7 @@ public class DeduceTypes {
 	private OS_Element _resolveAlias(AliasStatement aliasStatement) {
 		LookupResultList lrl2;
 		if (aliasStatement.getExpression() instanceof Qualident) {
-			IExpression de = qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()).parts());
+			IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
 			if (de instanceof DotExpression)
 				lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
 			else
@@ -837,7 +819,7 @@ public class DeduceTypes {
 			deduceProcedureCall((ProcedureCallExpression) n, context);
 			return n.getType();
 		} else if (n.getKind() == ExpressionKind.QIDENT) {
-			final IExpression expression = qualidentToDotExpression2(((Qualident) n).parts());
+			final IExpression expression = Helpers.qualidentToDotExpression2(((Qualident) n));
 			return deduceExpression(expression, context);
 		}
 		
