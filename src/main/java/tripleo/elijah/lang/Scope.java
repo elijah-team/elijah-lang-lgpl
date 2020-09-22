@@ -8,8 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.Documentable;
-
 // Referenced classes of package pak2:
 //			StatementClosure, BlockStatement
 

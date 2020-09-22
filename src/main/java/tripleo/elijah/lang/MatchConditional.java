@@ -12,7 +12,6 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
-import tripleo.elijah.Documentable;
 import tripleo.elijah.contexts.SingleIdentContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;

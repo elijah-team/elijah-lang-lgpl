@@ -4,7 +4,7 @@
 
 import antlr.*;
 import antlr.collections.impl.BitSet;
-import tripleo.elijah.Documentable;
+import tripleo.elijah.lang.Documentable;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.GenerateStatement;
 import tripleo.elijah.ci.LibraryStatementPart;

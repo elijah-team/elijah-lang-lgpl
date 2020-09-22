@@ -3,8 +3,6 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.Documentable;
-
 import java.util.List;
 
 /**
