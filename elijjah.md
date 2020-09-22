@@ -25,7 +25,7 @@ It is intended to provide the power of C++, the expressibility of Python, and th
 
 In the early 2000s the author became disillusioned with the then current state of the language landscape.  Namely the frustrating complexity of C++ and the frustrating simplicity of Java, arguably the two most popular languages at the time.
 
-Due to unforseen circumstances, the compiler is just now being produced and released, hopefully to widespread acclaim or niche acceptance.  The author hopes that Elijjah can achieve what Java, D and Vala could not.
+Due to unforeseen circumstances, the compiler is just now being produced and released, hopefully to widespread acclaim or niche acceptance.  The author hopes that Elijjah can achieve what Java, D and Vala could not.
 
 The language has evolved over time from a simple JavaScript clone to a full-fledged programming language fit to challenge today's top contenders.  
 
@@ -33,7 +33,7 @@ The language has evolved over time from a simple JavaScript clone to a full-fled
 
 The author states that Elijjah is designed to be an industrial strength object-oriented language, and a better language that C++ and Java, but to still be interoperable with either, allowing programmers to make a gradual transition to Elijjah.
 
-Semicolons are optional as a statement terminator , though whilespace is ignored in the current compiler,  eventually a newline should be enough to deduce that the statement has ended.
+Semicolons are optional as a statement terminator , though whitespace is ignored in the current compiler,  eventually a newline should be enough to deduce that the statement has ended.
 
 ## Syntax
 
@@ -69,11 +69,11 @@ It is hoped that Elijjah will be useful in concurrent systems though at this tim
 
 Maybe the language will evolve concurrency and safety features present in other languages like Rust and Erlang.  The programmer has fine-grained control of memory layout (using `struct`s) where applicable (meaning largely using the C/C++ backends, though transparent access to C/C++ objects is supported).  Performance of idiomatic Elijjah is comparable to that of idiomatic C++.
 
-Elijjah also supports const correctness and immutable funtions, where an object is not allowed to be modified in any way.
+Elijjah also supports const correctness and immutable functions, where an object is not allowed to be modified in any way.
 
 ### Ownership
 
-Maybe the `borrow` keywword will be implemented one day.
+Maybe the `borrow` keyword will be implemented one day.
 
 ### Types and polymorphism
 
@@ -156,6 +156,6 @@ Also support for Cmake and Bazel.  Integration with GObject and Python are plann
   *  Python multiple assignment ( const (x, y, z) coming soon)\
   *  String interpolation (uses Python method (%); ${scope} coming)
   *  Kotlin/Groovy safe navigation, elvis operator
-  *  Kotlin overly complex hello world exapmle
+  *  Kotlin overly complex hello world example
   *  REPL
 
