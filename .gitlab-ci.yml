@@ -20,7 +20,8 @@ stages:
 build:
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS -e compile
+    - echo Skipping because this doesn't do anything anyway
+    - #- mvn $MAVEN_CLI_OPTS -e compile
 
 test:
   stage: test
@@ -62,8 +63,7 @@ pages:
   only:
     - master
   script:
-    - pip install mkdocs-material
-    - pip install mkdocs-git-revision-date-plugin
+    - pip install mkdocs-material  mkdocs-git-revision-date-plugin
     - mkdocs build --site-dir public
   artifacts:
     paths:
