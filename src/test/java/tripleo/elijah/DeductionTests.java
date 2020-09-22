@@ -14,7 +14,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
-import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.util.Helpers;
 
 import java.util.List;
@@ -33,8 +33,8 @@ public class DeductionTests {
 
 		c.feedCmdLine(args);
 
-		final OS_Element aClass = c.findClass("Main");
-		Assert.assertNotNull(aClass);
+		final List<ClassStatement> aClassList = c.findClass("Main");
+		Assert.assertEquals(aClassList.size(), 1);
 	}
 
 
@@ -46,8 +46,8 @@ public class DeductionTests {
 
 		c.feedCmdLine(args);
 
-		final OS_Element aClass = c.findClass("Main");
-		Assert.assertNotNull(aClass);
+		final List<ClassStatement> aClassList = c.findClass("Main");
+		Assert.assertEquals(aClassList.size(), 1);
 	}
 
 }

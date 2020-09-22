@@ -292,18 +292,14 @@ public class Compilation {
 
 	boolean showTree = false;
 
-	public OS_Element findClass(String string) {
+	public List<ClassStatement> findClass(String string) {
+		List<ClassStatement> l = new ArrayList<ClassStatement>();
 		for (OS_Module module : modules) {
 			if (module.hasClass(string)) {
-				return module.findClass(string);
+				l.add((ClassStatement) module.findClass(string));
 			}
 		}
-		return null;
-	}
-
-	public void addModule(OS_Module module, String fn) {
-		modules.add(module);
-		fn2m.put(fn, module);
+		return l;
 	}
 
 	public int errorCount() {
@@ -321,6 +317,15 @@ public class Compilation {
 			}
 		}
 		return null;
+	}
+
+	//
+	// MODULE STUFF
+	//
+
+	public void addModule(OS_Module module, String fn) {
+		modules.add(module);
+		fn2m.put(fn, module);
 	}
 
     public OS_Module fileNameToModule(String fileName) {
