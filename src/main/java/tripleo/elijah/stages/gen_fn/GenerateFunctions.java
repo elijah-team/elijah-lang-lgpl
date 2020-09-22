@@ -12,6 +12,7 @@ import antlr.CommonToken;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijjah.ElijjahTokenTypes;
@@ -146,14 +147,19 @@ public class GenerateFunctions {
 						BasicBinaryExpression bbe = (BasicBinaryExpression) x;
 						final IExpression right1 = bbe.getRight();
 						switch (right1.getKind()) {
-						case PROCEDURE_CALL:
-							int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft()), gf);
-							add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf), gf)));
-							break;
-						case IDENT:
+						case PROCEDURE_CALL: {
+							final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft());
+							int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), tte, gf);
+							int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf), gf)));
+							Instruction instruction = gf.getInstruction(instruction_number);
+							VariableTableEntry vte = gf.getVarTableEntry(ii);
+							vte.addPotentialType(instruction.getIndex(), tte);
+						}
+						break;
+						case IDENT: {
 							final IdentExpression left = (IdentExpression) bbe.getLeft();
 							InstructionArgument iii = gf.vte_lookup(left.getText());
-							int iii4, iii5;
+							int iii4, iii5=-1;
 							if (iii == null) {
 								iii4 = addIdentTableEntry(left, gf);
 							}
@@ -162,8 +168,14 @@ public class GenerateFunctions {
 							if (iiii == null) {
 								iii5 = addIdentTableEntry(right, gf);
 							}
-							add_i(gf, InstructionName.AGN, List_of(iii, iiii));
-							break;
+							int ia1 = add_i(gf, InstructionName.AGN, List_of(iii, iiii));
+							VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(iii));
+							vte.addPotentialType(ia1,
+									gf.getVarTableEntry(DeduceTypes2.to_int(iiii/* != null ? iiii :
+											gf.getVarTableEntry(iii5))*/)).type);
+						}
+
+						break;
 						default:
 							throw new NotImplementedException();
 						}
@@ -299,7 +311,9 @@ public class GenerateFunctions {
 			break;
 		case NUMERIC:
 			int ci = addConstantTableEntry(null, value, value.getType(), gf);
-			add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), new ConstTableIA(ci, gf)));
+			int ii = add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(vte), new ConstTableIA(ci, gf)));
+			VariableTableEntry vte1 = gf.getVarTableEntry(vte);
+			vte1.addPotentialType(ii, gf.getConstTableEntry(ci).type);
 			break;
 		default:
 			throw new NotImplementedException();
