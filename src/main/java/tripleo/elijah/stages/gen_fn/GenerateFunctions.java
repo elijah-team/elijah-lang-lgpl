@@ -113,7 +113,8 @@ public class GenerateFunctions {
 //			System.err.println("7001 fd.getItem = "+item);
 			generate_item((OS_Element) item, gf);
 		}
-		add_i(gf, InstructionName.X, List_of(new IntegerIA(e1)));
+		int x1 = add_i(gf, InstructionName.X, List_of(new IntegerIA(e1)));
+		gf.addContext(fd.getContext(), new Range(e1, x1)); // TODO remove interior contexts
 		System.out.println(String.format("602.1 %s", fd.funName));
 		for (Instruction instruction : gf.instructionsList) {
 			System.out.println(instruction);
