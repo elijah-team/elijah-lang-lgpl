@@ -13,9 +13,7 @@ import tripleo.elijah.stages.instructions.*;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created 9/10/20 2:57 PM
@@ -121,19 +119,19 @@ public class GeneratedFunction {
 	}
 
 	public void addContext(Context context, Range r) {
-//		contextRangeHashBiMap.put(context, r);
-		contextToRangeMap.put(r, context);
+//		contextToRangeMap.put(r, context);
 	}
 
 	public Context getContextFromPC(int pc) {
-		for (Map.Entry<Range, Context> rangeContextEntry : contextToRangeMap.entrySet()) {
-			if (rangeContextEntry.getKey().has(pc))
-				return rangeContextEntry.getValue();
-		}
-		return null;
+//		for (Map.Entry<Range, Context> rangeContextEntry : contextToRangeMap.entrySet()) {
+//			if (rangeContextEntry.getKey().has(pc))
+//				return rangeContextEntry.getValue();
+//		}
+//		return null;
+		return instructionsList.get(pc).getContext();
 	}
 
-	Map<Range, Context> contextToRangeMap = new HashMap<Range, Context>();
+//	Map<Range, Context> contextToRangeMap = new HashMap<Range, Context>();
 
 	public InstructionArgument vte_lookup(String text) {
 		int index = 0;
@@ -150,7 +148,6 @@ public class GeneratedFunction {
 		}
 		return null;
 	}
-//	BiMap<Context, Range> contextRangeHashBiMap = HashBiMap.create();
 }
 
 //
