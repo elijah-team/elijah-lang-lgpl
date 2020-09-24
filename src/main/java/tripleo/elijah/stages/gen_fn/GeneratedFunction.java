@@ -22,7 +22,8 @@ public class GeneratedFunction {
 	private final FunctionDef fd;
 	private final DefFunctionDef dfd;
 	private final List<Label> labelList = new ArrayList<Label>();
-	public List<Instruction> instructionsList = new ArrayList<>();
+	public List<Instruction> instructionsList = new ArrayList<Instruction>();
+	public List<Integer> deferred_calls = new ArrayList<Integer>();
 	private int instruction_index = 0;
 	public List<ConstantTableEntry> cte_list = new ArrayList<ConstantTableEntry>();
 	public List<VariableTableEntry> vte_list = new ArrayList<VariableTableEntry>();

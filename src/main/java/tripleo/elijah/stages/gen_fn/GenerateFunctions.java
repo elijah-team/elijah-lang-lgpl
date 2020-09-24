@@ -198,7 +198,13 @@ public class GenerateFunctions {
 						final List<TypeTableEntry> argument_types = List_of(gf.getVarTableEntry(to_int(left)).type, gf.getVarTableEntry(to_int(right)).type);
 						System.out.println("801.2 "+argument_types); // TODO still dont know the argument types at this point, which creates a problem for resolving functions
 						int fn_aug = addProcTableEntry(fn_aug_name, null, argument_types, gf);
-						add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(fn_aug), left, right), cctx);
+						int i = add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(fn_aug), left, right), cctx);
+						for (TypeTableEntry argument_type : argument_types) {
+							if (argument_type.attached == null) {
+								gf.deferred_calls.add(i);
+								break;
+							}
+						}
 					}
 					break;
 				default:
