@@ -1,13 +1,14 @@
 # Keywords
 
 `abstract`
-:   ABcde
+:   Used to introdude an abstract class after the keyword `class`
+:   Used to introduce an abstract function (use instead of the function body)
 
 `access`
-:   Used to introduce [an access clause](/access_notation.md)
+:   Used to introduce [an access clause](/access_notation)
 
 `alias`
-
+:   Used to introduce an [alias](/aliases)
 
 `as`
 
