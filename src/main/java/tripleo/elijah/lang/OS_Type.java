@@ -35,6 +35,13 @@ public class OS_Type {
 	public OS_Type() {
 	}
 
+	public static boolean isConcreteType(OS_Element element) {
+		if (element instanceof ClassStatement) return true;
+		// enum
+		// type
+		return false;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

@@ -65,6 +65,30 @@ public class DeduceTypes2 {
 			}
 				break;
 			case X:
+				{
+					// TODO brittle: is alias points to alias, will fail
+					for (VariableTableEntry vte : generatedFunction.vte_list) {
+//						System.out.println("704 "+vte.type.attached+" "+vte.potentialTypes());
+						int y=2;
+						if (vte.type.attached != null) {
+							TypeName x = vte.type.attached.getTypeName();
+							if (x instanceof NormalTypeName) {
+								String tn = ((NormalTypeName) x).getName();
+								LookupResultList lrl = x.getContext().lookup(tn);
+								OS_Element best = lrl.chooseBest(null);
+								if (best instanceof AliasStatement) {
+									best = _resolveAlias((AliasStatement) best); // TODO write _resolveAliasFully
+								}
+								if (!(OS_Type.isConcreteType(best))) {
+									module.parent.eee.reportError("Not a concrete type "+best);
+								} else {
+//								System.out.println("705 " + best);
+									vte.type.attached = new OS_Type((ClassStatement) best);
+								}
+							}
+						}
+					}
+				}
 				break;
 			case ES:
 				break;
