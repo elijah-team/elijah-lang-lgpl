@@ -16,6 +16,7 @@ import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
+import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
 
 import java.io.File;
@@ -35,13 +36,13 @@ public class TestGenFunction {
 		File file = new File(f);
 		OS_Module m = c.realParseElijjahFile(f, file, false);
 //		OS_Module m = c.parseElijjahFile(file, f, eee, false);
-		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
-		Assert.assertTrue("Method parsed correctly", m != null);
+			m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
+			Assert.assertTrue("Method parsed correctly", m != null);
 
-		final GenerateFunctions gfm = new GenerateFunctions(m);
-		List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
+			final GenerateFunctions gfm = new GenerateFunctions(m);
+			List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
 
-		for (GeneratedFunction gf : lgf) {
+			for (GeneratedFunction gf : lgf) {
 //			System.err.println("7000 "+gf);
 
 			if (gf.name().equals("main")) {
@@ -97,6 +98,31 @@ public class TestGenFunction {
 
 		Assert.assertEquals(2, c.errorCount());
 	}
+
+	@Test
+	public void testBasic1GenericElijah() throws Exception {
+		StdErrSink eee = new StdErrSink();
+		Compilation c = new Compilation(eee, new IO());
+
+		String f = "test/basic1/genericA.elijah";
+		File file = new File(f);
+		OS_Module m = c.realParseElijjahFile(f, file, false);
+//		OS_Module m = c.parseElijjahFile(file, f, eee, false);
+		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
+		Assert.assertTrue("Method parsed correctly", m != null);
+
+		final GenerateFunctions gfm = new GenerateFunctions(m);
+		List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
+
+		for (GeneratedFunction gf : lgf) {
+			for (Instruction instruction : gf.instructions()) {
+				System.out.println("8100 "+instruction);
+			}
+		}
+
+		new DeduceTypes2(m).deduceFunctions(lgf);
+	}
+
 }
 
 //
