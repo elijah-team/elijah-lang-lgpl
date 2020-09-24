@@ -14,6 +14,7 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
 /**
@@ -132,6 +133,10 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
 	@Override
 	public void setResolvedElement(OS_Element element) {
 		_resolvedElement = element;
+	}
+
+	public static IdentExpression forString(String string) {
+		return new IdentExpression(Helpers.makeToken(string));
 	}
 }
 
