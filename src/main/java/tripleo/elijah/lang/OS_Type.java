@@ -18,6 +18,7 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.Objects;
 
@@ -32,6 +33,13 @@ import java.util.Objects;
 public class OS_Type {
 
 	public OS_Type() {
+	}
+
+	public static boolean isConcreteType(OS_Element element) {
+		if (element instanceof ClassStatement) return true;
+		// enum
+		// type
+		return false;
 	}
 
 	@Override
@@ -70,6 +78,37 @@ public class OS_Type {
 		if (type_of_type != Type.FUNCTION || type_of_type != Type.USER_CLASS)
 			throw new IllegalArgumentException();
 		return etype;
+	}
+
+	public OS_Type resolve(Context ctx) {
+		switch (getType()) {
+		case BUILT_IN:
+			{
+				switch (getBType()) {
+				case SystemInteger:
+					LookupResultList r = ctx.lookup("SystemInteger");
+					OS_Element best = r.chooseBest(null);
+					return new OS_Type((ClassStatement) best);
+				case Boolean:
+					r = ctx.lookup("Boolean");
+					best = r.chooseBest(null);
+					return new OS_Type((ClassStatement) best);
+				default:
+					throw new NotImplementedException();
+				}
+			}
+		case USER:
+			{
+				LookupResultList r = ctx.lookup(getTypeName().toString()); // TODO
+				OS_Element best = r.chooseBest(null);
+				return new OS_Type((ClassStatement) best);
+			}
+		case USER_CLASS:
+		case FUNCTION:
+			return this;
+		default:
+			throw new IllegalStateException("can't be here.");
+		}
 	}
 
 	public enum Type {

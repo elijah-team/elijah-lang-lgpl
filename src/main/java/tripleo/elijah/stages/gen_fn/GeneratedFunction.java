@@ -13,9 +13,7 @@ import tripleo.elijah.stages.instructions.*;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created 9/10/20 2:57 PM
@@ -24,7 +22,8 @@ public class GeneratedFunction {
 	private final FunctionDef fd;
 	private final DefFunctionDef dfd;
 	private final List<Label> labelList = new ArrayList<Label>();
-	public List<Instruction> instructionsList = new ArrayList<>();
+	public List<Instruction> instructionsList = new ArrayList<Instruction>();
+	public List<Integer> deferred_calls = new ArrayList<Integer>();
 	private int instruction_index = 0;
 	public List<ConstantTableEntry> cte_list = new ArrayList<ConstantTableEntry>();
 	public List<VariableTableEntry> vte_list = new ArrayList<VariableTableEntry>();
@@ -43,30 +42,31 @@ public class GeneratedFunction {
 		fd = null;
 	}
 
+	//
+	// INSTRUCTIONS
+	//
+
 	public List<Instruction> instructions() {
 		return instructionsList;
-	}
-
-	public List<Label> labels() {
-		return labelList;
 	}
 
 	public Instruction getInstruction(int anIndex) {
 		return instructionsList.get(anIndex);
 	}
 
-	public void setLabel(Label l) {
-		l.setIndex(instruction_index);
-	}
-
-	public int add(InstructionName aName, List<InstructionArgument> args_) {
+	public int add(InstructionName aName, List<InstructionArgument> args_, Context ctx) {
 		Instruction i = new Instruction();
 		i.setIndex(instruction_index++);
 		i.setName(aName);
 		i.setArgs(args_);
+		i.setContext(ctx);
 		instructionsList.add(i);
 		return i.getIndex();
 	}
+
+	//
+	// toString
+	//
 
 	@Override
 	public String toString() {
@@ -76,6 +76,10 @@ public class GeneratedFunction {
 	public String name() {
 		return fd != null ? fd.funName.getText() : dfd.funName;
 	}
+
+	//
+	// LABELS
+	//
 
 	public Label addLabel(String base_name, boolean append_int) {
 		Label label = new Label();
@@ -93,6 +97,17 @@ public class GeneratedFunction {
 		label.setIndex(instruction_index);
 	}
 
+	public void setLabel(Label l) {
+		l.setIndex(instruction_index);
+	}
+
+	public List<Label> labels() {
+		return labelList;
+	}
+
+	//
+	//
+	//
 	public VariableTableEntry getVarTableEntry(int index) {
 		return vte_list.get(index);
 	}
@@ -120,19 +135,19 @@ public class GeneratedFunction {
 	}
 
 	public void addContext(Context context, Range r) {
-//		contextRangeHashBiMap.put(context, r);
-		contextToRangeMap.put(r, context);
+//		contextToRangeMap.put(r, context);
 	}
 
 	public Context getContextFromPC(int pc) {
-		for (Map.Entry<Range, Context> rangeContextEntry : contextToRangeMap.entrySet()) {
-			if (rangeContextEntry.getKey().has(pc))
-				return rangeContextEntry.getValue();
-		}
-		return null;
+//		for (Map.Entry<Range, Context> rangeContextEntry : contextToRangeMap.entrySet()) {
+//			if (rangeContextEntry.getKey().has(pc))
+//				return rangeContextEntry.getValue();
+//		}
+//		return null;
+		return instructionsList.get(pc).getContext();
 	}
 
-	Map<Range, Context> contextToRangeMap = new HashMap<Range, Context>();
+//	Map<Range, Context> contextToRangeMap = new HashMap<Range, Context>();
 
 	public InstructionArgument vte_lookup(String text) {
 		int index = 0;
@@ -149,7 +164,6 @@ public class GeneratedFunction {
 		}
 		return null;
 	}
-//	BiMap<Context, Range> contextRangeHashBiMap = HashBiMap.create();
 }
 
 //

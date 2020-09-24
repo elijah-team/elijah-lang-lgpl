@@ -6,6 +6,7 @@ stages:
   - sast
   - pages
   - test
+  - pages
   - deploy
 
 
