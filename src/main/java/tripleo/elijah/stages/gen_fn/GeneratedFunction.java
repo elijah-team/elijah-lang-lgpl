@@ -42,20 +42,16 @@ public class GeneratedFunction {
 		fd = null;
 	}
 
+	//
+	// INSTRUCTIONS
+	//
+
 	public List<Instruction> instructions() {
 		return instructionsList;
 	}
 
-	public List<Label> labels() {
-		return labelList;
-	}
-
 	public Instruction getInstruction(int anIndex) {
 		return instructionsList.get(anIndex);
-	}
-
-	public void setLabel(Label l) {
-		l.setIndex(instruction_index);
 	}
 
 	public int add(InstructionName aName, List<InstructionArgument> args_, Context ctx) {
@@ -68,6 +64,10 @@ public class GeneratedFunction {
 		return i.getIndex();
 	}
 
+	//
+	// toString
+	//
+
 	@Override
 	public String toString() {
 		return String.format("<GeneratedFunction %s>", name());
@@ -76,6 +76,10 @@ public class GeneratedFunction {
 	public String name() {
 		return fd != null ? fd.funName.getText() : dfd.funName;
 	}
+
+	//
+	// LABELS
+	//
 
 	public Label addLabel(String base_name, boolean append_int) {
 		Label label = new Label();
@@ -93,6 +97,17 @@ public class GeneratedFunction {
 		label.setIndex(instruction_index);
 	}
 
+	public void setLabel(Label l) {
+		l.setIndex(instruction_index);
+	}
+
+	public List<Label> labels() {
+		return labelList;
+	}
+
+	//
+	//
+	//
 	public VariableTableEntry getVarTableEntry(int index) {
 		return vte_list.get(index);
 	}
