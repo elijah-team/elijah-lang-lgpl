@@ -76,7 +76,7 @@ public class DeduceTypes2 {
 								String tn = ((NormalTypeName) x).getName();
 								LookupResultList lrl = x.getContext().lookup(tn);
 								OS_Element best = lrl.chooseBest(null);
-								if (best instanceof AliasStatement) {
+								while (best instanceof AliasStatement) {
 									best = _resolveAlias((AliasStatement) best); // TODO write _resolveAliasFully
 								}
 								if (!(OS_Type.isConcreteType(best))) {
