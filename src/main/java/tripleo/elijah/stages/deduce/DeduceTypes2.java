@@ -21,8 +21,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
-import static tripleo.elijah.util.Helpers.List_of;
-
 /**
  * Created 9/15/20 12:51 PM
  */
@@ -97,7 +95,7 @@ public class DeduceTypes2 {
 			case XS:
 				break;
 			case AGN:
-				{
+				{ // TODO doesn't account for __assign__
 					final IntegerIA arg = (IntegerIA)instruction.getArg(0);
 					VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
 					InstructionArgument i2 = instruction.getArg(1);
@@ -227,7 +225,7 @@ public class DeduceTypes2 {
 				case SystemInteger:
 					{
 						LookupResultList lrl = module.prelude.getContext().lookup("SystemInteger");
-						OS_Element best = lrl.chooseBest(List_of((f) -> OS_Type.isConcreteType((OS_Element) f)));
+						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
 								best = _resolveAlias((AliasStatement) best);
