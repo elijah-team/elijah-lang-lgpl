@@ -643,21 +643,17 @@ public class DeduceTypes {
 
 	private OS_Element _resolveAlias(AliasStatement aliasStatement) {
 		LookupResultList lrl2;
-		if (aliasStatement.getExpression() instanceof Qualident) {
-			IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
-			if (de instanceof DotExpression)
-				lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
-			else
-				lrl2 = aliasStatement.getContext().lookup(((IdentExpression) de).getText());
-			return lrl2.chooseBest(null);
+		IExpression expression = aliasStatement.getExpression();
+		if (expression instanceof Qualident) {
+			expression = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
 		}
+
 		// TODO what about when DotExpression is not just simple x.y.z? then alias equivalent to val
-		if (aliasStatement.getExpression() instanceof DotExpression) {
-			IExpression de = aliasStatement.getExpression();
-			lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
+		if (expression instanceof DotExpression) {
+			lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) expression);
 			return lrl2.chooseBest(null);
 		}
-		lrl2 = aliasStatement.getContext().lookup(((IdentExpression) aliasStatement.getExpression()).getText());
+		lrl2 = aliasStatement.getContext().lookup(((IdentExpression) expression).getText());
 		return lrl2.chooseBest(null);
 	}
 
