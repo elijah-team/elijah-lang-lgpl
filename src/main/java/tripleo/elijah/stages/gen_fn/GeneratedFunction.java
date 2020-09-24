@@ -59,11 +59,12 @@ public class GeneratedFunction {
 		l.setIndex(instruction_index);
 	}
 
-	public int add(InstructionName aName, List<InstructionArgument> args_) {
+	public int add(InstructionName aName, List<InstructionArgument> args_, Context ctx) {
 		Instruction i = new Instruction();
 		i.setIndex(instruction_index++);
 		i.setName(aName);
 		i.setArgs(args_);
+		i.setContext(ctx);
 		instructionsList.add(i);
 		return i.getIndex();
 	}

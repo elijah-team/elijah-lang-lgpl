@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import tripleo.elijah.lang.Context;
+
 import java.util.List;
 
 /**
@@ -17,6 +19,7 @@ public class Instruction {
 	private InstructionName name;
 	private int index;
 	List<InstructionArgument> args;
+	private Context context;
 
 	public void setName(InstructionName aName) {
 		name = aName;
@@ -49,6 +52,14 @@ public class Instruction {
 
 	public InstructionArgument getArg(int i) {
 		return args.get(i);
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
+	public Context getContext() {
+		return context;
 	}
 }
 
