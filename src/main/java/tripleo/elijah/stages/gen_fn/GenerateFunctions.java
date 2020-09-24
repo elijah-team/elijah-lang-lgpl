@@ -174,6 +174,7 @@ public class GenerateFunctions {
 								iii5 = addIdentTableEntry(right, gf);
 							}
 							int ia1 = add_i(gf, InstructionName.AGN, List_of(iii, iiii), cctx);
+							assert iii != null;
 							VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(iii));
 							vte.addPotentialType(ia1,
 									gf.getVarTableEntry(DeduceTypes2.to_int(iiii/* != null ? iiii :
