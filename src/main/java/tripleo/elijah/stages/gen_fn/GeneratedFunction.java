@@ -25,7 +25,7 @@ public class GeneratedFunction {
 	public List<Instruction> instructionsList = new ArrayList<>();
 	private int instruction_index = 0;
 	public List<ConstantTableEntry> cte_list = new ArrayList<ConstantTableEntry>();
-	List<VariableTableEntry> vte_list = new ArrayList<VariableTableEntry>();
+	public List<VariableTableEntry> vte_list = new ArrayList<VariableTableEntry>();
 	public List<ProcTableEntry> prte_list = new ArrayList<ProcTableEntry>();
 	List<TypeTableEntry> tte_list = new ArrayList<TypeTableEntry>();
 //	List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
