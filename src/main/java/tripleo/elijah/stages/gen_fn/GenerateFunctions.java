@@ -213,7 +213,7 @@ public class GenerateFunctions {
 			} else {
 				switch (x.getKind()) {
 					case ASSIGNMENT:
-						System.err.println(String.format("801.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
+						System.err.println(String.format("803.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
 						break;
 					case IS_A:
 						break;
