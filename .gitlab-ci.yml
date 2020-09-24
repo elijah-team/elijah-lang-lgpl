@@ -5,6 +5,7 @@ stages:
   - build
   - sast
   - test
+  - pages
   - deploy
 
 
