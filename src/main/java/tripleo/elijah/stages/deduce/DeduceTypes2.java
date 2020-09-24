@@ -228,23 +228,24 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private void implement_calls(GeneratedFunction gf, Context ctx, InstructionArgument i2, ProcTableEntry fn1, int pc) {
+	private void implement_calls(GeneratedFunction gf, Context context, InstructionArgument i2, ProcTableEntry fn1, int pc) {
 		IExpression pn1 = fn1.expression;
 		if (pn1 instanceof IdentExpression) {
 			String pn = ((IdentExpression) pn1).getText();
-			boolean found = lookup_name_calls(ctx, pn, fn1);
+			boolean found = lookup_name_calls(context, pn, fn1);
 			LookupResultList lrl;
 			OS_Element best;
 			if (found) return;
 
 			String pn2 = reverse_name(pn);
 //			System.out.println("7002 "+pn2);
-			found = lookup_name_calls(ctx, pn2, fn1);
+			found = lookup_name_calls(context, pn2, fn1);
 			if (found) return;
 
 			final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
-			LookupResultList lrl2 = gf.getContextFromPC(pc).lookup(vte.getName());
-//			System.out.println("7003 "+vte.getName()+" "+ctx);
+			final Context ctx = gf.getContextFromPC(pc);
+			LookupResultList lrl2 = ctx.lookup(vte.getName());
+			System.out.println("7003 "+vte.getName()+" "+ctx);
 			OS_Element best2 = lrl2.chooseBest(null);
 			if (best2 != null) {
 				found = lookup_name_calls(best2.getContext(), pn, fn1);
