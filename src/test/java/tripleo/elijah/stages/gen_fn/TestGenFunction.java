@@ -94,6 +94,8 @@ public class TestGenFunction {
 				}
 			}
 		}
+
+		Assert.assertEquals(2, c.errorCount());
 	}
 }
 
