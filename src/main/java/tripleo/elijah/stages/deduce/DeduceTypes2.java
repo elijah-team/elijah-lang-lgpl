@@ -196,6 +196,22 @@ public class DeduceTypes2 {
 				else
 					System.err.println("703 "+vte.getName()+" "+vte.potentialTypes());
 		}
+		{
+			//
+			// NOW CALCULATE DEFERRED CALLS
+			//
+			for (Integer deferred_call : generatedFunction.deferred_calls) {
+				final Instruction instruction = generatedFunction.getInstruction(deferred_call);
+
+				int i1 = to_int(instruction.getArg(0));
+				InstructionArgument i2 = (instruction.getArg(1));
+				ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
+				{
+//					generatedFunction.deferred_calls.remove(deferred_call);
+					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
+				}
+			}
+		}
 	}
 
 	private OS_Type resolve_type(OS_Type type, Context ctx) {
@@ -305,6 +321,14 @@ public class DeduceTypes2 {
 	}
 
 	private void implement_calls(GeneratedFunction gf, Context context, InstructionArgument i2, ProcTableEntry fn1, int pc) {
+		if (gf.deferred_calls.contains(pc)) {
+			System.err.println("Call is deferred "/*+gf.getInstruction(pc)*/+" "+fn1);
+			return;
+		}
+		implement_calls_(gf, context, i2, fn1, pc);
+	}
+
+	private void implement_calls_(GeneratedFunction gf, Context context, InstructionArgument i2, ProcTableEntry fn1, int pc) {
 		IExpression pn1 = fn1.expression;
 		if (pn1 instanceof IdentExpression) {
 			String pn = ((IdentExpression) pn1).getText();
