@@ -193,6 +193,8 @@ public class DeduceTypes2 {
 			if (vte.type.attached == null)
 				if (vte.potentialTypes().size() == 1)
 					vte.type.attached = new ArrayList<TypeTableEntry>(vte.potentialTypes()).get(0).attached;
+				else
+					System.err.println("703 "+vte.getName()+" "+vte.potentialTypes());
 		}
 	}
 
@@ -319,7 +321,7 @@ public class DeduceTypes2 {
 			final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
 			final Context ctx = gf.getContextFromPC(pc);
 			LookupResultList lrl2 = ctx.lookup(vte.getName());
-			System.out.println("7003 "+vte.getName()+" "+ctx);
+//			System.out.println("7003 "+vte.getName()+" "+ctx);
 			OS_Element best2 = lrl2.chooseBest(null);
 			if (best2 != null) {
 				found = lookup_name_calls(best2.getContext(), pn, fn1);

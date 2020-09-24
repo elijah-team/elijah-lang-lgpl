@@ -12,7 +12,6 @@ import antlr.CommonToken;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
-import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijjah.ElijjahTokenTypes;
@@ -22,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static tripleo.elijah.lang.ExpressionKind.PROCEDURE_CALL;
+import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 import static tripleo.elijah.util.Helpers.List_of;
 
 /**
@@ -84,6 +84,7 @@ public class GenerateFunctions {
 
 		return R;
 	}
+
 	private GeneratedFunction generateDefFunction(DefFunctionDef fd, OS_Element parent) {
 		System.err.println("601 fn "+fd.funName);
 		GeneratedFunction gf = new GeneratedFunction(fd);
@@ -119,9 +120,9 @@ public class GenerateFunctions {
 		int x1 = add_i(gf, InstructionName.X, List_of(new IntegerIA(e1)), cctx);
 		gf.addContext(fd.getContext(), new Range(e1, x1)); // TODO remove interior contexts
 		System.out.println(String.format("602.1 %s", fd.funName));
-		for (Instruction instruction : gf.instructionsList) {
-			System.out.println(instruction);
-		}
+//		for (Instruction instruction : gf.instructionsList) {
+//			System.out.println(instruction);
+//		}
 		System.out.println("VariableTable "+ gf.vte_list);
 		System.out.println("ConstantTable "+ gf.cte_list);
 		System.out.println("ProcTable     "+ gf.prte_list);
@@ -182,7 +183,9 @@ public class GenerateFunctions {
 						InstructionArgument right = simplify_expression(((BasicBinaryExpression) x).getRight(), gf);
 						CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__aug_mult__");
 						IdentExpression fn_aug_name = new IdentExpression(t);
-						int fn_aug = addProcTableEntry(fn_aug_name, null, List_of(null, null/*getType(left), getType(right)*/), gf);
+						final List<TypeTableEntry> argument_types = List_of(gf.getVarTableEntry(to_int(left)).type, gf.getVarTableEntry(to_int(right)).type);
+						System.out.println("801.2 "+argument_types); // TODO still dont know the argument types at this point, which creates a problem for resolving functions
+						int fn_aug = addProcTableEntry(fn_aug_name, null, argument_types, gf);
 						add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(fn_aug), left, right), cctx);
 					}
 					break;
@@ -352,7 +355,7 @@ public class GenerateFunctions {
 			IExpression expr = de.getLeft();
 			do {
 				InstructionArgument i = simplify_expression(expr, gf);
-				VariableTableEntry x = gf.vte_list.get(DeduceTypes2.to_int(i)/*((IntegerIA) i).getIndex()*/);
+				VariableTableEntry x = gf.vte_list.get(to_int(i)/*((IntegerIA) i).getIndex()*/);
 				System.err.println("901 "+x+" "+expr.getType());
 				expr = de.getRight();
 			} while (expr != null);
