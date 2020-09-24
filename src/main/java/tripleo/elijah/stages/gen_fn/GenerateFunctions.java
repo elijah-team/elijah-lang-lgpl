@@ -105,8 +105,8 @@ public class GenerateFunctions {
 		System.err.println("601.1 fn "+fd.funName);
 		GeneratedFunction gf = new GeneratedFunction(fd);
 		if (parent instanceof ClassStatement)
-			addVariableTableEntry("self", VariableTableType.SELF, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent)), gf);
-		addVariableTableEntry("Result", VariableTableType.RESULT, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fd.returnType())), gf); // TODO what about Unit returns?
+			addVariableTableEntry("self", VariableTableType.SELF, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent), IdentExpression.forString("self")), gf);
+		addVariableTableEntry("Result", VariableTableType.RESULT, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fd.returnType()), IdentExpression.forString("Result")), gf); // TODO what about Unit returns?
 		for (FormalArgListItem fali : fd.fal().falis) {
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
 			addVariableTableEntry(fali.name.getText(), VariableTableType.ARG, tte, gf);
