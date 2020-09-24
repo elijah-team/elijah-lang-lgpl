@@ -22,7 +22,7 @@ public class VariableTableEntry {
 	private final String name;
 	public TypeTableEntry type;
 	private final VariableTableType vtt;
-	Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
+	public Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 
 	public VariableTableEntry(int index, VariableTableType var1, String name, TypeTableEntry type) {
 		this.index = index;

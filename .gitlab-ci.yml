@@ -4,6 +4,7 @@ image: maven:latest
 stages:
   - build
   - sast
+  - pages
   - test
   - pages
   - deploy
@@ -60,11 +61,11 @@ include:
 
 pages:
   image: python:latest
-  stage: deploy
+#  stage: deploy
   only:
     - master
   script:
-    - pip install mkdocs-material  mkdocs-git-revision-date-plugin
+    - pip install mkdocs-material  mkdocs-git-revision-date-plugin mkdocs-git-revision-date-localized-plugin
     - mkdocs build --site-dir public
   artifacts:
     paths:

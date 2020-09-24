@@ -52,9 +52,9 @@ public class TestGenFunction {
 				Assert.assertEquals(InstructionName.X,    gf.getInstruction(4).getName());
 			} else if (gf.name().equals("factorial")) {
 				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
-				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(1).getName());
+				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(1).getName());
 				Assert.assertEquals(InstructionName.ES,   gf.getInstruction(2).getName());
-				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(3).getName());
+				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(3).getName());
 				Assert.assertEquals(InstructionName.CMP,  gf.getInstruction(4).getName());
 				Assert.assertEquals(InstructionName.JE,   gf.getInstruction(5).getName());
 				Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(6).getName());
@@ -77,7 +77,7 @@ public class TestGenFunction {
 */
 				for (int i = 0; i < gf.vte_list.size(); i++) {
 					VariableTableEntry vte = gf.getVarTableEntry(i);
-					System.out.println("8007 "+vte.type);
+					System.out.println(String.format("8007 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
 					if (vte.type.attached != null) {
 						Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
 						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
@@ -86,7 +86,7 @@ public class TestGenFunction {
 			} else if (gf.name().equals("factorial")) {
 				for (int i = 0; i < gf.vte_list.size(); i++) {
 					VariableTableEntry vte = gf.getVarTableEntry(i);
-					System.out.println("8008 "+vte.type);
+					System.out.println(String.format("8008 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
 					if (vte.type.attached != null) {
 						Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
 						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
