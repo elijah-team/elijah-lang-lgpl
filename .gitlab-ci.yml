@@ -22,7 +22,7 @@ build:
   stage: build
   script:
     - echo Skipping because this doesn\'t do anything anyway
-    - #- mvn $MAVEN_CLI_OPTS -e compile
+    #- mvn $MAVEN_CLI_OPTS -e compile
 
 test:
   stage: test
