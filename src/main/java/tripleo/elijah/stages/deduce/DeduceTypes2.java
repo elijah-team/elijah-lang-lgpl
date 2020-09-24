@@ -193,8 +193,10 @@ public class DeduceTypes2 {
 			if (vte.type.attached == null)
 				if (vte.potentialTypes().size() == 1)
 					vte.type.attached = new ArrayList<TypeTableEntry>(vte.potentialTypes()).get(0).attached;
-				else
+				else if (vte.potentialTypes().size() > 1) {
+					// TODO Check type compatibility
 					System.err.println("703 "+vte.getName()+" "+vte.potentialTypes());
+				}
 		}
 		{
 			//
