@@ -4,8 +4,8 @@ image: maven:latest
 stages:
   - build
   - sast
-  - test
   - pages
+  - test
   - deploy
 
 
@@ -60,7 +60,7 @@ include:
 
 pages:
   image: python:latest
-  stage: deploy
+#  stage: deploy
   only:
     - master
   script:
