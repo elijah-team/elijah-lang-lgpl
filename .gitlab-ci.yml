@@ -64,7 +64,7 @@ pages:
   only:
     - master
   script:
-    - pip install mkdocs-material  mkdocs-git-revision-date-plugin
+    - pip install mkdocs-material  mkdocs-git-revision-date-plugin mkdocs-git-revision-date-localized-plugin
     - mkdocs build --site-dir public
   artifacts:
     paths:
