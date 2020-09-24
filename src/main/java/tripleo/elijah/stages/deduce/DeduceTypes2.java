@@ -285,7 +285,7 @@ public class DeduceTypes2 {
 		return new String(pn2c);
 	}
 
-	private int to_int(InstructionArgument arg) {
+	public static int to_int(InstructionArgument arg) {
 		return ((IntegerIA) arg).getIndex();
 	}
 }

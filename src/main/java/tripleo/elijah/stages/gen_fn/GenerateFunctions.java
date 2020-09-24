@@ -12,6 +12,7 @@ import antlr.CommonToken;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijjah.ElijjahTokenTypes;
@@ -351,7 +352,7 @@ public class GenerateFunctions {
 			IExpression expr = de.getLeft();
 			do {
 				InstructionArgument i = simplify_expression(expr, gf);
-				VariableTableEntry x = gf.vte_list.get(((IntegerIA) i).getIndex());
+				VariableTableEntry x = gf.vte_list.get(DeduceTypes2.to_int(i)/*((IntegerIA) i).getIndex()*/);
 				System.err.println("901 "+x+" "+expr.getType());
 				expr = de.getRight();
 			} while (expr != null);
