@@ -8,15 +8,18 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created 9/15/20 12:51 PM
@@ -52,7 +55,7 @@ public class DeduceTypes2 {
 					case NUMERIC:
 						OS_Type a = cte.getTypeTableEntry().attached;
 						if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
-							cte.getTypeTableEntry().attached = new OS_Type(BuiltInTypes.SystemInteger).resolve(context);
+							cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);
 						}
 						break;
 					default:
@@ -167,6 +170,53 @@ public class DeduceTypes2 {
 				if (vte.potentialTypes().size() == 1)
 					vte.type.attached = new ArrayList<TypeTableEntry>(vte.potentialTypes()).get(0).attached;
 		}
+	}
+
+	private OS_Type resolve_type(OS_Type type, Context ctx) {
+		switch (type.getType()) {
+
+		case BUILT_IN:
+			{
+				switch (type.getBType()) {
+				case SystemInteger:
+					{
+						LookupResultList lrl = module.prelude.getContext().lookup("SystemInteger");
+						OS_Element best = lrl.chooseBest(null);
+						while (!(best instanceof ClassStatement)) {
+							if (best instanceof AliasStatement) {
+								best = _resolveAlias((AliasStatement) best);
+							}
+						}
+						return new OS_Type((ClassStatement) best);
+					}
+				case Boolean:
+					{
+						LookupResultList lrl = module.prelude.getContext().lookup("Boolean");
+						OS_Element best = lrl.chooseBest(null);
+						return new OS_Type((ClassStatement) best); // TODO might change to Type
+					}
+				}
+			}
+			break;
+		case USER:
+			{
+				TypeName tn1 = type.getTypeName();
+				if (tn1 instanceof NormalTypeName) {
+					String tn = ((NormalTypeName) tn1).getName();
+					System.out.println("799 "+tn);
+					LookupResultList lrl = tn1.getContext().lookup(tn); // TODO is this right?
+					OS_Element best = lrl.chooseBest(null);
+					return new OS_Type((ClassStatement) best); // TODO might change to Type
+				}
+				throw new NotImplementedException(); // TODO might be Qualident, etc
+			}
+//			break;
+		case USER_CLASS:
+			return type;
+		case FUNCTION:
+			return type;
+		}
+		throw new IllegalStateException("Cant be here.");
 	}
 
 	private void do_assign_constant(GeneratedFunction generatedFunction, Instruction instruction, VariableTableEntry vte, ConstTableIA i2) {
@@ -289,6 +339,90 @@ public class DeduceTypes2 {
 	public static int to_int(InstructionArgument arg) {
 		return ((IntegerIA) arg).getIndex();
 	}
+
+	private OS_Element _resolveAlias(AliasStatement aliasStatement) {
+		LookupResultList lrl2;
+		if (aliasStatement.getExpression() instanceof Qualident) {
+			IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
+			if (de instanceof DotExpression)
+				lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
+			else
+				lrl2 = aliasStatement.getContext().lookup(((IdentExpression) de).getText());
+			return lrl2.chooseBest(null);
+		}
+		// TODO what about when DotExpression is not just simple x.y.z? then alias equivalent to val
+		if (aliasStatement.getExpression() instanceof DotExpression) {
+			IExpression de = aliasStatement.getExpression();
+			lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
+			return lrl2.chooseBest(null);
+		}
+		lrl2 = aliasStatement.getContext().lookup(((IdentExpression) aliasStatement.getExpression()).getText());
+		return lrl2.chooseBest(null);
+	}
+
+	private LookupResultList lookup_dot_expression(Context ctx, DotExpression de) {
+		Stack<IExpression> s = dot_expression_to_stack(de);
+		OS_Type t = null;
+		IExpression ss = s.peek();
+		while (!s.isEmpty()) {
+			ss = s.peek();
+			if (t != null && (t.getType() == OS_Type.Type.USER_CLASS || t.getType() == OS_Type.Type.FUNCTION))
+				ctx = t.getClassOf().getContext();
+			t = deduceExpression(ss, ctx);
+			ss.setType(t);  // TODO should this be here?
+			s.pop();
+		}
+		if (t == null) {
+			NotImplementedException.raise();
+			return new LookupResultList();
+		} else
+			return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
+	}
+
+	@NotNull
+	private Stack<IExpression> dot_expression_to_stack(DotExpression de) {
+		Stack<IExpression> s = new Stack<IExpression>();
+		IExpression e = de;
+		IExpression left = null;
+		s.push(de.getRight());
+		while (true) {
+			left = e.getLeft();
+			s.push(left);
+			if (!(left instanceof DotExpression)) break;
+		}
+		return s;
+	}
+
+	public OS_Type deduceExpression(@NotNull IExpression n, Context context) {
+		if (n.getKind() == ExpressionKind.IDENT) {
+			return deduceIdentExpression((IdentExpression)n, context);
+		} else if (n.getKind() == ExpressionKind.NUMERIC) {
+			return new OS_Type(BuiltInTypes.SystemInteger);
+		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
+			DotExpression de = (DotExpression) n;
+			LookupResultList lrl = lookup_dot_expression(context, de);
+			OS_Type left_type = deduceExpression(de.getLeft(), context);
+			OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
+			NotImplementedException.raise();
+		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
+			deduceProcedureCall((ProcedureCallExpression) n, context);
+			return n.getType();
+		} else if (n.getKind() == ExpressionKind.QIDENT) {
+			final IExpression expression = Helpers.qualidentToDotExpression2(((Qualident) n));
+			return deduceExpression(expression, context);
+		}
+
+		return null;
+	}
+
+	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
+		throw new NotImplementedException();
+	}
+
+	private OS_Type deduceIdentExpression(IdentExpression ident, Context ctx) {
+		throw new NotImplementedException();
+	}
+
 }
 
 //
