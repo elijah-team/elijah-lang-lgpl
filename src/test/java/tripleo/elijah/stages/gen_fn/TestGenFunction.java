@@ -14,6 +14,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.InstructionName;
 
@@ -77,11 +78,19 @@ public class TestGenFunction {
 				for (int i = 0; i < gf.vte_list.size(); i++) {
 					VariableTableEntry vte = gf.getVarTableEntry(i);
 					System.out.println("8007 "+vte.type);
+					if (vte.type.attached != null) {
+						Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
+						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
+					}
 				}
 			} else if (gf.name().equals("factorial")) {
 				for (int i = 0; i < gf.vte_list.size(); i++) {
 					VariableTableEntry vte = gf.getVarTableEntry(i);
 					System.out.println("8008 "+vte.type);
+					if (vte.type.attached != null) {
+						Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
+						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
+					}
 				}
 			}
 		}
