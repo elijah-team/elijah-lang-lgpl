@@ -308,9 +308,34 @@ public class GenerateFunctions {
 			break;
 		case TO_TYPE:
 			break;
-		case ITER_TYPE:
-			break;
 		case EXPR_TYPE:
+			{
+				int i = addTempTableEntry(null, gf); // TODO deduce later
+				int i2 = addConstantTableEntry("", new NumericExpression(0), new OS_Type(BuiltInTypes.SystemInteger), gf);
+				final InstructionArgument ia1 = new ConstTableIA(i2, gf);
+				if (ia1 instanceof ConstTableIA)
+					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(i), ia1), cctx);
+				else
+					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(i), ia1), cctx);
+				Label label_top = gf.addLabel("top", true);
+				gf.place(label_top);
+				Label label_bottom = gf.addLabel("bottom"+label_top, false);
+				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(i), simplify_expression(loop.getToPart(), gf)), cctx);
+				add_i(gf, InstructionName.JE, List_of(label_bottom), cctx);
+				for (StatementItem statementItem : loop.getItems()) {
+					System.out.println("707 "+statementItem);
+					generate_item((OS_Element)statementItem, gf, cctx);
+				}
+				CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__preinc__");
+				IdentExpression pre_inc_name = new IdentExpression(t);
+				TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
+				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
+				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(i)), cctx);
+				add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
+				gf.place(label_bottom);
+			}
+			break;
+		case ITER_TYPE:
 			break;
 		case WHILE:
 			break;
