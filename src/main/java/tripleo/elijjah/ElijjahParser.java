@@ -3009,6 +3009,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				 MatchConditional.MatchConditionalPart3 mcp3=null;
 				 TypeName tn=null;
 				 IdentExpression i1=null;
+				 MatchContext ctx = null;
 		
 		try {      // for error handling
 			match(LITERAL_match);
@@ -3017,6 +3018,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				/*mc.setParent(aParent);*/mc.expr(expr);
 			}
 			match(LCURLY);
+			if ( inputState.guessing==0 ) {
+				ctx=new MatchContext(cur, mc);mc.setContext(ctx);cur=ctx;
+			}
 			{
 			int _cnt204=0;
 			_loop204:
@@ -3066,7 +3070,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			match(RCURLY);
 			if ( inputState.guessing==0 ) {
-				mc.postConstruct();
+				mc.postConstruct();cur=ctx.getParent();
 			}
 		}
 		catch (RecognitionException ex) {
@@ -3084,6 +3088,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		CaseConditional mc
 	) throws RecognitionException, TokenStreamException {
 		
+		CaseContext ctx = null;
 		
 		try {      // for error handling
 			match(LITERAL_case);
@@ -3092,6 +3097,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				mc.expr(expr);
 			}
 			match(LCURLY);
+			if ( inputState.guessing==0 ) {
+				ctx=new CaseContext(cur, mc);mc.setContext(ctx);cur=ctx;
+			}
 			{
 			_loop207:
 			do {
@@ -3107,7 +3115,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			}
 			match(RCURLY);
 			if ( inputState.guessing==0 ) {
-				mc.postConstruct();
+				mc.postConstruct();cur=ctx.getParent();
 			}
 		}
 		catch (RecognitionException ex) {

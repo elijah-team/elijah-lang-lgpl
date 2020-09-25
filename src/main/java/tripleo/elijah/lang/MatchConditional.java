@@ -12,6 +12,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.contexts.MatchContext;
 import tripleo.elijah.contexts.SingleIdentContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
@@ -29,6 +30,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 	private final SingleIdentContext _ctx;
 	private IExpression expr;
 	private OS_Element parent;
+	private MatchContext __ctx;
 
 	public MatchConditional(OS_Element parent, Context parentContext) {
 		this.parent = parent;
@@ -58,8 +60,8 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 	 */
 	@Override
 	public Context getContext() {
-		throw new NotImplementedException();
-//		return null;
+//		throw new NotImplementedException();
+		return __ctx;
 	}
 
 	public void setParent(OS_Element aParent) {
@@ -67,6 +69,10 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 	}
 
 	public void postConstruct() {
+	}
+
+	public void setContext(MatchContext ctx) {
+		__ctx=ctx;
 	}
 
 	interface MC1 extends Documentable {

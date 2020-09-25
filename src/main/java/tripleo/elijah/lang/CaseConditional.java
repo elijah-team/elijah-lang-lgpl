@@ -12,6 +12,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.contexts.CaseContext;
 import tripleo.elijah.contexts.SingleIdentContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
@@ -74,6 +75,10 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 
 	public IExpression getExpr() {
 		return expr;
+	}
+
+	public void setContext(CaseContext ctx) {
+		throw new NotImplementedException();
 	}
 
 	public class CaseScope implements OS_Container, OS_Element {

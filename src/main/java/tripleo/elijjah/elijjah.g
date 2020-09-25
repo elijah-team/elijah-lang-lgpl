@@ -672,9 +672,10 @@ matchConditional[MatchConditional mc, OS_Element aParent]
 		 MatchConditional.MatchConditionalPart2 mcp2=null;
 		 MatchConditional.MatchConditionalPart3 mcp3=null;
 		 TypeName tn=null;
-		 IdentExpression i1=null;}
+		 IdentExpression i1=null;
+		 MatchContext ctx = null;}
     : "match" expr=expression {/*mc.setParent(aParent);*/mc.expr(expr);}
-      LCURLY
+      LCURLY                {ctx=new MatchContext(cur, mc);mc.setContext(ctx);cur=ctx;}
       ( { mcp1 = mc.typeMatch();} 
       		i1=ident {mcp1.ident(i1);} TOK_COLON tn=typeName2 {mcp1.setTypeName(tn);} scope[mcp1.scope()]
       | { mcp2 = mc.normal();}
@@ -682,13 +683,14 @@ matchConditional[MatchConditional mc, OS_Element aParent]
       | { mcp3 = mc.valNormal();}
       		"val" i1=ident {mcp3.expr(i1);} scope[mcp3.scope()]
       )+
-      RCURLY {mc.postConstruct();}
+      RCURLY {mc.postConstruct();cur=ctx.getParent();}
     ;
 caseConditional[CaseConditional mc]
+           {CaseContext ctx = null;}
     : "case" expr=expression {mc.expr(expr);}
-      LCURLY
+      LCURLY                {ctx=new CaseContext(cur, mc);mc.setContext(ctx);cur=ctx;}
       ( expr=expression scope[mc.scope(expr)] )*
-      RCURLY {mc.postConstruct();}
+      RCURLY {mc.postConstruct();cur=ctx.getParent();}
     ;
 
 whileLoop[StatementClosure cr]
