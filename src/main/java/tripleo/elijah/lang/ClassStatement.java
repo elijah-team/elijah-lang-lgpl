@@ -155,7 +155,13 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	@Override
 	public String toString() {
-		return String.format("<Class %d %s %s>", _a.getCode(), getPackageName()._name, getName());
+		String package_name;
+		if (getPackageName() != null) {
+			final Qualident package_name_q = getPackageName()._name;
+			package_name = package_name_q.toString();
+		} else
+			package_name = "`'";
+		return String.format("<Class %d %s %s>", _a.getCode(), package_name, getName());
 	}
 
 	public ConstructorDef addCtor(IdentExpression aConstructorName) {
