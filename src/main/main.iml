@@ -45,6 +45,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="range-v1-0.0.2" level="project" />
+    <orderEntry type="library" name="range-v1-0.0.3b" level="project" />
   </component>
 </module>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="range-v1-0.0.3b">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../range-java/target/range-v1-0.0.3b.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
