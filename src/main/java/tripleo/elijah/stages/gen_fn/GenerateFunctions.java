@@ -234,7 +234,7 @@ public class GenerateFunctions {
 		} else if (item instanceof IfConditional) {
 			IfConditional ifc = (IfConditional) item;
 			generate_if(ifc, gf);
-			throw new NotImplementedException();
+//			throw new NotImplementedException();
 		} else if (item instanceof Loop) {
 			System.err.println("800");
 			Loop loop = (Loop) item;
@@ -488,7 +488,7 @@ public class GenerateFunctions {
 				int x = add_i(gf, InstructionName.CALL, right_ia, cctx);
 				return new IntegerIA(x);
 			}
-			throw new NotImplementedException();
+//			throw new NotImplementedException();
 		case DOT_EXP: {
 			DotExpression de = (DotExpression) expression;
 			IExpression expr = de.getLeft();
@@ -558,7 +558,7 @@ public class GenerateFunctions {
 					int x = add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), left_instruction, right_instruction), cctx);
 					return new IntegerIA(x);
 				}
-				throw new NotImplementedException();
+//				throw new NotImplementedException();
 			}
 		default:
 			throw new NotImplementedException();
