@@ -29,11 +29,6 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 				sb.append("==");
 				sb.append(abe.getRight().toString());
 				break;
-			case MULTIPLY:
-				sb.append(abe.getLeft().toString());
-				sb.append("*");
-				sb.append(abe.getRight().toString());
-				break;
 			case NOT_EQUAL:
 				sb.append(abe.getLeft().toString());
 				sb.append("!=");
@@ -44,9 +39,30 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 				sb.append("+");
 				sb.append(abe.getRight().toString());
 				break;
+			case SUBTRACTION:
+				sb.append(abe.getLeft().toString());
+				sb.append("-");
+				sb.append(abe.getRight().toString());
+				break;
+			case MULTIPLY:
+				sb.append(abe.getLeft().toString());
+				sb.append("*");
+				sb.append(abe.getRight().toString());
+				break;
+			case DIVIDE:
+				sb.append(abe.getLeft().toString());
+				sb.append("/");
+				sb.append(abe.getRight().toString());
+				break;
 			case AUG_PLUS:
+				sb.append(abe.getLeft().toString());
+				sb.append("+=");
+				sb.append(abe.getRight().toString());
 				break;
 			case AUG_MINUS:
+				sb.append(abe.getLeft().toString());
+				sb.append("-=");
+				sb.append(abe.getRight().toString());
 				break;
 			case AUG_MULT:
 				sb.append(abe.getLeft().toString());
@@ -130,11 +146,6 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 				sb.append("--");
 				sb.append(abe.getRight().toString());
 				break;
-			case SUBTRACTION:
-				sb.append(abe.getLeft().toString());
-				sb.append("-");
-				sb.append(abe.getRight().toString());
-				break;
 			case BNOT:
 				sb.append(abe.getLeft().toString());
 				sb.append("~");
@@ -148,11 +159,6 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 			case MODULO:
 				sb.append(abe.getLeft().toString());
 				sb.append("%");
-				sb.append(abe.getRight().toString());
-				break;
-			case DIVIDE:
-				sb.append(abe.getLeft().toString());
-				sb.append("/");
 				sb.append(abe.getRight().toString());
 				break;
 			case STRING_LITERAL:
@@ -260,6 +266,11 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 			case GET_ITEM:
 				sb.append(abe.getLeft().toString());
 				sb.append(" GET_ITEM ");
+				sb.append(abe.getRight().toString());
+				break;
+			case SET_ITEM:
+				sb.append(abe.getLeft().toString());
+				sb.append(" SET_ITEM ");
 				sb.append(abe.getRight().toString());
 				break;
 			case FUNC_EXPR:
