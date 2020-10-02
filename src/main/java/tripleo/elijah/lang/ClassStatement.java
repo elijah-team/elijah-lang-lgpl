@@ -156,7 +156,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	@Override
 	public String toString() {
 		String package_name;
-		if (getPackageName() != null) {
+		if (getPackageName() != null && getPackageName()._name != null) {
 			final Qualident package_name_q = getPackageName()._name;
 			package_name = package_name_q.toString();
 		} else
