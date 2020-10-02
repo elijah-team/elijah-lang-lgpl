@@ -423,6 +423,31 @@ public class GenerateFunctions {
 		final ExpressionKind expressionKind = expression.getKind();
 		switch (expressionKind) {
 		case PROCEDURE_CALL:
+			{
+				ProcedureCallExpression pce = (ProcedureCallExpression) expression;
+				IExpression    left = pce.getLeft();
+				ExpressionList args = pce.getArgs();
+				if (left.is_simple()) {
+					if (left instanceof IdentExpression) {
+						int y=2;
+						int x = addIdentTableEntry((IdentExpression) left, gf);
+					} else if (left instanceof SubExpression) {
+						SubExpression se = (SubExpression) left;
+
+					} else {
+						int x = addConstantTableEntry(null, left, left.getType(), gf);
+						throw new IllegalStateException("Cant be here");
+					}
+				} else {
+					InstructionArgument x = simplify_expression(left, gf, cctx);
+					int y=2;
+				}
+				for (IExpression arg : args) {
+					if (arg.is_simple()) {
+						int y=2;
+					}
+				}
+			}
 			throw new NotImplementedException();
 		case DOT_EXP: {
 			DotExpression de = (DotExpression) expression;
@@ -562,10 +587,10 @@ public class GenerateFunctions {
 	}
 
 	private int addIdentTableEntry(IdentExpression ident, GeneratedFunction gf) {
-		throw new NotImplementedException();
-//		IdentTableEntry idte = new IdentTableEntry(gf.idte_list.size(), ident);
-//		gf.idte_list.add(idte);
-//		return idte.index;
+//		throw new NotImplementedException();
+		IdentTableEntry idte = new IdentTableEntry(gf.idte_list.size(), ident);
+		gf.idte_list.add(idte);
+		return idte.index;
 	}
 
 	private void simplify_qident(Qualident left, GeneratedFunction gf) {
@@ -609,6 +634,14 @@ public class GenerateFunctions {
 		return vte.index;
 	}
 
+	/**
+	 * Add a Constant Table Entry of type with Type Table Entry type Specified
+	 * @param name
+	 * @param initialValue
+	 * @param type
+	 * @param gf
+	 * @return
+	 */
 	private int addConstantTableEntry(String name, IExpression initialValue, OS_Type type, GeneratedFunction gf) {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, initialValue);
 		ConstantTableEntry cte = new ConstantTableEntry(gf.cte_list.size(), name, initialValue, tte);
@@ -616,6 +649,14 @@ public class GenerateFunctions {
 		return cte.index;
 	}
 
+	/**
+	 * Add a Constant Table Entry of type with Type Table Entry type Transient
+	 * @param name
+	 * @param initialValue
+	 * @param type
+	 * @param gf
+	 * @return
+	 */
 	private int addConstantTableEntry2(String name, IExpression initialValue, OS_Type type, GeneratedFunction gf) {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, initialValue);
 		ConstantTableEntry cte = new ConstantTableEntry(gf.cte_list.size(), name, initialValue, tte);
