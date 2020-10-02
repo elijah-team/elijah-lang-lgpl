@@ -16,6 +16,7 @@ import tripleo.elijah.lang.DotExpression;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.Qualident;
+import tripleo.elijjah.ElijjahTokenTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,12 @@ public class Helpers {
 			r = new DotExpression(r, dotExpression);
 		}
 		return r;
+	}
+
+	@NotNull
+	public static IdentExpression string_to_ident(String txt) {
+		CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, txt);
+		return new IdentExpression(t);
 	}
 }
 
