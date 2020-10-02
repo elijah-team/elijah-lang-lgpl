@@ -120,11 +120,11 @@ public class GeneratedFunction {
 		return prte_list.get(index);
 	}
 
-	TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type) {
+	public TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type) {
 		return newTypeTableEntry(type1, type, null);
 	}
 
-	TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type, IExpression expression) {
+	public TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type, IExpression expression) {
 		final TypeTableEntry typeTableEntry = new TypeTableEntry(tte_list.size(), type1, type, expression);
 		tte_list.add(typeTableEntry);
 		return typeTableEntry;
