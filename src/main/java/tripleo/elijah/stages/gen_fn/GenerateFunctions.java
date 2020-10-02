@@ -367,6 +367,7 @@ public class GenerateFunctions {
 	}
 
 	private void assign_variable(GeneratedFunction gf, int vte, IExpression value, Context cctx) {
+		if (value == IExpression.UNASSIGNED) return; // default_expression
 		switch (value.getKind()) {
 		case PROCEDURE_CALL:
 			ProcedureCallExpression pce = (ProcedureCallExpression) value;
