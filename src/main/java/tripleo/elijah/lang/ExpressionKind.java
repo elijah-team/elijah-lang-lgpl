@@ -24,6 +24,7 @@ public enum ExpressionKind {
 	AUG_BOR,
 	IS_A, //xy,
 
+	INC, DEC,
 	INCREMENT, DECREMENT,
 	POST_INCREMENT, POST_DECREMENT,
 
@@ -40,7 +41,7 @@ public enum ExpressionKind {
 	
 	BAND, BXOR, BOR,
 
-	NOT_EQUAL, EQUAL, LT_, GT, LE, GE, INC, DEC,
+	NOT_EQUAL, EQUAL, LT_, GT, LE, GE,
 
 	LAND, LOR, BSHIFTR, LSHIFT, RSHIFT,
 	
