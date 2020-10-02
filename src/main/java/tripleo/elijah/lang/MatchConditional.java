@@ -126,7 +126,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 		@Override
 		public void statementWrapper(IExpression aExpr) {
-			element.add(new StatementWrapper(aExpr, getContext(), MatchConditional.this.getParent()));
+			element.add(new StatementWrapper(aExpr, getContext(), /*MatchConditional.this.*/getParent()));
 		}
 
 		@Override
