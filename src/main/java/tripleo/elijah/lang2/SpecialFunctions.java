@@ -17,9 +17,10 @@ import tripleo.elijah.util.NotImplementedException;
 public class SpecialFunctions {
 	public static String of(ExpressionKind kind) {
 		switch (kind) {
-		case LT_: return "__lt__";
-		case INCREMENT: return "__preinc__";
-		default: throw new NotImplementedException();
+		case LT_: 				return "__lt__";
+		case GT: 				return "__gt__";
+		case INCREMENT: 		return "__preinc__";
+		default: 				throw new NotImplementedException();
 		}
 	}
 }
