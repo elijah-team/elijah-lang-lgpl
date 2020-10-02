@@ -237,9 +237,21 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 	}
 
+	//
+	// EXPR
+	//
+
+	public IExpression getExpr() {
+		return expr;
+	}
+
 	public void expr(IExpression expr) {
 		this.expr = expr;
 	}
+
+	//
+	//
+	//
 
 	public MatchConditionalPart1 typeMatch() {
 		return new MatchConditionalPart1();
