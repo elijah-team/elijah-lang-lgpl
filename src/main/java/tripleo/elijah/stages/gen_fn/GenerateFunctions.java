@@ -128,7 +128,7 @@ public class GenerateFunctions {
 		System.out.println("ConstantTable "+ gf.cte_list);
 		System.out.println("ProcTable     "+ gf.prte_list);
 		System.out.println("TypeTable     "+ gf.tte_list);
-//		System.out.println("IdentTable    "+ gf.idte_list);
+		System.out.println("IdentTable    "+ gf.idte_list);
 		return gf;
 	}
 
