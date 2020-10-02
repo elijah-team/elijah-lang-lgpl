@@ -420,7 +420,8 @@ public class GenerateFunctions {
 	}
 
 	private InstructionArgument simplify_expression(IExpression expression, GeneratedFunction gf, Context cctx) {
-		switch (expression.getKind()) {
+		final ExpressionKind expressionKind = expression.getKind();
+		switch (expressionKind) {
 		case PROCEDURE_CALL:
 			throw new NotImplementedException();
 		case DOT_EXP: {
@@ -445,7 +446,7 @@ public class GenerateFunctions {
 				int ii = addConstantTableEntry2(null, ne, ne.getType(), gf);
 				return new ConstTableIA(ii, gf);
 			}
-		case LT_: // TODO all BinaryExpressions go here
+		case LT_: case GT: // TODO all BinaryExpressions go here
 			{
 				BasicBinaryExpression bbe = (BasicBinaryExpression) expression;
 				IExpression left = bbe.getLeft();
@@ -484,7 +485,7 @@ public class GenerateFunctions {
 				}
 				{
 					// create a call
-					IdentExpression expr_kind_name = Helpers.string_to_ident(SpecialFunctions.of(expression.getKind()));
+					IdentExpression expr_kind_name = Helpers.string_to_ident(SpecialFunctions.of(expressionKind));
 //					TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, expr_kind_name);
 					TypeTableEntry tte_left  = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, left);
 					TypeTableEntry tte_right = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, right);
