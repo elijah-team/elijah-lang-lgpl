@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 
 /**
@@ -19,7 +20,12 @@ public class ConstTableIA implements InstructionArgument {
 
     @Override
     public String toString() {
-        return String.format("(ct %d) [%s]", index, gf.cte_list.get(index).getName());
+        final ConstantTableEntry constantTableEntry = gf.cte_list.get(index);
+        final String name = constantTableEntry.getName();
+        if (name != null)
+            return String.format("(ct %d) [%s=%s]", index, name, constantTableEntry.initialValue);
+        else
+            return String.format("(ct %d) [%s]", index, constantTableEntry.initialValue);
     }
 
     public ConstTableIA(int index, GeneratedFunction generatedFunction) {
