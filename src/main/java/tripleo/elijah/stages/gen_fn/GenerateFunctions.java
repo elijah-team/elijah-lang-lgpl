@@ -138,7 +138,8 @@ public class GenerateFunctions {
 		} else if (item instanceof CaseConditional) {
 			throw new NotImplementedException();
 		} else if (item instanceof ClassStatement) {
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
+			System.out.println("Skip class for now "+((ClassStatement) item).name());
 		} else if (item instanceof StatementWrapper) {
 //				System.err.println("106");
 			IExpression x = ((StatementWrapper) item).getExpr();
