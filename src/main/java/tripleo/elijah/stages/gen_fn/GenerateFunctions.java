@@ -485,7 +485,7 @@ public class GenerateFunctions {
 						} else {
 							int x = addConstantTableEntry(null, arg, arg.getType(), gf);
 							ia = new ConstTableIA(x, gf);
-							iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, arg.getType(), arg);
+							iat = gf.getConstTableEntry(x).type;
 						}
 					} else {
 						InstructionArgument x = simplify_expression(left, gf, cctx);
