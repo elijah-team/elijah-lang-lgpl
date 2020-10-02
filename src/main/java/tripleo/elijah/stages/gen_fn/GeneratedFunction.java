@@ -152,14 +152,18 @@ public class GeneratedFunction {
 	public InstructionArgument vte_lookup(String text) {
 		int index = 0;
 		for (VariableTableEntry variableTableEntry : vte_list) {
-			if (variableTableEntry.getName().equals(text))
-				return new IntegerIA(index);
+			final String variableTableEntryName = variableTableEntry.getName();
+			if (variableTableEntryName != null) // TODO how can this be null?
+				if (variableTableEntryName.equals(text))
+					return new IntegerIA(index);
 			index++;
 		}
 		index = 0;
 		for (ConstantTableEntry constTableEntry : cte_list) {
-			if (constTableEntry.getName().equals(text))
-				return new ConstTableIA(index, this);
+			final String constTableEntryName = constTableEntry.getName();
+			if (constTableEntryName != null) // TODO how can this be null?
+				if (constTableEntryName.equals(text))
+					return new ConstTableIA(index, this);
 			index++;
 		}
 		return null;
