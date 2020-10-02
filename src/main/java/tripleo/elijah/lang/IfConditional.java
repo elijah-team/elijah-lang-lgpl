@@ -101,6 +101,10 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		return _items;
 	}
 
+	public List<IfConditional> getParts() {
+		return parts;
+	}
+
 	public void setContext(IfConditionalContext ifConditionalContext) {
 		_ctx = ifConditionalContext;
 	}

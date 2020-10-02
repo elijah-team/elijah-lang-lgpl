@@ -232,6 +232,8 @@ public class GenerateFunctions {
 				}
 			}
 		} else if (item instanceof IfConditional) {
+			IfConditional ifc = (IfConditional) item;
+			generate_if(ifc, gf);
 			throw new NotImplementedException();
 		} else if (item instanceof Loop) {
 			System.err.println("800");
@@ -271,6 +273,21 @@ public class GenerateFunctions {
 			throw new NotImplementedException();
 		} else {
 			throw new IllegalStateException("cant be here");
+		}
+	}
+
+	private void generate_if(IfConditional ifc, GeneratedFunction gf) {
+		final Context cctx = ifc.getContext();
+		{
+			IExpression expr = ifc.getExpr();
+			InstructionArgument i = simplify_expression(expr, gf);
+			System.out.println("710 "+i);
+		}
+		List<IfConditional> parts = ifc.getParts();
+		for (IfConditional part : parts) {
+			for (OS_Element partItem : part.getItems()) {
+				System.out.println("709 "+part+" "+partItem);
+			}
 		}
 	}
 
