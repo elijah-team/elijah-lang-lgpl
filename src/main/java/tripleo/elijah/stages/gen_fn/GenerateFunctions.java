@@ -681,7 +681,7 @@ public class GenerateFunctions {
 	 * @param initialValue
 	 * @param type
 	 * @param gf
-	 * @return
+	 * @return the cte table index
 	 */
 	private int addConstantTableEntry(String name, IExpression initialValue, OS_Type type, GeneratedFunction gf) {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, initialValue);
@@ -696,7 +696,7 @@ public class GenerateFunctions {
 	 * @param initialValue
 	 * @param type
 	 * @param gf
-	 * @return
+	 * @return the cte table index
 	 */
 	private int addConstantTableEntry2(String name, IExpression initialValue, OS_Type type, GeneratedFunction gf) {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, initialValue);
