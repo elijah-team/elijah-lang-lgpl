@@ -427,26 +427,66 @@ public class GenerateFunctions {
 				ProcedureCallExpression pce = (ProcedureCallExpression) expression;
 				IExpression    left = pce.getLeft();
 				ExpressionList args = pce.getArgs();
+				InstructionArgument left_ia;
+				List<InstructionArgument> right_ia = new ArrayList<InstructionArgument>(args.size());
 				if (left.is_simple()) {
 					if (left instanceof IdentExpression) {
+						// for ident(xyz...)
 						int y=2;
 						int x = addIdentTableEntry((IdentExpression) left, gf);
+						// TODO attach to var/const or lookup later in deduce
+						left_ia = new IdentIA(x);
 					} else if (left instanceof SubExpression) {
+						// for (1).toString() etc
 						SubExpression se = (SubExpression) left;
-
+						InstructionArgument ia = simplify_expression(se.getExpression(), gf, cctx);
+						//return ia;  // TODO is this correct?
+						left_ia = ia;
 					} else {
+						// for "".strip() etc
 						int x = addConstantTableEntry(null, left, left.getType(), gf);
-						throw new IllegalStateException("Cant be here");
+						left_ia = new ConstTableIA(x, gf);
+//						throw new IllegalStateException("Cant be here");
 					}
 				} else {
 					InstructionArgument x = simplify_expression(left, gf, cctx);
 					int y=2;
+					left_ia = x;
 				}
+				List<TypeTableEntry> args1 = new ArrayList<>();
 				for (IExpression arg : args) {
+					InstructionArgument ia;
+					TypeTableEntry iat;
 					if (arg.is_simple()) {
 						int y=2;
+						if (arg instanceof IdentExpression) {
+							int x = addIdentTableEntry((IdentExpression) arg, gf);
+							// TODO attach to var/const or lookup later in deduce
+							ia = new IdentIA(x);
+							iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
+						} else if (arg instanceof SubExpression) {
+							SubExpression se = (SubExpression) arg;
+							InstructionArgument ia2 = simplify_expression(se.getExpression(), gf, cctx);
+							//return ia;  // TODO is this correct?
+							ia = ia2;
+							iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
+						} else {
+							int x = addConstantTableEntry(null, arg, arg.getType(), gf);
+							ia = new ConstTableIA(x, gf);
+							iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, arg.getType(), arg);
+						}
+					} else {
+						InstructionArgument x = simplify_expression(left, gf, cctx);
+						int y=2;
+						ia = x;
+						iat = null;
 					}
+					right_ia.add(ia);
+					args1.add(iat);
 				}
+				int pte = addProcTableEntry(expression, null, args1, gf);
+				int x = add_i(gf, InstructionName.CALL, right_ia, cctx);
+				return new IntegerIA(x);
 			}
 			throw new NotImplementedException();
 		case DOT_EXP: {
