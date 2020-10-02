@@ -240,7 +240,9 @@ public class GenerateFunctions {
 			Loop loop = (Loop) item;
 			generate_loop(loop, gf);
 		} else if (item instanceof MatchConditional) {
-			throw new NotImplementedException();
+			MatchConditional mc = (MatchConditional) item;
+			generate_match_conditional(mc, gf);
+//			throw new NotImplementedException();
 		} else if (item instanceof NamespaceStatement) {
 			throw new NotImplementedException();
 		} else if (item instanceof VariableSequence) {
@@ -273,6 +275,16 @@ public class GenerateFunctions {
 			throw new NotImplementedException();
 		} else {
 			throw new IllegalStateException("cant be here");
+		}
+	}
+
+	private void generate_match_conditional(MatchConditional mc, GeneratedFunction gf) {
+		int y = 2;
+		final Context cctx = mc.getContext();
+		{
+			IExpression expr = mc.getExpr();
+			InstructionArgument i = simplify_expression(expr, gf, cctx);
+			System.out.println("710 "+i);
 		}
 	}
 
