@@ -15,8 +15,6 @@
 package tripleo.elijah.lang;
 
 
-import tripleo.elijah.util.NotImplementedException;
-
 public class SubExpression extends AbstractExpression {
 
 	private final IExpression carrier;
@@ -39,4 +37,12 @@ public class SubExpression extends AbstractExpression {
 	public OS_Type getType() {
 		return carrier.getType();
 	}
+
+	public IExpression getExpression() {
+		return carrier;
+	}
 }
+
+//
+//
+//
