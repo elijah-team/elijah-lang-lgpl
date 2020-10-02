@@ -149,8 +149,10 @@ public class DeduceTypes2 {
 							fn1.resolved = best; // TODO check arity and arg matching
 						} else
 							throw new NotImplementedException();
-					} else
+					} else {
+						System.out.println("10153 "+pn1.getClass().getName());
 						throw new NotImplementedException();
+					}
 
 				}
 				if (i2 instanceof IntegerIA) {
