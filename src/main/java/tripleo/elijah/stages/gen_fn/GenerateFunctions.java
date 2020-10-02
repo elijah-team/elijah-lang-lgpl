@@ -497,6 +497,7 @@ public class GenerateFunctions {
 					args1.add(iat);
 				}
 				int pte = addProcTableEntry(expression, null, args1, gf);
+				right_ia.add(0, new IntegerIA(pte));
 				int x = add_i(gf, InstructionName.CALL, right_ia, cctx);
 				return new IntegerIA(x);
 			}
