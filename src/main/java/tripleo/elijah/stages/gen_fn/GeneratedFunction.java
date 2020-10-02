@@ -29,7 +29,7 @@ public class GeneratedFunction {
 	public List<VariableTableEntry> vte_list = new ArrayList<VariableTableEntry>();
 	public List<ProcTableEntry> prte_list = new ArrayList<ProcTableEntry>();
 	List<TypeTableEntry> tte_list = new ArrayList<TypeTableEntry>();
-//	List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
+	List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
 	private int label_count = 0;
 
 	public GeneratedFunction(FunctionDef functionDef) {
