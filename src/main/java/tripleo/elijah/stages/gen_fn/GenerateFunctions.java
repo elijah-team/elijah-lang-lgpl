@@ -339,17 +339,17 @@ public class GenerateFunctions {
 			break;
 		case EXPR_TYPE:
 			{
-				int i = addTempTableEntry(null, gf); // TODO deduce later
+				int loop_iterator = addTempTableEntry(null, gf); // TODO deduce later
 				int i2 = addConstantTableEntry("", new NumericExpression(0), new OS_Type(BuiltInTypes.SystemInteger), gf);
 				final InstructionArgument ia1 = new ConstTableIA(i2, gf);
-				if (ia1 instanceof ConstTableIA)
-					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(i), ia1), cctx);
-				else
-					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(i), ia1), cctx);
+//				if (ia1 instanceof ConstTableIA)
+					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(loop_iterator), ia1), cctx);
+//				else
+//					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(loop_iterator), ia1), cctx);
 				Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
 				Label label_bottom = gf.addLabel("bottom"+label_top, false);
-				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(i), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
+				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(loop_iterator), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
 				add_i(gf, InstructionName.JE, List_of(label_bottom), cctx);
 				for (StatementItem statementItem : loop.getItems()) {
 					System.out.println("707 "+statementItem);
@@ -359,7 +359,7 @@ public class GenerateFunctions {
 				IdentExpression pre_inc_name = Helpers.string_to_ident(txt);
 				TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
-				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(i)), cctx);
+				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(loop_iterator)), cctx);
 				add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
 				gf.place(label_bottom);
 			}
