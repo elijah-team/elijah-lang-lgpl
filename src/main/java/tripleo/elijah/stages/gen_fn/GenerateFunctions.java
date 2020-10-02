@@ -295,6 +295,7 @@ public class GenerateFunctions {
 	private void generate_loop(Loop loop, GeneratedFunction gf) {
 		final Context cctx = loop.getContext();
 		int e2 = add_i(gf, InstructionName.ES, null, cctx);
+//		System.out.println("702 "+loop.getType());
 		switch (loop.getType()) {
 		case FROM_TO_TYPE:
 			{
