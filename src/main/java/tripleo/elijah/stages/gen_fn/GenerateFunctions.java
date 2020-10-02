@@ -8,14 +8,14 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
-import antlr.CommonToken;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijjah.ElijjahTokenTypes;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
@@ -156,7 +156,7 @@ public class GenerateFunctions {
 						case PROCEDURE_CALL: {
 							final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft());
 							int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), tte, gf);
-							int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf), gf)), cctx);
+							int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
 							Instruction instruction = gf.getInstruction(instruction_number);
 							VariableTableEntry vte = gf.getVarTableEntry(ii);
 							vte.addPotentialType(instruction.getIndex(), tte);
@@ -193,10 +193,9 @@ public class GenerateFunctions {
 						System.out.println(String.format("801.1 AUG_MULT %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
 //						BasicBinaryExpression bbe = (BasicBinaryExpression) x;
 //						final IExpression right1 = bbe.getRight();
-						InstructionArgument left = simplify_expression(x.getLeft(), gf);
-						InstructionArgument right = simplify_expression(((BasicBinaryExpression) x).getRight(), gf);
-						CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__aug_mult__");
-						IdentExpression fn_aug_name = new IdentExpression(t);
+						InstructionArgument left = simplify_expression(x.getLeft(), gf, cctx);
+						InstructionArgument right = simplify_expression(((BasicBinaryExpression) x).getRight(), gf, cctx);
+						IdentExpression fn_aug_name = Helpers.string_to_ident("__aug_mult__");
 						final List<TypeTableEntry> argument_types = List_of(gf.getVarTableEntry(to_int(left)).type, gf.getVarTableEntry(to_int(right)).type);
 //						System.out.println("801.2 "+argument_types);
 						int fn_aug = addProcTableEntry(fn_aug_name, null, argument_types, gf);
@@ -281,7 +280,7 @@ public class GenerateFunctions {
 		final Context cctx = ifc.getContext();
 		{
 			IExpression expr = ifc.getExpr();
-			InstructionArgument i = simplify_expression(expr, gf);
+			InstructionArgument i = simplify_expression(expr, gf, cctx);
 			System.out.println("710 "+i);
 		}
 		List<IfConditional> parts = ifc.getParts();
@@ -302,7 +301,7 @@ public class GenerateFunctions {
 				IdentExpression iterNameToken = loop.getIterNameToken();
 				String iterName = iterNameToken.getText();
 				int i = addTempTableEntry(null, iterNameToken, gf); // TODO deduce later
-				final InstructionArgument ia1 = simplify_expression(loop.getFromPart(), gf);
+				final InstructionArgument ia1 = simplify_expression(loop.getFromPart(), gf, cctx);
 				if (ia1 instanceof ConstTableIA)
 					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(i), ia1), cctx);
 				else
@@ -310,14 +309,13 @@ public class GenerateFunctions {
 				Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
 				Label label_bottom = gf.addLabel("bottom"+label_top, false);
-				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(i), simplify_expression(loop.getToPart(), gf)), cctx);
+				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(i), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
 				add_i(gf, InstructionName.JE, List_of(label_bottom), cctx);
 				for (StatementItem statementItem : loop.getItems()) {
 					System.out.println("705 "+statementItem);
 					generate_item((OS_Element)statementItem, gf, cctx);
 				}
-				CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__preinc__");
-				IdentExpression pre_inc_name = new IdentExpression(t);
+				IdentExpression pre_inc_name = Helpers.string_to_ident("__preinc__");
 				TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
 				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(i)), cctx);
@@ -339,14 +337,14 @@ public class GenerateFunctions {
 				Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
 				Label label_bottom = gf.addLabel("bottom"+label_top, false);
-				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(i), simplify_expression(loop.getToPart(), gf)), cctx);
+				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(i), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
 				add_i(gf, InstructionName.JE, List_of(label_bottom), cctx);
 				for (StatementItem statementItem : loop.getItems()) {
 					System.out.println("707 "+statementItem);
 					generate_item((OS_Element)statementItem, gf, cctx);
 				}
-				CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, "__preinc__");
-				IdentExpression pre_inc_name = new IdentExpression(t);
+				final String txt = SpecialFunctions.of(ExpressionKind.INCREMENT);
+				IdentExpression pre_inc_name = Helpers.string_to_ident(txt);
 				TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
 				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(i)), cctx);
@@ -371,7 +369,7 @@ public class GenerateFunctions {
 		switch (value.getKind()) {
 		case PROCEDURE_CALL:
 			ProcedureCallExpression pce = (ProcedureCallExpression) value;
-			final FnCallArgs fnCallArgs = new FnCallArgs(expression_to_call(value, gf), /*, simplify_args(pce.getArgs(), gf*/gf);
+			final FnCallArgs fnCallArgs = new FnCallArgs(expression_to_call(value, gf, cctx), /*, simplify_args(pce.getArgs(), gf*/gf);
 			add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), fnCallArgs), cctx);
 			break;
 		case NUMERIC:
@@ -394,17 +392,17 @@ public class GenerateFunctions {
 		IExpression left = pce.getLeft();
 		ExpressionList args = pce.getArgs();
 		//
-		int i = addProcTableEntry(left, simplify_expression(left, gf), get_args_types(args, gf), gf);
+		int i = addProcTableEntry(left, simplify_expression(left, gf, cctx), get_args_types(args, gf), gf);
 		final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
 		l.add(new IntegerIA(i));
-		l.addAll(simplify_args(args, gf));
+		l.addAll(simplify_args(args, gf, cctx));
 		add_i(gf, InstructionName.CALL, l, cctx);
 	}
 
-	private List<InstructionArgument> simplify_args(ExpressionList args, GeneratedFunction gf) {
+	private List<InstructionArgument> simplify_args(ExpressionList args, GeneratedFunction gf, Context cctx) {
 		List<InstructionArgument> R = new ArrayList<InstructionArgument>();
 		for (IExpression expression : args) {
-			InstructionArgument ia = simplify_expression(expression, gf);
+			InstructionArgument ia = simplify_expression(expression, gf, cctx);
 			if (ia != null) {
 				System.err.println("109 "+expression);
 				R.add(ia);
@@ -421,7 +419,7 @@ public class GenerateFunctions {
 		return pte.index;
 	}
 
-	private InstructionArgument simplify_expression(IExpression expression, GeneratedFunction gf) {
+	private InstructionArgument simplify_expression(IExpression expression, GeneratedFunction gf, Context cctx) {
 		switch (expression.getKind()) {
 		case PROCEDURE_CALL:
 			throw new NotImplementedException();
@@ -429,7 +427,7 @@ public class GenerateFunctions {
 			DotExpression de = (DotExpression) expression;
 			IExpression expr = de.getLeft();
 			do {
-				InstructionArgument i = simplify_expression(expr, gf);
+				InstructionArgument i = simplify_expression(expr, gf, cctx);
 				VariableTableEntry x = gf.vte_list.get(to_int(i)/*((IntegerIA) i).getIndex()*/);
 				System.err.println("901 "+x+" "+expr.getType());
 				expr = de.getRight();
@@ -446,6 +444,54 @@ public class GenerateFunctions {
 				NumericExpression ne = (NumericExpression) expression;
 				int ii = addConstantTableEntry2(null, ne, ne.getType(), gf);
 				return new ConstTableIA(ii, gf);
+			}
+		case LT_: // TODO all BinaryExpressions go here
+			{
+				BasicBinaryExpression bbe = (BasicBinaryExpression) expression;
+				IExpression left = bbe.getLeft();
+				IExpression right = bbe.getRight();
+				InstructionArgument left_instruction;
+				InstructionArgument right_instruction;
+				if (left.is_simple()) {
+					if (left instanceof IdentExpression) {
+						left_instruction = simplify_expression(left, gf, cctx);
+					} else {
+						// a constant
+						int left_constant_num = addConstantTableEntry2(null, left, left.getType(), gf);
+						left_instruction = new ConstTableIA(left_constant_num, gf);
+					}
+				} else {
+					// create a tmp var
+//					int left_temp = addTempTableEntry(null, gf);
+//					left_instruction = new IntegerIA(left_temp);
+					// TODO add_i ??
+					left_instruction = simplify_expression(left, gf, cctx);
+				}
+				if (right.is_simple()) {
+					if (right instanceof IdentExpression) {
+						right_instruction = simplify_expression(right, gf, cctx);
+					} else {
+						// a constant
+						int right_constant_num = addConstantTableEntry2(null, right, right.getType(), gf);
+						right_instruction = new ConstTableIA(right_constant_num, gf);
+					}
+				} else {
+					// create a tmp var
+//					int right_temp = addTempTableEntry(null, gf);
+//					right_instruction = new IntegerIA(right_temp);
+					// TODO add_i ??
+					right_instruction = simplify_expression(right, gf, cctx);
+				}
+				{
+					// create a call
+					IdentExpression expr_kind_name = Helpers.string_to_ident(SpecialFunctions.of(expression.getKind()));
+//					TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, expr_kind_name);
+					TypeTableEntry tte_left  = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, left);
+					TypeTableEntry tte_right = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, right);
+					int pre_inc = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
+					add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), left_instruction, right_instruction), cctx);
+				}
+				throw new NotImplementedException();
 			}
 		default:
 			throw new NotImplementedException();
@@ -477,14 +523,14 @@ public class GenerateFunctions {
 		return R;
 	}
 
-	private Instruction expression_to_call(IExpression expression, GeneratedFunction gf) {
+	private Instruction expression_to_call(IExpression expression, GeneratedFunction gf, Context cctx) {
 		if (expression.getKind() != PROCEDURE_CALL)
 			throw new NotImplementedException();
 
 		switch (expression.getLeft().getKind()){
 		case IDENT:
 			ProcedureCallExpression pce = (ProcedureCallExpression) expression;
-			return expression_to_call_add_entry(gf, pce, (IdentExpression) expression.getLeft());
+			return expression_to_call_add_entry(gf, pce, (IdentExpression) expression.getLeft(), cctx);
 		case QIDENT:
 			simplify_qident((Qualident) expression.getLeft(), gf);
 			break;
@@ -501,14 +547,14 @@ public class GenerateFunctions {
 	}
 
 	@NotNull
-	private Instruction expression_to_call_add_entry(GeneratedFunction gf, ProcedureCallExpression pce, IdentExpression left) {
+	private Instruction expression_to_call_add_entry(GeneratedFunction gf, ProcedureCallExpression pce, IdentExpression left, Context cctx) {
 		Instruction i = new Instruction();
 		i.setName(InstructionName.CALL);
 		List<InstructionArgument> li = new ArrayList<>();
 //			int ii = addIdentTableEntry((IdentExpression) expression.getLeft(), gf);
 		int ii = addProcTableEntry(left, null, get_args_types(pce.getArgs(), gf), gf);
 		li.add(new IntegerIA(ii));
-		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf);
+		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf, cctx);
 		li.addAll(args_);
 		i.setArgs(li);
 		return i;
@@ -546,12 +592,14 @@ public class GenerateFunctions {
 		return vte.index;
 	}
 
+/*
 	private int addTempTableEntry(OS_Type type, String name, GeneratedFunction gf) {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type);
 		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, name, tte);
 		gf.vte_list.add(vte);
 		return vte.index;
 	}
+*/
 
 	private int addTempTableEntry(OS_Type type, IdentExpression name, GeneratedFunction gf) {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, name);
