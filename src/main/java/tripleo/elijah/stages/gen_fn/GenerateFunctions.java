@@ -36,7 +36,7 @@ public class GenerateFunctions {
 	}
 
 	public List<GeneratedFunction> generateAllTopLevelFunctions() {
-		List<GeneratedFunction> R = new ArrayList<>();
+		List<GeneratedFunction> R = new ArrayList<GeneratedFunction>();
 
 		for (ModuleItem item : module.getItems()) {
 			if (item instanceof NamespaceStatement) {
