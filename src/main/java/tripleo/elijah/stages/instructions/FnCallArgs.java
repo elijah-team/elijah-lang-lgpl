@@ -8,9 +8,13 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created 9/10/20 3:36 PM
@@ -22,12 +26,23 @@ public class FnCallArgs implements InstructionArgument {
     @Override
     public String toString() {
         final int index = ((IntegerIA) expression_to_call.args.get(0)).getIndex();
+        final List<InstructionArgument> instructionArguments = expression_to_call.args.subList(1, expression_to_call.args.size());
+/*
+        final List<String> collect = instructionArguments
+                .stream()
+                .map((instructionArgument -> instructionArgument.toString()))
+                .collect(Collectors.toList());
+*/
+        final Collection<String> collect2 = Collections2.transform(instructionArguments, new Function<InstructionArgument, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable InstructionArgument input) {
+                return input.toString();
+            }
+        });
         return String.format("(call %d [%s(%s)] %s)",
                 index, gf.prte_list.get(index).expression, gf.prte_list.get(index).args,
-                String.join(" ", expression_to_call.args.subList(1, expression_to_call.args.size())
-                        .stream()
-                        .map((instructionArgument -> instructionArgument.toString()))
-                        .collect(Collectors.toList())));
+                String.join(" ", collect2));
 
     }
 
