@@ -413,6 +413,8 @@ public class GenerateFunctions {
 
 	private List<InstructionArgument> simplify_args(ExpressionList args, GeneratedFunction gf, Context cctx) {
 		List<InstructionArgument> R = new ArrayList<InstructionArgument>();
+		if (args == null) return R;
+		//
 		for (IExpression expression : args) {
 			InstructionArgument ia = simplify_expression(expression, gf, cctx);
 			if (ia != null) {
