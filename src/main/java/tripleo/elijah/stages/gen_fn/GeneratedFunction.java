@@ -168,6 +168,10 @@ public class GeneratedFunction {
 		}
 		return null;
 	}
+
+	public IdentTableEntry getIdentTableEntry(int i) {
+		return idte_list.get(i);
+	}
 }
 
 //
