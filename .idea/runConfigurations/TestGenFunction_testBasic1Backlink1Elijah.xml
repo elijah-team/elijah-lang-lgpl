@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TestGenFunction.testBasic1Backlink1Elijah" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+    <module name="test" />
+    <useClassPathOnly />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="tripleo.elijah.stages.gen_fn.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="PACKAGE_NAME" value="tripleo.elijah.stages.gen_fn" />
+    <option name="MAIN_CLASS_NAME" value="tripleo.elijah.stages.gen_fn.TestGenFunction" />
+    <option name="METHOD_NAME" value="testBasic1Backlink1Elijah" />
+    <option name="TEST_OBJECT" value="method" />
+    <option name="PARAMETERS" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
