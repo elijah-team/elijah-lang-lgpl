@@ -498,8 +498,14 @@ public class GenerateFunctions {
 				}
 				int pte = addProcTableEntry(expression, null, args1, gf);
 				right_ia.add(0, new IntegerIA(pte));
-				int x = add_i(gf, InstructionName.CALL, right_ia, cctx);
-				return new IntegerIA(x);
+				{
+					int tmp_var = addTempTableEntry(null, gf);
+					Instruction i = new Instruction();
+					i.setName(InstructionName.CALL);
+					i.setArgs(right_ia);
+					int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp_var), new FnCallArgs(i, gf)), cctx);
+					return new IntegerIA(x);
+				}
 			}
 //			throw new NotImplementedException();
 		case DOT_EXP: {
