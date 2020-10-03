@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.IdentExpression;
+import tripleo.elijah.stages.instructions.InstructionArgument;
 
 /**
  * Created 9/12/20 10:27 PM
@@ -16,8 +17,13 @@ import tripleo.elijah.lang.IdentExpression;
 public class IdentTableEntry {
     final int index;
     private final IdentExpression ident;
+	/**
+	 * Either an {@link tripleo.elijah.stages.instructions.IntegerIA} which is a vte
+	 * or a {@link tripleo.elijah.stages.instructions.IdentIA} which is an idte
+	 */
+	public InstructionArgument backlink;
 
-    public IdentTableEntry(int index, IdentExpression ident) {
+	public IdentTableEntry(int index, IdentExpression ident) {
         this.index = index;
         this.ident = ident;
     }
