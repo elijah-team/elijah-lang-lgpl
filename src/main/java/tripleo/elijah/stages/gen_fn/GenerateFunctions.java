@@ -260,7 +260,7 @@ public class GenerateFunctions {
 						assign_variable(gf, i, iv, cctx);
 					}
 				} else {
-					int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf);
+					int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf); // TODO why not vs.initialValue ??
 					IExpression iv = vs.initialValue();
 					assign_variable(gf, i, iv, cctx);
 				}
