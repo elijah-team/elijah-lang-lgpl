@@ -149,46 +149,10 @@ public class GenerateFunctions {
 //					int i = addTempTableEntry(x.getType(), gf);
 				switch (expressionKind) {
 				case ASSIGNMENT:
-					{
-						System.err.println(String.format("801 %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
-						BasicBinaryExpression bbe = (BasicBinaryExpression) x;
-						final IExpression right1 = bbe.getRight();
-						switch (right1.getKind()) {
-						case PROCEDURE_CALL: {
-							final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft());
-							int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), tte, gf);
-							int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
-							Instruction instruction = gf.getInstruction(instruction_number);
-							VariableTableEntry vte = gf.getVarTableEntry(ii);
-							vte.addPotentialType(instruction.getIndex(), tte);
-						}
-						break;
-						case IDENT: {
-							final IdentExpression left = (IdentExpression) bbe.getLeft();
-							InstructionArgument iii = gf.vte_lookup(left.getText());
-							int iii4, iii5=-1;
-							if (iii == null) {
-								iii4 = addIdentTableEntry(left, gf);
-							}
-							final IdentExpression right = (IdentExpression) right1;
-							InstructionArgument iiii = gf.vte_lookup(right.getText());
-							if (iiii == null) {
-								iii5 = addIdentTableEntry(right, gf);
-							}
-							int ia1 = add_i(gf, InstructionName.AGN, List_of(iii, iiii), cctx);
-							assert iii != null;
-							VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(iii));
-							vte.addPotentialType(ia1,
-									gf.getVarTableEntry(DeduceTypes2.to_int(iiii/* != null ? iiii :
-											gf.getVarTableEntry(iii5))*/)).type);
-						}
-
-						break;
-						default:
-							throw new NotImplementedException();
-						}
-					}
-					break;
+					System.err.println(String.format("703.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
+					throw new IllegalStateException();
+//					generate_item_assignment(x, gf, cctx);
+//					break;
 				case AUG_MULT:
 					{
 						System.out.println(String.format("801.1 AUG_MULT %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
@@ -221,9 +185,10 @@ public class GenerateFunctions {
 				switch (expressionKind) {
 				case ASSIGNMENT:
 					System.err.println(String.format("803.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
+					generate_item_assignment(x, gf, cctx);
 					break;
-				case IS_A:
-					break;
+//				case IS_A:
+//					break;
 				case PROCEDURE_CALL:
 					ProcedureCallExpression pce = (ProcedureCallExpression) x;
 					simplify_procedure_call(pce, gf, cctx);
@@ -282,6 +247,46 @@ public class GenerateFunctions {
 			throw new NotImplementedException();
 		} else {
 			throw new IllegalStateException("cant be here");
+		}
+	}
+
+	private void generate_item_assignment(IExpression x, GeneratedFunction gf, Context cctx) {
+		System.err.println(String.format("801 %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
+		BasicBinaryExpression bbe = (BasicBinaryExpression) x;
+		final IExpression right1 = bbe.getRight();
+		switch (right1.getKind()) {
+		case PROCEDURE_CALL: {
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft());
+			int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), tte, gf);
+			int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
+			Instruction instruction = gf.getInstruction(instruction_number);
+			VariableTableEntry vte = gf.getVarTableEntry(ii);
+			vte.addPotentialType(instruction.getIndex(), tte);
+		}
+		break;
+		case IDENT: {
+			final IdentExpression left = (IdentExpression) bbe.getLeft();
+			InstructionArgument iii = gf.vte_lookup(left.getText());
+			int iii4, iii5=-1;
+			if (iii == null) {
+				iii4 = addIdentTableEntry(left, gf);
+			}
+			final IdentExpression right = (IdentExpression) right1;
+			InstructionArgument iiii = gf.vte_lookup(right.getText());
+			if (iiii == null) {
+				iii5 = addIdentTableEntry(right, gf);
+			}
+			int ia1 = add_i(gf, InstructionName.AGN, List_of(iii, iiii), cctx);
+			assert iii != null;
+			VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(iii));
+			vte.addPotentialType(ia1,
+					gf.getVarTableEntry(DeduceTypes2.to_int(iiii/* != null ? iiii :
+							gf.getVarTableEntry(iii5))*/)).type);
+		}
+
+		break;
+		default:
+			throw new NotImplementedException();
 		}
 	}
 
