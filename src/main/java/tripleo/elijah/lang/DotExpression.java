@@ -27,6 +27,11 @@ public class DotExpression extends BasicBinaryExpression {
 		return String.format("%s.%s", left, right);
 	}
 
+	@Override
+	public boolean is_simple() {
+		return false; // TODO when is this true or not? see {@link Qualident}
+	}
+
 }
 
 //
