@@ -143,10 +143,11 @@ public class GenerateFunctions {
 		} else if (item instanceof StatementWrapper) {
 //				System.err.println("106");
 			IExpression x = ((StatementWrapper) item).getExpr();
+			final ExpressionKind expressionKind = x.getKind();
 			System.err.println("106-1 "+x.getKind()+" "+x);
 			if (x.is_simple()) {
 //					int i = addTempTableEntry(x.getType(), gf);
-				switch (x.getKind()) {
+				switch (expressionKind) {
 				case ASSIGNMENT:
 					{
 						System.err.println(String.format("801 %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
@@ -217,18 +218,24 @@ public class GenerateFunctions {
 					throw new NotImplementedException();
 				}
 			} else {
-				switch (x.getKind()) {
-					case ASSIGNMENT:
-						System.err.println(String.format("803.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
-						break;
-					case IS_A:
-						break;
-					case PROCEDURE_CALL:
-						ProcedureCallExpression pce = (ProcedureCallExpression) x;
-						simplify_procedure_call(pce, gf, cctx);
-						break;
-					default:
-						break;
+				switch (expressionKind) {
+				case ASSIGNMENT:
+					System.err.println(String.format("803.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
+					break;
+				case IS_A:
+					break;
+				case PROCEDURE_CALL:
+					ProcedureCallExpression pce = (ProcedureCallExpression) x;
+					simplify_procedure_call(pce, gf, cctx);
+					break;
+				case DOT_EXP:
+					{
+						DotExpression de = (DotExpression) x;
+						generate_item_dot_expression(null, de.getLeft(), de.getRight(), gf, cctx);
+					}
+					break;
+				default:
+					break;
 				}
 			}
 		} else if (item instanceof IfConditional) {
@@ -276,6 +283,21 @@ public class GenerateFunctions {
 		} else {
 			throw new IllegalStateException("cant be here");
 		}
+	}
+
+	private void generate_item_dot_expression(InstructionArgument backlink, IExpression left, IExpression right, GeneratedFunction gf, Context cctx) {
+		int y=2;
+		int x = addIdentTableEntry((IdentExpression) left, gf);
+		if (backlink != null) {
+			gf.getIdentTableEntry(x).backlink = backlink;
+		}
+		if (right.getLeft() == right)
+			return;
+		//
+		if (right instanceof IdentExpression)
+			generate_item_dot_expression(new IdentIA(x), right.getLeft(), ((IdentExpression)right), gf, cctx);
+		else
+			generate_item_dot_expression(new IdentIA(x), right.getLeft(), ((BasicBinaryExpression)right).getRight(), gf, cctx);
 	}
 
 	private void generate_match_conditional(MatchConditional mc, GeneratedFunction gf) {
