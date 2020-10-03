@@ -123,6 +123,30 @@ public class TestGenFunction {
 		new DeduceTypes2(m).deduceFunctions(lgf);
 	}
 
+	@Test
+	public void testBasic1Backlink1Elijah() throws Exception {
+		StdErrSink eee = new StdErrSink();
+		Compilation c = new Compilation(eee, new IO());
+
+		String f = "test/basic1/backlink1.elijah";
+		File file = new File(f);
+		OS_Module m = c.realParseElijjahFile(f, file, false);
+//		OS_Module m = c.parseElijjahFile(file, f, eee, false);
+		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
+		Assert.assertTrue("Method parsed correctly", m != null);
+
+		final GenerateFunctions gfm = new GenerateFunctions(m);
+		List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
+
+		for (GeneratedFunction gf : lgf) {
+			for (Instruction instruction : gf.instructions()) {
+				System.out.println("8100 "+instruction);
+			}
+		}
+
+		new DeduceTypes2(m).deduceFunctions(lgf);
+	}
+
 }
 
 //
