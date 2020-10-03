@@ -587,6 +587,8 @@ public class GenerateFunctions {
 
 	private List<TypeTableEntry> get_args_types(ExpressionList args, GeneratedFunction gf) {
 		List<TypeTableEntry> R = new ArrayList<>();
+		if (args == null) return R;
+		//
 		for (IExpression arg : args) {
 			final OS_Type type = arg.getType();
 			System.err.println(String.format("108 %s %s", arg, type));
