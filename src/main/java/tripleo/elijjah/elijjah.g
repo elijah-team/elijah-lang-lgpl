@@ -276,7 +276,7 @@ opfal2 returns [FormalArgList fal]
 statement[StatementClosure cr, OS_Element aParent]
 		{Qualident q=null;FormalArgList o=null;}
 	:
-	( expr=postfixExpression {cr.statementWrapper(expr);}
+	( expr=assignmentExpression/*postfixExpression*/ {cr.statementWrapper(expr);}
 	//procedureCallStatement[cr.procCallExpr()]
 	| ifConditional[cr.ifConditional(aParent, cur)]
 	| matchConditional[cr.matchConditional(cur), aParent]
