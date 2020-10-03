@@ -20,6 +20,7 @@ public class SpecialFunctions {
 		case LT_: 				return "__lt__";
 		case GT: 				return "__gt__";
 		case INCREMENT: 		return "__preinc__";
+		case AUG_MULT:			return "__imult__";
 		default: 				throw new NotImplementedException();
 		}
 	}

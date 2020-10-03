@@ -196,7 +196,7 @@ public class GenerateFunctions {
 //						final IExpression right1 = bbe.getRight();
 						InstructionArgument left = simplify_expression(x.getLeft(), gf, cctx);
 						InstructionArgument right = simplify_expression(((BasicBinaryExpression) x).getRight(), gf, cctx);
-						IdentExpression fn_aug_name = Helpers.string_to_ident("__aug_mult__");
+						IdentExpression fn_aug_name = Helpers.string_to_ident(SpecialFunctions.of(expressionKind));
 						final List<TypeTableEntry> argument_types = List_of(gf.getVarTableEntry(to_int(left)).type, gf.getVarTableEntry(to_int(right)).type);
 //						System.out.println("801.2 "+argument_types);
 						int fn_aug = addProcTableEntry(fn_aug_name, null, argument_types, gf);
