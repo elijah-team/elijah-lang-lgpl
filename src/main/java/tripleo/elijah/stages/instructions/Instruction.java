@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class Instruction {
 	private InstructionName name;
-	private int index;
+	private int index = -1;
 	List<InstructionArgument> args;
 	private Context context;
 
