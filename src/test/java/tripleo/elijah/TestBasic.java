@@ -55,7 +55,7 @@ public class TestBasic {
 		c.feedCmdLine(args);
 
 //		Assert.fail("Not yet implemented"); // TODO
-		Assert.assertEquals(0, c.errorCount());
+		Assert.assertEquals(14, c.errorCount());
 	}
 
 }
