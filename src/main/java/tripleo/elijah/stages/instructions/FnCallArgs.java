@@ -12,6 +12,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,8 +41,9 @@ public class FnCallArgs implements InstructionArgument {
                 return input.toString();
             }
         });
+        final ProcTableEntry procTableEntry = gf.prte_list.get(index);
         return String.format("(call %d [%s(%s)] %s)",
-                index, gf.prte_list.get(index).expression, gf.prte_list.get(index).args,
+                index, procTableEntry.expression, procTableEntry.args,
                 String.join(" ", collect2));
 
     }
