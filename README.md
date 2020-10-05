@@ -30,7 +30,9 @@ oluoluolu+elijah (at) gmail.com
 
 [Elijjah by Example](https://elijjah-by-example.github.io)
 
-[Elijjah by Example](https://oluoluolu-gh.gitbook.io/elijjah-by-example/)
+[GitBook: Elijjah by Example](https://oluoluolu-gh.gitbook.io/elijjah-by-example/)
+
+[Documentation on GitLab](https://elijah-team.gitlab.io/elijah-lang/) (look here first)
 
 ----
 
