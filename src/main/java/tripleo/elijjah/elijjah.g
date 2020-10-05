@@ -655,11 +655,6 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 
 
 
-//procedureCallStatement[StatementClosure cr]
-//	 {ProcedureCallExpression pce=cr.procedureCallExpression();}
-//	: xy=qualident {pce.identifier(xy);}
-//	  procCallEx[pce]
-//	;
 ifConditional[IfConditional ifex]
         {IfConditionalContext ifc_top=null,ifc=null;IfConditional else_;}
 	: "if" expr=expression {ifex.expr(expr);cur=ifex.getContext();}
