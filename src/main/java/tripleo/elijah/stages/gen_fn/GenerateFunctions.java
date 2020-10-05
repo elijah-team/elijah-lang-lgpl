@@ -644,8 +644,8 @@ public class GenerateFunctions {
 //					TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, expr_kind_name);
 					TypeTableEntry tte_left  = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, left);
 					TypeTableEntry tte_right = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, right);
-					int pre_inc = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
-					int x = add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), left_instruction, right_instruction), cctx);
+					int pte = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
+					int x = add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pte), left_instruction, right_instruction), cctx);
 					return new IntegerIA(x);
 				}
 //				throw new NotImplementedException();
