@@ -719,7 +719,7 @@ public class GenerateFunctions {
 		return i;
 	}
 
-	private int addIdentTableEntry(IdentExpression ident, GeneratedFunction gf) {
+	public int addIdentTableEntry(IdentExpression ident, GeneratedFunction gf) {
 //		throw new NotImplementedException();
 		IdentTableEntry idte = new IdentTableEntry(gf.idte_list.size(), ident);
 		gf.idte_list.add(idte);
