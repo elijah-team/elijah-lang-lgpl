@@ -10,6 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.instructions.*;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
@@ -171,6 +172,66 @@ public class GeneratedFunction {
 
 	public IdentTableEntry getIdentTableEntry(int i) {
 		return idte_list.get(i);
+	}
+
+	public InstructionArgument get_assignment_path(IExpression expression, GenerateFunctions generateFunctions) {
+		switch (expression.getKind()) {
+		case DOT_EXP:
+			{
+				DotExpression de = (DotExpression) expression;
+				InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions);
+				return get_assignment_path(left_part, de.getRight(), generateFunctions);
+			}
+		case QIDENT:
+			throw new NotImplementedException();
+		case PROCEDURE_CALL:
+			throw new NotImplementedException();
+		case GET_ITEM:
+			throw new NotImplementedException();
+		case IDENT:
+			{
+				IdentExpression ie = (IdentExpression) expression;
+				String text = ie.getText();
+				InstructionArgument lookup = vte_lookup(text); // IntegerIA(variable) or ConstTableIA or null
+				if (lookup != null)
+					return lookup;
+				int ite = generateFunctions.addIdentTableEntry(ie, this);
+				return new IdentIA(ite, this);
+			}
+		default:
+			throw new IllegalStateException();
+		}
+	}
+
+	private InstructionArgument get_assignment_path(InstructionArgument prev, IExpression expression, GenerateFunctions generateFunctions) {
+		switch (expression.getKind()) {
+		case DOT_EXP:
+		{
+			DotExpression de = (DotExpression) expression;
+			InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions);
+			if (left_part instanceof IdentIA) {
+				((IdentIA)left_part).setPrev(prev);
+			} else
+				throw new NotImplementedException();
+			return get_assignment_path(left_part, de.getRight(), generateFunctions);
+		}
+		case QIDENT:
+			throw new NotImplementedException();
+		case PROCEDURE_CALL:
+			throw new NotImplementedException();
+		case GET_ITEM:
+			throw new NotImplementedException();
+		case IDENT:
+			{
+				IdentExpression ie = (IdentExpression) expression;
+				int ite = generateFunctions.addIdentTableEntry(ie, this);
+				final IdentIA identIA = new IdentIA(ite, this);
+				identIA.setPrev(prev);
+				return identIA;
+			}
+		default:
+			throw new IllegalStateException();
+		}
 	}
 }
 
