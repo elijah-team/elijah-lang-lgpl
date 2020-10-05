@@ -32,3 +32,6 @@ oluoluolu+elijah (at) gmail.com
 
 [Elijjah by Example](https://oluoluolu-gh.gitbook.io/elijjah-by-example/)
 
+----
+
+Look at my [code coverage](https://codecov.io/gl/elijah-team/elijah-lang/branch/master): `master`'s only at 13%
