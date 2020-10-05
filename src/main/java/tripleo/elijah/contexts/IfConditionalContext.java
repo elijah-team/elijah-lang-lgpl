@@ -18,9 +18,17 @@ import java.util.List;
 public class IfConditionalContext extends Context {
 	private final Context _parent;
 	private final IfConditional carrier;
+	private final Context _prev_ctx;
 
 	public IfConditionalContext(Context cur, IfConditional ifConditional) {
 		_parent = cur;
+		carrier = ifConditional;
+		_prev_ctx = null; // TOP if statement
+	}
+
+	public IfConditionalContext(Context ctx, IfConditional ifConditional, boolean _ignored) {
+		_prev_ctx = ctx;
+		_parent = ((IfConditionalContext)ctx)._parent;
 		carrier = ifConditional;
 	}
 
