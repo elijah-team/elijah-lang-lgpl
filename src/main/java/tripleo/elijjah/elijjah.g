@@ -660,7 +660,7 @@ ifConditional[IfConditional ifex]
 	: "if" expr=expression {ifex.expr(expr);cur=ifex.getContext();}
 	scope[ifex.scope()] {cur=cur.getParent();}
 	( elseif_part[ifex.elseif()] )*
-	( "else" {else_=ifex.else();cur=else_.getContext();} scope[else_.scope()] {cur=cur.getParent();})?
+	( "else" {else_=ifex.else();cur=else_.getContext();} scope[else_!=null?else_.scope():null] {cur=cur.getParent();})?
 	;
 elseif_part[IfConditional ifex]
 	: ("elseif" | "else" "if") expr=expression {ifex.expr(expr);cur=ifex.getContext();}

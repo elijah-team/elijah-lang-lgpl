@@ -2977,7 +2977,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				if ( inputState.guessing==0 ) {
 					else_=ifex.else();cur=else_.getContext();
 				}
-				scope(else_.scope());
+				scope(else_!=null?else_.scope():null);
 				if ( inputState.guessing==0 ) {
 					cur=cur.getParent();
 				}
