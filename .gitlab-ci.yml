@@ -21,6 +21,7 @@ stages:
 
 build:
   stage: build
+  image: alpine
   script:
     - echo Skipping because this doesn\'t do anything anyway
     #- mvn $MAVEN_CLI_OPTS -e compile
@@ -29,6 +30,7 @@ test:
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS test
+    - curl -s https://codecov.io/bash | bash -s - -t d63d15e4-247f-4588-b8bf-b31e34529ef5
 
 deploy:
   stage: deploy

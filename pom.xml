@@ -10,7 +10,7 @@
     <properties>
         <maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>
-        <jacoco.version>0.8.2</jacoco.version>
+        <jacoco.version>0.8.6</jacoco.version>
         <downloadSources>true</downloadSources>
         <guava.version>29.0-jre</guava.version>
         <buffers.version>0.0.2a</buffers.version>
@@ -194,11 +194,11 @@
                 </execution>
                 </executions>
             </plugin>
-            <!--
-              <plugin>
+            
+              <!-- <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.2</version>
+                <version>0.8.6</version>
                 <executions>
                   <execution>
                     <goals>
@@ -218,7 +218,7 @@
                   </execution>
                 </executions>
               </plugin>-->
-            <!--
+            
                   <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
@@ -236,7 +236,7 @@
                           <goal>report</goal>
                         </goals>
                       </execution>
-                      &lt;!&ndash; Add this checking &ndash;&gt;
+                      <!-- Add this checking -->
                       <execution>
                         <id>jacoco-check</id>
                         <goals>
@@ -260,7 +260,7 @@
 
                     </executions>
                   </plugin>
-            -->
+          
 
         </plugins>
     </build>
