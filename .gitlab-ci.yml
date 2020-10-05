@@ -29,6 +29,8 @@ test:
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS test
+    - CODECOV_TOKEN="d63d15e4-247f-4588-b8bf-b31e34529ef5"
+    - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   stage: deploy
