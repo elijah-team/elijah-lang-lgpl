@@ -97,21 +97,41 @@ public class DeduceTypes2 {
 				break;
 			case AGN:
 				{ // TODO doesn't account for __assign__
-					final IntegerIA arg = (IntegerIA)instruction.getArg(0);
-					VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
-					InstructionArgument i2 = instruction.getArg(1);
-					if (i2 instanceof IntegerIA) {
-						VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
-						vte.addPotentialType(instruction.getIndex(), vte2.type);
-//							throw new NotImplementedException();
-					} else if (i2 instanceof FnCallArgs) {
-						FnCallArgs fca = (FnCallArgs) i2;
-						do_assign_call(generatedFunction, fd_ctx, vte, fca, instruction.getIndex());
-					} else if (i2 instanceof ConstTableIA) {
-						int y=2;
-						do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
-					} else
-						throw new NotImplementedException();
+					final InstructionArgument agn_lhs = instruction.getArg(0);
+					if (agn_lhs instanceof IntegerIA) {
+						final IntegerIA arg = (IntegerIA) agn_lhs;
+						VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
+						InstructionArgument i2 = instruction.getArg(1);
+						if (i2 instanceof IntegerIA) {
+							VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
+							vte.addPotentialType(instruction.getIndex(), vte2.type);
+						} else if (i2 instanceof FnCallArgs) {
+							FnCallArgs fca = (FnCallArgs) i2;
+							do_assign_call(generatedFunction, fd_ctx, vte, fca, instruction.getIndex());
+						} else if (i2 instanceof ConstTableIA) {
+							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
+						} else if (i2 instanceof IdentIA) {
+							throw new NotImplementedException();
+						} else
+							throw new NotImplementedException();
+					} else if (agn_lhs instanceof IdentIA) {
+						final IdentIA arg = (IdentIA) agn_lhs;
+						IdentTableEntry idte = generatedFunction.getIdentTableEntry(arg.getIndex());
+						InstructionArgument i2 = instruction.getArg(1);
+						if (i2 instanceof IntegerIA) {
+							VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
+							idte.addPotentialType(instruction.getIndex(), vte2.type);
+						} else if (i2 instanceof FnCallArgs) {
+							FnCallArgs fca = (FnCallArgs) i2;
+							do_assign_call(generatedFunction, fd_ctx, idte, fca, instruction.getIndex());
+						} else if (i2 instanceof IdentIA) {
+							throw new NotImplementedException();
+						} else if (i2 instanceof ConstTableIA) {
+							do_assign_constant(generatedFunction, instruction, idte, (ConstTableIA) i2);
+						} else
+							throw new NotImplementedException();
+
+					}
 				}
 				break;
 			case AGNK:
