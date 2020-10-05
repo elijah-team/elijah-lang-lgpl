@@ -567,7 +567,7 @@ public class GenerateFunctions {
 					right_ia.add(ia);
 					args1.add(iat);
 				}
-				int pte = addProcTableEntry(expression, null, args1, gf);
+				int pte = addProcTableEntry(expression, left_ia, args1, gf);
 				right_ia.add(0, new IntegerIA(pte));
 				{
 					int tmp_var = addTempTableEntry(null, gf);
