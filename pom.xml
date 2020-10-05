@@ -208,7 +208,7 @@
 
 
 
-                  <! -- attached to Maven test phase -- >
+                  < ! - - attached to Maven test phase - - >
                   <execution>
                     <id>report</id>
                     <phase>test</phase>
