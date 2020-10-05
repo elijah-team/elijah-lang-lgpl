@@ -661,11 +661,15 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 //	  procCallEx[pce]
 //	;
 ifConditional[IfConditional ifex]
-	: "if" expr=expression {ifex.expr(expr);}
-	scope[ifex.scope()]
-	("else" scope[ifex.else_().scope()]
-	| elseif_part[ifex.elseif()]
-	)*
+        {IfConditionalContext ifc_top=null,ifc=null;IfConditional else_;}
+	: "if" expr=expression {ifex.expr(expr);cur=ifex.getContext();}
+	scope[ifex.scope()] {cur=cur.getParent();}
+	( elseif_part[ifex.elseif()] )*
+	( "else" {else_=ifex.else();cur=else_.getContext();} scope[else_.scope()] {cur=cur.getParent();})?
+	;
+elseif_part[IfConditional ifex]
+	: ("elseif" | "else" "if") expr=expression {ifex.expr(expr);cur=ifex.getContext();}
+	scope[ifex.scope()] {cur=cur.getParent();}
 	;
 matchConditional[MatchConditional mc, OS_Element aParent]
 		{MatchConditional.MatchConditionalPart1 mcp1=null;
@@ -731,10 +735,6 @@ varStmt_i[VariableStatement vs]
 	: i=ident                   {vs.setName(i);}
 	( TOK_COLON tn=typeName2    {vs.setTypeName(tn);})?
 	( BECOMES expr=expression   {vs.initial(expr);})?
-	;
-elseif_part[IfConditional ifex]
-	: ("elseif" | "else" "if") expr=expression {ifex.expr(expr);}
-	scope[ifex.scope()]
 	;
 
 //
