@@ -312,9 +312,9 @@ public class GenerateFunctions {
 			return;
 		//
 		if (right instanceof IdentExpression)
-			generate_item_dot_expression(new IdentIA(x), right.getLeft(), ((IdentExpression)right), gf, cctx);
+			generate_item_dot_expression(new IdentIA(x, gf), right.getLeft(), ((IdentExpression)right), gf, cctx);
 		else
-			generate_item_dot_expression(new IdentIA(x), right.getLeft(), ((BasicBinaryExpression)right).getRight(), gf, cctx);
+			generate_item_dot_expression(new IdentIA(x, gf), right.getLeft(), ((BasicBinaryExpression)right).getRight(), gf, cctx);
 	}
 
 	private void generate_match_conditional(MatchConditional mc, GeneratedFunction gf) {
@@ -488,7 +488,7 @@ public class GenerateFunctions {
 						int y=2;
 						int x = addIdentTableEntry((IdentExpression) left, gf);
 						// TODO attach to var/const or lookup later in deduce
-						left_ia = new IdentIA(x);
+						left_ia = new IdentIA(x, gf);
 					} else if (left instanceof SubExpression) {
 						// for (1).toString() etc
 						SubExpression se = (SubExpression) left;
@@ -515,7 +515,7 @@ public class GenerateFunctions {
 						if (arg instanceof IdentExpression) {
 							int x = addIdentTableEntry((IdentExpression) arg, gf);
 							// TODO attach to var/const or lookup later in deduce
-							ia = new IdentIA(x);
+							ia = new IdentIA(x, gf);
 							iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
 						} else if (arg instanceof SubExpression) {
 							SubExpression se = (SubExpression) arg;

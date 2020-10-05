@@ -8,11 +8,42 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+
 /**
  * Created 10/2/20 2:36 PM
  */
 public class IdentIA implements InstructionArgument {
+	private final int id;
+	private final GeneratedFunction gf;
+//	private InstructionArgument prev;
+
+/*
 	public IdentIA(int x) {
+		this.id = x;
+		this.gf = null;  // TODO watch out
+	}
+*/
+
+	public IdentIA(int ite, GeneratedFunction generatedFunction) {
+		this.gf = generatedFunction;
+		this.id = ite;
+	}
+
+	public void setPrev(InstructionArgument ia) {
+		gf.getIdentTableEntry(id).backlink = ia;
+	}
+
+	@Override
+	public String toString() {
+		return "IdentIA{" +
+				"id=" + id +
+//				", prev=" + prev +
+				'}';
+	}
+
+	public int getIndex() {
+		return id;
 	}
 }
 
