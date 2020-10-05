@@ -329,16 +329,46 @@ public class GenerateFunctions {
 
 	private void generate_if(IfConditional ifc, GeneratedFunction gf) {
 		final Context cctx = ifc.getContext();
+		Label label_next = new Label();
+		Label label_end  = new Label();
 		{
+			int begin0 = add_i(gf, InstructionName.ES, null, cctx);
 			IExpression expr = ifc.getExpr();
 			InstructionArgument i = simplify_expression(expr, gf, cctx);
-			System.out.println("710 "+i);
-		}
-		List<IfConditional> parts = ifc.getParts();
-		for (IfConditional part : parts) {
-			for (OS_Element partItem : part.getItems()) {
-				System.out.println("709 "+part+" "+partItem);
+			System.out.println("710 " + i);
+			add_i(gf, InstructionName.CMP, List_of(i), cctx);
+			add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
+			int begin_1st = add_i(gf, InstructionName.ES, null, cctx);
+			for (OS_Element item : ifc.getItems()) {
+				generate_item(item, gf, cctx);
 			}
+			if (ifc.getParts().size() == 0) {
+				gf.place(label_next);
+				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_1st)), cctx);
+				gf.place(label_end);
+			} else {
+				add_i(gf, InstructionName.JMP, List_of(label_end), cctx);
+				List<IfConditional> parts = ifc.getParts();
+				for (IfConditional part : parts) {
+					gf.place(label_next);
+					label_next = new Label();
+					if (part.getExpr() != null) {
+						InstructionArgument ii = simplify_expression(part.getExpr(), gf, cctx);
+						System.out.println("711 " + ii);
+						add_i(gf, InstructionName.CMP, List_of(ii), cctx);
+						add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
+					}
+					int begin_next = add_i(gf, InstructionName.ES, null, cctx);
+					for (OS_Element partItem : part.getItems()) {
+						System.out.println("709 " + part + " " + partItem);
+						generate_item(partItem, gf, cctx);
+					}
+					add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_next)), cctx);
+					gf.place(label_next);
+				}
+				gf.place(label_end);
+			}
+			add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
 		}
 	}
 
