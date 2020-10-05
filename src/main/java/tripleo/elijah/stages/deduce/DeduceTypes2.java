@@ -348,6 +348,65 @@ public class DeduceTypes2 {
 		}
 	}
 
+	private void do_assign_constant(GeneratedFunction generatedFunction, Instruction instruction, IdentTableEntry idte, ConstTableIA i2) {
+		if (idte.type != null && idte.type.attached != null) {
+			// TODO check types
+		}
+		ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
+		if (cte.type.attached == null) {
+			System.out.println("*** ERROR: Null type in CTE "+cte);
+		}
+//		vte.type = cte.type;
+		idte.addPotentialType(instruction.getIndex(), cte.type);
+	}
+
+	private void do_assign_call(GeneratedFunction generatedFunction, Context ctx, IdentTableEntry idte, FnCallArgs fca, int instructionIndex) {
+		ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
+		for (TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
+			System.out.println("770 "+tte);
+			IExpression e = tte.expression;
+			if (e == null) continue;
+			switch (e.getKind()) {
+			case NUMERIC:
+			{
+				tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
+				idte.type = tte;
+			}
+			break;
+			case IDENT:
+			{
+/*
+					LookupResultList lrl = ctx.lookup(((IdentExpression)e).getText());
+					OS_Element best = lrl.chooseBest(null);
+					int y=2;
+*/
+				InstructionArgument yy = generatedFunction.vte_lookup(((IdentExpression) e).getText());
+//					System.out.println("10000 "+yy);
+				Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(yy)).potentialTypes();
+				List<TypeTableEntry> ll = new ArrayList<>(c);
+				if (ll.size() == 1) {
+					tte.attached = ll.get(0).attached;
+					idte.addPotentialType(instructionIndex, ll.get(0));
+				} else
+					throw new NotImplementedException();
+			}
+			break;
+			default:
+			{
+				throw new NotImplementedException();
+			}
+			}
+		}
+		{
+			LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
+			OS_Element best = lrl.chooseBest(null);
+			if (best != null)
+				pte.resolved = best; // TODO do we need to add a dependency for class?
+			else
+				throw new NotImplementedException();
+		}
+	}
+
 	private void implement_calls(GeneratedFunction gf, Context context, InstructionArgument i2, ProcTableEntry fn1, int pc) {
 		if (gf.deferred_calls.contains(pc)) {
 			System.err.println("Call is deferred "/*+gf.getInstruction(pc)*/+" "+fn1);
