@@ -21,7 +21,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 //	private final Scope parent_scope;
 	private final IfConditional sibling;
 	private final List<IfConditional> parts = new ArrayList<IfConditional>();
-	private int order = 0;
+//	private int order = 0;
 	private IExpression expr;
 	private final List<OS_Element> _items = new ArrayList<OS_Element>();
 	final IfConditionalScope _scope = new IfConditionalScope();
@@ -37,9 +37,9 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 
 	public IfConditional(IfConditional ifExpression) {
 		this.sibling = ifExpression;
-		this.order = ++sibling/*if_parent*/.order;
+//		this.order = ++sibling/*if_parent*/.order;
 		//
-		this._ctx = ifExpression._ctx;
+		this._ctx = new IfConditionalContext(ifExpression._ctx, this, true);
 		this._parent = ifExpression._parent;
 //		this.parent_scope = this.sibling.parent_scope;
 	}
