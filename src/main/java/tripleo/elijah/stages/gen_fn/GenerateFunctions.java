@@ -285,6 +285,18 @@ public class GenerateFunctions {
 		}
 
 		break;
+		case NUMERIC:
+			{
+				IExpression left = bbe.getLeft();
+				NumericExpression ne = (NumericExpression) right1;
+
+				@NotNull InstructionArgument agn_path = gf.get_assignment_path(left, this);
+				int cte = addConstantTableEntry("", ne, ne.getType(), gf);
+
+				int agn_inst = add_i(gf, InstructionName.AGN, List_of(agn_path, new ConstTableIA(cte, gf)), cctx);
+				// TODO what now??
+			}
+			break;
 		default:
 			throw new NotImplementedException();
 		}
