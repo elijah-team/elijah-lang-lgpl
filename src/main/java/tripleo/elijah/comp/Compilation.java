@@ -322,6 +322,20 @@ public class Compilation {
 		return null;
 	}
 
+	public boolean findStdLib(String prelude_name) {
+		File local_stdlib = new File("lib_elijjah/lib-"+prelude_name+"/stdlib.ez");
+		if (local_stdlib.exists()) {
+			try {
+				CompilerInstructions ci = realParseEzFile(local_stdlib.getName(), io.readFile(local_stdlib), local_stdlib);
+				add_ci(ci);
+			} catch (Exception e) {
+				eee.exception(e);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	//
 	// MODULE STUFF
 	//
