@@ -1,0 +1,10 @@
+package std.math
+
+namespace {
+
+	randInt(x: SystemInteger, y: SystemInteger) -> SystemInteger {
+		abstract
+	}
+
+}
+
