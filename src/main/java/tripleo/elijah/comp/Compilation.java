@@ -328,9 +328,9 @@ public class Compilation {
 			try {
 				CompilerInstructions ci = realParseEzFile(local_stdlib.getName(), io.readFile(local_stdlib), local_stdlib);
 				add_ci(ci);
+				return true;
 			} catch (Exception e) {
 				eee.exception(e);
-				return true;
 			}
 		}
 		return false;
