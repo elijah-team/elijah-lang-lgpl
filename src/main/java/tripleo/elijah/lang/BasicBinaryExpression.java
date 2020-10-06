@@ -114,38 +114,6 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 				sb.append(" is_a ");
 				sb.append(abe.getRight().toString());
 				break;
-			case QIDENT:
-				break;
-			case INCREMENT:
-				sb.append("++");
-				sb.append(abe.getLeft().toString());
-				sb.append(abe.getRight().toString());
-				break;
-			case DECREMENT:
-				sb.append("--");
-				sb.append(abe.getLeft().toString());
-				sb.append(abe.getRight().toString());
-				break;
-			case NEGATION:
-				sb.append("-");
-				sb.append(abe.getLeft().toString());
-				sb.append(abe.getRight().toString());
-				break;
-			case POSITIVITY:
-				sb.append("+");
-				sb.append(abe.getLeft().toString());
-				sb.append(abe.getRight().toString());
-				break;
-			case POST_INCREMENT:
-				sb.append(abe.getLeft().toString());
-				sb.append(abe.getRight().toString());
-				sb.append("++");
-				break;
-			case POST_DECREMENT:
-				sb.append(abe.getLeft().toString());
-				sb.append("--");
-				sb.append(abe.getRight().toString());
-				break;
 			case BNOT:
 				sb.append(abe.getLeft().toString());
 				sb.append("~");
@@ -160,18 +128,6 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 				sb.append(abe.getLeft().toString());
 				sb.append("%");
 				sb.append(abe.getRight().toString());
-				break;
-			case STRING_LITERAL:
-				break;
-			case PROCEDURE_CALL:
-				break;
-			case VARREF:
-				break;
-			case IDENT:
-				break;
-			case NUMERIC:
-				break;
-			case FLOAT:
 				break;
 			case BAND:
 				sb.append(abe.getLeft().toString());
@@ -218,16 +174,6 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 				sb.append(abe.getRight().toString());
 				sb.append("--");
 				break;
-			case NEG:
-				sb.append("-");
-				sb.append(abe.getLeft().toString());
-				sb.append(abe.getRight().toString());
-				break;
-			case POS:
-				sb.append("+");
-				sb.append(abe.getLeft().toString());
-				sb.append(abe.getRight().toString());
-				break;
 			case LAND:
 				sb.append(abe.getLeft().toString());
 				sb.append(" & ");
@@ -258,11 +204,11 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 				sb.append(" DOT_EXP ");
 				sb.append(abe.getRight().toString());
 				break;
-			case INDEX_OF:
-				sb.append(abe.getLeft().toString());
-				sb.append(" INDEX_OF ");
-				sb.append(abe.getRight().toString());
-				break;
+//			case INDEX_OF:
+//				sb.append(abe.getLeft().toString());
+//				sb.append(" INDEX_OF ");
+//				sb.append(abe.getRight().toString());
+//				break;
 			case GET_ITEM:
 				sb.append(abe.getLeft().toString());
 				sb.append(" GET_ITEM ");
@@ -273,6 +219,11 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 				sb.append(" SET_ITEM ");
 				sb.append(abe.getRight().toString());
 				break;
+
+			//
+			// SHOULD PROBABLY THROW
+			//
+
 			case FUNC_EXPR:
 				sb.append(abe.getLeft().toString());
 				sb.append(" FUNC_EXPR ");
@@ -283,6 +234,67 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 				sb.append(" TO_EXPR ");
 				sb.append(abe.getRight().toString());
 				break;
+
+		case QIDENT:
+			throw new IllegalStateException();
+		case STRING_LITERAL:
+			throw new IllegalStateException();
+		case PROCEDURE_CALL:
+			throw new IllegalStateException();
+		case VARREF:
+			throw new IllegalStateException();
+		case IDENT:
+			throw new IllegalStateException();
+		case NUMERIC:
+			throw new IllegalStateException();
+		case FLOAT:
+			throw new IllegalStateException();
+
+		//
+		// SINGLE EXPRESSIONS
+		//
+
+		case INCREMENT:
+			sb.append("++");
+			sb.append(abe.getLeft().toString());
+//				sb.append(abe.getRight().toString());
+			break;
+		case DECREMENT:
+			sb.append("--");
+			sb.append(abe.getLeft().toString());
+//				sb.append(abe.getRight().toString());
+			break;
+//		case NEG://ATION:
+//			sb.append("-");
+//			sb.append(abe.getLeft().toString());
+////				sb.append(abe.getRight().toString());
+//			break;
+//		case POS://ITIVITY:
+//			sb.append("+");
+//			sb.append(abe.getLeft().toString());
+////				sb.append(abe.getRight().toString());
+//			break;
+		case NEG:
+			sb.append("-");
+			sb.append(abe.getLeft().toString());
+			sb.append(abe.getRight().toString());
+			break;
+		case POS:
+			sb.append("+");
+			sb.append(abe.getLeft().toString());
+			sb.append(abe.getRight().toString());
+			break;
+		case POST_INCREMENT:
+			sb.append(abe.getLeft().toString());
+//				sb.append(abe.getRight().toString());
+			sb.append("++");
+			break;
+		case POST_DECREMENT:
+			sb.append(abe.getLeft().toString());
+			sb.append("--");
+//				sb.append(abe.getRight().toString());
+			break;
+
 		}
 		return sb.toString();
 	}
