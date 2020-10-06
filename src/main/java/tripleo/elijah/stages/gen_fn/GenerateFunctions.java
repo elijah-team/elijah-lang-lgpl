@@ -492,7 +492,11 @@ public class GenerateFunctions {
 		IExpression left = pce.getLeft();
 		ExpressionList args = pce.getArgs();
 		//
-		int i = addProcTableEntry(left, simplify_expression(left, gf, cctx), get_args_types(args, gf), gf);
+		InstructionArgument expression_num = simplify_expression(left, gf, cctx);
+		if (expression_num == null) {
+			expression_num = gf.get_assignment_path(left, this);
+		}
+		int i = addProcTableEntry(left, expression_num, get_args_types(args, gf), gf);
 		final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
 		l.add(new IntegerIA(i));
 		l.addAll(simplify_args(args, gf, cctx));
