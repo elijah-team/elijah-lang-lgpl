@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
+import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
@@ -520,26 +521,29 @@ public class DeduceTypes2 {
 
 			final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
 			final Context ctx = gf.getContextFromPC(pc); // might be inside a loop or something
-			LookupResultList lrl2 = ctx.lookup(vte.getName());
+			final String vteName = vte.getName();
+			if (SpecialVariables.contains(vteName)) {
+				System.err.println("Skipping special variable "+vteName+" "+pn);
+			} else {
+				LookupResultList lrl2 = ctx.lookup(vteName);
 //			System.out.println("7003 "+vte.getName()+" "+ctx);
-			OS_Element best2 = lrl2.chooseBest(null);
-			if (best2 != null) {
-				found = lookup_name_calls(best2.getContext(), pn, fn1);
-				if (found) return;
+				OS_Element best2 = lrl2.chooseBest(null);
+				if (best2 != null) {
+					found = lookup_name_calls(best2.getContext(), pn, fn1);
+					if (found) return;
 
-				if (pn2 != null) {
-					found = lookup_name_calls(best2.getContext(), pn2, fn1);
+					if (pn2 != null) {
+						found = lookup_name_calls(best2.getContext(), pn2, fn1);
+					}
+
 					if (!found) {
 						//throw new NotImplementedException(); // TODO
 						module.parent.eee.reportError("Special Function not found " + pn);
 					}
+				} else {
+					throw new NotImplementedException(); // Cant find vte, should never happen
 				}
-
-			} else {
-				throw new NotImplementedException(); // Cant find vte, should never happen
 			}
-
-
 		} else
 			throw new NotImplementedException(); // pn1 is not IdentExpression
 	}
