@@ -12,6 +12,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
@@ -376,6 +377,7 @@ public class DeduceTypes2 {
 				IdentIA ident_a = (IdentIA) pte.expression_num;
 				IdentTableEntry ite = generatedFunction.getIdentTableEntry(ident_a.getIndex());
 				Stack<InstructionArgument> s = new Stack<InstructionArgument>();
+				s.push(ident_a);
 				while (ite.backlink != null) {
 //					InstructionArgument oo;
 //					ite.backlink = oo;
@@ -388,18 +390,49 @@ public class DeduceTypes2 {
 					} else
 						throw new NotImplementedException();
 				}
+				OS_Element el = null; Context ectx = ctx;
 				for (InstructionArgument ia : s) {
 					if (ia instanceof IntegerIA) {
 						throw new NotImplementedException();
 //						s.push(ite.backlink);
 					} else if (ia instanceof IdentIA) {
-						throw new NotImplementedException();
-//						s.push(ite.backlink);
+						IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) ia).getIndex());
+						//assert idte.backlink == null;
+						final String text = idte.getIdent().getText();
+						LookupResultList lrl = ectx.lookup(text);
+						el = lrl.chooseBest(null);
+						if (el != null) {
+							if (el.getContext() != null)
+								ectx = el.getContext();
+							else {
+								int yy=2;
+							}
+						} else {
+							module.parent.eee.reportError("Can't resolve "+text);
+							return; // README cant resolve pte. Maybe report error
+						}
 					} else
 						throw new NotImplementedException();
 				}
+
+				pte.resolved = el;
 			}
 		}
+	}
+
+	private LookupResultList lookupExpression(IExpression left, Context ctx) {
+		switch (left.getKind()) {
+		case QIDENT:
+			IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
+			return lookupExpression(de, ctx)/*lookup_dot_expression(ctx, de)*/;
+		case DOT_EXP:
+			return lookup_dot_expression(ctx, (DotExpression) left);
+		case IDENT:
+			return ctx.lookup(((IdentExpression) left).getText());
+		default:
+			throw new IllegalStateException();
+		}
+
 	}
 
 	private void do_assign_constant(GeneratedFunction generatedFunction, Instruction instruction, IdentTableEntry idte, ConstTableIA i2) {
