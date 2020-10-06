@@ -511,13 +511,15 @@ public class DeduceTypes2 {
 			OS_Element best;
 			if (found) return;
 
-			String pn2 = reverse_name(pn);
-//			System.out.println("7002 "+pn2);
-			found = lookup_name_calls(context, pn2, fn1);
-			if (found) return;
+			String pn2 = SpecialFunctions.reverse_name(pn);
+			if (pn2 != null) {
+//				System.out.println("7002 "+pn2);
+				found = lookup_name_calls(context, pn2, fn1);
+				if (found) return;
+			}
 
 			final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
-			final Context ctx = gf.getContextFromPC(pc);
+			final Context ctx = gf.getContextFromPC(pc); // might be inside a loop or something
 			LookupResultList lrl2 = ctx.lookup(vte.getName());
 //			System.out.println("7003 "+vte.getName()+" "+ctx);
 			OS_Element best2 = lrl2.chooseBest(null);
@@ -525,10 +527,12 @@ public class DeduceTypes2 {
 				found = lookup_name_calls(best2.getContext(), pn, fn1);
 				if (found) return;
 
-				found = lookup_name_calls(best2.getContext(), pn2, fn1);
-				if (!found) {
-					//throw new NotImplementedException(); // TODO
-					module.parent.eee.reportError("Special Function not found " + pn);
+				if (pn2 != null) {
+					found = lookup_name_calls(best2.getContext(), pn2, fn1);
+					if (!found) {
+						//throw new NotImplementedException(); // TODO
+						module.parent.eee.reportError("Special Function not found " + pn);
+					}
 				}
 
 			} else {
