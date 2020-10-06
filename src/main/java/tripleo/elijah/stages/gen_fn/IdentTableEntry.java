@@ -51,6 +51,10 @@ public class IdentTableEntry {
 				", potentialTypes=" + potentialTypes +
 				'}';
 	}
+
+	public IdentExpression getIdent() {
+		return ident;
+	}
 }
 
 //
