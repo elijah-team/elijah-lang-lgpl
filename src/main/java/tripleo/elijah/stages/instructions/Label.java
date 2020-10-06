@@ -8,21 +8,29 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+
 /**
  * Created 9/10/20 3:17 PM
  */
 public class Label implements InstructionArgument {
+	private final GeneratedFunction gf;
 	String name;
 	long index;
+	private int number;
 
-	public Label(String name) {
-		this.name = name;
+//	public Label(String name) {
+//		this.name = name;
+//	}
+
+	public Label(GeneratedFunction gf) {
+		this.gf = gf;
 	}
 
-	public Label() {
-
-	}
-
+	/**
+	 * Corresponds to pc
+	 * @param index pc
+	 */
 	public void setIndex(long index) {
 		this.index = index;
 	}
@@ -37,6 +45,18 @@ public class Label implements InstructionArgument {
 
 	public long getIndex() {
 		return index;
+	}
+
+	/**
+	 * Corresponds to the number of labels
+	 * @param number
+	 */
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public int getNumber() {
+		return number;
 	}
 }
 

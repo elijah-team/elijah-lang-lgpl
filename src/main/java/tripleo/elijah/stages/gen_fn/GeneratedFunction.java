@@ -87,12 +87,15 @@ public class GeneratedFunction {
 	}
 
 	public Label addLabel(String base_name, boolean append_int) {
-		Label label = new Label();
+		Label label = new Label(this);
 		String name;
 		if (append_int) {
+			label.setNumber(label_count);
 			name = String.format("%s%d", base_name, label_count++);
-		} else
+		} else {
 			name = base_name;
+			label.setNumber(label_count);
+		}
 		label.setName(name);
 		labelList.add(label);
 		return label;
