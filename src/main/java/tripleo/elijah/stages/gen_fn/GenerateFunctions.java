@@ -695,7 +695,7 @@ public class GenerateFunctions {
 					inst.setArgs(List_of(new IntegerIA(pte), left_instruction, right_instruction));
 					FnCallArgs fca = new FnCallArgs(inst, gf);
 					int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp), fca), cctx);
-					return new IntegerIA(x); // TODO  is this right?? we want to return the variable, not proc calls, right?
+					return new IntegerIA(tmp); // TODO  is this right?? we want to return the variable, not proc calls, right?
 				}
 //				throw new NotImplementedException();
 			}
