@@ -348,8 +348,8 @@ public class GenerateFunctions {
 
 	private void generate_if(IfConditional ifc, GeneratedFunction gf) {
 		final Context cctx = ifc.getContext();
-		Label label_next = new Label();
-		Label label_end  = new Label();
+		Label label_next = gf.addLabel();
+		Label label_end  = gf.addLabel();
 		{
 			int begin0 = add_i(gf, InstructionName.ES, null, cctx);
 			IExpression expr = ifc.getExpr();
@@ -370,7 +370,7 @@ public class GenerateFunctions {
 				List<IfConditional> parts = ifc.getParts();
 				for (IfConditional part : parts) {
 					gf.place(label_next);
-					label_next = new Label();
+					label_next = gf.addLabel();
 					if (part.getExpr() != null) {
 						InstructionArgument ii = simplify_expression(part.getExpr(), gf, cctx);
 						System.out.println("711 " + ii);
