@@ -688,8 +688,14 @@ public class GenerateFunctions {
 					TypeTableEntry tte_left  = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, left);
 					TypeTableEntry tte_right = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, right);
 					int pte = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
-					int x = add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pte), left_instruction, right_instruction), cctx);
-					return new IntegerIA(x);
+					int tmp = addTempTableEntry(expression.getType(), // README should be Boolean
+							gf);
+					Instruction inst = new Instruction();
+					inst.setName(InstructionName.CALLS);
+					inst.setArgs(List_of(new IntegerIA(pte), left_instruction, right_instruction));
+					FnCallArgs fca = new FnCallArgs(inst, gf);
+					int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp), fca), cctx);
+					return new IntegerIA(x); // TODO  is this right?? we want to return the variable, not proc calls, right?
 				}
 //				throw new NotImplementedException();
 			}
