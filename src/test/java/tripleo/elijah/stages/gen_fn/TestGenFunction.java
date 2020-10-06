@@ -109,6 +109,7 @@ public class TestGenFunction {
 		OS_Module m = c.realParseElijjahFile(f, file, false);
 //		OS_Module m = c.parseElijjahFile(file, f, eee, false);
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
+		c.findStdLib("c");
 		Assert.assertTrue("Method parsed correctly", m != null);
 
 		final GenerateFunctions gfm = new GenerateFunctions(m);
