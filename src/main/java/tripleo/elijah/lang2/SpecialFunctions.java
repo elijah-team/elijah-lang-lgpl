@@ -24,6 +24,12 @@ public class SpecialFunctions {
 		default: 				throw new NotImplementedException();
 		}
 	}
+
+	public static String reverse_name(String pn) {
+		if (pn.equals("__gt__")) // README  explicitly disallow
+			return null;
+		return null;
+	}
 }
 
 //
