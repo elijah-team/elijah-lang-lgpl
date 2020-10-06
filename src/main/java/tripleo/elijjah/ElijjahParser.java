@@ -2945,7 +2945,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		IfConditional ifex
 	) throws RecognitionException, TokenStreamException {
 		
-		IfConditionalContext ifc_top=null,ifc=null;IfConditional else_;
+		IfConditionalContext ifc_top=null,ifc=null;IfConditional else_=null;
 		
 		try {      // for error handling
 			match(LITERAL_if);
@@ -2975,7 +2975,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				match(LITERAL_else);
 				if ( inputState.guessing==0 ) {
-					else_=ifex.else();cur=else_.getContext();
+					else_=ifex.else_();cur=else_.getContext();
 				}
 				scope(else_!=null?else_.scope():null);
 				if ( inputState.guessing==0 ) {
