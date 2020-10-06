@@ -40,9 +40,9 @@ program
 indexingStatement[IndexingStatement idx]
 		{ExpressionList el=null;}
 	: "indexing" 
-		(i1:IDENT 			{idx.setName(i1);}
-		 TOK_COLON 			{el=new ExpressionList();} 
-		 expressionList[el]	{idx.setExprs(el);})*
+		(i1:IDENT 			    {idx.setName(i1);}
+		 TOK_COLON 			    //{el=new ExpressionList();}
+		 el=expressionList2		{idx.setExprs(el);})*
 	;
 constantValue returns [IExpression e]
 	 {e=null;}
@@ -51,6 +51,7 @@ constantValue returns [IExpression e]
 	|n:NUM_INT        {e=new NumericExpression(n);}
 	|f:NUM_FLOAT      {e=new FloatExpression(f);}
 	;
+/*
 primitiveExpression  returns [IExpression e]
 		{e=null;ExpressionList el=null;}
 	: e=constantValue
@@ -59,6 +60,7 @@ primitiveExpression  returns [IExpression e]
 	    expressionList[el]  {((ListExpression)e).setContents(el);}
 	  RBRACK
 	;
+*/
 qualident returns [Qualident q]
     {q=new Qualident();}
 	:
@@ -309,9 +311,11 @@ ident returns [IdentExpression id]
 		{id=null;}
 	: r1:IDENT {id=new IdentExpression(r1, cur);}
 	;
+/*
 expressionList[ExpressionList el]
 	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
 	;
+*/
 expressionList2 returns [ExpressionList el]
 		{el = new ExpressionList();}
 	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
@@ -616,9 +620,10 @@ dot_expression_or_procedure_call [IExpression e1] returns [IExpression ee]
 
 // the basic element of an expression
 primaryExpression returns [IExpression ee]
-		{ee=null;FuncExpr ppc=null;IdentExpression e=null;}
+		{ee=null;FuncExpr ppc=null;IdentExpression e=null;
+		ExpressionList el=null;}
 		//IExpression e3=null;*/}
-	:	e=ident {ee=e;}
+	:	ee=ident
 //	|	newExpression
 	|	ee=constantValue
 //	|	"super"
@@ -628,6 +633,9 @@ primaryExpression returns [IExpression ee]
 	|	"null"
 	|	LPAREN/*!*/ ee=assignmentExpression RPAREN/*!*/ {ee=new SubExpression(ee);}
 	|   {ppc=new FuncExpr();} funcExpr[ppc] {ee=ppc;}
+	| LBRACK        {ee=new ListExpression();el=new ExpressionList();}
+	    el=expressionList2  {((ListExpression)ee).setContents(el);}
+	  RBRACK
 	;
 funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 		{Scope0 sc = new Scope0(pc);TypeName tn=null;FuncExprContext ctx=null;}

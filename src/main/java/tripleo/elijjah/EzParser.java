@@ -4,7 +4,6 @@
 
 import antlr.*;
 import antlr.collections.impl.BitSet;
-import tripleo.elijah.lang.Documentable;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.GenerateStatement;
 import tripleo.elijah.ci.LibraryStatementPart;
@@ -130,10 +129,7 @@ public EzParser(ParserSharedInputState state) {
 						idx.setName(i1);
 					}
 					match(TOK_COLON);
-					if ( inputState.guessing==0 ) {
-						el=new ExpressionList();
-					}
-					expressionList(el);
+					el=expressionList2();
 					if ( inputState.guessing==0 ) {
 						idx.setExprs(el);
 					}
@@ -354,10 +350,10 @@ public EzParser(ParserSharedInputState state) {
 		return ee;
 	}
 	
-	public final void expressionList(
-		ExpressionList el
-	) throws RecognitionException, TokenStreamException {
+	public final ExpressionList  expressionList2() throws RecognitionException, TokenStreamException {
+		ExpressionList el;
 		
+		el = new ExpressionList();
 		
 		try {      // for error handling
 			expr=expression();
@@ -365,7 +361,7 @@ public EzParser(ParserSharedInputState state) {
 				el.next(expr);
 			}
 			{
-			_loop42:
+			_loop41:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
@@ -375,7 +371,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop42;
+					break _loop41;
 				}
 				
 			} while (true);
@@ -390,6 +386,7 @@ public EzParser(ParserSharedInputState state) {
 			  throw ex;
 			}
 		}
+		return el;
 	}
 	
 	public final IExpression  constantValue() throws RecognitionException, TokenStreamException {
@@ -449,159 +446,12 @@ public EzParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_7);
+				consumeUntil(_tokenSet_5);
 			} else {
 			  throw ex;
 			}
 		}
 		return e;
-	}
-	
-	public final IExpression  primitiveExpression() throws RecognitionException, TokenStreamException {
-		IExpression e;
-		
-		e=null;ExpressionList el=null;
-		
-		try {      // for error handling
-			switch ( LA(1)) {
-			case STRING_LITERAL:
-			case CHAR_LITERAL:
-			case NUM_INT:
-			case NUM_FLOAT:
-			{
-				e=constantValue();
-				break;
-			}
-			case IDENT:
-			{
-				e=variableReference();
-				break;
-			}
-			case LBRACK:
-			{
-				match(LBRACK);
-				if ( inputState.guessing==0 ) {
-					e=new ListExpression();el=new ExpressionList();
-				}
-				expressionList(el);
-				if ( inputState.guessing==0 ) {
-					((ListExpression)e).setContents(el);
-				}
-				match(RBRACK);
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(LT(1), getFilename());
-			}
-			}
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_0);
-			} else {
-			  throw ex;
-			}
-		}
-		return e;
-	}
-	
-	public final IExpression  variableReference() throws RecognitionException, TokenStreamException {
-		IExpression ee;
-		
-		Token  lp = null;
-		ProcedureCallExpression pcx;ExpressionList el=null;ee=null;IdentExpression r1=null, r2=null;
-		
-		try {      // for error handling
-			r1=ident();
-			if ( inputState.guessing==0 ) {
-				ee=r1;
-			}
-			{
-			switch ( LA(1)) {
-			case DOT:
-			{
-				match(DOT);
-				r2=ident();
-				if ( inputState.guessing==0 ) {
-					ee=new DotExpression(ee, r2);
-				}
-				break;
-			}
-			case LBRACK:
-			{
-				match(LBRACK);
-				expr=expression();
-				match(RBRACK);
-				if ( inputState.guessing==0 ) {
-					ee=new GetItemExpression(ee, expr);
-				}
-				break;
-			}
-			case LPAREN:
-			{
-				lp = LT(1);
-				match(LPAREN);
-				{
-				switch ( LA(1)) {
-				case IDENT:
-				case STRING_LITERAL:
-				case CHAR_LITERAL:
-				case NUM_INT:
-				case NUM_FLOAT:
-				case LPAREN:
-				case PLUS:
-				case MINUS:
-				case INC:
-				case DEC:
-				case BNOT:
-				case LNOT:
-				case LITERAL_true:
-				case LITERAL_false:
-				case LITERAL_this:
-				case LITERAL_null:
-				{
-					el=expressionList2();
-					break;
-				}
-				case RPAREN:
-				{
-					break;
-				}
-				default:
-				{
-					throw new NoViableAltException(LT(1), getFilename());
-				}
-				}
-				}
-				if ( inputState.guessing==0 ) {
-					ProcedureCallExpression pce=new ProcedureCallExpression();
-					pce.identifier(ee);
-					pce.setArgs(el);
-					ee=pce;
-				}
-				match(RPAREN);
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(LT(1), getFilename());
-			}
-			}
-			}
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_0);
-			} else {
-			  throw ex;
-			}
-		}
-		return ee;
 	}
 	
 	public final Qualident  qualident() throws RecognitionException, TokenStreamException {
@@ -619,7 +469,7 @@ public EzParser(ParserSharedInputState state) {
 				q.append(r1);
 			}
 			{
-			_loop23:
+			_loop22:
 			do {
 				if ((LA(1)==DOT)) {
 					d1 = LT(1);
@@ -631,7 +481,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop23;
+					break _loop22;
 				}
 				
 			} while (true);
@@ -641,7 +491,7 @@ public EzParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_8);
+				consumeUntil(_tokenSet_7);
 			} else {
 			  throw ex;
 			}
@@ -661,8 +511,8 @@ public EzParser(ParserSharedInputState state) {
 			case STRING_LITERAL:
 			{
 				{
-				int _cnt29=0;
-				_loop29:
+				int _cnt28=0;
+				_loop28:
 				do {
 					if ((LA(1)==STRING_LITERAL)) {
 						s1 = LT(1);
@@ -672,10 +522,10 @@ public EzParser(ParserSharedInputState state) {
 						}
 					}
 					else {
-						if ( _cnt29>=1 ) { break _loop29; } else {throw new NoViableAltException(LT(1), getFilename());}
+						if ( _cnt28>=1 ) { break _loop28; } else {throw new NoViableAltException(LT(1), getFilename());}
 					}
 					
-					_cnt29++;
+					_cnt28++;
 				} while (true);
 				}
 				break;
@@ -747,7 +597,7 @@ public EzParser(ParserSharedInputState state) {
 				ail.push(s);
 			}
 			{
-			_loop34:
+			_loop33:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
@@ -757,7 +607,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop34;
+					break _loop33;
 				}
 				
 			} while (true);
@@ -791,7 +641,7 @@ public EzParser(ParserSharedInputState state) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_7);
+				consumeUntil(_tokenSet_8);
 			} else {
 			  throw ex;
 			}
@@ -949,7 +799,7 @@ public EzParser(ParserSharedInputState state) {
 				qal.add(qid);
 			}
 			{
-			_loop38:
+			_loop37:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
@@ -959,7 +809,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop38;
+					break _loop37;
 				}
 				
 			} while (true);
@@ -976,43 +826,101 @@ public EzParser(ParserSharedInputState state) {
 		}
 	}
 	
-	public final ExpressionList  expressionList2() throws RecognitionException, TokenStreamException {
-		ExpressionList el;
+	public final IExpression  variableReference() throws RecognitionException, TokenStreamException {
+		IExpression ee;
 		
-		el = new ExpressionList();
+		Token  lp = null;
+		ProcedureCallExpression pcx;ExpressionList el=null;ee=null;IdentExpression r1=null, r2=null;
 		
 		try {      // for error handling
-			expr=expression();
+			r1=ident();
 			if ( inputState.guessing==0 ) {
-				el.next(expr);
+				ee=r1;
 			}
 			{
-			_loop45:
-			do {
-				if ((LA(1)==COMMA)) {
-					match(COMMA);
-					expr=expression();
-					if ( inputState.guessing==0 ) {
-						el.next(expr);
-					}
+			switch ( LA(1)) {
+			case DOT:
+			{
+				match(DOT);
+				r2=ident();
+				if ( inputState.guessing==0 ) {
+					ee=new DotExpression(ee, r2);
 				}
-				else {
-					break _loop45;
+				break;
+			}
+			case LBRACK:
+			{
+				match(LBRACK);
+				expr=expression();
+				match(RBRACK);
+				if ( inputState.guessing==0 ) {
+					ee=new GetItemExpression(ee, expr);
 				}
-				
-			} while (true);
+				break;
+			}
+			case LPAREN:
+			{
+				lp = LT(1);
+				match(LPAREN);
+				{
+				switch ( LA(1)) {
+				case IDENT:
+				case STRING_LITERAL:
+				case LBRACK:
+				case CHAR_LITERAL:
+				case NUM_INT:
+				case NUM_FLOAT:
+				case LPAREN:
+				case PLUS:
+				case MINUS:
+				case INC:
+				case DEC:
+				case BNOT:
+				case LNOT:
+				case LITERAL_true:
+				case LITERAL_false:
+				case LITERAL_this:
+				case LITERAL_null:
+				{
+					el=expressionList2();
+					break;
+				}
+				case RPAREN:
+				{
+					break;
+				}
+				default:
+				{
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				}
+				}
+				if ( inputState.guessing==0 ) {
+					ProcedureCallExpression pce=new ProcedureCallExpression();
+					pce.identifier(ee);
+					pce.setArgs(el);
+					ee=pce;
+				}
+				match(RPAREN);
+				break;
+			}
+			default:
+			{
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			}
 			}
 		}
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
 				consume();
-				consumeUntil(_tokenSet_11);
+				consumeUntil(_tokenSet_0);
 			} else {
 			  throw ex;
 			}
 		}
-		return el;
+		return ee;
 	}
 	
 	public final IExpression  conditionalExpression() throws RecognitionException, TokenStreamException {
@@ -1044,7 +952,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=logicalAndExpression();
 			{
-			_loop55:
+			_loop51:
 			do {
 				if ((LA(1)==LOR) && (_tokenSet_9.member(LA(2)))) {
 					match(LOR);
@@ -1054,7 +962,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop55;
+					break _loop51;
 				}
 				
 			} while (true);
@@ -1080,7 +988,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=inclusiveOrExpression();
 			{
-			_loop58:
+			_loop54:
 			do {
 				if ((LA(1)==LAND) && (_tokenSet_9.member(LA(2)))) {
 					match(LAND);
@@ -1090,7 +998,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop58;
+					break _loop54;
 				}
 				
 			} while (true);
@@ -1116,7 +1024,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=exclusiveOrExpression();
 			{
-			_loop61:
+			_loop57:
 			do {
 				if ((LA(1)==BOR) && (_tokenSet_9.member(LA(2)))) {
 					match(BOR);
@@ -1126,7 +1034,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop61;
+					break _loop57;
 				}
 				
 			} while (true);
@@ -1153,7 +1061,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=andExpression();
 			{
-			_loop64:
+			_loop60:
 			do {
 				if ((LA(1)==BXOR) && (_tokenSet_9.member(LA(2)))) {
 					match(BXOR);
@@ -1163,7 +1071,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop64;
+					break _loop60;
 				}
 				
 			} while (true);
@@ -1190,7 +1098,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=equalityExpression();
 			{
-			_loop67:
+			_loop63:
 			do {
 				if ((LA(1)==BAND) && (_tokenSet_9.member(LA(2)))) {
 					match(BAND);
@@ -1200,7 +1108,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop67;
+					break _loop63;
 				}
 				
 			} while (true);
@@ -1228,7 +1136,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=relationalExpression();
 			{
-			_loop71:
+			_loop67:
 			do {
 				if ((LA(1)==NOT_EQUAL||LA(1)==EQUAL) && (_tokenSet_9.member(LA(2)))) {
 					{
@@ -1261,7 +1169,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop71;
+					break _loop67;
 				}
 				
 			} while (true);
@@ -1291,7 +1199,7 @@ public EzParser(ParserSharedInputState state) {
 			ee=shiftExpression();
 			{
 			{
-			_loop76:
+			_loop72:
 			do {
 				if (((LA(1) >= LT_ && LA(1) <= GE)) && (_tokenSet_9.member(LA(2)))) {
 					{
@@ -1341,7 +1249,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop76;
+					break _loop72;
 				}
 				
 			} while (true);
@@ -1369,7 +1277,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=additiveExpression();
 			{
-			_loop80:
+			_loop76:
 			do {
 				if (((LA(1) >= SL && LA(1) <= BSR)) && (_tokenSet_9.member(LA(2)))) {
 					{
@@ -1410,7 +1318,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop80;
+					break _loop76;
 				}
 				
 			} while (true);
@@ -1437,7 +1345,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=multiplicativeExpression();
 			{
-			_loop84:
+			_loop80:
 			do {
 				if ((LA(1)==PLUS||LA(1)==MINUS) && (_tokenSet_9.member(LA(2)))) {
 					{
@@ -1470,7 +1378,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop84;
+					break _loop80;
 				}
 				
 			} while (true);
@@ -1497,7 +1405,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=unaryExpression();
 			{
-			_loop88:
+			_loop84:
 			do {
 				if (((LA(1) >= STAR && LA(1) <= MOD)) && (_tokenSet_9.member(LA(2)))) {
 					{
@@ -1538,7 +1446,7 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop88;
+					break _loop84;
 				}
 				
 			} while (true);
@@ -1602,6 +1510,7 @@ public EzParser(ParserSharedInputState state) {
 			}
 			case IDENT:
 			case STRING_LITERAL:
+			case LBRACK:
 			case CHAR_LITERAL:
 			case NUM_INT:
 			case NUM_FLOAT:
@@ -1662,6 +1571,7 @@ public EzParser(ParserSharedInputState state) {
 			}
 			case IDENT:
 			case STRING_LITERAL:
+			case LBRACK:
 			case CHAR_LITERAL:
 			case NUM_INT:
 			case NUM_FLOAT:
@@ -1704,7 +1614,7 @@ public EzParser(ParserSharedInputState state) {
 		try {      // for error handling
 			ee=primaryExpression();
 			{
-			_loop96:
+			_loop92:
 			do {
 				if ((LA(1)==DOT) && (LA(2)==IDENT)) {
 					match(DOT);
@@ -1737,13 +1647,14 @@ public EzParser(ParserSharedInputState state) {
 					
 					}
 				}
-				else if ((LA(1)==LPAREN) && (_tokenSet_12.member(LA(2)))) {
+				else if ((LA(1)==LPAREN) && (_tokenSet_11.member(LA(2)))) {
 					lp = LT(1);
 					match(LPAREN);
 					{
 					switch ( LA(1)) {
 					case IDENT:
 					case STRING_LITERAL:
+					case LBRACK:
 					case CHAR_LITERAL:
 					case NUM_INT:
 					case NUM_FLOAT:
@@ -1781,7 +1692,7 @@ public EzParser(ParserSharedInputState state) {
 					match(RPAREN);
 				}
 				else {
-					break _loop96;
+					break _loop92;
 				}
 				
 			} while (true);
@@ -1802,7 +1713,7 @@ public EzParser(ParserSharedInputState state) {
 	public final IExpression  primaryExpression() throws RecognitionException, TokenStreamException {
 		IExpression ee;
 		
-		ee=null;FuncExpr ppc=null;IdentExpression e=null;
+		ee=null;FuncExpr ppc=null;IdentExpression e=null;ExpressionList el=null;
 		
 		try {      // for error handling
 			switch ( LA(1)) {
@@ -1852,6 +1763,19 @@ public EzParser(ParserSharedInputState state) {
 				}
 				break;
 			}
+			case LBRACK:
+			{
+				match(LBRACK);
+				if ( inputState.guessing==0 ) {
+					ee=new ListExpression();
+				}
+				el=expressionList2();
+				if ( inputState.guessing==0 ) {
+					((ListExpression)ee).setContents(el);
+				}
+				match(RBRACK);
+				break;
+			}
 			default:
 			{
 				throw new NoViableAltException(LT(1), getFilename());
@@ -1884,13 +1808,14 @@ public EzParser(ParserSharedInputState state) {
 				ee=new DotExpression(e1, e);
 			}
 			{
-			if ((LA(1)==LPAREN) && (_tokenSet_12.member(LA(2)))) {
+			if ((LA(1)==LPAREN) && (_tokenSet_11.member(LA(2)))) {
 				lp2 = LT(1);
 				match(LPAREN);
 				{
 				switch ( LA(1)) {
 				case IDENT:
 				case STRING_LITERAL:
+				case LBRACK:
 				case CHAR_LITERAL:
 				case NUM_INT:
 				case NUM_FLOAT:
@@ -1945,58 +1870,6 @@ public EzParser(ParserSharedInputState state) {
 			}
 		}
 		return ee;
-	}
-	
-	public final void procCallEx(
-		ProcedureCallExpression pce
-	) throws RecognitionException, TokenStreamException {
-		
-		
-		try {      // for error handling
-			match(LPAREN);
-			{
-			switch ( LA(1)) {
-			case IDENT:
-			case STRING_LITERAL:
-			case CHAR_LITERAL:
-			case NUM_INT:
-			case NUM_FLOAT:
-			case LPAREN:
-			case PLUS:
-			case MINUS:
-			case INC:
-			case DEC:
-			case BNOT:
-			case LNOT:
-			case LITERAL_true:
-			case LITERAL_false:
-			case LITERAL_this:
-			case LITERAL_null:
-			{
-				expressionList(pce.exprList());
-				break;
-			}
-			case RPAREN:
-			{
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(LT(1), getFilename());
-			}
-			}
-			}
-			match(RPAREN);
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_0);
-			} else {
-			  throw ex;
-			}
-		}
 	}
 	
 	
@@ -2094,17 +1967,15 @@ public EzParser(ParserSharedInputState state) {
 	public static final BitSet _tokenSet_5 = new BitSet(_tokenSet_5_data_);
 	private static final long _tokenSet_6_data_[] = { 16793840L, 0L };
 	public static final BitSet _tokenSet_6 = new BitSet(_tokenSet_6_data_);
-	private static final long _tokenSet_7_data_[] = { 72057594034807282L, 0L };
+	private static final long _tokenSet_7_data_[] = { 4194306L, 0L };
 	public static final BitSet _tokenSet_7 = new BitSet(_tokenSet_7_data_);
-	private static final long _tokenSet_8_data_[] = { 4194306L, 0L };
+	private static final long _tokenSet_8_data_[] = { 72057594034807282L, 0L };
 	public static final BitSet _tokenSet_8 = new BitSet(_tokenSet_8_data_);
-	private static final long _tokenSet_9_data_[] = { -65302194587561856L, 0L };
+	private static final long _tokenSet_9_data_[] = { -65302194587553664L, 0L };
 	public static final BitSet _tokenSet_9 = new BitSet(_tokenSet_9_data_);
 	private static final long _tokenSet_10_data_[] = { -2164238L, 0L };
 	public static final BitSet _tokenSet_10 = new BitSet(_tokenSet_10_data_);
-	private static final long _tokenSet_11_data_[] = { 16777216L, 0L };
+	private static final long _tokenSet_11_data_[] = { -65302194570776448L, 0L };
 	public static final BitSet _tokenSet_11 = new BitSet(_tokenSet_11_data_);
-	private static final long _tokenSet_12_data_[] = { -65302194570784640L, 0L };
-	public static final BitSet _tokenSet_12 = new BitSet(_tokenSet_12_data_);
 	
 	}
