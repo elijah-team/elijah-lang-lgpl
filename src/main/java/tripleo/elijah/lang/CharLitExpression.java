@@ -32,8 +32,7 @@ public class CharLitExpression implements IExpression {
 	 */
 	@Override
 	public ExpressionKind getKind() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExpressionKind.CHAR_LITERAL;
 	}
 
 	/* (non-Javadoc)
