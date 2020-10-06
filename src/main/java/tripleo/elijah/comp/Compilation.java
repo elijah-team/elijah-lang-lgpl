@@ -155,16 +155,19 @@ public class Compilation {
 				return matches2;
 			}
 		};
-		for (String file_name : directory.list(f)) {
-			try {
-				final File file = new File(directory, file_name);
-				final CompilerInstructions ezFile = parseEzFile(file, file.toString(), eee);
-				if (ezFile != null)
-					R.add(ezFile);
-				else
-					eee.reportError("9995 ezFile is null "+file.toString());
-			} catch (Exception e) {
-				eee.exception(e);
+		final String[] list = directory.list(f);
+		if (list != null) {
+			for (String file_name : list) {
+				try {
+					final File file = new File(directory, file_name);
+					final CompilerInstructions ezFile = parseEzFile(file, file.toString(), eee);
+					if (ezFile != null)
+						R.add(ezFile);
+					else
+						eee.reportError("9995 ezFile is null "+file.toString());
+				} catch (Exception e) {
+					eee.exception(e);
+				}
 			}
 		}
 		return R;
@@ -200,8 +203,11 @@ public class Compilation {
 				return matches;
 			}
 		};
-		for (File file : dir.listFiles(accept_source_files)) {
-			parseElijjahFile(file, file.toString(), eee, do_out);
+		final File[] files = dir.listFiles(accept_source_files);
+		if (files != null) {
+			for (File file : files) {
+				parseElijjahFile(file, file.toString(), eee, do_out);
+			}
 		}
 	}
 
