@@ -78,7 +78,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 	}
 
 	public void setContext(CaseContext ctx) {
-		throw new NotImplementedException();
+//		throw new NotImplementedException(); // UNCOMMENTME
 	}
 
 	public class CaseScope implements OS_Container, OS_Element {
