@@ -154,8 +154,8 @@ public class GenerateFunctions {
 				switch (expressionKind) {
 				case ASSIGNMENT:
 					System.err.println(String.format("703.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
-//					throw new IllegalStateException(); // UNCOMMENTME
-//					generate_item_assignment(x, gf, cctx);
+//					throw new IllegalStateException();
+					generate_item_assignment(x, gf, cctx);
 //					break;
 				case AUG_MULT:
 					{
