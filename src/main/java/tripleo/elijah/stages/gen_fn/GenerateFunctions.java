@@ -8,6 +8,9 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
@@ -19,6 +22,7 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static tripleo.elijah.lang.ExpressionKind.PROCEDURE_CALL;
@@ -493,6 +497,26 @@ public class GenerateFunctions {
 				System.err.println("109-0 error expr not found "+expression);
 			}
 		}
+		return R;
+	}
+
+	private Collection<InstructionArgument> simplify_args2(ExpressionList args, GeneratedFunction gf, Context cctx) {
+		Collection<InstructionArgument> R = new ArrayList<InstructionArgument>();
+		if (args == null) return R;
+		//
+		R = Collections2.transform(args.expressions(), new Function<IExpression, InstructionArgument>() {
+			@Override
+			public @Nullable InstructionArgument apply(@Nullable IExpression input) {
+				@Nullable IExpression expression = input;
+				InstructionArgument ia = simplify_expression(expression, gf, cctx);
+				if (ia != null) {
+					System.err.println("109 "+expression);
+				} else {
+					System.err.println("109-0 error expr not found "+expression);
+				}
+				return ia;
+			}
+		});
 		return R;
 	}
 
