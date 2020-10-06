@@ -618,7 +618,7 @@ public class GenerateFunctions {
 					i.setName(InstructionName.CALL);
 					i.setArgs(right_ia);
 					int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp_var), new FnCallArgs(i, gf)), cctx);
-					return new IntegerIA(x);
+					return new IntegerIA(tmp_var); // return tmp_var instead of expression assigning it
 				}
 			}
 //			throw new NotImplementedException();
