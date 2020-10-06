@@ -1,5 +1,7 @@
 indexing
-	date: "0411201943"
+	date: ["0411201943", "1006200619"]
+
+import std.math
 
 class Main { main() {
 
