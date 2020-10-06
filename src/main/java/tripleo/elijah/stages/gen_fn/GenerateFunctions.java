@@ -317,6 +317,7 @@ public class GenerateFunctions {
 			}
 			break;
 		default:
+			System.err.println("right1.getKind(): "+right1.getKind());
 			throw new NotImplementedException();
 		}
 	}
