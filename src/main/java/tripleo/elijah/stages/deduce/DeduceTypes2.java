@@ -107,7 +107,7 @@ public class DeduceTypes2 {
 							vte.addPotentialType(instruction.getIndex(), vte2.type);
 						} else if (i2 instanceof FnCallArgs) {
 							FnCallArgs fca = (FnCallArgs) i2;
-							do_assign_call(generatedFunction, fd_ctx, vte, fca, instruction.getIndex());
+							do_assign_call(generatedFunction, fd_ctx, vte, fca, instruction);
 						} else if (i2 instanceof ConstTableIA) {
 							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
 						} else if (i2 instanceof IdentIA) {
@@ -301,7 +301,8 @@ public class DeduceTypes2 {
 		vte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
-	private void do_assign_call(GeneratedFunction generatedFunction, Context ctx, VariableTableEntry vte, FnCallArgs fca, int instructionIndex) {
+	private void do_assign_call(GeneratedFunction generatedFunction, Context ctx, VariableTableEntry vte, FnCallArgs fca, Instruction instruction) {
+		int instructionIndex = instruction.getIndex();
 		ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		for (TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
 			System.out.println("770 "+tte);
@@ -311,7 +312,7 @@ public class DeduceTypes2 {
 			case NUMERIC:
 				{
 					tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
-					vte.type = tte;
+					//vte.type = tte;
 				}
 				break;
 			case IDENT:
@@ -332,6 +333,23 @@ public class DeduceTypes2 {
 						throw new NotImplementedException();
 				}
 				break;
+			case PROCEDURE_CALL:
+				{
+					ProcedureCallExpression pce = (ProcedureCallExpression) e;
+					LookupResultList lrl = lookupExpression(pce.getLeft(), ctx);
+					OS_Element best = lrl.chooseBest(null);
+					if (best != null) {
+						if (best instanceof FunctionDef) { // TODO what about alias?
+							tte.attached = new OS_FuncType((FunctionDef) best);
+							//vte.addPotentialType(instructionIndex, tte);
+						} else {
+							int y=2;
+						}
+					} else {
+						int y=2;
+					}
+				}
+				break;
 			default:
 				{
 					throw new NotImplementedException();
@@ -340,13 +358,19 @@ public class DeduceTypes2 {
 		}
 		{
 			if (pte.expression_num == null) {
-				LookupResultList lrl = ctx.lookup(((IdentExpression) pte.expression).getText());
+				if (fca.expression_to_call.getName() != InstructionName.CALLS) {
+					final String text = ((IdentExpression) pte.expression).getText();
+					LookupResultList lrl = ctx.lookup(text);
 
-				OS_Element best = lrl.chooseBest(null);
-				if (best != null)
-					pte.resolved = best; // TODO do we need to add a dependency for class?
-				else
-					throw new NotImplementedException();
+					OS_Element best = lrl.chooseBest(null);
+					if (best != null)
+						pte.resolved = best; // TODO do we need to add a dependency for class?
+					else {
+						module.parent.eee.reportError("Cant resolve "+text);
+					}
+				} else {
+					implement_calls(generatedFunction, ctx.getParent(), instruction.getArg(1), pte, instructionIndex);
+				}
 			} else {
 				int y=2;
 				IdentIA ident_a = (IdentIA) pte.expression_num;
