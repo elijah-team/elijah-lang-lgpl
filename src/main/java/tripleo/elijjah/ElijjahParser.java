@@ -2744,14 +2744,14 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				formalArgListItem_priv(fal.next());
 				{
-				_loop252:
+				_loop254:
 				do {
 					if ((LA(1)==COMMA)) {
 						match(COMMA);
 						formalArgListItem_priv(fal.next());
 					}
 					else {
-						break _loop252;
+						break _loop254;
 					}
 					
 				} while (true);
@@ -2958,13 +2958,30 @@ public ElijjahParser(ParserSharedInputState state) {
 				cur=cur.getParent();
 			}
 			{
-			_loop201:
+			_loop203:
 			do {
-				if ((LA(1)==LITERAL_else||LA(1)==LITERAL_elseif) && (_tokenSet_49.member(LA(2)))) {
+				boolean synPredMatched202 = false;
+				if (((LA(1)==LITERAL_else||LA(1)==LITERAL_elseif) && (_tokenSet_49.member(LA(2))))) {
+					int _m202 = mark();
+					synPredMatched202 = true;
+					inputState.guessing++;
+					try {
+						{
+						match(LITERAL_else);
+						match(LITERAL_if);
+						}
+					}
+					catch (RecognitionException pe) {
+						synPredMatched202 = false;
+					}
+					rewind(_m202);
+					inputState.guessing--;
+				}
+				if ( synPredMatched202 ) {
 					elseif_part(ifex.elseif());
 				}
 				else {
-					break _loop201;
+					break _loop203;
 				}
 				
 			} while (true);
@@ -3064,8 +3081,8 @@ public ElijjahParser(ParserSharedInputState state) {
 				ctx=new MatchContext(cur, mc);mc.setContext(ctx);cur=ctx;
 			}
 			{
-			int _cnt207=0;
-			_loop207:
+			int _cnt209=0;
+			_loop209:
 			do {
 				if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
 					if ( inputState.guessing==0 ) {
@@ -3104,10 +3121,10 @@ public ElijjahParser(ParserSharedInputState state) {
 					scope(mcp3.scope());
 				}
 				else {
-					if ( _cnt207>=1 ) { break _loop207; } else {throw new NoViableAltException(LT(1), getFilename());}
+					if ( _cnt209>=1 ) { break _loop209; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt207++;
+				_cnt209++;
 			} while (true);
 			}
 			match(RCURLY);
@@ -3143,14 +3160,14 @@ public ElijjahParser(ParserSharedInputState state) {
 				ctx=new CaseContext(cur, mc);mc.setContext(ctx);cur=ctx;
 			}
 			{
-			_loop210:
+			_loop212:
 			do {
 				if ((_tokenSet_18.member(LA(1)))) {
 					expr=expression();
 					scope(mc.scope(expr));
 				}
 				else {
-					break _loop210;
+					break _loop212;
 				}
 				
 			} while (true);
@@ -3395,14 +3412,14 @@ public ElijjahParser(ParserSharedInputState state) {
 				cr.add(tn);
 			}
 			{
-			_loop245:
+			_loop247:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
 					tn=typeName2();
 				}
 				else {
-					break _loop245;
+					break _loop247;
 				}
 				
 			} while (true);
