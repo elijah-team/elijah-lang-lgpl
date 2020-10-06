@@ -242,8 +242,8 @@ public class Compilation {
 		final InputStream s = io.readFile(file);
 		try {
 			OS_Module R = parseFile_(f, s, do_out);
-			s.close();
 			fn2m.put(f, R);
+			s.close();
 			return R;
 		} catch (ANTLRException e) {
 			System.err.println(("parser exception: " + e));
@@ -260,8 +260,8 @@ public class Compilation {
 		try {
 			CompilerInstructions R = parseEzFile_(f, s);
 			R.setFilename(file.toString());
-			s.close();
 			fn2ci.put(f, R);
+			s.close();
 			return R;
 		} catch (ANTLRException e) {
 			System.err.println(("parser exception: " + e));
