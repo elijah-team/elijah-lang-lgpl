@@ -18,7 +18,7 @@ import java.util.Map;
  * Created 9/10/20 4:51 PM
  */
 public class VariableTableEntry {
-	public final int index;
+	private final int index;
 	private final String name;
 	public TypeTableEntry type;
 	private final VariableTableType vtt;
@@ -52,6 +52,10 @@ public class VariableTableEntry {
 
 	public Collection<TypeTableEntry> potentialTypes() {
 		return potentialTypes.values();
+	}
+
+	public int getIndex() {
+		return index;
 	}
 }
 

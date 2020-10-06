@@ -790,14 +790,14 @@ public class GenerateFunctions {
 	private int addVariableTableEntry(String name, VariableTableType vtt, TypeTableEntry type, GeneratedFunction gf) {
 		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), vtt, name, type);
 		gf.vte_list.add(vte);
-		return vte.index;
+		return vte.getIndex();
 	}
 
 	private int addTempTableEntry(OS_Type type, GeneratedFunction gf) {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type);
 		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, null, tte);
 		gf.vte_list.add(vte);
-		return vte.index;
+		return vte.getIndex();
 	}
 
 /*
@@ -813,7 +813,7 @@ public class GenerateFunctions {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, name);
 		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, name.getText(), tte);
 		gf.vte_list.add(vte);
-		return vte.index;
+		return vte.getIndex();
 	}
 
 	/**
