@@ -21,7 +21,7 @@ import java.util.List;
  * Created 9/10/20 3:36 PM
  */
 public class FnCallArgs implements InstructionArgument {
-    private final Instruction expression_to_call;
+    public final Instruction expression_to_call;
     private final GeneratedFunction gf;
 
     @Override
