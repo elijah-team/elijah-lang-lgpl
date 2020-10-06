@@ -184,6 +184,8 @@ public class Compilation {
 			File dir = new File(dir_name);
 			if (dir_name.equals(".."))
 				dir = instruction_dir/*.getAbsoluteFile()*/.getParentFile();
+			else
+				dir = new File(instruction_dir, dir_name);
 			use_internal(dir, do_out);
 		}
 		use_internal(instruction_dir, do_out);
@@ -236,8 +238,8 @@ public class Compilation {
 	}
 
 	public OS_Module realParseElijjahFile(String f, File file, boolean do_out) throws Exception {
-		if (fn2m.containsKey(f)) { // don't parse twice
-			return fn2m.get(f);
+		if (fn2m.containsKey(file.toString())) { // don't parse twice
+			return fn2m.get(file.toString());
 		}
 		final InputStream s = io.readFile(file);
 		try {
@@ -254,8 +256,8 @@ public class Compilation {
 	}
 
 	public CompilerInstructions realParseEzFile(String f, InputStream s, File file) throws Exception {
-		if (fn2ci.containsKey(f)) { // don't parse twice
-			return fn2ci.get(f);
+		if (fn2ci.containsKey(file.toString())) { // don't parse twice
+			return fn2ci.get(file.toString());
 		}
 		try {
 			CompilerInstructions R = parseEzFile_(f, s);
