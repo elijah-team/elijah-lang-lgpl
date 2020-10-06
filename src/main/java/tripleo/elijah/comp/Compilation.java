@@ -22,6 +22,7 @@ import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes;
 import tripleo.elijah.stages.translate.TranslateModule;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
 import tripleo.elijjah.EzLexer;
@@ -176,18 +177,13 @@ public class Compilation {
 	private void use(CompilerInstructions compilerInstructions, boolean do_out) throws Exception {
 		final File instruction_dir = new File(compilerInstructions.getFilename()).getParentFile();
 		for (LibraryStatementPart lsp : compilerInstructions.lsps) {
-			String dir_name = string_expression_to_string(lsp.getDirName());
+			String dir_name = Helpers.remove_single_quotes_from_string(lsp.getDirName());
 			File dir = new File(dir_name);
 			if (dir_name.equals(".."))
 				dir = instruction_dir/*.getAbsoluteFile()*/.getParentFile();
 			use_internal(dir, do_out);
 		}
 		use_internal(instruction_dir, do_out);
-	}
-
-	@NotNull
-	private static String string_expression_to_string(String s) {
-		return s.substring(1, s.length()-1);
 	}
 
 	private void use_internal(File dir, boolean do_out) throws Exception {

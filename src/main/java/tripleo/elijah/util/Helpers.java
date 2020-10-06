@@ -73,6 +73,11 @@ public class Helpers {
 		CommonToken t = new CommonToken(ElijjahTokenTypes.IDENT, txt);
 		return new IdentExpression(t);
 	}
+
+	@NotNull
+	public static String remove_single_quotes_from_string(String s) {
+		return s.substring(1, s.length()-1);
+	}
 }
 
 //
