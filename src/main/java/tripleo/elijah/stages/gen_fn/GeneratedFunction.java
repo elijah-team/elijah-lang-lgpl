@@ -102,10 +102,6 @@ public class GeneratedFunction {
 		label.setIndex(instruction_index);
 	}
 
-	public void setLabel(Label l) {
-		l.setIndex(instruction_index);
-	}
-
 	public List<Label> labels() {
 		return labelList;
 	}
