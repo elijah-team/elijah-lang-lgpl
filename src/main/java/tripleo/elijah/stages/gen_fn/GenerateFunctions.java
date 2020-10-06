@@ -408,7 +408,7 @@ public class GenerateFunctions {
 					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(i), ia1), cctx);
 				Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
-				Label label_bottom = gf.addLabel("bottom"+label_top, false);
+				Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
 				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(i), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
 				add_i(gf, InstructionName.JE, List_of(label_bottom), cctx);
 				for (StatementItem statementItem : loop.getItems()) {
@@ -436,7 +436,7 @@ public class GenerateFunctions {
 //					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(loop_iterator), ia1), cctx);
 				Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
-				Label label_bottom = gf.addLabel("bottom"+label_top, false);
+				Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
 				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(loop_iterator), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
 				add_i(gf, InstructionName.JE, List_of(label_bottom), cctx);
 				for (StatementItem statementItem : loop.getItems()) {
