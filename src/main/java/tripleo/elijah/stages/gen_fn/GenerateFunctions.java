@@ -267,11 +267,20 @@ public class GenerateFunctions {
 		switch (right1.getKind()) {
 		case PROCEDURE_CALL: {
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft());
-			int ii = addVariableTableEntry(((IdentExpression)bbe.getLeft()).getText(), tte, gf);
-			int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
-			Instruction instruction = gf.getInstruction(instruction_number);
-			VariableTableEntry vte = gf.getVarTableEntry(ii);
-			vte.addPotentialType(instruction.getIndex(), tte);
+			final String text = ((IdentExpression) bbe.getLeft()).getText();
+			InstructionArgument lookup = gf.vte_lookup(text);
+			if (lookup != null) {
+				int instruction_number = add_i(gf, InstructionName.AGN, List_of(lookup, new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
+				Instruction instruction = gf.getInstruction(instruction_number);
+				VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lookup).getIndex());
+				vte.addPotentialType(instruction.getIndex(), tte);
+			} else {
+				int ii = addVariableTableEntry(text, tte, gf);
+				int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
+				Instruction instruction = gf.getInstruction(instruction_number);
+				VariableTableEntry vte = gf.getVarTableEntry(ii);
+				vte.addPotentialType(instruction.getIndex(), tte);
+			}
 		}
 		break;
 		case IDENT: {
