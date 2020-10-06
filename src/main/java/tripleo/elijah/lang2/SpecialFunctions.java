@@ -21,6 +21,7 @@ public class SpecialFunctions {
 		case GT: 				return "__gt__";
 		case INCREMENT: 		return "__preinc__";
 		case AUG_MULT:			return "__imult__";
+		case ASSIGNMENT:		return "__assign__";
 		default: 				throw new NotImplementedException();
 		}
 	}
