@@ -177,7 +177,7 @@ public class Compilation {
 		cis.add(ci);
 	}
 
-	private void use(CompilerInstructions compilerInstructions, boolean do_out) throws Exception {
+	public void use(CompilerInstructions compilerInstructions, boolean do_out) throws Exception {
 		final File instruction_dir = new File(compilerInstructions.getFilename()).getParentFile();
 		for (LibraryStatementPart lsp : compilerInstructions.lsps) {
 			String dir_name = Helpers.remove_single_quotes_from_string(lsp.getDirName());

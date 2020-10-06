@@ -10,6 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.junit.Assert;
 import org.junit.Test;
+import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
@@ -111,6 +112,10 @@ public class TestGenFunction {
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 		c.findStdLib("c");
 		Assert.assertTrue("Method parsed correctly", m != null);
+
+		for (CompilerInstructions ci : c.cis) {
+			c.use(ci, false);
+		}
 
 		final GenerateFunctions gfm = new GenerateFunctions(m);
 		List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
