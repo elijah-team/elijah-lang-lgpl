@@ -82,6 +82,10 @@ public class GeneratedFunction {
 	// LABELS
 	//
 
+	public Label addLabel() {
+		return addLabel("__label", true);
+	}
+
 	public Label addLabel(String base_name, boolean append_int) {
 		Label label = new Label();
 		String name;
