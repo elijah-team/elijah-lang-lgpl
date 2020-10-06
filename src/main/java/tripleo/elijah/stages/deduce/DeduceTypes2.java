@@ -339,12 +339,42 @@ public class DeduceTypes2 {
 			}
 		}
 		{
-			LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
-			OS_Element best = lrl.chooseBest(null);
-			if (best != null)
-				pte.resolved = best; // TODO do we need to add a dependency for class?
-			else
-				throw new NotImplementedException();
+			if (pte.expression_num == null) {
+				LookupResultList lrl = ctx.lookup(((IdentExpression) pte.expression).getText());
+
+				OS_Element best = lrl.chooseBest(null);
+				if (best != null)
+					pte.resolved = best; // TODO do we need to add a dependency for class?
+				else
+					throw new NotImplementedException();
+			} else {
+				int y=2;
+				IdentIA ident_a = (IdentIA) pte.expression_num;
+				IdentTableEntry ite = generatedFunction.getIdentTableEntry(ident_a.getIndex());
+				Stack<InstructionArgument> s = new Stack<InstructionArgument>();
+				while (ite.backlink != null) {
+//					InstructionArgument oo;
+//					ite.backlink = oo;
+					if (ite.backlink instanceof IntegerIA) {
+//						throw new NotImplementedException();
+						s.push(ite.backlink);
+					} else if (ite.backlink instanceof IdentIA) {
+//						throw new NotImplementedException();
+						s.push(ite.backlink);
+					} else
+						throw new NotImplementedException();
+				}
+				for (InstructionArgument ia : s) {
+					if (ia instanceof IntegerIA) {
+						throw new NotImplementedException();
+//						s.push(ite.backlink);
+					} else if (ia instanceof IdentIA) {
+						throw new NotImplementedException();
+//						s.push(ite.backlink);
+					} else
+						throw new NotImplementedException();
+				}
+			}
 		}
 	}
 
