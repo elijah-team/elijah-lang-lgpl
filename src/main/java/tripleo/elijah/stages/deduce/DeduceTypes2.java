@@ -169,8 +169,10 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 						if (best != null) {
 							fn1.resolved = best; // TODO check arity and arg matching
-						} else
+						} else {
+							System.err.println(pn1);
 							throw new NotImplementedException();
+						}
 					} else {
 						System.out.println("10153 "+pn1.getClass().getName());
 						throw new NotImplementedException();
