@@ -524,30 +524,60 @@ public class DeduceTypes2 {
 				if (found) return;
 			}
 
-			final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
-			final Context ctx = gf.getContextFromPC(pc); // might be inside a loop or something
-			final String vteName = vte.getName();
-			if (SpecialVariables.contains(vteName)) {
-				System.err.println("Skipping special variable "+vteName+" "+pn);
-			} else {
-				LookupResultList lrl2 = ctx.lookup(vteName);
-//			System.out.println("7003 "+vte.getName()+" "+ctx);
-				OS_Element best2 = lrl2.chooseBest(null);
-				if (best2 != null) {
-					found = lookup_name_calls(best2.getContext(), pn, fn1);
-					if (found) return;
+			if (i2 instanceof IntegerIA) {
+				final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
+				final Context ctx = gf.getContextFromPC(pc); // might be inside a loop or something
+				final String vteName = vte.getName();
+				if (vteName != null) {
+					if (SpecialVariables.contains(vteName)) {
+						System.err.println("Skipping special variable " + vteName + " " + pn);
+					} else {
+						LookupResultList lrl2 = ctx.lookup(vteName);
+//						System.out.println("7003 "+vte.getName()+" "+ctx);
+						OS_Element best2 = lrl2.chooseBest(null);
+						if (best2 != null) {
+							found = lookup_name_calls(best2.getContext(), pn, fn1);
+							if (found) return;
 
-					if (pn2 != null) {
-						found = lookup_name_calls(best2.getContext(), pn2, fn1);
-					}
+							if (pn2 != null) {
+								found = lookup_name_calls(best2.getContext(), pn2, fn1);
+							}
 
-					if (!found) {
-						//throw new NotImplementedException(); // TODO
-						module.parent.eee.reportError("Special Function not found " + pn);
+							if (!found) {
+								//throw new NotImplementedException(); // TODO
+								module.parent.eee.reportError("Special Function not found " + pn);
+							}
+						} else {
+							throw new NotImplementedException(); // Cant find vte, should never happen
+						}
 					}
 				} else {
-					throw new NotImplementedException(); // Cant find vte, should never happen
+					Collection<TypeTableEntry> t = vte.potentialTypes();
+					ArrayList<TypeTableEntry> tt = new ArrayList<TypeTableEntry>(t);
+					if (tt.size() == 1) {
+						OS_Type x = tt.get(0).attached;
+						if (x.getType() == OS_Type.Type.USER_CLASS) {
+							Context ctx1 = x.getClassOf().getContext();
+
+							found = lookup_name_calls(ctx1, pn, fn1);
+							if (found) return;
+
+							if (pn2 != null) {
+								found = lookup_name_calls(ctx1, pn2, fn1);
+							}
+
+							if (!found) {
+								//throw new NotImplementedException(); // TODO
+								module.parent.eee.reportError("Special Function not found " + pn);
+							}
+						} else
+							assert false;
+					} else
+						assert false;
 				}
+			} else {
+				int y=2;
+				System.err.println("i2 is not IntegerIA");
 			}
 		} else
 			throw new NotImplementedException(); // pn1 is not IdentExpression
