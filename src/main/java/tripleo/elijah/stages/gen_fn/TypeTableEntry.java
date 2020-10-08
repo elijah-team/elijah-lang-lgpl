@@ -40,7 +40,11 @@ public class TypeTableEntry {
                 '}';
     }
 
-    public enum Type {
+    public int getIndex() {
+        return index;
+    }
+
+	public enum Type {
         SPECIFIED, TRANSIENT
     }
 
