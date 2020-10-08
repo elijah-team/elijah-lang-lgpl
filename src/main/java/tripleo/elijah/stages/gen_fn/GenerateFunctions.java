@@ -677,15 +677,16 @@ public class GenerateFunctions {
 //			throw new NotImplementedException();
 		case DOT_EXP: {
 			DotExpression de = (DotExpression) expression;
-			IExpression expr = de.getLeft();
-			do {
-				InstructionArgument i = simplify_expression(expr, gf, cctx);
-				VariableTableEntry x = gf.vte_list.get(to_int(i)/*((IntegerIA) i).getIndex()*/);
-				System.err.println("901 "+x+" "+expr.getType());
-				expr = de.getRight();
-			} while (expr != null);
+			return gf.get_assignment_path(de, this);
+//			IExpression expr = de.getLeft();
+//			do {
+//				InstructionArgument i = simplify_expression(expr, gf, cctx);
+//				VariableTableEntry x = gf.vte_list.get(to_int(i)/*((IntegerIA) i).getIndex()*/);
+//				System.err.println("901 "+x+" "+expr.getType());
+//				expr = de.getRight();
+//			} while (expr != null);
 		}
-		break;
+//		break;
 		case QIDENT:
 			throw new NotImplementedException();
 		case IDENT:
@@ -755,7 +756,7 @@ public class GenerateFunctions {
 		default:
 			throw new NotImplementedException();
 		}
-		return null;
+//		return null;
 	}
 
 	private List<TypeTableEntry> get_args_types(ExpressionList args, GeneratedFunction gf) {
