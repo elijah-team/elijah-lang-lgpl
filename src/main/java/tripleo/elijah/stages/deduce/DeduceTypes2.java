@@ -183,6 +183,9 @@ public class DeduceTypes2 {
 					int i2i = to_int(i2);
 					VariableTableEntry vte = generatedFunction.getVarTableEntry(i2i);
 					int y =2;
+				} else if (i2 instanceof IdentIA) {
+					int y=2;
+					System.err.println("i2 is IdentIA");
 				} else
 					throw new NotImplementedException();
 			}
