@@ -11,10 +11,7 @@
  */
 package tripleo.elijah.contexts;
 
-import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.IdentExpression;
-import tripleo.elijah.lang.LookupResultList;
-import tripleo.elijah.lang.Loop;
+import tripleo.elijah.lang.*;
 
 import java.util.List;
 
@@ -36,10 +33,12 @@ public class LoopContext extends Context {
 	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
 		alreadySearched.add(carrier.getContext());
 
-		if (carrier.getIterName() != null) {
-			if (name.equals(carrier.getIterName())) { // reversed to prevent NPEs
-				IdentExpression ie = carrier.getIterNameToken();
-				Result.add(name, level, ie, this);
+		if (carrier.getIterNameToken() != null) {
+			if (carrier.getIterName() != null) {
+				if (name.equals(carrier.getIterName())) { // reversed to prevent NPEs
+					IdentExpression ie = carrier.getIterNameToken();
+					Result.add(name, level, ie, this);
+				}
 			}
 		}
 
