@@ -7,11 +7,12 @@
  *
  */
 /**
- * 
+ *
  */
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.contexts.MatchConditionalContext;
 import tripleo.elijah.contexts.MatchContext;
 import tripleo.elijah.contexts.SingleIdentContext;
 import tripleo.elijah.gen.ICodeGen;
@@ -28,6 +29,7 @@ import java.util.List;
 public class MatchConditional implements OS_Element, StatementItem, FunctionItem {
 
 	private final SingleIdentContext _ctx;
+	private final List<MC1> parts = new ArrayList<MC1>();
 	private IExpression expr;
 	private OS_Element parent;
 	private MatchContext __ctx;
@@ -37,6 +39,9 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		this._ctx = new SingleIdentContext(parentContext, this);
 	}
 
+	public List<MC1> getParts() {
+		return parts;
+	}
 
 	/**
 	 * @category OS_Element
@@ -54,6 +59,10 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		return this.parent;
 	}
 
+	public void setParent(OS_Element aParent) {
+		this.parent = aParent;
+	}
+
 	/**
 	 * @category OS_Element
 	 * @return
@@ -64,21 +73,52 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		return __ctx;
 	}
 
-	public void setParent(OS_Element aParent) {
-		this.parent = aParent;
+	public void setContext(MatchContext ctx) {
+		__ctx = ctx;
 	}
 
 	public void postConstruct() {
 	}
 
-	public void setContext(MatchContext ctx) {
-		__ctx=ctx;
+	//
+	// EXPR
+	//
+
+	public IExpression getExpr() {
+		return expr;
 	}
 
-	interface MC1 extends Documentable {
+	public void expr(IExpression expr) {
+		this.expr = expr;
+	}
+
+	//
+	//
+	//
+	public MatchConditionalPart1 typeMatch() {
+		final MatchConditionalPart1 p = new MatchConditionalPart1();
+		parts.add(p);
+		return p;
+	}
+
+	public MatchConditionalPart2 normal() {
+		final MatchConditionalPart2 p = new MatchConditionalPart2();
+		parts.add(p);
+		return p;
+	}
+
+	public MatchConditionalPart3 valNormal() {
+		final MatchConditionalPart3 p = new MatchConditionalPart3();
+		parts.add(p);
+		return p;
+	}
+
+	public interface MC1 extends Documentable {
 		void add(FunctionItem aItem);
 
-//		void addDocString(String text);
+		Context getContext();
+
+		Iterable<? extends FunctionItem> getItems();
 	}
 
 	private final class MatchConditionalScope implements Scope {
@@ -146,9 +186,10 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 	public class MatchConditionalPart3 implements MC1 {
 
-		private List<Token> docstrings = null;
-		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+		private final Context ___ctx = new MatchConditionalContext(MatchConditional.this.getContext(), this);
 
+		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+		private List<Token> docstrings = null;
 		private IdentExpression matching_expression;
 
 		public void expr(IdentExpression expr) {
@@ -165,6 +206,16 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
+		public Context getContext() {
+			return ___ctx;
+		}
+
+		@Override
+		public Iterable<? extends FunctionItem> getItems() {
+			return items;
+		}
+
+		@Override
 		public void addDocString(Token text) {
 			if (docstrings == null)
 				docstrings = new ArrayList<Token>();
@@ -174,10 +225,20 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 	public class MatchConditionalPart2 implements MC1 {
 
-		private List<Token> docstrings = new ArrayList<Token>();
-		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+		private final Context ___ctx = new MatchConditionalContext(MatchConditional.this.getContext(), this);
 
+		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+		private List<Token> docstrings = new ArrayList<Token>();
 		private IExpression matching_expression;
+
+		@Override
+		public List<FunctionItem> getItems() {
+			return items;
+		}
+
+		public IExpression getMatchingExpression() {
+			return matching_expression;
+		}
 
 		public void expr(IExpression expr) {
 			this.matching_expression = expr;
@@ -198,14 +259,20 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 				docstrings = new ArrayList<Token>();
 			docstrings.add(text);
 		}
+
+		@Override
+		public Context getContext() {
+			return ___ctx;
+		}
 	}
 
 	public class MatchConditionalPart1 implements MC1 {
 
-		private List<Token> docstrings = new ArrayList<Token>();
 		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+		private final Context ___ctx = new MatchConditionalContext(MatchConditional.this.getContext(), this);
 
 		TypeName tn /*= new RegularTypeName()*/;
+		private List<Token> docstrings = new ArrayList<Token>();
 		private IdentExpression ident;
 
 		public void ident(IdentExpression i1) {
@@ -232,37 +299,27 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 			docstrings.add(text);
 		}
 
+		@Override
+		public List<FunctionItem> getItems() {
+			return items;
+		}
+
+		public TypeName getTypeName() {
+			return tn;
+		}
+
 		public void setTypeName(TypeName typeName) {
 			tn = typeName;
 		}
-	}
 
-	//
-	// EXPR
-	//
+		public IdentExpression getIdent() {
+			return ident;
+		}
 
-	public IExpression getExpr() {
-		return expr;
-	}
-
-	public void expr(IExpression expr) {
-		this.expr = expr;
-	}
-
-	//
-	//
-	//
-
-	public MatchConditionalPart1 typeMatch() {
-		return new MatchConditionalPart1();
-	}
-
-	public MatchConditionalPart2 normal() {
-		return new MatchConditionalPart2();
-	}
-
-	public MatchConditionalPart3 valNormal() {
-		return new MatchConditionalPart3();
+		@Override
+		public Context getContext() {
+			return ___ctx;
+		}
 	}
 
 }
