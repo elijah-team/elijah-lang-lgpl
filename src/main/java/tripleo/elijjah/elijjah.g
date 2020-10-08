@@ -288,7 +288,7 @@ statement[StatementClosure cr, OS_Element aParent]
 	| frobeIteration[cr]
 	| "construct" q=qualident o=opfal2 {cr.constructExpression(q,o);}
 	| "yield" expr=expression {cr.yield(expr);}
-	) (SEMI|)
+	) opt_semi
 	;
 opt_semi: (SEMI|);
 identList2 returns [IdentList ail]
@@ -320,6 +320,7 @@ expressionList2 returns [ExpressionList el]
 		{el = new ExpressionList();}
 	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
 	;
+/*
 variableReference returns [IExpression ee]
 		{ProcedureCallExpression pcx;ExpressionList el=null;ee=null;IdentExpression r1=null, r2=null;}
 	: r1=ident  {ee=r1;}
@@ -332,6 +333,7 @@ variableReference returns [IExpression ee]
       ee=pce;} RPAREN
 	)
 	;
+*/
 invariantStatement[InvariantStatement cr]
         {InvariantStatementPart isp=null;}
 	: "invariant"
