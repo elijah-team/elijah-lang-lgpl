@@ -343,7 +343,59 @@ public class GenerateFunctions {
 		{
 			IExpression expr = mc.getExpr();
 			InstructionArgument i = simplify_expression(expr, gf, cctx);
-			System.out.println("710 "+i);
+			System.out.println("710 " + i);
+
+			Label label_next = gf.addLabel();
+			Label label_end  = gf.addLabel();
+
+			{
+				for (MatchConditional.MC1 part : mc.getParts()) {
+					if (part instanceof MatchConditional.MatchConditionalPart1) {
+						MatchConditional.MatchConditionalPart1 mc1 = (MatchConditional.MatchConditionalPart1) part;
+						TypeName tn = mc1.getTypeName();
+						IdentExpression id = mc1.getIdent();
+
+						int begin0 = add_i(gf, InstructionName.ES, null, cctx);
+
+						TypeTableEntry t = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(tn));
+						add_i(gf, InstructionName.IS_A, List_of(i, new IntegerIA(t.getIndex())), cctx);
+						add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
+						Context context = mc1.getContext();
+
+						int tmp = addTempTableEntry(null, id, gf); // TODO no context!
+						for (FunctionItem item : mc1.getItems()) {
+							generate_item((OS_Element) item, gf, context);
+						}
+
+						add_i(gf, InstructionName.JMP, List_of(label_end), context);
+						add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
+						gf.place(label_next);
+						label_next = gf.addLabel();
+					} else if (part instanceof MatchConditional.MatchConditionalPart2) {
+						MatchConditional.MatchConditionalPart2 mc2 = (MatchConditional.MatchConditionalPart2) part;
+						IExpression id = mc2.getMatchingExpression();
+
+						int begin0 = add_i(gf, InstructionName.ES, null, cctx);
+
+						InstructionArgument i2 = simplify_expression(id, gf, cctx);
+						add_i(gf, InstructionName.CMP, List_of(i, i2), cctx);
+						add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
+						Context context = mc2.getContext();
+
+						for (FunctionItem item : mc2.getItems()) {
+							generate_item((OS_Element) item, gf, context);
+						}
+
+						add_i(gf, InstructionName.JMP, List_of(label_end), context);
+						add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
+						gf.place(label_next);
+						label_next = gf.addLabel();
+					} else if (part instanceof MatchConditional.MatchConditionalPart3) {
+						System.err.println("Don't know what this is");
+					}
+				}
+				gf.place(label_end);
+			}
 		}
 	}
 
