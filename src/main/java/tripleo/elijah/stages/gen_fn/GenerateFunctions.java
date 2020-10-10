@@ -401,6 +401,7 @@ public class GenerateFunctions {
 
 	private void generate_if(IfConditional ifc, GeneratedFunction gf) {
 		final Context cctx = ifc.getContext();
+		final IdentExpression Boolean_true = Helpers.string_to_ident("true");
 		Label label_next = gf.addLabel();
 		Label label_end  = gf.addLabel();
 		{
@@ -408,6 +409,8 @@ public class GenerateFunctions {
 			IExpression expr = ifc.getExpr();
 			InstructionArgument i = simplify_expression(expr, gf, cctx);
 			System.out.println("710 " + i);
+			int const_true = addConstantTableEntry("true", Boolean_true, new OS_Type(BuiltInTypes.Boolean), gf);
+			add_i(gf, InstructionName.CMP, List_of(i, new ConstTableIA(const_true, gf)), cctx);
 			add_i(gf, InstructionName.CMP, List_of(i), cctx);
 			add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
 			int begin_1st = add_i(gf, InstructionName.ES, null, cctx);
@@ -427,7 +430,8 @@ public class GenerateFunctions {
 					if (part.getExpr() != null) {
 						InstructionArgument ii = simplify_expression(part.getExpr(), gf, cctx);
 						System.out.println("711 " + ii);
-						add_i(gf, InstructionName.CMP, List_of(ii), cctx);
+//						int const_true = addConstantTableEntry("true", Boolean_true, new OS_Type(BuiltInTypes.Boolean), gf);
+						add_i(gf, InstructionName.CMP, List_of(ii, new ConstTableIA(const_true, gf)), cctx);
 						add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
 					}
 					int begin_next = add_i(gf, InstructionName.ES, null, cctx);

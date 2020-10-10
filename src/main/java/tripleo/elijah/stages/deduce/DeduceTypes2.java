@@ -60,9 +60,21 @@ public class DeduceTypes2 {
 						if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
 							cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);
 						}
-						break;
-					default:
+					}
+					break;
+					case IDENT:
+						{
+							OS_Type a = cte.getTypeTableEntry().attached;
+							if (a.getType() == OS_Type.Type.BUILT_IN && a.getBType() == BuiltInTypes.Boolean) {
+								assert cte.getName().equals("true") || cte.getName().equals("false");
+							} else
+								throw new NotImplementedException();
+							break;
+						}
+					default: {
+						System.err.println(iv.getKind());
 						throw new NotImplementedException();
+					}
 					}
 				}
 			}
