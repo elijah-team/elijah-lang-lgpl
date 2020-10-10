@@ -35,16 +35,16 @@ public class Label implements InstructionArgument {
 		this.index = index;
 	}
 
+	public long getIndex() {
+		return index;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	public String getName() {
 		return name;
-	}
-
-	public long getIndex() {
-		return index;
 	}
 
 	/**
@@ -57,6 +57,11 @@ public class Label implements InstructionArgument {
 
 	public int getNumber() {
 		return number;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("<Label %s index:%d number:%d>", getName(), getIndex(), getNumber());
 	}
 }
 
