@@ -411,7 +411,6 @@ public class GenerateFunctions {
 			System.out.println("710 " + i);
 			int const_true = addConstantTableEntry("true", Boolean_true, new OS_Type(BuiltInTypes.Boolean), gf);
 			add_i(gf, InstructionName.CMP, List_of(i, new ConstTableIA(const_true, gf)), cctx);
-			add_i(gf, InstructionName.CMP, List_of(i), cctx);
 			add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
 			int begin_1st = add_i(gf, InstructionName.ES, null, cctx);
 			for (OS_Element item : ifc.getItems()) {
