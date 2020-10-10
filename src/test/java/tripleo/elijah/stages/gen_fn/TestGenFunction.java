@@ -17,6 +17,7 @@ import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
+import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
 
@@ -128,6 +129,8 @@ public class TestGenFunction {
 		}
 
 		new DeduceTypes2(m).deduceFunctions(lgf);
+
+		new GenerateC(m).generateCode(lgf);
 	}
 
 	@Test
