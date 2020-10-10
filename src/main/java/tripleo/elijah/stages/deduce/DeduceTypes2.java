@@ -55,7 +55,7 @@ public class DeduceTypes2 {
 				for (ConstantTableEntry cte : generatedFunction.cte_list) {
 					IExpression iv = cte.initialValue;
 					switch (iv.getKind()) {
-					case NUMERIC:
+					case NUMERIC: {
 						OS_Type a = cte.getTypeTableEntry().attached;
 						if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
 							cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);

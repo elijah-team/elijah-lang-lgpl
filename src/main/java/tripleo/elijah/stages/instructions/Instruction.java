@@ -61,6 +61,10 @@ public class Instruction {
 	public Context getContext() {
 		return context;
 	}
+
+//	public List<InstructionArgument> getArgs() {
+//		return args;
+//	}
 }
 
 //
