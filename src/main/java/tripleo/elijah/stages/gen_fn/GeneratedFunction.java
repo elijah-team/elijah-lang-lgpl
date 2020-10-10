@@ -176,6 +176,10 @@ public class GeneratedFunction {
 		return cte_list.get(index);
 	}
 
+	public TypeTableEntry getTypeTableEntry(int index) {
+		return tte_list.get(index);
+	}
+
 	public ProcTableEntry getProcTableEntry(int index) {
 		return prte_list.get(index);
 	}
