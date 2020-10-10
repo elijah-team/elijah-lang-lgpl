@@ -11,6 +11,7 @@ package tripleo.elijah.stages.instructions;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 
@@ -21,41 +22,55 @@ import java.util.List;
  * Created 9/10/20 3:36 PM
  */
 public class FnCallArgs implements InstructionArgument {
-    public final Instruction expression_to_call;
-    private final GeneratedFunction gf;
+	public final Instruction expression_to_call;
+	private final GeneratedFunction gf;
 
-    @Override
-    public String toString() {
-        final int index = ((IntegerIA) expression_to_call.args.get(0)).getIndex();
-        final List<InstructionArgument> instructionArguments = expression_to_call.args.subList(1, expression_to_call.args.size());
+	@Override
+	public String toString() {
+		final int index = ((IntegerIA) expression_to_call.args.get(0)).getIndex();
+		final List<InstructionArgument> instructionArguments = getInstructionArguments();
 /*
         final List<String> collect = instructionArguments
                 .stream()
                 .map((instructionArgument -> instructionArgument.toString()))
                 .collect(Collectors.toList());
 */
-        final Collection<String> collect2 = Collections2.transform(instructionArguments, new Function<InstructionArgument, String>() {
-            @Nullable
-            @Override
-            public String apply(@Nullable InstructionArgument input) {
-                return input.toString();
-            }
-        });
-        final ProcTableEntry procTableEntry = gf.prte_list.get(index);
-        return String.format("(call %d [%s(%s)] %s)",
-                index, procTableEntry.expression, procTableEntry.args,
-                String.join(" ", collect2));
+		final Collection<String> collect2 = Collections2.transform(instructionArguments, new Function<InstructionArgument, String>() {
+			@Nullable
+			@Override
+			public String apply(@Nullable InstructionArgument input) {
+				return input.toString();
+			}
+		});
+		final ProcTableEntry procTableEntry = gf.prte_list.get(index);
+		return String.format("(call %d [%s(%s)] %s)",
+				index, procTableEntry.expression, procTableEntry.args,
+				String.join(" ", collect2));
 
-    }
+	}
 
-    public FnCallArgs(Instruction expression_to_call, GeneratedFunction generatedFunction) {
-        this.expression_to_call = expression_to_call;
-        this.gf = generatedFunction;
-    }
+	public FnCallArgs(Instruction expression_to_call, GeneratedFunction generatedFunction) {
+		this.expression_to_call = expression_to_call;
+		this.gf = generatedFunction;
+	}
 
-    public InstructionArgument getArg(int i) {
-        return expression_to_call.getArg(i);
-    }
+	public InstructionArgument getArg(int i) {
+		return expression_to_call.getArg(i);
+	}
+
+	public Instruction getExpression() {
+		return expression_to_call;
+	}
+
+	@NotNull
+	public List<InstructionArgument> getInstructionArguments() {
+		final List<InstructionArgument> args = this.getArgs();
+		return args.subList(1, args.size());
+	}
+
+	private List<InstructionArgument> getArgs() {
+		return expression_to_call.args;
+	}
 }
 
 //
