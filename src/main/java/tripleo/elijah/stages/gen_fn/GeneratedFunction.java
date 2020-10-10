@@ -34,6 +34,7 @@ public class GeneratedFunction {
 	List<TypeTableEntry> tte_list = new ArrayList<TypeTableEntry>();
 	List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
 	private int label_count = 0;
+	private int _nextTemp = 0;
 
 	public GeneratedFunction(FunctionDef functionDef) {
 		fd = functionDef;
@@ -290,6 +291,18 @@ public class GeneratedFunction {
 		default:
 			throw new IllegalStateException();
 		}
+	}
+
+	public int nextTemp() {
+		return ++_nextTemp;
+	}
+
+	public Label findLabel(int index) {
+		for (Label label : labelList) {
+			if (label.getIndex() == index)
+				return label;
+		}
+		return null;
 	}
 }
 
