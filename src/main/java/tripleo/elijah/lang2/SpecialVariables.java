@@ -18,6 +18,13 @@ public class SpecialVariables {
 		System.err.println("SpecialVariables: test: "+name);
 		return false;
 	}
+
+	public static String get(String name) {
+		if (name.equals("self")) return "vsc"; // TODO this should be this in Java and C++
+		if (name.equals("Result")) return "vsr";
+		System.err.println("SpecialVariables: test: "+name);
+		return "<>";
+	}
 }
 
 //
