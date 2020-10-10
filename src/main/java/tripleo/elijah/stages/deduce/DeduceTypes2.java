@@ -393,47 +393,9 @@ public class DeduceTypes2 {
 			} else {
 				int y=2;
 				IdentIA ident_a = (IdentIA) pte.expression_num;
-				IdentTableEntry ite = generatedFunction.getIdentTableEntry(ident_a.getIndex());
-				Stack<InstructionArgument> s = new Stack<InstructionArgument>();
-				s.push(ident_a);
-				while (ite.backlink != null) {
-//					InstructionArgument oo;
-//					ite.backlink = oo;
-					if (ite.backlink instanceof IntegerIA) {
-//						throw new NotImplementedException();
-						s.push(ite.backlink);
-					} else if (ite.backlink instanceof IdentIA) {
-//						throw new NotImplementedException();
-						s.push(ite.backlink);
-					} else
-						throw new NotImplementedException();
-				}
-				OS_Element el = null; Context ectx = ctx;
-				for (InstructionArgument ia : s) {
-					if (ia instanceof IntegerIA) {
-						throw new NotImplementedException();
-//						s.push(ite.backlink);
-					} else if (ia instanceof IdentIA) {
-						IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) ia).getIndex());
-						//assert idte.backlink == null;
-						final String text = idte.getIdent().getText();
-						LookupResultList lrl = ectx.lookup(text);
-						el = lrl.chooseBest(null);
-						if (el != null) {
-							if (el.getContext() != null)
-								ectx = el.getContext();
-							else {
-								int yy=2;
-							}
-						} else {
-							module.parent.eee.reportError("Can't resolve "+text);
-							return; // README cant resolve pte. Maybe report error
-						}
-					} else
-						throw new NotImplementedException();
-				}
-
-				pte.resolved = el;
+				OS_Element el = generatedFunction.resolveIdentIA(ctx, ident_a, module);
+				if (el != null)
+					pte.resolved = el;
 			}
 		}
 	}

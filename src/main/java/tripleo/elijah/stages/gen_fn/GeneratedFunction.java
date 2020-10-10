@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.NotImplementedException;
@@ -15,6 +16,7 @@ import tripleo.util.range.Range;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created 9/10/20 2:57 PM
@@ -41,6 +43,59 @@ public class GeneratedFunction {
 	public GeneratedFunction(DefFunctionDef dfd_) {
 		dfd = dfd_;
 		fd = null;
+	}
+
+	/**
+	 *
+	 * @param ctx
+	 * @param ident_a pte.expression_num
+	 * @param module
+	 * @return
+	 */
+	@Nullable
+	public OS_Element resolveIdentIA(Context ctx, IdentIA ident_a, OS_Module module) {
+		IdentTableEntry ite = getIdentTableEntry(ident_a.getIndex());
+		Stack<InstructionArgument> s = new Stack<InstructionArgument>();
+		s.push(ident_a);
+		while (ite.backlink != null) {
+//					InstructionArgument oo;
+//					ite.backlink = oo;
+			if (ite.backlink instanceof IntegerIA) {
+//						throw new NotImplementedException();
+				s.push(ite.backlink);
+			} else if (ite.backlink instanceof IdentIA) {
+//						throw new NotImplementedException();
+				s.push(ite.backlink);
+			} else
+				throw new NotImplementedException();
+//					ite = ite.backlink;
+		}
+		OS_Element el = null;
+		Context ectx = ctx;
+		for (InstructionArgument ia : s) {
+			if (ia instanceof IntegerIA) {
+				throw new NotImplementedException();
+//						s.push(ite.backlink);
+			} else if (ia instanceof IdentIA) {
+				IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
+				//assert idte.backlink == null;
+				final String text = idte.getIdent().getText();
+				LookupResultList lrl = ectx.lookup(text);
+				el = lrl.chooseBest(null);
+				if (el != null) {
+					if (el.getContext() != null)
+						ectx = el.getContext();
+					else {
+						int yy=2;
+					}
+				} else {
+					module.parent.eee.reportError("Can't resolve "+text);
+					return null; // README cant resolve pte. Maybe report error
+				}
+			} else
+				throw new NotImplementedException();
+		}
+		return el;
 	}
 
 	//
