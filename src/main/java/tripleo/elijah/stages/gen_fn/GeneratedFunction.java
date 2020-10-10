@@ -22,7 +22,7 @@ import java.util.Stack;
  * Created 9/10/20 2:57 PM
  */
 public class GeneratedFunction {
-	private final FunctionDef fd;
+	public final FunctionDef fd;
 	private final DefFunctionDef dfd;
 	private final List<Label> labelList = new ArrayList<Label>();
 	public List<Instruction> instructionsList = new ArrayList<Instruction>();
