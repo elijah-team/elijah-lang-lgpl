@@ -256,7 +256,7 @@
                             </rule>
                           </rules>
     <excludes>
-      <exclude>antlr*</exclude>
+      <exclude>antlr/*</exclude>
     </excludes>
                         </configuration>
                       </execution>
