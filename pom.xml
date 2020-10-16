@@ -255,6 +255,9 @@
                               </limits>
                             </rule>
                           </rules>
+    <excludes>
+      <exclude>antlr*</exclude>
+    </excludes>
                         </configuration>
                       </execution>
 
