@@ -131,9 +131,8 @@ public class GenerateC {
 						ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) value).getIndex());
 						final String realTargetName = getRealTargetName(gf, (IntegerIA) target);
 						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, getAssignmentValue(value, gf)));
-					}
-
-					tos.put_string_ln(String.format("vsb = %s;", getRealTargetName(gf, (IntegerIA) target)));
+					} else
+						tos.put_string_ln(String.format("vsb = %s;", getRealTargetName(gf, (IntegerIA) target)));
 					int y=2;
 				}
 				break;
