@@ -28,31 +28,31 @@ public class DeduceTypesTest {
 	public void setUp() {
 		OS_Module mod = new OS_Module();
 		mod.parent = new Compilation(new StdErrSink(), new IO());
-		DeduceTypes d = new DeduceTypes(mod);
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		ClassStatement cs = new ClassStatement(mod);
-		cs.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("Test")));
+		cs.setName(Helpers.string_to_ident("Test"));
 		final ClassContext cctx = new ClassContext(mctx, cs);
 		cs.setContext(cctx);
 		final FunctionDef fd = cs.funcDef();
-		fd.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("test")));
+		fd.setName(Helpers.string_to_ident("test"));
 		final FunctionContext fctx = new FunctionContext(cctx, fd);
 		fd.setContext(fctx);
 		VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
 		final VariableStatement vs = vss.next();
-		final IdentExpression x = new IdentExpression(tripleo.elijah.util.Helpers.makeToken("x"));
+		final IdentExpression x = Helpers.string_to_ident("x");
 		x.setContext(fctx);
 		vs.setName(x);
 		final Qualident qu = new Qualident();
-		qu.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
+		qu.append(Helpers.makeToken("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
 		fd.postConstruct();
 		cs.postConstruct();
 		mod.postConstruct();
 		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
-		final IdentExpression x1 = new IdentExpression(Helpers.makeToken("x"));
+		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
+		DeduceTypes d = new DeduceTypes(mod);
 		this.x = d.deduceExpression(x1, fc);
 		System.out.println(this.x);
 	}
