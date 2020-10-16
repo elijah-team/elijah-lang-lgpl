@@ -228,6 +228,11 @@
                         <goals>
                           <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+   <excludes>
+      <exclude>antlr/*</exclude>
+    </excludes>
+                        </configuration>
                       </execution>
                       <execution>
                         <id>jacoco-report</id>
@@ -235,11 +240,6 @@
                         <goals>
                           <goal>report</goal>
                         </goals>
-                        <configuration>
-   <excludes>
-      <exclude>antlr/*</exclude>
-    </excludes>
-                        </configuration>
                       </execution>
                       <!-- Add this checking -->
                       <execution>
