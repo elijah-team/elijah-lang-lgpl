@@ -151,6 +151,7 @@
         </plugins>
         -->
         <plugins>
+        <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -166,9 +167,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
             </plugin>
-
+-->
             <!-- To use the plugin goals in your POM or parent POM -->
-            <plugin>
+<!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <version>3.0.0-M5</version>
@@ -179,10 +180,6 @@
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-<!--
-                    <outputDirectory>/absolute/path/to/the/output/directory</outputDirectory>
-                    <finalName>filename-of-generated-jar-file</finalName>
--->
                     <attach>true</attach>
                 </configuration>
                 <executions>
@@ -194,30 +191,7 @@
                 </execution>
                 </executions>
             </plugin>
-            
-              <!-- <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.6</version>
-                <executions>
-                  <execution>
-                    <goals>
-                      <goal>prepare-agent</goal>
-                    </goals>
-                  </execution>
-
-
-
-                  < ! - - attached to Maven test phase - - >
-                  <execution>
-                    <id>report</id>
-                    <phase>test</phase>
-                    <goals>
-                      <goal>report</goal>
-                    </goals>
-                  </execution>
-                </executions>
-              </plugin>-->
+-->            
             
                   <plugin>
                     <groupId>org.jacoco</groupId>
@@ -228,12 +202,12 @@
                         <goals>
                           <goal>prepare-agent</goal>
                         </goals>
-                        <configuration>
+<!--                        <configuration>
    <excludes>
       <exclude>antlr/*</exclude>
     </excludes>
                         </configuration>
-                      </execution>
+-->                      </execution>
                       <execution>
                         <id>jacoco-report</id>
                         <phase>test</phase>
@@ -255,7 +229,7 @@
                                 <limit>
                                   <counter>LINE</counter>
                                   <value>COVEREDRATIO</value>
-                                  <minimum>0.9</minimum>
+                                  <minimum>0.7</minimum>
                                 </limit>
                               </limits>
                             </rule>
