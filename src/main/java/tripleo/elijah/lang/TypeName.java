@@ -23,6 +23,9 @@ public interface TypeName {
 	}
 
 	Type kindOfType();
+
+	@Override
+	boolean equals(Object o);
 }
 
 //

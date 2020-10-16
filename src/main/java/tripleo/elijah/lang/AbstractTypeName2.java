@@ -8,7 +8,8 @@
  */
 package tripleo.elijah.lang;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 /*
  * Created on 5/4/2019 at 12:25
@@ -79,6 +80,19 @@ public abstract class AbstractTypeName2 implements NormalTypeName {
 		return _ltm;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof NormalTypeName)) return false;
+		NormalTypeName that = (NormalTypeName) o;
+		return getConstant() == that.getConstant() &&
+				getReference() == that.getReference() &&
+				getOut() == that.getOut() &&
+				getIn() == that.getIn() &&
+//				type == that.type &&
+				getModifiers().containsAll(that.getModifiers()) &&
+				getName().equals(that.getName());
+	}
 }
 
 //

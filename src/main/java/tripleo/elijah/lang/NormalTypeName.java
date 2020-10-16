@@ -41,6 +41,8 @@ public interface NormalTypeName extends TypeName, Resolvable {
 	void setContext(Context cur);
 
 	Collection<TypeModifiers> getModifiers();
+
+	TypeNameList getGenericPart();
 }
 
 //

@@ -39,7 +39,7 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
-	/* @ requires pr_name != null; */
+	/* #@ requires pr_name != null; */
 	// pr_name is null when first created
 	@Override
 	public String toString() {
@@ -67,6 +67,11 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
+	public TypeNameList getGenericPart() {
+		return genericPart;
+	}
+
+	@Override
 	public Context getContext() {
 		return _ctx;
 	}
@@ -89,10 +94,10 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof VariableTypeName)) return false;
 		if (!super.equals(o)) return false;
-		VariableTypeName that = (VariableTypeName) o;
-		return Objects.equals(genericPart, that.genericPart);
+		if (!(o instanceof NormalTypeName)) return false;
+		NormalTypeName that = (NormalTypeName) o;
+		return Objects.equals(genericPart, that.getGenericPart());
 	}
 
 	@Override

@@ -64,43 +64,47 @@ public class DeduceTypesTest {
 //		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());
 //	}
 	/**
-	 * was comparing a TypeName to an OS_Type and that's why it failed
+	 * Now comparing {@link RegularTypeName} to {@link VariableTypeName} works
 	 */
-//	@Test
-//	public void testDeduceIdentExpression2() {
-//		final RegularTypeName tn = new RegularTypeName();
-//		Qualident tnq = new Qualident();
-//		tnq.append(Helpers.makeToken("Integer"));
-//		tn.setName(tnq);
-//		Assert.assertEquals(new OS_Type(tn), x.getTypeName());
-//	}
+	@Test
+	public void testDeduceIdentExpression2() {
+		final RegularTypeName tn = new RegularTypeName();
+		Qualident tnq = new Qualident();
+		tnq.append(Helpers.makeToken("Integer"));
+		tn.setName(tnq);
+		Assert.assertEquals(new OS_Type(tn), x/*.getTypeName()*/);
+	}
 	@Test
 	public void testDeduceIdentExpression3() {
 		final VariableTypeName tn = new VariableTypeName();
 		Qualident tnq = new Qualident();
-		tnq.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
+		tnq.append(Helpers.makeToken("Integer"));
 		tn.setName(tnq);
-//		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
-		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
+		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
+		Assert.assertEquals(new OS_Type(tn), x);
 	}
 	@Test
 	public void testDeduceIdentExpression3_5() {
 		final VariableTypeName tn = new VariableTypeName();
 		Qualident tnq = new Qualident();
-		tnq.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
+		tnq.append(Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
-//		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
+		Assert.assertEquals(new OS_Type(tn), x);
 	}
 	@Test
 	public void testDeduceIdentExpression4() {
 		final VariableTypeName tn = new VariableTypeName();
 		Qualident tnq = new Qualident();
-		tnq.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
+		tnq.append(Helpers.makeToken("Integer"));
 		tn.setName(tnq);
-//		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
-//		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
+		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
+		Assert.assertEquals(new OS_Type(tn), x);
 		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());
 	}
 
 }
+
+//
+//
+//

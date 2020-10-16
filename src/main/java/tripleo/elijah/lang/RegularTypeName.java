@@ -123,6 +123,10 @@ public String getName() {
 		return Type.NORMAL;
 	}
 
+	@Override
+	public TypeNameList getGenericPart() {
+		return genericPart;
+	}
 }
 
 //

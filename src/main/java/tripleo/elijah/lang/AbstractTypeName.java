@@ -93,7 +93,7 @@ public abstract class AbstractTypeName implements NormalTypeName {
 				getOut() == that.getOut() &&
 				getIn() == that.getIn() &&
 //				type == that.type &&
-				getModifiers().equals(that.getModifiers()) &&
+				getModifiers().containsAll(that.getModifiers()) &&
 				getName().equals(that.getName());
 	}
 
