@@ -235,6 +235,11 @@
                         <goals>
                           <goal>report</goal>
                         </goals>
+                        <configuration>
+   <excludes>
+      <exclude>antlr/*</exclude>
+    </excludes>
+                        </configuration>
                       </execution>
                       <!-- Add this checking -->
                       <execution>
@@ -255,9 +260,6 @@
                               </limits>
                             </rule>
                           </rules>
-    <excludes>
-      <exclude>antlr/*</exclude>
-    </excludes>
                         </configuration>
                       </execution>
 
