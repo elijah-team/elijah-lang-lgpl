@@ -19,6 +19,13 @@ import org.jetbrains.annotations.Contract;
 
 public interface IExpression {
 
+	static boolean isConstant(IExpression expression) {
+		return expression instanceof StringExpression ||
+				expression instanceof CharLitExpression ||
+				expression instanceof FloatExpression ||
+				expression instanceof NumericExpression;
+	}
+
 	@Contract(pure = true)
 	ExpressionKind getKind();
 
