@@ -551,7 +551,7 @@ public class DeduceTypes2 {
 				}
 			} else {
 				int y=2;
-				System.err.println("i2 is not IntegerIA");
+				System.err.println("i2 is not IntegerIA ("+i2.getClass().getName()+")");
 			}
 		} else
 			throw new NotImplementedException(); // pn1 is not IdentExpression
