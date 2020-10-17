@@ -413,9 +413,11 @@ public class GenerateFunctions {
 			add_i(gf, InstructionName.CMP, List_of(i, new ConstTableIA(const_true, gf)), cctx);
 			add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
 			int begin_1st = add_i(gf, InstructionName.ES, null, cctx);
+			int begin_2nd = add_i(gf, InstructionName.ES, null, cctx);
 			for (OS_Element item : ifc.getItems()) {
 				generate_item(item, gf, cctx);
 			}
+			add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_2nd)), cctx);
 			if (ifc.getParts().size() == 0) {
 				gf.place(label_next);
 				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_1st)), cctx);
@@ -713,14 +715,12 @@ public class GenerateFunctions {
 						left_instruction = simplify_expression(left, gf, cctx);
 					} else {
 						// a constant
+						assert IExpression.isConstant(right);
 						int left_constant_num = addConstantTableEntry2(null, left, left.getType(), gf);
 						left_instruction = new ConstTableIA(left_constant_num, gf);
 					}
 				} else {
 					// create a tmp var
-//					int left_temp = addTempTableEntry(null, gf);
-//					left_instruction = new IntegerIA(left_temp);
-					// TODO add_i ??
 					left_instruction = simplify_expression(left, gf, cctx);
 				}
 				if (right.is_simple()) {
@@ -728,14 +728,12 @@ public class GenerateFunctions {
 						right_instruction = simplify_expression(right, gf, cctx);
 					} else {
 						// a constant
+						assert IExpression.isConstant(right);
 						int right_constant_num = addConstantTableEntry2(null, right, right.getType(), gf);
 						right_instruction = new ConstTableIA(right_constant_num, gf);
 					}
 				} else {
 					// create a tmp var
-//					int right_temp = addTempTableEntry(null, gf);
-//					right_instruction = new IntegerIA(right_temp);
-					// TODO add_i ??
 					right_instruction = simplify_expression(right, gf, cctx);
 				}
 				{
