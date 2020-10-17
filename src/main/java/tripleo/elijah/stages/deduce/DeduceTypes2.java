@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.stages.deduce;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
@@ -565,17 +564,6 @@ public class DeduceTypes2 {
 			return true;
 		}
 		return false;
-	}
-
-	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
-	private String reverse_name(String pn) {
-		byte[] pnc = pn.getBytes(); // warning ascii
-		byte[] pn2c = new byte[pnc.length+2];
-		System.arraycopy(pnc, 0, pn2c, 0, 2);
-		pn2c[2] = 'r';
-		System.arraycopy(pnc, 2, pn2c, 3, pnc.length-2);
-		pn2c[pn2c.length-1] = '\0';
-		return new String(pn2c);
 	}
 
 	public static int to_int(InstructionArgument arg) {
