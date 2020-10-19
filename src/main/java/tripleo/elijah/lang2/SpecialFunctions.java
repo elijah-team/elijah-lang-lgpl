@@ -9,7 +9,6 @@
 package tripleo.elijah.lang2;
 
 import tripleo.elijah.lang.ExpressionKind;
-import tripleo.elijah.util.NotImplementedException;
 
 /**
  * Created 10/2/20 10:16 AM
@@ -22,7 +21,8 @@ public class SpecialFunctions {
 		case INCREMENT: 		return "__preinc__";
 		case AUG_MULT:			return "__imult__";
 		case ASSIGNMENT:		return "__assign__";
-		default: 				throw new NotImplementedException();
+		default:
+			throw new IllegalStateException("Unexpected value: " + kind);
 		}
 	}
 
