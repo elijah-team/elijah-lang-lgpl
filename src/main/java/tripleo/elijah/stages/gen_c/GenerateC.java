@@ -372,7 +372,8 @@ public class GenerateC {
 							sb.append(((IdentExpression) ptex).getText());
 						} else if (ptex instanceof ProcedureCallExpression) {
 							sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
-						}
+						} else
+							throw new IllegalStateException("ptex is "+ptex.getClass().getName());
 					}
 					sb.append("(");
 					{
