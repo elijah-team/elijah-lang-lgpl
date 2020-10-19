@@ -820,7 +820,7 @@ public class GenerateFunctions {
 		i.setName(InstructionName.CALL);
 		final List<InstructionArgument> li = new ArrayList<>();
 //			int ii = addIdentTableEntry((IdentExpression) expression.getLeft(), gf);
-		final int ii = addProcTableEntry(left, null, get_args_types(pce.getArgs(), gf), gf);
+		final int ii = addProcTableEntry(left, gf.get_assignment_path(left, this), get_args_types(pce.getArgs(), gf), gf);
 		li.add(new IntegerIA(ii));
 		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf, cctx);
 		li.addAll(args_);
