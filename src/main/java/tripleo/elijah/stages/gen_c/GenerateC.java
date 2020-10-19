@@ -11,6 +11,7 @@ package tripleo.elijah.stages.gen_c;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.gen_fn.*;
@@ -324,7 +325,7 @@ public class GenerateC {
 						sb.append(ptex.getText());
 					} else {
 						OS_Element el = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) pte.expression_num, module);
-						System.err.println("8777 "+el);
+						System.err.println("8777 " + el);
 						IExpression ptex = pte.expression;
 						if (ptex instanceof IdentExpression) {
 							sb.append(((IdentExpression) ptex).getText());
@@ -332,7 +333,33 @@ public class GenerateC {
 							sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
 						}
 					}
-					break;
+					sb.append("(");
+					{
+						int args_size = inst.getArgsSize();
+						List<String> sll = new ArrayList<>();
+						for (int i = 1; i < args_size; i++) {
+							InstructionArgument ia = inst.getArg(i);
+							int y=2;
+							System.err.println("7777 " +ia);
+							if (ia instanceof ConstTableIA) {
+								ConstantTableEntry constTableEntry = gf.getConstTableEntry(((ConstTableIA) ia).getIndex());
+								sll.add(""+ const_to_string(constTableEntry.initialValue));
+							} else if (ia instanceof IntegerIA) {
+								VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
+								sll.add("" + variableTableEntry.getName());
+							} else if (ia instanceof IdentIA) {
+								@org.jetbrains.annotations.Nullable OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
+								//String path = gf.getIAPath((IdentIA) ia));
+								assert ident != null;
+								throw new NotImplementedException();
+							} else {
+								throw new IllegalStateException("Cant be here");
+							}
+						}
+						sb.append(String.join(", ", sll));
+					}
+					sb.append(");");
+					return sb.toString();
 				}
 			case CALLS:
 				{
