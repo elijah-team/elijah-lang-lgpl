@@ -856,15 +856,6 @@ public class GenerateFunctions {
 		return vte.getIndex();
 	}
 
-/*
-	private int addTempTableEntry(OS_Type type, String name, GeneratedFunction gf) {
-		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type);
-		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, name, tte);
-		gf.vte_list.add(vte);
-		return vte.index;
-	}
-*/
-
 	private int addTempTableEntry(OS_Type type, IdentExpression name, GeneratedFunction gf) {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, name);
 		VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, name.getText(), tte);
