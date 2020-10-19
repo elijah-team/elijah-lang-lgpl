@@ -21,7 +21,10 @@ import java.util.List;
 public class ProcTableEntry {
 	public final int index;
 	public final List<TypeTableEntry> args;
-	public final IExpression expression;
+	/**
+	 * Just a hint to the programmer. The compiler should be able to work without this.
+	 */
+	@Deprecated public final IExpression expression;
 	public final InstructionArgument expression_num;
 	public OS_Element resolved;
 
