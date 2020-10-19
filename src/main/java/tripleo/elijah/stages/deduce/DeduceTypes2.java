@@ -193,6 +193,7 @@ public class DeduceTypes2 {
 						throw new NotImplementedException();
 					}
 */
+					assert el != null;
 					fn1.resolved = el;
 
 				}
