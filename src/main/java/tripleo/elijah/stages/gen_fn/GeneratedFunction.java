@@ -59,11 +59,15 @@ public class GeneratedFunction {
 		IdentTableEntry ite = getIdentTableEntry(ident_a.getIndex());
 		Stack<InstructionArgument> s = new Stack<InstructionArgument>();
 		s.push(ident_a);
-		while (ite.backlink != null) {
-//					InstructionArgument oo;
-//					ite.backlink = oo;
-			if (ite.backlink instanceof IntegerIA) {
+		InstructionArgument oo = ident_a;
+		//
+		// TODO: make this work
+		//
+/*
+		while (oo != null) {
+			if (oo instanceof IntegerIA) {
 //						throw new NotImplementedException();
+				IdentTableEntry ite1 = getIdentTableEntry(ident_a.getIndex());
 				s.push(ite.backlink);
 			} else if (ite.backlink instanceof IdentIA) {
 //						throw new NotImplementedException();
@@ -71,7 +75,9 @@ public class GeneratedFunction {
 			} else
 				throw new NotImplementedException();
 //					ite = ite.backlink;
+			oo = null;
 		}
+*/
 		OS_Element el = null;
 		Context ectx = ctx;
 		for (InstructionArgument ia : s) {
