@@ -464,17 +464,17 @@ public class GenerateFunctions {
 			{
 				IdentExpression iterNameToken = loop.getIterNameToken();
 				String iterName = iterNameToken.getText();
-				int i = addTempTableEntry(null, iterNameToken, gf); // TODO deduce later
-				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(i)), cctx);
+				int iter_temp = addTempTableEntry(null, iterNameToken, gf); // TODO deduce later
+				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(iter_temp)), cctx);
 				final InstructionArgument ia1 = simplify_expression(loop.getFromPart(), gf, cctx);
 				if (ia1 instanceof ConstTableIA)
-					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(i), ia1), cctx);
+					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(iter_temp), ia1), cctx);
 				else
-					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(i), ia1), cctx);
+					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(iter_temp), ia1), cctx);
 				Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
 				Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
-				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(i), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
+				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(iter_temp), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
 				add_i(gf, InstructionName.JE, List_of(label_bottom), cctx);
 				for (StatementItem statementItem : loop.getItems()) {
 					System.out.println("705 "+statementItem);
@@ -483,7 +483,7 @@ public class GenerateFunctions {
 				IdentExpression pre_inc_name = Helpers.string_to_ident("__preinc__");
 				TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 				int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
-				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(i)), cctx);
+				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(iter_temp)), cctx);
 				add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
 				gf.place(label_bottom);
 			}
