@@ -63,7 +63,7 @@ public class GenerateC {
 			@Nullable
 			@Override
 			public String apply(@Nullable FormalArgListItem input) {
-				return String.format("%s %s", input.name, input.tn);
+				return String.format("%s %s", getTypeName(input.tn), input.name);
 			}
 		}));
 		tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
@@ -287,6 +287,15 @@ public class GenerateC {
 		tos.put_string_ln("}");
 		tos.flush();
 		tos.close();
+	}
+
+	private String getTypeName(TypeName typeName) {
+		if (typeName instanceof RegularTypeName) {
+			String name = ((RegularTypeName) typeName).getName(); // TODO convert to Z-name
+
+			return name;
+		}
+		return ""+typeName; // TODO type is not fully deduced
 	}
 
 	@NotNull
