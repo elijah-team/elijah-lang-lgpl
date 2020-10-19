@@ -231,8 +231,24 @@ public class GenerateC {
 					int yyy=2;
 				}
 				break;
-			case DOT:
+			case DECL:
+				{
+					InstructionArgument decl_type = instruction.getArg(0);
+					IntegerIA vte_num = (IntegerIA) instruction.getArg(1);
+					String target_name = getRealTargetName(gf, vte_num);
+					VariableTableEntry vte = gf.getVarTableEntry(vte_num.getIndex());
+
+					OS_Type x = vte.type.attached;
+					TypeName y = x.getTypeName();
+					if (y instanceof NormalTypeName) {
+						String z = ((NormalTypeName) y).getName();
+						tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+					} else
+						System.err.println("8887 "+y.getClass().getName());
+				}
 				break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + instruction.getName());
 			}
 		}
 		tos.dec_tabs();

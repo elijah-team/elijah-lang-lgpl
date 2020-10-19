@@ -12,12 +12,14 @@ import java.io.*;
 
 public class TabbedOutputStream {
 
+	private boolean dont_close = false;
 	int tabwidth;
 	Writer myStream;
 	private boolean do_tabs = false;
 
 	public TabbedOutputStream(OutputStream os) {
 		tabwidth = 0;
+		if (os == System.out) dont_close = true;
 		myStream = new BufferedWriter(new OutputStreamWriter(os));
 	}
 
@@ -80,7 +82,8 @@ public class TabbedOutputStream {
 		if (!is_connected())
 			throw new IllegalStateException("is_connected assertion failed; closing twice");
 
-		myStream.close();
+		if (!dont_close)
+			myStream.close();
 		myStream = null;
 	}
 

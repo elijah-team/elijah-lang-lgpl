@@ -19,7 +19,7 @@ public enum InstructionName {
 	CALL, CALLS, RET, YIELD,
 	TRY,
 	PC,
-	IS_A, DOT
+	IS_A, DECL
 }
 
 //
