@@ -110,10 +110,10 @@ public class TestGenFunction {
 		String f = "test/basic1/genericA.elijah";
 		File file = new File(f);
 		OS_Module m = c.realParseElijjahFile(f, file, false);
+		Assert.assertTrue("Method parsed correctly", m != null);
 //		OS_Module m = c.parseElijjahFile(file, f, eee, false);
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 		c.findStdLib("c");
-		Assert.assertTrue("Method parsed correctly", m != null);
 
 		for (CompilerInstructions ci : c.cis) {
 			c.use(ci, false);
