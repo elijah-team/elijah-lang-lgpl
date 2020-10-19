@@ -616,7 +616,6 @@ public class GenerateFunctions {
 				if (left.is_simple()) {
 					if (left instanceof IdentExpression) {
 						// for ident(xyz...)
-						int y=2;
 						int x = addIdentTableEntry((IdentExpression) left, gf);
 						// TODO attach to var/const or lookup later in deduce
 						left_ia = new IdentIA(x, gf);
@@ -628,6 +627,7 @@ public class GenerateFunctions {
 						left_ia = ia;
 					} else {
 						// for "".strip() etc
+						assert IExpression.isConstant(left);
 						int x = addConstantTableEntry(null, left, left.getType(), gf);
 						left_ia = new ConstTableIA(x, gf);
 //						throw new IllegalStateException("Cant be here");
@@ -655,6 +655,7 @@ public class GenerateFunctions {
 							ia = ia2;
 							iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
 						} else {
+							assert IExpression.isConstant(arg);
 							int x = addConstantTableEntry(null, arg, arg.getType(), gf);
 							ia = new ConstTableIA(x, gf);
 							iat = gf.getConstTableEntry(x).type;
