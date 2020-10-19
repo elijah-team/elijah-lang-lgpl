@@ -224,16 +224,19 @@ public class GenerateFunctions {
 		} else if (item instanceof VariableSequence) {
 			for (VariableStatement vs : ((VariableSequence) item).items()) {
 //					System.out.println("8004 " + vs);
+				String variable_name = vs.getName();
 				if (vs.getTypeModifiers() == TypeModifiers.CONST) {
 					if (vs.initialValue().is_simple()) {
-						int ci = addConstantTableEntry(vs.getName(), vs.initialValue(), vs.initialValue().getType(), gf);
-						int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf);
+						int ci = addConstantTableEntry(variable_name, vs.initialValue(), vs.initialValue().getType(), gf);
+						int vte_num = addVariableTableEntry(variable_name, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf);
 						IExpression iv = vs.initialValue();
-						add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(i), new ConstTableIA(ci, gf)), cctx);
+						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("const"), new IntegerIA(vte_num)), cctx);
+						add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(vte_num), new ConstTableIA(ci, gf)), cctx);
 					} else {
-						int i = addVariableTableEntry(vs.getName(), gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf);
+						int vte_num = addVariableTableEntry(variable_name, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf);
+						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("val"), new IntegerIA(vte_num)), cctx);
 						IExpression iv = vs.initialValue();
-						assign_variable(gf, i, iv, cctx);
+						assign_variable(gf, vte_num, iv, cctx);
 					}
 				} else {
 					final TypeTableEntry tte;
@@ -242,9 +245,10 @@ public class GenerateFunctions {
 					} else {
 						tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken());
 					}
-					int i = addVariableTableEntry(vs.getName(), tte, gf); // TODO why not vs.initialValue ??
+					int vte_num = addVariableTableEntry(variable_name, tte, gf); // TODO why not vs.initialValue ??
+					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("var"), new IntegerIA(vte_num)), cctx);
 					IExpression iv = vs.initialValue();
-					assign_variable(gf, i, iv, cctx);
+					assign_variable(gf, vte_num, iv, cctx);
 				}
 //				final OS_Type type = vs.initialValue().getType();
 //				final String stype = type == null ? "Unknown" : getTypeString(type);
@@ -275,10 +279,11 @@ public class GenerateFunctions {
 				VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lookup).getIndex());
 				vte.addPotentialType(instruction.getIndex(), tte);
 			} else {
-				int ii = addVariableTableEntry(text, tte, gf);
-				int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(ii), new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
+				int vte_num = addVariableTableEntry(text, tte, gf);
+				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(vte_num)), cctx);
+				int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num), new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
 				Instruction instruction = gf.getInstruction(instruction_number);
-				VariableTableEntry vte = gf.getVarTableEntry(ii);
+				VariableTableEntry vte = gf.getVarTableEntry(vte_num);
 				vte.addPotentialType(instruction.getIndex(), tte);
 			}
 		}
@@ -363,6 +368,7 @@ public class GenerateFunctions {
 						Context context = mc1.getContext();
 
 						int tmp = addTempTableEntry(null, id, gf); // TODO no context!
+						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), context);
 						for (FunctionItem item : mc1.getItems()) {
 							generate_item((OS_Element) item, gf, context);
 						}
@@ -459,6 +465,7 @@ public class GenerateFunctions {
 				IdentExpression iterNameToken = loop.getIterNameToken();
 				String iterName = iterNameToken.getText();
 				int i = addTempTableEntry(null, iterNameToken, gf); // TODO deduce later
+				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(i)), cctx);
 				final InstructionArgument ia1 = simplify_expression(loop.getFromPart(), gf, cctx);
 				if (ia1 instanceof ConstTableIA)
 					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(i), ia1), cctx);
@@ -486,6 +493,7 @@ public class GenerateFunctions {
 		case EXPR_TYPE:
 			{
 				int loop_iterator = addTempTableEntry(null, gf); // TODO deduce later
+				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(loop_iterator)), cctx);
 				int i2 = addConstantTableEntry("", new NumericExpression(0), new OS_Type(BuiltInTypes.SystemInteger), gf);
 				final InstructionArgument ia1 = new ConstTableIA(i2, gf);
 //				if (ia1 instanceof ConstTableIA)
@@ -673,6 +681,7 @@ public class GenerateFunctions {
 				right_ia.add(0, new IntegerIA(pte));
 				{
 					int tmp_var = addTempTableEntry(null, gf);
+					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp_var)), cctx);
 					Instruction i = new Instruction();
 					i.setName(InstructionName.CALL);
 					i.setArgs(right_ia);
@@ -746,6 +755,7 @@ public class GenerateFunctions {
 					int pte = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
 					int tmp = addTempTableEntry(expression.getType(), // README should be Boolean
 							gf);
+					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), cctx);
 					Instruction inst = new Instruction();
 					inst.setName(InstructionName.CALLS);
 					inst.setArgs(List_of(new IntegerIA(pte), left_instruction, right_instruction));
