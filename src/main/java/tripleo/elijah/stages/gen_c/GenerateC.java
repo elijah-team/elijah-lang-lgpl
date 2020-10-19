@@ -251,12 +251,28 @@ public class GenerateC {
 					VariableTableEntry vte = gf.getVarTableEntry(vte_num.getIndex());
 
 					OS_Type x = vte.type.attached;
-					TypeName y = x.getTypeName();
-					if (y instanceof NormalTypeName) {
-						String z = ((NormalTypeName) y).getName();
-						tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
-					} else
-						System.err.println("8887 "+y.getClass().getName());
+					if (x != null) {
+						TypeName y = x.getTypeName();
+						if (y instanceof NormalTypeName) {
+							String z = ((NormalTypeName) y).getName();
+							tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+						} else {
+							if (y != null) {
+								//
+								// VARIABLE WASN'T FULLY DEDUCED YET
+								//
+								System.err.println("8887 "+y.getClass().getName());
+							} else {
+								//
+								// VARIABLE WASN'T FULLY DEDUCED YET
+								// MTL A TEMP VARIABLE
+								//
+								System.err.println("8886 y is null (No typename specified)");
+							}
+						}
+					} else {
+						System.err.println("8885 x is null (No typename specified)");
+					}
 				}
 				break;
 			default:
