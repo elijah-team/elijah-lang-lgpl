@@ -1,0 +1,11 @@
+#!/bin/sh
+VERSION=0.0.6
+ELIJJAH=$(echo `pwd`/../share/elijjah/$VERSION/)
+COMPILER_DIR=$ELIJJAH/compiler
+
+for each in `find $COMPILER_DIR`; do CP=$CP:$each ; done
+
+#echo $CP
+
+$JAVA_HOME/bin/java -classpath $CP tripleo.elijah.Main $@
+

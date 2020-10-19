@@ -309,6 +309,10 @@ public class Compilation {
 
 	public OS_Module findPrelude(String prelude_name) {
 		File local_prelude = new File("lib_elijjah/lib-"+prelude_name+"/Prelude.elijjah");
+		if (!local_prelude.exists()) {
+			String env = System.getenv("ELIJJAH");
+			local_prelude = new File(env+VERSION.getVersion()+"/lib/stdlib/", "Prelude.elijjah");
+		}
 		if (local_prelude.exists()) {
 			try {
 				return realParseElijjahFile(local_prelude.getName(), local_prelude, false);
