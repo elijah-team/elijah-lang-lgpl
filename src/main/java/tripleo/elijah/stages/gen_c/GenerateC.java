@@ -70,7 +70,7 @@ public class GenerateC {
 		tos.incr_tabs();
 		//
 		for (Instruction instruction : gf.instructions()) {
-			System.err.println("8999 "+instruction);
+//			System.err.println("8999 "+instruction);
 			Label label = gf.findLabel(instruction.getIndex());
 			if (label != null) {
 				tos.put_string_ln(label.getName()+":");

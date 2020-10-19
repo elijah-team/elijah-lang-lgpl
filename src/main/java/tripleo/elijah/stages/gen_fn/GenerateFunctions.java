@@ -148,7 +148,7 @@ public class GenerateFunctions {
 //				System.err.println("106");
 			IExpression x = ((StatementWrapper) item).getExpr();
 			final ExpressionKind expressionKind = x.getKind();
-			System.err.println("106-1 "+x.getKind()+" "+x);
+//			System.err.println("106-1 "+x.getKind()+" "+x);
 			if (x.is_simple()) {
 //					int i = addTempTableEntry(x.getType(), gf);
 				switch (expressionKind) {
@@ -188,7 +188,7 @@ public class GenerateFunctions {
 			} else {
 				switch (expressionKind) {
 				case ASSIGNMENT:
-					System.err.println(String.format("803.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
+//					System.err.println(String.format("803.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
 					generate_item_assignment(x, gf, cctx);
 					break;
 //				case IS_A:
@@ -265,7 +265,7 @@ public class GenerateFunctions {
 	}
 
 	private void generate_item_assignment(@NotNull IExpression x, @NotNull GeneratedFunction gf, Context cctx) {
-		System.err.println(String.format("801 %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
+//		System.err.println(String.format("801 %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
 		BasicBinaryExpression bbe = (BasicBinaryExpression) x;
 		final IExpression right1 = bbe.getRight();
 		switch (right1.getKind()) {
@@ -576,7 +576,7 @@ public class GenerateFunctions {
 		for (IExpression expression : args) {
 			InstructionArgument ia = simplify_expression(expression, gf, cctx);
 			if (ia != null) {
-				System.err.println("109 "+expression);
+//				System.err.println("109 "+expression);
 				R.add(ia);
 			} else {
 				System.err.println("109-0 error expr not found "+expression);
@@ -770,7 +770,7 @@ public class GenerateFunctions {
 		//
 		for (IExpression arg : args) {
 			final OS_Type type = arg.getType();
-			System.err.println(String.format("108 %s %s", arg, type));
+//			System.err.println(String.format("108 %s %s", arg, type));
 			if (arg instanceof IdentExpression) {
 				InstructionArgument x = gf.vte_lookup(((IdentExpression) arg).getText());
 				TypeTableEntry tte;

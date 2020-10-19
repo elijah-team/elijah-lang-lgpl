@@ -45,7 +45,7 @@ public class DeduceTypes2 {
 		//
 		for (Instruction instruction : generatedFunction.instructions()) {
 			final Context context = generatedFunction.getContextFromPC(instruction.getIndex());
-			System.out.println("8006 " + instruction);
+//			System.out.println("8006 " + instruction);
 			switch (instruction.getName()) {
 			case E: {
 				//
