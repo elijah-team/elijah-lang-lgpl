@@ -396,6 +396,9 @@ public class DeduceTypes2 {
 				OS_Element el = generatedFunction.resolveIdentIA(ctx, ident_a, module);
 				if (el != null)
 					pte.resolved = el;
+				else {
+					System.err.println("IdentIA path cannot be resolved "+generatedFunction.getIdentIAPath(ident_a));
+				}
 			}
 		}
 	}
