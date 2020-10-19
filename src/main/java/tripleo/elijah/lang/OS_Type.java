@@ -85,15 +85,28 @@ public class OS_Type {
 		switch (getType()) {
 		case BUILT_IN:
 			{
+				//
+				// TODO These are technically not right
+				//
 				switch (getBType()) {
 				case SystemInteger:
-					final LookupResultList r = ctx.lookup("SystemInteger");
-					final OS_Element best = r.chooseBest(null);
-					return new OS_Type((ClassStatement) best);
+					{
+						final LookupResultList r;
+						final OS_Element best;
+
+						r = ctx.lookup("SystemInteger");
+						best = r.chooseBest(null);
+						return new OS_Type((ClassStatement) best);
+					}
 				case Boolean:
-					r = ctx.lookup("Boolean");
-					best = r.chooseBest(null);
-					return new OS_Type((ClassStatement) best);
+					{
+						final LookupResultList r;
+						final OS_Element best;
+
+						r = ctx.lookup("Boolean");
+						best = r.chooseBest(null);
+						return new OS_Type((ClassStatement) best);
+					}
 				default:
 					throw new NotImplementedException();
 				}
