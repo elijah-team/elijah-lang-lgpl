@@ -190,8 +190,20 @@ public class GenerateC {
 							IExpression ptex = pte.expression;
 							if (ptex instanceof IdentExpression) {
 								sb.append(((IdentExpression) ptex).getText());
+								{
+									sb.append('(');
+									final List<String> sl3 = getArgumentStrings(gf, instruction);
+									sb.append(String.join(", ", sl3));
+									sb.append(");");
+								}
 							} else if (ptex instanceof ProcedureCallExpression) {
 								sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
+								{
+									sb.append('(');
+									final List<String> sl3 = getArgumentStrings(gf, instruction);
+									sb.append(String.join(", ", sl3));
+									sb.append(");");
+								}
 							}
 						}
 					}
@@ -255,6 +267,27 @@ public class GenerateC {
 		tos.put_string_ln("}");
 		tos.flush();
 		tos.close();
+	}
+
+	@NotNull
+	private List<String> getArgumentStrings(GeneratedFunction gf, Instruction instruction) {
+		final List<String> sl3 = new ArrayList<String>();
+		int args_size = instruction.getArgsSize();
+		for (int i = 1; i < args_size; i++) {
+			InstructionArgument ia = instruction.getArg(i);
+			if (ia instanceof IntegerIA) {
+//				VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(ia));
+				String realTargetName = getRealTargetName(gf, (IntegerIA) ia);
+				sl3.add(realTargetName);
+			} else if (ia instanceof IdentIA) {
+				int y=2;
+				sl3.add("<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>");
+			} else {
+				System.err.println(ia.getClass().getName());
+				throw new NotImplementedException();
+			}
+		}
+		return sl3;
 	}
 
 	private String getAssignmentValue(InstructionArgument value, GeneratedFunction gf) {
