@@ -338,7 +338,7 @@ public class GenerateC {
 		StringBuilder sb = new StringBuilder();
 		if (value instanceof FnCallArgs) {
 			FnCallArgs fca = (FnCallArgs) value;
-			List<String> sl = new ArrayList<String>();
+//			List<String> sl = new ArrayList<String>();
 			Instruction inst = fca.getExpression();
 //			System.err.println("9000 "+inst.getName());
 			InstructionArgument x = inst.getArg(0);
@@ -363,27 +363,7 @@ public class GenerateC {
 					}
 					sb.append("(");
 					{
-						int args_size = inst.getArgsSize();
-						List<String> sll = new ArrayList<>();
-						for (int i = 1; i < args_size; i++) {
-							InstructionArgument ia = inst.getArg(i);
-							int y=2;
-							System.err.println("7777 " +ia);
-							if (ia instanceof ConstTableIA) {
-								ConstantTableEntry constTableEntry = gf.getConstTableEntry(((ConstTableIA) ia).getIndex());
-								sll.add(""+ const_to_string(constTableEntry.initialValue));
-							} else if (ia instanceof IntegerIA) {
-								VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
-								sll.add("" + variableTableEntry.getName());
-							} else if (ia instanceof IdentIA) {
-								@org.jetbrains.annotations.Nullable OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
-								//String path = gf.getIAPath((IdentIA) ia));
-								assert ident != null;
-								throw new NotImplementedException();
-							} else {
-								throw new IllegalStateException("Cant be here");
-							}
-						}
+						List<String> sll = getAssignmentValueArgs(inst, gf);
 						sb.append(String.join(", ", sll));
 					}
 					sb.append(");");
@@ -403,12 +383,19 @@ public class GenerateC {
 							sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
 						}
 					}
-					break;
+					sb.append("(");
+					{
+						List<String> sll = getAssignmentValueArgs(inst, gf);
+						sb.append(String.join(", ", sll));
+					}
+					sb.append(");");
+					return sb.toString();
 				}
 			default:
 				throw new NotImplementedException();
 			}
 //			System.err.println("9000-2 "+pte);
+/*
 			for (InstructionArgument arg : fca.getInstructionArguments()) {
 //				System.err.println("9000-1 "+arg);
 				if (arg instanceof IntegerIA) {
@@ -429,6 +416,7 @@ public class GenerateC {
 			sb.append(String.join(", ", sl));
 			sb.append(')');
 			return sb.toString();
+*/
 		}
 
 		if (value instanceof ConstTableIA) {
@@ -447,6 +435,32 @@ public class GenerateC {
 		}
 
 		return ""+value;
+	}
+
+	@NotNull
+	private List<String> getAssignmentValueArgs(Instruction inst, GeneratedFunction gf) {
+		int args_size = inst.getArgsSize();
+		List<String> sll = new ArrayList<>();
+		for (int i = 1; i < args_size; i++) {
+			InstructionArgument ia = inst.getArg(i);
+			int y=2;
+			System.err.println("7777 " +ia);
+			if (ia instanceof ConstTableIA) {
+				ConstantTableEntry constTableEntry = gf.getConstTableEntry(((ConstTableIA) ia).getIndex());
+				sll.add(""+ const_to_string(constTableEntry.initialValue));
+			} else if (ia instanceof IntegerIA) {
+				VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
+				sll.add("" + variableTableEntry.getName());
+			} else if (ia instanceof IdentIA) {
+				@org.jetbrains.annotations.Nullable OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
+				//String path = gf.getIAPath((IdentIA) ia));
+				assert ident != null;
+				throw new NotImplementedException();
+			} else {
+				throw new IllegalStateException("Cant be here");
+			}
+		}
+		return sll;
 	}
 
 	private String const_to_string(IExpression expression) {
