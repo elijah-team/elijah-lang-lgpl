@@ -46,14 +46,18 @@ public class GenerateC {
 	private void generateCodeForMethod(GeneratedFunction gf) throws IOException {
 		if (gf.fd == null) return;
 		TabbedOutputStream tos = new TabbedOutputStream(System.out);
-		OS_Type tte = gf.getTypeTableEntry(1).attached;
 		String returnType;
 		String name;
+		//
+		// FIND RETURN TYPE
+		//
+		OS_Type tte = gf.getTypeTableEntry(1).attached;
 		if (tte != null) {
 			returnType = tte.getClassOf().getName();
 		} else {
 			returnType = "void";
 		}
+		//
 		name = gf.fd.name();
 		String args = String.join(", ", Collections2.transform(gf.fd.fal().falis, new Function<FormalArgListItem, String>() {
 			@Nullable
