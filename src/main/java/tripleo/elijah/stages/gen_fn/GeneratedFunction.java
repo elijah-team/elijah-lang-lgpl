@@ -315,6 +315,12 @@ public class GeneratedFunction {
 		}
 		return null;
 	}
+
+	public String getIdentIAPath(IdentIA ia) {
+		return null;
+	}
+
+
 }
 
 //
