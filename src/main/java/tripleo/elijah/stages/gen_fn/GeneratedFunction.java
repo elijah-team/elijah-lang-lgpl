@@ -263,7 +263,7 @@ public class GeneratedFunction {
 				return new IdentIA(ite, this);
 			}
 		default:
-			throw new IllegalStateException();
+			throw new IllegalStateException("Unexpected value: " + expression.getKind());
 		}
 	}
 
@@ -294,7 +294,7 @@ public class GeneratedFunction {
 				return identIA;
 			}
 		default:
-			throw new IllegalStateException();
+			throw new IllegalStateException("Unexpected value: " + expression.getKind());
 		}
 	}
 
