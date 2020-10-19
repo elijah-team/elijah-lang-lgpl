@@ -11,6 +11,7 @@ package tripleo.elijah.stages.gen_fn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.range.Range;
@@ -311,8 +312,37 @@ public class GeneratedFunction {
 		return null;
 	}
 
-	public String getIdentIAPath(final IdentIA ia) {
-		return null;
+	public String getIdentIAPath(final IdentIA ia2) {
+		final Stack<InstructionArgument> s = new Stack<InstructionArgument>();
+		InstructionArgument oo = ia2;
+
+		while (oo != null) {
+			if (oo instanceof IntegerIA) {
+				s.push(oo);
+				oo = null;
+			} else if (oo instanceof IdentIA) {
+				final IdentTableEntry ite1 = getIdentTableEntry(((IdentIA) oo).getIndex());
+				s.push(oo);
+				if (ite1.backlink != null)
+					s.push(ite1.backlink);
+				oo = ite1.backlink;
+			} else
+				throw new NotImplementedException();
+		}
+
+		List<String> sl = new ArrayList<>();
+		for (final InstructionArgument ia : s) {
+			if (ia instanceof IntegerIA) {
+				VariableTableEntry vte = this.getVarTableEntry(DeduceTypes2.to_int(ia));
+				sl.add(vte.getName());
+			} else if (ia instanceof IdentIA) {
+				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
+				final String text = idte.getIdent().getText();
+				sl.add(text);
+			} else
+				throw new NotImplementedException();
+		}
+		return String.join(".", sl);
 	}
 
 
