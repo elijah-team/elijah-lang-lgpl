@@ -226,7 +226,8 @@ public class DeduceTypes2 {
 				break;
 			case PC:
 				break;
-			case DOT:
+			case DECL:
+//				throw new NotImplementedException();
 				break;
 			}
 		}
