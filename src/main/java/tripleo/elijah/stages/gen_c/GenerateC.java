@@ -365,8 +365,10 @@ public class GenerateC {
 						final IdentExpression ptex = (IdentExpression) pte.expression;
 						sb.append(ptex.getText());
 					} else {
-						final OS_Element el = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) pte.expression_num, module);
-						System.err.println("8777 " + el);
+//						final OS_Element el = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) pte.expression_num, module);
+						String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
+//						System.err.println("8677 " + path);
+/*
 						final IExpression ptex = pte.expression;
 						if (ptex instanceof IdentExpression) {
 							sb.append(((IdentExpression) ptex).getText());
@@ -374,6 +376,8 @@ public class GenerateC {
 							sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
 						} else
 							throw new IllegalStateException("ptex is "+ptex.getClass().getName());
+*/
+						sb.append(path);
 					}
 					sb.append("(");
 					{
