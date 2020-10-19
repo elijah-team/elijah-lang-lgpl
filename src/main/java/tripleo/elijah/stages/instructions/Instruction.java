@@ -62,6 +62,10 @@ public class Instruction {
 		return context;
 	}
 
+	public int getArgsSize() {
+		return args.size();
+	}
+
 //	public List<InstructionArgument> getArgs() {
 //		return args;
 //	}
