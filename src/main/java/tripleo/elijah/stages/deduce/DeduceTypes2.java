@@ -169,9 +169,9 @@ public class DeduceTypes2 {
 			case JMP:
 				break;
 			case CALL: {
-				int i1 = to_int(instruction.getArg(0));
+				int pte_num = to_int(instruction.getArg(0));
 				InstructionArgument i2 = (instruction.getArg(1));
-				ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
+				ProcTableEntry fn1 = generatedFunction.getProcTableEntry(pte_num);
 				{
 					IExpression pn1 = fn1.expression;
 					if (pn1 instanceof IdentExpression) {
