@@ -20,7 +20,7 @@ package tripleo.elijah.lang;
  */
 public class ToExpression extends BasicBinaryExpression {
 
-    public ToExpression(IExpression fromPart, IExpression toPart) {
+    public ToExpression(final IExpression fromPart, final IExpression toPart) {
         left = fromPart;
         right = toPart;
         _kind = ExpressionKind.TO_EXPR;

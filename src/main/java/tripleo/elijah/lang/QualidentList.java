@@ -13,7 +13,7 @@ import java.util.List;
 
 public class QualidentList {
 
-	public void add(Qualident qid) {
+	public void add(final Qualident qid) {
 		// TODO Auto-generated method stub
 		parts.add(qid);
 	}

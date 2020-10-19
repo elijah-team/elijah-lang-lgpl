@@ -9,7 +9,7 @@ public class StatementWrapper implements StatementItem, FunctionItem, OS_Element
     private Context _ctx;
     private OS_Element _parent;
 
-    public StatementWrapper(IExpression aexpr, Context ctx, OS_Element parent) {
+    public StatementWrapper(final IExpression aexpr, final Context ctx, final OS_Element parent) {
         expr = aexpr;
         _ctx = ctx;
         _parent = parent;
@@ -38,7 +38,7 @@ public class StatementWrapper implements StatementItem, FunctionItem, OS_Element
     }
 
     @Override
-    public void visitGen(ICodeGen visit) {
+    public void visitGen(final ICodeGen visit) {
         throw new NotImplementedException();
     }
 

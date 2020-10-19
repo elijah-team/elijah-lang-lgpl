@@ -20,12 +20,12 @@ public class InvariantStatementPart {
     private final InvariantStatement parent;
     private IExpression expr;
 
-    public InvariantStatementPart(InvariantStatement cr, Token token) {
+    public InvariantStatementPart(final InvariantStatement cr, final Token token) {
         this.parent = cr;
         this.name = token;
     }
 
-    public void setExpr(IExpression expr) {
+    public void setExpr(final IExpression expr) {
         this.expr = expr;
     }
 }

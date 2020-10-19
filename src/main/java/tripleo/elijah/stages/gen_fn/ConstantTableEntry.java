@@ -30,7 +30,7 @@ public class ConstantTableEntry {
 				'}';
 	}
 
-	public ConstantTableEntry(int index, String name, IExpression initialValue, TypeTableEntry type) {
+	public ConstantTableEntry(final int index, final String name, final IExpression initialValue, final TypeTableEntry type) {
 		this.index = index;
 		this.name = name;
 		this.initialValue = initialValue;

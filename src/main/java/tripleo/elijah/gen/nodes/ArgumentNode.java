@@ -25,7 +25,7 @@ public class ArgumentNode {
 	private String genType;
 	private String _varName;
 
-	public ArgumentNode(String varName, TypeRef genType) {
+	public ArgumentNode(final String varName, final TypeRef genType) {
 		super();
 		this.setVarName(varName);
 		this._typeRef = genType;
@@ -39,7 +39,7 @@ public class ArgumentNode {
 		return ident;
 	}
 	
-	public void setIdent(IdentExpression ident) {
+	public void setIdent(final IdentExpression ident) {
 		this.ident = ident;
 	}
 	
@@ -47,7 +47,7 @@ public class ArgumentNode {
 		return _typeRef.genType();
 	}
 	
-	public void setGenType(String genType) {
+	public void setGenType(final String genType) {
 		this.genType = genType;
 	}
 	
@@ -55,7 +55,7 @@ public class ArgumentNode {
 		return _varName;
 	}
 	
-	public void setVarName(String _varName) {
+	public void setVarName(final String _varName) {
 		this._varName = _varName;
 	}
 	

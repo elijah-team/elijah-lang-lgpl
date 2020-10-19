@@ -28,9 +28,9 @@ public class CompilationTest {
 
 	@Test
 	public final void testEz() {
-		List<String> args = List_of("test/comp_test/main3", "-sE"/*, "-out"*/);
-		ErrSink eee = new StdErrSink();
-		Compilation c = new Compilation(eee, new IO());
+		final List<String> args = List_of("test/comp_test/main3", "-sE"/*, "-out"*/);
+		final ErrSink eee = new StdErrSink();
+		final Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
 

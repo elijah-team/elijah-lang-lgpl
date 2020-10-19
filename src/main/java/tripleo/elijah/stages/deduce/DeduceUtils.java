@@ -18,12 +18,12 @@ public class DeduceUtils {
 
 		private final ExpressionList args;
 
-		public MatchArgs(ExpressionList args) {
+		public MatchArgs(final ExpressionList args) {
 			this.args = args;
 		}
 
 		@Override
-		public boolean apply(@Nullable OS_Element2 input) {
+		public boolean apply(@Nullable final OS_Element2 input) {
 			if (!(input instanceof FunctionDef)) return false;
 			//
 			if (args == null && ((FunctionDef)input).fal().falis.size() == 0)
@@ -37,7 +37,7 @@ public class DeduceUtils {
 
 	static class IsConstructor implements com.google.common.base.Predicate<OS_Element> {
 		@Override
-		public boolean apply(@Nullable OS_Element input) {
+		public boolean apply(@Nullable final OS_Element input) {
 			return input instanceof ConstructorDef;
 		}
 	}
@@ -45,20 +45,20 @@ public class DeduceUtils {
 	static class MatchConstructorArgs implements java.util.function.Predicate {
 		private final ProcedureCallExpression pce;
 
-		public MatchConstructorArgs(ProcedureCallExpression pce) {
+		public MatchConstructorArgs(final ProcedureCallExpression pce) {
 			this.pce = pce;
 		}
 
 		@Override
-		public boolean test(Object o) {
+		public boolean test(final Object o) {
 			final ExpressionList args = pce.getArgs();
 			// See if candidate matches args
 			if (((LookupResult)o).getElement() instanceof ClassStatement) {
 				//o filter isCtor each (each args isCompat)
-				ClassStatement klass = (ClassStatement) ((LookupResult)o).getElement();
+				final ClassStatement klass = (ClassStatement) ((LookupResult)o).getElement();
 
-				Iterable<ClassItem> ctors = Iterables.filter(klass.getItems(), new IsConstructor());
-				Iterable<ClassItem> ctors2 = Iterables.filter(ctors, new MatchFunctionArgs(pce));
+				final Iterable<ClassItem> ctors = Iterables.filter(klass.getItems(), new IsConstructor());
+				final Iterable<ClassItem> ctors2 = Iterables.filter(ctors, new MatchFunctionArgs(pce));
 //				return ctors.iterator().hasNext();
 				return Lists.newArrayList(ctors2).size() > 0;
 
@@ -71,12 +71,12 @@ public class DeduceUtils {
 	static class MatchFunctionArgs implements com.google.common.base.Predicate<ClassItem> {
 		private final ProcedureCallExpression pce;
 
-		public MatchFunctionArgs(ProcedureCallExpression pce) {
+		public MatchFunctionArgs(final ProcedureCallExpression pce) {
 			this.pce = pce;
 		}
 
 		@Override
-		public boolean apply(ClassItem o) {
+		public boolean apply(final ClassItem o) {
 			//  TODO what about __call__ and __ctor__ for ClassStatement?
 //			System.out.println("2000 "+o);
 			if (!(o instanceof FunctionDef)) return false;
@@ -85,8 +85,8 @@ public class DeduceUtils {
 			// See if candidate matches args
 			/*if (((LookupResult)o).getElement() instanceof FunctionDef)*/ {
 				//o filter isCtor each (each args isCompat)
-				FunctionDef fd = (FunctionDef) (/*(LookupResult)*/o)/*.getElement()*/;
-				List<OS_Element2> matching_functions = fd.items()
+				final FunctionDef fd = (FunctionDef) (/*(LookupResult)*/o)/*.getElement()*/;
+				final List<OS_Element2> matching_functions = fd.items()
 						                                       .stream()
 						                                       .filter(new MatchArgs(pce.getArgs()))
 						                                       .collect(Collectors.toList());

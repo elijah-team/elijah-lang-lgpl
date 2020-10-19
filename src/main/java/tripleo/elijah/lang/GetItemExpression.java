@@ -19,7 +19,7 @@ public class GetItemExpression extends AbstractExpression { // TODO binary?
 
 	public IExpression index;
 
-	public GetItemExpression(IExpression ee, IExpression expr) {
+	public GetItemExpression(final IExpression ee, final IExpression expr) {
 		this.left    = ee;
 		this.index   = expr;
 		this._kind   = ExpressionKind.GET_ITEM;
@@ -44,7 +44,7 @@ public class GetItemExpression extends AbstractExpression { // TODO binary?
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
 	}
 
@@ -53,7 +53,7 @@ public class GetItemExpression extends AbstractExpression { // TODO binary?
 		return _type;
 	}
 
-	public void parens(Token lb, Token rb) {
+	public void parens(final Token lb, final Token rb) {
 		// TODO implement me later
 		
 	}

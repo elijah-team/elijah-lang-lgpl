@@ -15,7 +15,7 @@ public class ModuleRef implements RefElemenet {
 	private final String _path;
 	private final int _code;
 	
-	public ModuleRef(String path, int code) {
+	public ModuleRef(final String path, final int code) {
 		this._path=path;
 		this._code=code;
 	}

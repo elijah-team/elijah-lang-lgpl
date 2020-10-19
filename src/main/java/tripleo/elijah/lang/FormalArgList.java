@@ -19,7 +19,7 @@ public class FormalArgList {
 	public List<FormalArgListItem> falis=new ArrayList<FormalArgListItem>();
 
 	public FormalArgListItem next() {
-		FormalArgListItem fali = new FormalArgListItem();
+		final FormalArgListItem fali = new FormalArgListItem();
 		falis.add(fali);
 		return fali;
 	}

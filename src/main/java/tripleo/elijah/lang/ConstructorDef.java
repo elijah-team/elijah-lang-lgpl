@@ -17,7 +17,7 @@ import tripleo.elijah.util.Helpers;
  */
 public class ConstructorDef extends FunctionDef {
 
-	public ConstructorDef(IdentExpression aConstructorName, ClassStatement aParent) {
+	public ConstructorDef(final IdentExpression aConstructorName, final ClassStatement aParent) {
 		super(aParent);
 		if (aConstructorName != null)
 			setName(aConstructorName);

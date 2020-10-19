@@ -14,7 +14,7 @@ public class NormalImportStatement implements ImportStatement {
 	private final QualidentList importList = new QualidentList();
 	private Context _ctx;
 
-	public NormalImportStatement(OS_Element aParent) {
+	public NormalImportStatement(final OS_Element aParent) {
 		parent = aParent;
 		if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(this);
@@ -22,7 +22,7 @@ public class NormalImportStatement implements ImportStatement {
 			throw new NotImplementedException();
 	}
 
-	public void addNormalPart(Qualident aQualident) {
+	public void addNormalPart(final Qualident aQualident) {
 		importList.add(aQualident);
 	}
 
@@ -42,7 +42,7 @@ public class NormalImportStatement implements ImportStatement {
 	}
 
 	@Override
-	public void setContext(ImportContext ctx) {
+	public void setContext(final ImportContext ctx) {
 		_ctx = ctx;
 	}
 

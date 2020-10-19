@@ -26,11 +26,11 @@ public class DeduceTypesTest {
 
 	@Before
 	public void setUp() {
-		OS_Module mod = new OS_Module();
+		final OS_Module mod = new OS_Module();
 		mod.parent = new Compilation(new StdErrSink(), new IO());
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
-		ClassStatement cs = new ClassStatement(mod);
+		final ClassStatement cs = new ClassStatement(mod);
 		cs.setName(Helpers.string_to_ident("Test"));
 		final ClassContext cctx = new ClassContext(mctx, cs);
 		cs.setContext(cctx);
@@ -38,7 +38,7 @@ public class DeduceTypesTest {
 		fd.setName(Helpers.string_to_ident("test"));
 		final FunctionContext fctx = new FunctionContext(cctx, fd);
 		fd.setContext(fctx);
-		VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
+		final VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
 		final VariableStatement vs = vss.next();
 		final IdentExpression x = Helpers.string_to_ident("x");
 		x.setContext(fctx);
@@ -49,10 +49,10 @@ public class DeduceTypesTest {
 		fd.postConstruct();
 		cs.postConstruct();
 		mod.postConstruct();
-		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
+		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
-		DeduceTypes d = new DeduceTypes(mod);
+		final DeduceTypes d = new DeduceTypes(mod);
 		this.x = d.deduceExpression(x1, fc);
 		System.out.println(this.x);
 	}
@@ -69,7 +69,7 @@ public class DeduceTypesTest {
 	@Test
 	public void testDeduceIdentExpression2() {
 		final RegularTypeName tn = new RegularTypeName();
-		Qualident tnq = new Qualident();
+		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn), x/*.getTypeName()*/);
@@ -77,7 +77,7 @@ public class DeduceTypesTest {
 	@Test
 	public void testDeduceIdentExpression3() {
 		final VariableTypeName tn = new VariableTypeName();
-		Qualident tnq = new Qualident();
+		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
@@ -86,7 +86,7 @@ public class DeduceTypesTest {
 	@Test
 	public void testDeduceIdentExpression3_5() {
 		final VariableTypeName tn = new VariableTypeName();
-		Qualident tnq = new Qualident();
+		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
@@ -95,7 +95,7 @@ public class DeduceTypesTest {
 	@Test
 	public void testDeduceIdentExpression4() {
 		final VariableTypeName tn = new VariableTypeName();
-		Qualident tnq = new Qualident();
+		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());

@@ -14,11 +14,11 @@ import tripleo.elijah.gen.CompilerContext;
  */
 public class SimpleFnCall {
 
-	public SimpleFnCall(String string, List<String> list_of) {
+	public SimpleFnCall(final String string, final List<String> list_of) {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void GenFnCall(CompilerContext cctx, GenBuffer gbn) {
+	public void GenFnCall(final CompilerContext cctx, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}

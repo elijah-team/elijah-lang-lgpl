@@ -26,7 +26,7 @@ public class VariableTableEntry {
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public int tempNum = -1;
 
-	public VariableTableEntry(int index, VariableTableType var1, String name, TypeTableEntry type) {
+	public VariableTableEntry(final int index, final VariableTableType var1, final String name, final TypeTableEntry type) {
 		this.index = index;
 		this.name = name;
 		this.vtt = var1;
@@ -48,7 +48,7 @@ public class VariableTableEntry {
 		return name;
 	}
 
-	public void addPotentialType(int instructionIndex, TypeTableEntry tte) {
+	public void addPotentialType(final int instructionIndex, final TypeTableEntry tte) {
 		potentialTypes.put(instructionIndex, tte);
 	}
 

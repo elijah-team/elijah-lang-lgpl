@@ -23,7 +23,7 @@ public class DefFunctionContext extends Context {
 
 	private final DefFunctionDef carrier;
 
-	public DefFunctionContext(DefFunctionDef functionDef) {
+	public DefFunctionContext(final DefFunctionDef functionDef) {
 		carrier = functionDef;
 	}
 
@@ -35,7 +35,7 @@ public class DefFunctionContext extends Context {
 	 * @param alreadySearched
 	 * @return
 	 */
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	@Override public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 //		final LookupResultList Result = new LookupResultList();
 		alreadySearched.add(carrier.getContext());
 		return getParent().lookup(name, level, Result, alreadySearched, one);

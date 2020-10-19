@@ -29,10 +29,10 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 
 	private TypeModifiers def;
 
-	public void defaultModifiers(TypeModifiers aModifiers) {def=aModifiers;}
+	public void defaultModifiers(final TypeModifiers aModifiers) {def=aModifiers;}
 
 	public VariableStatement next() {
-		VariableStatement st = new VariableStatement(this);
+		final VariableStatement st = new VariableStatement(this);
 		st.set(def);
 		stmts.add(st);
 		return st;
@@ -43,7 +43,7 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
@@ -53,7 +53,7 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 		return this.parent;
 	}
 
-	public void setParent(OS_Element parent) {
+	public void setParent(final OS_Element parent) {
 		this.parent = parent;
 	}
 
@@ -62,13 +62,13 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 		return _ctx;
 	}
 
-	public void setContext(Context ctx) {
+	public void setContext(final Context ctx) {
 		_ctx = ctx;
 	}
 
 	@Override public String toString() {
-		List<String> r = new ArrayList<String>();
-		for (VariableStatement stmt : stmts) {
+		final List<String> r = new ArrayList<String>();
+		for (final VariableStatement stmt : stmts) {
 			r.add(stmt.getName());
 		}
 		return r.toString();

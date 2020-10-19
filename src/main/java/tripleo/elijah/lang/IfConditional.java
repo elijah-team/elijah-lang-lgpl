@@ -29,13 +29,13 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 	private Context _ctx;
 //	private final IfExpression if_parent;
 
-	public IfConditional(OS_Element _parent) {
+	public IfConditional(final OS_Element _parent) {
 		this._parent = _parent;
 		this._ctx = null;
 		this.sibling = null;
 	}
 
-	public IfConditional(IfConditional ifExpression) {
+	public IfConditional(final IfConditional ifExpression) {
 		this.sibling = ifExpression;
 //		this.order = ++sibling/*if_parent*/.order;
 		//
@@ -50,7 +50,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 //	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		throw new NotImplementedException();
 	}
 
@@ -69,13 +69,13 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
     }
 
 	public IfConditional else_() {
-		IfConditional elsepart = new IfConditional(this);
+		final IfConditional elsepart = new IfConditional(this);
 		parts.add(elsepart);
 		return elsepart;
 	}
 
 	public IfConditional elseif() {
-		IfConditional elseifpart = new IfConditional(this);
+		final IfConditional elseifpart = new IfConditional(this);
 		parts.add(elseifpart);
 		return elseifpart;
 	}
@@ -85,7 +85,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 	 *
 	 * @param expr
 	 */
-	public void expr(IExpression expr) {
+	public void expr(final IExpression expr) {
 		this.expr = expr;
 	}
 	
@@ -105,7 +105,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		return parts;
 	}
 
-	public void setContext(IfConditionalContext ifConditionalContext) {
+	public void setContext(final IfConditionalContext ifConditionalContext) {
 		_ctx = ifConditionalContext;
 	}
 
@@ -113,7 +113,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		private List<Token> mDocs;
 
 		@Override
-		public void addDocString(Token s) {
+		public void addDocString(final Token s) {
 			if (mDocs == null)
 				mDocs = new ArrayList<Token>();
 			mDocs.add(s);
@@ -121,7 +121,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 
 		/*@ requires parent != null; */
 		@Override
-		public void statementWrapper(IExpression aExpr) {
+		public void statementWrapper(final IExpression aExpr) {
 			//if (parent_scope == null) throw new IllegalStateException("parent is null");
 			add(new StatementWrapper(aExpr, getContext(), getParent()));
 		}
@@ -137,7 +137,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		}
 
 		@Override
-		public void add(StatementItem aItem) {
+		public void add(final StatementItem aItem) {
 			IfConditional.this.add(aItem);
 		}
 
@@ -164,7 +164,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 	    }
 	}
 
-	private void add(StatementItem aItem) {
+	private void add(final StatementItem aItem) {
 		_items.add((OS_Element) aItem);
 	}
 

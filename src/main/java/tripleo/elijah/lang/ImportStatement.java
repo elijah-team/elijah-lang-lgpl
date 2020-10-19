@@ -17,7 +17,7 @@ import java.util.List;
 public interface ImportStatement extends ModuleItem {
 
 	@Override
-	default void visitGen(ICodeGen visit) {
+	default void visitGen(final ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}

@@ -12,16 +12,16 @@ import tripleo.elijah.gen.CompilerContext;
  */
 public class IfNode {
 
-	public IfNode(TmpSSACtxNode latn) {
+	public IfNode(final TmpSSACtxNode latn) {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void BeginIfCtx(CompilerContext cctx, GenBuffer gbn) {
+	public void BeginIfCtx(final CompilerContext cctx, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void CloseIfCtx(CompilerContext cctx, GenBuffer gbn) {
+	public void CloseIfCtx(final CompilerContext cctx, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -15,7 +15,7 @@ public class TypeNameList {
 
 	List<TypeName> p = new ArrayList<TypeName>();
 
-	public void add(TypeName tn) {
+	public void add(final TypeName tn) {
 		p.add(tn);
 	}
 

@@ -27,7 +27,7 @@ public class TmpSSACtxNode {
 	private final CompilerContext _ctx;
 	private IExpressionNode _node;
 	
-	public TmpSSACtxNode(CompilerContext cctx) {
+	public TmpSSACtxNode(final CompilerContext cctx) {
 		// TODO Auto-generated constructor stub
 		this._ctx=cctx;
 	}
@@ -51,15 +51,15 @@ public class TmpSSACtxNode {
 		return __expr;
 	}
 	
-	public void setExprType(IExpression __expr) {
+	public void setExprType(final IExpression __expr) {
 		this.__expr = __expr;
 	}
 	
-	public void setExprType(IExpressionNode node) {
+	public void setExprType(final IExpressionNode node) {
 		this._node = node;
 	}
 
-	public void GenLocalAgn(CompilerContext cctx, GenBuffer gbn) {
+	public void GenLocalAgn(final CompilerContext cctx, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}

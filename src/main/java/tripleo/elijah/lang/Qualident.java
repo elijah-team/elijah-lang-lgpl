@@ -26,10 +26,10 @@ import java.util.Objects;
 public class Qualident  implements IExpression {
 
 	/** Look into creating a {@link DotExpression} from here */
-	public void append(Token r1) {
+	public void append(final Token r1) {
 		parts.add(r1);		
 	}
-	public void appendDot(Token d1) {
+	public void appendDot(final Token d1) {
 //		parts.add(d1);
 	}
 	
@@ -43,7 +43,7 @@ public class Qualident  implements IExpression {
 	@NotNull
 	public String asSimpleString() {
 		final StringBuilder sb=new StringBuilder();
-		for (Token part : parts) {
+		for (final Token part : parts) {
 			sb.append(part.getText());
 			sb.append('.');
 		}
@@ -58,7 +58,7 @@ public class Qualident  implements IExpression {
 	}
 	
 	@Override
-	public void setKind(ExpressionKind aIncrement) {
+	public void setKind(final ExpressionKind aIncrement) {
 		throw new IllegalArgumentException(); // TODO is this right?
 	}
 	
@@ -69,7 +69,7 @@ public class Qualident  implements IExpression {
 	
 	/** Not sure what this should do */
 	@Override
-	public void setLeft(IExpression iexpression) {
+	public void setLeft(final IExpression iexpression) {
 		throw new IllegalArgumentException(); // TODO is this right?
 	}
 	
@@ -86,7 +86,7 @@ public class Qualident  implements IExpression {
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
@@ -99,13 +99,13 @@ public class Qualident  implements IExpression {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) return true;
 		if (!(o instanceof Qualident)) return false;
-		Qualident qualident = (Qualident) o;
+		final Qualident qualident = (Qualident) o;
 		for (int i=0; i< parts.size();i++) {
-			Token ppart = qualident.parts.get(i);
-			Token part  = parts.get(i);
+			final Token ppart = qualident.parts.get(i);
+			final Token part  = parts.get(i);
 			if (!equivalentTokens(ppart, part))
 				return false;
 //			if (!qualident.parts.contains(token))
@@ -115,7 +115,7 @@ public class Qualident  implements IExpression {
 		return Objects.equals(_type, qualident._type);
 	}
 
-	private static boolean equivalentTokens(Token token1, Token token2) {
+	private static boolean equivalentTokens(final Token token1, final Token token2) {
 		return token2.getText().equals(token1.getText()) &&
 			token2.getLine() == token1.getLine() &&
 			token2.getColumn() == token1.getColumn() &&

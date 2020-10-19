@@ -6,7 +6,7 @@ import java.util.List;
 public class IntroducedExpressionList {
 	private final List<FunctionPrelimInstruction> items = new ArrayList<FunctionPrelimInstruction>();
 
-	public void add(FunctionPrelimInstruction i) {
+	public void add(final FunctionPrelimInstruction i) {
 		items.add(i);
 	}
 

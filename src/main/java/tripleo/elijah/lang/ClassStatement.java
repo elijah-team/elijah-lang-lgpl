@@ -40,7 +40,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 //	public ClassStatement() {
 //	}
 	
-	public ClassStatement(OS_Element aElement) {
+	public ClassStatement(final OS_Element aElement) {
 		parent = aElement; // setParent
 		if (aElement instanceof  OS_Module) {
 			final OS_Module module = (OS_Module) aElement;
@@ -64,7 +64,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 //	}
 
 	@Override
-	public void addDocString(Token aText) {
+	public void addDocString(final Token aText) {
 		mDocs.add(aText.getText());
 	}
 
@@ -96,7 +96,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return parent;
 	}
 	
-	public void setName(IdentExpression aText) {
+	public void setName(final IdentExpression aText) {
 		clsName = aText;
 	}
 
@@ -117,23 +117,23 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
-		Collection<ClassItem> c = Collections2.filter(getItems(), new Predicate<ClassItem>() {
+		final Collection<ClassItem> c = Collections2.filter(getItems(), new Predicate<ClassItem>() {
 			@Override
-			public boolean apply(@Nullable ClassItem input) {
+			public boolean apply(@Nullable final ClassItem input) {
 				final boolean b = input instanceof OS_Element2;
 //				System.out.println(String.format("%s %b", input, b));
 				return b;
 			}
 		});
-		ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
-		for (ClassItem functionItem : c) {
+		final ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
+		for (final ClassItem functionItem : c) {
 			a.add((OS_Element2) functionItem);
 		}
 		return a;
 	}
 
 	@Override // OS_Container
-	public void add(OS_Element anElement) {
+	public void add(final OS_Element anElement) {
 		if (anElement instanceof ClassItem)
 			items.add((ClassItem) anElement);
 		else
@@ -141,11 +141,11 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		visit.addClass(this);
 	}
 	
-	public void setPackageName(OS_Package aPackageName) {
+	public void setPackageName(final OS_Package aPackageName) {
 		_packageName = aPackageName;
 	}
 	
@@ -155,7 +155,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	@Override
 	public String toString() {
-		String package_name;
+		final String package_name;
 		if (getPackageName() != null && getPackageName()._name != null) {
 			final Qualident package_name_q = getPackageName()._name;
 			package_name = package_name_q.toString();
@@ -164,7 +164,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return String.format("<Class %d %s %s>", _a.getCode(), package_name, getName());
 	}
 
-	public ConstructorDef addCtor(IdentExpression aConstructorName) {
+	public ConstructorDef addCtor(final IdentExpression aConstructorName) {
 		return new ConstructorDef(aConstructorName, this);
 	}
 	
@@ -200,7 +200,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	public Collection<ClassItem> findFunction(final String name) {
 		return Collections2.filter(items, new Predicate<ClassItem>() {
 			@Override
-			public boolean apply(@Nullable ClassItem item) {
+			public boolean apply(@Nullable final ClassItem item) {
 				if (item instanceof FunctionDef)
 					if (((FunctionDef) item).name().equals(name))
 						return true;
@@ -209,11 +209,11 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		});
 	}
 
-	public void setType(ClassTypes aType) {
+	public void setType(final ClassTypes aType) {
 		_type = aType;
 	}
 
-	public void setContext(ClassContext ctx) {
+	public void setContext(final ClassContext ctx) {
 		_a.setContext(ctx);
 	}
 
@@ -222,13 +222,13 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	List<AnnotationClause> annotations = null;
 
-	public void addAnnotation(AnnotationClause a) {
+	public void addAnnotation(final AnnotationClause a) {
 		if (annotations == null)
 			annotations = new ArrayList<AnnotationClause>();
 		annotations.add(a);
 	}
 
-	public void addAccess(AccessNotation acs) {
+	public void addAccess(final AccessNotation acs) {
 		accesses.add(acs);
 	}
 

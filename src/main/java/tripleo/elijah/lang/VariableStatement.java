@@ -23,7 +23,7 @@ public class VariableStatement implements OS_Element {
 	private IdentExpression name;
 	private TypeModifiers typeModifiers;
 
-	public VariableStatement(VariableSequence aSequence) {
+	public VariableStatement(final VariableSequence aSequence) {
 		_parent = aSequence;
 	}
 
@@ -35,11 +35,11 @@ public class VariableStatement implements OS_Element {
 		return name;
 	}
 
-	public void setName(IdentExpression s) {
+	public void setName(final IdentExpression s) {
 		name = s;
 	}
 
-	public void initial(IExpression aExpr) {
+	public void initial(final IExpression aExpr) {
 		initialValue=aExpr;
 	}
 
@@ -53,7 +53,7 @@ public class VariableStatement implements OS_Element {
 	}
 */
 
-	public void set(TypeModifiers y) {
+	public void set(final TypeModifiers y) {
 		typeModifiers = y;
 	}
 
@@ -95,7 +95,7 @@ public class VariableStatement implements OS_Element {
 	}*/
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
@@ -111,7 +111,7 @@ public class VariableStatement implements OS_Element {
 		return getParent().getContext();
 	}
 
-	public void setTypeName(TypeName tn) {
+	public void setTypeName(final TypeName tn) {
 		typeName = tn;
 	}
 

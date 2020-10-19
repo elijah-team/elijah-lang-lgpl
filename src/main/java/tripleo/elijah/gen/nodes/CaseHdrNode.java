@@ -30,7 +30,7 @@ public class CaseHdrNode implements Node {
 //		this.expr = new VariableReferenceNode2(vr.getName(),  null, false);
 //	}
 	
-	public CaseHdrNode(VariableReferenceNode3 varref) {
+	public CaseHdrNode(final VariableReferenceNode3 varref) {
 		// TODO Auto-generated constructor stub
 		this.expr = /*new ExpressionNode*/(varref);
 	}
@@ -39,7 +39,7 @@ public class CaseHdrNode implements Node {
 		return expr;
 	}
 
-	public void setExpr(ExpressionNode expr) {
+	public void setExpr(final ExpressionNode expr) {
 		this.expr = expr;
 	}
 	

@@ -48,12 +48,12 @@ public class Compilation {
 	private int _packageCode = 1;
 	public final List<CompilerInstructions> cis = new ArrayList<CompilerInstructions>();
 
-	public Compilation(ErrSink eee, IO io) {
+	public Compilation(final ErrSink eee, final IO io) {
 		this.eee = eee;
 		this.io  = io;
 	}
 
-	public void feedCmdLine(List<String> args) {
+	public void feedCmdLine(final List<String> args) {
 		main(args, new StdErrSink());
 	}
 
@@ -61,7 +61,7 @@ public class Compilation {
 		return io;
 	}
 
-	public void setIO(IO io) {
+	public void setIO(final IO io) {
 		this.io = io;
 	}
 
@@ -71,16 +71,16 @@ public class Compilation {
 
 	public String stage = "O"; // Output
 
-	public void main(List<String> args, ErrSink errSink) {
+	public void main(final List<String> args, final ErrSink errSink) {
 		boolean do_out = false;
 		try {
 			if (args.size() > 0) {
-				Options options = new Options();
+				final Options options = new Options();
 				options.addOption("s", true, "stage: E: parse; O: output");
 				options.addOption("showtree", false, "show tree");
 				options.addOption("out", false, "make debug files");
-				CommandLineParser clp = new DefaultParser();
-				CommandLine cmd = clp.parse(options, args.toArray(new String[args.size()]));
+				final CommandLineParser clp = new DefaultParser();
+				final CommandLine cmd = clp.parse(options, args.toArray(new String[args.size()]));
 
 				if (cmd.hasOption("s")) {
 					stage = cmd.getOptionValue('s');
@@ -103,7 +103,7 @@ public class Compilation {
 					else {
 //						eee.reportError("9996 Not an .ez file "+file_name);
 						if (f.isDirectory()) {
-							List<CompilerInstructions> ezs = searchEzFiles(f);
+							final List<CompilerInstructions> ezs = searchEzFiles(f);
 							if (ezs.size() > 1) {
 								eee.reportError("9998 Too many .ez files, using first.");
 								add_ci(ezs.get(0));
@@ -117,7 +117,7 @@ public class Compilation {
 					}
 				}
 
-				for (CompilerInstructions ci : cis) {
+				for (final CompilerInstructions ci : cis) {
 					use(ci, do_out);
 				}
 
@@ -125,9 +125,9 @@ public class Compilation {
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
-					for (OS_Module module : modules) {
+					for (final OS_Module module : modules) {
 						new DeduceTypes(module).deduce();
-						for (OS_Element2 item : module.items()) {
+						for (final OS_Element2 item : module.items()) {
 							if (item instanceof ClassStatement || item instanceof NamespaceStatement)
 								System.err.println("8001 "+item);
 						}
@@ -141,23 +141,23 @@ public class Compilation {
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or file names>");
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			errSink.exception(e);
 		}
 	}
 
-	private List<CompilerInstructions> searchEzFiles(File directory) {
+	private List<CompilerInstructions> searchEzFiles(final File directory) {
 		final List<CompilerInstructions> R = new ArrayList<CompilerInstructions>();
 		final FilenameFilter f = new FilenameFilter() {
 			@Override
-			public boolean accept(File file, String s) {
+			public boolean accept(final File file, final String s) {
 				final boolean matches2 = Pattern.matches(".+\\.ez$", s);
 				return matches2;
 			}
 		};
 		final String[] list = directory.list(f);
 		if (list != null) {
-			for (String file_name : list) {
+			for (final String file_name : list) {
 				try {
 					final File file = new File(directory, file_name);
 					final CompilerInstructions ezFile = parseEzFile(file, file.toString(), eee);
@@ -165,7 +165,7 @@ public class Compilation {
 						R.add(ezFile);
 					else
 						eee.reportError("9995 ezFile is null "+file.toString());
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					eee.exception(e);
 				}
 			}
@@ -173,14 +173,14 @@ public class Compilation {
 		return R;
 	}
 
-	private void add_ci(CompilerInstructions ci) {
+	private void add_ci(final CompilerInstructions ci) {
 		cis.add(ci);
 	}
 
-	public void use(CompilerInstructions compilerInstructions, boolean do_out) throws Exception {
+	public void use(final CompilerInstructions compilerInstructions, final boolean do_out) throws Exception {
 		final File instruction_dir = new File(compilerInstructions.getFilename()).getParentFile();
-		for (LibraryStatementPart lsp : compilerInstructions.lsps) {
-			String dir_name = Helpers.remove_single_quotes_from_string(lsp.getDirName());
+		for (final LibraryStatementPart lsp : compilerInstructions.lsps) {
+			final String dir_name = Helpers.remove_single_quotes_from_string(lsp.getDirName());
 			File dir = new File(dir_name);
 			if (dir_name.equals(".."))
 				dir = instruction_dir/*.getAbsoluteFile()*/.getParentFile();
@@ -191,7 +191,7 @@ public class Compilation {
 		use_internal(instruction_dir, do_out);
 	}
 
-	private void use_internal(File dir, boolean do_out) throws Exception {
+	private void use_internal(final File dir, final boolean do_out) throws Exception {
 		if (!dir.isDirectory()) {
 			eee.reportError("9997 Not a directory " + dir.toString());
 			return;
@@ -199,7 +199,7 @@ public class Compilation {
 		//
 		final FilenameFilter accept_source_files = new FilenameFilter() {
 			@Override
-			public boolean accept(File directory, String file_name) {
+			public boolean accept(final File directory, final String file_name) {
 				final boolean matches = Pattern.matches(".+\\.elijah$", file_name)
 						             || Pattern.matches(".+\\.elijjah$", file_name);
 				return matches;
@@ -207,16 +207,16 @@ public class Compilation {
 		};
 		final File[] files = dir.listFiles(accept_source_files);
 		if (files != null) {
-			for (File file : files) {
+			for (final File file : files) {
 				parseElijjahFile(file, file.toString(), eee, do_out);
 			}
 		}
 	}
 
-	private CompilerInstructions parseEzFile(File f, String file_name, ErrSink errSink) throws Exception {
+	private CompilerInstructions parseEzFile(final File f, final String file_name, final ErrSink errSink) throws Exception {
 		System.out.println((String.format("   %s", f.getAbsolutePath())));
 		if (f.exists()) {
-			CompilerInstructions m = realParseEzFile(file_name, io.readFile(f), f);
+			final CompilerInstructions m = realParseEzFile(file_name, io.readFile(f), f);
 			return m;
 //			m.prelude = this.findPrelude("c"); // TODO extract Prelude for all modules from here
 		} else {
@@ -226,10 +226,10 @@ public class Compilation {
 		return null;
 	}
 
-	private void parseElijjahFile(@NotNull File f, String file_name, ErrSink errSink, boolean do_out) throws Exception {
+	private void parseElijjahFile(@NotNull final File f, final String file_name, final ErrSink errSink, final boolean do_out) throws Exception {
 		System.out.println((String.format("   %s", f.getAbsolutePath())));
 		if (f.exists()) {
-			OS_Module m = realParseElijjahFile(file_name, f, do_out);
+			final OS_Module m = realParseElijjahFile(file_name, f, do_out);
 			m.prelude = this.findPrelude("c"); // TODO we dont know which prelude to find yet
 		} else {
 			errSink.reportError(
@@ -237,17 +237,17 @@ public class Compilation {
 		}
 	}
 
-	public OS_Module realParseElijjahFile(String f, File file, boolean do_out) throws Exception {
+	public OS_Module realParseElijjahFile(final String f, final File file, final boolean do_out) throws Exception {
 		if (fn2m.containsKey(file.getAbsolutePath())) { // don't parse twice
 			return fn2m.get(file.getAbsolutePath());
 		}
 		final InputStream s = io.readFile(file);
 		try {
-			OS_Module R = parseFile_(f, s, do_out);
+			final OS_Module R = parseFile_(f, s, do_out);
 			fn2m.put(file.getAbsolutePath(), R);
 			s.close();
 			return R;
-		} catch (ANTLRException e) {
+		} catch (final ANTLRException e) {
 			System.err.println(("parser exception: " + e));
 			e.printStackTrace(System.err);
 			s.close();
@@ -255,17 +255,17 @@ public class Compilation {
 		}
 	}
 
-	public CompilerInstructions realParseEzFile(String f, InputStream s, File file) throws Exception {
+	public CompilerInstructions realParseEzFile(final String f, final InputStream s, final File file) throws Exception {
 		if (fn2ci.containsKey(file.getAbsolutePath())) { // don't parse twice
 			return fn2ci.get(file.getAbsolutePath());
 		}
 		try {
-			CompilerInstructions R = parseEzFile_(f, s);
+			final CompilerInstructions R = parseEzFile_(f, s);
 			R.setFilename(file.toString());
 			fn2ci.put(file.getAbsolutePath(), R);
 			s.close();
 			return R;
-		} catch (ANTLRException e) {
+		} catch (final ANTLRException e) {
 			System.err.println(("parser exception: " + e));
 			e.printStackTrace(System.err);
 			s.close();
@@ -273,10 +273,10 @@ public class Compilation {
 		}
 	}
 
-	private OS_Module parseFile_(String f, InputStream s, boolean do_out) throws RecognitionException, TokenStreamException {
-		ElijjahLexer lexer = new ElijjahLexer(s);
+	private OS_Module parseFile_(final String f, final InputStream s, final boolean do_out) throws RecognitionException, TokenStreamException {
+		final ElijjahLexer lexer = new ElijjahLexer(s);
 		lexer.setFilename(f);
-		ElijjahParser parser = new ElijjahParser(lexer);
+		final ElijjahParser parser = new ElijjahParser(lexer);
 		parser.out = new Out(f, this, do_out);
 		parser.setFilename(f);
 		parser.program();
@@ -285,10 +285,10 @@ public class Compilation {
 		return module;
 	}
 
-	private CompilerInstructions parseEzFile_(String f, InputStream s) throws RecognitionException, TokenStreamException {
-		EzLexer lexer = new EzLexer(s);
+	private CompilerInstructions parseEzFile_(final String f, final InputStream s) throws RecognitionException, TokenStreamException {
+		final EzLexer lexer = new EzLexer(s);
 		lexer.setFilename(f);
-		EzParser parser = new EzParser(lexer);
+		final EzParser parser = new EzParser(lexer);
 		parser.setFilename(f);
 		parser.program();
 		final CompilerInstructions instructions = parser.ci;
@@ -297,9 +297,9 @@ public class Compilation {
 
 	boolean showTree = false;
 
-	public List<ClassStatement> findClass(String string) {
-		List<ClassStatement> l = new ArrayList<ClassStatement>();
-		for (OS_Module module : modules) {
+	public List<ClassStatement> findClass(final String string) {
+		final List<ClassStatement> l = new ArrayList<ClassStatement>();
+		for (final OS_Module module : modules) {
 			if (module.hasClass(string)) {
 				l.add((ClassStatement) module.findClass(string));
 			}
@@ -311,12 +311,12 @@ public class Compilation {
 		return eee.errorCount();
 	}
 
-	public OS_Module findPrelude(String prelude_name) {
-		File local_prelude = new File("lib_elijjah/lib-"+prelude_name+"/Prelude.elijjah");
+	public OS_Module findPrelude(final String prelude_name) {
+		final File local_prelude = new File("lib_elijjah/lib-"+prelude_name+"/Prelude.elijjah");
 		if (local_prelude.exists()) {
 			try {
 				return realParseElijjahFile(local_prelude.getName(), local_prelude, false);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				eee.exception(e);
 				return null;
 			}
@@ -324,14 +324,14 @@ public class Compilation {
 		return null;
 	}
 
-	public boolean findStdLib(String prelude_name) {
-		File local_stdlib = new File("lib_elijjah/lib-"+prelude_name+"/stdlib.ez");
+	public boolean findStdLib(final String prelude_name) {
+		final File local_stdlib = new File("lib_elijjah/lib-"+prelude_name+"/stdlib.ez");
 		if (local_stdlib.exists()) {
 			try {
-				CompilerInstructions ci = realParseEzFile(local_stdlib.getName(), io.readFile(local_stdlib), local_stdlib);
+				final CompilerInstructions ci = realParseEzFile(local_stdlib.getName(), io.readFile(local_stdlib), local_stdlib);
 				add_ci(ci);
 				return true;
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				eee.exception(e);
 			}
 		}
@@ -342,12 +342,12 @@ public class Compilation {
 	// MODULE STUFF
 	//
 
-	public void addModule(OS_Module module, String fn) {
+	public void addModule(final OS_Module module, final String fn) {
 		modules.add(module);
 		fn2m.put(fn, module);
 	}
 
-    public OS_Module fileNameToModule(String fileName) {
+    public OS_Module fileNameToModule(final String fileName) {
         if (fn2m.containsKey(fileName)) {
             return fn2m.get(fileName);
         }
@@ -373,15 +373,15 @@ public class Compilation {
 	//  PACKAGES
 	//
 
-	public boolean isPackage(String pkg) {
+	public boolean isPackage(final String pkg) {
 		return _packages.containsKey(pkg);
 	}
 
-	public OS_Package getPackage(Qualident pkg_name) {
+	public OS_Package getPackage(final Qualident pkg_name) {
 		return _packages.get(pkg_name.toString());
 	}
 
-	public OS_Package makePackage(Qualident pkg_name) {
+	public OS_Package makePackage(final Qualident pkg_name) {
 		if (!isPackage(pkg_name.toString())) {
 			final OS_Package newPackage = new OS_Package(pkg_name, nextPackageCode());
 			_packages.put(pkg_name.toString(), newPackage);

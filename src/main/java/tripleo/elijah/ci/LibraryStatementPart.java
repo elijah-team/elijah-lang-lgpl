@@ -22,11 +22,11 @@ public class LibraryStatementPart {
 	private String dirName;
 	private List<Directive> dirs = new ArrayList<Directive>();
 
-	public void setName(Token i1) {
+	public void setName(final Token i1) {
 		name = i1.getText();
 	}
 
-	public void setDirName(Token dirName) {
+	public void setDirName(final Token dirName) {
 		this.dirName = dirName.getText();
 	}
 
@@ -38,7 +38,7 @@ public class LibraryStatementPart {
 		return dirName;
 	}
 
-	public void addDirective(Token token, IExpression iExpression) {
+	public void addDirective(final Token token, final IExpression iExpression) {
 		dirs.add(new Directive(token, iExpression));
 	}
 
@@ -47,7 +47,7 @@ public class LibraryStatementPart {
 		private final IExpression expression;
 		private final String name;
 
-		public Directive(Token token_, IExpression expression_) {
+		public Directive(final Token token_, final IExpression expression_) {
 			name = token_.getText();
 			expression = expression_;
 		}

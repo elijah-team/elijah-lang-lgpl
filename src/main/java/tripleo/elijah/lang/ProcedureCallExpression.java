@@ -18,7 +18,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	private IExpression _left;
 	private ExpressionList args=new ExpressionList();
 	
-	public ProcedureCallExpression(Token aToken, ExpressionList aExpressionList, Token aToken1) {
+	public ProcedureCallExpression(final Token aToken, final ExpressionList aExpressionList, final Token aToken1) {
 		throw new NotImplementedException();
 		
 	}
@@ -32,7 +32,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	 * 
 	 * @param xyz a method name in Qualident form (might come as DotExpression in future)
 	 */
-	public void identifier(Qualident xyz) {
+	public void identifier(final Qualident xyz) {
 		setLeft(xyz);
 	}
 	
@@ -41,7 +41,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	 * 
 	 * @param xyz a method name might come as DotExpression or IdentExpression
 	 */
-	public void identifier(IExpression xyz) {
+	public void identifier(final IExpression xyz) {
 		setLeft(xyz);
 	}
 	
@@ -66,7 +66,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	}
 
 	@Override
-	public void setKind(ExpressionKind aIncrement) {
+	public void setKind(final ExpressionKind aIncrement) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
@@ -80,7 +80,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	 * @see #identifier(Qualident)
 	 */
 	@Override
-	public void setLeft(IExpression iexpression) {
+	public void setLeft(final IExpression iexpression) {
 		_left = iexpression;
 	}
 
@@ -94,7 +94,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	 *
 	 * @param ael the new value
 	 */
-	public void setArgs(ExpressionList ael) {
+	public void setArgs(final ExpressionList ael) {
 		args = ael;
 	}
 	
@@ -126,7 +126,7 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 

@@ -16,10 +16,10 @@ public class FileCharSink implements CharSink {
 	 * @see tripleo.util.io.CharSink#accept(char)
 	 */
 	@Override
-	public void accept(char char1) {
+	public void accept(final char char1) {
 		try {
 			fos.write(char1);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -29,10 +29,10 @@ public class FileCharSink implements CharSink {
 	 * @see tripleo.util.io.CharSink#accept(java.lang.String)
 	 */
 	@Override
-	public void accept(String string1) {
+	public void accept(final String string1) {
 		try {
 			fos.write(string1.getBytes());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -43,7 +43,7 @@ public class FileCharSink implements CharSink {
 	/**
 	 * @param fos
 	 */
-	public FileCharSink(FileOutputStream fos) {
+	public FileCharSink(final FileOutputStream fos) {
 		super();
 		this.fos = fos;
 	}

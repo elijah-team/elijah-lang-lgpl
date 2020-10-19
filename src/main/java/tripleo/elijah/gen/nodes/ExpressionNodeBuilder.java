@@ -35,7 +35,7 @@ import static tripleo.elijah.gen.TypeRef.*;
 public class ExpressionNodeBuilder {
 	
 	private static class MyIExpressionNode1 implements IExpressionNode {
-		static String printableExpression(@NotNull IExpression expression) {
+		static String printableExpression(@NotNull final IExpression expression) {
 //			if (expression instanceof OS_Integer) {
 //				return Integer.toString(((OS_Integer) expression).getValue());
 //			} else
@@ -49,7 +49,7 @@ public class ExpressionNodeBuilder {
 		
 		private final IExpressionNode _right;
 		
-		public MyIExpressionNode1(VariableReferenceNode3 left, ExpressionOperators middle, IExpressionNode right) {
+		public MyIExpressionNode1(final VariableReferenceNode3 left, final ExpressionOperators middle, final IExpressionNode right) {
 			_left = left;
 			_middle = middle;
 			_right = right;
@@ -61,10 +61,10 @@ public class ExpressionNodeBuilder {
 		}
 		
 		@Override
-		public String genText(CompilerContext cctx) {
-			String left = _left.genText();
-			String middle1 = _middle.getSymbol();
-			String right = printableExpression(_right.getExpr());
+		public String genText(final CompilerContext cctx) {
+			final String left = _left.genText();
+			final String middle1 = _middle.getSymbol();
+			final String right = printableExpression(_right.getExpr());
 			
 			return String.format("%s %s %s", left, middle1, right);
 		}
@@ -114,30 +114,30 @@ public class ExpressionNodeBuilder {
 	
 	@NotNull
 	@Contract("_, _, _ -> new")
-	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, IExpression right) {
+	public static IExpression binex(final TypeRef rt, final VariableReference left, final ExpressionOperators middle, final IExpression right) {
 		// TODO Auto-generated method stub
-		ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
+		final ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
 		return new BasicBinaryExpression(left, middle1, right);
 	}
 
 	@NotNull
 	@Contract("_, _, _ -> new")
-	public static IExpression binex(TypeRef rt, VariableReference left, ExpressionOperators middle, TmpSSACtxNode right) { // todo wrong again
+	public static IExpression binex(final TypeRef rt, final VariableReference left, final ExpressionOperators middle, final TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
-		ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
+		final ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
 		return new BasicBinaryExpression(left, middle1, new StringExpression(tripleo.elijah.util.Helpers.makeToken(right.text()))); // TODO !!!
 	}
 
 	@NotNull
-	public static IExpressionNode binex(TypeRef rt, VariableReferenceNode3 n, ExpressionOperators opMinus, NumericExpression integer) {
-		TypeRef typeRef = new TypeRef(null, null,"int", 80);  // TODO smells
+	public static IExpressionNode binex(final TypeRef rt, final VariableReferenceNode3 n, final ExpressionOperators opMinus, final NumericExpression integer) {
+		final TypeRef typeRef = new TypeRef(null, null,"int", 80);  // TODO smells
 		//
 		return new MyIExpressionNode1(n, opMinus, new IntegerNode(integer, typeRef));
 	}
 	
 	@NotNull
 	@Contract(value = "_, _, _ -> new", pure = true)
-	public static IExpressionNode binex(final TypeRef rt, VariableReferenceNode3 varref, ExpressionOperators operators, TmpSSACtxNode node) {
+	public static IExpressionNode binex(final TypeRef rt, final VariableReferenceNode3 varref, final ExpressionOperators operators, final TmpSSACtxNode node) {
 		return new IExpressionNode() {
 			@Override
 			public String genText() {
@@ -145,7 +145,7 @@ public class ExpressionNodeBuilder {
 			}
 			
 			@Override
-			public String genText(CompilerContext cctx) {
+			public String genText(final CompilerContext cctx) {
 				return null;
 			}
 			
@@ -187,7 +187,7 @@ public class ExpressionNodeBuilder {
 	}
 	
 	@NotNull
-	public static IExpressionNode fncall(final MethRef aMeth, List<LocalAgnTmpNode> of) { // TODO no so wrong anymore
+	public static IExpressionNode fncall(final MethRef aMeth, final List<LocalAgnTmpNode> of) { // TODO no so wrong anymore
 		// TODO Auto-generated method stub
 		final ProcedureCallExpression pce1 = new ProcedureCallExpression();
 		final Qualident xyz = new Qualident();
@@ -197,7 +197,7 @@ public class ExpressionNodeBuilder {
 		pce1.identifier(xyz);
 		//
 		//
-		ExpressionList expl = Helpers.LocalAgnTmpNodeToListVarRef(of);
+		final ExpressionList expl = Helpers.LocalAgnTmpNodeToListVarRef(of);
 		pce1.setArgs(expl);
 		//
 		//
@@ -209,7 +209,7 @@ public class ExpressionNodeBuilder {
 			}
 			
 			@Override
-			public String genText(CompilerContext cctx) {
+			public String genText(final CompilerContext cctx) {
 				final TypeRef p = aMeth.getParent();
 				final int code = p.getCode();
 				final String s = String.format("z%d%s", code, pce1.getLeft().toString());
@@ -218,9 +218,9 @@ public class ExpressionNodeBuilder {
 				sb.append(s);
 				sb.append('(');
 				
-				List<String> sl = new ArrayList<String>();
-				for (IExpression arg : pce1.getArgs()) {
-					String s2;
+				final List<String> sl = new ArrayList<String>();
+				for (final IExpression arg : pce1.getArgs()) {
+					final String s2;
 					if (arg instanceof VariableReference) {
 						s2 = ((VariableReference) arg).getName();
 					} else {
@@ -279,7 +279,7 @@ public class ExpressionNodeBuilder {
 //		return fncall(string, expl);
 //	}
 	
-	public static IExpressionNode fncall(String string, List<LocalAgnTmpNode> of) { // todo wrong
+	public static IExpressionNode fncall(final String string, final List<LocalAgnTmpNode> of) { // todo wrong
 		// TODO Auto-generated method stub
 		final ProcedureCallExpression pce1 = new ProcedureCallExpression();
 		final Qualident xyz = new Qualident();
@@ -299,7 +299,7 @@ public class ExpressionNodeBuilder {
 			}
 			
 			@Override
-			public String genText(CompilerContext cctx) {
+			public String genText(final CompilerContext cctx) {
 				NotImplementedException.raise();
 				return null;
 			}
@@ -351,7 +351,7 @@ public class ExpressionNodeBuilder {
 	 */
 	@NotNull
 	@Contract("_ -> new")
-	public static IdentExpression ident(String string) {
+	public static IdentExpression ident(final String string) {
 		// TODO Parser level elements should not be used here
 		return new IdentExpression(tripleo.elijah.util.Helpers.makeToken(string));
 
@@ -365,14 +365,14 @@ public class ExpressionNodeBuilder {
 	 */
 	@NotNull
 	@Contract("_ -> new")
-	public static NumericExpression integer(int i) {
+	public static NumericExpression integer(final int i) {
 		// TODO Parser level elements should not be used here
 		return new NumericExpression(i);
 	}
 	
 	@NotNull
 	@Contract("_, _, _ -> new")
-	public static VariableReferenceNode3 varref(String string, Node container, TypeRef typeRef) {
+	public static VariableReferenceNode3 varref(final String string, final Node container, final TypeRef typeRef) {
  		return new VariableReferenceNode3(string, container, typeRef);
 	}
 	

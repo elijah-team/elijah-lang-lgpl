@@ -21,15 +21,15 @@ public class GenericTypeName implements TypeName {
 	private Qualident _typeName;
 	private TypeModifiers modifiers;
 
-	public GenericTypeName(Context cur) {
+	public GenericTypeName(final Context cur) {
 		_ctx=cur;
 	}
 
-	public void typeName(Qualident xy) {
+	public void typeName(final Qualident xy) {
 		_typeName = xy;
 	}
 
-	public void set(TypeModifiers modifiers_) {
+	public void set(final TypeModifiers modifiers_) {
 		modifiers = modifiers_;
 	}
 
@@ -39,7 +39,7 @@ public class GenericTypeName implements TypeName {
 	}
 
 	@Override
-	public void setContext(Context context) {
+	public void setContext(final Context context) {
 		throw new NotImplementedException();
 	}
 

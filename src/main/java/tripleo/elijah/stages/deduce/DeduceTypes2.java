@@ -29,21 +29,21 @@ import java.util.Stack;
 public class DeduceTypes2 {
 	private final OS_Module module;
 
-	public DeduceTypes2(OS_Module m) {
+	public DeduceTypes2(final OS_Module m) {
 		module = m;
 	}
 
-	public void deduceFunctions(List<GeneratedFunction> lgf) {
-		for (GeneratedFunction generatedFunction : lgf) {
+	public void deduceFunctions(final List<GeneratedFunction> lgf) {
+		for (final GeneratedFunction generatedFunction : lgf) {
 			deduce_generated_function(generatedFunction);
 		}
 	}
 
-	public void deduce_generated_function(GeneratedFunction generatedFunction) {
-		OS_Element fd = generatedFunction.getFD();
-		Context fd_ctx = fd.getContext();
+	public void deduce_generated_function(final GeneratedFunction generatedFunction) {
+		final OS_Element fd = generatedFunction.getFD();
+		final Context fd_ctx = fd.getContext();
 		//
-		for (Instruction instruction : generatedFunction.instructions()) {
+		for (final Instruction instruction : generatedFunction.instructions()) {
 			final Context context = generatedFunction.getContextFromPC(instruction.getIndex());
 //			System.out.println("8006 " + instruction);
 			switch (instruction.getName()) {
@@ -51,11 +51,11 @@ public class DeduceTypes2 {
 				//
 				// resolve all cte expressions
 				//
-				for (ConstantTableEntry cte : generatedFunction.cte_list) {
-					IExpression iv = cte.initialValue;
+				for (final ConstantTableEntry cte : generatedFunction.cte_list) {
+					final IExpression iv = cte.initialValue;
 					switch (iv.getKind()) {
 					case NUMERIC: {
-						OS_Type a = cte.getTypeTableEntry().attached;
+						final OS_Type a = cte.getTypeTableEntry().attached;
 						if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
 							cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);
 						}
@@ -63,7 +63,7 @@ public class DeduceTypes2 {
 					break;
 					case IDENT:
 						{
-							OS_Type a = cte.getTypeTableEntry().attached;
+							final OS_Type a = cte.getTypeTableEntry().attached;
 							if (a.getType() == OS_Type.Type.BUILT_IN && a.getBType() == BuiltInTypes.Boolean) {
 								assert cte.getName().equals("true") || cte.getName().equals("false");
 							} else
@@ -81,14 +81,14 @@ public class DeduceTypes2 {
 			case X:
 				{
 					// TODO brittle: is alias points to alias, will fail
-					for (VariableTableEntry vte : generatedFunction.vte_list) {
+					for (final VariableTableEntry vte : generatedFunction.vte_list) {
 //						System.out.println("704 "+vte.type.attached+" "+vte.potentialTypes());
-						int y=2;
+						final int y=2;
 						if (vte.type.attached != null) {
-							TypeName x = vte.type.attached.getTypeName();
+							final TypeName x = vte.type.attached.getTypeName();
 							if (x instanceof NormalTypeName) {
-								String tn = ((NormalTypeName) x).getName();
-								LookupResultList lrl = x.getContext().lookup(tn);
+								final String tn = ((NormalTypeName) x).getName();
+								final LookupResultList lrl = x.getContext().lookup(tn);
 								OS_Element best = lrl.chooseBest(null);
 								while (best instanceof AliasStatement) {
 									best = _resolveAlias((AliasStatement) best); // TODO write _resolveAliasFully
@@ -113,13 +113,13 @@ public class DeduceTypes2 {
 					final InstructionArgument agn_lhs = instruction.getArg(0);
 					if (agn_lhs instanceof IntegerIA) {
 						final IntegerIA arg = (IntegerIA) agn_lhs;
-						VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
-						InstructionArgument i2 = instruction.getArg(1);
+						final VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
+						final InstructionArgument i2 = instruction.getArg(1);
 						if (i2 instanceof IntegerIA) {
-							VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
+							final VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
 							vte.addPotentialType(instruction.getIndex(), vte2.type);
 						} else if (i2 instanceof FnCallArgs) {
-							FnCallArgs fca = (FnCallArgs) i2;
+							final FnCallArgs fca = (FnCallArgs) i2;
 							do_assign_call(generatedFunction, fd_ctx, vte, fca, instruction);
 						} else if (i2 instanceof ConstTableIA) {
 							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
@@ -129,13 +129,13 @@ public class DeduceTypes2 {
 							throw new NotImplementedException();
 					} else if (agn_lhs instanceof IdentIA) {
 						final IdentIA arg = (IdentIA) agn_lhs;
-						IdentTableEntry idte = generatedFunction.getIdentTableEntry(arg.getIndex());
-						InstructionArgument i2 = instruction.getArg(1);
+						final IdentTableEntry idte = generatedFunction.getIdentTableEntry(arg.getIndex());
+						final InstructionArgument i2 = instruction.getArg(1);
 						if (i2 instanceof IntegerIA) {
-							VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
+							final VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
 							idte.addPotentialType(instruction.getIndex(), vte2.type);
 						} else if (i2 instanceof FnCallArgs) {
-							FnCallArgs fca = (FnCallArgs) i2;
+							final FnCallArgs fca = (FnCallArgs) i2;
 							do_assign_call(generatedFunction, fd_ctx, idte, fca, instruction.getIndex());
 						} else if (i2 instanceof IdentIA) {
 							throw new NotImplementedException();
@@ -150,9 +150,9 @@ public class DeduceTypes2 {
 			case AGNK:
 				{
 					final IntegerIA arg = (IntegerIA)instruction.getArg(0);
-					VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
-					InstructionArgument i2 = instruction.getArg(1);
-					ConstTableIA ctia = (ConstTableIA) i2;
+					final VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
+					final InstructionArgument i2 = instruction.getArg(1);
+					final ConstTableIA ctia = (ConstTableIA) i2;
 					do_assign_constant(generatedFunction, instruction, vte, ctia);
 				}
 				break;
@@ -169,15 +169,15 @@ public class DeduceTypes2 {
 			case JMP:
 				break;
 			case CALL: {
-				int pte_num = to_int(instruction.getArg(0));
-				InstructionArgument i2 = (instruction.getArg(1));
-				ProcTableEntry fn1 = generatedFunction.getProcTableEntry(pte_num);
+				final int pte_num = to_int(instruction.getArg(0));
+				final InstructionArgument i2 = (instruction.getArg(1));
+				final ProcTableEntry fn1 = generatedFunction.getProcTableEntry(pte_num);
 				{
-					IExpression pn1 = fn1.expression;
+					final IExpression pn1 = fn1.expression;
 					if (pn1 instanceof IdentExpression) {
-						String pn = ((IdentExpression) pn1).getText();
-						LookupResultList lrl = fd_ctx.lookup(pn);
-						OS_Element best = lrl.chooseBest(null);
+						final String pn = ((IdentExpression) pn1).getText();
+						final LookupResultList lrl = fd_ctx.lookup(pn);
+						final OS_Element best = lrl.chooseBest(null);
 						if (best != null) {
 							fn1.resolved = best; // TODO check arity and arg matching
 						} else {
@@ -192,11 +192,11 @@ public class DeduceTypes2 {
 				}
 				if (false) {
 					if (i2 instanceof IntegerIA) {
-						int i2i = to_int(i2);
-						VariableTableEntry vte = generatedFunction.getVarTableEntry(i2i);
-						int y =2;
+						final int i2i = to_int(i2);
+						final VariableTableEntry vte = generatedFunction.getVarTableEntry(i2i);
+						final int y =2;
 					} else if (i2 instanceof IdentIA) {
-						int y=2;
+						final int y=2;
 						System.err.println("i2 is IdentIA");
 					} else
 						throw new NotImplementedException();
@@ -204,9 +204,9 @@ public class DeduceTypes2 {
 			}
 			break;
 			case CALLS: {
-				int i1 = to_int(instruction.getArg(0));
-				InstructionArgument i2 = (instruction.getArg(1));
-				ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
+				final int i1 = to_int(instruction.getArg(0));
+				final InstructionArgument i2 = (instruction.getArg(1));
+				final ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
 				{
 					implement_calls(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
 				}
@@ -233,7 +233,7 @@ public class DeduceTypes2 {
 				break;
 			}
 		}
-		for (VariableTableEntry vte : generatedFunction.vte_list) {
+		for (final VariableTableEntry vte : generatedFunction.vte_list) {
 			if (vte.type.attached == null)
 				if (vte.potentialTypes().size() == 1)
 					vte.type.attached = new ArrayList<TypeTableEntry>(vte.potentialTypes()).get(0).attached;
@@ -246,12 +246,12 @@ public class DeduceTypes2 {
 			//
 			// NOW CALCULATE DEFERRED CALLS
 			//
-			for (Integer deferred_call : generatedFunction.deferred_calls) {
+			for (final Integer deferred_call : generatedFunction.deferred_calls) {
 				final Instruction instruction = generatedFunction.getInstruction(deferred_call);
 
-				int i1 = to_int(instruction.getArg(0));
-				InstructionArgument i2 = (instruction.getArg(1));
-				ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
+				final int i1 = to_int(instruction.getArg(0));
+				final InstructionArgument i2 = (instruction.getArg(1));
+				final ProcTableEntry fn1 = generatedFunction.getProcTableEntry(i1);
 				{
 //					generatedFunction.deferred_calls.remove(deferred_call);
 					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
@@ -260,7 +260,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private OS_Type resolve_type(OS_Type type, Context ctx) {
+	private OS_Type resolve_type(final OS_Type type, final Context ctx) {
 		switch (type.getType()) {
 
 		case BUILT_IN:
@@ -268,7 +268,7 @@ public class DeduceTypes2 {
 				switch (type.getBType()) {
 				case SystemInteger:
 					{
-						LookupResultList lrl = module.prelude.getContext().lookup("SystemInteger");
+						final LookupResultList lrl = module.prelude.getContext().lookup("SystemInteger");
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
@@ -282,8 +282,8 @@ public class DeduceTypes2 {
 					}
 				case Boolean:
 					{
-						LookupResultList lrl = module.prelude.getContext().lookup("Boolean");
-						OS_Element best = lrl.chooseBest(null);
+						final LookupResultList lrl = module.prelude.getContext().lookup("Boolean");
+						final OS_Element best = lrl.chooseBest(null);
 						return new OS_Type((ClassStatement) best); // TODO might change to Type
 					}
 				}
@@ -291,12 +291,12 @@ public class DeduceTypes2 {
 			break;
 		case USER:
 			{
-				TypeName tn1 = type.getTypeName();
+				final TypeName tn1 = type.getTypeName();
 				if (tn1 instanceof NormalTypeName) {
-					String tn = ((NormalTypeName) tn1).getName();
+					final String tn = ((NormalTypeName) tn1).getName();
 					System.out.println("799 "+tn);
-					LookupResultList lrl = tn1.getContext().lookup(tn); // TODO is this right?
-					OS_Element best = lrl.chooseBest(null);
+					final LookupResultList lrl = tn1.getContext().lookup(tn); // TODO is this right?
+					final OS_Element best = lrl.chooseBest(null);
 					return new OS_Type((ClassStatement) best); // TODO might change to Type
 				}
 				throw new NotImplementedException(); // TODO might be Qualident, etc
@@ -310,11 +310,11 @@ public class DeduceTypes2 {
 		throw new IllegalStateException("Cant be here.");
 	}
 
-	private void do_assign_constant(GeneratedFunction generatedFunction, Instruction instruction, VariableTableEntry vte, ConstTableIA i2) {
+	private void do_assign_constant(final GeneratedFunction generatedFunction, final Instruction instruction, final VariableTableEntry vte, final ConstTableIA i2) {
 		if (vte.type.attached != null) {
 			// TODO check types
 		}
-		ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
+		final ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
 		if (cte.type.attached == null) {
 			System.out.println("Null type in CTE "+cte);
 		}
@@ -322,12 +322,12 @@ public class DeduceTypes2 {
 		vte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
-	private void do_assign_call(GeneratedFunction generatedFunction, Context ctx, VariableTableEntry vte, FnCallArgs fca, Instruction instruction) {
-		int instructionIndex = instruction.getIndex();
-		ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
-		for (TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
+	private void do_assign_call(final GeneratedFunction generatedFunction, final Context ctx, final VariableTableEntry vte, final FnCallArgs fca, final Instruction instruction) {
+		final int instructionIndex = instruction.getIndex();
+		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
+		for (final TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
 			System.out.println("770 "+tte);
-			IExpression e = tte.expression;
+			final IExpression e = tte.expression;
 			if (e == null) continue;
 			switch (e.getKind()) {
 			case NUMERIC:
@@ -343,10 +343,10 @@ public class DeduceTypes2 {
 					OS_Element best = lrl.chooseBest(null);
 					int y=2;
 */
-					InstructionArgument yy = generatedFunction.vte_lookup(((IdentExpression) e).getText());
+					final InstructionArgument yy = generatedFunction.vte_lookup(((IdentExpression) e).getText());
 //					System.out.println("10000 "+yy);
-					Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(yy)).potentialTypes();
-					List<TypeTableEntry> ll = new ArrayList<>(c);
+					final Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(yy)).potentialTypes();
+					final List<TypeTableEntry> ll = new ArrayList<>(c);
 					if (ll.size() == 1) {
 						tte.attached = ll.get(0).attached;
 						vte.addPotentialType(instructionIndex, ll.get(0));
@@ -356,18 +356,18 @@ public class DeduceTypes2 {
 				break;
 			case PROCEDURE_CALL:
 				{
-					ProcedureCallExpression pce = (ProcedureCallExpression) e;
-					LookupResultList lrl = lookupExpression(pce.getLeft(), ctx);
-					OS_Element best = lrl.chooseBest(null);
+					final ProcedureCallExpression pce = (ProcedureCallExpression) e;
+					final LookupResultList lrl = lookupExpression(pce.getLeft(), ctx);
+					final OS_Element best = lrl.chooseBest(null);
 					if (best != null) {
 						if (best instanceof FunctionDef) { // TODO what about alias?
 							tte.attached = new OS_FuncType((FunctionDef) best);
 							//vte.addPotentialType(instructionIndex, tte);
 						} else {
-							int y=2;
+							final int y=2;
 						}
 					} else {
-						int y=2;
+						final int y=2;
 					}
 				}
 				break;
@@ -381,9 +381,9 @@ public class DeduceTypes2 {
 			if (pte.expression_num == null) {
 				if (fca.expression_to_call.getName() != InstructionName.CALLS) {
 					final String text = ((IdentExpression) pte.expression).getText();
-					LookupResultList lrl = ctx.lookup(text);
+					final LookupResultList lrl = ctx.lookup(text);
 
-					OS_Element best = lrl.chooseBest(null);
+					final OS_Element best = lrl.chooseBest(null);
 					if (best != null)
 						pte.resolved = best; // TODO do we need to add a dependency for class?
 					else {
@@ -393,9 +393,9 @@ public class DeduceTypes2 {
 					implement_calls(generatedFunction, ctx.getParent(), instruction.getArg(1), pte, instructionIndex);
 				}
 			} else {
-				int y=2;
-				IdentIA ident_a = (IdentIA) pte.expression_num;
-				OS_Element el = generatedFunction.resolveIdentIA(ctx, ident_a, module);
+				final int y=2;
+				final IdentIA ident_a = (IdentIA) pte.expression_num;
+				final OS_Element el = generatedFunction.resolveIdentIA(ctx, ident_a, module);
 				if (el != null)
 					pte.resolved = el;
 				else {
@@ -405,10 +405,10 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private LookupResultList lookupExpression(IExpression left, Context ctx) {
+	private LookupResultList lookupExpression(final IExpression left, final Context ctx) {
 		switch (left.getKind()) {
 		case QIDENT:
-			IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
+			final IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
 			return lookupExpression(de, ctx)/*lookup_dot_expression(ctx, de)*/;
 		case DOT_EXP:
 			return lookup_dot_expression(ctx, (DotExpression) left);
@@ -420,11 +420,11 @@ public class DeduceTypes2 {
 
 	}
 
-	private void do_assign_constant(GeneratedFunction generatedFunction, Instruction instruction, IdentTableEntry idte, ConstTableIA i2) {
+	private void do_assign_constant(final GeneratedFunction generatedFunction, final Instruction instruction, final IdentTableEntry idte, final ConstTableIA i2) {
 		if (idte.type != null && idte.type.attached != null) {
 			// TODO check types
 		}
-		ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
+		final ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
 		if (cte.type.attached == null) {
 			System.out.println("*** ERROR: Null type in CTE "+cte);
 		}
@@ -432,11 +432,11 @@ public class DeduceTypes2 {
 		idte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
-	private void do_assign_call(GeneratedFunction generatedFunction, Context ctx, IdentTableEntry idte, FnCallArgs fca, int instructionIndex) {
-		ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
-		for (TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
+	private void do_assign_call(final GeneratedFunction generatedFunction, final Context ctx, final IdentTableEntry idte, final FnCallArgs fca, final int instructionIndex) {
+		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
+		for (final TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
 			System.out.println("770 "+tte);
-			IExpression e = tte.expression;
+			final IExpression e = tte.expression;
 			if (e == null) continue;
 			switch (e.getKind()) {
 			case NUMERIC:
@@ -452,10 +452,10 @@ public class DeduceTypes2 {
 					OS_Element best = lrl.chooseBest(null);
 					int y=2;
 */
-				InstructionArgument yy = generatedFunction.vte_lookup(((IdentExpression) e).getText());
+				final InstructionArgument yy = generatedFunction.vte_lookup(((IdentExpression) e).getText());
 //					System.out.println("10000 "+yy);
-				Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(yy)).potentialTypes();
-				List<TypeTableEntry> ll = new ArrayList<>(c);
+				final Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(yy)).potentialTypes();
+				final List<TypeTableEntry> ll = new ArrayList<>(c);
 				if (ll.size() == 1) {
 					tte.attached = ll.get(0).attached;
 					idte.addPotentialType(instructionIndex, ll.get(0));
@@ -470,8 +470,8 @@ public class DeduceTypes2 {
 			}
 		}
 		{
-			LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
-			OS_Element best = lrl.chooseBest(null);
+			final LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
+			final OS_Element best = lrl.chooseBest(null);
 			if (best != null)
 				pte.resolved = best; // TODO do we need to add a dependency for class?
 			else
@@ -479,7 +479,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private void implement_calls(GeneratedFunction gf, Context context, InstructionArgument i2, ProcTableEntry fn1, int pc) {
+	private void implement_calls(final GeneratedFunction gf, final Context context, final InstructionArgument i2, final ProcTableEntry fn1, final int pc) {
 		if (gf.deferred_calls.contains(pc)) {
 			System.err.println("Call is deferred "/*+gf.getInstruction(pc)*/+" "+fn1);
 			return;
@@ -487,16 +487,16 @@ public class DeduceTypes2 {
 		implement_calls_(gf, context, i2, fn1, pc);
 	}
 
-	private void implement_calls_(GeneratedFunction gf, Context context, InstructionArgument i2, ProcTableEntry fn1, int pc) {
-		IExpression pn1 = fn1.expression;
+	private void implement_calls_(final GeneratedFunction gf, final Context context, final InstructionArgument i2, final ProcTableEntry fn1, final int pc) {
+		final IExpression pn1 = fn1.expression;
 		if (pn1 instanceof IdentExpression) {
-			String pn = ((IdentExpression) pn1).getText();
+			final String pn = ((IdentExpression) pn1).getText();
 			boolean found = lookup_name_calls(context, pn, fn1);
 			LookupResultList lrl;
 			OS_Element best;
 			if (found) return;
 
-			String pn2 = SpecialFunctions.reverse_name(pn);
+			final String pn2 = SpecialFunctions.reverse_name(pn);
 			if (pn2 != null) {
 //				System.out.println("7002 "+pn2);
 				found = lookup_name_calls(context, pn2, fn1);
@@ -511,9 +511,9 @@ public class DeduceTypes2 {
 					if (SpecialVariables.contains(vteName)) {
 						System.err.println("Skipping special variable " + vteName + " " + pn);
 					} else {
-						LookupResultList lrl2 = ctx.lookup(vteName);
+						final LookupResultList lrl2 = ctx.lookup(vteName);
 //						System.out.println("7003 "+vte.getName()+" "+ctx);
-						OS_Element best2 = lrl2.chooseBest(null);
+						final OS_Element best2 = lrl2.chooseBest(null);
 						if (best2 != null) {
 							found = lookup_name_calls(best2.getContext(), pn, fn1);
 							if (found) return;
@@ -531,12 +531,12 @@ public class DeduceTypes2 {
 						}
 					}
 				} else {
-					Collection<TypeTableEntry> t = vte.potentialTypes();
-					ArrayList<TypeTableEntry> tt = new ArrayList<TypeTableEntry>(t);
+					final Collection<TypeTableEntry> t = vte.potentialTypes();
+					final ArrayList<TypeTableEntry> tt = new ArrayList<TypeTableEntry>(t);
 					if (tt.size() == 1) {
-						OS_Type x = tt.get(0).attached;
+						final OS_Type x = tt.get(0).attached;
 						if (x.getType() == OS_Type.Type.USER_CLASS) {
-							Context ctx1 = x.getClassOf().getContext();
+							final Context ctx1 = x.getClassOf().getContext();
 
 							found = lookup_name_calls(ctx1, pn, fn1);
 							if (found) return;
@@ -555,16 +555,16 @@ public class DeduceTypes2 {
 						assert false;
 				}
 			} else {
-				int y=2;
+				final int y=2;
 				System.err.println("i2 is not IntegerIA ("+i2.getClass().getName()+")");
 			}
 		} else
 			throw new NotImplementedException(); // pn1 is not IdentExpression
 	}
 
-	private boolean lookup_name_calls(Context ctx, String pn, ProcTableEntry fn1) {
-		LookupResultList lrl = ctx.lookup(pn);
-		OS_Element best = lrl.chooseBest(null);
+	private boolean lookup_name_calls(final Context ctx, final String pn, final ProcTableEntry fn1) {
+		final LookupResultList lrl = ctx.lookup(pn);
+		final OS_Element best = lrl.chooseBest(null);
 		if (best != null) {
 			fn1.resolved = best; // TODO check arity and arg matching
 			return true;
@@ -572,14 +572,14 @@ public class DeduceTypes2 {
 		return false;
 	}
 
-	public static int to_int(InstructionArgument arg) {
+	public static int to_int(final InstructionArgument arg) {
 		return ((IntegerIA) arg).getIndex();
 	}
 
-	private OS_Element _resolveAlias(AliasStatement aliasStatement) {
-		LookupResultList lrl2;
+	private OS_Element _resolveAlias(final AliasStatement aliasStatement) {
+		final LookupResultList lrl2;
 		if (aliasStatement.getExpression() instanceof Qualident) {
-			IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
+			final IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
 			if (de instanceof DotExpression)
 				lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
 			else
@@ -588,7 +588,7 @@ public class DeduceTypes2 {
 		}
 		// TODO what about when DotExpression is not just simple x.y.z? then alias equivalent to val
 		if (aliasStatement.getExpression() instanceof DotExpression) {
-			IExpression de = aliasStatement.getExpression();
+			final IExpression de = aliasStatement.getExpression();
 			lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
 			return lrl2.chooseBest(null);
 		}
@@ -596,8 +596,8 @@ public class DeduceTypes2 {
 		return lrl2.chooseBest(null);
 	}
 
-	private LookupResultList lookup_dot_expression(Context ctx, DotExpression de) {
-		Stack<IExpression> s = dot_expression_to_stack(de);
+	private LookupResultList lookup_dot_expression(Context ctx, final DotExpression de) {
+		final Stack<IExpression> s = dot_expression_to_stack(de);
 		OS_Type t = null;
 		IExpression ss = s.peek();
 		while (!s.isEmpty()) {
@@ -616,9 +616,9 @@ public class DeduceTypes2 {
 	}
 
 	@NotNull
-	private Stack<IExpression> dot_expression_to_stack(DotExpression de) {
-		Stack<IExpression> s = new Stack<IExpression>();
-		IExpression e = de;
+	private Stack<IExpression> dot_expression_to_stack(final DotExpression de) {
+		final Stack<IExpression> s = new Stack<IExpression>();
+		final IExpression e = de;
 		IExpression left = null;
 		s.push(de.getRight());
 		while (true) {
@@ -629,16 +629,16 @@ public class DeduceTypes2 {
 		return s;
 	}
 
-	public OS_Type deduceExpression(@NotNull IExpression n, Context context) {
+	public OS_Type deduceExpression(@NotNull final IExpression n, final Context context) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			return deduceIdentExpression((IdentExpression)n, context);
 		} else if (n.getKind() == ExpressionKind.NUMERIC) {
 			return new OS_Type(BuiltInTypes.SystemInteger);
 		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
-			DotExpression de = (DotExpression) n;
-			LookupResultList lrl = lookup_dot_expression(context, de);
-			OS_Type left_type = deduceExpression(de.getLeft(), context);
-			OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
+			final DotExpression de = (DotExpression) n;
+			final LookupResultList lrl = lookup_dot_expression(context, de);
+			final OS_Type left_type = deduceExpression(de.getLeft(), context);
+			final OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
 			NotImplementedException.raise();
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
 			deduceProcedureCall((ProcedureCallExpression) n, context);
@@ -651,11 +651,11 @@ public class DeduceTypes2 {
 		return null;
 	}
 
-	private void deduceProcedureCall(ProcedureCallExpression pce, Context ctx) {
+	private void deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx) {
 		throw new NotImplementedException();
 	}
 
-	private OS_Type deduceIdentExpression(IdentExpression ident, Context ctx) {
+	private OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) {
 		throw new NotImplementedException();
 	}
 

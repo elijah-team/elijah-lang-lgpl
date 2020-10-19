@@ -14,16 +14,16 @@ import tripleo.elijah.lang.IdentExpression;
  */
 public class ClassDeclNode {
 
-	public ClassDeclNode(String string, Object object, Object list_of) {
+	public ClassDeclNode(final String string, final Object object, final Object list_of) {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void GenClassDecl(CompilerContext cctx, GenBuffer gbn) {
+	public void GenClassDecl(final CompilerContext cctx, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void CloseClassDecl(CompilerContext cctx, GenBuffer gbn) {
+	public void CloseClassDecl(final CompilerContext cctx, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}

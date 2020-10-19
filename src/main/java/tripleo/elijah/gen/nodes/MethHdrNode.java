@@ -37,7 +37,7 @@ public class MethHdrNode implements Node {
 	private final List<ArgumentNode> argument_types;
 	private final int _code;
 	
-	public MethHdrNode(Node parent, @NonNull IdentExpression return_type, String method_name, List<ArgumentNode> argument_types, int code) {
+	public MethHdrNode(final Node parent, @NonNull final IdentExpression return_type, final String method_name, final List<ArgumentNode> argument_types, final int code) {
 		_parent = parent;
 		_code = code;
 		methName = new MethNameNode(method_name, this);
@@ -48,7 +48,7 @@ public class MethHdrNode implements Node {
 		returnType2 = null;
 	}
 	
-	public MethHdrNode(TypeRef retType, Node parent, String methodName, List<ArgumentNode> argumentTypes, int code) {
+	public MethHdrNode(final TypeRef retType, final Node parent, final String methodName, final List<ArgumentNode> argumentTypes, final int code) {
 		_parent = parent;
 		_code = code;
 		methName=new MethNameNode(methodName, this);
@@ -59,17 +59,17 @@ public class MethHdrNode implements Node {
 		returnType=null;
 	}
 	
-	public ArgumentNode argument(int c) {
+	public ArgumentNode argument(final int c) {
 		// TODO Auto-generated method stub
 //		if (c>=argument_types.size()) return null;
 		return (argument_types.get(c));
 	}
 	
-	public void addAnnotation(AnnotationNode node) {
+	public void addAnnotation(final AnnotationNode node) {
 		NotImplementedException.raise();
 	}
 	
-	public void addModifier(TypeModifiers mod) {
+	public void addModifier(final TypeModifiers mod) {
 		NotImplementedException.raise();
 	}
 	
@@ -86,13 +86,13 @@ public class MethHdrNode implements Node {
 		
 					@Override
 					public boolean hasNext() {
-						MethHdrNode node=MethHdrNode.this;
+						final MethHdrNode node=MethHdrNode.this;
 						return c<node.argCount;
 					}
 		
 					@Override
 					public ArgumentNode next() {
-						MethHdrNode node=MethHdrNode.this;
+						final MethHdrNode node=MethHdrNode.this;
 						return node.argument(c++);
 					}
 				};
@@ -117,17 +117,17 @@ public class MethHdrNode implements Node {
 		return methName.genName;
 	}
 
-	public void GenMethHdr(CompilerContext cctx, GenBuffer gbn) {
+	public void GenMethHdr(final CompilerContext cctx, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void BeginMeth(CompilerContext cctx, GenBuffer gbn) {
+	public void BeginMeth(final CompilerContext cctx, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void EndMeth(CompilerContext cctx, GenBuffer gbn) {
+	public void EndMeth(final CompilerContext cctx, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -22,7 +22,7 @@ public class FloatExpression implements IExpression {
 	float carrier;
 	private final Token n;
 
-	public FloatExpression(Token n) {
+	public FloatExpression(final Token n) {
 		this.n = n;
 		carrier = Float.parseFloat(n.getText());
 	}
@@ -33,7 +33,7 @@ public class FloatExpression implements IExpression {
 	}
 
 	@Override
-	public void setLeft(IExpression aLeft) {
+	public void setLeft(final IExpression aLeft) {
 		throw new NotImplementedException(); // TODO
 	}
 
@@ -48,7 +48,7 @@ public class FloatExpression implements IExpression {
 	}
 
 	@Override
-	public void setKind(ExpressionKind aType) {
+	public void setKind(final ExpressionKind aType) {
 		// log and ignore
 		System.err.println("Trying to set ExpressionType of FloatExpression to "+aType.toString());
 	}
@@ -65,7 +65,7 @@ public class FloatExpression implements IExpression {
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 

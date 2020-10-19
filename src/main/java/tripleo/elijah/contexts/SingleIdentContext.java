@@ -15,17 +15,17 @@ public class SingleIdentContext extends Context {
 	public IdentExpression carrier;
 	private OS_Element element;
 
-	public void setString(IdentExpression carrier) {
+	public void setString(final IdentExpression carrier) {
 		this.carrier = carrier;
 	}
 
-	public SingleIdentContext(Context _parent, OS_Element element) {
+	public SingleIdentContext(final Context _parent, final OS_Element element) {
 		this._parent = _parent;
 		this.element = element;
 	}
 
 	@Override
-	public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(element.getContext());
 
 		if (carrier != null && carrier.getText().equals(name))

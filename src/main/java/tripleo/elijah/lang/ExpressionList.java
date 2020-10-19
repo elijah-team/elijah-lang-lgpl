@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ExpressionList implements Iterable<IExpression> {
 
-	public IExpression next(IExpression aExpr) {
+	public IExpression next(final IExpression aExpr) {
 //		assert aExpr != null;
 		if (aExpr == null) throw new IllegalArgumentException("expression cannot be null");
 		//
@@ -43,7 +43,7 @@ public class ExpressionList implements Iterable<IExpression> {
 		return exprs.iterator();
 	}
 	
-	public void add(IExpression aExpr) {
+	public void add(final IExpression aExpr) {
 		exprs.add(aExpr);
 	}
 

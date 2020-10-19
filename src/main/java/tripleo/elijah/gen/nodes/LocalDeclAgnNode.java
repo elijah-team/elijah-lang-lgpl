@@ -19,12 +19,12 @@ public class LocalDeclAgnNode {
 //		NotImplementedException.raise();
 //	}
 
-	public LocalDeclAgnNode(String string, @NotNull NumericExpression integer) {
+	public LocalDeclAgnNode(final String string, @NotNull final NumericExpression integer) {
 		// TODO Auto-generated constructor stub
 		NotImplementedException.raise();
 	}
 
-	public LocalDeclAgnNode(String string, TypeRef sys_int, IExpressionNode fncall) {
+	public LocalDeclAgnNode(final String string, final TypeRef sys_int, final IExpressionNode fncall) {
 		// TODO Auto-generated constructor stub
 		NotImplementedException.raise();
 	}

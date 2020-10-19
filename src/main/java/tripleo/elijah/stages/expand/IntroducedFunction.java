@@ -9,7 +9,7 @@ public class IntroducedFunction implements FunctionPrelimInstruction {
     private String funName;
     private List<IExpression> args;
 
-    public IntroducedFunction(IExpression expression) {
+    public IntroducedFunction(final IExpression expression) {
         this.base = expression;
     }
 
@@ -19,13 +19,13 @@ public class IntroducedFunction implements FunctionPrelimInstruction {
     }
     private int _inst;
     @Override
-    public void setInstructionNumber(int i) {_inst = i;}
+    public void setInstructionNumber(final int i) {_inst = i;}
 
-    public void setName(String s) {
+    public void setName(final String s) {
         funName = s;
     }
 
-    public void setArgs(List<IExpression> list) {
+    public void setArgs(final List<IExpression> list) {
         this.args = list;
     }
 }

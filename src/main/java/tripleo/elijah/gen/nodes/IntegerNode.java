@@ -23,7 +23,7 @@ public class IntegerNode implements IExpressionNode {
 	private final IExpression _expr;
 	private final TypeRef _type;
 	
-	public IntegerNode(NumericExpression aInteger, TypeRef aTypeRef) {
+	public IntegerNode(final NumericExpression aInteger, final TypeRef aTypeRef) {
 		_expr = aInteger;
 		_type = aTypeRef;
 	}
@@ -54,7 +54,7 @@ public class IntegerNode implements IExpressionNode {
 	}
 	
 	@Override
-	public String genText(CompilerContext cctx) {
+	public String genText(final CompilerContext cctx) {
 		return Integer.toString(((NumericExpression)_expr).getValue());
 	}
 	

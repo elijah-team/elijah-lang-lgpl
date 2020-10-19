@@ -29,14 +29,14 @@ public class NamespaceContext extends Context {
 //		carrier = namespaceStatement;
 //	}
 
-	public NamespaceContext(Context aParent, NamespaceStatement ns) {
+	public NamespaceContext(final Context aParent, final NamespaceStatement ns) {
 		_parent = aParent;
 		carrier = ns;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	@Override public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(carrier.getContext());
-		for (ClassItem item: carrier.getItems()) {
+		for (final ClassItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 					    !(item instanceof NamespaceStatement) &&
 					    !(item instanceof VariableSequence) &&
@@ -50,7 +50,7 @@ public class NamespaceContext extends Context {
 			}
 			if (item instanceof VariableSequence) {
 //				System.out.println("[NamespaceContext#lookup] VariableSequence "+item);
-				for (VariableStatement vs : ((VariableSequence) item).items()) {
+				for (final VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs, this);
 				}

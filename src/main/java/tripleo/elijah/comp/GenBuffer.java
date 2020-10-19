@@ -25,36 +25,36 @@ public class GenBuffer {
 	private final Map<String, Buffer> hdr_bufs = new HashMap<String, Buffer>();
 	private final Map<String, Buffer> reg_bufs = new HashMap<String, Buffer>();
 
-	public void GenImportStmt(CompilerContext cctx, ImportNode impn) {
+	public void GenImportStmt(final CompilerContext cctx, final ImportNode impn) {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
 
 	}
 
-	public void InitMod(CompilerContext cctx, String string) {
+	public void InitMod(final CompilerContext cctx, final String string) {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
 
 	}
 
-	public Buffer moduleBufHdr(String module) {
+	public Buffer moduleBufHdr(final String module) {
 //		NotImplementedException.raise();
 		if (hdr_bufs.containsKey(module)) {
 			return hdr_bufs.get(module);
 		} else {
-			Buffer buf = new FileBackedBuffer(module + ".h");
+			final Buffer buf = new FileBackedBuffer(module + ".h");
 			hdr_bufs.put(module, buf);
 			return buf;
 		}
 	}
 
-	public Buffer moduleBufImpl(String module) {
+	public Buffer moduleBufImpl(final String module) {
 		// TODO Auto-generated method stub
 //		NotImplementedException.raise();
 		if (reg_bufs.containsKey(module)) {
 			return reg_bufs.get(module);
 		} else {
-			Buffer buf = new FileBackedBuffer(module + ".c");
+			final Buffer buf = new FileBackedBuffer(module + ".c");
 			reg_bufs.put(module, buf);
 			return buf;
 		}
@@ -74,11 +74,11 @@ public class GenBuffer {
 //	}
 	
 	public void writeBuffers() throws IOException {
-		for (Map.Entry<String, Buffer> entry : reg_bufs.entrySet()) {
+		for (final Map.Entry<String, Buffer> entry : reg_bufs.entrySet()) {
 			final String module = entry.getKey();
 			final Buffer build  = entry.getValue();
 			//
-			FileOutputStream fileOutputStream;
+			final FileOutputStream fileOutputStream;
 			fileOutputStream = new FileOutputStream(module + ".c", true); // append
 			final String buildText = build.getText();
 			fileOutputStream.write(buildText.getBytes());
@@ -87,12 +87,12 @@ public class GenBuffer {
 		}
 	}
 
-	public void GenLocalDeclAgn(CompilerContext cctx, LocalDeclAgnNode ldan1) {
+	public void GenLocalDeclAgn(final CompilerContext cctx, final LocalDeclAgnNode ldan1) {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
 	}
 
-	public void GenLocalAgn(CompilerContext cctx, LocalDeclAgnNode ldan_f1) {
+	public void GenLocalAgn(final CompilerContext cctx, final LocalDeclAgnNode ldan_f1) {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
 	}

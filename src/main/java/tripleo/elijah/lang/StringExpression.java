@@ -13,7 +13,7 @@ import tripleo.elijah.util.NotImplementedException;
 
 public class StringExpression extends AbstractExpression {
 
-public StringExpression(Token g) {
+public StringExpression(final Token g) {
 set(g.getText());
 }
 
@@ -29,14 +29,14 @@ set(g.getText());
 	}
 
 	@Override
-	public void setLeft(IExpression iexpression) {
+	public void setLeft(final IExpression iexpression) {
 		throw new IllegalArgumentException("Should use set()");
 	}
 
 	@Override
 	public String repr_() {return repr_;}
 
-	public void set(String g) {repr_ = g;}
+	public void set(final String g) {repr_ = g;}
 
 	@Override
 	public String toString() {
@@ -48,7 +48,7 @@ set(g.getText());
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 

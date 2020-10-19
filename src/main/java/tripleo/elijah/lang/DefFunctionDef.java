@@ -29,15 +29,15 @@ public class DefFunctionDef implements ClassItem {
 	private int _type;
 	private FormalArgList fal;
 	
-	public void setExpr(IExpression aExpr) {
+	public void setExpr(final IExpression aExpr) {
 		_expr=aExpr;
 	}
 	
-	public void setType(int aType) {
+	public void setType(final int aType) {
 		_type = aType;
 	}
 	
-	public void setOpfal(FormalArgList fal) {
+	public void setOpfal(final FormalArgList fal) {
 		this.fal=fal;
 	}
 	
@@ -45,7 +45,7 @@ public class DefFunctionDef implements ClassItem {
 
 		private final IExpression expr;
 
-		public StatementWrapper(IExpression aexpr) {
+		public StatementWrapper(final IExpression aexpr) {
 			expr = aexpr;
 		}
 
@@ -56,7 +56,7 @@ public class DefFunctionDef implements ClassItem {
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 
 		@Override
-		public void add(StatementItem aItem) {
+		public void add(final StatementItem aItem) {
 			if (aItem instanceof FunctionItem)
 				/*getElement().*/items.add((FunctionItem) aItem);
 			else
@@ -85,7 +85,7 @@ public class DefFunctionDef implements ClassItem {
 		}
 
 		@Override
-		public void addDocString(Token aS) {
+		public void addDocString(final Token aS) {
 			docstrings.add(aS.getText());
 		}
 
@@ -100,7 +100,7 @@ public class DefFunctionDef implements ClassItem {
 		}
 
 		@Override
-		public void statementWrapper(IExpression aExpr) {
+		public void statementWrapper(final IExpression aExpr) {
 			add(new StatementWrapper(aExpr));
 		}
 	}
@@ -117,7 +117,7 @@ public class DefFunctionDef implements ClassItem {
 	public String funName;
 	private TypeName _returnType = null;
 
-	public DefFunctionDef(OS_Element aStatement) {
+	public DefFunctionDef(final OS_Element aStatement) {
 		parent = aStatement;
 		if (aStatement instanceof ClassStatement) {
 			((ClassStatement)parent).add(this);
@@ -135,12 +135,12 @@ public class DefFunctionDef implements ClassItem {
 		return mScope2;
 	}
 
-	public void setName(Token aText) {
+	public void setName(final Token aText) {
 		funName = aText.getText();
 	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		// TODO implement me
 		throw new NotImplementedException();
 	}
@@ -149,7 +149,7 @@ public class DefFunctionDef implements ClassItem {
 		return _returnType;
 	}
 
-	public void setReturnType(TypeName returnType_) {
+	public void setReturnType(final TypeName returnType_) {
 		_returnType = returnType_;
 	}
 

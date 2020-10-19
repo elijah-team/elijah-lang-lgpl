@@ -20,22 +20,22 @@ public class IfConditionalContext extends Context {
 	private final IfConditional carrier;
 	private final Context _prev_ctx;
 
-	public IfConditionalContext(Context cur, IfConditional ifConditional) {
+	public IfConditionalContext(final Context cur, final IfConditional ifConditional) {
 		_parent = cur;
 		carrier = ifConditional;
 		_prev_ctx = null; // TOP if statement
 	}
 
-	public IfConditionalContext(Context ctx, IfConditional ifConditional, boolean _ignored) {
+	public IfConditionalContext(final Context ctx, final IfConditional ifConditional, final boolean _ignored) {
 		_prev_ctx = ctx;
 		_parent = ((IfConditionalContext)ctx)._parent;
 		carrier = ifConditional;
 	}
 
 	@Override
-	public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(carrier.getContext());
-		for (OS_Element/*StatementItem*/ item: carrier.getItems()) {
+		for (final OS_Element/*StatementItem*/ item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 			    !(item instanceof NamespaceStatement) &&
 			    !(item instanceof FunctionDef) &&
@@ -49,7 +49,7 @@ public class IfConditionalContext extends Context {
 			}
 			if (item instanceof VariableSequence) {
 				System.out.println("1102 "+item);
-				for (VariableStatement vs : ((VariableSequence) item).items()) {
+				for (final VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs, this);
 				}

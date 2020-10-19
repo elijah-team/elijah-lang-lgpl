@@ -15,7 +15,7 @@ public class LookupResult {
 	private OS_Element element;
 	private int level;
 
-	public LookupResult(String name, OS_Element element, int level, Context aContext) {
+	public LookupResult(final String name, final OS_Element element, final int level, final Context aContext) {
 		this.name = name;
 		this.element = element;
 		this.level = level;
@@ -36,7 +36,7 @@ public class LookupResult {
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -50,7 +50,7 @@ public class LookupResult {
 	/**
 	 * @param element the element to set
 	 */
-	public void setElement(OS_Element element) {
+	public void setElement(final OS_Element element) {
 		this.element = element;
 	}
 
@@ -64,7 +64,7 @@ public class LookupResult {
 	/**
 	 * @param level the level to set
 	 */
-	public void setLevel(int level) {
+	public void setLevel(final int level) {
 		this.level = level;
 	}
 

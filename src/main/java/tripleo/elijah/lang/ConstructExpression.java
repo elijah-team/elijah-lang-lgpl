@@ -23,7 +23,7 @@ public class ConstructExpression extends AbstractExpression implements Statement
 //	public ConstructExpression(Scope aScope) {
 //	}
 
-	public ConstructExpression(IExpression aExpr, FormalArgList aO) {
+	public ConstructExpression(final IExpression aExpr, final FormalArgList aO) {
 		_expr = aExpr;
 		_args = aO;
 	}
@@ -34,7 +34,7 @@ public class ConstructExpression extends AbstractExpression implements Statement
 	}
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
 	}
 

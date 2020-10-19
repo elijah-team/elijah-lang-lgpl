@@ -15,7 +15,7 @@ package tripleo.elijah.lang;
  */
 public class DestructorDef extends FunctionDef {
 
-	public DestructorDef(ClassStatement classStatement) {
+	public DestructorDef(final ClassStatement classStatement) {
 		super(classStatement);
 //		parent = classStatement;
 	}

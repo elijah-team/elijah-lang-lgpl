@@ -21,7 +21,7 @@ public class AssigningImportStatement implements ImportStatement {
 		Qualident value;
 	}
 
-	public AssigningImportStatement(OS_Element aParent) {
+	public AssigningImportStatement(final OS_Element aParent) {
 		parent = aParent;
 		if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(this);
@@ -29,14 +29,14 @@ public class AssigningImportStatement implements ImportStatement {
 			throw new NotImplementedException();
 	}
 
-	public void addAssigningPart(Token aToken, Qualident aQualident) {
-		Part p = new Part();
+	public void addAssigningPart(final Token aToken, final Qualident aQualident) {
+		final Part p = new Part();
 		p.name = aToken;
 		p.value = aQualident;
 		addPart(p);
 	}
 
-	private void addPart(Part p) {
+	private void addPart(final Part p) {
 		_parts.add(p);
 	}
 
@@ -52,20 +52,20 @@ public class AssigningImportStatement implements ImportStatement {
 
 	@Override
 	public List<Qualident> parts() {
-		List<Qualident> r = new ArrayList<Qualident>();
-		for (Part part : _parts) {
+		final List<Qualident> r = new ArrayList<Qualident>();
+		for (final Part part : _parts) {
 			r.add(tokenToQualident(part.name));
 		}
 		return r;
 	}
 
 	@Override
-	public void setContext(ImportContext ctx) {
+	public void setContext(final ImportContext ctx) {
 		_ctx = ctx;
 	}
 
-	private static Qualident tokenToQualident(Token token) {
-		Qualident r = new Qualident();
+	private static Qualident tokenToQualident(final Token token) {
+		final Qualident r = new Qualident();
 		r.append(token);
 		return r;
 	}

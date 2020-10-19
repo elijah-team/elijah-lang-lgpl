@@ -16,16 +16,16 @@ package tripleo.elijah.lang;
 
 public class ExpressionBuilder {
 
-	public static IBinaryExpression buildPartial(IExpression aE, ExpressionKind aType) {
+	public static IBinaryExpression buildPartial(final IExpression aE, final ExpressionKind aType) {
 		// TODO Auto-generated method stub
 		return new BasicBinaryExpression(aE, aType, null);
 	}
 
-	public static IBinaryExpression build(IExpression aE, ExpressionKind aType, IExpression aExpression) {
+	public static IBinaryExpression build(final IExpression aE, final ExpressionKind aType, final IExpression aExpression) {
 		return new BasicBinaryExpression(aE, aType, aExpression);
 	}
 
-	public static IExpression build(IExpression aE, ExpressionKind aType) {
+	public static IExpression build(final IExpression aE, final ExpressionKind aType) {
 		// TODO Auto-generated method stub
 		return new AbstractExpression(aE, aType) {
 			@Override
@@ -36,7 +36,7 @@ public class ExpressionBuilder {
 			OS_Type _type;
 
 			@Override
-			public void setType(OS_Type deducedExpression) {
+			public void setType(final OS_Type deducedExpression) {
 				_type = deducedExpression;
 		    }
 

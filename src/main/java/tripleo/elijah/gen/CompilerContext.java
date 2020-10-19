@@ -13,7 +13,7 @@ public class CompilerContext {
 	private final String _module;
 	private int _tmp=0;
 
-	public CompilerContext(String aModule) {
+	public CompilerContext(final String aModule) {
 		_module=aModule;
 	}
 	public String module() {

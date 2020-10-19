@@ -28,14 +28,14 @@ public class ExpandFunctions {
 
 	private final OS_Module module;
 
-	public ExpandFunctions(OS_Module module) {
+	public ExpandFunctions(final OS_Module module) {
 		this.module = module;
 	}
 
-	public void addClass(ClassStatement klass, OS_Module parent) {
+	public void addClass(final ClassStatement klass, final OS_Module parent) {
 //		System.out.print("class " + klass.clsName + "{\n");
 		{
-			for (ClassItem element : klass.getItems())
+			for (final ClassItem element : klass.getItems())
 				addClassItem(element, klass);
 		}
 //		System.out.print("}\n");
@@ -46,13 +46,13 @@ public class ExpandFunctions {
 	 * @param element the element to add 
 	 * @param parent could be class or namespace
 	 */
-	private void addClassItem(ClassItem element, OS_Element parent) {
+	private void addClassItem(final ClassItem element, final OS_Element parent) {
 		{
 			if (element instanceof FunctionDef) {
-				FunctionDef fd = (FunctionDef) element;
+				final FunctionDef fd = (FunctionDef) element;
 //				System.out.print("void " + fd.funName + "(){\n");  // TODO: _returnType and mFal
 				{
-					for (FunctionItem fi : fd.getItems())
+					for (final FunctionItem fi : fd.getItems())
 						addFunctionItem(fi, fd);
 				}
 //				System.out.print("\n}\n\n");
@@ -66,27 +66,27 @@ public class ExpandFunctions {
 		}
 	}
 	
-	public void addFunctionItem(FunctionItem element, FunctionDef parent) {
+	public void addFunctionItem(final FunctionItem element, final FunctionDef parent) {
 		final FunctionContext fc = (FunctionContext) parent.getContext();
 		if (element instanceof VariableSequence) {
-			for (VariableStatement ii : ((VariableSequence) element).items()) {
+			for (final VariableStatement ii : ((VariableSequence) element).items()) {
 //				addFunctionItem_deduceVariableStatement(parent, ii);
-				IntroducedVariable i = fc.introduceVariable(ii);
+				final IntroducedVariable i = fc.introduceVariable(ii);
 				//i.setModifiers(ii.typeModifiers);
 			}
 		} else if (element instanceof ProcedureCallExpression) {
-			ProcedureCallExpression pce = (ProcedureCallExpression) element;
+			final ProcedureCallExpression pce = (ProcedureCallExpression) element;
 			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
 		} else if (element instanceof Loop) {
 			addFunctionItem_Loop((Loop) element, parent, fc);
 		}  else if (element instanceof StatementWrapper) {
-			IExpression expr = ((StatementWrapper) element).getExpr();
+			final IExpression expr = ((StatementWrapper) element).getExpr();
 			if (expr.getKind() == ExpressionKind.ASSIGNMENT) {
-				FunctionPrelimInstruction fi = fc.introduceVariable(expr.getLeft());
+				final FunctionPrelimInstruction fi = fc.introduceVariable(expr.getLeft());
 				final IExpression right_side = ((IBinaryExpression) expr).getRight();
 				if (right_side.getKind() == ExpressionKind.IDENT) {
 					//FunctionPrelimInstruction fi2 = fc.introduceVariable(right_side);
-					FunctionPrelimInstruction fi3 = fc.assign(fi, /*fi2*/right_side);
+					final FunctionPrelimInstruction fi3 = fc.assign(fi, /*fi2*/right_side);
 //					fi2.setInstructionNumber(-1); // why introduce in the first place?
 				} else if (right_side.getKind() == ExpressionKind.PROCEDURE_CALL) {
 					System.err.println("2002 here"); // TODO implement me
@@ -96,7 +96,7 @@ public class ExpandFunctions {
 				final FunctionPrelimInstruction fi = expandProcedureCall((ProcedureCallExpression) expr, fc);
 //				final ExpressionList args = ((ProcedureCallExpression) expr).getArgs();
 //				fc.makeProcCall(fi, args);
-				int y=2;
+				final int y=2;
 			} else throw new NotImplementedException();
 		} else if (element instanceof IfConditional) {
 		} else if (element instanceof ClassStatement) {
@@ -110,7 +110,7 @@ public class ExpandFunctions {
 		}
 	}
 
-	private void addFunctionItem_Loop(Loop loop, FunctionDef parent, FunctionContext fc) {
+	private void addFunctionItem_Loop(final Loop loop, final FunctionDef parent, final FunctionContext fc) {
 
 		if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
 			//
@@ -119,7 +119,7 @@ public class ExpandFunctions {
 //			parent.getContext().add(ie(loop.getIterName()), ie(loop.getIterName()));
 
 //			String varname="vt"+loop.getIterName();
-			ToExpression toex = new ToExpression(loop.getFromPart(), loop.getToPart());
+			final ToExpression toex = new ToExpression(loop.getFromPart(), loop.getToPart());
 			deduceExpression_(toex.getLeft(), parent.getContext(), fc);
 			deduceExpression_(toex.getRight(), parent.getContext(), fc);
 
@@ -156,11 +156,11 @@ public class ExpandFunctions {
 	}
 
 	@NotNull
-	private IdentExpression ie(String s) {
+	private IdentExpression ie(final String s) {
 		return new IdentExpression(Helpers.makeToken(s));
 	}
 
-	private void addFunctionItem_Loop_EXPR_TYPE(Loop loop, FunctionDef parent, FunctionContext fc) {
+	private void addFunctionItem_Loop_EXPR_TYPE(final Loop loop, final FunctionDef parent, final FunctionContext fc) {
 		if (loop.getIterName() != null) {
 			//
 			// DON'T MODIFY  NAMETABLE
@@ -172,7 +172,7 @@ public class ExpandFunctions {
 			System.out.println("loop.getIterName() == null");
 //				String varname="vt"+loop.getIterName();
 		}
-		ToExpression toex;
+		final ToExpression toex;
 		if (loop.getFromPart() == null)
 			toex = new ToExpression(new NumericExpression(0), loop.getToPart());
 		else
@@ -196,15 +196,15 @@ public class ExpandFunctions {
 //				System.out.println(String.format("{for (int %s=%d;%s<=%d;%s++){\n\t",
 //						varname, 0,
 //						varname, toPart.getValue(),  varname));
-				for (StatementItem item : loop.getItems()) {
+				for (final StatementItem item : loop.getItems()) {
 					System.out.println("\t"+item);
 					if (item instanceof VariableSequence) {
 //						fd._a.setCode(nextFunctionCode());
 //						parent._a.getContext().add(element, null);
-						for (VariableStatement ii : ((VariableSequence) item).items())
+						for (final VariableStatement ii : ((VariableSequence) item).items())
 							deduceVariableStatement(loop, ii, fc);
 					} else if (item instanceof StatementWrapper) {
-						IExpression e = ((StatementWrapper) item).getExpr();
+						final IExpression e = ((StatementWrapper) item).getExpr();
 						if (e instanceof BasicBinaryExpression) {
 							deduceExpression_(e.getLeft(), loop.getContext(), fc);
 							deduceExpression_(((BasicBinaryExpression) e).getRight(), loop.getContext(), fc);
@@ -223,13 +223,13 @@ public class ExpandFunctions {
 //			}
 	}
 
-	private void deduceExpression_(IExpression expression, Context context, FunctionContext fc) {
-		FunctionPrelimInstruction fi = expandExpression(expression, fc);
+	private void deduceExpression_(final IExpression expression, final Context context, final FunctionContext fc) {
+		final FunctionPrelimInstruction fi = expandExpression(expression, fc);
 		//expression.setType(t);
-		int y=2;
+		final int y=2;
 	}
 
-	private FunctionPrelimInstruction expandProcedureCall(ProcedureCallExpression pce, FunctionContext fc) {
+	private FunctionPrelimInstruction expandProcedureCall(final ProcedureCallExpression pce, final FunctionContext fc) {
 		FunctionPrelimInstruction i;
 		final ExpressionKind pce_left_kind = pce.getLeft().getKind();
 		if (pce_left_kind == ExpressionKind.PROCEDURE_CALL) {
@@ -246,7 +246,7 @@ public class ExpandFunctions {
 			}
 			//i = fc.makeProcCall(i, pce.getArgs());
 		} else if (pce_left_kind == ExpressionKind.IDENT) {
-			IntroducedVariable intro = fc.introduceVariable(pce.getLeft());
+			final IntroducedVariable intro = fc.introduceVariable(pce.getLeft());
 			intro.makeIntoFunctionCall(pce.getArgs()); // TODO look above
 			i = intro;
 		} else {
@@ -255,17 +255,17 @@ public class ExpandFunctions {
 		return i;
 	}
 
-	public void deduceVariableStatement(OS_Element parent, @NotNull VariableStatement vs, FunctionContext fc) {
+	public void deduceVariableStatement(final OS_Element parent, @NotNull final VariableStatement vs, final FunctionContext fc) {
 		{
 			OS_Type dtype = null;
 			if (vs.typeName().isNull()) {
 				if (vs.initialValue() != null) {
-					IExpression iv = vs.initialValue();
+					final IExpression iv = vs.initialValue();
 					if (iv instanceof NumericExpression) {
 						dtype = new OS_Type(BuiltInTypes.SystemInteger);
 					} else if (iv instanceof IdentExpression) {
-						LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
-						for (LookupResult n: lrl.results()) {
+						final LookupResultList lrl = parent.getContext().lookup(((IdentExpression) iv).getText());
+						for (final LookupResult n: lrl.results()) {
 							System.out.println("99 "+n);
 						}
 					} else if (iv instanceof ProcedureCallExpression) {
@@ -293,38 +293,38 @@ public class ExpandFunctions {
 	}
 
 	private void deduceVariableStatement_procedureCallExpression(
-			@NotNull OS_Element parent, IExpression iv,
-			ProcedureCallExpression pce, @NotNull IdentExpression left, FunctionContext fc) {
+			@NotNull final OS_Element parent, final IExpression iv,
+			final ProcedureCallExpression pce, @NotNull final IdentExpression left, final FunctionContext fc) {
 		final String text = left.getText();
 		final LookupResultList lrl = parent.getContext().lookup(text);
 		System.out.println("98 "+/*n*/iv);
 		if (lrl.results().size() == 0 )
 			System.err.println("596 no results for "+text);
-		for (LookupResult n: lrl.results()) {
+		for (final LookupResult n: lrl.results()) {
 			System.out.println("597 "+n);
 //			Helpers.printXML(iv, new TabbedOutputStream(System.out));
 		}
 		final Collection<IExpression> expressions = pce.getArgs().expressions();
-		List<FunctionPrelimInstruction> q = expressions.stream()
+		final List<FunctionPrelimInstruction> q = expressions.stream()
 				.map(n -> expandExpression(n, fc))
 				.collect(Collectors.toList());
 		System.out.println("590 "+q);
 		NotImplementedException.raise();
 	}
 
-	public FunctionPrelimInstruction expandExpression(@NotNull IExpression n, FunctionContext fc) {
+	public FunctionPrelimInstruction expandExpression(@NotNull final IExpression n, final FunctionContext fc) {
 		if (n.getKind() == ExpressionKind.IDENT) {
-			LookupResultList lrl = /*context*/fc.lookup(((IdentExpression)n).getText());
+			final LookupResultList lrl = /*context*/fc.lookup(((IdentExpression)n).getText());
 			if (/*lrl.results().size() == 1*/true) { // TODO the reason were having problems here is constraints vs shadowing
 				// TODO what to do here??
 				final OS_Element element = lrl.chooseBest(null);
 				if (element instanceof VariableStatement) {
 					final VariableStatement vs = (VariableStatement) element;
 					if (vs.typeName() != null) {
-						FunctionPrelimInstruction i;
+						final FunctionPrelimInstruction i;
 						if (vs.typeName().isNull()) {
 							i = expandExpression(vs.initialValue(), fc);
-							int y=2;
+							final int y=2;
 							return i;
 						} else {
 							i = fc.introduceVariable(vs);
@@ -347,13 +347,13 @@ public class ExpandFunctions {
 		} else if (n.getKind() == ExpressionKind.NUMERIC) {
 //			return new OS_Type(BuiltInTypes.SystemInteger);
 		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
-			DotExpression de = (DotExpression) n;
-			var left_type = expandExpression(de.getLeft(), fc);
+			final DotExpression de = (DotExpression) n;
+			final var left_type = expandExpression(de.getLeft(), fc);
 //			var right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext(), fc);
-			int y=2;
+			final int y=2;
 		} else if (n.getKind() == ExpressionKind.GET_ITEM) {
-			int y=2;
-			FunctionPrelimInstruction i = fc.introduceFunction(n.getLeft());
+			final int y=2;
+			final FunctionPrelimInstruction i = fc.introduceFunction(n.getLeft());
 			final IntroducedFunction nn = (IntroducedFunction) i;
 			nn.setName("__getitem__");
 			nn.setArgs(tripleo.elijah.util.Helpers.List_of(((GetItemExpression)n).index));
@@ -365,7 +365,7 @@ public class ExpandFunctions {
 		return null;
 	}
 
-	private String getElementName(OS_Element element) {
+	private String getElementName(final OS_Element element) {
 		if (element instanceof VariableStatement) {
 			return "<VariableStatement>";
 		} else if (element instanceof FormalArgListItem) {
@@ -377,19 +377,19 @@ public class ExpandFunctions {
 	}
 
 	/** Only interested in classes and namespaces here, as that's where the functions are */
-	private void addModuleItem(ModuleItem element) {
+	private void addModuleItem(final ModuleItem element) {
 		if (element instanceof ClassStatement) {
-			ClassStatement cl = (ClassStatement) element;
+			final ClassStatement cl = (ClassStatement) element;
 			addClass(cl, module);
 		} else if (element instanceof NamespaceStatement) {
-			NamespaceStatement ns = (NamespaceStatement) element;
+			final NamespaceStatement ns = (NamespaceStatement) element;
 			addNamespace(ns, module);
 		}
 	}
-	private void addNamespace(NamespaceStatement ns, OS_Module parent) {
+	private void addNamespace(final NamespaceStatement ns, final OS_Module parent) {
 		System.out.print("namespace " + ns.getName() + "{\n");
 		{
-			for (ClassItem element : ns.getItems())
+			for (final ClassItem element : ns.getItems())
 				addClassItem(element, ns);
 		}
 		System.out.print("}\n");
@@ -397,7 +397,7 @@ public class ExpandFunctions {
 
 	public void expand() {
 		System.out.println("-- [ExpandFunctions#expand] ----------------------------");
-		for (ModuleItem element : module.items) {
+		for (final ModuleItem element : module.items) {
 			addModuleItem(element);
 		}
 	}

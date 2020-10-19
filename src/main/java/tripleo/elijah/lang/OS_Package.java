@@ -29,18 +29,18 @@ public class OS_Package implements OS_Element {
 	Qualident _name;
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		throw new NotImplementedException();
 	}
 
 	// TODO packages, elements
 
-	public OS_Package(Qualident aName, int aCode) {
+	public OS_Package(final Qualident aName, final int aCode) {
 		_code = aCode;
 		_name = aName;
 	}
 
-	public OS_Package(Qualident aName, int aCode, OS_Module module) {
+	public OS_Package(final Qualident aName, final int aCode, final OS_Module module) {
 		_code = aCode;
 		_name = aName;
 		_module = module;
@@ -61,7 +61,7 @@ public class OS_Package implements OS_Element {
 	// ELEMENTS
 	//
 
-	public void addElement(OS_Element element) {
+	public void addElement(final OS_Element element) {
 		elements.add(element);
 	}
 

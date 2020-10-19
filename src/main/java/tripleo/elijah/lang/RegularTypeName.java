@@ -21,7 +21,7 @@ public class RegularTypeName extends AbstractTypeName2 implements NormalTypeName
 //	private OS_Type _resolved;
 	private OS_Element _resolvedElement;
 
-	public RegularTypeName(Context cur) {
+	public RegularTypeName(final Context cur) {
 		super();
 		_ctx = cur;
 	}
@@ -32,7 +32,7 @@ public class RegularTypeName extends AbstractTypeName2 implements NormalTypeName
 	}
 
 	@Override
-	public void addGenericPart(TypeNameList tn2) {
+	public void addGenericPart(final TypeNameList tn2) {
 		genericPart = tn2;
 	}
 
@@ -53,7 +53,7 @@ public String getName() {
 //}
 
 	@Override
-	public void setContext(Context ctx) {
+	public void setContext(final Context ctx) {
 		_ctx = ctx;
 	}
 
@@ -73,13 +73,13 @@ public String getName() {
 	}
 
 	@Override
-	public void setResolvedElement(OS_Element element) {
+	public void setResolvedElement(final OS_Element element) {
 		_resolvedElement = element;
 	}
 
 
 	@Override
-	public void setName(Qualident aS) {
+	public void setName(final Qualident aS) {
 		this.typeName=aS;
 	}
 
@@ -89,7 +89,7 @@ public String getName() {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		for (TypeModifiers modifier : _ltm) {
+		for (final TypeModifiers modifier : _ltm) {
 			switch (modifier) {
 				case CONST:      sb.append("const "); break;
 				case REFPAR:     sb.append("ref "); break;

@@ -50,7 +50,7 @@ public class ExpressionNode implements IExpressionNode {
 	}
 	*/
 	
-	public ExpressionNode(@NonNull IExpression expr1) {
+	public ExpressionNode(@NonNull final IExpression expr1) {
 		// TODO Auto-generated constructor stub
 		if (expr1 != null) {
 			genName=expr1.toString(); // TODO likely wrong
@@ -61,7 +61,7 @@ public class ExpressionNode implements IExpressionNode {
 		}
 	}
 
-	static String getStringPCE(ProcedureCallExpression expr) {
+	static String getStringPCE(final ProcedureCallExpression expr) {
 		final int code = 1000; // TODO hardcoded
 		return Helpers.getFunctionName(code, expr.getLeft().toString(), expr.exprList());
 	}
@@ -99,7 +99,7 @@ public class ExpressionNode implements IExpressionNode {
 	}
 	
 	@Override
-	public String genText(CompilerContext cctx) {
+	public String genText(final CompilerContext cctx) {
 //		if (iex instanceof OS_Integer) {
 //			final int value = ((OS_Integer) iex).getValue();
 //			return ((Integer) value).toString();
@@ -122,11 +122,11 @@ public class ExpressionNode implements IExpressionNode {
 					right_side = ""+((NumericExpression) abe.getRight()).getValue();
 				}
 				if (abe._kind == ExpressionKind.SUBTRACTION) {
-					String s = String.format("%s - %s", left_side,	right_side);
+					final String s = String.format("%s - %s", left_side,	right_side);
 					return s;
 				}
 				if (abe._kind == ExpressionKind.MULTIPLY) {
-					String s = String.format("%s * %s", left_side, right_side);
+					final String s = String.format("%s * %s", left_side, right_side);
 					return s;
 				}
 				

@@ -37,12 +37,12 @@ public class GeneratedFunction {
 	private int label_count = 0;
 	private int _nextTemp = 0;
 
-	public GeneratedFunction(FunctionDef functionDef) {
+	public GeneratedFunction(final FunctionDef functionDef) {
 		fd = functionDef;
 		dfd = null;
 	}
 
-	public GeneratedFunction(DefFunctionDef dfd_) {
+	public GeneratedFunction(final DefFunctionDef dfd_) {
 		dfd = dfd_;
 		fd = null;
 	}
@@ -55,8 +55,8 @@ public class GeneratedFunction {
 	 * @return
 	 */
 	@Nullable
-	public OS_Element resolveIdentIA(Context ctx, @NotNull IdentIA ident_a, @NotNull OS_Module module) {
-		Stack<InstructionArgument> s = new Stack<InstructionArgument>();
+	public OS_Element resolveIdentIA(final Context ctx, @NotNull final IdentIA ident_a, @NotNull final OS_Module module) {
+		final Stack<InstructionArgument> s = new Stack<InstructionArgument>();
 		InstructionArgument oo = ident_a;
 
 		while (oo != null) {
@@ -75,21 +75,21 @@ public class GeneratedFunction {
 
 		OS_Element el = null;
 		Context ectx = ctx;
-		for (InstructionArgument ia : s) {
+		for (final InstructionArgument ia : s) {
 			if (ia instanceof IntegerIA) {
 				throw new NotImplementedException();
 //						s.push(ite.backlink);
 			} else if (ia instanceof IdentIA) {
-				IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
+				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
 				//assert idte.backlink == null;
 				final String text = idte.getIdent().getText();
-				LookupResultList lrl = ectx.lookup(text);
+				final LookupResultList lrl = ectx.lookup(text);
 				el = lrl.chooseBest(null);
 				if (el != null) {
 					if (el.getContext() != null)
 						ectx = el.getContext();
 					else {
-						int yy=2;
+						final int yy=2;
 					}
 				} else {
 					module.parent.eee.reportError("Can't resolve "+text);
@@ -109,12 +109,12 @@ public class GeneratedFunction {
 		return instructionsList;
 	}
 
-	public Instruction getInstruction(int anIndex) {
+	public Instruction getInstruction(final int anIndex) {
 		return instructionsList.get(anIndex);
 	}
 
-	public int add(InstructionName aName, List<InstructionArgument> args_, Context ctx) {
-		Instruction i = new Instruction();
+	public int add(final InstructionName aName, final List<InstructionArgument> args_, final Context ctx) {
+		final Instruction i = new Instruction();
 		i.setIndex(instruction_index++);
 		i.setName(aName);
 		i.setArgs(args_);
@@ -144,9 +144,9 @@ public class GeneratedFunction {
 		return addLabel("__label", true);
 	}
 
-	public @NotNull Label addLabel(String base_name, boolean append_int) {
-		Label label = new Label(this);
-		String name;
+	public @NotNull Label addLabel(final String base_name, final boolean append_int) {
+		final Label label = new Label(this);
+		final String name;
 		if (append_int) {
 			label.setNumber(label_count);
 			name = String.format("%s%d", base_name, label_count++);
@@ -159,7 +159,7 @@ public class GeneratedFunction {
 		return label;
 	}
 
-	public void place(@NotNull Label label) {
+	public void place(@NotNull final Label label) {
 		label.setIndex(instruction_index);
 	}
 
@@ -170,27 +170,27 @@ public class GeneratedFunction {
 	//
 	//
 	//
-	public VariableTableEntry getVarTableEntry(int index) {
+	public VariableTableEntry getVarTableEntry(final int index) {
 		return vte_list.get(index);
 	}
 
-	public ConstantTableEntry getConstTableEntry(int index) {
+	public ConstantTableEntry getConstTableEntry(final int index) {
 		return cte_list.get(index);
 	}
 
-	public TypeTableEntry getTypeTableEntry(int index) {
+	public TypeTableEntry getTypeTableEntry(final int index) {
 		return tte_list.get(index);
 	}
 
-	public ProcTableEntry getProcTableEntry(int index) {
+	public ProcTableEntry getProcTableEntry(final int index) {
 		return prte_list.get(index);
 	}
 
-	public @NotNull TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type) {
+	public @NotNull TypeTableEntry newTypeTableEntry(final TypeTableEntry.Type type1, final OS_Type type) {
 		return newTypeTableEntry(type1, type, null);
 	}
 
-	public @NotNull TypeTableEntry newTypeTableEntry(TypeTableEntry.Type type1, OS_Type type, IExpression expression) {
+	public @NotNull TypeTableEntry newTypeTableEntry(final TypeTableEntry.Type type1, final OS_Type type, final IExpression expression) {
 		final TypeTableEntry typeTableEntry = new TypeTableEntry(tte_list.size(), type1, type, expression);
 		tte_list.add(typeTableEntry);
 		return typeTableEntry;
@@ -200,11 +200,11 @@ public class GeneratedFunction {
 		return fd != null ? fd : dfd;
 	}
 
-	public void addContext(Context context, Range r) {
+	public void addContext(final Context context, final Range r) {
 //		contextToRangeMap.put(r, context);
 	}
 
-	public Context getContextFromPC(int pc) {
+	public Context getContextFromPC(final int pc) {
 //		for (Map.Entry<Range, Context> rangeContextEntry : contextToRangeMap.entrySet()) {
 //			if (rangeContextEntry.getKey().has(pc))
 //				return rangeContextEntry.getValue();
@@ -215,9 +215,9 @@ public class GeneratedFunction {
 
 //	Map<Range, Context> contextToRangeMap = new HashMap<Range, Context>();
 
-	public @Nullable InstructionArgument vte_lookup(String text) {
+	public @Nullable InstructionArgument vte_lookup(final String text) {
 		int index = 0;
-		for (VariableTableEntry variableTableEntry : vte_list) {
+		for (final VariableTableEntry variableTableEntry : vte_list) {
 			final String variableTableEntryName = variableTableEntry.getName();
 			if (variableTableEntryName != null) // TODO how can this be null?
 				if (variableTableEntryName.equals(text))
@@ -225,7 +225,7 @@ public class GeneratedFunction {
 			index++;
 		}
 		index = 0;
-		for (ConstantTableEntry constTableEntry : cte_list) {
+		for (final ConstantTableEntry constTableEntry : cte_list) {
 			final String constTableEntryName = constTableEntry.getName();
 			if (constTableEntryName != null) // TODO how can this be null?
 				if (constTableEntryName.equals(text))
@@ -235,16 +235,16 @@ public class GeneratedFunction {
 		return null;
 	}
 
-	public IdentTableEntry getIdentTableEntry(int i) {
+	public IdentTableEntry getIdentTableEntry(final int i) {
 		return idte_list.get(i);
 	}
 
-	public @Nullable InstructionArgument get_assignment_path(@NotNull IExpression expression, @NotNull GenerateFunctions generateFunctions) {
+	public @Nullable InstructionArgument get_assignment_path(@NotNull final IExpression expression, @NotNull final GenerateFunctions generateFunctions) {
 		switch (expression.getKind()) {
 		case DOT_EXP:
 			{
-				DotExpression de = (DotExpression) expression;
-				InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions);
+				final DotExpression de = (DotExpression) expression;
+				final InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions);
 				return get_assignment_path(left_part, de.getRight(), generateFunctions);
 			}
 		case QIDENT:
@@ -255,12 +255,12 @@ public class GeneratedFunction {
 			throw new NotImplementedException();
 		case IDENT:
 			{
-				IdentExpression ie = (IdentExpression) expression;
-				String text = ie.getText();
-				InstructionArgument lookup = vte_lookup(text); // IntegerIA(variable) or ConstTableIA or null
+				final IdentExpression ie = (IdentExpression) expression;
+				final String text = ie.getText();
+				final InstructionArgument lookup = vte_lookup(text); // IntegerIA(variable) or ConstTableIA or null
 				if (lookup != null)
 					return lookup;
-				int ite = generateFunctions.addIdentTableEntry(ie, this);
+				final int ite = generateFunctions.addIdentTableEntry(ie, this);
 				return new IdentIA(ite, this);
 			}
 		default:
@@ -268,12 +268,12 @@ public class GeneratedFunction {
 		}
 	}
 
-	private @NotNull InstructionArgument get_assignment_path(InstructionArgument prev, @NotNull IExpression expression, @NotNull GenerateFunctions generateFunctions) {
+	private @NotNull InstructionArgument get_assignment_path(final InstructionArgument prev, @NotNull final IExpression expression, @NotNull final GenerateFunctions generateFunctions) {
 		switch (expression.getKind()) {
 		case DOT_EXP:
 		{
-			DotExpression de = (DotExpression) expression;
-			InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions);
+			final DotExpression de = (DotExpression) expression;
+			final InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions);
 			if (left_part instanceof IdentIA) {
 				((IdentIA)left_part).setPrev(prev);
 			} else
@@ -288,8 +288,8 @@ public class GeneratedFunction {
 			throw new NotImplementedException();
 		case IDENT:
 			{
-				IdentExpression ie = (IdentExpression) expression;
-				int ite = generateFunctions.addIdentTableEntry(ie, this);
+				final IdentExpression ie = (IdentExpression) expression;
+				final int ite = generateFunctions.addIdentTableEntry(ie, this);
 				final IdentIA identIA = new IdentIA(ite, this);
 				identIA.setPrev(prev);
 				return identIA;
@@ -303,15 +303,15 @@ public class GeneratedFunction {
 		return ++_nextTemp;
 	}
 
-	public @Nullable Label findLabel(int index) {
-		for (Label label : labelList) {
+	public @Nullable Label findLabel(final int index) {
+		for (final Label label : labelList) {
 			if (label.getIndex() == index)
 				return label;
 		}
 		return null;
 	}
 
-	public String getIdentIAPath(IdentIA ia) {
+	public String getIdentIAPath(final IdentIA ia) {
 		return null;
 	}
 

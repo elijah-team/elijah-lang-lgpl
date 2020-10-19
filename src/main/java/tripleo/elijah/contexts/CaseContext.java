@@ -22,12 +22,12 @@ public class CaseContext extends Context {
 	private final CaseConditional carrier;
 	private final Context _parent;
 
-	public CaseContext(Context aParent, CaseConditional mc) {
+	public CaseContext(final Context aParent, final CaseConditional mc) {
 		this._parent = aParent;
 		this.carrier = mc;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	@Override public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(carrier.getContext());
 
 /*

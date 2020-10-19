@@ -29,15 +29,15 @@ public class CompilerInstructions {
 		return _idx;
 	}
 
-	public void add(GenerateStatement generateStatement) {
+	public void add(final GenerateStatement generateStatement) {
 		gens.add(generateStatement);
 	}
 
-	public void add(LibraryStatementPart libraryStatementPart) {
+	public void add(final LibraryStatementPart libraryStatementPart) {
 		lsps.add(libraryStatementPart);
 	}
 
-	public void setFilename(String filename) {
+	public void setFilename(final String filename) {
 		this.filename = filename;
 	}
 

@@ -20,7 +20,7 @@ import java.util.List;
 public class GenerateStatement {
 	private final List<Directive> dirs = new ArrayList<Directive>();
 
-	public void addDirective(Token token, IExpression expression) {
+	public void addDirective(final Token token, final IExpression expression) {
 		dirs.add(new Directive(token, expression));
 	}
 
@@ -29,7 +29,7 @@ public class GenerateStatement {
 		private final IExpression expression;
 		private final String name;
 
-		public Directive(Token token_, IExpression expression_) {
+		public Directive(final Token token_, final IExpression expression_) {
 			name = token_.getText();
 			expression = expression_;
 		}

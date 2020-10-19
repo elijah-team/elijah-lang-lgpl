@@ -23,12 +23,12 @@ public class DeduceTypesTest2 {
 
 	@Test
 	public void testDeduceIdentExpression() {
-		OS_Module mod = new OS_Module();
+		final OS_Module mod = new OS_Module();
 		mod.parent = new Compilation(new StdErrSink(), new IO());
-		DeduceTypes d = new DeduceTypes(mod);
+		final DeduceTypes d = new DeduceTypes(mod);
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
-		ClassStatement cs = new ClassStatement(mod);
+		final ClassStatement cs = new ClassStatement(mod);
 		cs.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("Test")));
 		final ClassContext cctx = new ClassContext(mctx, cs);
 		cs.setContext(cctx);
@@ -36,21 +36,21 @@ public class DeduceTypesTest2 {
 		fd.setName(new IdentExpression(Helpers.makeToken("test")));
 		final FunctionContext fctx = new FunctionContext(cctx, fd);
 		fd.setContext(fctx);
-		VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
+		final VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
 		final VariableStatement vs = vss.next();
 		vs.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("x")));
 		final Qualident qu = new Qualident();
 		qu.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
-		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
+		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		final IdentExpression x1 = new IdentExpression(tripleo.elijah.util.Helpers.makeToken("x"));
 		x1.setContext(fc);
-		OS_Type x = d.deduceExpression(x1, fc);
+		final OS_Type x = d.deduceExpression(x1, fc);
 		System.out.println(x);
 //		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());
 //		final RegularTypeName tn = new RegularTypeName();
 		final VariableTypeName tn = new VariableTypeName();
-		Qualident tnq = new Qualident();
+		final Qualident tnq = new Qualident();
 		tnq.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 		fd.postConstruct();

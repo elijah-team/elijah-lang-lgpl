@@ -27,12 +27,12 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
 	public  Attached _a;
 	private OS_Element _resolvedElement;
 
-	public IdentExpression(Token r1) {
+	public IdentExpression(final Token r1) {
 		this.text = r1;
 		this._a = new Attached();
 	}
 
-	public IdentExpression(Token r1, Context cur) {
+	public IdentExpression(final Token r1, final Context cur) {
 		this.text = r1;
 		this._a = new Attached();
 		setContext(cur);
@@ -52,7 +52,7 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
 	}
 
 	@Override
-	public void setKind(ExpressionKind aIncrement) {
+	public void setKind(final ExpressionKind aIncrement) {
 		// log and ignore
 		System.err.println("Trying to set ExpressionType of IdentExpression to "+aIncrement.toString());
 	}
@@ -63,7 +63,7 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
 	}
 
 	@Override
-	public void setLeft(IExpression iexpression) {
+	public void setLeft(final IExpression iexpression) {
 //		if (iexpression instanceof IdentExpression) {
 //			text = ((IdentExpression) iexpression).text;
 //		} else {
@@ -87,7 +87,7 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
 	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
@@ -107,7 +107,7 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
@@ -116,7 +116,7 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
     	return _type;
 	}
 
-	public void setContext(Context cur) {
+	public void setContext(final Context cur) {
 		_a.setContext(cur);
 	}
 
@@ -131,11 +131,11 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
 	}
 
 	@Override
-	public void setResolvedElement(OS_Element element) {
+	public void setResolvedElement(final OS_Element element) {
 		_resolvedElement = element;
 	}
 
-	public static IdentExpression forString(String string) {
+	public static IdentExpression forString(final String string) {
 		return new IdentExpression(Helpers.makeToken(string));
 	}
 }

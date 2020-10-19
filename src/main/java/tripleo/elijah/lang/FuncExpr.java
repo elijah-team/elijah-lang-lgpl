@@ -33,7 +33,7 @@ public class FuncExpr implements IExpression, OS_Element {
 	private FuncExprContext _ctx;
 
 
-	public void type(TypeModifiers function) {
+	public void type(final TypeModifiers function) {
 		// TODO Auto-generated method stub
 		NotImplementedException.raise();
 	}
@@ -50,7 +50,7 @@ public class FuncExpr implements IExpression, OS_Element {
 		return funcExprScope;
 	}
 
-	public void setReturnType(TypeName tn) {
+	public void setReturnType(final TypeName tn) {
 		_returnType = tn;
 	}
 
@@ -58,7 +58,7 @@ public class FuncExpr implements IExpression, OS_Element {
 		return items;
 	}
 
-	public void setContext(FuncExprContext ctx) {
+	public void setContext(final FuncExprContext ctx) {
 		_ctx = ctx;
 	}
 
@@ -75,12 +75,12 @@ public class FuncExpr implements IExpression, OS_Element {
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 		private final FuncExpr funcExpr;
 
-		public FuncExprScope(FuncExpr funcExpr) {
+		public FuncExprScope(final FuncExpr funcExpr) {
 			this.funcExpr = funcExpr;
 		}
 
 		@Override
-		public void add(StatementItem aItem) {
+		public void add(final StatementItem aItem) {
 			if (aItem instanceof FunctionItem)
 				funcExpr.items.add((FunctionItem) aItem);
 			else
@@ -89,7 +89,7 @@ public class FuncExpr implements IExpression, OS_Element {
 		}
 		
 		@Override
-		public void addDocString(Token aS) {
+		public void addDocString(final Token aS) {
 			funcExpr.docstrings.add(aS.getText());
 		}
 		
@@ -114,7 +114,7 @@ public class FuncExpr implements IExpression, OS_Element {
 		}
 
 		@Override
-		public void statementWrapper(IExpression aExpr) {
+		public void statementWrapper(final IExpression aExpr) {
 			add(new StatementWrapper(aExpr, getParent().getContext(), getParent()));
 //			throw new NotImplementedException(); // TODO
 		}
@@ -143,7 +143,7 @@ public class FuncExpr implements IExpression, OS_Element {
 	}
 
 	@Override
-	public void setKind(ExpressionKind aKind) {
+	public void setKind(final ExpressionKind aKind) {
 		throw new NotImplementedException();
 	}
 
@@ -153,7 +153,7 @@ public class FuncExpr implements IExpression, OS_Element {
 	}
 
 	@Override
-	public void setLeft(IExpression iexpression) {
+	public void setLeft(final IExpression iexpression) {
 		throw new NotImplementedException();
 	}
 
@@ -169,7 +169,7 @@ public class FuncExpr implements IExpression, OS_Element {
 
 	/************* FOR THE OTHER ONE ******************/
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
 	}
 
@@ -179,7 +179,7 @@ public class FuncExpr implements IExpression, OS_Element {
 	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}

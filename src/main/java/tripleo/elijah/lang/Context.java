@@ -25,7 +25,7 @@ public abstract class Context {
 //		this.attached = attached;
 //	}
 	
-	public LookupResultList lookup(@NotNull String name) {
+	public LookupResultList lookup(@NotNull final String name) {
 		final LookupResultList Result = new LookupResultList();
 		return lookup(name, 0, Result, new ArrayList<Context>(), false);
 	}

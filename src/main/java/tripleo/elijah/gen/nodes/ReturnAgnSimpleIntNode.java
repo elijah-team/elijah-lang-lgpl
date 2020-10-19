@@ -18,7 +18,7 @@ public class ReturnAgnSimpleIntNode {
 
 	private final NumericExpression integer;
 
-	public ReturnAgnSimpleIntNode(NumericExpression integer) {
+	public ReturnAgnSimpleIntNode(final NumericExpression integer) {
 		// TODO Auto-generated constructor stub
 		this.integer=integer;
 	}

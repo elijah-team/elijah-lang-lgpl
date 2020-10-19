@@ -9,7 +9,7 @@ public abstract class AbstractBlockScope implements Scope {
 
 	private final AbstractStatementClosure asc;
 
-	public AbstractBlockScope(OS_Container _element) {
+	public AbstractBlockScope(final OS_Container _element) {
 		this._element = _element;
 		this.asc = new AbstractStatementClosure(this, getParent());
 	}
@@ -17,7 +17,7 @@ public abstract class AbstractBlockScope implements Scope {
 	private final OS_Container _element;
 
 	@Override
-	public void add(StatementItem aItem) {
+	public void add(final StatementItem aItem) {
 		if (aItem instanceof FunctionItem)
 			_element.add((OS_Element) aItem);
 		else
@@ -25,7 +25,7 @@ public abstract class AbstractBlockScope implements Scope {
 	}
 
 	@Override
-	public void addDocString(Token aS) {
+	public void addDocString(final Token aS) {
 		_element.addDocString(aS);
 	}
 
@@ -45,7 +45,7 @@ public abstract class AbstractBlockScope implements Scope {
 	}
 
 	@Override
-	public void statementWrapper(IExpression aExpr) {
+	public void statementWrapper(final IExpression aExpr) {
 		add(new StatementWrapper(aExpr, getContext(), getParent()));
 	}
 

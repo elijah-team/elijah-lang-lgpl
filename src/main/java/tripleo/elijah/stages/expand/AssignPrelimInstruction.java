@@ -14,12 +14,12 @@ public class AssignPrelimInstruction implements FunctionPrelimInstruction {
     private final FunctionPrelimInstruction var;
     private final IExpression /*FunctionPrelimInstruction*/ expr;
 
-    public AssignPrelimInstruction(FunctionPrelimInstruction fi, /*FunctionPrelimInstruction*/IExpression fi2) {
+    public AssignPrelimInstruction(final FunctionPrelimInstruction fi, /*FunctionPrelimInstruction*/final IExpression fi2) {
         this.var = fi;
         this.expr = fi2;
     }
 
-    @Override public void setInstructionNumber(int i) {_inst = i;}
+    @Override public void setInstructionNumber(final int i) {_inst = i;}
     @Override public int instructionNumber() {
         return _inst;
     }

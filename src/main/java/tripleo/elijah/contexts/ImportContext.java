@@ -21,22 +21,22 @@ public class ImportContext extends Context {
 	private final Context _parent;
 	private final ImportStatement carrier;
 
-	public ImportContext(Context aParent, ImportStatement imp) {
+	public ImportContext(final Context aParent, final ImportStatement imp) {
 		_parent = aParent;
 		carrier = imp;
 	}
 
 	@Override
-	public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(this);
 //		System.err.println("2002 "+importStatement.importList());
-		for (Qualident importStatementItem : carrier.parts()) {
+		for (final Qualident importStatementItem : carrier.parts()) {
 //			System.err.println("2005 "+importStatementItem);
 			if (module().isPackage(importStatementItem.toString())) {
-				List<OS_Element> l = new ArrayList<>();
-				OS_Package aPackage = module().getPackage(importStatementItem);
+				final List<OS_Element> l = new ArrayList<>();
+				final OS_Package aPackage = module().getPackage(importStatementItem);
 //				LogEvent.logEvent(4003 , ""+aPackage.getElements());
-				for (OS_Element element : aPackage.getElements()) {
+				for (final OS_Element element : aPackage.getElements()) {
 //					System.err.println("4002 "+element);
 					if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
 //		                LogEvent.logEvent(4103, "");

@@ -21,14 +21,14 @@ public class ModuleContext extends Context {
 
 	OS_Module carrier;
 
-	public ModuleContext(OS_Module module) {
+	public ModuleContext(final OS_Module module) {
 		this.carrier = module;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	@Override public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(carrier.getContext());
 		// TODO look all this up in a table, not by iteration
-		for (ModuleItem item: carrier.getItems()) {
+		for (final ModuleItem item: carrier.getItems()) {
 			//
 //			List<String> items;
 //			if ((item instanceof ClassStatement)) {

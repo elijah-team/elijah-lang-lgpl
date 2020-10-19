@@ -22,21 +22,21 @@ public class TypeAliasExpression {
 	private IdentExpression x;
 	private Qualident y;
 
-	public TypeAliasExpression(OS_Element aParent) {
+	public TypeAliasExpression(final OS_Element aParent) {
 		this.parent = aParent;
 	}
 
-    public void make(IdentExpression x, Qualident y) {
+    public void make(final IdentExpression x, final Qualident y) {
 		// TODO Auto-generated method stub
 		this.x=x;
 		this.y=y;
 	}
 	
-	public void setIdent(IdentExpression aToken) {
+	public void setIdent(final IdentExpression aToken) {
 		x = aToken;
 	}
 	
-	public void setBecomes(Qualident qq) {
+	public void setBecomes(final Qualident qq) {
 		y=qq;
 	}
 }

@@ -10,13 +10,13 @@ package tripleo.elijah.lang;
  */
 public class DotExpression extends BasicBinaryExpression {
 
-	public DotExpression(IExpression ee, IdentExpression identExpression) {
+	public DotExpression(final IExpression ee, final IdentExpression identExpression) {
 		left = ee;
 		right = identExpression;
 		_kind = ExpressionKind.DOT_EXP;
 	}
 
-	public DotExpression(IExpression ee, IExpression aExpression) {
+	public DotExpression(final IExpression ee, final IExpression aExpression) {
 		left = ee;
 		right = aExpression;
 		_kind = ExpressionKind.DOT_EXP;

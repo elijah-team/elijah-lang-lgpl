@@ -22,11 +22,11 @@ public class NumericExpression implements IExpression {
 	int carrier;
 	private Token n;
 
-	public NumericExpression(int aCarrier) {
+	public NumericExpression(final int aCarrier) {
 		carrier = aCarrier;
 	}
 
-	public NumericExpression(Token n) {
+	public NumericExpression(final Token n) {
 		this.n = n;
 		carrier = Integer.parseInt(n.getText());
 	}
@@ -37,7 +37,7 @@ public class NumericExpression implements IExpression {
 	}
 
 	@Override
-	public void setLeft(IExpression aLeft) {
+	public void setLeft(final IExpression aLeft) {
 		throw new NotImplementedException(); // TODO
 	}
 
@@ -52,7 +52,7 @@ public class NumericExpression implements IExpression {
 	}
 
 	@Override
-	public void setKind(ExpressionKind aType) {
+	public void setKind(final ExpressionKind aType) {
 		// log and ignore
 		System.err.println("Trying to set ExpressionType of NumericExpression to "+aType.toString());
 	}
@@ -70,7 +70,7 @@ public class NumericExpression implements IExpression {
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 

@@ -26,14 +26,14 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, 
 	private final List<StatementItem> items = new ArrayList<StatementItem>();
 	private final OS_Element parent;
 
-	public Loop(OS_Element aParent) {
+	public Loop(final OS_Element aParent) {
 		// document assumption
 		if (!(aParent instanceof FunctionDef) && !(aParent instanceof Loop))
 			System.out.println("parent is not FunctionDef or Loop");
 		parent = aParent;
 	}
 
-	public void type(LoopTypes2 aType) {
+	public void type(final LoopTypes2 aType) {
 		type = aType;
 	}
 
@@ -41,19 +41,19 @@ public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, 
 		return _scope ;
 	}
 
-	public void expr(IExpression aExpr) {
+	public void expr(final IExpression aExpr) {
 		expr=aExpr;
 	}
 
-	public void topart(IExpression aExpr) {
+	public void topart(final IExpression aExpr) {
 		topart=aExpr;
 	}
 
-	public void frompart(IExpression aExpr) {
+	public void frompart(final IExpression aExpr) {
 		frompart=aExpr;
 	}
 
-	public void iterName(IdentExpression s) {
+	public void iterName(final IdentExpression s) {
 //		assert type == ITER_TYPE;
 		iterName=s;
 	}
@@ -73,7 +73,7 @@ private final Attached _a = new Attached();
 	}
 
 	@Override // OS_Element
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		throw new NotImplementedException();
 	}
 
@@ -97,7 +97,7 @@ private final Attached _a = new Attached();
 		return frompart;
 	}
 
-	public void setContext(LoopContext ctx) {
+	public void setContext(final LoopContext ctx) {
 		_a.setContext(ctx);
 	}
 
@@ -110,7 +110,7 @@ private final Attached _a = new Attached();
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 
 		@Override
-		public void add(StatementItem aItem) {
+		public void add(final StatementItem aItem) {
 //			if (aItem instanceof FunctionItem)
 //				items.add((FunctionItem) aItem);
 //			else
@@ -140,7 +140,7 @@ private final Attached _a = new Attached();
 		}
 
 		@Override
-		public void addDocString(Token aS) {
+		public void addDocString(final Token aS) {
 			docstrings.add(aS.getText());
 		}
 
@@ -155,7 +155,7 @@ private final Attached _a = new Attached();
 		}
 
 		@Override
-		public void statementWrapper(IExpression aExpr) {
+		public void statementWrapper(final IExpression aExpr) {
 			add(new StatementWrapper(aExpr, getContext(), getParent()));
 //			throw new NotImplementedException(); // TODO
 		}

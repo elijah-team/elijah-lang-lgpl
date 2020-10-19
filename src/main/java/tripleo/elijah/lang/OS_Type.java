@@ -35,7 +35,7 @@ public class OS_Type {
 	public OS_Type() {
 	}
 
-	public static boolean isConcreteType(OS_Element element) {
+	public static boolean isConcreteType(final OS_Element element) {
 		if (element instanceof ClassStatement) return true;
 		// enum
 		// type
@@ -43,10 +43,10 @@ public class OS_Type {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		OS_Type os_type = (OS_Type) o;
+		final OS_Type os_type = (OS_Type) o;
 /*		switch (kind) {
 			case USER: return (((OS_Type) o).getTypeName()).equals(getTypeName());
 			case BUILT_IN: return (((OS_Type) o).type).equals(type);
@@ -80,15 +80,15 @@ public class OS_Type {
 		return etype;
 	}
 
-	public OS_Type resolve(Context ctx) {
+	public OS_Type resolve(final Context ctx) {
 		assert ctx != null;
 		switch (getType()) {
 		case BUILT_IN:
 			{
 				switch (getBType()) {
 				case SystemInteger:
-					LookupResultList r = ctx.lookup("SystemInteger");
-					OS_Element best = r.chooseBest(null);
+					final LookupResultList r = ctx.lookup("SystemInteger");
+					final OS_Element best = r.chooseBest(null);
 					return new OS_Type((ClassStatement) best);
 				case Boolean:
 					r = ctx.lookup("Boolean");
@@ -100,8 +100,8 @@ public class OS_Type {
 			}
 		case USER:
 			{
-				LookupResultList r = ctx.lookup(getTypeName().toString()); // TODO
-				OS_Element best = r.chooseBest(null);
+				final LookupResultList r = ctx.lookup(getTypeName().toString()); // TODO
+				final OS_Element best = r.chooseBest(null);
 				return new OS_Type((ClassStatement) best);
 			}
 		case USER_CLASS:
@@ -126,20 +126,20 @@ public class OS_Type {
 	private TypeName ttype;
 
 	/*@ ensures type_of_type = Type.BUILT_IN; */
-	public OS_Type(BuiltInTypes aType) {
+	public OS_Type(final BuiltInTypes aType) {
 		this.type = aType;
 		this.type_of_type = Type.BUILT_IN;
 	}
 
 	/*@ ensures type_of_type = Type.USER_CLASS; */
-	public OS_Type(ClassStatement klass) {
+	public OS_Type(final ClassStatement klass) {
 		assert klass != null;
 		this.etype = klass;
 		this.type_of_type = Type.USER_CLASS;
 	}
 
 	/*@ ensures type_of_type = Type.USER; */
-	public OS_Type(/*Normal*/TypeName typeName) {
+	public OS_Type(/*Normal*/final TypeName typeName) {
 		this.ttype = typeName;
 		this.type_of_type = Type.USER;
 	}

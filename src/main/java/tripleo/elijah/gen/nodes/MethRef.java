@@ -22,17 +22,17 @@ public class MethRef {
 	private final TypeRef _parent;
 	private final String _title;
 	
-	public MethRef(String title, TypeRef parent, int code) {
+	public MethRef(final String title, final TypeRef parent, final int code) {
 		_title = title;
 		_parent = parent;
 		_code = code;
 	}
 	
-	public void setArgTypes(TypeRef... types) {
+	public void setArgTypes(final TypeRef... types) {
 		NotImplementedException.raise();
 	}
 	
-	public void setReturnType(TypeRef return_type) {
+	public void setReturnType(final TypeRef return_type) {
 		NotImplementedException.raise();
 	}
 	

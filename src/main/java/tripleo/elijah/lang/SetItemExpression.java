@@ -12,7 +12,7 @@ package tripleo.elijah.lang;
  * Created 8/6/20 1:15 PM
  */
 public class SetItemExpression extends BasicBinaryExpression {
-	public SetItemExpression(GetItemExpression left_, IExpression right_) {
+	public SetItemExpression(final GetItemExpression left_, final IExpression right_) {
 		this.setLeft(left_);
 		this.setRight(right_);
 		this._kind = ExpressionKind.SET_ITEM;

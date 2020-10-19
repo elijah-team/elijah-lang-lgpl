@@ -32,16 +32,16 @@ public class WithStatement implements OS_Element, OS_Container, FunctionItem, St
 	};
 
 	@Override
-	public void addDocString(Token aText) {
+	public void addDocString(final Token aText) {
 		mDocs.add(aText.getText());
 	}
 
-	public WithStatement(OS_Element aParent) {
+	public WithStatement(final OS_Element aParent) {
 		_parent = aParent;
 	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 
 	}
 
@@ -69,7 +69,7 @@ public class WithStatement implements OS_Element, OS_Container, FunctionItem, St
 
 	VariableSequence hidden_seq = new VariableSequence();
 
-	public void setContext(WithContext ctx) {
+	public void setContext(final WithContext ctx) {
 		this.ctx = ctx;
 	}
 
@@ -86,7 +86,7 @@ public class WithStatement implements OS_Element, OS_Container, FunctionItem, St
 	}
 
 	@Override
-	public void add(OS_Element anElement) {
+	public void add(final OS_Element anElement) {
 		if (!(anElement instanceof FunctionItem))
 			return;
 		_items.add((FunctionItem) anElement);

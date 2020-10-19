@@ -27,29 +27,29 @@ public class IO {
 	final List<File> recordedreads  = new ArrayList<File>();
 	final List<File> recordedwrites = new ArrayList<File>();
 	
-	public boolean recordedRead(File file) {
+	public boolean recordedRead(final File file) {
 		return recordedreads.contains(file);
 	}
 
-	public boolean recordedWrite(File file) {
+	public boolean recordedWrite(final File file) {
 		return recordedwrites.contains(file);
 	}
 
-	public CharSource openRead(Path p) {
+	public CharSource openRead(final Path p) {
 		record(FileOption.READ, p);
 		return null;
 	}
 
-	public CharSink openWrite(Path p) {
+	public CharSink openWrite(final Path p) {
 		record(FileOption.WRITE, p);				
 		return null;
 	}
 
-	private void record(FileOption read, @NotNull Path p) {
+	private void record(final FileOption read, @NotNull final Path p) {
 		record(read, p.toFile());
 	}
 
-	private void record(@NotNull FileOption read, @NotNull File file) {
+	private void record(@NotNull final FileOption read, @NotNull final File file) {
 		switch (read) {
 			case WRITE:
 				recordedwrites.add(file);
@@ -62,7 +62,7 @@ public class IO {
 		}
 	}
 
-	public InputStream readFile(File f) throws FileNotFoundException {
+	public InputStream readFile(final File f) throws FileNotFoundException {
 		record(FileOption.READ, f);
 		return new FileInputStream(f);
 	}

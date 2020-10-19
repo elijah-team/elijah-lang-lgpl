@@ -16,7 +16,7 @@ public class VariableReferenceNode {
 	private final CompilerContext _cctx;
 	private final VariableReference _varref;
 	
-	public VariableReferenceNode(CompilerContext cctx, VariableReference varref) {
+	public VariableReferenceNode(final CompilerContext cctx, final VariableReference varref) {
 		NotImplementedException.raise();
 		this._cctx=cctx;
 		this._varref=varref;

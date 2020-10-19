@@ -19,7 +19,7 @@ public class TypeCheckExpression extends AbstractExpression implements IExpressi
     private final IExpression checking;
     private final TypeName checkfor;
 
-    public TypeCheckExpression(IExpression ee, TypeName p1) {
+    public TypeCheckExpression(final IExpression ee, final TypeName p1) {
         this.checking = ee;
         this.checkfor = p1;
     }
@@ -30,7 +30,7 @@ public class TypeCheckExpression extends AbstractExpression implements IExpressi
     }
 
     @Override
-    public void setType(OS_Type deducedExpression) {
+    public void setType(final OS_Type deducedExpression) {
         throw new IllegalStateException("Type of TypeCheckExpression is always boolean");
     }
 

@@ -21,12 +21,12 @@ public class Scope0 implements Scope {
 
 	private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 
-	public Scope0(FuncExpr funcExpr) {
+	public Scope0(final FuncExpr funcExpr) {
 		this.funcExpr = funcExpr;
 	}
 
 	@Override
-	public void add(StatementItem aItem) {
+	public void add(final StatementItem aItem) {
 		if (aItem instanceof FunctionItem)
 			items.add((FunctionItem) aItem);
 		else
@@ -35,7 +35,7 @@ public class Scope0 implements Scope {
 	}
 
 	@Override
-	public void addDocString(Token aS) {
+	public void addDocString(final Token aS) {
 		throw new NotImplementedException();
 //			docstrings.add(aS.getText());
 	}
@@ -57,7 +57,7 @@ public class Scope0 implements Scope {
 	}
 
 	@Override
-	public void statementWrapper(IExpression aExpr) {
+	public void statementWrapper(final IExpression aExpr) {
 		add(new StatementWrapper(aExpr, getParent().getContext(), getParent()));
 //			throw new NotImplementedException(); // TODO
 	}

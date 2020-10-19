@@ -20,7 +20,7 @@ public class RootedImportStatement implements ImportStatement {
 	private Qualident root;
 	private Context _ctx;
 
-	public RootedImportStatement(OS_Element aParent) {
+	public RootedImportStatement(final OS_Element aParent) {
 		parent = aParent;
 		if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(this);
@@ -32,14 +32,14 @@ public class RootedImportStatement implements ImportStatement {
 		return root;
 	}
 
-	public void setRoot(Qualident root) {
+	public void setRoot(final Qualident root) {
 		this.root = root;
 	}
 
 	/** Used in from syntax
 	 * @category from
 	 */
-	public void importRoot(Qualident xyz) {
+	public void importRoot(final Qualident xyz) {
 		setRoot(xyz);
 	}
 
@@ -59,13 +59,13 @@ public class RootedImportStatement implements ImportStatement {
 
 	@Override
 	public List<Qualident> parts() {
-		List<Qualident> r = new ArrayList<Qualident>();
-		for (Qualident qualident : importList.parts) {
-			Qualident q = new Qualident();
-			for (Token part : q.parts()) {
+		final List<Qualident> r = new ArrayList<Qualident>();
+		for (final Qualident qualident : importList.parts) {
+			final Qualident q = new Qualident();
+			for (final Token part : q.parts()) {
 				q.append(part);
 			}
-			for (Token part : qualident.parts()) {
+			for (final Token part : qualident.parts()) {
 				q.append(part);
 			}
 			r.add(q);
@@ -74,7 +74,7 @@ public class RootedImportStatement implements ImportStatement {
 	}
 
 	@Override
-	public void setContext(ImportContext ctx) {
+	public void setContext(final ImportContext ctx) {
 		_ctx = ctx;
 	}
 

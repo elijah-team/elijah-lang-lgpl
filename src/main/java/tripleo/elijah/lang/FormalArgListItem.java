@@ -20,12 +20,12 @@ public class FormalArgListItem implements OS_Element, OS_Element2 {
 		return tn;
 	}
 
-	public void setName(IdentExpression s) {
+	public void setName(final IdentExpression s) {
 		name=s;
 	}
 
     @Override // OS_Element
-    public void visitGen(ICodeGen visit) {
+    public void visitGen(final ICodeGen visit) {
         throw new NotImplementedException();
     }
 
@@ -50,7 +50,7 @@ public class FormalArgListItem implements OS_Element, OS_Element2 {
 		return name;
 	}
 
-	public void setTypeName(TypeName tn1) {
+	public void setTypeName(final TypeName tn1) {
 		tn = tn1;
 	}
 }

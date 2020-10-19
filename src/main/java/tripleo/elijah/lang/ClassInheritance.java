@@ -21,7 +21,7 @@ public class ClassInheritance {
 
 	private final ClassStatement parent;
 
-	public ClassInheritance(ClassStatement aStatement) {
+	public ClassInheritance(final ClassStatement aStatement) {
 		parent=aStatement;
 	}
 
@@ -34,7 +34,7 @@ public class ClassInheritance {
 //		return tn;
 //	}
 
-	public void add(TypeName tn) {
+	public void add(final TypeName tn) {
 //		tn.setContext(parent.getContext());
 		tns.add(tn);
 	}

@@ -23,7 +23,7 @@ public class ListExpression extends BasicBinaryExpression {
 
 	ExpressionList contents=new ExpressionList();
 	
-	public void setContents(ExpressionList aList) {
+	public void setContents(final ExpressionList aList) {
 		contents = aList;
 	}
 }

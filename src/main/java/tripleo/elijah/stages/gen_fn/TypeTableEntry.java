@@ -22,7 +22,7 @@ public class TypeTableEntry {
     public @Nullable OS_Type attached;
     public final IExpression expression;
 
-    public TypeTableEntry(int index, Type lifetime, @Nullable OS_Type attached, IExpression expression) {
+    public TypeTableEntry(final int index, final Type lifetime, @Nullable final OS_Type attached, final IExpression expression) {
         this.index = index;
         this.lifetime = lifetime;
         if (attached == null || (attached.getType() == OS_Type.Type.USER && attached.getTypeName() == null))

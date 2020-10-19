@@ -20,7 +20,7 @@ public class TypeRef  implements Node {
 	private final String _name;
 	private final int _code;
 	
-	public TypeRef(ModuleRef moduleRef, RefElemenet parent, String name, int code) {
+	public TypeRef(final ModuleRef moduleRef, final RefElemenet parent, final String name, final int code) {
 		this._module = moduleRef;
 		this._parent = parent;
 		this._name   = name;
@@ -62,7 +62,7 @@ public class TypeRef  implements Node {
 		return String.format("Z%d", _code);
 	}
 	
-	public static boolean is_integer_code(int aCode) {
+	public static boolean is_integer_code(final int aCode) {
 		return aCode == CODE_U64 || aCode == CODE_SYS_INT;
 	}
 	

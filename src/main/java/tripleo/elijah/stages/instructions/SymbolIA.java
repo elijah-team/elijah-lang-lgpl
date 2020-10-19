@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Contract;
 public class SymbolIA implements InstructionArgument {
 	private final String text;
 
-	public SymbolIA(String s) {
+	public SymbolIA(final String s) {
 		this.text = s;
 	}
 

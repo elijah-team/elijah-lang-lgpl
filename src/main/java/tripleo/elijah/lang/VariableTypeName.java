@@ -32,7 +32,7 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
-	public void addGenericPart(TypeNameList tn2) {
+	public void addGenericPart(final TypeNameList tn2) {
 		genericPart = tn2;
 	}
 
@@ -43,7 +43,7 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	// pr_name is null when first created
 	@Override
 	public String toString() {
-		String result;
+		final String result;
 		if (pr_name != null) {
 			if (genericPart != null) {
 				result = String.format("%s[%s]", pr_name.toString(), genericPart.toString());
@@ -57,7 +57,7 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
-	public void setContext(Context ctx) {
+	public void setContext(final Context ctx) {
 		_ctx = ctx;
 	}
 
@@ -87,16 +87,16 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
-	public void setResolvedElement(OS_Element element) {
+	public void setResolvedElement(final OS_Element element) {
 		_resolvedElement = element;
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) return true;
 		if (!super.equals(o)) return false;
 		if (!(o instanceof NormalTypeName)) return false;
-		NormalTypeName that = (NormalTypeName) o;
+		final NormalTypeName that = (NormalTypeName) o;
 		return Objects.equals(genericPart, that.getGenericPart());
 	}
 

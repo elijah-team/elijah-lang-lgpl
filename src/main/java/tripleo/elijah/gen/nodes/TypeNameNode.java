@@ -12,7 +12,7 @@ import tripleo.elijah.lang.IdentExpression;
  */
 public class TypeNameNode {
 
-	public TypeNameNode(@NonNull IdentExpression return_type) {
+	public TypeNameNode(@NonNull final IdentExpression return_type) {
 		// TODO Auto-generated constructor stub
 		genType=return_type.getText(); // TODO wrong prolly
 	}

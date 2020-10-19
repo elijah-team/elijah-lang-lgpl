@@ -25,18 +25,18 @@ public class LoopContext extends Context {
 	private final Loop carrier;
 	private final Context _parent;
 
-	public LoopContext(Context cur, Loop loop) {
+	public LoopContext(final Context cur, final Loop loop) {
 		carrier = loop;
 		_parent = cur;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	@Override public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(carrier.getContext());
 
 		if (carrier.getIterNameToken() != null) {
 			if (carrier.getIterName() != null) {
 				if (name.equals(carrier.getIterName())) { // reversed to prevent NPEs
-					IdentExpression ie = carrier.getIterNameToken();
+					final IdentExpression ie = carrier.getIterNameToken();
 					Result.add(name, level, ie, this);
 				}
 			}

@@ -23,15 +23,15 @@ public class IndexingStatement {
 	private ExpressionList exprs;
 	private final OS_Module parent;
 
-	public IndexingStatement(OS_Module module) {
+	public IndexingStatement(final OS_Module module) {
 		this.parent = module;
 	}
 
-	public void setName(Token i1) {
+	public void setName(final Token i1) {
 		this.name = i1;
 	}
 
-	public void setExprs(ExpressionList el) {
+	public void setExprs(final ExpressionList el) {
 		this.exprs = el;
 	}
 

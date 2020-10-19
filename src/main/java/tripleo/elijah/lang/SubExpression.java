@@ -19,7 +19,7 @@ public class SubExpression extends AbstractExpression {
 
 	private final IExpression carrier;
 
-	public SubExpression(IExpression ee) {
+	public SubExpression(final IExpression ee) {
 		carrier=ee;
 	}
 
@@ -29,7 +29,7 @@ public class SubExpression extends AbstractExpression {
 	}
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		throw new IllegalStateException("Cant set this type");
 	}
 

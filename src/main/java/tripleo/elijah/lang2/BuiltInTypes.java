@@ -19,7 +19,7 @@ public enum BuiltInTypes {
 
 	final int _code;
 	
-	BuiltInTypes(int aCode) {
+	BuiltInTypes(final int aCode) {
 		_code = aCode;
 	}
 	

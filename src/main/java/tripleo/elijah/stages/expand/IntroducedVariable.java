@@ -25,23 +25,23 @@ public class IntroducedVariable implements FunctionPrelimInstruction {
     IExpression variable;
     private IntroducedExpressionList args2;
 
-    public IntroducedVariable(IExpression variable) {
+    public IntroducedVariable(final IExpression variable) {
         this.variable = variable;
         this.kind = Type.VARREF;
     }
 
-    public IntroducedVariable(VariableStatement variable) {
+    public IntroducedVariable(final VariableStatement variable) {
         this.vardecl = variable;
         this.kind = Type.VARDECL;
     }
 
-    public void makeIntoFunctionCall(ExpressionList args) {
+    public void makeIntoFunctionCall(final ExpressionList args) {
         this.args = args == null ? new ExpressionList() : args; // TODO is this really necessary?
         this.kind = Type.PROCEDURE_CALL;
         System.out.println("[#makeIntoFunctionCall] " + this + " " + args);
     }
 
-    public void makeIntoFunctionCall(IntroducedExpressionList expressionList) {
+    public void makeIntoFunctionCall(final IntroducedExpressionList expressionList) {
         this.args2 = expressionList;// == null ? new IntroducedExpressionList() : expressionList; // TODO is this really necessary?
         this.kind = Type.PROCEDURE_CALL;
         System.out.println("[#makeIntoFunctionCall] " + this + " " + expressionList);
@@ -58,7 +58,7 @@ public class IntroducedVariable implements FunctionPrelimInstruction {
     }
 
     @Override
-    public void setInstructionNumber(int i) {_inst = i;}
+    public void setInstructionNumber(final int i) {_inst = i;}
     @Override
     public int instructionNumber() {
         return _inst;

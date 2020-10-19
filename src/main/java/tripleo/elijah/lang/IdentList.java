@@ -21,7 +21,7 @@ public class IdentList {
 //		idents.add(new OS_Ident(aa));
 //	}
 
-	public void push(IdentExpression s) {
+	public void push(final IdentExpression s) {
 		idents2.add(s);
 	}
 }

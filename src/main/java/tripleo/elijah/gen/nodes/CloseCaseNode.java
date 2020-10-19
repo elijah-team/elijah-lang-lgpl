@@ -32,7 +32,7 @@ public class CloseCaseNode {
 
 	public CaseChoiceNode hdr_node;
 
-	public CloseCaseNode(CaseChoiceNode csn, ChoiceOptions break1) {
+	public CloseCaseNode(final CaseChoiceNode csn, final ChoiceOptions break1) {
 		// TODO Auto-generated constructor stub
 		hdr_node=csn;
 	}
@@ -43,7 +43,7 @@ public class CloseCaseNode {
 ////		hdr_node=csn2;
 //	}
 	
-	public CloseCaseNode(CaseChoiceNode csn2, ChoiceOptions aBreak, boolean b) {
+	public CloseCaseNode(final CaseChoiceNode csn2, final ChoiceOptions aBreak, final boolean b) {
 		assert b==true; // means default
 		NotImplementedException.raise();
 	}

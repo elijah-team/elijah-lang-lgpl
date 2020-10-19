@@ -21,15 +21,15 @@ public class Instruction {
 	List<InstructionArgument> args;
 	private Context context;
 
-	public void setName(InstructionName aName) {
+	public void setName(final InstructionName aName) {
 		name = aName;
 	}
 
-	public void setIndex(int l) {
+	public void setIndex(final int l) {
 		index = l;
 	}
 
-	public void setArgs(List<InstructionArgument> args_) {
+	public void setArgs(final List<InstructionArgument> args_) {
 		args = args_;
 	}
 
@@ -50,11 +50,11 @@ public class Instruction {
 				'}';
 	}
 
-	public InstructionArgument getArg(int i) {
+	public InstructionArgument getArg(final int i) {
 		return args.get(i);
 	}
 
-	public void setContext(Context context) {
+	public void setContext(final Context context) {
 		this.context = context;
 	}
 

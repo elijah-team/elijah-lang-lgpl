@@ -22,20 +22,20 @@ import java.io.IOException;
  */
 public class FindBothSourceFilesMain {
 
-	public static void main(String[] args) {
-		FindBothSourceFiles f=new FindBothSourceFiles(/*"xx"*/);
+	public static void main(final String[] args) {
+		final FindBothSourceFiles f=new FindBothSourceFiles(/*"xx"*/);
 		try {
 			f.compilerShouldFindBothParseFiles();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		GenBuffer gbn = new GenBuffer();
-		CompilerContext cctx = new CompilerContext("fact.elijah");
+		final GenBuffer gbn = new GenBuffer();
+		final CompilerContext cctx = new CompilerContext("fact.elijah");
 		new FactorialR().factorial_r(cctx , gbn);
 		try {
 			gbn.writeBuffers();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

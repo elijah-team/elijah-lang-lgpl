@@ -37,20 +37,20 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	private final List<String> mDocs = new ArrayList<String>();
 
 	@Override
-	public void addDocString(Token aText) {
+	public void addDocString(final Token aText) {
 		mDocs.add(aText.getText());
 	}
 
-	public void setAbstract(boolean b) {
+	public void setAbstract(final boolean b) {
 		_isAbstract = b;
 		if (b) {this.set(FunctionModifiers.ABSTRACT);}
 	}
 
-	public void set(FunctionModifiers mod) {
+	public void set(final FunctionModifiers mod) {
 		_mod = mod;
 	}
 
-	public void setReturnType(TypeName tn) {
+	public void setReturnType(final TypeName tn) {
 		this._returnType = tn;
 	}
 
@@ -59,7 +59,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this, getParent());
 
 		@Override
-		public void add(StatementItem aItem) {
+		public void add(final StatementItem aItem) {
 			if (!(aItem instanceof FunctionItem)) {
 				System.err.println(String.format("adding false FunctionItem %s", aItem.getClass().getName()));
 				return;
@@ -68,7 +68,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		}
 		
 		@Override
-		public void addDocString(Token aS) {
+		public void addDocString(final Token aS) {
 			docstrings.add(aS.getText());
 		}
 		
@@ -88,7 +88,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		}
 
 		@Override
-		public void statementWrapper(IExpression aExpr) {
+		public void statementWrapper(final IExpression aExpr) {
 			add(new StatementWrapper(aExpr, getContext(), getParent()));
 //			throw new NotImplementedException(); // TODO
 		}
@@ -125,7 +125,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	//	private FunctionDefScope mScope;
 	private final OS_Element/*ClassStatement*/ parent;
 
-	public FunctionDef(OS_Element aElement) {
+	public FunctionDef(final OS_Element aElement) {
 		parent = aElement;
 		if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(this);
@@ -154,23 +154,23 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
-		Collection<FunctionItem> c = Collections2.filter(getItems(), new Predicate<FunctionItem>() {
+		final Collection<FunctionItem> c = Collections2.filter(getItems(), new Predicate<FunctionItem>() {
 			@Override
-			public boolean apply(@Nullable FunctionItem input) {
+			public boolean apply(@Nullable final FunctionItem input) {
 				final boolean b = input instanceof OS_Element2;
 //				System.out.println(String.format("%s %b", input, b));
 				return b;
 			}
 		});
-		ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
-		for (FunctionItem functionItem : c) {
+		final ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
+		for (final FunctionItem functionItem : c) {
 			a.add((OS_Element2) functionItem);
 		}
 		return a;
 	}
 
 	@Override // OS_Container
-	public void add(OS_Element anElement) {
+	public void add(final OS_Element anElement) {
 		if (anElement instanceof FunctionItem)
 			items.add((FunctionItem) anElement);
 		else
@@ -188,7 +188,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		return mScope2;
 	}
 
-	public void setName(IdentExpression aText) {
+	public void setName(final IdentExpression aText) {
 		funName = aText;
 	}
 
@@ -199,7 +199,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 //	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
@@ -211,7 +211,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		return funName.getText();
 	}
 
-	public void setContext(FunctionContext ctx) {
+	public void setContext(final FunctionContext ctx) {
 		_a.setContext(ctx);
 	}
 
@@ -220,7 +220,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	List<AnnotationClause> annotations = null;
 
-	public void addAnnotation(AnnotationClause a) {
+	public void addAnnotation(final AnnotationClause a) {
 		if (annotations == null)
 			annotations = new ArrayList<AnnotationClause>();
 		annotations.add(a);

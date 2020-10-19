@@ -20,17 +20,17 @@ public class AccessNotation {
 	private Token shorthand;
 	private TypeNameList tnl;
 
-	public void setCategory(Token category) {
+	public void setCategory(final Token category) {
 		assert category.getType() == ElijjahTokenTypes.STRING_LITERAL;
 		this.category = category;
 	}
 
-	public void setShortHand(Token shorthand) {
+	public void setShortHand(final Token shorthand) {
 		assert shorthand.getType() == ElijjahTokenTypes.IDENT;
 		this.shorthand = shorthand;
 	}
 
-	public void setTypeNames(TypeNameList tnl) {
+	public void setTypeNames(final TypeNameList tnl) {
 		this.tnl = tnl;
 	}
 }

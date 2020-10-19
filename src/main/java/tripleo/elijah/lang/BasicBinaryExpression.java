@@ -16,8 +16,8 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		BasicBinaryExpression abe = this;
+		final StringBuilder sb = new StringBuilder();
+		final BasicBinaryExpression abe = this;
 		switch (abe.getKind()) {
 			case ASSIGNMENT:
 				sb.append(abe.getLeft().toString());
@@ -305,7 +305,7 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 		_kind = null;
 	}
 
-	public BasicBinaryExpression(IExpression aLeft, ExpressionKind aType, IExpression aRight) {
+	public BasicBinaryExpression(final IExpression aLeft, final ExpressionKind aType, final IExpression aRight) {
 		left = aLeft;
 		_kind = aType;
 		right = aRight;
@@ -332,23 +332,23 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 	}
 
 	@Override
-	public void set(IBinaryExpression aEx) {
+	public void set(final IBinaryExpression aEx) {
 		left=aEx.getLeft();
 		_kind =aEx.getKind();
 		right=aEx.getRight();
 	}
 
 	@Override
-	public void setLeft(IExpression aLeft) {
+	public void setLeft(final IExpression aLeft) {
 		left = aLeft;
 	}
 
 	@Override
-	public void setRight(IExpression aRight) {
+	public void setRight(final IExpression aRight) {
 		right = aRight;
 	}
 	@Override
-	public void shift(ExpressionKind aType) {
+	public void shift(final ExpressionKind aType) {
 		left=new BasicBinaryExpression(left, _kind,right); //TODO
 		_kind =aType;
 		right=null;
@@ -359,7 +359,7 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 	public ExpressionKind _kind;
 
 	@Override
-	public void setKind(ExpressionKind aKind) {
+	public void setKind(final ExpressionKind aKind) {
 		_kind = aKind;
 	}
 
@@ -371,7 +371,7 @@ public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 

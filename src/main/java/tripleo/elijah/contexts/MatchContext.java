@@ -21,13 +21,13 @@ public class MatchContext extends Context {
 	private final MatchConditional carrier;
 	private final Context _parent;
 
-	public MatchContext(Context aParent, MatchConditional mc) {
+	public MatchContext(final Context aParent, final MatchConditional mc) {
 		this._parent=aParent;
 		this.carrier=mc;
 	}
 
 	@Override
-	public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(carrier.getContext());
 
 /*

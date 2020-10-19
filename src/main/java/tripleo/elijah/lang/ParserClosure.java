@@ -19,7 +19,7 @@ import tripleo.elijah.comp.Compilation;
 
 public class ParserClosure extends ProgramClosure {
 
-	public ParserClosure(String fn, @NotNull Compilation compilation) {
+	public ParserClosure(final String fn, @NotNull final Compilation compilation) {
 		module = new OS_Module();
 		module.setFileName(fn);
 		module.setParent(compilation); // TODO take a look at all this here
@@ -42,7 +42,7 @@ public class ParserClosure extends ProgramClosure {
 		return module;
 	}
 
-	public void packageName(Qualident aPackageName) {
+	public void packageName(final Qualident aPackageName) {
 		//assert module.packageName ==null;
 		module.pushPackageName(aPackageName);
 	}

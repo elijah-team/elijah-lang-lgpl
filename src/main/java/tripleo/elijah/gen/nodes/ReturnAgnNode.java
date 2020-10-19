@@ -24,12 +24,12 @@ public class ReturnAgnNode {
 	private LocalAgnTmpNode _latn;
 	public ExpressionNode expr;
 
-	public ReturnAgnNode(IExpression expression) {
+	public ReturnAgnNode(final IExpression expression) {
 		// TODO Auto-generated constructor stub
 		expr = new ExpressionNode(expression);
 	}
 
-	public ReturnAgnNode(LocalAgnTmpNode latn3) {
+	public ReturnAgnNode(final LocalAgnTmpNode latn3) {
 		// TODO might be wrong
 //		throw new NotImplementedException();
 		this._latn = latn3;

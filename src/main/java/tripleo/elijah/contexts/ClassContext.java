@@ -28,14 +28,14 @@ public class ClassContext extends Context {
 ////		super(classStatement);
 //	}
 
-	public ClassContext(Context aParent, ClassStatement cls) {
+	public ClassContext(final Context aParent, final ClassStatement cls) {
 		_parent = aParent;
 		carrier = cls;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	@Override public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(carrier.getContext());
-		for (ClassItem item: carrier.getItems()) {
+		for (final ClassItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) &&
 				!(item instanceof FunctionDef) &&
@@ -49,26 +49,26 @@ public class ClassContext extends Context {
 			}
 			if (item instanceof VariableSequence) {
 				System.out.println("102 "+item);
-				for (VariableStatement vs : ((VariableSequence) item).items()) {
+				for (final VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs, this);
 				}
 			}
 		}
-		for (TypeName tn1 : carrier.classInheritance().tns) {
+		for (final TypeName tn1 : carrier.classInheritance().tns) {
 //			System.out.println("1001 "+tn);
-			NormalTypeName tn = (NormalTypeName)tn1;
-			OS_Element best;
+			final NormalTypeName tn = (NormalTypeName)tn1;
+			final OS_Element best;
 			if (!tn.hasResolvedElement()) {
-				LookupResultList tnl = tn.getContext().lookup(tn.getName());
+				final LookupResultList tnl = tn.getContext().lookup(tn.getName());
 //	    		System.out.println("1002 "+tnl.results());
 				best = tnl.chooseBest(null);
 			} else
 				best = tn.getResolvedElement();
 			if (best != null) {
 				tn.setResolvedElement(best);
-				LookupResultList lrl2 = best.getContext().lookup(name);
-				OS_Element best2 = lrl2.chooseBest(null);
+				final LookupResultList lrl2 = best.getContext().lookup(name);
+				final OS_Element best2 = lrl2.chooseBest(null);
 				if (best2 != null)
 					Result.add(name, level, best2, this);
 			}

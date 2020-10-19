@@ -18,7 +18,7 @@ public class BlockStatement implements Statement, StatementItem {
 	private final FormalArgList fal=new FormalArgList();
 	private final StatementClosure scope;
 	
-	public BlockStatement(Scope aParent) {
+	public BlockStatement(final Scope aParent) {
 		parent = aParent;
 		scope=new AbstractStatementClosure(parent);
 	}

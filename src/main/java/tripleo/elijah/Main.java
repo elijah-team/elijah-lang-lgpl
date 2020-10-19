@@ -18,10 +18,10 @@ import java.util.List;
 
 public class Main {
 
-	public static void main(String[] args) {
-		StdErrSink errSink = new StdErrSink();
-		Compilation cc = new Compilation(errSink, new IO());
-		List<String> ls = new ArrayList<String>();
+	public static void main(final String[] args) {
+		final StdErrSink errSink = new StdErrSink();
+		final Compilation cc = new Compilation(errSink, new IO());
+		final List<String> ls = new ArrayList<String>();
 		ls.addAll(Arrays.asList(args));
 		cc.main(ls, new StdErrSink());
 	}

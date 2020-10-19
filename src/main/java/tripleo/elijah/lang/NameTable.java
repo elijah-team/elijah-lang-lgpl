@@ -14,7 +14,7 @@ import java.util.Map;
 public class NameTable {
 
 	class TypedElement {
-		public TypedElement(OS_Element element2, OS_Type dtype) {
+		public TypedElement(final OS_Element element2, final OS_Type dtype) {
 			this.element = element2;
 			this.type    = dtype;
 		}
@@ -32,7 +32,7 @@ public class NameTable {
 	
 	Map<String, TypedElement> members = new HashMap<String, TypedElement>();
 	
-	public void add(OS_Element element, String name, OS_Type dtype) {
+	public void add(final OS_Element element, final String name, final OS_Type dtype) {
 //		element.setType(dtype);
 		members.put(name, new TypedElement(element, dtype));
 		System.err.println("[NameTable#add] "+members);

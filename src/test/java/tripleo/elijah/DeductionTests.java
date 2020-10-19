@@ -27,14 +27,14 @@ public class DeductionTests {
 
 	@Test
 	public final void testParseFile() {
-		List<String> args = tripleo.elijah.util.Helpers.List_of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
-		ErrSink eee = new StdErrSink();
-		Compilation c = new Compilation(eee, new IO());
+		final List<String> args = tripleo.elijah.util.Helpers.List_of("test/demo-el-normal", "test/demo-el-normal/main2", "-sE");
+		final ErrSink eee = new StdErrSink();
+		final Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
 
 		final List<ClassStatement> aClassList = c.findClass("Main");
-		for (ClassStatement classStatement : aClassList) {
+		for (final ClassStatement classStatement : aClassList) {
 			System.out.println(classStatement.getPackageName().getName());
 		}
 		Assert.assertEquals(3, aClassList.size());  // NOTE this may change. be aware
@@ -43,9 +43,9 @@ public class DeductionTests {
 
 	@Test
 	public final void testListFolders() {
-		List<String> args = Helpers.List_of(/*"test/demo-el-normal/listfolders2.elijah",*/ "test/demo-el-normal/listfolders/", "-sE");
-		ErrSink eee = new StdErrSink();
-		Compilation c = new Compilation(eee, new IO());
+		final List<String> args = Helpers.List_of(/*"test/demo-el-normal/listfolders2.elijah",*/ "test/demo-el-normal/listfolders/", "-sE");
+		final ErrSink eee = new StdErrSink();
+		final Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
 

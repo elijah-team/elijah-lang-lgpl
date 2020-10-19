@@ -16,7 +16,7 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 		_kind  = null;
 	}
 
-	public AbstractExpression(IExpression aLeft, ExpressionKind aType) {
+	public AbstractExpression(final IExpression aLeft, final ExpressionKind aType) {
 		left = aLeft;
 		_kind = aType;
 	}
@@ -37,7 +37,7 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 	}
 
 	@Override
-	public void setLeft(IExpression aLeft) {
+	public void setLeft(final IExpression aLeft) {
 		left = aLeft;
 	}
 
@@ -45,7 +45,7 @@ public abstract class AbstractExpression implements IExpression, ScopeElement {
 	public ExpressionKind _kind;
 
 	@Override
-	public void setKind(ExpressionKind type1) {
+	public void setKind(final ExpressionKind type1) {
 		_kind=type1;
 	}
 }

@@ -34,7 +34,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 	private OS_Element parent;
 	private MatchContext __ctx;
 
-	public MatchConditional(OS_Element parent, Context parentContext) {
+	public MatchConditional(final OS_Element parent, final Context parentContext) {
 		this.parent = parent;
 		this._ctx = new SingleIdentContext(parentContext, this);
 	}
@@ -47,7 +47,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 	 * @category OS_Element
 	 */
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		throw new NotImplementedException();
 	}
 
@@ -59,7 +59,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		return this.parent;
 	}
 
-	public void setParent(OS_Element aParent) {
+	public void setParent(final OS_Element aParent) {
 		this.parent = aParent;
 	}
 
@@ -73,7 +73,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		return __ctx;
 	}
 
-	public void setContext(MatchContext ctx) {
+	public void setContext(final MatchContext ctx) {
 		__ctx = ctx;
 	}
 
@@ -88,7 +88,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		return expr;
 	}
 
-	public void expr(IExpression expr) {
+	public void expr(final IExpression expr) {
 		this.expr = expr;
 	}
 
@@ -126,12 +126,12 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 		private final MC1 element;
 
-		public MatchConditionalScope(MC1 part1) {
+		public MatchConditionalScope(final MC1 part1) {
 			element = part1;
 		}
 
 		@Override
-		public void add(StatementItem aItem) {
+		public void add(final StatementItem aItem) {
 			if (aItem instanceof FunctionItem)
 				element.add((FunctionItem) aItem);
 			else
@@ -140,7 +140,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public void addDocString(Token aS) {
+		public void addDocString(final Token aS) {
 			element.addDocString(aS);
 		}
 
@@ -165,7 +165,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public void statementWrapper(IExpression aExpr) {
+		public void statementWrapper(final IExpression aExpr) {
 			element.add(new StatementWrapper(aExpr, getContext(), /*MatchConditional.this.*/getParent()));
 		}
 
@@ -192,7 +192,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		private List<Token> docstrings = null;
 		private IdentExpression matching_expression;
 
-		public void expr(IdentExpression expr) {
+		public void expr(final IdentExpression expr) {
 			this.matching_expression = expr;
 		}
 
@@ -201,7 +201,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public void add(FunctionItem aItem) {
+		public void add(final FunctionItem aItem) {
 			items.add(aItem);
 		}
 
@@ -216,7 +216,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public void addDocString(Token text) {
+		public void addDocString(final Token text) {
 			if (docstrings == null)
 				docstrings = new ArrayList<Token>();
 			docstrings.add(text);
@@ -240,7 +240,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 			return matching_expression;
 		}
 
-		public void expr(IExpression expr) {
+		public void expr(final IExpression expr) {
 			this.matching_expression = expr;
 		}
 
@@ -249,12 +249,12 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public void add(FunctionItem aItem) {
+		public void add(final FunctionItem aItem) {
 			items.add(aItem);
 		}
 
 		@Override
-		public void addDocString(Token text) {
+		public void addDocString(final Token text) {
 			if (docstrings == null)
 				docstrings = new ArrayList<Token>();
 			docstrings.add(text);
@@ -275,7 +275,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		private List<Token> docstrings = new ArrayList<Token>();
 		private IdentExpression ident;
 
-		public void ident(IdentExpression i1) {
+		public void ident(final IdentExpression i1) {
 			this.ident = i1;
 		}
 
@@ -288,12 +288,12 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public void add(FunctionItem aItem) {
+		public void add(final FunctionItem aItem) {
 			items.add(aItem);
 		}
 
 		@Override
-		public void addDocString(Token text) {
+		public void addDocString(final Token text) {
 			if (docstrings == null)
 				docstrings = new ArrayList<Token>();
 			docstrings.add(text);
@@ -308,7 +308,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 			return tn;
 		}
 
-		public void setTypeName(TypeName typeName) {
+		public void setTypeName(final TypeName typeName) {
 			tn = typeName;
 		}
 

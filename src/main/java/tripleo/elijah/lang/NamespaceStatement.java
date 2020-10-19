@@ -35,7 +35,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	private OS_Package _packageName;
 	private List<AccessNotation> accesses = new ArrayList<AccessNotation>();
 
-	public NamespaceStatement(OS_Element aElement) {
+	public NamespaceStatement(final OS_Element aElement) {
 		parent = aElement; // setParent
 		if (aElement instanceof  OS_Module) {
 			final OS_Module module = (OS_Module) aElement;
@@ -50,7 +50,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		}
 	}
 
-	public void setPackageName(OS_Package aPackageName) {
+	public void setPackageName(final OS_Package aPackageName) {
 		_packageName = aPackageName;
 	}
 
@@ -58,21 +58,21 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		return _packageName;
 	}
 
-	public void setName(IdentExpression i1) {
+	public void setName(final IdentExpression i1) {
 		nsName = i1;
 	}
 
 	private final List<String> mDocs = new ArrayList<String>();
 
 	@Override
-	public void addDocString(Token aText) {
+	public void addDocString(final Token aText) {
 		mDocs.add(aText.getText());
 	}
 
 	public StatementClosure statementClosure() {
 		return new AbstractStatementClosure(new Scope() {
 			@Override
-			public void statementWrapper(IExpression aExpr) {
+			public void statementWrapper(final IExpression aExpr) {
 				throw new NotImplementedException();
 			}
 
@@ -89,7 +89,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 			}
 
 			@Override
-			public void add(StatementItem aItem) {
+			public void add(final StatementItem aItem) {
 				NamespaceStatement.this.add((OS_Element) aItem);
 			}
 
@@ -114,7 +114,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 			}
 
 			@Override
-			public void addDocString(Token s1) {
+			public void addDocString(final Token s1) {
 				NamespaceStatement.this.addDocString(s1);
 			}
 		});
@@ -137,7 +137,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 
 	@Override // OS_Element
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		// TODO Auto-generated method stub
 		throw new NotImplementedException();
 	}
@@ -161,7 +161,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		return nsName.getText();
 	}
 
-	public void setType(NamespaceTypes aType) {
+	public void setType(final NamespaceTypes aType) {
 		_kind = aType;
 	}
 
@@ -174,23 +174,23 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
-		Collection<ClassItem> c = Collections2.filter(getItems(), new Predicate<ClassItem>() {
+		final Collection<ClassItem> c = Collections2.filter(getItems(), new Predicate<ClassItem>() {
 			@Override
-			public boolean apply(@Nullable ClassItem input) {
+			public boolean apply(@Nullable final ClassItem input) {
 				final boolean b = input instanceof OS_Element2;
 //				System.out.println(String.format("%s %b", input, b));
 				return b;
 			}
 		});
-		ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
-		for (ClassItem functionItem : c) {
+		final ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
+		for (final ClassItem functionItem : c) {
 			a.add((OS_Element2) functionItem);
 		}
 		return a;
 	}
 
 	@Override // OS_Container
-	public void add(OS_Element anElement) {
+	public void add(final OS_Element anElement) {
 		if (anElement instanceof ClassItem)
 			items.add((ClassItem) anElement);
 		else
@@ -202,13 +202,13 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		return getName();
 	}
 
-	public void setContext(NamespaceContext ctx) {
+	public void setContext(final NamespaceContext ctx) {
 		_a.setContext(ctx);
 	}
 
 	List<AnnotationClause> annotations = null;
 
-	public void addAnnotation(AnnotationClause a) {
+	public void addAnnotation(final AnnotationClause a) {
 		if (annotations == null)
 			annotations = new ArrayList<AnnotationClause>();
 		annotations.add(a);
@@ -226,7 +226,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		}
 	}
 
-	public void addAccess(AccessNotation acs) {
+	public void addAccess(final AccessNotation acs) {
 		accesses.add(acs);
 	}
 }

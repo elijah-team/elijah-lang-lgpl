@@ -22,7 +22,7 @@ public class CharLitExpression implements IExpression {
 
 	private final Token char_lit_raw;
 
-	public CharLitExpression(Token c) {
+	public CharLitExpression(final Token c) {
 		// TODO Auto-generated constructor stub
 		char_lit_raw = c;
 	}
@@ -39,7 +39,7 @@ public class CharLitExpression implements IExpression {
 	 * @see tripleo.elijah.lang.IExpression#set(tripleo.elijah.lang.ExpressionType)
 	 */
 	@Override
-	public void setKind(ExpressionKind aIncrement) {
+	public void setKind(final ExpressionKind aIncrement) {
 		// TODO Auto-generated method stub
 
 	}
@@ -57,7 +57,7 @@ public class CharLitExpression implements IExpression {
 	 * @see tripleo.elijah.lang.IExpression#setLeft(tripleo.elijah.lang.IExpression)
 	 */
 	@Override
-	public void setLeft(IExpression iexpression) {
+	public void setLeft(final IExpression iexpression) {
 		// TODO Auto-generated method stub
 
 	}
@@ -79,7 +79,7 @@ public class CharLitExpression implements IExpression {
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 

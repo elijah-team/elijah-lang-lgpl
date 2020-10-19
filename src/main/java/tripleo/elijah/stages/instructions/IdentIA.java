@@ -25,12 +25,12 @@ public class IdentIA implements InstructionArgument {
 	}
 */
 
-	public IdentIA(int ite, GeneratedFunction generatedFunction) {
+	public IdentIA(final int ite, final GeneratedFunction generatedFunction) {
 		this.gf = generatedFunction;
 		this.id = ite;
 	}
 
-	public void setPrev(InstructionArgument ia) {
+	public void setPrev(final InstructionArgument ia) {
 		gf.getIdentTableEntry(id).backlink = ia;
 	}
 

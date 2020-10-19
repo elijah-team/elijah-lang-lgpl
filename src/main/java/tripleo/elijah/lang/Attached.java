@@ -21,7 +21,7 @@ public class Attached {
 	Context _context;
 	Node _node;
 	
-	public Attached(Context aContext) {
+	public Attached(final Context aContext) {
 		_context = aContext;
 	}
 
@@ -34,7 +34,7 @@ public class Attached {
 		return _code;
 	}
 	
-	public void setCode(int aCode) {
+	public void setCode(final int aCode) {
 		_code = aCode;
 	}
 	
@@ -42,7 +42,7 @@ public class Attached {
 		return _context;
 	}
 	
-	public void setContext(Context aContext) {
+	public void setContext(final Context aContext) {
 		_context = aContext;
 	}
 	
@@ -50,7 +50,7 @@ public class Attached {
 		return _node;
 	}
 	
-	public void setNode(Node aNode) {
+	public void setNode(final Node aNode) {
 		_node = aNode;
 	}
 	

@@ -10,11 +10,11 @@ public class QualidentToDotExpresstionTest {
 
     @Test
     public void qualidentToDotExpression2() {
-        Qualident q = new Qualident();
+        final Qualident q = new Qualident();
         q.append(tripleo.elijah.util.Helpers.makeToken("a"));
         q.append(tripleo.elijah.util.Helpers.makeToken("b"));
         q.append(tripleo.elijah.util.Helpers.makeToken("c"));
-        IExpression e = Helpers.qualidentToDotExpression2(q);
+        final IExpression e = Helpers.qualidentToDotExpression2(q);
         System.out.println(e);
         Assert.assertEquals("a.b.c", e.toString());
     }

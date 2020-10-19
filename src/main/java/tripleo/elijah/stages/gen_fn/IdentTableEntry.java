@@ -30,12 +30,12 @@ public class IdentTableEntry {
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public TypeTableEntry type;
 
-	public IdentTableEntry(int index, IdentExpression ident) {
+	public IdentTableEntry(final int index, final IdentExpression ident) {
         this.index = index;
         this.ident = ident;
     }
 
-	public void addPotentialType(int instructionIndex, TypeTableEntry tte) {
+	public void addPotentialType(final int instructionIndex, final TypeTableEntry tte) {
 		potentialTypes.put(instructionIndex, tte);
 	}
 

@@ -10,15 +10,15 @@ public class TypeOfTypeName implements TypeName {
 	private Qualident _typeOf;
 	private TypeModifiers modifiers;
 
-	public TypeOfTypeName(Context cur) {
+	public TypeOfTypeName(final Context cur) {
 		_ctx=cur;
 	}
 
-	public void typeOf(Qualident xy) {
+	public void typeOf(final Qualident xy) {
 		_typeOf=xy;
 	}
 
-	public void set(TypeModifiers modifiers_) {
+	public void set(final TypeModifiers modifiers_) {
 		modifiers = modifiers_;
 	}
 
@@ -28,7 +28,7 @@ public class TypeOfTypeName implements TypeName {
 	}
 
 	@Override
-	public void setContext(Context context) {
+	public void setContext(final Context context) {
 		throw new NotImplementedException();
 	}
 

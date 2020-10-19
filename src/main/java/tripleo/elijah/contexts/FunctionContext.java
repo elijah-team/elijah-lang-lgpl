@@ -27,14 +27,14 @@ public class FunctionContext extends Context {
 	public List<FunctionPrelimInstruction> functionPrelimInstructions = new ArrayList<FunctionPrelimInstruction>();
 	private int functionPrelimInstructionsNumber = 1;
 
-	public FunctionContext(Context aParent, FunctionDef fd) {
+	public FunctionContext(final Context aParent, final FunctionDef fd) {
 		_parent = aParent;
 		carrier = fd;
 	}
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	@Override public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(carrier.getContext());
-		for (FunctionItem item: carrier.getItems()) {
+		for (final FunctionItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) &&
 				!(item instanceof FunctionDef) &&
@@ -46,13 +46,13 @@ public class FunctionContext extends Context {
 				}
 			} else if (item instanceof VariableSequence) {
 //				System.out.println("[FunctionContext#lookup] VariableSequence "+item);
-				for (VariableStatement vs : ((VariableSequence) item).items()) {
+				for (final VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs, this);
 				}
 			}
 		}
-		for (FormalArgListItem arg : carrier.getArgs()) {
+		for (final FormalArgListItem arg : carrier.getArgs()) {
 			if (arg.name.getText().equals(name)) {
 				Result.add(name, level, arg, this);
 			}
@@ -70,7 +70,7 @@ public class FunctionContext extends Context {
 		return _parent;
 	}
 
-	public IntroducedVariable introduceVariable(IExpression variable) {
+	public IntroducedVariable introduceVariable(final IExpression variable) {
 //		System.out.println("[#introduceVariable] "+variable);
 		final IntroducedVariable introducedVariable = new IntroducedVariable(variable);
 		variableTable.add(introducedVariable);
@@ -78,7 +78,7 @@ public class FunctionContext extends Context {
 		return introducedVariable;
 	}
 
-	public IntroducedVariable introduceVariable(VariableStatement variable) {
+	public IntroducedVariable introduceVariable(final VariableStatement variable) {
 //		System.out.println("[#introduceVariable] "+variable);
 		final IntroducedVariable introducedVariable = new IntroducedVariable(variable);
 		variableTable.add(introducedVariable);
@@ -88,24 +88,24 @@ public class FunctionContext extends Context {
 
 	List<IntroducedVariable> variableTable = new ArrayList<IntroducedVariable>();
 
-	public DotExpressionInstruction dotExpression(FunctionPrelimInstruction i, IExpression de) {
-		DotExpressionInstruction dei = new DotExpressionInstruction(i, de);
+	public DotExpressionInstruction dotExpression(final FunctionPrelimInstruction i, final IExpression de) {
+		final DotExpressionInstruction dei = new DotExpressionInstruction(i, de);
 		addPrelimInstruction(dei);
 		return dei;
 	}
 
-	public FunctionCallPrelimInstruction makeProcCall(FunctionPrelimInstruction fi, ExpressionList args) {
-		IntroducedExpressionList els = simplifyExpressionList(args);
-		FunctionCallPrelimInstruction fci = new FunctionCallPrelimInstruction(fi, els);
+	public FunctionCallPrelimInstruction makeProcCall(final FunctionPrelimInstruction fi, final ExpressionList args) {
+		final IntroducedExpressionList els = simplifyExpressionList(args);
+		final FunctionCallPrelimInstruction fci = new FunctionCallPrelimInstruction(fi, els);
 		addPrelimInstruction(fci);
 		return fci;
 	}
 
-	private IntroducedExpressionList simplifyExpressionList(ExpressionList args) {
-		IntroducedExpressionList args1 = new IntroducedExpressionList();
+	private IntroducedExpressionList simplifyExpressionList(final ExpressionList args) {
+		final IntroducedExpressionList args1 = new IntroducedExpressionList();
 		if (args == null) return args1;
-		for (IExpression arg : args) {
-			int y=2;
+		for (final IExpression arg : args) {
+			final int y=2;
 			if (arg.getKind() == ExpressionKind.PROCEDURE_CALL) {
 				FunctionPrelimInstruction i = null; // TODO
 				if (arg.getLeft().getKind() == ExpressionKind.IDENT) {
@@ -117,8 +117,8 @@ public class FunctionContext extends Context {
 				}
 				//makeProcCall(i, ((ProcedureCallExpression)arg).getArgs());
 			} else if (arg.getKind() == ExpressionKind.FUNC_EXPR) {
-				int yy=2;
-				FunctionPrelimInstruction i = introduceVariable(arg);
+				final int yy=2;
+				final FunctionPrelimInstruction i = introduceVariable(arg);
 				args1.add(i);
 			}
 		}
@@ -131,8 +131,8 @@ public class FunctionContext extends Context {
 //		return api;
 //	}
 
-	public FunctionPrelimInstruction assign(FunctionPrelimInstruction fi, IExpression fi2) {
-		AssignPrelimInstruction api = new AssignPrelimInstruction(fi, fi2);
+	public FunctionPrelimInstruction assign(final FunctionPrelimInstruction fi, final IExpression fi2) {
+		final AssignPrelimInstruction api = new AssignPrelimInstruction(fi, fi2);
 		addPrelimInstruction(api);
 		return api;
 	}
@@ -142,7 +142,7 @@ public class FunctionContext extends Context {
 		fpi.setInstructionNumber(functionPrelimInstructionsNumber++);
 	}
 
-	public FunctionPrelimInstruction introduceFunction(IExpression expression) {
+	public FunctionPrelimInstruction introduceFunction(final IExpression expression) {
 //		System.out.println("[#introduceFunction] "+expression);
 		final IntroducedFunction introducedFunction = new IntroducedFunction(expression);
 //		variableTable.add(introducedFunction);

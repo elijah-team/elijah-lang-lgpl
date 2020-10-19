@@ -38,7 +38,7 @@ public class FnCallArgs implements InstructionArgument {
 		final Collection<String> collect2 = Collections2.transform(instructionArguments, new Function<InstructionArgument, String>() {
 			@Nullable
 			@Override
-			public String apply(@Nullable InstructionArgument input) {
+			public String apply(@Nullable final InstructionArgument input) {
 				return input.toString();
 			}
 		});
@@ -49,12 +49,12 @@ public class FnCallArgs implements InstructionArgument {
 
 	}
 
-	public FnCallArgs(Instruction expression_to_call, GeneratedFunction generatedFunction) {
+	public FnCallArgs(final Instruction expression_to_call, final GeneratedFunction generatedFunction) {
 		this.expression_to_call = expression_to_call;
 		this.gf = generatedFunction;
 	}
 
-	public InstructionArgument getArg(int i) {
+	public InstructionArgument getArg(final int i) {
 		return expression_to_call.getArg(i);
 	}
 

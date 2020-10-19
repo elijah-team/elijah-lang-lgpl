@@ -12,7 +12,7 @@ package tripleo.elijah.util;
  * Created 8/15/20 3:52 PM
  */
 public class LogEvent {
-	public static void logEvent(int number, String message) {
+	public static void logEvent(final int number, final String message) {
 		System.err.println(""+number+" "+message);
 	}
 }

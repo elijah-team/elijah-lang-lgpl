@@ -36,17 +36,17 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 	private CaseScope default_case_scope = null;
 	private CaseContext __ctx = null; // TODO look into removing this
 
-	public CaseConditional(OS_Element parent, Context parentContext) {
+	public CaseConditional(final OS_Element parent, final Context parentContext) {
         this.parent = parent;
         this._ctx = new SingleIdentContext(parentContext, this);
     }
 
-    public void expr(IExpression expr) {
+    public void expr(final IExpression expr) {
 		this.expr = expr;
 	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		throw new NotImplementedException();
 	}
 
@@ -64,7 +64,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		return _ctx;
 	}
 
-	private void addScopeFor(IExpression expression, CaseScope caseScope) {
+	private void addScopeFor(final IExpression expression, final CaseScope caseScope) {
 		if (scopes.containsKey(expression))
 			System.err.println("already has an expression" + expression); // TODO put in some verify step
 		scopes.put(expression, caseScope);
@@ -78,7 +78,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		return expr;
 	}
 
-	public void setContext(CaseContext ctx) {
+	public void setContext(final CaseContext ctx) {
 		__ctx = ctx;
 	}
 
@@ -89,7 +89,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		private ArrayList<Token> mDocs = null;
 		private boolean _isDefault = false;
 
-		public CaseScope(IExpression expression) {
+		public CaseScope(final IExpression expression) {
 			this.expr = expression;
 			addScopeFor(expr, this);
 		}
@@ -100,7 +100,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		}
 
 		@Override
-		public void add(OS_Element anElement) {
+		public void add(final OS_Element anElement) {
 			_items.add(anElement);
 		}
 
@@ -109,14 +109,14 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		}
 
 		@Override
-		public void addDocString(Token s1) {
+		public void addDocString(final Token s1) {
 			if (mDocs == null)
 				mDocs = new ArrayList<Token>();
 			mDocs.add(s1);
 		}
 
 		@Override
-		public void visitGen(ICodeGen visit) {
+		public void visitGen(final ICodeGen visit) {
 			throw new NotImplementedException();
 		}
 
@@ -137,7 +137,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		}
 	}
 
-	public Scope scope(IExpression expression) {
+	public Scope scope(final IExpression expression) {
 		return new AbstractBlockScope(new CaseScope(expression)) {
 			@Override
 			public Context getContext() {

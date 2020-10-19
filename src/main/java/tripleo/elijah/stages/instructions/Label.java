@@ -23,7 +23,7 @@ public class Label implements InstructionArgument {
 //		this.name = name;
 //	}
 
-	public Label(GeneratedFunction gf) {
+	public Label(final GeneratedFunction gf) {
 		this.gf = gf;
 	}
 
@@ -31,7 +31,7 @@ public class Label implements InstructionArgument {
 	 * Corresponds to pc
 	 * @param index pc
 	 */
-	public void setIndex(long index) {
+	public void setIndex(final long index) {
 		this.index = index;
 	}
 
@@ -39,7 +39,7 @@ public class Label implements InstructionArgument {
 		return index;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -51,7 +51,7 @@ public class Label implements InstructionArgument {
 	 * Corresponds to the number of labels
 	 * @param number
 	 */
-	public void setNumber(int number) {
+	public void setNumber(final int number) {
 		this.number = number;
 	}
 

@@ -9,7 +9,7 @@ package tripleo.elijah.gen.nodes;
  */
 public class Inherited {
 
-	public Inherited(String string, boolean b) {
+	public Inherited(final String string, final boolean b) {
 		// TODO Auto-generated constructor stub
 	}
 

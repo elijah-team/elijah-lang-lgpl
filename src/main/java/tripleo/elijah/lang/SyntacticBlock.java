@@ -30,12 +30,12 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 		}
 	};
 
-	public SyntacticBlock(OS_Element aParent) {
+	public SyntacticBlock(final OS_Element aParent) {
 		_parent = aParent;
 	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 
 	}
 
@@ -53,7 +53,7 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 		return _items;
 	}
 
-	public void setContext(SyntacticBlockContext ctx) {
+	public void setContext(final SyntacticBlockContext ctx) {
 		this.ctx = ctx;
 	}
 
@@ -70,14 +70,14 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 	}
 
 	@Override
-	public void add(OS_Element anElement) {
+	public void add(final OS_Element anElement) {
 		if (!(anElement instanceof FunctionItem))
 			return;
 		_items.add((FunctionItem) anElement);
 	}
 
 	@Override
-	public void addDocString(Token s1) {
+	public void addDocString(final Token s1) {
 
 	}
 

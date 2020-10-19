@@ -26,16 +26,16 @@ public class LookupResultList {
 
 	private final List<LookupResult> _results = new ArrayList<LookupResult>();
 
-	public void add(String name, int level, OS_Element element, Context aContext) {
-		for (LookupResult result : _results) {
+	public void add(final String name, final int level, final OS_Element element, final Context aContext) {
+		for (final LookupResult result : _results) {
 			if (result.getElement() == element)
 				return; // TODO hack for bad algorithm
 		}
 		_results.add(new LookupResult(name, element, level, aContext));
 	}
 
-	public OS_Element chooseBest(List<Predicate> l) {
-		List<LookupResult> r;
+	public OS_Element chooseBest(final List<Predicate> l) {
+		final List<LookupResult> r;
 		if (l != null) {
 			r = getMaxScoredResults(l);
 		} else {
@@ -62,13 +62,13 @@ public class LookupResultList {
 		return null; //throw new NotImplementedException();
 	}
 
-	private List<LookupResult> getMaxScoredResults(List<Predicate> l) {
-		Map<LookupResult, Integer> new_results = new HashMap<LookupResult, Integer>();
+	private List<LookupResult> getMaxScoredResults(final List<Predicate> l) {
+		final Map<LookupResult, Integer> new_results = new HashMap<LookupResult, Integer>();
 		int maxScore = 0;
 
-		for (LookupResult lookupResult : _results) {
+		for (final LookupResult lookupResult : _results) {
 			int score = 0;
-			for (Predicate predicate : l) {
+			for (final Predicate predicate : l) {
 				if (predicate.test(lookupResult.getElement()))
 					score++;
 			}

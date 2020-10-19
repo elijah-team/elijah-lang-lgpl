@@ -19,7 +19,7 @@ public class OS_FuncExprType extends OS_Type {
 		return func_expr;
 	}
 
-	public OS_FuncExprType(FuncExpr funcExpr) {
+	public OS_FuncExprType(final FuncExpr funcExpr) {
 		super();
 		this.func_expr = funcExpr;
 	}

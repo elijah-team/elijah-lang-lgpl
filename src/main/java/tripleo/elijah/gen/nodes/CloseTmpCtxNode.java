@@ -22,7 +22,7 @@ public class CloseTmpCtxNode {
 	CompilerContext cctx;
 	TmpSSACtxNode   tmpNode;
 	
-	public CloseTmpCtxNode(CompilerContext cctx, TmpSSACtxNode tmpNode) {
+	public CloseTmpCtxNode(final CompilerContext cctx, final TmpSSACtxNode tmpNode) {
 		this.cctx = cctx;
 		this.tmpNode = tmpNode;
 	}

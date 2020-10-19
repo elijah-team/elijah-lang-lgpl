@@ -20,16 +20,16 @@ public class WithContext extends Context {
 	private final WithStatement carrier;
 	private final Context _parent;
 
-	public WithContext(WithStatement carrier, Context _parent) {
+	public WithContext(final WithStatement carrier, final Context _parent) {
 		this.carrier = carrier;
 		this._parent = _parent;
 	}
 
 
-	@Override public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	@Override public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		alreadySearched.add(carrier.getContext());
 
-		for (FunctionItem item: carrier.getItems()) {
+		for (final FunctionItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 			    !(item instanceof NamespaceStatement) &&
 			    !(item instanceof FunctionDef) &&
@@ -41,7 +41,7 @@ public class WithContext extends Context {
 				}
 			} else if (item instanceof VariableSequence) {
 //				System.out.println("[FunctionContext#lookup] VariableSequence "+item);
-				for (VariableStatement vs : ((VariableSequence) item).items()) {
+				for (final VariableStatement vs : ((VariableSequence) item).items()) {
 					if (vs.getName().equals(name))
 						Result.add(name, level, vs, this);
 				}

@@ -45,8 +45,8 @@ public class OS_Module implements OS_Element, OS_Container {
 //		indexingItems.add(new IndexingItem(i1, c1));
 //	}
 
-	public OS_Element findClass(String className) {
-		for (ModuleItem item : items) {
+	public OS_Element findClass(final String className) {
+		for (final ModuleItem item : items) {
 			if (item instanceof ClassStatement) {
 				if (((ClassStatement) item).getName().equals(className))
 					return item;
@@ -63,7 +63,7 @@ public class OS_Module implements OS_Element, OS_Container {
 		return _fileName;
 	}
 
-	public void setFileName(String fileName) {
+	public void setFileName(final String fileName) {
 		this._fileName = fileName;
 	}
 
@@ -71,8 +71,8 @@ public class OS_Module implements OS_Element, OS_Container {
 		return items;
 	}
 
-	public boolean hasClass(String className) {
-		for (ModuleItem item : items) {
+	public boolean hasClass(final String className) {
+		for (final ModuleItem item : items) {
 			if (item instanceof ClassStatement) {
 				if (((ClassStatement) item).getName().equals(className))
 					return true;
@@ -83,22 +83,22 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
-		Collection<ModuleItem> c = Collections2.filter(getItems(), new Predicate<ModuleItem>() {
+		final Collection<ModuleItem> c = Collections2.filter(getItems(), new Predicate<ModuleItem>() {
 			@Override
-			public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable ModuleItem input) {
+			public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable final ModuleItem input) {
 				final boolean b = input instanceof OS_Element2;
 				return b;
 			}
 		});
-		ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
-		for (ModuleItem moduleItem : c) {
+		final ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
+		for (final ModuleItem moduleItem : c) {
 			a.add((OS_Element2) moduleItem);
 		}
 		return a;
 	}
 
 	@Override
-	public void add(OS_Element anElement) {
+	public void add(final OS_Element anElement) {
 		if (!(anElement instanceof ModuleItem)) {
 			parent.eee.info(String.format(
 					"[Module#add] adding %s to OS_Module", anElement.getClass().getName()));
@@ -126,7 +126,7 @@ public class OS_Module implements OS_Element, OS_Container {
 //	}
 
 	@Override
-	public void visitGen(ICodeGen visit) {
+	public void visitGen(final ICodeGen visit) {
 		visit.addModule(this);
 	}
 
@@ -144,7 +144,7 @@ public class OS_Module implements OS_Element, OS_Container {
 		return null;
 	}
 
-	public void setParent(@NotNull Compilation parent) {
+	public void setParent(@NotNull final Compilation parent) {
 		this.parent = parent;
 	}
 
@@ -165,7 +165,7 @@ public class OS_Module implements OS_Element, OS_Container {
 		return parent.makePackage(packageNames_q.peek());//new OS_Package(packageNames_q.peek(), packageNames_q.size()); // TODO
 	}
 
-	public void pushPackageName(Qualident xyz) {
+	public void pushPackageName(final Qualident xyz) {
 		packageNames_q.push(xyz);
 	}
 
@@ -176,8 +176,8 @@ public class OS_Module implements OS_Element, OS_Container {
 	 * @param name the class we are looking for
 	 * @return either the class or null
 	 */
-	public @Nullable ClassStatement getClassByName(String name) {
-		for (ModuleItem item : items) {
+	public @Nullable ClassStatement getClassByName(final String name) {
+		for (final ModuleItem item : items) {
 			if (item instanceof ClassStatement)
 				if (((ClassStatement) item).getName().equals(name))
 					return (ClassStatement) item;
@@ -187,7 +187,7 @@ public class OS_Module implements OS_Element, OS_Container {
 
 
 	public void postConstruct() {
-		for (ModuleItem anElement : items) {
+		for (final ModuleItem anElement : items) {
 			if (anElement instanceof OS_Element2) {
 				final String element_name = ((OS_Element2) anElement).name();
 				// TODO make and check a nametable, will fail for imports
@@ -195,7 +195,7 @@ public class OS_Module implements OS_Element, OS_Container {
 //					throw new IllegalArgumentException("element2 with null name");
 					System.err.println(String.format("*** OS_Element2 (%s) with null name", anElement));
 				} else {
-					for (ModuleItem item : items) { // TODO Use Multimap
+					for (final ModuleItem item : items) { // TODO Use Multimap
 						if (item instanceof OS_Element2 && item != anElement)
 							if (element_name.equals(((OS_Element2) item).name())) {
 								parent.eee.reportWarning(String.format(
@@ -209,7 +209,7 @@ public class OS_Module implements OS_Element, OS_Container {
 			//
 			// FIND ALL ENTRY POINTS (should only be one per module)
 			//
-			for (ModuleItem item : items) {
+			for (final ModuleItem item : items) {
 				if (item instanceof ClassStatement) {
 					if (((ClassStatement) item).getPackageName() == OS_Package.default_package) {
 						entryPoints.add((ClassStatement) item);
@@ -221,12 +221,12 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	}
 
-	public void setContext(ModuleContext mctx) {
+	public void setContext(final ModuleContext mctx) {
 		_a.setContext(mctx);
 	}
 
 	@Override
-	public void addDocString(Token s1) {
+	public void addDocString(final Token s1) {
 		throw new NotImplementedException();
 	}
 }

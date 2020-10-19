@@ -26,16 +26,16 @@ public class DeduceTypesTest3 {
 
 	@Before
 	public void setUp() {
-		OS_Module mod = new OS_Module();
+		final OS_Module mod = new OS_Module();
 		mod.parent = new Compilation(new StdErrSink(), new IO());
-		DeduceTypes d = new DeduceTypes(mod);
+		final DeduceTypes d = new DeduceTypes(mod);
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
-		ClassStatement cs = new ClassStatement(mod);
+		final ClassStatement cs = new ClassStatement(mod);
 		cs.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("Test")));
 		final ClassContext cctx = new ClassContext(mctx, cs);
 		cs.setContext(cctx);
-		ClassStatement cs_foo = new ClassStatement(mod);
+		final ClassStatement cs_foo = new ClassStatement(mod);
 		cs_foo.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("Foo")));
 		final ClassContext cctx_foo = new ClassContext(mctx, cs_foo);
 		cs_foo.setContext(cctx_foo);
@@ -43,7 +43,7 @@ public class DeduceTypesTest3 {
 		fd.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("test")));
 		final FunctionContext fctx = new FunctionContext(cctx, fd);
 		fd.setContext(fctx);
-		VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
+		final VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
 		final VariableStatement vs = vss.next();
 		vs.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("x")));
 		final Qualident qu = new Qualident();
@@ -53,7 +53,7 @@ public class DeduceTypesTest3 {
 		cs_foo.postConstruct();
 		cs.postConstruct();
 		mod.postConstruct();
-		FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
+		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		assert fc == fctx;
 		final IdentExpression x1 = new IdentExpression(tripleo.elijah.util.Helpers.makeToken("x"));
 		x1.setContext(fc);
@@ -80,7 +80,7 @@ public class DeduceTypesTest3 {
 	@Test
 	public void testDeduceIdentExpression3() {
 		final VariableTypeName tn = new VariableTypeName();
-		Qualident tnq = new Qualident();
+		final Qualident tnq = new Qualident();
 		tnq.append(tripleo.elijah.util.Helpers.makeToken("Foo"));
 		tn.setName(tnq);
 //		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
@@ -89,7 +89,7 @@ public class DeduceTypesTest3 {
 	@Test
 	public void testDeduceIdentExpression3_5() {
 		final VariableTypeName tn = new VariableTypeName();
-		Qualident tnq = new Qualident();
+		final Qualident tnq = new Qualident();
 		tnq.append(tripleo.elijah.util.Helpers.makeToken("Foo"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
@@ -98,7 +98,7 @@ public class DeduceTypesTest3 {
 	@Test
 	public void testDeduceIdentExpression4() {
 		final VariableTypeName tn = new VariableTypeName();
-		Qualident tnq = new Qualident();
+		final Qualident tnq = new Qualident();
 		tnq.append(tripleo.elijah.util.Helpers.makeToken("Foo"));
 		tn.setName(tnq);
 //		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());

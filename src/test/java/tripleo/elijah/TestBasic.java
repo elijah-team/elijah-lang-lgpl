@@ -30,12 +30,12 @@ public class TestBasic {
 
 	@Test
 	public final void testBasicParse() throws IOException {
-		List<String> ez_files = Files.readLines(new File("test/basic/ez_files.txt"), Charsets.UTF_8);
-		List<String> args = new ArrayList<String>();
+		final List<String> ez_files = Files.readLines(new File("test/basic/ez_files.txt"), Charsets.UTF_8);
+		final List<String> args = new ArrayList<String>();
 		args.addAll(ez_files);
 		args.add("-sE");
-		ErrSink eee = new StdErrSink();
-		Compilation c = new Compilation(eee, new IO());
+		final ErrSink eee = new StdErrSink();
+		final Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
 
@@ -44,13 +44,13 @@ public class TestBasic {
 
 	@Test
 	public final void testBasic() throws IOException {
-		List<String> ez_files = Files.readLines(new File("test/basic/ez_files.txt"), Charsets.UTF_8);
-		List<String> args = new ArrayList<String>();
+		final List<String> ez_files = Files.readLines(new File("test/basic/ez_files.txt"), Charsets.UTF_8);
+		final List<String> args = new ArrayList<String>();
 		args.addAll(ez_files);
 		args.add("-sO");
 //		List<String> args = List_of("test/basic", "-sO"/*, "-out"*/);
-		ErrSink eee = new StdErrSink();
-		Compilation c = new Compilation(eee, new IO());
+		final ErrSink eee = new StdErrSink();
+		final Compilation c = new Compilation(eee, new IO());
 
 		c.feedCmdLine(args);
 

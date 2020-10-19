@@ -14,16 +14,16 @@ public class ExpandFunctionsTest {
 
 //    @Test
     public void expand() {
-        Compilation c = new Compilation(new StdErrSink(), new IO());
+        final Compilation c = new Compilation(new StdErrSink(), new IO());
 //        final String file_name = "test/basic/listfolders2.elijah";
         final String file_name = "test/basic/listfolders3/listfolders3.elijah";
         c.feedCmdLine(Helpers.List_of(file_name, "-sO"));
-        OS_Module mod = c.fileNameToModule(file_name);
+        final OS_Module mod = c.fileNameToModule(file_name);
         Assert.assertTrue(mod != null);
-        ClassStatement kl = mod.getClassByName("Main");
-        Collection<ClassItem> fdl = kl.findFunction("main");
-        FunctionDef fd = (FunctionDef) fdl.iterator().next();
-        FunctionContext fc = (FunctionContext) fd.getContext();
+        final ClassStatement kl = mod.getClassByName("Main");
+        final Collection<ClassItem> fdl = kl.findFunction("main");
+        final FunctionDef fd = (FunctionDef) fdl.iterator().next();
+        final FunctionContext fc = (FunctionContext) fd.getContext();
         final FunctionPrelimInstruction fi1 = fc.functionPrelimInstructions.get(0);
         assert fi1 instanceof IntroducedVariable;
         {
@@ -58,6 +58,6 @@ public class ExpandFunctionsTest {
             assert fi6 instanceof AssignPrelimInstruction;
             Assert.assertTrue(((AssignPrelimInstruction) fi6).instructionNumber() == 6);
         }
-        int y=2;
+        final int y=2;
     }
 }

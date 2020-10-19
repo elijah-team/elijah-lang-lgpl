@@ -19,7 +19,7 @@ public class QualifiedImportStatement implements ImportStatement {
 		public IdentList idents;
 	}
 
-	public QualifiedImportStatement(OS_Element aParent) {
+	public QualifiedImportStatement(final OS_Element aParent) {
 		parent = aParent;
 		if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(this);
@@ -27,14 +27,14 @@ public class QualifiedImportStatement implements ImportStatement {
 			throw new IllegalStateException();
 	}
 
-	public void addSelectivePart(Qualident aQualident, IdentList il) {
-		Part p = new Part();
+	public void addSelectivePart(final Qualident aQualident, final IdentList il) {
+		final Part p = new Part();
 		p.base = aQualident;
 		p.idents = il;
 		addPart(p);
 	}
 
-	private void addPart(Part p) {
+	private void addPart(final Part p) {
 		_parts.add(p);
 	}
 
@@ -50,15 +50,15 @@ public class QualifiedImportStatement implements ImportStatement {
 
 	@Override
 	public List<Qualident> parts() {
-		List<Qualident> r = new ArrayList<Qualident>();
-		for (Part part : _parts) {
+		final List<Qualident> r = new ArrayList<Qualident>();
+		for (final Part part : _parts) {
 			r.add(part.base);
 		}
 		return r;
 	}
 
 	@Override
-	public void setContext(ImportContext ctx) {
+	public void setContext(final ImportContext ctx) {
 		_ctx = ctx;
 	}
 

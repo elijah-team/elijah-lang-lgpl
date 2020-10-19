@@ -17,7 +17,7 @@ import java.util.List;
 public class AnnotationClause {
 	List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
 
-	public void add(AnnotationPart ap) {
+	public void add(final AnnotationPart ap) {
 		aps.add(ap);
 	}
 }

@@ -21,7 +21,7 @@ public class IntegerIA implements InstructionArgument {
 
 	private final int index;
 
-	public IntegerIA(int e1) {
+	public IntegerIA(final int e1) {
 		index = e1;
 	}
 

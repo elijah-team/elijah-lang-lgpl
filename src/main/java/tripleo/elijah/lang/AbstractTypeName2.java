@@ -36,7 +36,7 @@ public abstract class AbstractTypeName2 implements NormalTypeName {
 	}
 	
 	@Override
-	public void setConstant(boolean aFlag) {
+	public void setConstant(final boolean aFlag) {
 		_ltm.add(TypeModifiers.CONST);
 	}
 	
@@ -46,7 +46,7 @@ public abstract class AbstractTypeName2 implements NormalTypeName {
 	}
 	
 	@Override
-	public void setReference(boolean aFlag) {
+	public void setReference(final boolean aFlag) {
 		_ltm.add(TypeModifiers.REFPAR);
 	}
 	
@@ -56,7 +56,7 @@ public abstract class AbstractTypeName2 implements NormalTypeName {
 	}
 	
 	@Override
-	public void setOut(boolean aFlag) {
+	public void setOut(final boolean aFlag) {
 		_ltm.add(TypeModifiers.OUTPAR);
 	}
 	
@@ -66,7 +66,7 @@ public abstract class AbstractTypeName2 implements NormalTypeName {
 	}
 	
 	@Override
-	public void setIn(boolean aFlag) {
+	public void setIn(final boolean aFlag) {
 		_ltm.add(TypeModifiers.INPAR);
 	}
 
@@ -81,10 +81,10 @@ public abstract class AbstractTypeName2 implements NormalTypeName {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) return true;
 		if (!(o instanceof NormalTypeName)) return false;
-		NormalTypeName that = (NormalTypeName) o;
+		final NormalTypeName that = (NormalTypeName) o;
 		return getConstant() == that.getConstant() &&
 				getReference() == that.getReference() &&
 				getOut() == that.getOut() &&

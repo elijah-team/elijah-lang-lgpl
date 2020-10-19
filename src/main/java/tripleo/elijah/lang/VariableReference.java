@@ -30,13 +30,13 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 		return String.format("VariableReference (%s)", main);
 	}
 
-	public void setMain(String s) {
+	public void setMain(final String s) {
 		main = s;
 		System.out.println(repr_());
 	}
 
-	public void setMain(Token t) {
-		String s = t.getText();
+	public void setMain(final Token t) {
+		final String s = t.getText();
 		main = s;
 		System.out.println(repr_());
 	}
@@ -56,7 +56,7 @@ public class VariableReference extends AbstractExpression implements OS_Expressi
 	OS_Type _type;
 
 	@Override
-	public void setType(OS_Type deducedExpression) {
+	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 

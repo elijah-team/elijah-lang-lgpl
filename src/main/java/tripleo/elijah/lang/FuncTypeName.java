@@ -11,16 +11,16 @@ public class FuncTypeName implements TypeName {
 	private TypeNameList _arglist = null/*new TypeNameList()*/;
 	private TypeName _returnValue = null /*new RegularTypeName()*/; // TODO warning
 
-	public FuncTypeName(Context cur) {
+	public FuncTypeName(final Context cur) {
 		_ctx = cur;
 	}
 
-	public void argList(TypeNameList tnl) {
+	public void argList(final TypeNameList tnl) {
 		_arglist = tnl;
 	}
 
 //	@Override
-	public void type(TypeModifiers typeModifiers) {
+	public void type(final TypeModifiers typeModifiers) {
 		_modifiers = typeModifiers;
 	}
 
@@ -29,7 +29,7 @@ public class FuncTypeName implements TypeName {
 		return Type.FUNCTION;
 	}
 
-	public void returnValue(TypeName rtn) {
+	public void returnValue(final TypeName rtn) {
 		_returnValue = rtn;
 	}
 
@@ -39,7 +39,7 @@ public class FuncTypeName implements TypeName {
 	}
 
 	@Override
-	public void setContext(Context context) {
+	public void setContext(final Context context) {
 		throw new NotImplementedException();
 	}
 

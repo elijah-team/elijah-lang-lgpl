@@ -26,7 +26,7 @@ public abstract class AbstractTypeName implements NormalTypeName {
 	}
 
 	@Override
-	public void setConstant(boolean s) {
+	public void setConstant(final boolean s) {
 		pr_constant = s;
 	}
 
@@ -36,7 +36,7 @@ public abstract class AbstractTypeName implements NormalTypeName {
 	}
 
 	@Override
-	public void setReference(boolean s) {
+	public void setReference(final boolean s) {
 		pr_reference = s;
 	}
 
@@ -46,7 +46,7 @@ public abstract class AbstractTypeName implements NormalTypeName {
 	}
 
 	@Override
-	public void setOut(boolean s) {
+	public void setOut(final boolean s) {
 		pr_out = s;
 	}
 
@@ -56,7 +56,7 @@ public abstract class AbstractTypeName implements NormalTypeName {
 	}
 
 	@Override
-	public void setIn(boolean s) {
+	public void setIn(final boolean s) {
 		pr_in = s;
 	}
 
@@ -66,7 +66,7 @@ public abstract class AbstractTypeName implements NormalTypeName {
 	}
 
 	@Override
-	public void setName(Qualident s) {
+	public void setName(final Qualident s) {
 		pr_name = s;
 	}
 	
@@ -84,10 +84,10 @@ public abstract class AbstractTypeName implements NormalTypeName {
 	protected Qualident pr_name;
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) return true;
 		if (!(o instanceof NormalTypeName)) return false;
-		NormalTypeName that = (NormalTypeName) o;
+		final NormalTypeName that = (NormalTypeName) o;
 		return getConstant() == that.getConstant() &&
 				getReference() == that.getReference() &&
 				getOut() == that.getOut() &&

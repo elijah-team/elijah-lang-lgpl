@@ -17,7 +17,7 @@ public class VariableReferenceNode2 extends ExpressionNode {
 	private  String _declared;
 	private  boolean _perm;
 	
-	public VariableReferenceNode2(String declared, String t, boolean b) {
+	public VariableReferenceNode2(final String declared, final String t, final boolean b) {
 		super();
 		this._declared = declared;
 		this._perm = b;
@@ -28,7 +28,7 @@ public class VariableReferenceNode2 extends ExpressionNode {
 	}
 	
 	@Override
-	public String genText(CompilerContext cctx) {
+	public String genText(final CompilerContext cctx) {
 		if (getExpr()/*iex*/ == null) {
 			return _declared;
 		} else {
@@ -38,7 +38,7 @@ public class VariableReferenceNode2 extends ExpressionNode {
 		return super.genText(cctx);
 	}
 	
-	private void setText(IdentExpression identExpression) {
+	private void setText(final IdentExpression identExpression) {
 		//NotImplementedException.raise();
 		_declared = identExpression.getText();
 		_perm = true;

@@ -28,7 +28,7 @@ public class ProcTableEntry {
 	public final InstructionArgument expression_num;
 	public OS_Element resolved;
 
-	public ProcTableEntry(int index, IExpression iExpression, InstructionArgument expression_num, List<TypeTableEntry> args) {
+	public ProcTableEntry(final int index, final IExpression iExpression, final InstructionArgument expression_num, final List<TypeTableEntry> args) {
 		this.index = index;
 		this.expression = iExpression;
 		this.expression_num = expression_num;

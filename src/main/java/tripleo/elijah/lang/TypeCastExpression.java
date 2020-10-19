@@ -21,7 +21,7 @@ public class TypeCastExpression extends AbstractExpression implements IExpressio
     }
 
     @Override
-    public void setType(OS_Type deducedExpression) {
+    public void setType(final OS_Type deducedExpression) {
 
     }
 
@@ -36,7 +36,7 @@ public class TypeCastExpression extends AbstractExpression implements IExpressio
 		return tn;
 	}
 
-	public void setTypeName(TypeName typeName) {
+	public void setTypeName(final TypeName typeName) {
 		tn = typeName;
 	}
 }

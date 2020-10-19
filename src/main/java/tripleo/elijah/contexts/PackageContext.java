@@ -19,12 +19,12 @@ import java.util.List;
 public class PackageContext extends Context {
 	private final Context _parent;
 
-	public PackageContext(Context aParent) {
+	public PackageContext(final Context aParent) {
 		_parent = aParent;
 	}
 
 	@Override
-	public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
+	public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
 		// TODO since we are not maintaining an item list, pass to parent
 		// TODO implement me
 		alreadySearched.add(this);

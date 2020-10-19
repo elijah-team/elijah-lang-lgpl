@@ -7,12 +7,12 @@ public class FunctionCallPrelimInstruction implements FunctionPrelimInstruction 
     private ExpressionList args;
 	private IntroducedExpressionList args2;
 
-	public FunctionCallPrelimInstruction(FunctionPrelimInstruction fi, ExpressionList args) {
+	public FunctionCallPrelimInstruction(final FunctionPrelimInstruction fi, final ExpressionList args) {
         this.left_side = fi;
         this.args = args;
     }
 
-	public FunctionCallPrelimInstruction(FunctionPrelimInstruction fi, IntroducedExpressionList els) {
+	public FunctionCallPrelimInstruction(final FunctionPrelimInstruction fi, final IntroducedExpressionList els) {
 		this.left_side = fi;
 		this.args2 = els;
 	}
@@ -23,5 +23,5 @@ public class FunctionCallPrelimInstruction implements FunctionPrelimInstruction 
     }
     private int _inst;
     @Override
-    public void setInstructionNumber(int i) {_inst = i;}
+    public void setInstructionNumber(final int i) {_inst = i;}
 }

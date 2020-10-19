@@ -14,7 +14,7 @@ public class DotExpressionInstruction implements FunctionPrelimInstruction {
     private final FunctionPrelimInstruction variable;
     final IExpression expr;
 
-    public DotExpressionInstruction(FunctionPrelimInstruction i, IExpression de) {
+    public DotExpressionInstruction(final FunctionPrelimInstruction i, final IExpression de) {
         this.variable = i;
         this.expr     = de;
     }
@@ -32,7 +32,7 @@ public class DotExpressionInstruction implements FunctionPrelimInstruction {
     }
     private int _inst;
     @Override
-    public void setInstructionNumber(int i) {_inst = i;}
+    public void setInstructionNumber(final int i) {_inst = i;}
 }
 
 //

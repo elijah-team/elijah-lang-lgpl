@@ -20,7 +20,7 @@ public class OS_FuncType extends OS_Type {
 		return function_def;
 	}
 
-	public OS_FuncType(FunctionDef functionDef) {
+	public OS_FuncType(final FunctionDef functionDef) {
 		super();
 		this.function_def = functionDef;
 		this.type_of_type = Type.FUNCTION;
