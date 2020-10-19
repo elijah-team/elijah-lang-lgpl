@@ -277,14 +277,18 @@ public class GenerateC {
 								if (pt.size() == 1) {
 									TypeTableEntry ty = pt.get(0);
 //									System.err.println("8885 " +ty.attached);
-									assert ty.attached.getType() == OS_Type.Type.USER_CLASS;
-									ClassStatement el = ty.attached.getClassOf();
-									String z = el.getName();
+									OS_Type attached = ty.attached;
+									assert attached != null;
+									String z = getTypeName(attached);
 									tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
 								} else {
 									assert x.getType() == OS_Type.Type.BUILT_IN;
-									OS_Type el = x.resolve(gf.getFD().getContext());
-									System.err.println("Bad potentialTypes size "+el);
+									Context context = gf.getFD().getContext();
+									assert context != null;
+									OS_Type type = x.resolve(context);
+//									System.err.println("Bad potentialTypes size "+type);
+									String z = getTypeName(type);
+									tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
 								}
 //								System.err.println("8886 y is null (No typename specified)");
 							}

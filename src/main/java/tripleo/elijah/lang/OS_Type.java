@@ -81,6 +81,7 @@ public class OS_Type {
 	}
 
 	public OS_Type resolve(Context ctx) {
+		assert ctx != null;
 		switch (getType()) {
 		case BUILT_IN:
 			{
