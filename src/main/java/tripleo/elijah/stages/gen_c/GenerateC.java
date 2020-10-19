@@ -190,6 +190,15 @@ public class GenerateC {
 							final IdentExpression ptex = (IdentExpression) pte.expression;
 							sb.append(ptex.getText());
 						} else {
+							String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
+							sb.append(path);
+							{
+								sb.append('(');
+								final List<String> sl3 = getArgumentStrings(gf, instruction);
+								sb.append(String.join(", ", sl3));
+								sb.append(");");
+							}
+/*
 							final OS_Element el = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) pte.expression_num, module);
 							System.err.println("8777 " + el);
 							final IExpression ptex = pte.expression;
@@ -210,6 +219,7 @@ public class GenerateC {
 									sb.append(");");
 								}
 							}
+*/
 						}
 					}
 				}
