@@ -22,9 +22,11 @@ public class ProcTableEntry {
 	public final int index;
 	public final List<TypeTableEntry> args;
 	/**
-	 * Just a hint to the programmer. The compiler should be able to work without this.
+	 * Either a hint to the programmer-- The compiler should be able to work without this.
+	 * <br/>
+	 * Or for synthetic methods
 	 */
-	@Deprecated public final IExpression expression;
+	public final IExpression expression;
 	public final InstructionArgument expression_num;
 	public OS_Element resolved;
 

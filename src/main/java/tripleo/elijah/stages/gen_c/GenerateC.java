@@ -360,7 +360,7 @@ public class GenerateC {
 			case CALL:
 				{
 					if (pte.expression_num == null) {
-						assert false;
+//						assert false; // TODO synthetic methods
 						final int y=2;
 						final IdentExpression ptex = (IdentExpression) pte.expression;
 						sb.append(ptex.getText());
