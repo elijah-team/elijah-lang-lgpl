@@ -6,3 +6,5 @@ eljc*out
 out/
 target/
 output/
+package/bin/
+package/share/
