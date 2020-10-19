@@ -394,6 +394,17 @@ public class GenerateC {
 		return ""+value;
 	}
 
+	private String const_to_string(IExpression expression) {
+		if (expression instanceof NumericExpression) {
+			return ""+((NumericExpression) expression).getValue();
+		}
+		// StringExpression
+		// FloatLitExpression
+		// CharListExpression
+		// BooleanExpression
+		throw new NotImplementedException();
+	}
+
 	private String getRealTargetName(GeneratedFunction gf, IntegerIA target) {
 		final VariableTableEntry varTableEntry = gf.getVarTableEntry(target.getIndex());
 		final String vte_name = varTableEntry.getName();
