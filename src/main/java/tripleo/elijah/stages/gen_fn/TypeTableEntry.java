@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Type;
 
@@ -17,10 +19,10 @@ import tripleo.elijah.lang.OS_Type;
 public class TypeTableEntry {
     final int index;
     private final Type lifetime;
-    public OS_Type attached;
+    public @Nullable OS_Type attached;
     public final IExpression expression;
 
-    public TypeTableEntry(int index, Type lifetime, OS_Type attached, IExpression expression) {
+    public TypeTableEntry(int index, Type lifetime, @Nullable OS_Type attached, IExpression expression) {
         this.index = index;
         this.lifetime = lifetime;
         if (attached == null || (attached.getType() == OS_Type.Type.USER && attached.getTypeName() == null))
@@ -31,7 +33,7 @@ public class TypeTableEntry {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "TypeTableEntry{" +
                 "index=" + index +
                 ", lifetime=" + lifetime +

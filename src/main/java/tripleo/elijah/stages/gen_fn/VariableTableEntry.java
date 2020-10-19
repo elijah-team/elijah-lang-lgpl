@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.stages.instructions.VariableTableType;
 
 import java.util.Collection;
@@ -22,7 +23,7 @@ public class VariableTableEntry {
 	private final String name;
 	public TypeTableEntry type;
 	public final VariableTableType vtt;
-	public Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
+	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public int tempNum = -1;
 
 	public VariableTableEntry(int index, VariableTableType var1, String name, TypeTableEntry type) {
@@ -33,7 +34,7 @@ public class VariableTableEntry {
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "VariableTableEntry{" +
 				"index=" + index +
 				", name='" + name + '\'' +
@@ -51,7 +52,7 @@ public class VariableTableEntry {
 		potentialTypes.put(instructionIndex, tte);
 	}
 
-	public Collection<TypeTableEntry> potentialTypes() {
+	public @NotNull Collection<TypeTableEntry> potentialTypes() {
 		return potentialTypes.values();
 	}
 

@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 
@@ -26,7 +27,7 @@ public class IdentTableEntry {
 	 * or a {@link tripleo.elijah.stages.instructions.IdentIA} which is an idte
 	 */
 	public InstructionArgument backlink;
-	public Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
+	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public TypeTableEntry type;
 
 	public IdentTableEntry(int index, IdentExpression ident) {
@@ -38,12 +39,12 @@ public class IdentTableEntry {
 		potentialTypes.put(instructionIndex, tte);
 	}
 
-	public Collection<TypeTableEntry> potentialTypes() {
+	public @NotNull Collection<TypeTableEntry> potentialTypes() {
 		return potentialTypes.values();
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "IdentTableEntry{" +
 				"index=" + index +
 				", ident=" + ident +

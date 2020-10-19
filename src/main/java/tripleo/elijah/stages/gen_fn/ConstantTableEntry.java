@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.IExpression;
 
 /**
@@ -20,7 +21,7 @@ public class ConstantTableEntry {
 	public final TypeTableEntry type;
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "ConstantTableEntry{" +
 				"index=" + index +
 				", name='" + name + '\'' +
