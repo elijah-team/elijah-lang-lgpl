@@ -173,10 +173,9 @@ public class GenerateC {
 //				throw new NotImplementedException();
 				{
 					StringBuilder sb = new StringBuilder();
-					List<String> sl = new ArrayList<String>();
-					Instruction inst = instruction;//fca.getExpression();
-//					System.err.println("9000 "+inst.getName());
-					InstructionArgument x = inst.getArg(0);
+//					List<String> sl = new ArrayList<String>();
+// 					System.err.println("9000 "+inst.getName());
+					InstructionArgument x = instruction.getArg(0);
 					assert x instanceof IntegerIA;
 					ProcTableEntry pte = gf.getProcTableEntry(((IntegerIA) x).getIndex());
 					{
