@@ -21,6 +21,7 @@ import tripleo.elijah.util.TabbedOutputStream;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -271,7 +272,21 @@ public class GenerateC {
 								// VARIABLE WASN'T FULLY DEDUCED YET
 								// MTL A TEMP VARIABLE
 								//
-								System.err.println("8886 y is null (No typename specified)");
+								@NotNull Collection<TypeTableEntry> pt_ = vte.potentialTypes();
+								List<TypeTableEntry> pt = new ArrayList<>(pt_);
+								if (pt.size() == 1) {
+									TypeTableEntry ty = pt.get(0);
+//									System.err.println("8885 " +ty.attached);
+									assert ty.attached.getType() == OS_Type.Type.USER_CLASS;
+									ClassStatement el = ty.attached.getClassOf();
+									String z = el.getName();
+									tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+								} else {
+									assert x.getType() == OS_Type.Type.BUILT_IN;
+									OS_Type el = x.resolve(gf.getFD().getContext());
+									System.err.println("Bad potentialTypes size "+el);
+								}
+//								System.err.println("8886 y is null (No typename specified)");
 							}
 						}
 					} else {
