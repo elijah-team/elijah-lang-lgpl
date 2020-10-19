@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.deduce;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
@@ -173,11 +174,14 @@ public class DeduceTypes2 {
 				final InstructionArgument i2 = (instruction.getArg(1));
 				final ProcTableEntry fn1 = generatedFunction.getProcTableEntry(pte_num);
 				{
+					@Nullable OS_Element el = generatedFunction.resolveIdentIA(context, (IdentIA) fn1.expression_num, module);
+/*
 					final IExpression pn1 = fn1.expression;
 					if (pn1 instanceof IdentExpression) {
 						final String pn = ((IdentExpression) pn1).getText();
 						final LookupResultList lrl = fd_ctx.lookup(pn);
 						final OS_Element best = lrl.chooseBest(null);
+						assert el == best;
 						if (best != null) {
 							fn1.resolved = best; // TODO check arity and arg matching
 						} else {
@@ -188,6 +192,8 @@ public class DeduceTypes2 {
 						System.out.println("10153 "+pn1.getClass().getName());
 						throw new NotImplementedException();
 					}
+*/
+					fn1.resolved = el;
 
 				}
 				if (false) {
