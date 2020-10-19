@@ -122,11 +122,11 @@ public class TestGenFunction {
 		final GenerateFunctions gfm = new GenerateFunctions(m);
 		List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
 
-		for (GeneratedFunction gf : lgf) {
-			for (Instruction instruction : gf.instructions()) {
-				System.out.println("8100 "+instruction);
-			}
-		}
+//		for (GeneratedFunction gf : lgf) {
+//			for (Instruction instruction : gf.instructions()) {
+//				System.out.println("8100 "+instruction);
+//			}
+//		}
 
 		new DeduceTypes2(m).deduceFunctions(lgf);
 
