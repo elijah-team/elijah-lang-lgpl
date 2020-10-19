@@ -308,6 +308,14 @@ public class GenerateC {
 		tos.close();
 	}
 
+	private String getTypeName(OS_Type ty) {
+		assert ty != null;
+		assert ty.getType() == OS_Type.Type.USER_CLASS;
+		ClassStatement el = ty.getClassOf();
+		String z = el.getName();
+		return z;
+	}
+
 	private String getTypeName(TypeName typeName) {
 		if (typeName instanceof RegularTypeName) {
 			String name = ((RegularTypeName) typeName).getName(); // TODO convert to Z-name
