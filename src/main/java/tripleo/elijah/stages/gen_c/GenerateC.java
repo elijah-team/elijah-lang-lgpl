@@ -186,46 +186,60 @@ public class GenerateC {
 					final ProcTableEntry pte = gf.getProcTableEntry(((IntegerIA) x).getIndex());
 					{
 						if (pte.expression_num == null) {
-							final int y = 2;
 							final IdentExpression ptex = (IdentExpression) pte.expression;
-							sb.append(ptex.getText());
+							String text = ptex.getText();
+							@org.jetbrains.annotations.Nullable InstructionArgument xx = gf.vte_lookup(text);
+							assert xx != null;
+							String xxx = getRealTargetName(gf, (IntegerIA) xx);
+							sb.append(xxx);
 						} else {
 							String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
 							sb.append(path);
-							{
-								sb.append('(');
-								final List<String> sl3 = getArgumentStrings(gf, instruction);
-								sb.append(String.join(", ", sl3));
-								sb.append(");");
-							}
-/*
-							final OS_Element el = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) pte.expression_num, module);
-							System.err.println("8777 " + el);
-							final IExpression ptex = pte.expression;
-							if (ptex instanceof IdentExpression) {
-								sb.append(((IdentExpression) ptex).getText());
-								{
-									sb.append('(');
-									final List<String> sl3 = getArgumentStrings(gf, instruction);
-									sb.append(String.join(", ", sl3));
-									sb.append(");");
-								}
-							} else if (ptex instanceof ProcedureCallExpression) {
-								sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
-								{
-									sb.append('(');
-									final List<String> sl3 = getArgumentStrings(gf, instruction);
-									sb.append(String.join(", ", sl3));
-									sb.append(");");
-								}
-							}
-*/
+						}
+						{
+							sb.append('(');
+							final List<String> sl3 = getArgumentStrings(gf, instruction);
+							sb.append(String.join(", ", sl3));
+							sb.append(");");
 						}
 					}
+					tos.put_string_ln(sb.toString());
 				}
 				break;
 			case CALLS:
 //				throw new NotImplementedException();
+				{
+					final StringBuilder sb = new StringBuilder();
+					final InstructionArgument x = instruction.getArg(0);
+					assert x instanceof IntegerIA;
+					final ProcTableEntry pte = gf.getProcTableEntry(((IntegerIA) x).getIndex());
+					{
+						if (pte.expression_num == null) {
+							final int y = 2;
+							final IdentExpression ptex = (IdentExpression) pte.expression;
+							String text = ptex.getText();
+							@org.jetbrains.annotations.Nullable InstructionArgument xx = gf.vte_lookup(text);
+							String xxx;
+							if (xx != null) {
+								xxx = getRealTargetName(gf, (IntegerIA) xx);
+							} else {
+								xxx = text;
+								System.err.println("xxx is null "+text);
+							}
+							sb.append(xxx);
+						} else {
+							String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
+							sb.append(path);
+						}
+						{
+							sb.append('(');
+							final List<String> sl3 = getArgumentStrings(gf, instruction);
+							sb.append(String.join(", ", sl3));
+							sb.append(");");
+						}
+					}
+					tos.put_string_ln(sb.toString());
+				}
 				break;
 			case RET:
 				break;
