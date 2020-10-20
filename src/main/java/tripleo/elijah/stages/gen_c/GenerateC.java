@@ -361,7 +361,8 @@ public class GenerateC {
 				sl3.add(realTargetName);
 			} else if (ia instanceof IdentIA) {
 				final int y=2;
-				sl3.add("<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>");
+				String text = gf.getIdentIAPath((IdentIA) ia);
+				sl3.add(text);
 			} else {
 				System.err.println(ia.getClass().getName());
 				throw new NotImplementedException();
