@@ -79,6 +79,7 @@ public class GenerateC {
 			switch (instruction.getName()) {
 			case E:
 				{
+					tos.put_string_ln("bool vsb;");
 					tos.put_string_ln("{");
 					tos.incr_tabs();
 				}
