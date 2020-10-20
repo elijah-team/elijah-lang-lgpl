@@ -48,25 +48,31 @@ public class TestGenFunction {
 //			System.err.println("7000 "+gf);
 
 			if (gf.name().equals("main")) {
-				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
-				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(1).getName());
-				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(2).getName());
-				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(3).getName());
-				Assert.assertEquals(InstructionName.X,    gf.getInstruction(4).getName());
+				int pc=0;
+				Assert.assertEquals(InstructionName.E,    gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.DECL,  gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.X,    gf.getInstruction(pc++).getName());
 			} else if (gf.name().equals("factorial")) {
-				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
-				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(1).getName());
-				Assert.assertEquals(InstructionName.ES,   gf.getInstruction(2).getName());
-				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(3).getName());
-				Assert.assertEquals(InstructionName.CMP,  gf.getInstruction(4).getName());
-				Assert.assertEquals(InstructionName.JE,   gf.getInstruction(5).getName());
-				Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(6).getName());
-				Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(7).getName());
-				Assert.assertEquals(InstructionName.JMP,  gf.getInstruction(8).getName());
-				Assert.assertEquals(InstructionName.XS,   gf.getInstruction(9).getName());
-				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(10).getName());
-				Assert.assertEquals(InstructionName.CALLS,  gf.getInstruction(11).getName());
-				Assert.assertEquals(InstructionName.X,    gf.getInstruction(12).getName());
+				int pc=0;
+				Assert.assertEquals(InstructionName.E,    gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.ES,   gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.CMP,  gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.JE,   gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.JMP,  gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.XS,   gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.CALLS,  gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.X,    gf.getInstruction(pc++).getName());
 			}
 		}
 
