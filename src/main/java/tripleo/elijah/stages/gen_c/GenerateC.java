@@ -64,7 +64,7 @@ public class GenerateC {
 			@Nullable
 			@Override
 			public String apply(@Nullable final FormalArgListItem input) {
-				return String.format("%s %s", getTypeName(input.tn), input.name);
+				return String.format("%s va%s", getTypeName(input.tn), input.name);
 			}
 		}));
 		tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
