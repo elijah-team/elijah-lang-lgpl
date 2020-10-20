@@ -499,7 +499,9 @@ public class GenerateC {
 				sll.add("" + variableTableEntry.getName());
 			} else if (ia instanceof IdentIA) {
 				@org.jetbrains.annotations.Nullable final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
-				//String path = gf.getIAPath((IdentIA) ia));
+				//String path = gf.getIAPath((IdentIA) ia));    // return x.y.z
+//				String path2 = gf.getIdentIAPath((IdentIA) ia); // return ZP105get_z(vvx.vmy)
+//				assert path.equals(path2); // should always fail
 				assert ident != null;
 				throw new NotImplementedException();
 			} else {
