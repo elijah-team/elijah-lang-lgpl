@@ -265,9 +265,9 @@ public class GenerateC {
 					if (y instanceof NormalTypeName) {
 						final String z = ((NormalTypeName) y).getName();
 						tos.put_string_ln(String.format("vsb = ZS<%s>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
-					} else System.err.println("8886 "+y.getClass().getName());
+					} else
+						System.err.println("8886 "+y.getClass().getName());
 //					Label realTarget = (Label) target;
-//
 //					tos.put_string_ln(String.format("goto %s;", realTarget.getName()));
 					final int yyy=2;
 				}
