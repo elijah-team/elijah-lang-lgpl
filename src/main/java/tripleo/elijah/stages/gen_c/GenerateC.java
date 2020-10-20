@@ -466,16 +466,18 @@ public class GenerateC {
 		if (value instanceof ConstTableIA) {
 			final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) value).getIndex());
 			System.err.println(("9001-3 "+cte.initialValue));
-			if (cte.initialValue instanceof NumericExpression) {
-				return (""+((NumericExpression) cte.initialValue).getValue());
-			} else if (cte.initialValue instanceof IdentExpression) {
+			switch (cte.initialValue.getKind()) {
+			case NUMERIC:
+				return ("" + ((NumericExpression) cte.initialValue).getValue());
+			case IDENT:
 				final String text = ((IdentExpression) cte.initialValue).getText();
 				if (text.equals("true") || text.equals("false"))
 					return text;
 				else
 					throw new NotImplementedException();
-			} else
+			default:
 				throw new NotImplementedException();
+			}
 		}
 
 		return ""+value;
