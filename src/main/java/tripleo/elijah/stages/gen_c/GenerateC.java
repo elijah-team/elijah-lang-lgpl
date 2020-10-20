@@ -410,7 +410,7 @@ public class GenerateC {
 						final List<String> sll = getAssignmentValueArgs(inst, gf);
 						sb.append(String.join(", ", sll));
 					}
-					sb.append(");");
+					sb.append(")");
 					return sb.toString();
 				}
 			case CALLS:
