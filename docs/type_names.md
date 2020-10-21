@@ -23,7 +23,9 @@ IDENT[IDENT (, IDENT)*]
 4. Function
 
 ~~~~
-("func"|"proc") IDENT LPAREN args RPAREN -> returnType
+"func" IDENT LPAREN args RPAREN -> returnType
+"proc" IDENT LPAREN args RPAREN
 ~~~~
 
 Obviously for a `proc`, one doesn't include the return type.
+The `returnType` is optional for a `func`, but good code includes it.
