@@ -364,8 +364,8 @@ public class GenerateFunctions {
 						final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
 
 						final TypeTableEntry t = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(tn));
-						add_i(gf, InstructionName.IS_A, List_of(i, new IntegerIA(t.getIndex())), cctx);
-						add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
+//						label_next = gf.addLabel();
+						add_i(gf, InstructionName.IS_A, List_of(i, new IntegerIA(t.getIndex()), /*TODO not*/new LabelIA(label_next)), cctx);
 						final Context context = mc1.getContext();
 
 						final int tmp = addTempTableEntry(null, id, gf); // TODO no context!
