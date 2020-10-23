@@ -37,14 +37,13 @@ public class TestGenFunction {
 		final String f = "test/demo-el-normal/fact1.elijah";
 		final File file = new File(f);
 		final OS_Module m = c.realParseElijjahFile(f, file, false);
-//		OS_Module m = c.parseElijjahFile(file, f, eee, false);
-			m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
-			Assert.assertTrue("Method parsed correctly", m != null);
+		Assert.assertTrue("Method parsed correctly", m != null);
+		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 
-			final GenerateFunctions gfm = new GenerateFunctions(m);
-			final List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
+		final GenerateFunctions gfm = new GenerateFunctions(m);
+		final List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
 
-			for (final GeneratedFunction gf : lgf) {
+		for (final GeneratedFunction gf : lgf) {
 //			System.err.println("7000 "+gf);
 
 			if (gf.name().equals("main")) {
@@ -79,12 +78,6 @@ public class TestGenFunction {
 		new DeduceTypes2(m).deduceFunctions(lgf);
 		for (final GeneratedFunction gf : lgf) {
 			if (gf.name().equals("main")) {
-/*
-				Assert.assertEquals(InstructionName.E,    gf.getInstruction(0).getName());
-				Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(1).getName());
-				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(2).getName());
-				Assert.assertEquals(InstructionName.X,    gf.getInstruction(3).getName());
-*/
 				for (int i = 0; i < gf.vte_list.size(); i++) {
 					final VariableTableEntry vte = gf.getVarTableEntry(i);
 					System.out.println(String.format("8007 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
@@ -117,7 +110,6 @@ public class TestGenFunction {
 		final File file = new File(f);
 		final OS_Module m = c.realParseElijjahFile(f, file, false);
 		Assert.assertTrue("Method parsed correctly", m != null);
-//		OS_Module m = c.parseElijjahFile(file, f, eee, false);
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 		c.findStdLib("c");
 
@@ -147,9 +139,8 @@ public class TestGenFunction {
 		final String f = "test/basic1/backlink1.elijah";
 		final File file = new File(f);
 		final OS_Module m = c.realParseElijjahFile(f, file, false);
-//		OS_Module m = c.parseElijjahFile(file, f, eee, false);
-		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 		Assert.assertTrue("Method parsed correctly", m != null);
+		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 
 		final GenerateFunctions gfm = new GenerateFunctions(m);
 		final List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
