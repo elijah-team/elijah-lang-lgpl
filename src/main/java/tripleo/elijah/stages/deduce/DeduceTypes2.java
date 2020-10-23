@@ -48,36 +48,39 @@ public class DeduceTypes2 {
 			final Context context = generatedFunction.getContextFromPC(instruction.getIndex());
 //			System.out.println("8006 " + instruction);
 			switch (instruction.getName()) {
-			case E: {
-				//
-				// resolve all cte expressions
-				//
-				for (final ConstantTableEntry cte : generatedFunction.cte_list) {
-					final IExpression iv = cte.initialValue;
-					switch (iv.getKind()) {
-					case NUMERIC: {
-						final OS_Type a = cte.getTypeTableEntry().attached;
-						if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
-							cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);
-						}
-					}
-					break;
-					case IDENT:
-						{
-							final OS_Type a = cte.getTypeTableEntry().attached;
-							if (a.getType() == OS_Type.Type.BUILT_IN && a.getBType() == BuiltInTypes.Boolean) {
-								assert cte.getName().equals("true") || cte.getName().equals("false");
-							} else
+			case E:
+				{
+					//
+					// resolve all cte expressions
+					//
+					for (final ConstantTableEntry cte : generatedFunction.cte_list) {
+						final IExpression iv = cte.initialValue;
+						switch (iv.getKind()) {
+						case NUMERIC:
+							{
+								final OS_Type a = cte.getTypeTableEntry().attached;
+								if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
+									cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);
+								}
+								break;
+							}
+						case IDENT:
+							{
+								final OS_Type a = cte.getTypeTableEntry().attached;
+								if (a.getType() == OS_Type.Type.BUILT_IN && a.getBType() == BuiltInTypes.Boolean) {
+									assert cte.getName().equals("true") || cte.getName().equals("false");
+								} else
+									throw new NotImplementedException();
+								break;
+							}
+						default:
+							{
+								System.err.println(iv.getKind());
 								throw new NotImplementedException();
-							break;
+							}
 						}
-					default: {
-						System.err.println(iv.getKind());
-						throw new NotImplementedException();
-					}
 					}
 				}
-			}
 				break;
 			case X:
 				{
