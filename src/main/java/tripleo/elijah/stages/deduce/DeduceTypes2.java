@@ -81,10 +81,11 @@ public class DeduceTypes2 {
 				break;
 			case X:
 				{
-					// TODO brittle: is alias points to alias, will fail
+					//
+					// ATTACH A TYPE TO VTE'S
+					//
 					for (final VariableTableEntry vte : generatedFunction.vte_list) {
 //						System.out.println("704 "+vte.type.attached+" "+vte.potentialTypes());
-						final int y=2;
 						if (vte.type.attached != null) {
 							final TypeName x = vte.type.attached.getTypeName();
 							if (x instanceof NormalTypeName) {
@@ -92,12 +93,12 @@ public class DeduceTypes2 {
 								final LookupResultList lrl = x.getContext().lookup(tn);
 								OS_Element best = lrl.chooseBest(null);
 								while (best instanceof AliasStatement) {
-									best = _resolveAlias((AliasStatement) best); // TODO write _resolveAliasFully
+									best = _resolveAlias((AliasStatement) best);
 								}
 								if (!(OS_Type.isConcreteType(best))) {
 									module.parent.eee.reportError("Not a concrete type "+best);
 								} else {
-//								System.out.println("705 " + best);
+//									System.out.println("705 " + best);
 									vte.type.attached = new OS_Type((ClassStatement) best);
 								}
 							}
@@ -144,7 +145,6 @@ public class DeduceTypes2 {
 							do_assign_constant(generatedFunction, instruction, idte, (ConstTableIA) i2);
 						} else
 							throw new NotImplementedException();
-
 					}
 				}
 				break;
@@ -195,7 +195,6 @@ public class DeduceTypes2 {
 */
 					assert el != null;
 					fn1.resolved = el;
-
 				}
 				if (false) {
 					if (i2 instanceof IntegerIA) {
