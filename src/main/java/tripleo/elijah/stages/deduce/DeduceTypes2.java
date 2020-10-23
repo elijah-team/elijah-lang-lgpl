@@ -164,9 +164,12 @@ public class DeduceTypes2 {
 				break;
 			case AGNF:
 				break;
-			case CMP:
-				break;
 			case JE:
+				{
+
+				}
+				break;
+			case JNE:
 				break;
 			case JL:
 				break;
@@ -239,8 +242,6 @@ public class DeduceTypes2 {
 				break;
 			case DECL:
 //				throw new NotImplementedException();
-				break;
-			case JNE:
 				break;
 			case IS_A:
 				break;

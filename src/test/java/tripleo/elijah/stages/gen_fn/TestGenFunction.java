@@ -63,7 +63,6 @@ public class TestGenFunction {
 				Assert.assertEquals(InstructionName.ES,   gf.getInstruction(pc++).getName());
 				Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
 				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
-				Assert.assertEquals(InstructionName.CMP,  gf.getInstruction(pc++).getName());
 				Assert.assertEquals(InstructionName.JE,   gf.getInstruction(pc++).getName());
 				Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(pc++).getName());
 				Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(pc++).getName());

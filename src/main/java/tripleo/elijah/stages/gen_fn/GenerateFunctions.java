@@ -388,8 +388,7 @@ public class GenerateFunctions {
 						final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
 
 						final InstructionArgument i2 = simplify_expression(id, gf, cctx);
-						add_i(gf, InstructionName.CMP, List_of(i, i2), cctx);
-						add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
+						add_i(gf, InstructionName.JNE, List_of(i, i2, label_next), cctx);
 						final Context context = mc2.getContext();
 
 						for (final FunctionItem item : mc2.getItems()) {
@@ -420,8 +419,7 @@ public class GenerateFunctions {
 			final InstructionArgument i = simplify_expression(expr, gf, cctx);
 			System.out.println("710 " + i);
 			final int const_true = addConstantTableEntry("true", Boolean_true, new OS_Type(BuiltInTypes.Boolean), gf);
-			add_i(gf, InstructionName.CMP, List_of(i, new ConstTableIA(const_true, gf)), cctx);
-			add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
+			add_i(gf, InstructionName.JNE, List_of(i, new ConstTableIA(const_true, gf), label_next), cctx);
 			final int begin_1st = add_i(gf, InstructionName.ES, null, cctx);
 			final int begin_2nd = add_i(gf, InstructionName.ES, null, cctx);
 			for (final OS_Element item : ifc.getItems()) {
@@ -431,7 +429,7 @@ public class GenerateFunctions {
 			if (ifc.getParts().size() == 0) {
 				gf.place(label_next);
 				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_1st)), cctx);
-				gf.place(label_end);
+//				gf.place(label_end);
 			} else {
 				add_i(gf, InstructionName.JMP, List_of(label_end), cctx);
 				final List<IfConditional> parts = ifc.getParts();
@@ -442,8 +440,7 @@ public class GenerateFunctions {
 						final InstructionArgument ii = simplify_expression(part.getExpr(), gf, cctx);
 						System.out.println("711 " + ii);
 //						int const_true = addConstantTableEntry("true", Boolean_true, new OS_Type(BuiltInTypes.Boolean), gf);
-						add_i(gf, InstructionName.CMP, List_of(ii, new ConstTableIA(const_true, gf)), cctx);
-						add_i(gf, InstructionName.JNE, List_of(label_next), cctx);
+						add_i(gf, InstructionName.JNE, List_of(ii, new ConstTableIA(const_true, gf), label_next), cctx);
 					}
 					final int begin_next = add_i(gf, InstructionName.ES, null, cctx);
 					for (final OS_Element partItem : part.getItems()) {
@@ -478,8 +475,7 @@ public class GenerateFunctions {
 				final Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
 				final Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
-				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(iter_temp), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
-				add_i(gf, InstructionName.JE, List_of(label_bottom), cctx);
+				add_i(gf, InstructionName.JE, List_of(new IntegerIA(iter_temp), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
 				for (final StatementItem statementItem : loop.getItems()) {
 					System.out.println("705 "+statementItem);
 					generate_item((OS_Element)statementItem, gf, cctx);
@@ -507,8 +503,7 @@ public class GenerateFunctions {
 				final Label label_top = gf.addLabel("top", true);
 				gf.place(label_top);
 				final Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
-				add_i(gf, InstructionName.CMP, List_of(new IntegerIA(loop_iterator), simplify_expression(loop.getToPart(), gf, cctx)), cctx);
-				add_i(gf, InstructionName.JE, List_of(label_bottom), cctx);
+				add_i(gf, InstructionName.JE, List_of(new IntegerIA(loop_iterator), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
 				for (final StatementItem statementItem : loop.getItems()) {
 					System.out.println("707 "+statementItem);
 					generate_item((OS_Element)statementItem, gf, cctx);

@@ -14,7 +14,6 @@ package tripleo.elijah.stages.instructions;
 public enum InstructionName {
 	E, X, ES, XS,
 	AGN, AGNK, AGNT, AGNF,
-	CMP,
 	JE, JNE, JL, JMP,
 	CALL, CALLS, RET, YIELD,
 	TRY,

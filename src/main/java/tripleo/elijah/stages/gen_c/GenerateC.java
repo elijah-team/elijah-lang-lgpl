@@ -126,44 +126,89 @@ public class GenerateC {
 				break;
 			case AGNF:
 				break;
-			case CMP:
-				{
-					final InstructionArgument target = instruction.getArg(0);
-					final InstructionArgument value  = instruction.getArg(1);
-
-					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)target).getIndex());
-					assert value != null;
-
-					if (value instanceof ConstTableIA) {
-						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) value).getIndex());
-						final String realTargetName = getRealTargetName(gf, (IntegerIA) target);
-						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, getAssignmentValue(value, gf)));
-					} else
-						tos.put_string_ln(String.format("vsb = %s;", getRealTargetName(gf, (IntegerIA) target)));
-					final int y=2;
-				}
-				break;
 			case JE:
 				{
-					final InstructionArgument target = instruction.getArg(0);
+					final InstructionArgument lhs    = instruction.getArg(0);
+					final InstructionArgument rhs    = instruction.getArg(1);
+					final InstructionArgument target = instruction.getArg(2);
 
 					final Label realTarget = (Label) target;
 
-					tos.put_string_ln(String.format("if (vsb) goto %s;", realTarget.getName()));
-					final int y=2;
+					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lhs).getIndex());
+					assert rhs != null;
+
+					if (rhs instanceof ConstTableIA) {
+						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
+						final String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
+						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+					} else {
+						//
+						// TODO need to lookup special __eq__ function
+						//
+						String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
+						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+
+						final int y = 2;
+					}
 				}
 				break;
 			case JNE:
 				{
-					final InstructionArgument target = instruction.getArg(0);
+					final InstructionArgument lhs    = instruction.getArg(0);
+					final InstructionArgument rhs    = instruction.getArg(1);
+					final InstructionArgument target = instruction.getArg(2);
 
 					final Label realTarget = (Label) target;
 
-					tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
-					final int y=2;
+					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lhs).getIndex());
+					assert rhs != null;
+
+					if (rhs instanceof ConstTableIA) {
+						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
+						final String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
+						tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+					} else {
+						//
+						// TODO need to lookup special __ne__ function ??
+						//
+						String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
+						tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+
+						final int y = 2;
+					}
 				}
 				break;
 			case JL:
+				{
+					final InstructionArgument lhs    = instruction.getArg(0);
+					final InstructionArgument rhs    = instruction.getArg(1);
+					final InstructionArgument target = instruction.getArg(2);
+
+					final Label realTarget = (Label) target;
+
+					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lhs).getIndex());
+					assert rhs != null;
+
+					if (rhs instanceof ConstTableIA) {
+						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
+						final String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
+						tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+					} else {
+						//
+						// TODO need to lookup special __lt__ function
+						//
+						String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
+						tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+
+						final int y = 2;
+					}
+				}
 				break;
 			case JMP:
 				{
@@ -311,7 +356,7 @@ public class GenerateC {
 									final Context context = gf.getFD().getContext();
 									assert context != null;
 									final OS_Type type = x.resolve(context);
-//									System.err.println("Bad potentialTypes size "+type);
+									System.err.println("Bad potentialTypes size "+type);
 									final String z = getTypeName(type);
 									tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
 								}
