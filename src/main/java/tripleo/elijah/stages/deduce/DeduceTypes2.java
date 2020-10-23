@@ -237,6 +237,12 @@ public class DeduceTypes2 {
 			case DECL:
 //				throw new NotImplementedException();
 				break;
+			case JNE:
+				break;
+			case IS_A:
+				break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + instruction.getName());
 			}
 		}
 		for (final VariableTableEntry vte : generatedFunction.vte_list) {
