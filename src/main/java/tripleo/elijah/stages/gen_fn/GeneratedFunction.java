@@ -338,7 +338,7 @@ public class GeneratedFunction {
 				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
 				text = vte.getName();
 			} else if (ia instanceof IdentIA) {
-				final IdentTableEntry idte = getIdentTableEntry(DeduceTypes2.to_int(ia));
+				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
 				text = idte.getIdent().getText();
 			} else
 				throw new NotImplementedException();
