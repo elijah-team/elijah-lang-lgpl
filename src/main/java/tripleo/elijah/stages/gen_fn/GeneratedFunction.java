@@ -323,8 +323,6 @@ public class GeneratedFunction {
 			} else if (oo instanceof IdentIA) {
 				final IdentTableEntry ite1 = getIdentTableEntry(((IdentIA) oo).getIndex());
 				s.push(oo);
-//				if (ite1.backlink != null)
-//					s.push(ite1.backlink);
 				oo = ite1.backlink;
 			} else
 				throw new NotImplementedException();
