@@ -465,7 +465,7 @@ public class GenerateC {
 
 		if (value instanceof ConstTableIA) {
 			final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) value).getIndex());
-			System.err.println(("9001-3 "+cte.initialValue));
+//			System.err.println(("9001-3 "+cte.initialValue));
 			switch (cte.initialValue.getKind()) {
 			case NUMERIC:
 				return ("" + ((NumericExpression) cte.initialValue).getValue());
@@ -490,7 +490,7 @@ public class GenerateC {
 		for (int i = 1; i < args_size; i++) {
 			final InstructionArgument ia = inst.getArg(i);
 			final int y=2;
-			System.err.println("7777 " +ia);
+//			System.err.println("7777 " +ia);
 			if (ia instanceof ConstTableIA) {
 				final ConstantTableEntry constTableEntry = gf.getConstTableEntry(((ConstTableIA) ia).getIndex());
 				sll.add(""+ const_to_string(constTableEntry.initialValue));
