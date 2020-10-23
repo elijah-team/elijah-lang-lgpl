@@ -299,6 +299,7 @@ public class GenerateC {
 				{
 					final IntegerIA testing_var_   = (IntegerIA)instruction.getArg(0);
 					final IntegerIA testing_type_  = (IntegerIA)instruction.getArg(1);
+					final Label     target_label   = ((LabelIA)instruction.getArg(2)).label;
 
 					final VariableTableEntry testing_var  = gf.getVarTableEntry(testing_var_.getIndex());
 					final TypeTableEntry     testing_type = gf.getTypeTableEntry(testing_type_.getIndex());
@@ -311,6 +312,7 @@ public class GenerateC {
 					if (y instanceof NormalTypeName) {
 						final String z = ((NormalTypeName) y).getName();
 						tos.put_string_ln(String.format("vsb = ZS<%s>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
+						tos.put_string_ln(String.format("if (!vsb) goto %s;", label.getName()));
 					} else
 						System.err.println("8886 "+y.getClass().getName());
 //					Label realTarget = (Label) target;
