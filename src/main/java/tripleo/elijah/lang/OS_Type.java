@@ -24,7 +24,7 @@ import java.util.Objects;
 
 /**
  *
- * TODO What is this class for and do we really need it?  See {@link RegularTypeName#_resolved}
+ * This class represents all the different type of types in the system possible
  *
  *
  * @author Tripleo(sb)
