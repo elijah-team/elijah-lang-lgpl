@@ -370,6 +370,8 @@ public class GenerateC {
 					}
 				}
 				break;
+			case NOP:
+				break;
 			default:
 				throw new IllegalStateException("Unexpected value: " + instruction.getName());
 			}

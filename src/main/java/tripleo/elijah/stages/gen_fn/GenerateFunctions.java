@@ -403,6 +403,8 @@ public class GenerateFunctions {
 						System.err.println("Don't know what this is");
 					}
 				}
+				gf.place(label_next);
+				add_i(gf, InstructionName.NOP, List_of(), cctx);
 				gf.place(label_end);
 			}
 		}

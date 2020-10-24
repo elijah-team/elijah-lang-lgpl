@@ -245,6 +245,8 @@ public class DeduceTypes2 {
 				break;
 			case IS_A:
 				break;
+			case NOP:
+				break;
 			default:
 				throw new IllegalStateException("Unexpected value: " + instruction.getName());
 			}
