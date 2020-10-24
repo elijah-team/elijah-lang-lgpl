@@ -308,15 +308,17 @@ public class GenerateC {
 					System.err.println("8888 "+testing_type);
 
 					final OS_Type x = testing_type.attached;
-					final TypeName y = x.getTypeName();
-					if (y instanceof NormalTypeName) {
-						final String z = ((NormalTypeName) y).getName();
-						tos.put_string_ln(String.format("vsb = ZS<%s>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
-						tos.put_string_ln(String.format("if (!vsb) goto %s;", label.getName()));
-					} else
-						System.err.println("8886 "+y.getClass().getName());
-//					Label realTarget = (Label) target;
-//					tos.put_string_ln(String.format("goto %s;", realTarget.getName()));
+					if (x != null) {
+						final TypeName y = x.getTypeName();
+						if (y instanceof NormalTypeName) {
+							final String z = ((NormalTypeName) y).getName();
+							tos.put_string_ln(String.format("vsb = ZS<%s>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
+							tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
+						} else
+							System.err.println("8886 "+y.getClass().getName());
+					} else {
+						System.err.println("8885 testing_type.attached is null " + testing_type);
+					}
 					final int yyy=2;
 				}
 				break;
