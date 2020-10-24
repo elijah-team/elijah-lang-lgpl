@@ -441,7 +441,6 @@ public class GenerateFunctions {
 					if (part.getExpr() != null) {
 						final InstructionArgument ii = simplify_expression(part.getExpr(), gf, cctx);
 						System.out.println("711 " + ii);
-//						int const_true = addConstantTableEntry("true", Boolean_true, new OS_Type(BuiltInTypes.Boolean), gf);
 						add_i(gf, InstructionName.JNE, List_of(ii, new ConstTableIA(const_true, gf), label_next), cctx);
 					}
 					final int begin_next = add_i(gf, InstructionName.ES, null, cctx);
