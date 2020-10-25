@@ -274,6 +274,7 @@ public class GenerateFunctions {
 			final String text = ((IdentExpression) bbe.getLeft()).getText();
 			final InstructionArgument lookup = gf.vte_lookup(text);
 			if (lookup != null) {
+				// TODO should be AGNC
 				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(lookup, new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
 				final Instruction instruction = gf.getInstruction(instruction_number);
 				final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lookup).getIndex());
@@ -281,6 +282,7 @@ public class GenerateFunctions {
 			} else {
 				final int vte_num = addVariableTableEntry(text, tte, gf);
 				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(vte_num)), cctx);
+				// TODO should be AGNC
 				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num), new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
 				final Instruction instruction = gf.getInstruction(instruction_number);
 				final VariableTableEntry vte = gf.getVarTableEntry(vte_num);
@@ -536,6 +538,7 @@ public class GenerateFunctions {
 		case PROCEDURE_CALL:
 			final ProcedureCallExpression pce = (ProcedureCallExpression) value;
 			final FnCallArgs fnCallArgs = new FnCallArgs(expression_to_call(value, gf, cctx), /*, simplify_args(pce.getArgs(), gf*/gf);
+			// TODO should be AGNC
 			add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), fnCallArgs), cctx);
 			break;
 		case NUMERIC:
@@ -685,11 +688,11 @@ public class GenerateFunctions {
 					final Instruction i = new Instruction();
 					i.setName(InstructionName.CALL);
 					i.setArgs(right_ia);
+					// TODO should be AGNC
 					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp_var), new FnCallArgs(i, gf)), cctx);
 					return new IntegerIA(tmp_var); // return tmp_var instead of expression assigning it
 				}
 			}
-//			throw new NotImplementedException();
 		case DOT_EXP:
 			{
 				final DotExpression de = (DotExpression) expression;
@@ -753,6 +756,7 @@ public class GenerateFunctions {
 					inst.setName(InstructionName.CALLS);
 					inst.setArgs(List_of(new IntegerIA(pte), left_instruction, right_instruction));
 					final FnCallArgs fca = new FnCallArgs(inst, gf);
+					// TODO should be AGNC
 					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp), fca), cctx);
 					return new IntegerIA(tmp); // TODO  is this right?? we want to return the variable, not proc calls, right?
 				}
