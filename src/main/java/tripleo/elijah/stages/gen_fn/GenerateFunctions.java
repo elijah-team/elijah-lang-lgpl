@@ -312,7 +312,6 @@ public class GenerateFunctions {
 					gf.getVarTableEntry(DeduceTypes2.to_int(iiii/* != null ? iiii :
 							gf.getVarTableEntry(iii5))*/)).type);
 		}
-
 		break;
 		case NUMERIC:
 			{
