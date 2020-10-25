@@ -798,7 +798,7 @@ public class GenerateFunctions {
 		if (expression.getKind() != PROCEDURE_CALL)
 			throw new NotImplementedException();
 
-		switch (expression.getLeft().getKind()){
+		switch (expression.getLeft().getKind()) {
 		case IDENT:
 			final ProcedureCallExpression pce = (ProcedureCallExpression) expression;
 			return expression_to_call_add_entry(gf, pce, (IdentExpression) expression.getLeft(), cctx);
