@@ -275,7 +275,8 @@ public class GenerateFunctions {
 			final InstructionArgument lookup = gf.vte_lookup(text);
 			if (lookup != null) {
 				// TODO should be AGNC
-				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(lookup, new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
+				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(lookup,
+						new FnCallArgs(expression_to_call((ProcedureCallExpression) right1, gf, cctx), gf)), cctx);
 				final Instruction instruction = gf.getInstruction(instruction_number);
 				final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lookup).getIndex());
 				vte.addPotentialType(instruction.getIndex(), tte);
@@ -283,7 +284,8 @@ public class GenerateFunctions {
 				final int vte_num = addVariableTableEntry(text, tte, gf);
 				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(vte_num)), cctx);
 				// TODO should be AGNC
-				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num), new FnCallArgs(expression_to_call(right1, gf, cctx), gf)), cctx);
+				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num),
+						new FnCallArgs(expression_to_call((ProcedureCallExpression) right1, gf, cctx), gf)), cctx);
 				final Instruction instruction = gf.getInstruction(instruction_number);
 				final VariableTableEntry vte = gf.getVarTableEntry(vte_num);
 				vte.addPotentialType(instruction.getIndex(), tte);
@@ -794,37 +796,32 @@ public class GenerateFunctions {
 		return R;
 	}
 
-	private @org.jetbrains.annotations.Nullable Instruction expression_to_call(@NotNull final IExpression expression, @NotNull final GeneratedFunction gf, final Context cctx) {
-		if (expression.getKind() != PROCEDURE_CALL)
-			throw new NotImplementedException();
-
-		switch (expression.getLeft().getKind()) {
-		case IDENT:
-			final ProcedureCallExpression pce = (ProcedureCallExpression) expression;
-			return expression_to_call_add_entry(gf, pce, (IdentExpression) expression.getLeft(), cctx);
-		case QIDENT:
-			simplify_qident((Qualident) expression.getLeft(), gf);
-			break;
+	private @org.jetbrains.annotations.Nullable Instruction expression_to_call(@NotNull final ProcedureCallExpression pce, @NotNull final GeneratedFunction gf, final Context cctx) {
+		switch (pce.getLeft().getKind()) {
+		case IDENT: {
+			return expression_to_call_add_entry(gf, pce, pce.getLeft(), cctx);
+		}
+		case QIDENT: {
+			simplify_qident((Qualident) pce.getLeft(), gf); // TODO ??
+			return expression_to_call_add_entry(gf, pce, pce.getLeft(), cctx);
+		}
 		case DOT_EXP: {
-			simplify_dot_expression((DotExpression) expression.getLeft(), gf);
-//			return expression_to_call_add_entry(gf, pce, i);
-			}
-			break;
+			simplify_dot_expression((DotExpression) pce.getLeft(), gf); // TODO ??
+			return expression_to_call_add_entry(gf, pce, pce.getLeft(), cctx);
+		}
 		default:
 			throw new NotImplementedException();
 		}
-//		int i = simplify_expression(expression, gf);
-		return null;
 	}
 
 	@NotNull
-	private Instruction expression_to_call_add_entry(@NotNull final GeneratedFunction gf, @NotNull final ProcedureCallExpression pce, final IdentExpression left, final Context cctx) {
+	private Instruction expression_to_call_add_entry(@NotNull final GeneratedFunction gf, @NotNull final ProcedureCallExpression pce, final IExpression left, final Context cctx) {
 		final Instruction i = new Instruction();
 		i.setName(InstructionName.CALL); // TODO see line 686
 		final List<InstructionArgument> li = new ArrayList<>();
 //			int ii = addIdentTableEntry((IdentExpression) expression.getLeft(), gf);
-		final int ii = addProcTableEntry(left, gf.get_assignment_path(left, this), get_args_types(pce.getArgs(), gf), gf);
-		li.add(new IntegerIA(ii));
+		final int pte_num = addProcTableEntry(left, gf.get_assignment_path(left, this), get_args_types(pce.getArgs(), gf), gf);
+		li.add(new IntegerIA(pte_num));
 		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf, cctx);
 		li.addAll(args_);
 		i.setArgs(li);
