@@ -820,7 +820,7 @@ public class GenerateFunctions {
 	@NotNull
 	private Instruction expression_to_call_add_entry(@NotNull final GeneratedFunction gf, @NotNull final ProcedureCallExpression pce, final IdentExpression left, final Context cctx) {
 		final Instruction i = new Instruction();
-		i.setName(InstructionName.CALL);
+		i.setName(InstructionName.CALL); // TODO see line 686
 		final List<InstructionArgument> li = new ArrayList<>();
 //			int ii = addIdentTableEntry((IdentExpression) expression.getLeft(), gf);
 		final int ii = addProcTableEntry(left, gf.get_assignment_path(left, this), get_args_types(pce.getArgs(), gf), gf);
