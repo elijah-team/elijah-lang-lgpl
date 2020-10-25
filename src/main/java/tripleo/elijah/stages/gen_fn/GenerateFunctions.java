@@ -398,7 +398,7 @@ public class GenerateFunctions {
 						add_i(gf, InstructionName.JMP, List_of(label_end), context);
 						add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
 						gf.place(label_next);
-						label_next = gf.addLabel();
+//						label_next = gf.addLabel();
 					} else if (part instanceof MatchConditional.MatchConditionalPart3) {
 						System.err.println("Don't know what this is");
 					}
@@ -437,7 +437,7 @@ public class GenerateFunctions {
 				final List<IfConditional> parts = ifc.getParts();
 				for (final IfConditional part : parts) {
 					gf.place(label_next);
-					label_next = gf.addLabel();
+//					label_next = gf.addLabel();
 					if (part.getExpr() != null) {
 						final InstructionArgument ii = simplify_expression(part.getExpr(), gf, cctx);
 						System.out.println("711 " + ii);
