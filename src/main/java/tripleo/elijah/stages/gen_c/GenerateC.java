@@ -324,52 +324,7 @@ public class GenerateC {
 				break;
 			case DECL:
 				{
-					final InstructionArgument decl_type = instruction.getArg(0);
-					final IntegerIA vte_num = (IntegerIA) instruction.getArg(1);
-					final String target_name = getRealTargetName(gf, vte_num);
-					final VariableTableEntry vte = gf.getVarTableEntry(vte_num.getIndex());
-
-					final OS_Type x = vte.type.attached;
-					if (x != null) {
-						final TypeName y = x.getTypeName();
-						if (y instanceof NormalTypeName) {
-							final String z = ((NormalTypeName) y).getName();
-							tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
-						} else {
-							if (y != null) {
-								//
-								// VARIABLE WASN'T FULLY DEDUCED YET
-								//
-								System.err.println("8887 "+y.getClass().getName());
-							} else {
-								//
-								// VARIABLE WASN'T FULLY DEDUCED YET
-								// MTL A TEMP VARIABLE
-								//
-								@NotNull final Collection<TypeTableEntry> pt_ = vte.potentialTypes();
-								final List<TypeTableEntry> pt = new ArrayList<>(pt_);
-								if (pt.size() == 1) {
-									final TypeTableEntry ty = pt.get(0);
-//									System.err.println("8885 " +ty.attached);
-									final OS_Type attached = ty.attached;
-									assert attached != null;
-									final String z = getTypeName(attached);
-									tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
-								} else {
-									assert x.getType() == OS_Type.Type.BUILT_IN;
-									final Context context = gf.getFD().getContext();
-									assert context != null;
-									final OS_Type type = x.resolve(context);
-									System.err.println("Bad potentialTypes size "+type);
-									final String z = getTypeName(type);
-									tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
-								}
-//								System.err.println("8886 y is null (No typename specified)");
-							}
-						}
-					} else {
-						System.err.println("8885 x is null (No typename specified)");
-					}
+					generate_method_decl(instruction, tos, gf);
 				}
 				break;
 			case NOP:
@@ -383,6 +338,59 @@ public class GenerateC {
 		tos.flush();
 		tos.close();
 	}
+
+	private void generate_method_decl(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
+		final SymbolIA decl_type = (SymbolIA)  instruction.getArg(0);
+		final IntegerIA  vte_num = (IntegerIA) instruction.getArg(1);
+		final String target_name = getRealTargetName(gf, vte_num);
+		final VariableTableEntry vte = gf.getVarTableEntry(vte_num.getIndex());
+
+		final OS_Type x = vte.type.attached;
+		if (x == null) {
+			System.err.println("8885 x is null (No typename specified) for "+target_name);
+			return;
+		}
+
+		final TypeName y = x.getTypeName();
+		if (y instanceof NormalTypeName) {
+			final String z = ((NormalTypeName) y).getName();
+			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+			return;
+		}
+
+		if (y != null) {
+			//
+			// VARIABLE WASN'T FULLY DEDUCED YET
+			//
+			System.err.println("8887 "+y.getClass().getName());
+			return;
+		}
+
+		//
+		// VARIABLE WASN'T FULLY DEDUCED YET
+		// MTL A TEMP VARIABLE
+		//
+		@NotNull final Collection<TypeTableEntry> pt_ = vte.potentialTypes();
+		final List<TypeTableEntry> pt = new ArrayList<>(pt_);
+		if (pt.size() == 1) {
+			final TypeTableEntry ty = pt.get(0);
+//			System.err.println("8885 " +ty.attached);
+			final OS_Type attached = ty.attached;
+			assert attached != null;
+			final String z = getTypeName(attached);
+			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+		} else {
+			assert x.getType() == OS_Type.Type.BUILT_IN;
+			final Context context = gf.getFD().getContext();
+			assert context != null;
+			final OS_Type type = x.resolve(context);
+			System.err.println("Bad potentialTypes size "+type);
+			final String z = getTypeName(type);
+			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+		}
+//		System.err.println("8886 y is null (No typename specified)");
+	}
+
 
 	private String getTypeName(final OS_Type ty) {
 		assert ty != null;
