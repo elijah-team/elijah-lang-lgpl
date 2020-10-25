@@ -431,6 +431,7 @@ public class GenerateC {
 		return sl3;
 	}
 
+	@NotNull
 	private String getAssignmentValue(final InstructionArgument value, final GeneratedFunction gf) {
 		final StringBuilder sb = new StringBuilder();
 		if (value instanceof FnCallArgs) {
