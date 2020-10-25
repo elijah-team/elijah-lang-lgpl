@@ -421,7 +421,7 @@ public class GenerateFunctions {
 			final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
 			final IExpression expr = ifc.getExpr();
 			final InstructionArgument i = simplify_expression(expr, gf, cctx);
-			System.out.println("710 " + i);
+//			System.out.println("711 " + i);
 			final int const_true = addConstantTableEntry("true", Boolean_true, new OS_Type(BuiltInTypes.Boolean), gf);
 			add_i(gf, InstructionName.JNE, List_of(i, new ConstTableIA(const_true, gf), label_next), cctx);
 			final int begin_1st = add_i(gf, InstructionName.ES, null, cctx);
@@ -442,7 +442,7 @@ public class GenerateFunctions {
 //					label_next = gf.addLabel();
 					if (part.getExpr() != null) {
 						final InstructionArgument ii = simplify_expression(part.getExpr(), gf, cctx);
-						System.out.println("711 " + ii);
+						System.out.println("712 " + ii);
 						add_i(gf, InstructionName.JNE, List_of(ii, new ConstTableIA(const_true, gf), label_next), cctx);
 					}
 					final int begin_next = add_i(gf, InstructionName.ES, null, cctx);
