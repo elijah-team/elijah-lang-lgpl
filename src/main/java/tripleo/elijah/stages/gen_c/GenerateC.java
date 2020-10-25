@@ -436,12 +436,12 @@ public class GenerateC {
 		final StringBuilder sb = new StringBuilder();
 		if (value instanceof FnCallArgs) {
 			final FnCallArgs fca = (FnCallArgs) value;
-//			List<String> sl = new ArrayList<String>();
 			final Instruction inst = fca.getExpression();
 //			System.err.println("9000 "+inst.getName());
 			final InstructionArgument x = inst.getArg(0);
 			assert x instanceof IntegerIA;
 			final ProcTableEntry pte = gf.getProcTableEntry(((IntegerIA)x).getIndex());
+//			System.err.println("9000-2 "+pte);
 			switch (inst.getName()) {
 			case CALL:
 				{
@@ -496,31 +496,8 @@ public class GenerateC {
 					return sb.toString();
 				}
 			default:
-				throw new NotImplementedException();
+				throw new IllegalStateException("Unexpected value: " + inst.getName());
 			}
-//			System.err.println("9000-2 "+pte);
-/*
-			for (InstructionArgument arg : fca.getInstructionArguments()) {
-//				System.err.println("9000-1 "+arg);
-				if (arg instanceof IntegerIA) {
-					VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) arg).getIndex());
-					sl.add(getRealTargetName(gf, (IntegerIA) arg));
-				} else if (arg instanceof ConstTableIA) {
-					ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA)arg).getIndex());
-					System.err.println(("9000-3 "+cte.initialValue));
-					if (cte.initialValue instanceof NumericExpression) {
-						sl.add(""+((NumericExpression) cte.initialValue).getValue());
-					} else
-						throw new NotImplementedException();
-				} else
-					throw new NotImplementedException();
-			}
-
-			sb.append('(');
-			sb.append(String.join(", ", sl));
-			sb.append(')');
-			return sb.toString();
-*/
 		}
 
 		if (value instanceof ConstTableIA) {
