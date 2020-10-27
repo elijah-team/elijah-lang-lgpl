@@ -155,7 +155,7 @@ public class GenerateFunctions {
 					System.err.println(String.format("703.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
 //					throw new IllegalStateException();
 					generate_item_assignment(x, gf, cctx);
-//					break;
+					break;
 				case AUG_MULT:
 					{
 						System.out.println(String.format("801.1 AUG_MULT %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
