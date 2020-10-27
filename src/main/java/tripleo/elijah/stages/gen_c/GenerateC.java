@@ -353,8 +353,8 @@ public class GenerateC {
 
 		final TypeName y = x.getTypeName();
 		if (y instanceof NormalTypeName) {
-			final String z = ((NormalTypeName) y).getName();
-			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+			final String z = getTypeName(y);
+			tos.put_string_ln(String.format("%s %s;", z, target_name));
 			return;
 		}
 
@@ -410,7 +410,7 @@ public class GenerateC {
 			break;
 		case BUILT_IN:
 			System.err.println("Warning: BUILT_IN TypeName in GenerateC");
-			z = ty.getBType().name();
+			z = "Z"+ty.getBType().getCode();  // README should not even be here, but look at .name() for other code gen schemes
 			break;
 		default:
 			throw new IllegalStateException("Unexpected value: " + ty.getType());
@@ -422,8 +422,9 @@ public class GenerateC {
 		if (typeName instanceof RegularTypeName) {
 			final String name = ((RegularTypeName) typeName).getName(); // TODO convert to Z-name
 
-			return name;
+			return String.format("Z<%s>", name);
 		}
+		System.err.println("Warning type is not fully deduced "+typeName);
 		return ""+typeName; // TODO type is not fully deduced
 	}
 
