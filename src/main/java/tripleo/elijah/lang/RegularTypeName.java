@@ -42,16 +42,6 @@ public String getName() {
 	return this.typeName.asSimpleString();
 }
 
-//	@Override
-//public String getTypeName() {
-//	return this.typeName.toString();
-//}  // TODO is this right?
-
-//@Override
-//public void setGeneric(boolean value) {
-//	_ltm.add(TypeModifiers.GENERIC);
-//}
-
 	@Override
 	public void setContext(final Context ctx) {
 		_ctx = ctx;
