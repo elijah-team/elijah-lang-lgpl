@@ -747,7 +747,7 @@ public class DeduceTypes {
 				if (element instanceof VariableStatement) {
 					final NormalTypeName tn = (NormalTypeName) ((VariableStatement) element).typeName();
 					if (!tn.isNull())
-						return new OS_Type(((VariableStatement) element).typeName());
+						return new OS_Type(tn);
 					else
 						return deduceTypeName((VariableStatement) element, context);
 				} else if (element instanceof FormalArgListItem) {
