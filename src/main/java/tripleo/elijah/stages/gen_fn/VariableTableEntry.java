@@ -49,7 +49,8 @@ public class VariableTableEntry {
 	}
 
 	public void addPotentialType(final int instructionIndex, final TypeTableEntry tte) {
-		potentialTypes.put(instructionIndex, tte);
+		if (!potentialTypes.containsKey(instructionIndex))
+			potentialTypes.put(instructionIndex, tte);
 	}
 
 	public @NotNull Collection<TypeTableEntry> potentialTypes() {
