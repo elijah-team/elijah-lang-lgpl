@@ -393,10 +393,28 @@ public class GenerateC {
 
 
 	private String getTypeName(final OS_Type ty) {
-		assert ty != null;
-		assert ty.getType() == OS_Type.Type.USER_CLASS;
-		final ClassStatement el = ty.getClassOf();
-		final String z = el.getName();
+		if (ty == null) throw new IllegalArgumentException("ty is null");
+		//
+		String z;
+		switch (ty.getType()) {
+		case USER_CLASS:
+			final ClassStatement el = ty.getClassOf();
+			z = el.getName();
+			break;
+		case FUNCTION:
+			z = "<function>";
+			break;
+		case USER:
+			System.err.println("Warning: USER TypeName in GenerateC");
+			z = ty.getTypeName().toString();
+			break;
+		case BUILT_IN:
+			System.err.println("Warning: BUILT_IN TypeName in GenerateC");
+			z = ty.getBType().name();
+			break;
+		default:
+			throw new IllegalStateException("Unexpected value: " + ty.getType());
+		}
 		return z;
 	}
 

@@ -416,9 +416,23 @@ public class DeduceTypes2 {
 				final int y=2;
 				final IdentIA ident_a = (IdentIA) pte.expression_num;
 				final OS_Element el = generatedFunction.resolveIdentIA(ctx, ident_a, module);
-				if (el != null)
+				if (el != null) {
 					pte.resolved = el;
-				else {
+					if (el instanceof FunctionDef) {
+						FunctionDef fd = (FunctionDef) el;
+						OS_Type type = new OS_Type(fd.returnType());
+						@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, null);
+						vte.addPotentialType(instructionIndex, tte);
+					} else if (el instanceof ClassStatement) {
+						ClassStatement kl = (ClassStatement) el;
+						OS_Type type = new OS_Type(kl);
+						@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, null);
+						vte.addPotentialType(instructionIndex, tte);
+					} else {
+						System.err.println("7890 "+el.getClass().getName());
+//						assert false;
+					}
+				} else {
 					System.err.println("IdentIA path cannot be resolved "+generatedFunction.getIdentIAPath(ident_a));
 				}
 			}
