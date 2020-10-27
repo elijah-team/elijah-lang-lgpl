@@ -514,7 +514,7 @@ public class GenerateFunctions {
 				final String txt = SpecialFunctions.of(ExpressionKind.INCREMENT);
 				final IdentExpression pre_inc_name = Helpers.string_to_ident(txt);
 				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
-				final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
+				final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte), gf);
 				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(loop_iterator)), cctx);
 				add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
 				gf.place(label_bottom);
