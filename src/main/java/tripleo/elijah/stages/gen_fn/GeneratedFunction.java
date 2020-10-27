@@ -220,6 +220,11 @@ public class GeneratedFunction {
 
 //	Map<Range, Context> contextToRangeMap = new HashMap<Range, Context>();
 
+	/**
+	 *
+	 * @param text variable name from the source file
+	 * @return {@link IntegerIA} or {@link ConstTableIA} or null if not found, meaning not a local variable
+	 */
 	public @Nullable InstructionArgument vte_lookup(final String text) {
 		int index = 0;
 		for (final VariableTableEntry variableTableEntry : vte_list) {
