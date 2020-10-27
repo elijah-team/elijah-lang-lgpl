@@ -20,6 +20,9 @@ import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.Helpers;
 
+/**
+ * Useless tests. We really want to know if a TypeName will resolve to the same types
+ */
 public class DeduceTypesTest {
 
 	private OS_Type x;
