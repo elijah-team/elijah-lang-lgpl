@@ -370,7 +370,7 @@ public class GenerateFunctions {
 						add_i(gf, InstructionName.IS_A, List_of(i, new IntegerIA(t.getIndex()), /*TODO not*/new LabelIA(label_next)), cctx);
 						final Context context = mc1.getContext();
 
-						final int tmp = addTempTableEntry(null, id, gf); // TODO no context!
+						final int tmp = addTempTableEntry(new OS_Type(mc1.getTypeName()), id, gf); // TODO no context!
 						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), context);
 						VariableTableEntry vte_tmp = gf.getVarTableEntry(tmp);
 						vte_tmp.addPotentialType(-1, t); // TODO in the future instructionIndex may be unsigned
