@@ -28,7 +28,7 @@ public class DeduceTypesTest2 {
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		final ClassStatement cs = new ClassStatement(mod);
-		cs.setName(new IdentExpression(Helpers.makeToken("Test")));
+		cs.setName(Helpers.string_to_ident("Test"));
 		final ClassContext cctx = new ClassContext(mctx, cs);
 		cs.setContext(cctx);
 		final FunctionDef fd = cs.funcDef();
