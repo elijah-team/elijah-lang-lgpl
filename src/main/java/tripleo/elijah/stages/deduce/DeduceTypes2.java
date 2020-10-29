@@ -387,9 +387,11 @@ public class DeduceTypes2 {
 							//vte.addPotentialType(instructionIndex, tte);
 						} else {
 							final int y=2;
+							throw new NotImplementedException();
 						}
 					} else {
 						final int y=2;
+						throw new NotImplementedException();
 					}
 				}
 				break;
