@@ -28,7 +28,7 @@ public class DeduceTypesTest2 {
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		final ClassStatement cs = new ClassStatement(mod);
-		cs.setName(new IdentExpression(tripleo.elijah.util.Helpers.makeToken("Test")));
+		cs.setName(new IdentExpression(Helpers.makeToken("Test")));
 		final ClassContext cctx = new ClassContext(mctx, cs);
 		cs.setContext(cctx);
 		final FunctionDef fd = cs.funcDef();
@@ -37,12 +37,12 @@ public class DeduceTypesTest2 {
 		fd.setContext(fctx);
 		final VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
 		final VariableStatement vs = vss.next();
-		vs.setName((tripleo.elijah.util.Helpers.string_to_ident("x")));
+		vs.setName((Helpers.string_to_ident("x")));
 		final Qualident qu = new Qualident();
-		qu.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
+		qu.append(Helpers.makeToken("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
 		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
-		final IdentExpression x1 = (tripleo.elijah.util.Helpers.string_to_ident("x"));
+		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
 		final DeduceTypes d = new DeduceTypes(mod);
 		final OS_Type x = d.deduceExpression(x1, fc);
@@ -51,7 +51,7 @@ public class DeduceTypesTest2 {
 //		final RegularTypeName tn = new RegularTypeName();
 		final VariableTypeName tn = new VariableTypeName();
 		final Qualident tnq = new Qualident();
-		tnq.append(tripleo.elijah.util.Helpers.makeToken("Integer"));
+		tnq.append(Helpers.makeToken("Integer"));
 		tn.setName(tnq);
 		fd.postConstruct();
 		cs.postConstruct();
