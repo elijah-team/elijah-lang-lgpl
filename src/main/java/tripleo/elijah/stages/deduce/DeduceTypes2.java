@@ -649,16 +649,19 @@ public class DeduceTypes2 {
 			return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
 	}
 
-	@NotNull
-	private Stack<IExpression> dot_expression_to_stack(final DotExpression de) {
+	@NotNull Stack<IExpression> dot_expression_to_stack(final DotExpression de) {
 		final Stack<IExpression> s = new Stack<IExpression>();
+		final Stack<IExpression> right_stack = new Stack<IExpression>();
 		final IExpression e = de;
-		IExpression left = null;
-		s.push(de.getRight());
-		while (true) {
-			left = e.getLeft();
-			s.push(left);
-			if (!(left instanceof DotExpression)) break;
+		IExpression right = de.getRight();
+		right_stack.push(de.getLeft());
+		while (right instanceof DotExpression) {
+			right_stack.push(right.getLeft());
+			right = ((DotExpression) right).getRight();
+		}
+		right_stack.push(right);
+		for (IExpression expression : right_stack) {
+			s.push(expression);
 		}
 		return s;
 	}
