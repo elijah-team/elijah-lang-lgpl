@@ -67,6 +67,8 @@ public class DeduceTypes2 {
 						case IDENT:
 							{
 								final OS_Type a = cte.getTypeTableEntry().attached;
+								assert a != null;
+								assert a.getType() != null;
 								if (a.getType() == OS_Type.Type.BUILT_IN && a.getBType() == BuiltInTypes.Boolean) {
 									assert cte.getName().equals("true") || cte.getName().equals("false");
 								} else
@@ -569,6 +571,8 @@ public class DeduceTypes2 {
 					final ArrayList<TypeTableEntry> tt = new ArrayList<TypeTableEntry>(t);
 					if (tt.size() == 1) {
 						final OS_Type x = tt.get(0).attached;
+						assert x != null;
+						assert x.getType() != null;
 						if (x.getType() == OS_Type.Type.USER_CLASS) {
 							final Context ctx1 = x.getClassOf().getContext();
 
