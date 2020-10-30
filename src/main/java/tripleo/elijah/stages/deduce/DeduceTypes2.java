@@ -19,10 +19,7 @@ import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created 9/15/20 12:51 PM
@@ -656,9 +653,7 @@ public class DeduceTypes2 {
 	}
 
 	@NotNull Stack<IExpression> dot_expression_to_stack(final DotExpression de) {
-		final Stack<IExpression> s = new Stack<IExpression>();
 		final Stack<IExpression> right_stack = new Stack<IExpression>();
-		final IExpression e = de;
 		IExpression right = de.getRight();
 		right_stack.push(de.getLeft());
 		while (right instanceof DotExpression) {
@@ -666,10 +661,8 @@ public class DeduceTypes2 {
 			right = ((DotExpression) right).getRight();
 		}
 		right_stack.push(right);
-		for (IExpression expression : right_stack) {
-			s.push(expression);
-		}
-		return s;
+		Collections.reverse(right_stack);
+		return right_stack;
 	}
 
 	public OS_Type deduceExpression(@NotNull final IExpression n, final Context context) {
