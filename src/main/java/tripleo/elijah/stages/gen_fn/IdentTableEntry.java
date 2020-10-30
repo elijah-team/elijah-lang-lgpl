@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.stages.instructions.InstructionArgument;
@@ -29,6 +30,7 @@ public class IdentTableEntry {
 	public InstructionArgument backlink;
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public TypeTableEntry type;
+	private GeneratedNode resolved;
 
 	public IdentTableEntry(final int index, final IdentExpression ident) {
         this.index = index;
@@ -39,6 +41,7 @@ public class IdentTableEntry {
 		potentialTypes.put(instructionIndex, tte);
 	}
 
+	@SuppressFBWarnings("NP_NONNULL_RETURN_VIOLATION")
 	public @NotNull Collection<TypeTableEntry> potentialTypes() {
 		return potentialTypes.values();
 	}
@@ -50,11 +53,21 @@ public class IdentTableEntry {
 				", ident=" + ident +
 				", backlink=" + backlink +
 				", potentialTypes=" + potentialTypes +
+				", type=" + type +
+				", resolved=" + resolved +
 				'}';
 	}
 
 	public IdentExpression getIdent() {
 		return ident;
+	}
+
+	public void resolve(GeneratedNode gn) {
+		resolved = gn;
+	}
+
+	public boolean isResolved() {
+		return resolved != null;
 	}
 }
 
