@@ -233,6 +233,9 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 
+	public IdentExpression getNameNode() {
+		return clsName;
+	}
 }
 
 //
