@@ -67,7 +67,14 @@ public class GenerateC {
 				return String.format("%s va%s", getTypeName(input.tn), input.name);
 			}
 		}));
-		tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
+		if (gf.fd.getParent() instanceof ClassStatement) {
+			ClassStatement st = (ClassStatement) gf.fd.getParent();
+			final String class_name = getTypeName(new OS_Type(st));
+			tos.put_string_ln(String.format("%s %s(%s vsc, %s) {", returnType, name, class_name, args));
+		} else {
+			// TODO vsi for namespace instance??
+			tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
+		}
 		tos.incr_tabs();
 		//
 		for (final Instruction instruction : gf.instructions()) {
