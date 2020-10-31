@@ -370,7 +370,7 @@ public class GenerateC {
 		final String target_type = getTypeName(target_type_.attached);
 		final String source_target = getRealTargetName(gf, vte_targ_);
 
-		tos.put_string_ln(String.format("%s = (%s)%s;", target_name, target_type, source_target));
+		tos.put_string_ln(String.format("%s = (Z<%s>)%s;", target_name, target_type, source_target));
 	}
 
 	private void generate_method_decl(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
