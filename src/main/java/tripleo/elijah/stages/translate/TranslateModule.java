@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * Created 9/3/20 12:38 PM
@@ -210,7 +208,7 @@ public class TranslateModule {
 		}
 	}
 
-	private TabbedOutputStream getFile() {
+	/*private TabbedOutputStream getFile() {
 		final String fn = module.getFileName();
 		final String fn2 = fn.substring(0, fn.lastIndexOf('.'));
 		final String fn3 = fn2 + ".java";
@@ -225,5 +223,5 @@ public class TranslateModule {
 			module.parent.eee.exception(e);
 		}
 		return null;
-	}
+	}*/
 }

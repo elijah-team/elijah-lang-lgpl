@@ -348,7 +348,7 @@ public class ExpandFunctions {
 //			return new OS_Type(BuiltInTypes.SystemInteger);
 		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
 			final DotExpression de = (DotExpression) n;
-			final var left_type = expandExpression(de.getLeft(), fc);
+			final FunctionPrelimInstruction left_type = expandExpression(de.getLeft(), fc);
 //			var right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext(), fc);
 			final int y=2;
 		} else if (n.getKind() == ExpressionKind.GET_ITEM) {
