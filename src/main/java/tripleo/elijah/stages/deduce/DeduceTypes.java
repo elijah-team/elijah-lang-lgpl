@@ -467,16 +467,7 @@ public class DeduceTypes {
 
 	@NotNull
 	private Stack<IExpression> dot_expression_to_stack(final DotExpression de) {
-		final Stack<IExpression> s = new Stack<IExpression>();
-		final IExpression e = de;
-		IExpression left = null;
-		s.push(de.getRight());
-		while (true) {
-			left = e.getLeft();
-			s.push(left);
-			if (!(left instanceof DotExpression)) break;
-		}
-		return s;
+		return DeduceTypes2.dot_expression_to_stack(de);
 	}
 
 	private void lookup_and_set(final Context ctx, final IExpression exp, final String function_name) {
