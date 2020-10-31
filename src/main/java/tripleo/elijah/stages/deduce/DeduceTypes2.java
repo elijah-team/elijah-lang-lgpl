@@ -85,10 +85,11 @@ public class DeduceTypes2 {
 				{
 					//
 					// ATTACH A TYPE TO VTE'S
+					// CONVERT USER TYPES TO USER_CLASS TYPES
 					//
 					for (final VariableTableEntry vte : generatedFunction.vte_list) {
 //						System.out.println("704 "+vte.type.attached+" "+vte.potentialTypes());
-						if (vte.type.attached != null) {
+						if (vte.type.attached != null && vte.type.attached.getType() == OS_Type.Type.USER) {
 							final TypeName x = vte.type.attached.getTypeName();
 							if (x instanceof NormalTypeName) {
 								final String tn = ((NormalTypeName) x).getName();
@@ -98,7 +99,7 @@ public class DeduceTypes2 {
 									best = _resolveAlias((AliasStatement) best);
 								}
 								if (!(OS_Type.isConcreteType(best))) {
-									module.parent.eee.reportError("Not a concrete type "+best);
+									module.parent.eee.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
 								} else {
 //									System.out.println("705 " + best);
 									vte.type.attached = new OS_Type((ClassStatement) best);
