@@ -804,8 +804,10 @@ public class GenerateFunctions {
 				} else if (x instanceof IntegerIA) {
 					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) x).getIndex());
 					tte = vte.type;
-				} else
+				} else {
+					int y=2;
 					continue; // TODO
+				}
 				R.add(tte);
 			} else
 				R.add(getType(arg, gf));
