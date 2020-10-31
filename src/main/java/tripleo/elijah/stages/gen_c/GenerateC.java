@@ -596,12 +596,16 @@ public class GenerateC {
 		final VariableTableEntry varTableEntry = gf.getVarTableEntry(target.getIndex());
 		final String vte_name = varTableEntry.getName();
 		if (varTableEntry.vtt == VariableTableType.TEMP) {
-			int tempNum = varTableEntry.tempNum;
-			if (tempNum == -1) {
-				varTableEntry.tempNum = gf.nextTemp();
-				tempNum = varTableEntry.tempNum;
+			if (varTableEntry.getName() == null) {
+				int tempNum = varTableEntry.tempNum;
+				if (tempNum == -1) {
+					varTableEntry.tempNum = gf.nextTemp();
+					tempNum = varTableEntry.tempNum;
+				}
+				return "vt" + tempNum;
+			} else {
+				return "vt" + varTableEntry.getName();
 			}
-			return "vt" + tempNum;
 		} else if (varTableEntry.vtt == VariableTableType.ARG) {
 			return "va" + vte_name;
 		} else if (SpecialVariables.contains(vte_name)) {
