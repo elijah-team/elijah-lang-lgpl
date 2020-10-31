@@ -107,6 +107,7 @@ public class DeduceTypes2 {
 							}
 						}
 					}
+					int y=2;
 				}
 				break;
 			case ES:
@@ -473,15 +474,15 @@ public class DeduceTypes2 {
 
 	private void do_assign_call(final GeneratedFunction generatedFunction, final Context ctx, final IdentTableEntry idte, final FnCallArgs fca, final int instructionIndex) {
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
-		for (final TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
-			System.out.println("770 "+tte);
+		for (final TypeTableEntry tte : pte.getArgs()) {
+			System.out.println("771 "+tte);
 			final IExpression e = tte.expression;
 			if (e == null) continue;
 			switch (e.getKind()) {
 			case NUMERIC:
 			{
 				tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
-				idte.type = tte;
+				idte.type = tte; // TODO this looks wrong
 			}
 			break;
 			case IDENT:

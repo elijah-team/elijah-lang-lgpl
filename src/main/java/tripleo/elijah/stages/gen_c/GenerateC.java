@@ -77,7 +77,9 @@ public class GenerateC {
 		}
 		tos.incr_tabs();
 		//
-		for (final Instruction instruction : gf.instructions()) {
+		@NotNull List<Instruction> instructions = gf.instructions();
+		for (int instruction_index = 0; instruction_index < instructions.size(); instruction_index++) {
+			Instruction instruction = instructions.get(instruction_index);
 //			System.err.println("8999 "+instruction);
 			final Label label = gf.findLabel(instruction.getIndex());
 			if (label != null) {
@@ -506,6 +508,11 @@ public class GenerateC {
 						final int y=2;
 						final IdentExpression ptex = (IdentExpression) pte.expression;
 						sb.append(ptex.getText());
+//						if (SpecialVariables.contains(ptex.getText())) {
+//							sb.append(SpecialVariables.get(ptex.getText()));
+//						} else {
+//
+//						}
 					} else {
 //						final OS_Element el = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) pte.expression_num, module);
 						String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
