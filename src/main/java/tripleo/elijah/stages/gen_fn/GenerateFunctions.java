@@ -384,15 +384,15 @@ public class GenerateFunctions {
 
 						final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
 
-						final TypeTableEntry t = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(tn));
-//						label_next = gf.addLabel();
+						final int tmp = addTempTableEntry(new OS_Type(tn), id, gf); // TODO no context!
+						VariableTableEntry vte_tmp = gf.getVarTableEntry(tmp);
+						final TypeTableEntry t = vte_tmp.type;
 						add_i(gf, InstructionName.IS_A, List_of(i, new IntegerIA(t.getIndex()), /*TODO not*/new LabelIA(label_next)), cctx);
 						final Context context = mc1.getContext();
 
-						final int tmp = addTempTableEntry(new OS_Type(mc1.getTypeName()), id, gf); // TODO no context!
 						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), context);
-						VariableTableEntry vte_tmp = gf.getVarTableEntry(tmp);
-						vte_tmp.addPotentialType(-1, t); // TODO in the future instructionIndex may be unsigned
+						final int cast_inst = add_i(gf, InstructionName.CAST, List_of(new IntegerIA(tmp), new IntegerIA(t.getIndex()), (i)), context);
+						vte_tmp.addPotentialType(cast_inst, t); // TODO in the future instructionIndex may be unsigned
 
 						for (final FunctionItem item : mc1.getItems()) {
 							generate_item((OS_Element) item, gf, context);

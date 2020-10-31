@@ -240,6 +240,9 @@ public class DeduceTypes2 {
 				break;
 			case PC:
 				break;
+			case CAST:
+				// README potentialType info is already added by MatchConditional
+				break;
 			case DECL:
 //				throw new NotImplementedException();
 				break;

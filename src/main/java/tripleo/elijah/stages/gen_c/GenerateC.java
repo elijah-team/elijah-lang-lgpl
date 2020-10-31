@@ -336,6 +336,11 @@ public class GenerateC {
 					generate_method_decl(instruction, tos, gf);
 				}
 				break;
+			case CAST:
+				{
+					generate_method_cast(instruction, tos, gf);
+				}
+				break;
 			case NOP:
 				break;
 			default:
@@ -346,6 +351,18 @@ public class GenerateC {
 		tos.put_string_ln("}");
 		tos.flush();
 		tos.close();
+	}
+
+	private void generate_method_cast(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
+		final IntegerIA  vte_num_ = (IntegerIA) instruction.getArg(0);
+		final IntegerIA vte_type_ = (IntegerIA) instruction.getArg(1);
+		final IntegerIA vte_targ_ = (IntegerIA) instruction.getArg(2);
+		final String target_name = getRealTargetName(gf, vte_num_);
+		final TypeTableEntry target_type_ = gf.getTypeTableEntry(vte_type_.getIndex());
+		final String target_type = getTypeName(target_type_.attached);
+		final String source_target = getRealTargetName(gf, vte_targ_);
+
+		tos.put_string_ln(String.format("%s = (%s)%s;", target_name, target_type, source_target));
 	}
 
 	private void generate_method_decl(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
