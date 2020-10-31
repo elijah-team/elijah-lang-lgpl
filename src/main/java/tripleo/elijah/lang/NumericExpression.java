@@ -15,6 +15,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.util.NotImplementedException;
 
 public class NumericExpression implements IExpression {
@@ -26,7 +27,7 @@ public class NumericExpression implements IExpression {
 		carrier = aCarrier;
 	}
 
-	public NumericExpression(final Token n) {
+	public NumericExpression(final @NotNull Token n) {
 		this.n = n;
 		carrier = Integer.parseInt(n.getText());
 	}
@@ -41,43 +42,55 @@ public class NumericExpression implements IExpression {
 		throw new NotImplementedException(); // TODO
 	}
 
+	// region kind
+
+	@Override  // IExpression
+	public ExpressionKind getKind() {
+		return ExpressionKind.NUMERIC; // TODO
+	}
+
+	@Override  // IExpression
+	public void setKind(final ExpressionKind aType) {
+		// log and ignore
+		System.err.println("Trying to set ExpressionType of NumericExpression to "+aType.toString());
+	}
+
+	// endregion
+
+	// region representation
+
 	@Override
 	public String repr_() {
 		return toString();
 	}
 
 	@Override
-	public ExpressionKind getKind() {
-		return ExpressionKind.NUMERIC; // TODO
-	}
-
-	@Override
-	public void setKind(final ExpressionKind aType) {
-		// log and ignore
-		System.err.println("Trying to set ExpressionType of NumericExpression to "+aType.toString());
-	}
-	
-	@Override
 	public String toString() {
 		return String.format("NumericExpression (%d)", carrier);
 	}
+
+	//endregion
 
 	@Override
 	public boolean is_simple() {
 		return true;
 	}
 
+	// region type
+
 	OS_Type _type;
 
-	@Override
+	@Override  // IExpression
 	public void setType(final OS_Type deducedExpression) {
 		_type = deducedExpression;
     }
 
-	@Override
+	@Override  // IExpression
 	public OS_Type getType() {
     	return _type;
 	}
+
+	// endregion
 
 	public int getValue() {
 		return carrier;
