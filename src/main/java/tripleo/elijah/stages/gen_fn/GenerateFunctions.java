@@ -177,7 +177,7 @@ public class GenerateFunctions {
 					break;
 				case AUG_MULT:
 					{
-						System.out.println(String.format("801.1 AUG_MULT %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
+						System.out.println(String.format("801.1 %s %s %s", expressionKind, x.getLeft(), ((BasicBinaryExpression) x).getRight()));
 //						BasicBinaryExpression bbe = (BasicBinaryExpression) x;
 //						final IExpression right1 = bbe.getRight();
 						final InstructionArgument left = simplify_expression(x.getLeft(), gf, cctx);
