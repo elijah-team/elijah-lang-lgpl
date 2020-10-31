@@ -28,26 +28,8 @@ import java.util.List;
 // TODO FunctionDef is not a Container is it?
 public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
 
-	private boolean _isAbstract;
-	private FunctionModifiers _mod;
-
 	public Iterable<FormalArgListItem> getArgs() {
 		return mFal.items();
-	}
-	private final List<String> mDocs = new ArrayList<String>();
-
-	@Override
-	public void addDocString(final Token aText) {
-		mDocs.add(aText.getText());
-	}
-
-	public void setAbstract(final boolean b) {
-		_isAbstract = b;
-		if (b) {this.set(FunctionModifiers.ABSTRACT);}
-	}
-
-	public void set(final FunctionModifiers mod) {
-		_mod = mod;
 	}
 
 	public void setReturnType(final TypeName tn) {
@@ -69,7 +51,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		
 		@Override
 		public void addDocString(final Token aS) {
-			docstrings.add(aS.getText());
+			mDocs.add(aS.getText());
 		}
 		
 		@Override
@@ -117,11 +99,10 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	public Attached _a = new Attached();
 	private TypeName _returnType = null;
-	private final List<String> docstrings = new ArrayList<String>();
-	public IdentExpression funName;
-	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
-	private final FormalArgList mFal = new FormalArgList();
 	private final FunctionDefScope mScope2 = new FunctionDefScope();
+
+	// region constructor
+
 	private final OS_Element parent;
 
 	public FunctionDef(final OS_Element aElement) {
@@ -133,22 +114,39 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		}
 	}
 
+	public FunctionDef(OS_Element element, Context context) {
+		parent = element;
+		if (element instanceof OS_Container) {
+			((OS_Container) parent).add(this);
+		} else {
+			throw new IllegalStateException("adding FunctionDef to " + element.getClass().getName());
+		}
+		_a.setContext(new FunctionContext(context, this));
+	}
+
+	// endregion
+
+	// region arglist
+
 	public FormalArgList fal() {
 		return mFal;
 	}
 
-	@Override // OS_Element
-	public Context getContext() {
-		return _a._context;
-	}
+	private final FormalArgList mFal = new FormalArgList();
 
-	public List<FunctionItem> getItems() {
-		return items;
-	}
+	// endregion
 
 	@Override // OS_Element
 	public OS_Element getParent() {
 		return parent;
+	}
+
+	// region items
+
+	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+
+	public List<FunctionItem> getItems() {
+		return items;
 	}
 
 	@Override // OS_Container
@@ -176,6 +174,8 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 			throw new IllegalStateException(String.format("Cant add %s to FunctionDef", anElement));
 	}
 
+	// endregion
+
 	/**
 	 * Can be {@code null} under the following circumstances:<br/><br/>
 	 *
@@ -194,10 +194,6 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		return mScope2;
 	}
 
-	public void setName(final IdentExpression aText) {
-		funName = aText;
-	}
-
 //	public void visit(JavaCodeGen gen) {
 //		// TODO Auto-generated method stub
 //		for (FunctionItem element : items)
@@ -210,6 +206,14 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		throw new NotImplementedException();
 	}
 
+	// region name
+
+	public IdentExpression funName;
+
+	public void setName(final IdentExpression aText) {
+		funName = aText;
+	}
+
 	@Override // OS_Element2
 	public String name() {
 		if (funName == null)
@@ -217,12 +221,25 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		return funName.getText();
 	}
 
+	// endregion
+
+	// region context
+
+	@Override // OS_Element
+	public Context getContext() {
+		return _a._context;
+	}
+
 	public void setContext(final FunctionContext ctx) {
 		_a.setContext(ctx);
 	}
 
+	// endregion
+
 	public void postConstruct() { // TODO
 	}
+
+	// region annotations
 
 	List<AnnotationClause> annotations = null;
 
@@ -231,6 +248,40 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 			annotations = new ArrayList<AnnotationClause>();
 		annotations.add(a);
 	}
+
+	// endregion
+
+	// region Documentable
+
+	private final List<String> mDocs = new ArrayList<String>();
+
+	@Override  // Documentable
+	public void addDocString(final Token aText) {
+		mDocs.add(aText.getText());
+	}
+
+	// endregion
+
+	// region abstract
+
+	private boolean _isAbstract;
+
+	public void setAbstract(final boolean b) {
+		_isAbstract = b;
+		if (b) {this.set(FunctionModifiers.ABSTRACT);}
+	}
+
+	// endregion
+
+	// region modifiers
+
+	private FunctionModifiers _mod;
+
+	public void set(final FunctionModifiers mod) {
+		_mod = mod;
+	}
+
+	// endregion
 }
 
 //
