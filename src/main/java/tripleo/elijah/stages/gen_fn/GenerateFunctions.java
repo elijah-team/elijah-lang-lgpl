@@ -160,8 +160,11 @@ public class GenerateFunctions {
 		} else if (item instanceof CaseConditional) {
 			throw new NotImplementedException();
 		} else if (item instanceof ClassStatement) {
-			//throw new NotImplementedException();
-			System.out.println("Skip class for now "+((ClassStatement) item).name());
+//			System.out.println("Skip class for now "+((ClassStatement) item).name());
+			GeneratedClass gc = generateClass((ClassStatement) item);
+			int ite_index = addIdentTableEntry(((ClassStatement) item).getNameNode(), gf);
+			IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
+			ite.resolve(gc);
 		} else if (item instanceof StatementWrapper) {
 //				System.err.println("106");
 			final IExpression x = ((StatementWrapper) item).getExpr();
@@ -280,6 +283,43 @@ public class GenerateFunctions {
 		} else {
 			throw new IllegalStateException("cant be here");
 		}
+	}
+
+	private @NotNull GeneratedClass generateClass(@NotNull ClassStatement klass) {
+		GeneratedClass gc = new GeneratedClass(klass, module);
+		AccessNotation an = null;
+
+		for (ClassItem item : klass.getItems()) {
+			if (item instanceof AliasStatement) {
+				throw new NotImplementedException();
+			} else if (item instanceof ClassStatement) {
+				throw new NotImplementedException();
+			} else if (item instanceof ConstructorDef) {
+				throw new NotImplementedException();
+			} else if (item instanceof DestructorDef) {
+				throw new NotImplementedException();
+			} else if (item instanceof FunctionDef) {
+				throw new NotImplementedException();
+			} else if (item instanceof DefFunctionDef) {
+				throw new NotImplementedException();
+			} else if (item instanceof NamespaceStatement) {
+				throw new NotImplementedException();
+			} else if (item instanceof VariableSequence) {
+				VariableSequence vsq = (VariableSequence) item;
+				for (VariableStatement vs : vsq.items()) {
+					System.out.println("6999 "+vs);
+					gc.addVarTableEntry(an, vs);
+				}
+			} else if (item instanceof AccessNotation) {
+				an = (AccessNotation) item;
+//				gc.addAccessNotation(an);
+			} else
+				throw new NotImplementedException();
+		}
+
+		gc.createCtor0();
+
+		return gc;
 	}
 
 	private void generate_item_assignment(@NotNull final IExpression x, @NotNull final GeneratedFunction gf, final Context cctx) {
