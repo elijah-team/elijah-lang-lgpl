@@ -614,7 +614,8 @@ public class GenerateFunctions {
 		R = Collections2.transform(args.expressions(), new Function<IExpression, InstructionArgument>() {
 			@Override
 			public @Nullable InstructionArgument apply(@Nullable final IExpression input) {
-				@Nullable final IExpression expression = input;
+				assert input != null;
+				@NotNull final IExpression expression = input;
 				final InstructionArgument ia = simplify_expression(expression, gf, cctx);
 				if (ia != null) {
 					System.err.println("109 "+expression);
