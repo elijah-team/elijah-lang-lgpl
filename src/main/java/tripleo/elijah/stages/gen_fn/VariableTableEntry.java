@@ -51,6 +51,11 @@ public class VariableTableEntry {
 	public void addPotentialType(final int instructionIndex, final TypeTableEntry tte) {
 		if (!potentialTypes.containsKey(instructionIndex))
 			potentialTypes.put(instructionIndex, tte);
+		else {
+			TypeTableEntry v = potentialTypes.get(instructionIndex);
+			assert v.attached == null;
+			v.attached = tte.attached;
+		}
 	}
 
 	public @NotNull Collection<TypeTableEntry> potentialTypes() {
