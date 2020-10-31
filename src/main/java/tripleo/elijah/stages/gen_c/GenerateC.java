@@ -81,7 +81,7 @@ public class GenerateC {
 //			System.err.println("8999 "+instruction);
 			final Label label = gf.findLabel(instruction.getIndex());
 			if (label != null) {
-				tos.put_string_ln(label.getName()+":");
+				tos.put_string_ln(label.getName() + ":");
 			}
 			switch (instruction.getName()) {
 			case E:
@@ -169,7 +169,7 @@ public class GenerateC {
 
 					final Label realTarget = (Label) target;
 
-					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lhs).getIndex());
+					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) lhs).getIndex());
 					assert rhs != null;
 
 					if (rhs instanceof ConstTableIA) {
@@ -197,7 +197,7 @@ public class GenerateC {
 
 					final Label realTarget = (Label) target;
 
-					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lhs).getIndex());
+					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) lhs).getIndex());
 					assert rhs != null;
 
 					if (rhs instanceof ConstTableIA) {
@@ -277,7 +277,7 @@ public class GenerateC {
 								xxx = getRealTargetName(gf, (IntegerIA) xx);
 							} else {
 								xxx = text;
-								System.err.println("xxx is null "+text);
+								System.err.println("xxx is null " + text);
 							}
 							sb.append(xxx);
 						} else {
@@ -304,15 +304,15 @@ public class GenerateC {
 				break;
 			case IS_A:
 				{
-					final IntegerIA testing_var_   = (IntegerIA)instruction.getArg(0);
-					final IntegerIA testing_type_  = (IntegerIA)instruction.getArg(1);
-					final Label     target_label   = ((LabelIA)instruction.getArg(2)).label;
+					final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
+					final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
+					final Label     target_label  = ((LabelIA) instruction.getArg(2)).label;
 
 					final VariableTableEntry testing_var  = gf.getVarTableEntry(testing_var_.getIndex());
 					final TypeTableEntry     testing_type = gf.getTypeTableEntry(testing_type_.getIndex());
 
-					System.err.println("8887 "+testing_var);
-					System.err.println("8888 "+testing_type);
+					System.err.println("8887 " + testing_var);
+					System.err.println("8888 " + testing_type);
 
 					final OS_Type x = testing_type.attached;
 					if (x != null) {
@@ -322,11 +322,11 @@ public class GenerateC {
 							tos.put_string_ln(String.format("vsb = ZS<%s>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
 							tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
 						} else
-							System.err.println("8886 "+y.getClass().getName());
+							System.err.println("8886 " + y.getClass().getName());
 					} else {
 						System.err.println("8885 testing_type.attached is null " + testing_type);
 					}
-					final int yyy=2;
+					final int yyy = 2;
 				}
 				break;
 			case DECL:
