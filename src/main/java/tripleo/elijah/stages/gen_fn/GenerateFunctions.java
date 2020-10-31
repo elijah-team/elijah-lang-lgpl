@@ -171,7 +171,7 @@ public class GenerateFunctions {
 			final ExpressionKind expressionKind = x.getKind();
 //			System.err.println("106-1 "+x.getKind()+" "+x);
 			if (x.is_simple()) {
-//					int i = addTempTableEntry(x.getType(), gf);
+//				int i = addTempTableEntry(x.getType(), gf);
 				switch (expressionKind) {
 				case ASSIGNMENT:
 					System.err.println(String.format("703.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
