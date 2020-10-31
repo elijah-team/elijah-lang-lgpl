@@ -360,19 +360,32 @@ public class GenerateC {
 			return;
 		}
 
-		final TypeName y = x.getTypeName();
-		if (y instanceof NormalTypeName) {
-			final String z = getTypeName(y);
-			tos.put_string_ln(String.format("%s %s;", z, target_name));
+		if (x.getType() == OS_Type.Type.USER_CLASS) {
+			final String z = getTypeName(x);
+			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
 			return;
-		}
+		} else if (x.getType() == OS_Type.Type.USER) {
+			final TypeName y = x.getTypeName();
+			if (y instanceof NormalTypeName) {
+				final String z = getTypeName(y);
+				tos.put_string_ln(String.format("%s %s;", z, target_name));
+				return;
+			}
 
-		if (y != null) {
-			//
-			// VARIABLE WASN'T FULLY DEDUCED YET
-			//
-			System.err.println("8887 "+y.getClass().getName());
-			return;
+			if (y != null) {
+				//
+				// VARIABLE WASN'T FULLY DEDUCED YET
+				//
+				System.err.println("8887 "+y.getClass().getName());
+				return;
+			}
+		} else if(x.getType() == OS_Type.Type.BUILT_IN) {
+			final Context context = gf.getFD().getContext();
+			assert context != null;
+			final OS_Type type = x.resolve(context);
+			System.err.println("Bad potentialTypes size " + type);
+			final String z = getTypeName(type);
+			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
 		}
 
 		//
@@ -388,16 +401,8 @@ public class GenerateC {
 			assert attached != null;
 			final String z = getTypeName(attached);
 			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
-		} else {
-			assert x.getType() == OS_Type.Type.BUILT_IN;
-			final Context context = gf.getFD().getContext();
-			assert context != null;
-			final OS_Type type = x.resolve(context);
-			System.err.println("Bad potentialTypes size "+type);
-			final String z = getTypeName(type);
-			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
 		}
-//		System.err.println("8886 y is null (No typename specified)");
+		System.err.println("8886 y is null (No typename specified)");
 	}
 
 
