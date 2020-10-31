@@ -61,7 +61,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		@Override
 		public void add(final StatementItem aItem) {
 			if (!(aItem instanceof FunctionItem)) {
-				System.err.println(String.format("adding false FunctionItem %s", aItem.getClass().getName()));
+				System.err.println(String.format("Will not add false StatementItem, is not FunctionItem %s", aItem.getClass().getName()));
 				return;
 			}
 			items.add((FunctionItem) aItem);
@@ -79,7 +79,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		
 		@Override
 		public InvariantStatement invariantStatement() {
-			return null;
+			throw new NotImplementedException();
 		}
 
 		@Override
@@ -90,12 +90,11 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		@Override
 		public void statementWrapper(final IExpression aExpr) {
 			add(new StatementWrapper(aExpr, getContext(), getParent()));
-//			throw new NotImplementedException(); // TODO
 		}
 
 		@Override
 		public TypeAliasExpression typeAlias() {
-			return null;
+			throw new NotImplementedException();
 		}
 
 		/* (non-Javadoc)
@@ -107,23 +106,23 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 			return FunctionDef.this;
 		}
 
+		/* (non-Javadoc)
+		 * @see tripleo.elijah.lang.Scope#getElement()
+		 */
 		@Override
 		public OS_Element getElement() {
 			return FunctionDef.this;
 		}
-
-
 	}
 
 	public Attached _a = new Attached();
-	private TypeName _returnType = null/*new RegularTypeName()*/;
+	private TypeName _returnType = null;
 	private final List<String> docstrings = new ArrayList<String>();
 	public IdentExpression funName;
 	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 	private final FormalArgList mFal = new FormalArgList();
 	private final FunctionDefScope mScope2 = new FunctionDefScope();
-	//	private FunctionDefScope mScope;
-	private final OS_Element/*ClassStatement*/ parent;
+	private final OS_Element parent;
 
 	public FunctionDef(final OS_Element aElement) {
 		parent = aElement;
@@ -177,14 +176,21 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 			throw new IllegalStateException(String.format("Cant add %s to FunctionDef", anElement));
 	}
 
+	/**
+	 * Can be {@code null} under the following circumstances:<br/><br/>
+	 *
+	 * 1. The compiler(parser) didn't get a chance to set it yet<br/>
+	 * 2. The programmer did not specify a return value and the compiler must deduce it<br/>
+	 * 3. The function is a void-type and specification isn't required <br/>
+	 *
+	 * @return the associated TypeName or NULL
+	 */
 	public TypeName returnType() {
-		// TODO Auto-generated method stub
 //		if (_returnType.isNull()) System.err.println("101 NULL (Unresolved) returnType");
 		return _returnType;
 	}
 
 	public Scope scope() {
-		//assert mScope == null;
 		return mScope2;
 	}
 
