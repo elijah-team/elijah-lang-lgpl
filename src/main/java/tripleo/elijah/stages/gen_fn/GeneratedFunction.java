@@ -352,7 +352,12 @@ public class GeneratedFunction {
 		return String.join(".", sl);
 	}
 
-
+	public VariableTableEntry getSelf() {
+		if (getFD().getParent() instanceof ClassStatement)
+			return getVarTableEntry(0);
+		else
+			return null;
+	}
 }
 
 //
