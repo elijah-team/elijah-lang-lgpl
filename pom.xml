@@ -8,8 +8,8 @@
     <name>eljc-v1</name>
     <url>http://gitlab.com/elijah-team/elijah-lang/</url>
     <properties>
-        <maven.compiler.source>10</maven.compiler.source>
-        <maven.compiler.target>10</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <jacoco.version>0.8.6</jacoco.version>
         <downloadSources>true</downloadSources>
         <guava.version>29.0-jre</guava.version>
