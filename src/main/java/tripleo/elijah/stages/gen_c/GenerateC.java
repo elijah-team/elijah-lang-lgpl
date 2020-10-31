@@ -115,8 +115,9 @@ public class GenerateC {
 					final InstructionArgument value  = instruction.getArg(1);
 
 					final String realTarget = getRealTargetName(gf, (IntegerIA) target);
-					tos.put_string_ln(String.format("%s = %s;", realTarget, getAssignmentValue(value, gf)));
-					final int y=2;
+					String s = String.format("%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
+					tos.put_string_ln(s);
+					final int y = 2;
 				}
 				break;
 			case AGNK:
@@ -125,8 +126,9 @@ public class GenerateC {
 					final InstructionArgument value  = instruction.getArg(1);
 
 					final String realTarget = getRealTargetName(gf, (IntegerIA) target);
-					tos.put_string_ln(String.format("%s = %s;", realTarget, getAssignmentValue(value, gf)));
-					final int y=2;
+					String s = String.format("%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
+					tos.put_string_ln(s);
+					final int y = 2;
 				}
 				break;
 			case AGNT:
@@ -147,14 +149,14 @@ public class GenerateC {
 					if (rhs instanceof ConstTableIA) {
 						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
 						final String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, getAssignmentValue(gf.getSelf(), rhs, gf)));
 						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 					} else {
 						//
 						// TODO need to lookup special __eq__ function
 						//
 						String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, getAssignmentValue(gf.getSelf(), rhs, gf)));
 						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 
 						final int y = 2;
@@ -175,14 +177,14 @@ public class GenerateC {
 					if (rhs instanceof ConstTableIA) {
 						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
 						final String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, getAssignmentValue(gf.getSelf(), rhs, gf)));
 						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 					} else {
 						//
 						// TODO need to lookup special __ne__ function ??
 						//
 						String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, getAssignmentValue(gf.getSelf(), rhs, gf)));
 						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 
 						final int y = 2;
@@ -203,14 +205,14 @@ public class GenerateC {
 					if (rhs instanceof ConstTableIA) {
 						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
 						final String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, getAssignmentValue(gf.getSelf(), rhs, gf)));
 						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 					} else {
 						//
 						// TODO need to lookup special __lt__ function
 						//
 						String realTargetName = getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, getAssignmentValue(rhs, gf)));
+						tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, getAssignmentValue(gf.getSelf(), rhs, gf)));
 						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 
 						final int y = 2;
@@ -458,7 +460,7 @@ public class GenerateC {
 	}
 
 	@NotNull
-	private String getAssignmentValue(final InstructionArgument value, final GeneratedFunction gf) {
+	private String getAssignmentValue(VariableTableEntry value_of_this, final InstructionArgument value, final GeneratedFunction gf) {
 		final StringBuilder sb = new StringBuilder();
 		if (value instanceof FnCallArgs) {
 			final FnCallArgs fca = (FnCallArgs) value;
