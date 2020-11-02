@@ -38,6 +38,28 @@ public class GeneratedClass implements GeneratedNode {
 
 	public void createCtor0() {
 		// TODO implement me
+		FunctionDef fd = new FunctionDef(klass, klass.getContext());
+		for (VarTableEntry varTableEntry : varTable) {
+			if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
+				IExpression left = varTableEntry.nameToken;
+				IExpression right = varTableEntry.initialValue;
+
+				IExpression e = ExpressionBuilder.build(left, ExpressionKind.ASSIGNMENT, right);
+				fd.add(new StatementWrapper(e, fd.getContext(), fd));
+			} else {
+				if (getPragma("auto_construct")) {
+					fd.add(new ConstructExpression(fd, fd.getContext(), varTableEntry.nameToken, null));
+				}
+			}
+		}
+	}
+
+	private boolean getPragma(String auto_construct) { // TODO this should be part of Context
+		return false;
+	}
+
+	public String getName() {
+		return klass.getName();
 	}
 
 	class VarTableEntry {

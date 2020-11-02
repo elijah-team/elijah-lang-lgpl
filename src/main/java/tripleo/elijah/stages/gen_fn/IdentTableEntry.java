@@ -69,6 +69,10 @@ public class IdentTableEntry {
 	public boolean isResolved() {
 		return resolved != null;
 	}
+
+	public GeneratedNode resolved() {
+		return resolved;
+	}
 }
 
 //

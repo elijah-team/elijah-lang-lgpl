@@ -307,10 +307,14 @@ public class GenerateFunctions {
 			} else if (item instanceof VariableSequence) {
 				VariableSequence vsq = (VariableSequence) item;
 				for (VariableStatement vs : vsq.items()) {
-					System.out.println("6999 "+vs);
+//					System.out.println("6999 "+vs);
 					gc.addVarTableEntry(an, vs);
 				}
 			} else if (item instanceof AccessNotation) {
+				//
+				// TODO two AccessNotation's can be active at once, for example if the first
+				//  one defined only classes and the second one defined only a category
+				//
 				an = (AccessNotation) item;
 //				gc.addAccessNotation(an);
 			} else

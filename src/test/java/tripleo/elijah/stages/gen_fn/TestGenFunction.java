@@ -117,7 +117,7 @@ public class TestGenFunction {
 		}
 
 		final GenerateFunctions gfm = new GenerateFunctions(m);
-		final List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
+		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
 
 //		for (GeneratedFunction gf : lgf) {
 //			for (Instruction instruction : gf.instructions()) {
