@@ -39,7 +39,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 //	 */
 //	public ClassStatement() {
 //	}
-	
+
 	public ClassStatement(final OS_Element aElement) {
 		parent = aElement; // setParent
 		if (aElement instanceof  OS_Module) {
@@ -53,6 +53,22 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		} else {
 			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", aElement));
 		}
+	}
+
+	public ClassStatement(final OS_Element aElement, final Context parentContext) {
+		parent = aElement; // setParent
+		if (aElement instanceof  OS_Module) {
+			final OS_Module module = (OS_Module) aElement;
+			//
+			this.setPackageName(module.pullPackageName());
+			_packageName.addElement(this);
+			module.add(this);
+		} else if (aElement instanceof OS_Container) {
+			((OS_Container) aElement).add(this);
+		} else {
+			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", aElement));
+		}
+		setContext(new ClassContext(parentContext, this));
 	}
 
 //	/**
