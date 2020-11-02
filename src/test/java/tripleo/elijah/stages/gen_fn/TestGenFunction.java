@@ -77,23 +77,28 @@ public class TestGenFunction {
 		}
 
 		new DeduceTypes2(m).deduceFunctions(lgf);
-		for (final GeneratedFunction gf : lgf) {
-			if (gf.name().equals("main")) {
-				for (int i = 0; i < gf.vte_list.size(); i++) {
-					final VariableTableEntry vte = gf.getVarTableEntry(i);
-					System.out.println(String.format("8007 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
-					if (vte.type.attached != null) {
-						Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
-						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
+
+		for (final GeneratedNode gn : lgf) {
+			if (gn instanceof GeneratedFunction) {
+				GeneratedFunction gf = (GeneratedFunction) gn;
+
+				if (gf.name().equals("main")) {
+					for (int i = 0; i < gf.vte_list.size(); i++) {
+						final VariableTableEntry vte = gf.getVarTableEntry(i);
+						System.out.println(String.format("8007 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
+						if (vte.type.attached != null) {
+							Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
+							Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
+						}
 					}
-				}
-			} else if (gf.name().equals("factorial")) {
-				for (int i = 0; i < gf.vte_list.size(); i++) {
-					final VariableTableEntry vte = gf.getVarTableEntry(i);
-					System.out.println(String.format("8008 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
-					if (vte.type.attached != null) {
-						Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
-						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
+				} else if (gf.name().equals("factorial")) {
+					for (int i = 0; i < gf.vte_list.size(); i++) {
+						final VariableTableEntry vte = gf.getVarTableEntry(i);
+						System.out.println(String.format("8008 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
+						if (vte.type.attached != null) {
+							Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
+							Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
+						}
 					}
 				}
 			}
