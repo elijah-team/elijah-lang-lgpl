@@ -12,8 +12,8 @@ import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.nodes.ImportNode;
 import tripleo.elijah.gen.nodes.LocalDeclAgnNode;
 import tripleo.util.NotImplementedException;
-import tripleo.util.buffer.Buffer;
 import tripleo.util.buffer.FileBackedBuffer;
+import tripleo.util.buffer.TextBuffer;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,8 +22,8 @@ import java.util.Map;
 
 public class GenBuffer {
 
-	private final Map<String, Buffer> hdr_bufs = new HashMap<String, Buffer>();
-	private final Map<String, Buffer> reg_bufs = new HashMap<String, Buffer>();
+	private final Map<String, TextBuffer> hdr_bufs = new HashMap<String, TextBuffer>();
+	private final Map<String, TextBuffer> reg_bufs = new HashMap<String, TextBuffer>();
 
 	public void GenImportStmt(final CompilerContext cctx, final ImportNode impn) {
 		// TODO Auto-generated method stub
@@ -37,24 +37,24 @@ public class GenBuffer {
 
 	}
 
-	public Buffer moduleBufHdr(final String module) {
+	public TextBuffer moduleBufHdr(final String module) {
 //		NotImplementedException.raise();
 		if (hdr_bufs.containsKey(module)) {
 			return hdr_bufs.get(module);
 		} else {
-			final Buffer buf = new FileBackedBuffer(module + ".h");
+			final TextBuffer buf = new FileBackedBuffer(module + ".h");
 			hdr_bufs.put(module, buf);
 			return buf;
 		}
 	}
 
-	public Buffer moduleBufImpl(final String module) {
+	public TextBuffer moduleBufImpl(final String module) {
 		// TODO Auto-generated method stub
 //		NotImplementedException.raise();
 		if (reg_bufs.containsKey(module)) {
 			return reg_bufs.get(module);
 		} else {
-			final Buffer buf = new FileBackedBuffer(module + ".c");
+			final TextBuffer buf = new FileBackedBuffer(module + ".c");
 			reg_bufs.put(module, buf);
 			return buf;
 		}
@@ -74,9 +74,9 @@ public class GenBuffer {
 //	}
 	
 	public void writeBuffers() throws IOException {
-		for (final Map.Entry<String, Buffer> entry : reg_bufs.entrySet()) {
+		for (final Map.Entry<String, TextBuffer> entry : reg_bufs.entrySet()) {
 			final String module = entry.getKey();
-			final Buffer build  = entry.getValue();
+			final TextBuffer build  = entry.getValue();
 			//
 			final FileOutputStream fileOutputStream;
 			fileOutputStream = new FileOutputStream(module + ".c", true); // append

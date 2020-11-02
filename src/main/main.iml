@@ -34,7 +34,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="com.google.guava:guava:29.0-jre" level="project" />
-    <orderEntry type="library" name="buffers-v1-0.0.2" level="project" />
     <orderEntry type="module-library">
       <library name="spotbugs-annotations">
         <CLASSES>
@@ -46,5 +45,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="range-v1-0.0.3b" level="project" />
+    <orderEntry type="library" name="buffers-v1-0.0.3" level="project" />
   </component>
 </module>
