@@ -17,10 +17,7 @@ import tripleo.elijah.gen.nodes.*;
 import tripleo.elijah.lang.NumericExpression;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.util.buffer.Buffer;
-import tripleo.util.buffer.DefaultBuffer;
-import tripleo.util.buffer.Transform;
-import tripleo.util.buffer.XX;
+import tripleo.util.buffer.*;
 
 import java.util.List;
 
@@ -172,7 +169,7 @@ public class FactorialR /* extends TestCase */ {
 	}
 	
 	private void GenReturnAgn(final CompilerContext cctx, final ReturnAgnNode node, final GenBuffer gbn) {
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.append("vsr =");
 		buf.append(node.getExpr().genText(cctx));
 		buf.append_ln(";");
@@ -180,15 +177,15 @@ public class FactorialR /* extends TestCase */ {
 	}
 	
 	@Deprecated private void GenReturnAgnSimpleInt(final CompilerContext cctx, final ReturnAgnSimpleIntNode rasin, final GenBuffer gbn) {
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.append("vsr = ");
 		buf.append(((Integer)rasin.getValue()).toString());
 		buf.append_nl(";");
 	}
 	
-	public static Buffer GenLocalAgn(final CompilerContext cctx, final LocalAgnTmpNode node, final GenBuffer gbn) {
+	public static TextBuffer GenLocalAgn(final CompilerContext cctx, final LocalAgnTmpNode node, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 //		if (node instanceof LocalAgnTmpNode) {
 //			BufferSequenceBuilder sb=new BufferSequenceBuilder(6).
 //					named("open").named("type").named("name").
@@ -204,13 +201,13 @@ public class FactorialR /* extends TestCase */ {
 	}
 	
 	private void CloseTmpCtx(final CompilerContext cctx, final LocalAgnTmpNode lamn, final GenBuffer gbn) {
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.append_cb(""); // close-brace
 	}
 	
 	private void BeginDefaultCaseStatement(final CompilerContext cctx, final CaseChoiceNode node, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.incr_i();
 		buf.append_ln("default: {");
 		if (!node.is_default())
@@ -245,7 +242,7 @@ public class FactorialR /* extends TestCase */ {
 
 	private void BeginCaseChoice(final CompilerContext cctx, final CaseChoiceNode node, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 		final boolean is_simple = node.left.is_const_expr();
 		final boolean is_default = node.is_simple();
 		if (is_default) {
@@ -263,15 +260,15 @@ public class FactorialR /* extends TestCase */ {
 	
 	private void CloseCaseChoice(final CompilerContext cctx, final CloseCaseNode node, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		final Buffer buf = gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf = gbn.moduleBufImpl(cctx.module());
 		buf.decr_i();
 		buf.append_ln("break; }");
 //		buf.append_nl("} // close select ("+node.hdr_node.left.genName+")"); // TODO left was expr
 	}
 	
-	public static Buffer BeginTmpSSACtx(final CompilerContext cctx, final TmpSSACtxNode node, final GenBuffer gbn) {
+	public static TextBuffer BeginTmpSSACtx(final CompilerContext cctx, final TmpSSACtxNode node, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.incr_i();
 		buf.append_ln("{");
 		if (node._tmp != null) {
@@ -286,7 +283,7 @@ public class FactorialR /* extends TestCase */ {
 	}
 
 	private void BeginCaseStatement(final CompilerContext cctx, final CaseHdrNode node, final GenBuffer gbn) {
-		final Buffer buf = gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf = gbn.moduleBufImpl(cctx.module());
 		final boolean is_simple = node.getExpr().is_simple();
 		buf.append_s("switch (");
 		if (is_simple) {
@@ -300,7 +297,7 @@ public class FactorialR /* extends TestCase */ {
 	
 	private void EndCaseStatement(final CompilerContext cctx, final CaseHdrNode node, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.decr_i();
 		buf.append_nl("} // close select "+node.getExpr().genText()+"");
 	}
@@ -318,7 +315,7 @@ public class FactorialR /* extends TestCase */ {
 
 	private void BeginMeth(final CompilerContext cctx, final MethHdrNode node, final GenBuffer gbn) {
 		// TODO Auto-generated method stub
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 /*
 		BufferSequenceBuilder sb = new BufferSequenceBuilder(4).
 				named("type").named("name").named("args").semieol();
@@ -346,14 +343,14 @@ public class FactorialR /* extends TestCase */ {
 		}
 	
 	private void EndMeth(final CompilerContext cctx, final MethHdrNode mhn, final GenBuffer gbn) {
-		final Buffer buf=gbn.moduleBufImpl(cctx.module());
+		final TextBuffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.append_ln("return vsr;");
 		buf.decr_i();
 		buf.append_ln("}");
 	}
 	
 	public void GenMethHdr(final CompilerContext cctx, final MethHdrNode node, final GenBuffer gbn) {
-		final Buffer buf = gbn.moduleBufHdr(cctx.module());
+		final TextBuffer buf = gbn.moduleBufHdr(cctx.module());
 		buf.append_s(node.returnType().genType());
 		buf.append(node.genName());
 		buf.append("(");

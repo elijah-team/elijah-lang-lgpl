@@ -15,7 +15,7 @@ import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.gen.ModuleRef;
 import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.gen.nodes.*;
-import tripleo.util.buffer.Buffer;
+import tripleo.util.buffer.TextBuffer;
 
 import static tripleo.elijah.util.Helpers.List_of;
 
@@ -91,14 +91,14 @@ public class FactorialDotElijahTest {
 		final LocalAgnTmpNode lamn=new LocalAgnTmpNode(tccssan, ExpressionNodeBuilder.binex(u64,
 				ExpressionNodeBuilder.varref("n", shn, u64),
 				ExpressionOperators.OP_MINUS, ExpressionNodeBuilder.integer(1)));
-		final Buffer b1 = FactorialR.BeginTmpSSACtx(cctx, tccssan, gbn);
+		final TextBuffer b1 = FactorialR.BeginTmpSSACtx(cctx, tccssan, gbn);
 //		Assert.assertEquals("{\n\tu64 ", b1.getText()); // TODO maybe this wll be right in the future.
 		Assert.assertEquals("{\n\tZ81 ", b1.getText());
 		
 		final TmpSSACtxNode tccssan2 = new TmpSSACtxNode(cctx);
 		final LocalAgnTmpNode latn2=new LocalAgnTmpNode(tccssan2, ExpressionNodeBuilder.fncall(
 				fact_r, List_of(lamn)));
-		final Buffer b2 = FactorialR.GenLocalAgn(cctx, latn2, gbn);
+		final TextBuffer b2 = FactorialR.GenLocalAgn(cctx, latn2, gbn);
 		Assert.assertEquals("{\n" +
 				"\tZ81 vt2 = z100factorial_r(vt1);\n" +
 				"\t", b2.getText());

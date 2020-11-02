@@ -46,7 +46,7 @@ public class FindBothSourceFiles {
 	}
 
 /*
-	public static Buffer GenLocalAgn(CompilerContext cctx, LocalAgnTmpNode node, GenBuffer gbn) {
+	public static TextBuffer GenLocalAgn(CompilerContext cctx, LocalAgnTmpNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 //		if (node instanceof LocalAgnTmpNode) {
@@ -63,7 +63,7 @@ public class FindBothSourceFiles {
 		return buf;
 	}
 
-	public static Buffer BeginTmpSSACtx(CompilerContext cctx, TmpSSACtxNode node, GenBuffer gbn) {
+	public static TextBuffer BeginTmpSSACtx(CompilerContext cctx, TmpSSACtxNode node, GenBuffer gbn) {
 		// TODO Auto-generated method stub
 		Buffer buf=gbn.moduleBufImpl(cctx.module());
 		buf.incr_i();
