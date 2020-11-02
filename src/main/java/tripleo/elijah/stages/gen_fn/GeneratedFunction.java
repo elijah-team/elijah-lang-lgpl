@@ -49,6 +49,29 @@ public class GeneratedFunction implements GeneratedNode {
 		fd = null;
 	}
 
+	public static void printTables(GeneratedFunction gf) {
+		System.out.println("VariableTable ");
+		for (VariableTableEntry variableTableEntry : gf.vte_list) {
+			System.out.println("\t"+variableTableEntry);
+		}
+		System.out.println("ConstantTable ");
+		for (ConstantTableEntry constantTableEntry : gf.cte_list) {
+			System.out.println("\t"+constantTableEntry);
+		}
+		System.out.println("ProcTable     ");
+		for (ProcTableEntry procTableEntry : gf.prte_list) {
+			System.out.println("\t"+procTableEntry);
+		}
+		System.out.println("TypeTable     ");
+		for (TypeTableEntry typeTableEntry : gf.tte_list) {
+			System.out.println("\t"+typeTableEntry);
+		}
+		System.out.println("IdentTable    ");
+		for (IdentTableEntry identTableEntry : gf.idte_list) {
+			System.out.println("\t"+identTableEntry);
+		}
+	}
+
 	/**
 	 *
 	 * @param ctx
