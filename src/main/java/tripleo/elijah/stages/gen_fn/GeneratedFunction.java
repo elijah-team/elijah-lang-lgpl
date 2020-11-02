@@ -23,7 +23,7 @@ import java.util.Stack;
 /**
  * Created 9/10/20 2:57 PM
  */
-public class GeneratedFunction {
+public class GeneratedFunction implements GeneratedNode {
 	public final @Nullable FunctionDef fd;
 	private final @Nullable DefFunctionDef dfd;
 	private final List<Label> labelList = new ArrayList<Label>();
