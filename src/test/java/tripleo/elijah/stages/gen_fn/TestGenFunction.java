@@ -142,26 +142,33 @@ public class TestGenFunction {
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 
 		final GenerateFunctions gfm = new GenerateFunctions(m);
-		final List<GeneratedFunction> lgf = gfm.generateAllTopLevelFunctions();
+		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
 
-		for (final GeneratedFunction gf : lgf) {
-			for (final Instruction instruction : gf.instructions()) {
-				System.out.println("8100 "+instruction);
+		for (final GeneratedNode gn : lgf) {
+			if (gn instanceof GeneratedFunction) {
+				GeneratedFunction gf = (GeneratedFunction) gn;
+				for (final Instruction instruction : gf.instructions()) {
+					System.out.println("8100 " + instruction);
+				}
 			}
 		}
 
 		new DeduceTypes2(m).deduceFunctions(lgf);
 
-		for (final GeneratedFunction gf : lgf) {
-			System.out.println("----------------------------------------------------------");
-			System.out.println(gf.name());
-			System.out.println("----------------------------------------------------------");
-			System.out.println("VariableTable " + gf.vte_list);
-			System.out.println("ConstantTable " + gf.cte_list);
-			System.out.println("ProcTable     " + gf.prte_list);
-			System.out.println("TypeTable     " + gf.tte_list);
-			System.out.println("IdentTable    " + gf.idte_list);
-			System.out.println("----------------------------------------------------------");
+		for (final GeneratedNode gn : lgf) {
+			if (gn instanceof GeneratedFunction) {
+				GeneratedFunction gf = (GeneratedFunction) gn;
+				System.out.println("----------------------------------------------------------");
+				System.out.println(gf.name());
+				System.out.println("----------------------------------------------------------");
+				GenerateFunctions.printTables(gf);
+//				System.out.println("VariableTable " + gf.vte_list);
+//				System.out.println("ConstantTable " + gf.cte_list);
+//				System.out.println("ProcTable     " + gf.prte_list);
+//				System.out.println("TypeTable     " + gf.tte_list);
+//				System.out.println("IdentTable    " + gf.idte_list);
+//				System.out.println("----------------------------------------------------------");
+			}
 		}
 	}
 
