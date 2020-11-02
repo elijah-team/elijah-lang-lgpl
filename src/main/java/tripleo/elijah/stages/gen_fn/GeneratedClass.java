@@ -20,7 +20,7 @@ import java.util.List;
 public class GeneratedClass implements GeneratedNode {
 	private final OS_Module module;
 	private final ClassStatement klass;
-	List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
+	public List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
 
 	public GeneratedClass(ClassStatement klass, OS_Module module) {
 		this.klass = klass;
@@ -62,9 +62,9 @@ public class GeneratedClass implements GeneratedNode {
 		return klass.getName();
 	}
 
-	class VarTableEntry {
-		private final IdentExpression nameToken;
-		private final IExpression initialValue;
+	public class VarTableEntry {
+		public final IdentExpression nameToken;
+		public final IExpression initialValue;
 
 		public VarTableEntry(IdentExpression nameToken, IExpression initialValue) {
 			this.nameToken = nameToken;

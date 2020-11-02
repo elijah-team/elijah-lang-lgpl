@@ -69,9 +69,23 @@ public class GenerateC {
 		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
 		try {
 			tos.put_string_ln(String.format("typedef struct z<%s> {", x.getName()));
-
-
+			tos.incr_tabs();
+			for (GeneratedClass.VarTableEntry o : x.varTable){
+				tos.put_string_ln(String.format("void *vm%s;", o.nameToken));
+			}
+			tos.dec_tabs();
+			tos.put_string_ln("");
 			tos.put_string_ln(String.format("} Z<%s>;", x.getName()));
+
+			tos.put_string_ln("");
+			tos.put_string_ln("");
+			tos.put_string_ln(String.format("Z<%s> ZC<%s>() {", x.getName(), x.getName()));
+			tos.incr_tabs();
+			tos.put_string_ln("");
+			tos.dec_tabs();
+			tos.put_string_ln(String.format("}", x.getName()));
+			tos.put_string_ln("");
+			tos.flush();
 		} finally {
 			tos.close();
 		}
