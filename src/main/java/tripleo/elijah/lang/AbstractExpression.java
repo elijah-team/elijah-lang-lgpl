@@ -9,7 +9,7 @@
 
 package tripleo.elijah.lang;
 
-public abstract class AbstractExpression implements IExpression, ScopeElement {
+public abstract class AbstractExpression implements IExpression {
 
 	public AbstractExpression() {
 		left  = null;

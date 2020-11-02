@@ -13,9 +13,14 @@ import tripleo.elijah.util.NotImplementedException;
 
 public class StringExpression extends AbstractExpression {
 
-public StringExpression(final Token g) {
+public StringExpression(final Token g) { // TODO List<Token>
 set(g.getText());
 }
+
+	@Override
+	public ExpressionKind getKind() {
+		return ExpressionKind.STRING_LITERAL;
+	}
 
 	@Override public boolean is_simple() {
 		return true;

@@ -19,7 +19,7 @@ import java.util.List;
 // Referenced classes of package pak2:
 //			Statement, LoopTypes, Scope
 
-public class Loop implements Statement, LoopTypes, StatementItem, FunctionItem, OS_Element {
+public class Loop implements /*Statement,*/ LoopTypes, StatementItem, FunctionItem, OS_Element {
 
 	private final Scope _scope = new LoopScope();
 	private final List<String> docstrings = new ArrayList<String>();

@@ -11,7 +11,17 @@
  */
 package tripleo.elijah.gen.nodes;
 
+import tripleo.elijah.lang.AnnotationClause;
+
 public class AnnotationNode {
+	//Qualident name;
+	//ExpressionList arguments;
+
+	public AnnotationNode(AnnotationClause ac) {
+		this.ac = ac;
+	}
+
+	AnnotationClause ac;
 }
 
 //

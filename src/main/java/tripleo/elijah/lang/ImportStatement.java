@@ -14,7 +14,7 @@ import tripleo.elijah.util.NotImplementedException;
 
 import java.util.List;
 
-public interface ImportStatement extends ModuleItem {
+public interface ImportStatement extends ModuleItem, ClassItem, StatementItem {
 
 	@Override
 	default void visitGen(final ICodeGen visit) {

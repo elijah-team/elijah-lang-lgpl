@@ -14,8 +14,8 @@ public interface IBinaryExpression extends IExpression {
 
 	void setRight(IExpression iexpression);
 
-	void shift(ExpressionKind aType);
+	@Deprecated void shift(ExpressionKind aType);
 
-	void set(IBinaryExpression aEx);
+	@Deprecated void set(IBinaryExpression aEx); // TODO what is this for?
 
 }

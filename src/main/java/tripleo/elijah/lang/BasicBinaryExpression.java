@@ -9,7 +9,7 @@
 
 package tripleo.elijah.lang;
 
-public class BasicBinaryExpression implements IBinaryExpression, ScopeElement {
+public class BasicBinaryExpression implements IBinaryExpression {
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

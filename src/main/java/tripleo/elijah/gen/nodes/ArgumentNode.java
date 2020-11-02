@@ -20,19 +20,18 @@ import tripleo.elijah.lang.IdentExpression;
  */
 public class ArgumentNode {
 	
-	private final TypeRef _typeRef;
+	private final TypeRef typeRef;
 	private IdentExpression ident;
 	private String genType;
-	private String _varName;
+	private String varName;
 
-	public ArgumentNode(final String varName, final TypeRef genType) {
-		super();
-		this.setVarName(varName);
-		this._typeRef = genType;
+	public ArgumentNode(final String varName, final TypeRef typeRef) {
+		this.varName = varName;
+		this.typeRef = typeRef;
 	}
 	
 	public TypeRef getTypeRef() {
-		return _typeRef;
+		return typeRef;
 	}
 	
 	public IdentExpression getIdent() {
@@ -44,7 +43,8 @@ public class ArgumentNode {
 	}
 	
 	public String getGenType() {
-		return _typeRef.genType();
+		// return typeRef.genGenType(); // TODO ??
+		return typeRef.genType();
 	}
 	
 	public void setGenType(final String genType) {
@@ -52,11 +52,11 @@ public class ArgumentNode {
 	}
 	
 	public String getVarName() {
-		return _varName;
+		return varName;
 	}
 	
 	public void setVarName(final String _varName) {
-		this._varName = _varName;
+		this.varName = _varName;
 	}
 	
 	public String getGenName() {

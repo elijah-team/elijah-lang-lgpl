@@ -7,6 +7,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import tripleo.elijah.comp.GenBuffer;
 import tripleo.elijah.gen.CompilerContext;
 import tripleo.elijah.lang.IdentExpression;
+import tripleo.elijah.util.NotImplementedException;
+
+import java.util.List;
 
 /**
  * @author Tripleo(sb)
@@ -14,7 +17,7 @@ import tripleo.elijah.lang.IdentExpression;
  */
 public class ClassDeclNode {
 
-	public ClassDeclNode(final String string, final Object object, final Object list_of) {
+	public ClassDeclNode(final String string, final List modifiers, final List<Inherited> inheritance) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -30,7 +33,7 @@ public class ClassDeclNode {
 
 	public @NonNull IdentExpression type() {
 		// TODO what is this
-		return null;
+		throw new NotImplementedException();
 	}
 
 }
