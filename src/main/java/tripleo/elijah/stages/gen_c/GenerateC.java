@@ -34,13 +34,46 @@ public class GenerateC {
 		this.module = m;
 	}
 
-	public void generateCode(final List<GeneratedFunction> lgf) {
-		for (final GeneratedFunction generatedFunction : lgf) {
-			try {
-				generateCodeForMethod(generatedFunction);
-			} catch (final IOException e) {
-				module.parent.eee.exception(e);
+	public void generateCode(final List<GeneratedNode> lgf) {
+		for (final GeneratedNode generatedNode : lgf) {
+			if (generatedNode instanceof GeneratedFunction) {
+				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
+				try {
+					generateCodeForMethod(generatedFunction);
+					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+						if (identTableEntry.isResolved()) {
+							GeneratedNode x = identTableEntry.resolved();
+
+							if (x instanceof GeneratedClass) {
+								generate_class((GeneratedClass) x);
+							} else
+								throw new NotImplementedException();
+						}
+					}
+				} catch (final IOException e) {
+					module.parent.eee.exception(e);
+				}
+			} else if (generatedNode instanceof GeneratedClass) {
+				try {
+					GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+					generate_class(generatedClass);
+				} catch (final IOException e) {
+					module.parent.eee.exception(e);
+				}
 			}
+		}
+	}
+
+	private void generate_class(GeneratedClass x) throws IOException {
+		int y=2;
+		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
+		try {
+			tos.put_string_ln(String.format("typedef struct z<%s> {", x.getName()));
+
+
+			tos.put_string_ln(String.format("} Z<%s>;", x.getName()));
+		} finally {
+			tos.close();
 		}
 	}
 

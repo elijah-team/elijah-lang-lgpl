@@ -38,7 +38,7 @@ public class GenerateFunctions {
 		module = module_;
 	}
 
-	public @NotNull List<GeneratedFunction> generateAllTopLevelFunctions() {
+	public List<GeneratedNode> generateAllTopLevelFunctions() {
 		final List<GeneratedFunction> R = new ArrayList<GeneratedFunction>();
 
 		for (final ModuleItem item : module.getItems()) {
