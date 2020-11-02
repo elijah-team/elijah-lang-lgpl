@@ -39,15 +39,15 @@ public class GenerateFunctions {
 	}
 
 	public List<GeneratedNode> generateAllTopLevelFunctions() {
-		final List<GeneratedFunction> R = new ArrayList<GeneratedFunction>();
+		final List<GeneratedNode> R = new ArrayList<GeneratedNode>();
 
 		for (final ModuleItem item : module.getItems()) {
 			if (item instanceof NamespaceStatement) {
-				final List<GeneratedFunction> r;
+				final List<GeneratedNode> r;
 				r = generateAllNamespaceFunctions(((NamespaceStatement) item));
 				R.addAll(r);
 			} else if (item instanceof ClassStatement) {
-				final List<GeneratedFunction> r;
+				final List<GeneratedNode> r;
 				final ClassStatement classStatement = (ClassStatement) item;
 				r = generateAllClassFunctions(classStatement);
 				R.addAll(r);
@@ -57,24 +57,24 @@ public class GenerateFunctions {
 		return R;
 	}
 
-	private @NotNull List<GeneratedFunction> generateAllClassFunctions(@NotNull final ClassStatement classStatement) {
-		final List<GeneratedFunction> R = new ArrayList<>();
+	private List<GeneratedNode> generateAllClassFunctions(@NotNull final ClassStatement classStatement) {
+		final List<GeneratedNode> R = new ArrayList<>();
 
 		for (final ClassItem item : classStatement.getItems()) {
 			if (item instanceof FunctionDef) {
 				final FunctionDef function_def = (FunctionDef) item;
-				R.add(generateFunction(function_def, classStatement));
+				R.add((GeneratedNode) generateFunction(function_def, classStatement));
 			} else if (item instanceof DefFunctionDef) {
 				final DefFunctionDef defFunctionDef = (DefFunctionDef) item;
-				R.add(generateDefFunction(defFunctionDef, classStatement));
+				R.add((GeneratedNode) generateDefFunction(defFunctionDef, classStatement));
 			}
 		}
 
 		return R;
 	}
 
-	private @NotNull List<GeneratedFunction> generateAllNamespaceFunctions(@NotNull final NamespaceStatement namespaceStatement) {
-		final List<GeneratedFunction> R = new ArrayList<>();
+	private List<GeneratedNode> generateAllNamespaceFunctions(@NotNull final NamespaceStatement namespaceStatement) {
+		final List<GeneratedNode> R = new ArrayList<>();
 
 		for (final ClassItem item : namespaceStatement.getItems()) {
 			if (item instanceof FunctionDef) {
