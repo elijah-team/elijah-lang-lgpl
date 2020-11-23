@@ -117,7 +117,8 @@ public class GenerateC {
 		if (gf.fd.getParent() instanceof ClassStatement) {
 			ClassStatement st = (ClassStatement) gf.fd.getParent();
 			final String class_name = getTypeName(new OS_Type(st));
-			tos.put_string_ln(String.format("%s %s(%s vsc, %s) {", returnType, name, class_name, args));
+			final String if_args = args.length() == 0 ? "" : ", ";
+			tos.put_string_ln(String.format("%s %s(%s vsc%s%s) {", returnType, name, class_name, if_args, args));
 		} else {
 			// TODO vsi for namespace instance??
 			tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
