@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.range.Range;
 
@@ -373,7 +374,7 @@ public class GeneratedFunction implements GeneratedNode {
 				throw new NotImplementedException();
 			sl.add(text);
 		}
-		return String.join(".", sl);
+		return Helpers.String_join(".", sl);
 	}
 
 	public VariableTableEntry getSelf() {

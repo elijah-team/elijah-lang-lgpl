@@ -68,7 +68,7 @@ public class Helpers {
 		for (final IExpression e : expressionList) {
 			ls.add(e.toString());
 		}
-		sb.append(String.join(", ", ls));
+		sb.append(tripleo.elijah.util.Helpers.String_join(", ", ls));
 		sb.append(")");
 		return sb.toString();
 	}

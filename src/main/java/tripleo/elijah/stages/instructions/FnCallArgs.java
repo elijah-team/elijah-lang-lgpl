@@ -14,6 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
+import tripleo.elijah.util.Helpers;
 
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +46,7 @@ public class FnCallArgs implements InstructionArgument {
 		final ProcTableEntry procTableEntry = gf.prte_list.get(index);
 		return String.format("(call %d [%s(%s)] %s)",
 				index, procTableEntry.expression, procTableEntry.args,
-				String.join(" ", collect2));
+				Helpers.String_join(" ", collect2));
 
 	}
 

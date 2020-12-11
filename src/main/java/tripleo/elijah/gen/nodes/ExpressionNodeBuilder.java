@@ -14,9 +14,6 @@
  */
 package tripleo.elijah.gen.nodes;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import antlr.CommonToken;
 import antlr.Token;
 import org.jetbrains.annotations.Contract;
@@ -27,7 +24,11 @@ import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
-import static tripleo.elijah.gen.TypeRef.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static tripleo.elijah.gen.TypeRef.CODE_U64;
+import static tripleo.elijah.gen.TypeRef.is_integer_code;
 
 /**
  * Please consider that there is no such thing as an ExpressionNode
@@ -229,7 +230,7 @@ public class ExpressionNodeBuilder {
 					sl.add(s2);
 //					sb.append(',');
 				}
-				sb.append(String.join(",", sl));
+				sb.append(tripleo.elijah.util.Helpers.String_join(",", sl));
 				sb.append(')');
 				final String s3 = sb.toString();
 				return s3;

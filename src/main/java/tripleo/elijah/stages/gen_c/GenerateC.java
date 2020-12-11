@@ -16,6 +16,7 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
 
@@ -107,7 +108,7 @@ public class GenerateC {
 		}
 		//
 		name = gf.fd.name();
-		final String args = String.join(", ", Collections2.transform(gf.fd.fal().falis, new Function<FormalArgListItem, String>() {
+		final String args = Helpers.String_join(", ", Collections2.transform(gf.fd.fal().falis, new Function<FormalArgListItem, String>() {
 			@Nullable
 			@Override
 			public String apply(@Nullable final FormalArgListItem input) {
@@ -304,7 +305,7 @@ public class GenerateC {
 						{
 							sb.append('(');
 							final List<String> sl3 = getArgumentStrings(gf, instruction);
-							sb.append(String.join(", ", sl3));
+							sb.append(Helpers.String_join(", ", sl3));
 							sb.append(");");
 						}
 					}
@@ -339,7 +340,7 @@ public class GenerateC {
 						{
 							sb.append('(');
 							final List<String> sl3 = getArgumentStrings(gf, instruction);
-							sb.append(String.join(", ", sl3));
+							sb.append(Helpers.String_join(", ", sl3));
 							sb.append(");");
 						}
 					}
@@ -579,7 +580,7 @@ public class GenerateC {
 					sb.append("(");
 					{
 						final List<String> sll = getAssignmentValueArgs(inst, gf);
-						sb.append(String.join(", ", sll));
+						sb.append(Helpers.String_join(", ", sll));
 					}
 					sb.append(")");
 					return sb.toString();
@@ -601,7 +602,7 @@ public class GenerateC {
 					sb.append("(");
 					{
 						final List<String> sll = getAssignmentValueArgs(inst, gf);
-						sb.append(String.join(", ", sll));
+						sb.append(Helpers.String_join(", ", sll));
 					}
 					sb.append(");");
 					return sb.toString();
