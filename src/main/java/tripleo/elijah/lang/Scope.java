@@ -8,10 +8,9 @@
  */
 package tripleo.elijah.lang;
 
-// Referenced classes of package pak2:
-//			StatementClosure, BlockStatement
-
 public interface Scope extends Documentable/*, OS_Element*/ {
+
+	void add(StatementItem aItem);
 
 	void statementWrapper(IExpression aExpr);
 
@@ -19,33 +18,12 @@ public interface Scope extends Documentable/*, OS_Element*/ {
 
 	BlockStatement blockStatement();
 
-	void add(StatementItem aItem);
-	
 	TypeAliasExpression typeAlias();
 	
 	InvariantStatement invariantStatement();
 	
-/*
-	@Override
-	default Context getContext() {
-		// TODO Auto-generated method stub
-		return null;
-	} 
-	
-	@Override
-	default OS_Element getParent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	default void visitGen(ICodeGen visit) {
-		// TODO Auto-generated method stub
-		
-	}
-*/
-
 	OS_Element getParent();
+
 	OS_Element getElement();
 }
 

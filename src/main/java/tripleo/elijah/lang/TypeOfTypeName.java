@@ -28,6 +28,11 @@ public class TypeOfTypeName implements TypeName {
 	}
 
 	@Override
+	public boolean isNull() {
+		return false;
+	}
+
+	@Override
 	public void setContext(final Context context) {
 		throw new NotImplementedException();
 	}

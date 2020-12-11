@@ -12,7 +12,7 @@ package tripleo.elijah.lang;
  * Created 8/16/20 2:16 AM
  */
 public interface TypeName {
-	default boolean isNull() {return false;}
+	boolean isNull();
 
 	void setContext(Context context);
 
