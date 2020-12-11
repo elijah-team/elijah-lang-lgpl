@@ -6,10 +6,6 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  * 
  */
-/**
- * Created Mar 27, 2019 at 2:24:09 PM
- *
- */
 package tripleo.elijah.lang;
 
 import antlr.Token;
@@ -24,6 +20,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Created Mar 27, 2019 at 2:24:09 PM
+ *
  * @author Tripleo(sb)
  *
  */
