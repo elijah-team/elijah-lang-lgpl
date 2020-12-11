@@ -69,22 +69,21 @@ public class DeduceTypesTest3 {
 //		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());
 //	}
 	/** TODO This test fails because we are comparing RegularTypeName and VariableTypeName */
-//	@Test
-//	public void testDeduceIdentExpression2() {
-//		final RegularTypeName tn = new RegularTypeName();
-//		Qualident tnq = new Qualident();
-//		tnq.append(Helpers.makeToken("Foo"));
-//		tn.setName(tnq);
-//		Assert.assertEquals(new OS_Type(tn), x/*.getTypeName()*/);
-//	}
+	@Test
+	public void testDeduceIdentExpression2() {
+		final RegularTypeName tn = new RegularTypeName();
+		Qualident tnq = new Qualident();
+		tnq.append(Helpers.makeToken("Foo"));
+		tn.setName(tnq);
+		Assert.assertEquals(new OS_Type(tn), x/*.getTypeName()*/);
+	}
 	@Test
 	public void testDeduceIdentExpression3() {
 		final VariableTypeName tn = new VariableTypeName();
 		final Qualident tnq = new Qualident();
 		tnq.append(tripleo.elijah.util.Helpers.makeToken("Foo"));
 		tn.setName(tnq);
-//		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
-		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
+		Assert.assertEquals(new OS_Type(tn), x);
 	}
 	@Test
 	public void testDeduceIdentExpression3_5() {
@@ -93,7 +92,6 @@ public class DeduceTypesTest3 {
 		tnq.append(tripleo.elijah.util.Helpers.makeToken("Foo"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
-//		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
 	}
 	@Test
 	public void testDeduceIdentExpression4() {
@@ -101,8 +99,6 @@ public class DeduceTypesTest3 {
 		final Qualident tnq = new Qualident();
 		tnq.append(tripleo.elijah.util.Helpers.makeToken("Foo"));
 		tn.setName(tnq);
-//		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
-//		Assert.assertEquals(new OS_Type(tn), x); // TODO this fails even when true
 		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());
 	}
 
