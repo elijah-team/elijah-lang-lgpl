@@ -259,13 +259,15 @@ public class DeduceTypes2 {
 			}
 		}
 		for (final VariableTableEntry vte : generatedFunction.vte_list) {
-			if (vte.type.attached == null)
-				if (vte.potentialTypes().size() == 1)
+			if (vte.type.attached == null) {
+				int potential_size = vte.potentialTypes().size();
+				if (potential_size == 1)
 					vte.type.attached = new ArrayList<TypeTableEntry>(vte.potentialTypes()).get(0).attached;
-				else if (vte.potentialTypes().size() > 1) {
+				else if (potential_size > 1) {
 					// TODO Check type compatibility
 					System.err.println("703 "+vte.getName()+" "+vte.potentialTypes());
 				}
+			}
 		}
 		{
 			//
