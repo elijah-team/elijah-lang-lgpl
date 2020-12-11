@@ -326,11 +326,10 @@ public class DeduceTypes2 {
 					System.out.println("799 [resolving USER type named] "+tn);
 					final LookupResultList lrl = tn1.getContext().lookup(tn); // TODO is this right?
 					final OS_Element best = lrl.chooseBest(null);
-					return new OS_Type((ClassStatement) best); // TODO might change to Type
+					return new OS_Type((ClassStatement) best);
 				}
 				throw new NotImplementedException(); // TODO might be Qualident, etc
 			}
-//			break;
 		case USER_CLASS:
 			return type;
 		case FUNCTION:
