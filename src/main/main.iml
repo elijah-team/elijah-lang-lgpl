@@ -22,7 +22,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="commons-cli-1.4" level="project" />
-    <orderEntry type="library" name="lombok" level="project" />
     <orderEntry type="module-library" scope="TEST">
       <library name="JUnit4">
         <CLASSES>
