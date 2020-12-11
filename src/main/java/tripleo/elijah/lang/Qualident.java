@@ -53,6 +53,7 @@ public class Qualident  implements IExpression {
 			@Nullable
 			@Override
 			public String apply(@Nullable Token input) {
+				assert input != null;
 				return input.getText();
 			}
 		}));
