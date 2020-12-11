@@ -297,7 +297,7 @@ public class DeduceTypes2 {
 					{
 						String typeName = type.getBType().name();
 						assert typeName.equals("SystemInteger");
-						final LookupResultList lrl = module.prelude.getContext().lookup("SystemInteger");
+						final LookupResultList lrl = module.prelude.getContext().lookup(typeName);
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
