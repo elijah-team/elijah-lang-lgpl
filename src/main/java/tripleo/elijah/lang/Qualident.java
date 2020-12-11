@@ -37,7 +37,7 @@ public class Qualident  implements IExpression {
 	}
 
 	public void appendDot(final Token d1) {
-//		parts.add(d1);
+//		_syntax.appendDot(d1, parts.size());//parts.add(d1);
 	}
 	
 	private final List<Token> parts = new ArrayList<Token>();
@@ -49,14 +49,21 @@ public class Qualident  implements IExpression {
 
 	@NotNull
 	public String asSimpleString() {
-		final StringBuilder sb=new StringBuilder();
-		for (final Token part : parts) {
-			sb.append(part.getText());
-			sb.append('.');
-		}
-		final String s = sb.toString();
-		final String substring = s.substring(0, s.length() - 1);
-		return substring;
+		return Helpers.String_join(".", Collections2.transform(parts, new Function<Token, String>() {
+			@Nullable
+			@Override
+			public String apply(@Nullable Token input) {
+				return input.getText();
+			}
+		}));
+//		final StringBuilder sb=new StringBuilder();
+//		for (final Token part : parts) {
+//			sb.append(part.getText());
+//			sb.append('.');
+//		}
+//		final String s = sb.toString();
+//		final String substring = s.substring(0, s.length() - 1);
+//		return substring;
 	}
 	
 	@Override
