@@ -16,6 +16,9 @@ package tripleo.elijah.gen.nodes;
 
 import antlr.CommonToken;
 import antlr.Token;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.CompilerContext;
@@ -24,7 +27,6 @@ import tripleo.elijah.gen.TypeRef;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static tripleo.elijah.gen.TypeRef.CODE_U64;
@@ -219,18 +221,31 @@ public class ExpressionNodeBuilder {
 				sb.append(s);
 				sb.append('(');
 				
-				final List<String> sl = new ArrayList<String>();
-				for (final IExpression arg : pce1.getArgs()) {
-					final String s2;
-					if (arg instanceof VariableReference) {
-						s2 = ((VariableReference) arg).getName();
-					} else {
-						s2 = (arg.toString());
+//				final List<String> sl = new ArrayList<String>();
+//				for (final IExpression arg : pce1.getArgs()) {
+//					final String s2;
+//					if (arg instanceof VariableReference) {
+//						s2 = ((VariableReference) arg).getName();
+//					} else {
+//						s2 = (arg.toString());
+//					}
+//					sl.add(s2);
+////					sb.append(',');
+//				}
+				sb.append(tripleo.elijah.util.Helpers.String_join(",", Collections2.transform(pce1.getArgs().expressions(), new Function<IExpression, String>() {
+					@Nullable
+					@Override
+					public String apply(@Nullable IExpression input) {
+						@NotNull final IExpression arg = input;
+						final String s2;
+						if (arg instanceof VariableReference) {
+							s2 = ((VariableReference) arg).getName();
+						} else {
+							s2 = arg.toString();
+						}
+						return s2;
 					}
-					sl.add(s2);
-//					sb.append(',');
-				}
-				sb.append(tripleo.elijah.util.Helpers.String_join(",", sl));
+				})));
 				sb.append(')');
 				final String s3 = sb.toString();
 				return s3;
@@ -284,8 +299,7 @@ public class ExpressionNodeBuilder {
 		// TODO Auto-generated method stub
 		final ProcedureCallExpression pce1 = new ProcedureCallExpression();
 		final Qualident xyz = new Qualident();
-		final Token t = new CommonToken();
-		t.setText(string);
+		final Token t = tripleo.elijah.util.Helpers.makeToken(string);
 		xyz.append(t);
 		pce1.identifier(xyz);
 		//
