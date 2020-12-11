@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Helpers {
 	public static void printXML(final Object obj, @NotNull final TabbedOutputStream tos) {
-		final XStream x= new XStream();
+		final XStream x = new XStream();
 		//x.setMode(XStream.ID_REFERENCES);
 		x.toXML(obj, tos.getStream());
 	}
@@ -38,12 +38,6 @@ public class Helpers {
 			r.add(e);
 		}
 		return r;
-	}
-
-	public static Token makeToken(final String aText) {
-		final CommonToken t = new CommonToken();
-		t.setText(aText);
-		return t;
 	}
 
 	public static IExpression qualidentToDotExpression2(@NotNull final Qualident q) {
@@ -66,6 +60,12 @@ public class Helpers {
 			r = new DotExpression(r, dotExpression);
 		}
 		return r;
+	}
+
+	public static Token makeToken(final String aText) {
+		final CommonToken t = new CommonToken();
+		t.setText(aText);
+		return t;
 	}
 
 	@NotNull
