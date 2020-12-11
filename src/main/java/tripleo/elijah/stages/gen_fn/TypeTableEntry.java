@@ -18,7 +18,7 @@ import tripleo.elijah.lang.OS_Type;
  */
 public class TypeTableEntry {
     final int index;
-    private final Type lifetime;
+    public final Type lifetime;
     public @Nullable OS_Type attached;
     public final IExpression expression;
 

@@ -53,8 +53,14 @@ public class VariableTableEntry {
 			potentialTypes.put(instructionIndex, tte);
 		else {
 			TypeTableEntry v = potentialTypes.get(instructionIndex);
-			assert v.attached == null;
-			v.attached = tte.attached;
+			if (v.attached == null)
+				v.attached = tte.attached;
+			else if (tte.lifetime == TypeTableEntry.Type.TRANSIENT && v.lifetime == TypeTableEntry.Type.SPECIFIED) {
+				//v.attached = v.attached; // leave it as is
+			} else if (tte.lifetime == v.lifetime && v.attached == tte.attached) {
+				// leave as is
+			} else
+				assert false;
 		}
 	}
 
