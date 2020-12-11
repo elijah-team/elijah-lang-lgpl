@@ -27,8 +27,11 @@ public class Qualident  implements IExpression {
 
 	/** Look into creating a {@link DotExpression} from here */
 	public void append(final Token r1) {
-		parts.add(r1);		
+		if (r1.getText().contains("."))
+			throw new IllegalArgumentException("trying to create a Qualident with a dot from a user created Token");
+		parts.add(r1);
 	}
+
 	public void appendDot(final Token d1) {
 //		parts.add(d1);
 	}
