@@ -41,4 +41,15 @@ public class TypeOfTypeName implements TypeName {
 	public Context getContext() {
 		return _ctx;
 	}
+
+	// TODO doesn't work with dotted Qualidents
+	public TypeName resolve(Context ctx) {
+//		TypeName tn = null;
+//		System.out.println(_typeOf.toString());
+		LookupResultList lrl = ctx.lookup(_typeOf.toString()); // TODO what about multi-level qualidents
+		OS_Element best = lrl.chooseBest(null);
+		if (best instanceof VariableStatement)
+			return ((VariableStatement) best).typeName();
+		return null;
+	}
 }
