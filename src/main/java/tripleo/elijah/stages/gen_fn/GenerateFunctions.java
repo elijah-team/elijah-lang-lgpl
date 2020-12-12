@@ -328,8 +328,7 @@ public class GenerateFunctions {
 			}
 		}
 
-		public void ident(GeneratedFunction gf, BasicBinaryExpression bbe, IdentExpression right, Context cctx) {
-			final IdentExpression left = (IdentExpression) bbe.getLeft();
+		public void ident(GeneratedFunction gf, IdentExpression left, IdentExpression right, Context cctx) {
 			final InstructionArgument iii = gf.vte_lookup(left.getText());
 			final int iii4;
 			int iii5=-1;
@@ -348,9 +347,7 @@ public class GenerateFunctions {
 							gf.getVarTableEntry(iii5))*/)).type);
 		}
 
-		public void numeric(@NotNull GeneratedFunction gf, BasicBinaryExpression bbe, NumericExpression ne, Context cctx) {
-			final IExpression left = bbe.getLeft();
-
+		public void numeric(@NotNull GeneratedFunction gf, IExpression left, NumericExpression ne, Context cctx) {
 			@NotNull final InstructionArgument agn_path = gf.get_assignment_path(left, GenerateFunctions.this);
 			final int cte = addConstantTableEntry("", ne, ne.getType(), gf);
 
@@ -369,10 +366,10 @@ public class GenerateFunctions {
 			gia.procedure_call(gf, bbe, (ProcedureCallExpression) right1, cctx);
 			break;
 		case IDENT:
-			gia.ident(gf, bbe, (IdentExpression) right1, cctx);
+			gia.ident(gf, (IdentExpression) bbe.getLeft(), (IdentExpression) right1, cctx);
 			break;
 		case NUMERIC:
-			gia.numeric(gf, bbe, (NumericExpression) right1, cctx);
+			gia.numeric(gf, bbe.getLeft(), (NumericExpression) right1, cctx);
 			break;
 		default:
 			System.err.println("right1.getKind(): "+right1.getKind());
