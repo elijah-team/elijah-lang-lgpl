@@ -431,12 +431,12 @@ public class DeduceTypes2 {
 					if (el instanceof FunctionDef) {
 						FunctionDef fd = (FunctionDef) el;
 						OS_Type type = new OS_Type(fd.returnType());
-						@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, null);
+						@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression);
 						vte.addPotentialType(instructionIndex, tte);
 					} else if (el instanceof ClassStatement) {
 						ClassStatement kl = (ClassStatement) el;
 						OS_Type type = new OS_Type(kl);
-						@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, null);
+						@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression);
 						vte.addPotentialType(instructionIndex, tte);
 					} else {
 						System.err.println("7890 "+el.getClass().getName());
