@@ -79,20 +79,20 @@ public class Helpers {
 		return s.substring(1, s.length()-1);
 	}
 
-	public static String String_join(String s, Iterable<String> stringIterable) {
+	public static String String_join(String separator, Iterable<String> stringIterable) {
 		if (false) {
 			final StringBuilder sb = new StringBuilder();
 
 			for (final String part : stringIterable) {
 				sb.append(part);
-				sb.append(s);
+				sb.append(separator);
 			}
 			final String ss = sb.toString();
-			final String substring = s.substring(0, ss.length() - s.length());
+			final String substring = separator.substring(0, ss.length() - separator.length());
 			return substring;
 		}
 		// since Java 1.8
-		return String.join(s, stringIterable);
+		return String.join(separator, stringIterable);
 	}
 }
 
