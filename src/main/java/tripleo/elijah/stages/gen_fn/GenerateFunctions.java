@@ -305,14 +305,14 @@ public class GenerateFunctions {
 
 	class Generate_item_assignment {
 
-		public void procedure_call(@NotNull GeneratedFunction gf, BasicBinaryExpression bbe, IExpression right1, Context cctx) {
+		public void procedure_call(@NotNull GeneratedFunction gf, BasicBinaryExpression bbe, ProcedureCallExpression pce, Context cctx) {
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft());
 			final String text = ((IdentExpression) bbe.getLeft()).getText();
 			final InstructionArgument lookup = gf.vte_lookup(text);
 			if (lookup != null) {
 				// TODO should be AGNC
 				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(lookup,
-						new FnCallArgs(expression_to_call((ProcedureCallExpression) right1, gf, cctx), gf)), cctx);
+						new FnCallArgs(expression_to_call(pce, gf, cctx), gf)), cctx);
 				final Instruction instruction = gf.getInstruction(instruction_number);
 				final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lookup).getIndex());
 				vte.addPotentialType(instruction.getIndex(), tte);
@@ -321,14 +321,14 @@ public class GenerateFunctions {
 				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(vte_num)), cctx);
 				// TODO should be AGNC
 				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num),
-						new FnCallArgs(expression_to_call((ProcedureCallExpression) right1, gf, cctx), gf)), cctx);
+						new FnCallArgs(expression_to_call(pce, gf, cctx), gf)), cctx);
 				final Instruction instruction = gf.getInstruction(instruction_number);
 				final VariableTableEntry vte = gf.getVarTableEntry(vte_num);
 				vte.addPotentialType(instruction.getIndex(), tte);
 			}
 		}
 
-		public void ident(GeneratedFunction gf, BasicBinaryExpression bbe, IExpression right1, Context cctx) {
+		public void ident(GeneratedFunction gf, BasicBinaryExpression bbe, IdentExpression right, Context cctx) {
 			final IdentExpression left = (IdentExpression) bbe.getLeft();
 			final InstructionArgument iii = gf.vte_lookup(left.getText());
 			final int iii4;
@@ -336,7 +336,6 @@ public class GenerateFunctions {
 			if (iii == null) {
 				iii4 = addIdentTableEntry(left, gf);
 			}
-			final IdentExpression right = (IdentExpression) right1;
 			final InstructionArgument iiii = gf.vte_lookup(right.getText());
 			if (iiii == null) {
 				iii5 = addIdentTableEntry(right, gf);
@@ -349,9 +348,8 @@ public class GenerateFunctions {
 							gf.getVarTableEntry(iii5))*/)).type);
 		}
 
-		public void numeric(@NotNull GeneratedFunction gf, BasicBinaryExpression bbe, IExpression right1, Context cctx) {
+		public void numeric(@NotNull GeneratedFunction gf, BasicBinaryExpression bbe, NumericExpression ne, Context cctx) {
 			final IExpression left = bbe.getLeft();
-			final NumericExpression ne = (NumericExpression) right1;
 
 			@NotNull final InstructionArgument agn_path = gf.get_assignment_path(left, GenerateFunctions.this);
 			final int cte = addConstantTableEntry("", ne, ne.getType(), gf);
@@ -368,13 +366,13 @@ public class GenerateFunctions {
 		final Generate_item_assignment gia = new Generate_item_assignment();
 		switch (right1.getKind()) {
 		case PROCEDURE_CALL:
-			gia.procedure_call(gf, bbe, right1, cctx);
+			gia.procedure_call(gf, bbe, (ProcedureCallExpression) right1, cctx);
 			break;
 		case IDENT:
-			gia.ident(gf, bbe, right1, cctx);
+			gia.ident(gf, bbe, (IdentExpression) right1, cctx);
 			break;
 		case NUMERIC:
-			gia.numeric(gf, bbe, right1, cctx);
+			gia.numeric(gf, bbe, (NumericExpression) right1, cctx);
 			break;
 		default:
 			System.err.println("right1.getKind(): "+right1.getKind());
