@@ -165,7 +165,12 @@ public class GenerateC {
 					final InstructionArgument target = instruction.getArg(0);
 					final InstructionArgument value  = instruction.getArg(1);
 
-					final String realTarget = getRealTargetName(gf, (IntegerIA) target);
+					final String realTarget;
+					if (target instanceof IntegerIA) {
+						realTarget = getRealTargetName(gf, (IntegerIA) target);
+					} else {
+						realTarget = getRealTargetName(gf, (IdentIA) target);
+					}
 					String s = String.format("%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
 					tos.put_string_ln(s);
 					final int y = 2;
@@ -692,7 +697,35 @@ public class GenerateC {
 		}
 		return "vv" + vte_name;
 	}
-}
+
+	private String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
+		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
+		List<String> ls = new ArrayList<String>();
+		ls.add(identTableEntry.getIdent().getText());
+		InstructionArgument backlink = identTableEntry.backlink;
+		while (backlink != null) {
+			if (backlink instanceof IntegerIA) {
+				IntegerIA integerIA = (IntegerIA) backlink;
+				int integerIAIndex = integerIA.getIndex();
+				String realTargetName = getRealTargetName(gf, integerIA);
+				VariableTableEntry varTableEntry = gf.getVarTableEntry(integerIAIndex);
+				String varTableEntryName = varTableEntry.getName();
+				ls.add(varTableEntryName);
+				backlink = null;
+			} else if (backlink instanceof IdentIA) {
+				IdentIA identIA = (IdentIA) backlink;
+				int identIAIndex = identIA.getIndex();
+				IdentTableEntry identTableEntry1 = gf.getIdentTableEntry(identIAIndex);
+				String identTableEntryName = identTableEntry1.getIdent().getText();
+				ls.add(identTableEntryName);
+				backlink = identTableEntry1.backlink;
+			} else
+				throw new IllegalStateException("Illegal type for backlink");
+		}
+		return Helpers.String_join(".", ls);
+	}
+
+	}
 
 //
 //
