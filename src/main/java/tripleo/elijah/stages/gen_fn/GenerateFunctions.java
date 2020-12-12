@@ -353,7 +353,7 @@ public class GenerateFunctions {
 			final IExpression left = bbe.getLeft();
 			final NumericExpression ne = (NumericExpression) right1;
 
-			@NotNull final InstructionArgument agn_path = gf.get_assignment_path(left, this);
+			@NotNull final InstructionArgument agn_path = gf.get_assignment_path(left, GenerateFunctions.this);
 			final int cte = addConstantTableEntry("", ne, ne.getType(), gf);
 
 			final int agn_inst = add_i(gf, InstructionName.AGN, List_of(agn_path, new ConstTableIA(cte, gf)), cctx);
