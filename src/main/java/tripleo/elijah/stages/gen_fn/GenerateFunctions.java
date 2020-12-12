@@ -303,12 +303,9 @@ public class GenerateFunctions {
 		return gc;
 	}
 
-	private void generate_item_assignment(@NotNull final IExpression x, @NotNull final GeneratedFunction gf, final Context cctx) {
-//		System.err.println(String.format("801 %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
-		final BasicBinaryExpression bbe = (BasicBinaryExpression) x;
-		final IExpression right1 = bbe.getRight();
-		switch (right1.getKind()) {
-		case PROCEDURE_CALL: {
+	class Generate_item_assignment {
+
+		public void procedure_call(@NotNull GeneratedFunction gf, BasicBinaryExpression bbe, IExpression right1, Context cctx) {
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft());
 			final String text = ((IdentExpression) bbe.getLeft()).getText();
 			final InstructionArgument lookup = gf.vte_lookup(text);
@@ -330,8 +327,8 @@ public class GenerateFunctions {
 				vte.addPotentialType(instruction.getIndex(), tte);
 			}
 		}
-		break;
-		case IDENT: {
+
+		public void ident(GeneratedFunction gf, BasicBinaryExpression bbe, IExpression right1, Context cctx) {
 			final IdentExpression left = (IdentExpression) bbe.getLeft();
 			final InstructionArgument iii = gf.vte_lookup(left.getText());
 			final int iii4;
@@ -351,18 +348,33 @@ public class GenerateFunctions {
 					gf.getVarTableEntry(DeduceTypes2.to_int(iiii/* != null ? iiii :
 							gf.getVarTableEntry(iii5))*/)).type);
 		}
-		break;
+
+		public void numeric(@NotNull GeneratedFunction gf, BasicBinaryExpression bbe, IExpression right1, Context cctx) {
+			final IExpression left = bbe.getLeft();
+			final NumericExpression ne = (NumericExpression) right1;
+
+			@NotNull final InstructionArgument agn_path = gf.get_assignment_path(left, this);
+			final int cte = addConstantTableEntry("", ne, ne.getType(), gf);
+
+			final int agn_inst = add_i(gf, InstructionName.AGN, List_of(agn_path, new ConstTableIA(cte, gf)), cctx);
+			// TODO what now??
+		}
+	}
+
+	private void generate_item_assignment(@NotNull final IExpression x, @NotNull final GeneratedFunction gf, final Context cctx) {
+//		System.err.println(String.format("801 %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
+		final BasicBinaryExpression bbe = (BasicBinaryExpression) x;
+		final IExpression right1 = bbe.getRight();
+		final Generate_item_assignment gia = new Generate_item_assignment();
+		switch (right1.getKind()) {
+		case PROCEDURE_CALL:
+			gia.procedure_call(gf, bbe, right1, cctx);
+			break;
+		case IDENT:
+			gia.ident(gf, bbe, right1, cctx);
+			break;
 		case NUMERIC:
-			{
-				final IExpression left = bbe.getLeft();
-				final NumericExpression ne = (NumericExpression) right1;
-
-				@NotNull final InstructionArgument agn_path = gf.get_assignment_path(left, this);
-				final int cte = addConstantTableEntry("", ne, ne.getType(), gf);
-
-				final int agn_inst = add_i(gf, InstructionName.AGN, List_of(agn_path, new ConstTableIA(cte, gf)), cctx);
-				// TODO what now??
-			}
+			gia.numeric(gf, bbe, right1, cctx);
 			break;
 		default:
 			System.err.println("right1.getKind(): "+right1.getKind());
