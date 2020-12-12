@@ -148,6 +148,12 @@ public class TestGenFunction {
 		Assert.assertTrue("Method parsed correctly", m != null);
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 
+		c.findStdLib("c");
+
+		for (final CompilerInstructions ci : c.cis) {
+			c.use(ci, false);
+		}
+
 		final GenerateFunctions gfm = new GenerateFunctions(m);
 		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
 
@@ -177,6 +183,9 @@ public class TestGenFunction {
 //				System.out.println("----------------------------------------------------------");
 			}
 		}
+
+		new GenerateC(m).generateCode(lgf);
+
 	}
 
 }
