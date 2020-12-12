@@ -270,7 +270,7 @@ public class GeneratedFunction implements GeneratedNode {
 		return null;
 	}
 
-	public @Nullable InstructionArgument get_assignment_path(@NotNull final IExpression expression, @NotNull final GenerateFunctions generateFunctions) {
+	public @NotNull InstructionArgument get_assignment_path(@NotNull final IExpression expression, @NotNull final GenerateFunctions generateFunctions) {
 		switch (expression.getKind()) {
 		case DOT_EXP:
 			{
