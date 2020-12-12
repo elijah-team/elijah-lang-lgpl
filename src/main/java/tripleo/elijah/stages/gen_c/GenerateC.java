@@ -627,6 +627,8 @@ public class GenerateC {
 				final String text = ((IdentExpression) cte.initialValue).getText();
 				if (text.equals("true") || text.equals("false"))
 					return text;
+				else if (text.equals("True") || text.equals("False"))
+					return text;
 				else
 					throw new NotImplementedException();
 			default:
