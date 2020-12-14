@@ -12,7 +12,9 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created 10/29/20 4:26 AM
@@ -21,6 +23,7 @@ public class GeneratedClass implements GeneratedNode {
 	private final OS_Module module;
 	private final ClassStatement klass;
 	public List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
+	private Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
 
 	public GeneratedClass(ClassStatement klass, OS_Module module) {
 		this.klass = klass;
@@ -60,6 +63,23 @@ public class GeneratedClass implements GeneratedNode {
 
 	public String getName() {
 		return klass.getName();
+	}
+
+	public void addFunction(FunctionDef functionDef, GeneratedFunction generatedFunction) {
+		if (functionMap.containsKey(functionDef))
+			throw new IllegalStateException("Function already generated"); // TODO do better than this
+		functionMap.put(functionDef, generatedFunction);
+	}
+
+	/**
+	 * Get a {@link GeneratedFunction}
+	 *
+	 * @param fd the function searching for
+	 *
+	 * @return null if no such key exists
+	 */
+	public GeneratedFunction getFunction(FunctionDef fd) {
+		return functionMap.get(fd);
 	}
 
 	public class VarTableEntry {

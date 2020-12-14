@@ -65,7 +65,7 @@ public class GenerateC {
 		}
 	}
 
-	private void generate_class(GeneratedClass x) throws IOException {
+	public void generate_class(GeneratedClass x) throws IOException {
 		int y=2;
 		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
 		try {
@@ -84,7 +84,7 @@ public class GenerateC {
 			tos.incr_tabs();
 			tos.put_string_ln("");
 			tos.dec_tabs();
-			tos.put_string_ln(String.format("}", x.getName()));
+			tos.put_string_ln(String.format("} // %s", x.getName()));
 			tos.put_string_ln("");
 			tos.flush();
 		} finally {

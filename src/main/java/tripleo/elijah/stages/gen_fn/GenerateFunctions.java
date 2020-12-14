@@ -262,7 +262,7 @@ public class GenerateFunctions {
 		}
 	}
 
-	private @NotNull GeneratedClass generateClass(@NotNull ClassStatement klass) {
+	public @NotNull GeneratedClass generateClass(@NotNull ClassStatement klass) {
 		GeneratedClass gc = new GeneratedClass(klass, module);
 		AccessNotation an = null;
 
@@ -276,7 +276,9 @@ public class GenerateFunctions {
 			} else if (item instanceof DestructorDef) {
 				throw new NotImplementedException();
 			} else if (item instanceof FunctionDef) {
-				throw new NotImplementedException();
+				//throw new NotImplementedException();
+				@NotNull GeneratedFunction f = generateFunction((FunctionDef) item, klass);
+				gc.addFunction((FunctionDef) item, f);
 			} else if (item instanceof DefFunctionDef) {
 				throw new NotImplementedException();
 			} else if (item instanceof NamespaceStatement) {
@@ -301,6 +303,27 @@ public class GenerateFunctions {
 		gc.createCtor0();
 
 		return gc;
+	}
+
+	public List<GeneratedNode> generateAllTopLevelClasses() {
+		List<GeneratedNode> R = new ArrayList<>();
+
+		for (final ModuleItem item : module.getItems()) {
+			if (item instanceof NamespaceStatement) {
+//				final List<GeneratedNode> r;
+//				r = generateAllNamespaceFunctions(((NamespaceStatement) item));
+//				R.addAll(r);
+			} else if (item instanceof ClassStatement) {
+//				final List<GeneratedNode> r;
+				final ClassStatement classStatement = (ClassStatement) item;
+//				r = generateAllClassFunctions(classStatement);
+//				R.addAll(r);
+				@NotNull GeneratedClass kl = generateClass(classStatement);
+				R.add(kl);
+			}
+		}
+
+		return R;
 	}
 
 	class Generate_item_assignment {
