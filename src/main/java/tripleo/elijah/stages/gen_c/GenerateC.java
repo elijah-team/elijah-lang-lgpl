@@ -10,6 +10,7 @@ package tripleo.elijah.stages.gen_c;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
@@ -725,7 +726,8 @@ public class GenerateC {
 			} else
 				throw new IllegalStateException("Illegal type for backlink");
 		}
-		return Helpers.String_join(".", ls);
+		List<String> ls2 = Lists.reverse(ls);
+		return Helpers.String_join(".", ls2);
 	}
 
 	}
