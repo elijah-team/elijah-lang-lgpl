@@ -156,6 +156,7 @@ public class TestGenFunction {
 
 		final GenerateFunctions gfm = new GenerateFunctions(m);
 		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
+		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
 
 		for (final GeneratedNode gn : lgf) {
 			if (gn instanceof GeneratedFunction) {
@@ -184,8 +185,17 @@ public class TestGenFunction {
 			}
 		}
 
-		new GenerateC(m).generateCode(lgf);
+		GenerateC ggc = new GenerateC(m);
+		ggc.generateCode(lgf);
 
+		for (GeneratedNode generatedNode : lgc) {
+			if (generatedNode instanceof GeneratedClass) {
+				ggc.generate_class((GeneratedClass) generatedNode);
+			} else {
+				System.out.println(lgc.getClass().getName());
+			}
+			;
+		}
 	}
 
 }
