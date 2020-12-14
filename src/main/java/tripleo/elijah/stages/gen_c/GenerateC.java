@@ -103,7 +103,7 @@ public class GenerateC {
 		//
 		final OS_Type tte = gf.getTypeTableEntry(1).attached;
 		if (tte != null) {
-			returnType = tte.getClassOf().getName();
+			returnType = String.format("Z<%s>", tte.getClassOf().getName());
 		} else {
 			returnType = "void";
 		}
@@ -121,7 +121,7 @@ public class GenerateC {
 			ClassStatement st = (ClassStatement) gf.fd.getParent();
 			final String class_name = getTypeName(new OS_Type(st));
 			final String if_args = args.length() == 0 ? "" : ", ";
-			tos.put_string_ln(String.format("%s %s(%s vsc%s%s) {", returnType, name, class_name, if_args, args));
+			tos.put_string_ln(String.format("%s %s(Z<%s> vsc%s%s) {", returnType, name, class_name, if_args, args));
 		} else {
 			// TODO vsi for namespace instance??
 			tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
