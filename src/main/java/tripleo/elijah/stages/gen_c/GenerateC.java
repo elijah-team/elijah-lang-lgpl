@@ -113,6 +113,7 @@ public class GenerateC {
 			@Nullable
 			@Override
 			public String apply(@Nullable final FormalArgListItem input) {
+				assert input != null;
 				return String.format("%s va%s", getTypeName(input.tn), input.name);
 			}
 		}));
