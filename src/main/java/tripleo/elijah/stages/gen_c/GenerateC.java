@@ -710,23 +710,27 @@ public class GenerateC {
 	private String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		List<String> ls = new ArrayList<String>();
-		ls.add(identTableEntry.getIdent().getText());
+		// TODO use a LinkedList, add to front to avoid reverse
+		//  use tuple to denote what type of lookup it is
+		//  NAMESPACE, CLASS, PROPERTY, MEMBER
+		//  dont know for ALIAS, TYPE and ENUM
+		ls.add("vm"+identTableEntry.getIdent().getText()); // TODO this might not always work, also put in loop
 		InstructionArgument backlink = identTableEntry.backlink;
 		while (backlink != null) {
 			if (backlink instanceof IntegerIA) {
 				IntegerIA integerIA = (IntegerIA) backlink;
-				int integerIAIndex = integerIA.getIndex();
+//				int integerIAIndex = integerIA.getIndex();
 				String realTargetName = getRealTargetName(gf, integerIA);
-				VariableTableEntry varTableEntry = gf.getVarTableEntry(integerIAIndex);
-				String varTableEntryName = varTableEntry.getName();
-				ls.add(varTableEntryName);
+//				VariableTableEntry varTableEntry = gf.getVarTableEntry(integerIAIndex);
+//				String varTableEntryName = varTableEntry.getName();
+				ls.add(realTargetName);
 				backlink = null;
 			} else if (backlink instanceof IdentIA) {
 				IdentIA identIA = (IdentIA) backlink;
 				int identIAIndex = identIA.getIndex();
 				IdentTableEntry identTableEntry1 = gf.getIdentTableEntry(identIAIndex);
 				String identTableEntryName = identTableEntry1.getIdent().getText();
-				ls.add(identTableEntryName);
+				ls.add("vm"+identTableEntryName); // TODO this might not always be right
 				backlink = identTableEntry1.backlink;
 			} else
 				throw new IllegalStateException("Illegal type for backlink");
@@ -734,8 +738,7 @@ public class GenerateC {
 		List<String> ls2 = Lists.reverse(ls);
 		return Helpers.String_join(".", ls2);
 	}
-
-	}
+}
 
 //
 //
