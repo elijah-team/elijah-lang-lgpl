@@ -10,7 +10,6 @@ package tripleo.elijah.stages.gen_c;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
@@ -24,6 +23,7 @@ import tripleo.elijah.util.TabbedOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -723,9 +723,8 @@ public class GenerateC {
 
 	private String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
-		List<String> ls = new ArrayList<String>();
-		// TODO use a LinkedList, add to front to avoid reverse
-		//  use tuple to denote what type of lookup it is
+		List<String> ls = new LinkedList<String>();
+		// TODO use tuple to denote what type of lookup it is
 		//  NAMESPACE, CLASS, PROPERTY, MEMBER
 		//  dont know for ALIAS, TYPE and ENUM
 		ls.add("vm"+identTableEntry.getIdent().getText()); // TODO this might not always work, also put in loop
@@ -737,20 +736,19 @@ public class GenerateC {
 				String realTargetName = getRealTargetName(gf, integerIA);
 //				VariableTableEntry varTableEntry = gf.getVarTableEntry(integerIAIndex);
 //				String varTableEntryName = varTableEntry.getName();
-				ls.add(realTargetName);
+				ls.add(0, realTargetName);
 				backlink = null;
 			} else if (backlink instanceof IdentIA) {
 				IdentIA identIA = (IdentIA) backlink;
 				int identIAIndex = identIA.getIndex();
 				IdentTableEntry identTableEntry1 = gf.getIdentTableEntry(identIAIndex);
 				String identTableEntryName = identTableEntry1.getIdent().getText();
-				ls.add("vm"+identTableEntryName); // TODO this might not always be right
+				ls.add(0, "vm"+identTableEntryName); // TODO this might not always be right
 				backlink = identTableEntry1.backlink;
 			} else
 				throw new IllegalStateException("Illegal type for backlink");
 		}
-		List<String> ls2 = Lists.reverse(ls);
-		return Helpers.String_join(".", ls2);
+		return Helpers.String_join(".", ls);
 	}
 }
 
