@@ -724,10 +724,10 @@ public class GenerateC {
 	private String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		List<String> ls = new LinkedList<String>();
-		// TODO use tuple to denote what type of lookup it is
+		// TODO in Deduce set property lookupType to denote what type of lookup it is
 		//  NAMESPACE, CLASS, PROPERTY, MEMBER
 		//  dont know for ALIAS, TYPE and ENUM
-		ls.add("vm"+identTableEntry.getIdent().getText()); // TODO this might not always work, also put in loop
+		ls.add("vm"+identTableEntry.getIdent().getText()); // TODO blindly adding "vm" might not always work, also put in loop
 		InstructionArgument backlink = identTableEntry.backlink;
 		while (backlink != null) {
 			if (backlink instanceof IntegerIA) {
@@ -743,7 +743,7 @@ public class GenerateC {
 				int identIAIndex = identIA.getIndex();
 				IdentTableEntry identTableEntry1 = gf.getIdentTableEntry(identIAIndex);
 				String identTableEntryName = identTableEntry1.getIdent().getText();
-				ls.add(0, "vm"+identTableEntryName); // TODO this might not always be right
+				ls.add(0, "vm"+identTableEntryName); // TODO blindly adding "vm" might not always be right
 				backlink = identTableEntry1.backlink;
 			} else
 				throw new IllegalStateException("Illegal type for backlink");
