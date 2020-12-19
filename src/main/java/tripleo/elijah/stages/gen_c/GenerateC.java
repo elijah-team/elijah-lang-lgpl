@@ -545,11 +545,10 @@ public class GenerateC {
 		return sl3;
 	}
 
-	@NotNull
-	private String getAssignmentValue(VariableTableEntry value_of_this, final InstructionArgument value, final GeneratedFunction gf) {
-		final StringBuilder sb = new StringBuilder();
-		if (value instanceof FnCallArgs) {
-			final FnCallArgs fca = (FnCallArgs) value;
+	class GetAssignmentValue {
+
+		public String FnCallArgs(FnCallArgs fca, GeneratedFunction gf) {
+			final StringBuilder sb = new StringBuilder();
 			final Instruction inst = fca.getExpression();
 //			System.err.println("9000 "+inst.getName());
 			final InstructionArgument x = inst.getArg(0);
@@ -558,69 +557,69 @@ public class GenerateC {
 //			System.err.println("9000-2 "+pte);
 			switch (inst.getName()) {
 			case CALL:
-				{
-					if (pte.expression_num == null) {
-//						assert false; // TODO synthetic methods
-						final int y=2;
-						final IdentExpression ptex = (IdentExpression) pte.expression;
-						sb.append(ptex.getText());
-//						if (SpecialVariables.contains(ptex.getText())) {
-//							sb.append(SpecialVariables.get(ptex.getText()));
-//						} else {
+			{
+				if (pte.expression_num == null) {
+//					assert false; // TODO synthetic methods
+					final int y=2;
+					final IdentExpression ptex = (IdentExpression) pte.expression;
+					sb.append(ptex.getText());
+//					if (SpecialVariables.contains(ptex.getText())) {
+//						sb.append(SpecialVariables.get(ptex.getText()));
+//					} else {
 //
-//						}
-					} else {
-//						final OS_Element el = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) pte.expression_num, module);
-						String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
-//						System.err.println("8677 " + path);
+// 					}
+				} else {
+//					final OS_Element el = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) pte.expression_num, module);
+					String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
+//					System.err.println("8677 " + path);
 /*
-						final IExpression ptex = pte.expression;
-						if (ptex instanceof IdentExpression) {
-							sb.append(((IdentExpression) ptex).getText());
-						} else if (ptex instanceof ProcedureCallExpression) {
-							sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
-						} else
-							throw new IllegalStateException("ptex is "+ptex.getClass().getName());
+					final IExpression ptex = pte.expression;
+					if (ptex instanceof IdentExpression) {
+						sb.append(((IdentExpression) ptex).getText());
+					} else if (ptex instanceof ProcedureCallExpression) {
+						sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
+					} else
+						throw new IllegalStateException("ptex is "+ptex.getClass().getName());
 */
-						sb.append(path);
-					}
-					sb.append("(");
-					{
-						final List<String> sll = getAssignmentValueArgs(inst, gf);
-						sb.append(Helpers.String_join(", ", sll));
-					}
-					sb.append(")");
-					return sb.toString();
+					sb.append(path);
 				}
-			case CALLS:
+				sb.append("(");
 				{
-					if (pte.expression_num == null) {
-						final int y=2;
-						final IdentExpression ptex = (IdentExpression) pte.expression;
-						sb.append(ptex.getText());
-					} else {
-						final IExpression ptex = pte.expression;
-						if (ptex instanceof IdentExpression) {
-							sb.append(((IdentExpression) ptex).getText());
-						} else if (ptex instanceof ProcedureCallExpression) {
-							sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
-						}
-					}
-					sb.append("(");
-					{
-						final List<String> sll = getAssignmentValueArgs(inst, gf);
-						sb.append(Helpers.String_join(", ", sll));
-					}
-					sb.append(");");
-					return sb.toString();
+					final List<String> sll = getAssignmentValueArgs(inst, gf);
+					sb.append(Helpers.String_join(", ", sll));
 				}
+				sb.append(")");
+				return sb.toString();
+			}
+			case CALLS:
+			{
+				if (pte.expression_num == null) {
+					final int y=2;
+					final IdentExpression ptex = (IdentExpression) pte.expression;
+					sb.append(ptex.getText());
+				} else {
+					final IExpression ptex = pte.expression;
+					if (ptex instanceof IdentExpression) {
+						sb.append(((IdentExpression) ptex).getText());
+					} else if (ptex instanceof ProcedureCallExpression) {
+						sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
+					}
+				}
+				sb.append("(");
+				{
+					final List<String> sll = getAssignmentValueArgs(inst, gf);
+					sb.append(Helpers.String_join(", ", sll));
+				}
+				sb.append(");");
+				return sb.toString();
+			}
 			default:
 				throw new IllegalStateException("Unexpected value: " + inst.getName());
 			}
 		}
 
-		if (value instanceof ConstTableIA) {
-			final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) value).getIndex());
+		public String ConstTableIA(ConstTableIA constTableIA, GeneratedFunction gf) {
+			final ConstantTableEntry cte = gf.getConstTableEntry(constTableIA.getIndex());
 //			System.err.println(("9001-3 "+cte.initialValue));
 			switch (cte.initialValue.getKind()) {
 			case NUMERIC:
@@ -636,6 +635,20 @@ public class GenerateC {
 			default:
 				throw new NotImplementedException();
 			}
+		}
+	}
+
+	@NotNull
+	private String getAssignmentValue(VariableTableEntry value_of_this, final InstructionArgument value, final GeneratedFunction gf) {
+		GetAssignmentValue gav = new GetAssignmentValue();
+		if (value instanceof FnCallArgs) {
+			final FnCallArgs fca = (FnCallArgs) value;
+			return gav.FnCallArgs(fca, gf);
+		}
+
+		if (value instanceof ConstTableIA) {
+			ConstTableIA constTableIA = (ConstTableIA) value;
+			return gav.ConstTableIA(constTableIA, gf);
 		}
 
 		return ""+value;
