@@ -545,9 +545,9 @@ public class GenerateC {
 		return sl3;
 	}
 
-	class GetAssignmentValue {
+	static class GetAssignmentValue {
 
-		public String FnCallArgs(FnCallArgs fca, GeneratedFunction gf) {
+		public String FnCallArgs(FnCallArgs fca, GeneratedFunction gf, OS_Module module) {
 			final StringBuilder sb = new StringBuilder();
 			final Instruction inst = fca.getExpression();
 //			System.err.println("9000 "+inst.getName());
@@ -585,7 +585,7 @@ public class GenerateC {
 				}
 				sb.append("(");
 				{
-					final List<String> sll = getAssignmentValueArgs(inst, gf);
+					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
 					sb.append(Helpers.String_join(", ", sll));
 				}
 				sb.append(")");
@@ -607,7 +607,7 @@ public class GenerateC {
 				}
 				sb.append("(");
 				{
-					final List<String> sll = getAssignmentValueArgs(inst, gf);
+					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
 					sb.append(Helpers.String_join(", ", sll));
 				}
 				sb.append(");");
@@ -636,6 +636,47 @@ public class GenerateC {
 				throw new NotImplementedException();
 			}
 		}
+
+		@NotNull
+		private List<String> getAssignmentValueArgs(final Instruction inst, final GeneratedFunction gf, OS_Module module) {
+			final int args_size = inst.getArgsSize();
+			final List<String> sll = new ArrayList<>();
+			for (int i = 1; i < args_size; i++) {
+				final InstructionArgument ia = inst.getArg(i);
+				final int y=2;
+//			System.err.println("7777 " +ia);
+				if (ia instanceof ConstTableIA) {
+					final ConstantTableEntry constTableEntry = gf.getConstTableEntry(((ConstTableIA) ia).getIndex());
+					sll.add(""+ const_to_string(constTableEntry.initialValue));
+				} else if (ia instanceof IntegerIA) {
+					final VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
+					sll.add(variableTableEntry.getName());
+				} else if (ia instanceof IdentIA) {
+					@org.jetbrains.annotations.Nullable
+					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
+					//String path = gf.getIAPath((IdentIA) ia));    // return x.y.z
+//				String path2 = gf.getIdentIAPath((IdentIA) ia); // return ZP105get_z(vvx.vmy)
+//				assert path.equals(path2); // should always fail
+					assert ident != null;
+					throw new NotImplementedException();
+				} else {
+					throw new IllegalStateException("Cant be here");
+				}
+			}
+			return sll;
+		}
+
+		private String const_to_string(final IExpression expression) {
+			if (expression instanceof NumericExpression) {
+				return ""+((NumericExpression) expression).getValue();
+			}
+			// StringExpression
+			// FloatLitExpression
+			// CharListExpression
+			// BooleanExpression
+			throw new NotImplementedException();
+		}
+
 	}
 
 	@NotNull
@@ -643,7 +684,7 @@ public class GenerateC {
 		GetAssignmentValue gav = new GetAssignmentValue();
 		if (value instanceof FnCallArgs) {
 			final FnCallArgs fca = (FnCallArgs) value;
-			return gav.FnCallArgs(fca, gf);
+			return gav.FnCallArgs(fca, gf, module);
 		}
 
 		if (value instanceof ConstTableIA) {
@@ -652,46 +693,6 @@ public class GenerateC {
 		}
 
 		return ""+value;
-	}
-
-	@NotNull
-	private List<String> getAssignmentValueArgs(final Instruction inst, final GeneratedFunction gf) {
-		final int args_size = inst.getArgsSize();
-		final List<String> sll = new ArrayList<>();
-		for (int i = 1; i < args_size; i++) {
-			final InstructionArgument ia = inst.getArg(i);
-			final int y=2;
-//			System.err.println("7777 " +ia);
-			if (ia instanceof ConstTableIA) {
-				final ConstantTableEntry constTableEntry = gf.getConstTableEntry(((ConstTableIA) ia).getIndex());
-				sll.add(""+ const_to_string(constTableEntry.initialValue));
-			} else if (ia instanceof IntegerIA) {
-				final VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
-				sll.add(variableTableEntry.getName());
-			} else if (ia instanceof IdentIA) {
-				@org.jetbrains.annotations.Nullable
-				final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
-				//String path = gf.getIAPath((IdentIA) ia));    // return x.y.z
-//				String path2 = gf.getIdentIAPath((IdentIA) ia); // return ZP105get_z(vvx.vmy)
-//				assert path.equals(path2); // should always fail
-				assert ident != null;
-				throw new NotImplementedException();
-			} else {
-				throw new IllegalStateException("Cant be here");
-			}
-		}
-		return sll;
-	}
-
-	private String const_to_string(final IExpression expression) {
-		if (expression instanceof NumericExpression) {
-			return ""+((NumericExpression) expression).getValue();
-		}
-		// StringExpression
-		// FloatLitExpression
-		// CharListExpression
-		// BooleanExpression
-		throw new NotImplementedException();
 	}
 
 	private String getRealTargetName(final GeneratedFunction gf, final IntegerIA target) {
