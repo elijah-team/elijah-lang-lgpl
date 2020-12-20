@@ -82,6 +82,10 @@ public class GeneratedClass implements GeneratedNode {
 		return functionMap.get(fd);
 	}
 
+	public ClassStatement getKlass() {
+		return this.klass;
+	}
+
 	public class VarTableEntry {
 		public final IdentExpression nameToken;
 		public final IExpression initialValue;
