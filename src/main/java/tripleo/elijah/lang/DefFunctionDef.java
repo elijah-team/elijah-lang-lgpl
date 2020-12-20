@@ -118,6 +118,7 @@ public class DefFunctionDef implements ClassItem {
 	private TypeName _returnType = null;
 
 	public DefFunctionDef(final OS_Element aStatement) {
+		assert aStatement != null;
 		parent = aStatement;
 		if (aStatement instanceof ClassStatement) {
 			((ClassStatement)parent).add(this);

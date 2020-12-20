@@ -105,7 +105,8 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	private final OS_Element parent;
 
-	public FunctionDef(final OS_Element aElement) {
+	@Deprecated public FunctionDef(final OS_Element aElement) {
+		assert aElement != null;
 		parent = aElement;
 		if (parent instanceof OS_Container) {
 			((OS_Container) parent).add(this);
