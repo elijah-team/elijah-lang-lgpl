@@ -17,9 +17,7 @@ import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.range.Range;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created 9/10/20 2:57 PM
@@ -82,18 +80,16 @@ public class GeneratedFunction implements GeneratedNode {
 	 */
 	@Nullable
 	public OS_Element resolveIdentIA(final Context ctx, @NotNull final IdentIA ident_a, @NotNull final OS_Module module) {
-		final Stack<InstructionArgument> s = new Stack<InstructionArgument>();
+		final List<InstructionArgument> s = new LinkedList<InstructionArgument>();
 		InstructionArgument oo = ident_a;
 
 		while (oo != null) {
 			if (oo instanceof IntegerIA) {
-				s.push(oo);
+				s.add(0, oo);
 				oo = null;
 			} else if (oo instanceof IdentIA) {
 				final IdentTableEntry ite1 = getIdentTableEntry(((IdentIA) oo).getIndex());
-				s.push(oo);
-				if (ite1.backlink != null)
-					s.push(ite1.backlink);
+				s.add(0, oo);
 				oo = ite1.backlink;
 			} else
 				throw new NotImplementedException();
