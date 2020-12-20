@@ -99,8 +99,33 @@ public class GeneratedFunction implements GeneratedNode {
 		Context ectx = ctx;
 		for (final InstructionArgument ia : s) {
 			if (ia instanceof IntegerIA) {
-				throw new NotImplementedException();
-//						s.push(ite.backlink);
+				VariableTableEntry vte = getVarTableEntry(((IntegerIA) ia).getIndex());
+				final String text = vte.getName();
+				final LookupResultList lrl = ectx.lookup(text);
+				el = lrl.chooseBest(null);
+				if (el != null) {
+					//
+					// TYPE INFORMATION IS CONTAINED IN VARIABLE DECLARATION
+					//
+					if (el instanceof VariableStatement) {
+						VariableStatement vs = (VariableStatement) el;
+						if (!vs.typeName().isNull()) {
+							ectx = vs.typeName().getContext();
+							continue;
+						}
+					}
+					//
+					// OTHERWISE TYPE INFORMATION MAY BE IN POTENTIAL_TYPES
+					//
+					@NotNull List<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
+					if (pot.size() == 1) {
+						ClassStatement x = pot.get(0).attached.getClassOf();
+						ectx = x.getContext();
+					}
+				} else {
+					module.parent.eee.reportError("Can't resolve "+text);
+					return null;
+				}
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
 				//assert idte.backlink == null;
