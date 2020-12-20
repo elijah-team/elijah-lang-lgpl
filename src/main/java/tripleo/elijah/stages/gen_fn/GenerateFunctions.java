@@ -772,7 +772,11 @@ public class GenerateFunctions {
 		case QIDENT:
 			throw new NotImplementedException();
 		case IDENT:
-			final InstructionArgument i = gf.vte_lookup(((IdentExpression) expression).getText());
+			InstructionArgument i = gf.vte_lookup(((IdentExpression) expression).getText());
+			if (i == null) {
+				int ii = addIdentTableEntry((IdentExpression) expression, gf);
+				i = new IdentIA(ii, gf);
+			}
 			return i;
 		case NUMERIC:
 			{
