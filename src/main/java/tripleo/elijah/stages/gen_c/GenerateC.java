@@ -70,22 +70,26 @@ public class GenerateC {
 		int y=2;
 		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
 		try {
-			tos.put_string_ln(String.format("typedef struct z<%s> {", x.getName()));
+			tos.put_string_ln("typedef struct {");
 			tos.incr_tabs();
+			tos.put_string_ln("int _tag;");
 			for (GeneratedClass.VarTableEntry o : x.varTable){
 				tos.put_string_ln(String.format("void *vm%s;", o.nameToken));
 			}
 			tos.dec_tabs();
 			tos.put_string_ln("");
-			tos.put_string_ln(String.format("} Z<%s>;", x.getName()));
+			String class_name = x.getName();
+			tos.put_string_ln(String.format("} Z<%s>;", class_name));
 
 			tos.put_string_ln("");
 			tos.put_string_ln("");
-			tos.put_string_ln(String.format("Z<%s> ZC<%s>() {", x.getName(), x.getName()));
+			tos.put_string_ln(String.format("Z<%s>* ZC<%s>() {", class_name, class_name));
 			tos.incr_tabs();
-			tos.put_string_ln("");
+			tos.put_string_ln(String.format("Z<%s>* R = GC_malloc(sizeof(Z<%s>));", class_name, class_name));
+			tos.put_string_ln(String.format("R->_tag = %d;", x.getKlass()._a.getCode()));
+			tos.put_string_ln("return R;");
 			tos.dec_tabs();
-			tos.put_string_ln(String.format("} // %s", x.getName()));
+			tos.put_string_ln(String.format("} // %s", class_name));
 			tos.put_string_ln("");
 			tos.flush();
 		} finally {
