@@ -181,41 +181,12 @@ public class DeduceTypes2 {
 				break;
 			case CALL: {
 				final int pte_num = to_int(instruction.getArg(0));
-				final InstructionArgument i2 = (instruction.getArg(1));
 				final ProcTableEntry fn1 = generatedFunction.getProcTableEntry(pte_num);
+//				final InstructionArgument i2 = (instruction.getArg(1));
 				{
 					@Nullable OS_Element el = generatedFunction.resolveIdentIA(context, (IdentIA) fn1.expression_num, module);
-/*
-					final IExpression pn1 = fn1.expression;
-					if (pn1 instanceof IdentExpression) {
-						final String pn = ((IdentExpression) pn1).getText();
-						final LookupResultList lrl = fd_ctx.lookup(pn);
-						final OS_Element best = lrl.chooseBest(null);
-						assert el == best;
-						if (best != null) {
-							fn1.resolved = best; // TODO check arity and arg matching
-						} else {
-							System.err.println(pn1);
-							throw new NotImplementedException();
-						}
-					} else {
-						System.out.println("10153 "+pn1.getClass().getName());
-						throw new NotImplementedException();
-					}
-*/
 					assert el != null;
 					fn1.resolved = el;
-				}
-				if (false) {
-					if (i2 instanceof IntegerIA) {
-						final int i2i = to_int(i2);
-						final VariableTableEntry vte = generatedFunction.getVarTableEntry(i2i);
-						final int y =2;
-					} else if (i2 instanceof IdentIA) {
-						final int y=2;
-						System.err.println("i2 is IdentIA");
-					} else
-						throw new NotImplementedException();
 				}
 			}
 			break;
