@@ -373,16 +373,16 @@ public class GeneratedFunction implements GeneratedNode {
 	}
 
 	public String getIdentIAPath(final IdentIA ia2) {
-		final Stack<InstructionArgument> s = new Stack<InstructionArgument>();
+		final List<InstructionArgument> s = new LinkedList<InstructionArgument>();
 		InstructionArgument oo = ia2;
 
 		while (oo != null) {
 			if (oo instanceof IntegerIA) {
-				s.push(oo);
+				s.add(0, oo);
 				oo = null;
 			} else if (oo instanceof IdentIA) {
 				final IdentTableEntry ite1 = getIdentTableEntry(((IdentIA) oo).getIndex());
-				s.push(oo);
+				s.add(0, oo);
 				oo = ite1.backlink;
 			} else
 				throw new NotImplementedException();
