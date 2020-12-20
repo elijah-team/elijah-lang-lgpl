@@ -219,14 +219,14 @@ public class TestGenFunction {
 		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
 		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
 
-		for (final GeneratedNode gn : lgf) {
-			if (gn instanceof GeneratedFunction) {
-				GeneratedFunction gf = (GeneratedFunction) gn;
-				for (final Instruction instruction : gf.instructions()) {
-					System.out.println("8100 " + instruction);
-				}
-			}
-		}
+//		for (final GeneratedNode gn : lgc) {
+//			if (gn instanceof GeneratedFunction) {
+//				GeneratedFunction gf = (GeneratedFunction) gn;
+//				for (final Instruction instruction : gf.instructions()) {
+//					System.out.println("8100 " + instruction);
+//				}
+//			}
+//		}
 
 		new DeduceTypes2(m).deduceFunctions(lgf);
 
@@ -255,7 +255,6 @@ public class TestGenFunction {
 			} else {
 				System.out.println(lgc.getClass().getName());
 			}
-			;
 		}
 	}
 
