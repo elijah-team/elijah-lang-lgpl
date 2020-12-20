@@ -150,7 +150,7 @@ public class GeneratedFunction implements GeneratedNode {
 	}
 
 	//
-	// INSTRUCTIONS
+	// region INSTRUCTIONS
 	//
 
 	public @NotNull List<Instruction> instructions() {
@@ -171,8 +171,10 @@ public class GeneratedFunction implements GeneratedNode {
 		return i.getIndex();
 	}
 
+	// endregion
+
 	//
-	// toString
+	// region toString
 	//
 
 	@Override
@@ -184,8 +186,10 @@ public class GeneratedFunction implements GeneratedNode {
 		return fd != null ? fd.funName.getText() : dfd.funName;
 	}
 
+	// endregion
+
 	//
-	// LABELS
+	// region LABELS
 	//
 
 	public @NotNull Label addLabel() {
@@ -215,8 +219,10 @@ public class GeneratedFunction implements GeneratedNode {
 		return labelList;
 	}
 
+	// endregion
+
 	//
-	//
+	// region get-entries
 	//
 	public VariableTableEntry getVarTableEntry(final int index) {
 		return vte_list.get(index);
@@ -237,6 +243,8 @@ public class GeneratedFunction implements GeneratedNode {
 	public ProcTableEntry getProcTableEntry(final int index) {
 		return prte_list.get(index);
 	}
+
+	// endregion
 
 	public @NotNull TypeTableEntry newTypeTableEntry(final TypeTableEntry.Type type1, final OS_Type type) {
 		return newTypeTableEntry(type1, type, null);
