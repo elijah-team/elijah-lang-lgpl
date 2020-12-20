@@ -856,8 +856,13 @@ public class GenerateFunctions {
 					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) x).getIndex());
 					tte = vte.type;
 				} else {
+					//
+					// WHEN VTE_LOOKUP FAILS, IE WHEN A MEMBER VARIABLE
+					//
 					int y=2;
-					continue; // TODO
+					int idte_index = addIdentTableEntry((IdentExpression) arg, gf);
+					tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, arg);
+					gf.getIdentTableEntry(idte_index).type = tte;
 				}
 				R.add(tte);
 			} else
