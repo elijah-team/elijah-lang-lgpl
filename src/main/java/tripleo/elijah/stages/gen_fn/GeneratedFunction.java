@@ -137,13 +137,14 @@ public class GeneratedFunction implements GeneratedNode {
 						ectx = el.getContext();
 					else {
 						final int yy=2;
+						throw new NotImplementedException();
 					}
 				} else {
 					module.parent.eee.reportError("Can't resolve "+text);
 					return null; // README cant resolve pte. Maybe report error
 				}
 			} else
-				throw new NotImplementedException();
+				throw new IllegalStateException("Really cant be here");
 		}
 		return el;
 	}
