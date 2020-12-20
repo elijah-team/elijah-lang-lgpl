@@ -198,6 +198,67 @@ public class TestGenFunction {
 		}
 	}
 
+	@Test
+	public void testBasic1Backlink3Elijah() throws Exception {
+		final StdErrSink eee = new StdErrSink();
+		final Compilation c = new Compilation(eee, new IO());
+
+		final String f = "test/basic1/backlink3.elijah";
+		final File file = new File(f);
+		final OS_Module m = c.realParseElijjahFile(f, file, false);
+		Assert.assertTrue("Method parsed correctly", m != null);
+		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
+
+		c.findStdLib("c");
+
+		for (final CompilerInstructions ci : c.cis) {
+			c.use(ci, false);
+		}
+
+		final GenerateFunctions gfm = new GenerateFunctions(m);
+		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
+		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+
+		for (final GeneratedNode gn : lgf) {
+			if (gn instanceof GeneratedFunction) {
+				GeneratedFunction gf = (GeneratedFunction) gn;
+				for (final Instruction instruction : gf.instructions()) {
+					System.out.println("8100 " + instruction);
+				}
+			}
+		}
+
+		new DeduceTypes2(m).deduceFunctions(lgf);
+
+		for (final GeneratedNode gn : lgf) {
+			if (gn instanceof GeneratedFunction) {
+				GeneratedFunction gf = (GeneratedFunction) gn;
+				System.out.println("----------------------------------------------------------");
+				System.out.println(gf.name());
+				System.out.println("----------------------------------------------------------");
+				GeneratedFunction.printTables(gf);
+//				System.out.println("VariableTable " + gf.vte_list);
+//				System.out.println("ConstantTable " + gf.cte_list);
+//				System.out.println("ProcTable     " + gf.prte_list);
+//				System.out.println("TypeTable     " + gf.tte_list);
+//				System.out.println("IdentTable    " + gf.idte_list);
+//				System.out.println("----------------------------------------------------------");
+			}
+		}
+
+		GenerateC ggc = new GenerateC(m);
+		ggc.generateCode(lgf);
+
+		for (GeneratedNode generatedNode : lgc) {
+			if (generatedNode instanceof GeneratedClass) {
+				ggc.generate_class((GeneratedClass) generatedNode);
+			} else {
+				System.out.println(lgc.getClass().getName());
+			}
+			;
+		}
+	}
+
 }
 
 //
