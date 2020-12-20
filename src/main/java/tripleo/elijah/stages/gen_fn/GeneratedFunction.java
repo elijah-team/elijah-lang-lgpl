@@ -72,10 +72,10 @@ public class GeneratedFunction implements GeneratedNode {
 	}
 
 	/**
-	 *
-	 * @param ctx
+	 * Called from {@link DeduceTypes2#do_assign_call(GeneratedFunction, Context, VariableTableEntry, FnCallArgs, Instruction)}
+	 * @param ctx to do lookups
 	 * @param ident_a pte.expression_num
-	 * @param module
+	 * @param module to report errors
 	 * @return
 	 */
 	@Nullable
