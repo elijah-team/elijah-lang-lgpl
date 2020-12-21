@@ -669,7 +669,7 @@ public class GenerateFunctions {
 				@NotNull final IExpression expression = input;
 				final InstructionArgument ia = simplify_expression(expression, gf, cctx);
 				if (ia != null) {
-					System.err.println("109 "+expression);
+					System.err.println("109-1 "+expression);
 				} else {
 					System.err.println("109-01 error expr not found "+expression);
 				}
