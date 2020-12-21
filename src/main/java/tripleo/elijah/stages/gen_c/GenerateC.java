@@ -543,7 +543,7 @@ public class GenerateC {
 				sl3.add(text);
 			} else {
 				System.err.println(ia.getClass().getName());
-				throw new NotImplementedException();
+				throw new IllegalStateException("Invalid InstructionArgument");
 			}
 		}
 		return sl3;
@@ -664,7 +664,7 @@ public class GenerateC {
 					assert ident != null;
 					throw new NotImplementedException();
 				} else {
-					throw new IllegalStateException("Cant be here");
+					throw new IllegalStateException("Cant be here: Invalid InstructionArgument");
 				}
 			}
 			return sll;
@@ -750,7 +750,7 @@ public class GenerateC {
 				ls.add(0, "vm"+identTableEntryName); // TODO blindly adding "vm" might not always be right
 				backlink = identTableEntry1.backlink;
 			} else
-				throw new IllegalStateException("Illegal type for backlink");
+				throw new IllegalStateException("Invalid InstructionArgument for backlink");
 		}
 		return Helpers.String_join(".", ls);
 	}
