@@ -163,7 +163,7 @@ public class GeneratedFunction implements GeneratedNode {
 		return Helpers.String_join(".", sl);
 	}
 
-	private List<InstructionArgument> _getIdentIAPathList(InstructionArgument oo) {
+	private @NotNull List<InstructionArgument> _getIdentIAPathList(@NotNull InstructionArgument oo) {
 		List<InstructionArgument> s = new LinkedList<InstructionArgument>();
 		while (oo != null) {
 			if (oo instanceof IntegerIA) {
