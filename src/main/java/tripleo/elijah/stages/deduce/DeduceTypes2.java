@@ -31,7 +31,7 @@ public class DeduceTypes2 {
 		module = m;
 	}
 
-	public void deduceFunctions(final List<GeneratedNode> lgf) {
+	public void deduceFunctions(final Iterable<GeneratedNode> lgf) {
 		for (final GeneratedNode generatedNode : lgf) {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;

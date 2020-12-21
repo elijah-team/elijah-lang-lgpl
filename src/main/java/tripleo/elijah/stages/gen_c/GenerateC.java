@@ -36,7 +36,17 @@ public class GenerateC {
 		this.module = m;
 	}
 
-	public void generateCode(final List<GeneratedNode> lgf) {
+	public void generateCode2(Collection<GeneratedFunction> generatedFunctions) {
+		generateCode(Collections2.transform(generatedFunctions, new Function<GeneratedFunction, GeneratedNode>() {
+			@Nullable
+			@Override
+			public GeneratedNode apply(@Nullable GeneratedFunction input) {
+				return input;
+			}
+		}));
+	}
+
+	public void generateCode(final Collection<GeneratedNode> lgf) {
 		for (final GeneratedNode generatedNode : lgf) {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
