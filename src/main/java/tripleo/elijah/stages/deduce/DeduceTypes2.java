@@ -414,7 +414,7 @@ public class DeduceTypes2 {
 //						assert false;
 					}
 				} else {
-					System.err.println("IdentIA path cannot be resolved "+generatedFunction.getIdentIAPath(ident_a));
+					System.err.println("IdentIA path cannot be resolved "+generatedFunction.getIdentIAPathNormal(ident_a));
 				}
 			}
 		}
