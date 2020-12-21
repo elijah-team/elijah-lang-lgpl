@@ -137,7 +137,6 @@ public class GenerateFunctions {
 		} else if (item instanceof CaseConditional) {
 			throw new NotImplementedException();
 		} else if (item instanceof ClassStatement) {
-//			System.out.println("Skip class for now "+((ClassStatement) item).name());
 			GeneratedClass gc = generateClass((ClassStatement) item);
 			int ite_index = addIdentTableEntry(((ClassStatement) item).getNameNode(), gf);
 			IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
@@ -218,6 +217,7 @@ public class GenerateFunctions {
 			generate_match_conditional(mc, gf);
 //			throw new NotImplementedException();
 		} else if (item instanceof NamespaceStatement) {
+//			System.out.println("Skip namespace for now "+((NamespaceStatement) item).name());
 			throw new NotImplementedException();
 		} else if (item instanceof VariableSequence) {
 			for (final VariableStatement vs : ((VariableSequence) item).items()) {
