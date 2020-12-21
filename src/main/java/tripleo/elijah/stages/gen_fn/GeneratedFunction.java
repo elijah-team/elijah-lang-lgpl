@@ -120,6 +120,7 @@ public class GeneratedFunction implements GeneratedNode {
 				final LookupResultList lrl = ectx.lookup(text);
 				el = lrl.chooseBest(null);
 				if (el != null) {
+//					idte.setResolved(el);
 					if (el.getContext() != null)
 						ectx = el.getContext();
 					else {

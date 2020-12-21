@@ -73,6 +73,10 @@ public class IdentTableEntry {
 	public GeneratedNode resolved() {
 		return resolved;
 	}
+
+//	public void setResolved(OS_Element el) {
+//		resolved_element = el;
+//	}
 }
 
 //
