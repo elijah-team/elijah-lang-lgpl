@@ -908,19 +908,22 @@ public class GenerateFunctions {
 		return i;
 	}
 
-	public int addIdentTableEntry(final IdentExpression ident, @NotNull final GeneratedFunction gf) {
-//		throw new NotImplementedException();
-		final IdentTableEntry idte = new IdentTableEntry(gf.idte_list.size(), ident);
-		gf.idte_list.add(idte);
-		return idte.index;
-	}
-
 	private void simplify_qident(final Qualident left, final GeneratedFunction gf) {
 		throw new NotImplementedException();
 	}
 
 	private void simplify_dot_expression(final DotExpression left, final GeneratedFunction gf) {
 		throw new NotImplementedException();
+	}
+
+	//
+	// region add-table-entries
+	//
+
+	public int addIdentTableEntry(final IdentExpression ident, @NotNull final GeneratedFunction gf) {
+		final IdentTableEntry idte = new IdentTableEntry(gf.idte_list.size(), ident);
+		gf.idte_list.add(idte);
+		return idte.index;
 	}
 
 	private int addVariableTableEntry(final String name, final TypeTableEntry type, @NotNull final GeneratedFunction gf) {
@@ -976,6 +979,8 @@ public class GenerateFunctions {
 		gf.cte_list.add(cte);
 		return cte.index;
 	}
+
+	// endregion
 
 	private int add_i(@NotNull final GeneratedFunction gf, final InstructionName x, final List<InstructionArgument> list_of, final Context ctx) {
 		final int i = gf.add(x, list_of, ctx);
