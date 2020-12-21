@@ -212,6 +212,7 @@ public class GeneratedFunction implements GeneratedNode {
 	//
 	// region get-entries
 	//
+
 	public VariableTableEntry getVarTableEntry(final int index) {
 		return vte_list.get(index);
 	}
