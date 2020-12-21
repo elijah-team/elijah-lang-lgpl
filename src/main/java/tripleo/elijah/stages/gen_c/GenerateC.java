@@ -86,20 +86,23 @@ public class GenerateC {
 			for (GeneratedClass.VarTableEntry o : x.varTable){
 				tos.put_string_ln(String.format("void *vm%s;", o.nameToken));
 			}
+
+			String class_name = getTypeName(new OS_Type(x.getKlass()));//getName();
+			int class_code = x.getKlass()._a.getCode();
+
 			tos.dec_tabs();
 			tos.put_string_ln("");
-			String class_name = x.getName();
-			tos.put_string_ln(String.format("} Z<%s>;", class_name));
+			tos.put_string_ln(String.format("} %s;", class_name));
 
 			tos.put_string_ln("");
 			tos.put_string_ln("");
-			tos.put_string_ln(String.format("Z<%s>* ZC<%s>() {", class_name, class_name));
+			tos.put_string_ln(String.format("%s* ZC%d() {", class_name, class_code));
 			tos.incr_tabs();
-			tos.put_string_ln(String.format("Z<%s>* R = GC_malloc(sizeof(Z<%s>));", class_name, class_name));
-			tos.put_string_ln(String.format("R->_tag = %d;", x.getKlass()._a.getCode()));
+			tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
+			tos.put_string_ln(String.format("R->_tag = %d;", class_code));
 			tos.put_string_ln("return R;");
 			tos.dec_tabs();
-			tos.put_string_ln(String.format("} // %s", class_name));
+			tos.put_string_ln(String.format("} // class %s", x.getName()));
 			tos.put_string_ln("");
 			tos.flush();
 		} finally {
@@ -117,7 +120,7 @@ public class GenerateC {
 		//
 		final OS_Type tte = gf.getTypeTableEntry(1).attached;
 		if (tte != null) {
-			returnType = String.format("Z<%s>*", tte.getClassOf().getName());
+			returnType = String.format("Z<%s>*", getTypeName(tte));
 		} else {
 			returnType = "void";
 		}
@@ -135,7 +138,7 @@ public class GenerateC {
 			ClassStatement st = (ClassStatement) gf.fd.getParent();
 			final String class_name = getTypeName(new OS_Type(st));
 			final String if_args = args.length() == 0 ? "" : ", ";
-			tos.put_string_ln(String.format("%s %s(Z<%s>* vsc%s%s) {", returnType, name, class_name, if_args, args));
+			tos.put_string_ln(String.format("%s %s%s(%s* vsc%s%s) {", returnType, class_name, name, class_name, if_args, args));
 		} else {
 			// TODO vsi for namespace instance??
 			tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
@@ -506,7 +509,7 @@ public class GenerateC {
 		switch (ty.getType()) {
 		case USER_CLASS:
 			final ClassStatement el = ty.getClassOf();
-			z = el.getName();
+			z = String.format("Z%d", el._a.getCode());//.getName();
 			break;
 		case FUNCTION:
 			z = "<function>";
@@ -529,7 +532,7 @@ public class GenerateC {
 		if (typeName instanceof RegularTypeName) {
 			final String name = ((RegularTypeName) typeName).getName(); // TODO convert to Z-name
 
-			return String.format("Z<%s>", name);
+			return String.format("Z<%s>/*kklkl*/", name);
 		}
 		System.err.println("Warning type is not fully deduced "+typeName);
 		return ""+typeName; // TODO type is not fully deduced
