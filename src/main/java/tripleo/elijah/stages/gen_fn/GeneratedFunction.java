@@ -71,6 +71,10 @@ public class GeneratedFunction implements GeneratedNode {
 		}
 	}
 
+	//
+	// region Ident-IA
+	//
+
 	/**
 	 * Called from {@link DeduceTypes2#do_assign_call(GeneratedFunction, Context, VariableTableEntry, FnCallArgs, Instruction)}
 	 * @param ctx to do lookups
@@ -136,6 +140,77 @@ public class GeneratedFunction implements GeneratedNode {
 		}
 		return el;
 	}
+
+	public String getIdentIAPath(final IdentIA ia2) {
+		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
+
+		//
+		// TODO NOT LOOKING UP THINGS, IE PROPERTIES, MEMBERS
+		//
+		List<String> sl = new ArrayList<String>();
+		for (final InstructionArgument ia : s) {
+			final String text;
+			if (ia instanceof IntegerIA) {
+				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
+				text = vte.getName();
+			} else if (ia instanceof IdentIA) {
+				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
+				text = idte.getIdent().getText();
+			} else
+				throw new NotImplementedException();
+			sl.add(text);
+		}
+		return Helpers.String_join(".", sl);
+	}
+
+	private List<InstructionArgument> _getIdentIAPathList(InstructionArgument oo) {
+		List<InstructionArgument> s = new LinkedList<InstructionArgument>();
+		while (oo != null) {
+			if (oo instanceof IntegerIA) {
+				s.add(0, oo);
+				oo = null;
+			} else if (oo instanceof IdentIA) {
+				final IdentTableEntry ite1 = getIdentTableEntry(((IdentIA) oo).getIndex());
+				s.add(0, oo);
+				oo = ite1.backlink;
+			} else
+				throw new IllegalStateException("Invalid InstructionArgument");
+		}
+		return s;
+	}
+
+	/**
+	 * Returns a string that represents the path encoded in ia2.
+	 * Does not transform the string into target language (ie C).
+	 * Called from {@link DeduceTypes2.do_assign_call}
+	 *
+	 * @param ia2 the path
+	 * @return a string that represents the path encoded in ia2
+	 */
+	public String getIdentIAPathNormal(final IdentIA ia2) {
+		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
+
+		//
+		// TODO NOT LOOKING UP THINGS, IE PROPERTIES, MEMBERS
+		//
+		List<String> sl = new ArrayList<String>();
+		for (final InstructionArgument ia : s) {
+			final String text;
+			if (ia instanceof IntegerIA) {
+				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
+				text = vte.getName();
+			} else if (ia instanceof IdentIA) {
+				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
+				text = idte.getIdent().getText();
+			} else
+				throw new NotImplementedException();
+			sl.add(text);
+		}
+		return Helpers.String_join(".", sl);
+	}
+
+
+	// endregion
 
 	//
 	// region INSTRUCTIONS
@@ -359,74 +434,6 @@ public class GeneratedFunction implements GeneratedNode {
 				return label;
 		}
 		return null;
-	}
-
-	public String getIdentIAPath(final IdentIA ia2) {
-		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
-
-		//
-		// TODO NOT LOOKING UP THINGS, IE PROPERTIES, MEMBERS
-		//
-		List<String> sl = new ArrayList<String>();
-		for (final InstructionArgument ia : s) {
-			final String text;
-			if (ia instanceof IntegerIA) {
-				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
-				text = vte.getName();
-			} else if (ia instanceof IdentIA) {
-				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
-				text = idte.getIdent().getText();
-			} else
-				throw new NotImplementedException();
-			sl.add(text);
-		}
-		return Helpers.String_join(".", sl);
-	}
-
-	private List<InstructionArgument> _getIdentIAPathList(InstructionArgument oo) {
-		List<InstructionArgument> s = new LinkedList<InstructionArgument>();
-		while (oo != null) {
-			if (oo instanceof IntegerIA) {
-				s.add(0, oo);
-				oo = null;
-			} else if (oo instanceof IdentIA) {
-				final IdentTableEntry ite1 = getIdentTableEntry(((IdentIA) oo).getIndex());
-				s.add(0, oo);
-				oo = ite1.backlink;
-			} else
-				throw new NotImplementedException();
-		}
-		return s;
-	}
-
-	/**
-	 * Returns a string that represents the path encoded in ia2.
-	 * Does not transform the string into target language (ie C).
-	 * Called from {@link DeduceTypes2.do_assign_call}
-	 *
-	 * @param ia2 the path
-	 * @return a string that represents the path encoded in ia2
-	 */
-	public String getIdentIAPathNormal(final IdentIA ia2) {
-		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
-
-		//
-		// TODO NOT LOOKING UP THINGS, IE PROPERTIES, MEMBERS
-		//
-		List<String> sl = new ArrayList<String>();
-		for (final InstructionArgument ia : s) {
-			final String text;
-			if (ia instanceof IntegerIA) {
-				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
-				text = vte.getName();
-			} else if (ia instanceof IdentIA) {
-				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
-				text = idte.getIdent().getText();
-			} else
-				throw new NotImplementedException();
-			sl.add(text);
-		}
-		return Helpers.String_join(".", sl);
 	}
 
 	public VariableTableEntry getSelf() {
