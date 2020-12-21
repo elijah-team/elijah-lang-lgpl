@@ -247,11 +247,12 @@ public class TestGenFunction {
 		}
 
 		GenerateC ggc = new GenerateC(m);
-		ggc.generateCode(lgf);
+//		ggc.generateCode(lgf);
 
 		for (GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedClass) {
 				ggc.generate_class((GeneratedClass) generatedNode);
+				ggc.generateCode2(((GeneratedClass) generatedNode).functionMap.values());
 			} else {
 				System.out.println(lgc.getClass().getName());
 			}

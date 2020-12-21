@@ -23,7 +23,7 @@ public class GeneratedClass implements GeneratedNode {
 	private final OS_Module module;
 	private final ClassStatement klass;
 	public List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
-	private Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
+	protected Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
 
 	public GeneratedClass(ClassStatement klass, OS_Module module) {
 		this.klass = klass;
