@@ -293,10 +293,8 @@ public class GenerateC {
 				}
 				break;
 			case CALL:
-//				throw new NotImplementedException();
 				{
 					final StringBuilder sb = new StringBuilder();
-//					List<String> sl = new ArrayList<String>();
 // 					System.err.println("9000 "+inst.getName());
 					final InstructionArgument x = instruction.getArg(0);
 					assert x instanceof IntegerIA;
