@@ -206,7 +206,7 @@ public class TestGenFunction {
 		final String f = "test/basic1/backlink3.elijah";
 		final File file = new File(f);
 		final OS_Module m = c.realParseElijjahFile(f, file, false);
-		Assert.assertTrue("Method parsed correctly", m != null);
+		Assert.assertEquals("Method parsed correctly", 0, c.errorCount());
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 
 		c.findStdLib("c");
