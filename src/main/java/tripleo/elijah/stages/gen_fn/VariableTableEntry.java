@@ -59,6 +59,8 @@ public class VariableTableEntry {
 				//v.attached = v.attached; // leave it as is
 			} else if (tte.lifetime == v.lifetime && v.attached == tte.attached) {
 				// leave as is
+			} else if (tte.attached.equals(v.attached)) {
+				// leave as is
 			} else
 				assert false;
 		}
