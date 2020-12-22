@@ -722,9 +722,7 @@ public class GenerateC {
 	private String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		List<String> ls = new LinkedList<String>();
-		// TODO in Deduce set property lookupType to denote what type of lookup it is
-		//  NAMESPACE, CLASS, PROPERTY, MEMBER
-		//  dont know for ALIAS, TYPE and ENUM
+		// TODO in Deduce set property lookupType to denote what type of lookup it is: MEMBER, LOCAL, or CLOSURE
 		ls.add("vm"+identTableEntry.getIdent().getText()); // TODO blindly adding "vm" might not always work, also put in loop
 		InstructionArgument backlink = identTableEntry.backlink;
 		while (backlink != null) {
