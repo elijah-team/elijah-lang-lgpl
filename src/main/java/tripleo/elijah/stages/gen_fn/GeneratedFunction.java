@@ -141,25 +141,77 @@ public class GeneratedFunction implements GeneratedNode {
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
 				//assert idte.backlink == null;
-				final String text = idte.getIdent().getText();
-				final LookupResultList lrl = ectx.lookup(text);
-				el = lrl.chooseBest(null);
-				if (el != null) {
-					idte.setResolved(el);
-					if (el.getContext() != null)
-						ectx = el.getContext();
-					else {
-						final int yy=2;
-						throw new NotImplementedException();
+
+				if (idte.backlink == null) {
+					final String text = idte.getIdent().getText();
+					final LookupResultList lrl = ectx.lookup(text);
+					el = lrl.chooseBest(null);
+					if (el != null) {
+						idte.setResolvedElement(el);
+						if (el.getContext() != null)
+							ectx = el.getContext();
+						else {
+							final int yy=2;
+							throw new NotImplementedException();
+						}
+					} else {
+						module.parent.eee.reportError("1000 Can't resolve "+text);
+						return null; // README cant resolve pte. Maybe report error
 					}
 				} else {
-					module.parent.eee.reportError("Can't resolve "+text);
-					return null; // README cant resolve pte. Maybe report error
+					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
+					for (InstructionArgument ia2 : z) {
+						if (ia2 instanceof IntegerIA) {
+							VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia2));
+							final String text = vte.getName();
+/*
+							final LookupResultList lrl = ectx.lookup(text);
+							el = lrl.chooseBest(null);
+							if (el == null) {
+								module.parent.eee.reportError("1002 Can't resolve "+text);
+								return null;
+							} else {
+								ectx = el.getContext();
+							}
+*/
+							OS_Type attached = vte.type.attached;
+							if (attached != null)
+								ectx = attached.getClassOf().getContext();
+							else {
+								System.out.println("1005 Can't find type of " + text);
+							}
+						} else if (ia2 instanceof IdentIA) {
+							final IdentTableEntry idte2 = getIdentTableEntry(((IdentIA) ia2).getIndex());
+							final String text = idte2.getIdent().getText();
+
+							final LookupResultList lrl = ectx.lookup(text);
+							el = lrl.chooseBest(null);
+							if (el == null) {
+								module.parent.eee.reportError("1002 Can't resolve "+text);
+								return null;
+							} else {
+								ectx = el.getContext();
+							}
+
+							int y=2;
+						}
+					}
 				}
 			} else
 				throw new IllegalStateException("Really cant be here");
 		}
 		return el;
+	}
+
+	private OS_Element lookup(IExpression expression, Context ctx) {
+		switch (expression.getKind()) {
+		case IDENT:
+			LookupResultList lrl = ctx.lookup(((IdentExpression)expression).getText());
+			OS_Element best = lrl.chooseBest(null);
+			return best;
+		default:
+			throw new NotImplementedException();
+		}
 	}
 
 	public String getIdentIAPath(final IdentIA ia2) {
