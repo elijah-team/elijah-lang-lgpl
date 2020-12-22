@@ -107,6 +107,8 @@ public class DeduceTypes2 {
 							if (y instanceof VariableStatement) {
 								TypeName typeName = ((VariableStatement) y).typeName();
 								if (!(typeName.isNull())) {
+									if (ite.type == null)
+										ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, ((VariableStatement) y).initialValue());
 									ite.type.attached = new OS_Type(typeName);
 								}
 							}
