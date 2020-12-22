@@ -120,7 +120,7 @@ public class GenerateC {
 		//
 		final OS_Type tte = gf.getTypeTableEntry(1).attached;
 		if (tte != null) {
-			returnType = String.format("Z<%s>*", getTypeName(tte));
+			returnType = String.format("%s*", getTypeName(tte));
 		} else {
 			returnType = "void";
 		}
@@ -516,7 +516,7 @@ public class GenerateC {
 			break;
 		case USER:
 			System.err.println("Warning: USER TypeName in GenerateC");
-			z = ty.getTypeName().toString();
+			z = String.format("Z<%s>", ty.getTypeName().toString());
 			break;
 		case BUILT_IN:
 			System.err.println("Warning: BUILT_IN TypeName in GenerateC");
