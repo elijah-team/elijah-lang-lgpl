@@ -246,7 +246,7 @@ public class GenerateFunctions {
 					if (vs.initialValue() == IExpression.UNASSIGNED && vs.typeName() != null) {
 						tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(vs.typeName()), vs.getNameToken());
 					} else {
-						tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken());
+						tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, vs.initialValue().getType(), vs.getNameToken());
 					}
 					final int vte_num = addVariableTableEntry(variable_name, tte, gf); // TODO why not vs.initialValue ??
 					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("var"), new IntegerIA(vte_num)), cctx);
@@ -615,7 +615,6 @@ public class GenerateFunctions {
 		case PROCEDURE_CALL:
 			final ProcedureCallExpression pce = (ProcedureCallExpression) value;
 			final FnCallArgs fnCallArgs = new FnCallArgs(expression_to_call(pce, gf, cctx), gf);
-			// TODO should be AGNC
 			add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), fnCallArgs), cctx);
 			break;
 		case NUMERIC:
