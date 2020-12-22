@@ -22,6 +22,7 @@ import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -193,6 +194,13 @@ public class TestGenFunction {
 		}
 	}
 
+	interface Runnable1 {
+
+		void set(OS_Module m);
+
+		void run();
+	}
+
 	@Test
 	public void testBasic1Backlink3Elijah() throws Exception {
 		final StdErrSink eee = new StdErrSink();
@@ -210,56 +218,102 @@ public class TestGenFunction {
 			c.use(ci, false);
 		}
 
-		final GenerateFunctions gfm = new GenerateFunctions(m);
-//		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
-		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
-
-		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
-		for (GeneratedNode lgci : lgc) {
-			if (lgci instanceof GeneratedClass) {
-				lgf.addAll(((GeneratedClass) lgci).functionMap.values());
+		Runnable1 runnable = new Runnable1() {
+			@Override
+			public void run() {
+				try {
+					run2();
+				} catch (IOException e) {
+					mod.parent.eee.exception(e);
+				}
 			}
-		}
 
-//		for (final GeneratedNode gn : lgc) {
-//			if (gn instanceof GeneratedFunction) {
-//				GeneratedFunction gf = (GeneratedFunction) gn;
-//				for (final Instruction instruction : gf.instructions()) {
-//					System.out.println("8100 " + instruction);
+			private OS_Module mod;
+
+			@Override
+			public void set(OS_Module mm) {
+				mod = mm;
+			}
+
+			public void run2() throws IOException {
+				final GenerateFunctions gfm = new GenerateFunctions(mod);
+//				final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
+				final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+
+				final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
+				for (GeneratedNode lgci : lgc) {
+					if (lgci instanceof GeneratedClass) {
+						lgf.addAll(((GeneratedClass) lgci).functionMap.values());
+					}
+				}
+
+//				for (final GeneratedNode gn : lgc) {
+//					if (gn instanceof GeneratedFunction) {
+//						GeneratedFunction gf = (GeneratedFunction) gn;
+//						for (final Instruction instruction : gf.instructions()) {
+//							System.out.println("8100 " + instruction);
+//						}
+//					}
 //				}
-//			}
-//		}
 
-		new DeduceTypes2(m).deduceFunctions(lgf);
+				new DeduceTypes2(mod).deduceFunctions(lgf);
+//				Collection<GeneratedNode> classes = Collections2.filter(lgc, new Predicate<GeneratedNode>() {
+//					@Override
+//					public boolean apply(@Nullable GeneratedNode input) {
+//						return input instanceof GeneratedClass;
+//					}
+//				});
+//				new DeduceTypes2(mod).deduceFunctions(new Iterable<GeneratedNode>() {
+//					@NotNull
+//					@Override
+//					public Iterator<GeneratedNode> iterator() {
+//						return new Iterator<GeneratedNode>() {
+//
+//							Iterator<GeneratedClass> ci = (Iterator<GeneratedClass>)classes.iterator();
+//
+//							@Override
+//							public boolean hasNext() {
+//								return ci.hasNext();
+//							}
+//
+//							@Override
+//							public GeneratedFunction next() {
+//								return ci.next().;
+//							}
+//						};
+//					}
+//				}));
 
-		for (final GeneratedNode gn : lgf) {
-			if (gn instanceof GeneratedFunction) {
-				GeneratedFunction gf = (GeneratedFunction) gn;
-				System.out.println("----------------------------------------------------------");
-				System.out.println(gf.name());
-				System.out.println("----------------------------------------------------------");
-				GeneratedFunction.printTables(gf);
-//				System.out.println("VariableTable " + gf.vte_list);
-//				System.out.println("ConstantTable " + gf.cte_list);
-//				System.out.println("ProcTable     " + gf.prte_list);
-//				System.out.println("TypeTable     " + gf.tte_list);
-//				System.out.println("IdentTable    " + gf.idte_list);
-//				System.out.println("----------------------------------------------------------");
+				for (final GeneratedNode gn : lgf) {
+					if (gn instanceof GeneratedFunction) {
+						GeneratedFunction gf = (GeneratedFunction) gn;
+						System.out.println("----------------------------------------------------------");
+						System.out.println(gf.name());
+						System.out.println("----------------------------------------------------------");
+//						GeneratedFunction.printTables(gf);
+//						System.out.println("----------------------------------------------------------");
+					}
+				}
+
+				GenerateC ggc = new GenerateC(mod);
+//				ggc.generateCode(lgf);
+
+				for (GeneratedNode generatedNode : lgc) {
+					if (generatedNode instanceof GeneratedClass) {
+						GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+						ggc.generate_class(generatedClass);
+						ggc.generateCode2(generatedClass.functionMap.values());
+					} else {
+						System.out.println(lgc.getClass().getName());
+					}
+				}
 			}
-		}
+		};
 
-		GenerateC ggc = new GenerateC(m);
-//		ggc.generateCode(lgf);
-
-		for (GeneratedNode generatedNode : lgc) {
-			if (generatedNode instanceof GeneratedClass) {
-				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				ggc.generate_class(generatedClass);
-				ggc.generateCode2(generatedClass.functionMap.values());
-			} else {
-				System.out.println(lgc.getClass().getName());
-			}
-		}
+		runnable.set(m);
+		runnable.run();
+		runnable.set(m.prelude);
+		runnable.run();
 	}
 
 }
