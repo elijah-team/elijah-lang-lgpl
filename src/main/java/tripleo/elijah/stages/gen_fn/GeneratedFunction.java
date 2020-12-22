@@ -442,6 +442,22 @@ public class GeneratedFunction implements GeneratedNode {
 		else
 			return null;
 	}
+
+	/**
+	 * Returns first {@link IdentTableEntry} that matches expression
+	 * Only works for IdentExpressions
+	 *
+	 * @param expression {@link IdentExpression} to test for
+	 * @return IdentTableEntry or null
+	 */
+	public IdentTableEntry getIdentTableEntryFor(IExpression expression) {
+		for (IdentTableEntry identTableEntry : idte_list) {
+			if (identTableEntry.getIdent().equals(expression)) {
+				return identTableEntry;
+			}
+		}
+		return null;
+	}
 }
 
 //
