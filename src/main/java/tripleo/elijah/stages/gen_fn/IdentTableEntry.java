@@ -11,6 +11,7 @@ package tripleo.elijah.stages.gen_fn;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.IdentExpression;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 
 import java.util.Collection;
@@ -21,7 +22,7 @@ import java.util.Map;
  * Created 9/12/20 10:27 PM
  */
 public class IdentTableEntry {
-    final int index;
+    private final int index;
     private final IdentExpression ident;
 	/**
 	 * Either an {@link tripleo.elijah.stages.instructions.IntegerIA} which is a vte
@@ -31,6 +32,7 @@ public class IdentTableEntry {
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public TypeTableEntry type;
 	private GeneratedNode resolved;
+	public OS_Element resolved_element;
 
 	public IdentTableEntry(final int index, final IdentExpression ident) {
         this.index = index;
@@ -74,9 +76,13 @@ public class IdentTableEntry {
 		return resolved;
 	}
 
-//	public void setResolved(OS_Element el) {
-//		resolved_element = el;
-//	}
+	public void setResolved(OS_Element el) {
+		resolved_element = el;
+	}
+
+	public int getIndex() {
+		return index;
+	}
 }
 
 //
