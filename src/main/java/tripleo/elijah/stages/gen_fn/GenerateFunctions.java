@@ -888,7 +888,7 @@ public class GenerateFunctions {
 		return R;
 	}
 
-	private @org.jetbrains.annotations.Nullable Instruction expression_to_call(@NotNull final ProcedureCallExpression pce, @NotNull final GeneratedFunction gf, final Context cctx) {
+	private @NotNull Instruction expression_to_call(@NotNull final ProcedureCallExpression pce, @NotNull final GeneratedFunction gf, final Context cctx) {
 		switch (pce.getLeft().getKind()) {
 		case IDENT: {
 			return expression_to_call_add_entry(gf, pce, pce.getLeft(), cctx);
