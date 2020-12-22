@@ -101,7 +101,7 @@ public class DeduceTypes2 {
 						final String x = generatedFunction.getIdentIAPathNormal(identIA);
 						@Nullable OS_Element y = generatedFunction.resolveIdentIA(context, identIA, module);
 						if (y == null) {
-							module.parent.eee.reportError("Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
+							module.parent.eee.reportError("1004 Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
 						} else {
 							//ite.resolved_element = y; // resolveIdentIA does this automatically
 							if (y instanceof VariableStatement) {

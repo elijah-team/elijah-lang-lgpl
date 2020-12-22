@@ -114,7 +114,7 @@ public class GeneratedFunction implements GeneratedNode {
 						ectx = x.getContext();
 					}
 				} else {
-					module.parent.eee.reportError("Can't resolve "+text);
+					module.parent.eee.reportError("1001 Can't resolve "+text);
 					return null;
 				}
 			} else if (ia instanceof IdentIA) {
