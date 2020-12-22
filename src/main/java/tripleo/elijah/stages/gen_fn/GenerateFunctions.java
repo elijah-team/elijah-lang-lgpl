@@ -935,7 +935,7 @@ public class GenerateFunctions {
 	public int addIdentTableEntry(final IdentExpression ident, @NotNull final GeneratedFunction gf) {
 		final IdentTableEntry idte = new IdentTableEntry(gf.idte_list.size(), ident);
 		gf.idte_list.add(idte);
-		return idte.index;
+		return idte.getIndex();
 	}
 
 	private int addVariableTableEntry(final String name, final TypeTableEntry type, @NotNull final GeneratedFunction gf) {
