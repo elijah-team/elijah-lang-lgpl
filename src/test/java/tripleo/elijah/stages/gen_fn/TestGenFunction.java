@@ -22,6 +22,7 @@ import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -216,8 +217,15 @@ public class TestGenFunction {
 		}
 
 		final GenerateFunctions gfm = new GenerateFunctions(m);
-		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
+//		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
 		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+
+		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
+		for (GeneratedNode lgci : lgc) {
+			if (lgci instanceof GeneratedClass) {
+				lgf.addAll(((GeneratedClass) lgci).functionMap.values());
+			}
+		}
 
 //		for (final GeneratedNode gn : lgc) {
 //			if (gn instanceof GeneratedFunction) {
@@ -251,8 +259,9 @@ public class TestGenFunction {
 
 		for (GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedClass) {
-				ggc.generate_class((GeneratedClass) generatedNode);
-				ggc.generateCode2(((GeneratedClass) generatedNode).functionMap.values());
+				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				ggc.generate_class(generatedClass);
+				ggc.generateCode2(generatedClass.functionMap.values());
 			} else {
 				System.out.println(lgc.getClass().getName());
 			}
