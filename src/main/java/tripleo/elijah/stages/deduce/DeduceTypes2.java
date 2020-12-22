@@ -384,9 +384,9 @@ public class DeduceTypes2 {
 					OS_Element best = lrl.chooseBest(null);
 					int y=2;
 */
-					final InstructionArgument yy = generatedFunction.vte_lookup(((IdentExpression) e).getText());
-//					System.out.println("10000 "+yy);
-					final Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(yy)).potentialTypes();
+					final InstructionArgument vte_index = generatedFunction.vte_lookup(((IdentExpression) e).getText());
+//					System.out.println("10000 "+vte_index);
+					final Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(vte_index)).potentialTypes();
 					final List<TypeTableEntry> ll = new ArrayList<>(c);
 					if (ll.size() == 1) {
 						tte.attached = ll.get(0).attached;
