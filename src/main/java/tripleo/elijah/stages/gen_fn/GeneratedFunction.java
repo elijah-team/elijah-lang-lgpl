@@ -235,12 +235,36 @@ public class GeneratedFunction implements GeneratedNode {
 		List<String> sl = new ArrayList<String>();
 		for (final InstructionArgument ia : s) {
 			final String text;
-			if (ia instanceof IntegerIA) {
+			if (ia instanceof IntegerIA) { // should only be the first element if at all
 				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
-				text = vte.getName();
+				text = "vv"+vte.getName();
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
-				text = idte.getIdent().getText();
+				OS_Element resolved_element = idte.resolved_element;
+				if (resolved_element != null) {
+					if (resolved_element instanceof ClassStatement) {
+						// Assuming constructor call
+						// TODO what about named contrcuctors
+						int code = ((ClassStatement) resolved_element)._a.getCode();
+						text = String.format("ZC%d", code);
+					} else if (resolved_element instanceof FunctionDef) {
+						OS_Element parent = resolved_element.getParent();
+						int code;
+						if (parent instanceof ClassStatement)
+							code = ((ClassStatement) parent)._a.getCode();
+						else if (parent instanceof NamespaceStatement) {
+							code = ((NamespaceStatement) parent)._a.getCode();
+						} else // TODO what about FunctionDef, etc
+							code = -1;
+						// TODO what about overloaded functions
+						text = String.format("ZC%d%s", code, ((FunctionDef) resolved_element).name());
+					} else {
+//						throw new NotImplementedException();
+						text = idte.getIdent().getText();
+						System.out.println("1008 "+resolved_element.getClass().getName());
+					}
+				} else
+					text = idte.getIdent().getText();
 			} else
 				throw new NotImplementedException();
 			sl.add(text);
