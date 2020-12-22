@@ -98,6 +98,7 @@ public class DeduceTypes2 {
 //							} else
 //								throw new IllegalStateException("Invalid InstructionArgument");
 //						}
+						final String x = generatedFunction.getIdentIAPathNormal(identIA);
 						@Nullable OS_Element y = generatedFunction.resolveIdentIA(context, identIA, module);
 						if (y == null) {
 							module.parent.eee.reportError("Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
@@ -213,6 +214,7 @@ public class DeduceTypes2 {
 				final ProcTableEntry fn1 = generatedFunction.getProcTableEntry(pte_num);
 //				final InstructionArgument i2 = (instruction.getArg(1));
 				{
+					String x = generatedFunction.getIdentIAPathNormal((IdentIA) fn1.expression_num);
 					@Nullable OS_Element el = generatedFunction.resolveIdentIA(context, (IdentIA) fn1.expression_num, module);
 					assert el != null;
 					fn1.resolved = el;
