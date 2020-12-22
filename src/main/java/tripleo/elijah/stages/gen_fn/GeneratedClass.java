@@ -89,6 +89,7 @@ public class GeneratedClass implements GeneratedNode {
 	public class VarTableEntry {
 		public final IdentExpression nameToken;
 		public final IExpression initialValue;
+		public OS_Type varType;
 
 		public VarTableEntry(IdentExpression nameToken, IExpression initialValue) {
 			this.nameToken = nameToken;
