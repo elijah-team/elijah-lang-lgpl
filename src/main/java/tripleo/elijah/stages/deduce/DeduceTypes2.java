@@ -357,6 +357,15 @@ public class DeduceTypes2 {
 	private void do_assign_call(final GeneratedFunction generatedFunction, final Context ctx, final VariableTableEntry vte, final FnCallArgs fca, final Instruction instruction) {
 		final int instructionIndex = instruction.getIndex();
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
+		IdentIA identIA = (IdentIA) pte.expression_num;
+		{
+			@Nullable OS_Element y = generatedFunction.resolveIdentIA(ctx, identIA, module);
+			if (y == null) {
+				System.out.println("1005 Can't find element for " + generatedFunction.getIdentIAPathNormal(identIA));
+			} else {
+//				generatedFunction.getIdentTableEntry(identIA.getIndex()).setResolvedElement(y);
+			}
+		}
 		for (final TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
 			System.out.println("770 "+tte);
 			final IExpression e = tte.expression;
