@@ -17,7 +17,9 @@ import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.range.Range;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created 9/10/20 2:57 PM
@@ -110,8 +112,27 @@ public class GeneratedFunction implements GeneratedNode {
 					//
 					@NotNull List<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
 					if (pot.size() == 1) {
-						ClassStatement x = pot.get(0).attached.getClassOf();
-						ectx = x.getContext();
+						OS_Type attached = pot.get(0).attached;
+						if (attached != null) {
+							if (attached.getType() == OS_Type.Type.USER_CLASS) {
+								ClassStatement x = attached.getClassOf();
+								ectx = x.getContext();
+							} else {
+								throw new IllegalStateException("Dont know what youre doing here.");
+							}
+						} else {
+							TypeTableEntry tte = pot.get(0);
+							OS_Element el2 = lookup(tte.expression.getLeft(), ectx);
+							if (el2 == null)
+								throw new IllegalStateException("foo bar");
+							else {
+								ectx = el2.getContext();
+								if (el2 instanceof ClassStatement)
+									tte.attached = new OS_Type((ClassStatement) el2);
+								else
+									throw new NotImplementedException();
+							}
+						}
 					}
 				} else {
 					module.parent.eee.reportError("1001 Can't resolve "+text);
