@@ -14,6 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
+import tripleo.elijah.stages.gen_fn.TypeTableEntry;
 import tripleo.elijah.util.Helpers;
 
 import java.util.Collection;
@@ -25,6 +26,7 @@ import java.util.List;
 public class FnCallArgs implements InstructionArgument {
 	public final Instruction expression_to_call;
 	private final GeneratedFunction gf;
+	private TypeTableEntry _type; // the return type of the function call
 
 	@Override
 	public String toString() {
@@ -71,6 +73,10 @@ public class FnCallArgs implements InstructionArgument {
 
 	private List<InstructionArgument> getArgs() {
 		return expression_to_call.args;
+	}
+
+	public void setType(TypeTableEntry tte2) {
+		_type = tte2;
 	}
 }
 
