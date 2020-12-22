@@ -82,6 +82,35 @@ public class DeduceTypes2 {
 							}
 						}
 					}
+					//
+					// resolve ident table
+					//
+					for (IdentTableEntry ite : generatedFunction.idte_list) {
+						if (ite.resolved_element != null)
+							continue;
+						IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
+//						@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(identIA);
+//						for (InstructionArgument ia : x) {
+//							if (ia instanceof IntegerIA) {
+//								int y=2;
+//							} else if (ia instanceof IdentIA) {
+//								int y=2;
+//							} else
+//								throw new IllegalStateException("Invalid InstructionArgument");
+//						}
+						@Nullable OS_Element y = generatedFunction.resolveIdentIA(context, identIA, module);
+						if (y == null) {
+							module.parent.eee.reportError("Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
+						} else {
+							//ite.resolved_element = y; // resolveIdentIA does this automatically
+							if (y instanceof VariableStatement) {
+								TypeName typeName = ((VariableStatement) y).typeName();
+								if (!(typeName.isNull())) {
+									ite.type.attached = new OS_Type(typeName);
+								}
+							}
+						}
+					}
 				}
 				break;
 			case X:
