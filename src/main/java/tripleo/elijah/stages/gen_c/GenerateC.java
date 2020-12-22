@@ -452,7 +452,7 @@ public class GenerateC {
 
 		final OS_Type x = vte.type.attached;
 		if (x == null) {
-			System.err.println("8885 x is null (No typename specified) for "+target_name);
+			System.err.println("8885 x is null (No typename specified) for "+ vte.getName());
 			return;
 		}
 
