@@ -177,11 +177,6 @@ public class TestGenFunction {
 				System.out.println(gf.name());
 				System.out.println("----------------------------------------------------------");
 				GeneratedFunction.printTables(gf);
-//				System.out.println("VariableTable " + gf.vte_list);
-//				System.out.println("ConstantTable " + gf.cte_list);
-//				System.out.println("ProcTable     " + gf.prte_list);
-//				System.out.println("TypeTable     " + gf.tte_list);
-//				System.out.println("IdentTable    " + gf.idte_list);
 //				System.out.println("----------------------------------------------------------");
 			}
 		}
@@ -195,7 +190,6 @@ public class TestGenFunction {
 			} else {
 				System.out.println(lgc.getClass().getName());
 			}
-			;
 		}
 	}
 
