@@ -532,9 +532,10 @@ public class GenerateC {
 		if (typeName instanceof RegularTypeName) {
 			final String name = ((RegularTypeName) typeName).getName(); // TODO convert to Z-name
 
-			return String.format("Z<%s>/*kklkl*/", name);
+//			return String.format("Z<%s>/*kklkl*/", name);
+			return getTypeName(new OS_Type(typeName));
 		}
-		System.err.println("Warning type is not fully deduced "+typeName);
+		module.parent.eee.reportError("Type is not fully deduced "+typeName);
 		return ""+typeName; // TODO type is not fully deduced
 	}
 
