@@ -615,7 +615,11 @@ public class GenerateFunctions {
 		case PROCEDURE_CALL:
 			final ProcedureCallExpression pce = (ProcedureCallExpression) value;
 			final FnCallArgs fnCallArgs = new FnCallArgs(expression_to_call(pce, gf, cctx), gf);
-			add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), fnCallArgs), cctx);
+			final int ii2 = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), fnCallArgs), cctx);
+			final VariableTableEntry vte2 = gf.getVarTableEntry(vte);
+			final TypeTableEntry tte2 = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
+			fnCallArgs.setType(tte2);
+			vte2.addPotentialType(ii2, tte2);
 			break;
 		case NUMERIC:
 			final int ci = addConstantTableEntry(null, value, value.getType(), gf);
