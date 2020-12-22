@@ -741,7 +741,7 @@ public class GenerateC {
 			} else
 				throw new IllegalStateException("Invalid InstructionArgument for backlink");
 		}
-		return Helpers.String_join(".", ls);
+		return Helpers.String_join("->", ls);
 	}
 }
 
