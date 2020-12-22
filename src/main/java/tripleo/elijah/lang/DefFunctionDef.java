@@ -110,7 +110,7 @@ public class DefFunctionDef implements ClassItem {
 
 	private final FormalArgList mFal = new FormalArgList();
 	private final DefFunctionDefScope mScope2 = new DefFunctionDefScope();
-	private final Attached _a = new Attached(new DefFunctionContext(this));
+	public final Attached _a = new Attached(new DefFunctionContext(this));
 
 	private final OS_Element parent;
 

@@ -63,10 +63,13 @@ public class GenerateFunctions {
 		for (final ClassItem item : classStatement.getItems()) {
 			if (item instanceof FunctionDef) {
 				final FunctionDef function_def = (FunctionDef) item;
-				R.add((GeneratedNode) generateFunction(function_def, classStatement));
+				GeneratedFunction generatedFunction = generateFunction(function_def, classStatement);
+				function_def._a.setCode(nextFunctionCode());
+				R.add(generatedFunction);
 			} else if (item instanceof DefFunctionDef) {
 				final DefFunctionDef defFunctionDef = (DefFunctionDef) item;
-				R.add((GeneratedNode) generateDefFunction(defFunctionDef, classStatement));
+				R.add(generateDefFunction(defFunctionDef, classStatement));
+				defFunctionDef._a.setCode(nextFunctionCode());
 			}
 		}
 
@@ -80,9 +83,11 @@ public class GenerateFunctions {
 			if (item instanceof FunctionDef) {
 				final FunctionDef function_def = (FunctionDef) item;
 				generateFunction(function_def, namespaceStatement);
+				function_def._a.setCode(nextFunctionCode());
 			} else if (item instanceof DefFunctionDef) {
 				final DefFunctionDef defFunctionDef = (DefFunctionDef) item;
 				generateDefFunction(defFunctionDef, namespaceStatement);
+				defFunctionDef._a.setCode(nextFunctionCode());
 			}
 		}
 
@@ -301,6 +306,8 @@ public class GenerateFunctions {
 		}
 
 		gc.createCtor0();
+
+		klass._a.setCode(nextClassCode());
 
 		return gc;
 	}
@@ -1007,6 +1014,9 @@ public class GenerateFunctions {
 		}
 //		return type.toString();
 	}
+
+	private int nextClassCode() { return module.parent.nextClassCode(); }
+	private int nextFunctionCode() { return module.parent.nextFunctionCode(); }
 
 }
 
