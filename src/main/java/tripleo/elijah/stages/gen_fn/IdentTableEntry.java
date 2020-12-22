@@ -76,7 +76,7 @@ public class IdentTableEntry {
 		return resolved;
 	}
 
-	public void setResolved(OS_Element el) {
+	public void setResolvedElement(OS_Element el) {
 		resolved_element = el;
 	}
 
