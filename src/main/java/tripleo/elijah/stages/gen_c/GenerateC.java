@@ -575,27 +575,10 @@ public class GenerateC {
 			{
 				if (pte.expression_num == null) {
 //					assert false; // TODO synthetic methods
-					final int y=2;
 					final IdentExpression ptex = (IdentExpression) pte.expression;
 					sb.append(ptex.getText());
-//					if (SpecialVariables.contains(ptex.getText())) {
-//						sb.append(SpecialVariables.get(ptex.getText()));
-//					} else {
-//
-// 					}
 				} else {
-//					final OS_Element el = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) pte.expression_num, module);
 					String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
-//					System.err.println("8677 " + path);
-/*
-					final IExpression ptex = pte.expression;
-					if (ptex instanceof IdentExpression) {
-						sb.append(((IdentExpression) ptex).getText());
-					} else if (ptex instanceof ProcedureCallExpression) {
-						sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
-					} else
-						throw new IllegalStateException("ptex is "+ptex.getClass().getName());
-*/
 					sb.append(path);
 				}
 				sb.append("(");
@@ -747,10 +730,7 @@ public class GenerateC {
 		while (backlink != null) {
 			if (backlink instanceof IntegerIA) {
 				IntegerIA integerIA = (IntegerIA) backlink;
-//				int integerIAIndex = integerIA.getIndex();
 				String realTargetName = getRealTargetName(gf, integerIA);
-//				VariableTableEntry varTableEntry = gf.getVarTableEntry(integerIAIndex);
-//				String varTableEntryName = varTableEntry.getName();
 				ls.add(0, realTargetName);
 				backlink = null;
 			} else if (backlink instanceof IdentIA) {
