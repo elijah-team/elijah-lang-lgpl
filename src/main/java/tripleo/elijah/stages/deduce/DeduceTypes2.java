@@ -437,7 +437,7 @@ public class DeduceTypes2 {
 				}
 			} else {
 				final int y=2;
-				final IdentIA ident_a = (IdentIA) pte.expression_num;
+				final IdentIA ident_a = identIA;
 				final OS_Element el = generatedFunction.resolveIdentIA(ctx, ident_a, module);
 				if (el != null) {
 					pte.resolved = el;
