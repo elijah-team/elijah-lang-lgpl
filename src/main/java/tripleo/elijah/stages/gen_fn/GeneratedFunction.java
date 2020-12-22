@@ -159,46 +159,58 @@ public class GeneratedFunction implements GeneratedNode {
 						return null; // README cant resolve pte. Maybe report error
 					}
 				} else {
-					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
-					for (InstructionArgument ia2 : z) {
-						if (ia2 instanceof IntegerIA) {
-							VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia2));
-							final String text = vte.getName();
-/*
-							final LookupResultList lrl = ectx.lookup(text);
-							el = lrl.chooseBest(null);
-							if (el == null) {
-								module.parent.eee.reportError("1002 Can't resolve "+text);
-								return null;
-							} else {
-								ectx = el.getContext();
-							}
-*/
-							OS_Type attached = vte.type.attached;
-							if (attached != null)
-								ectx = attached.getClassOf().getContext();
-							else {
-								System.out.println("1005 Can't find type of " + text);
-							}
-						} else if (ia2 instanceof IdentIA) {
-							final IdentTableEntry idte2 = getIdentTableEntry(((IdentIA) ia2).getIndex());
-							final String text = idte2.getIdent().getText();
-
-							final LookupResultList lrl = ectx.lookup(text);
-							el = lrl.chooseBest(null);
-							if (el == null) {
-								module.parent.eee.reportError("1002 Can't resolve "+text);
-								return null;
-							} else {
-								ectx = el.getContext();
-							}
-
-							int y=2;
-						}
-					}
+//					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
+					return resolveIdentIA2(ctx, ident_a, module, s);
 				}
 			} else
 				throw new IllegalStateException("Really cant be here");
+		}
+		return el;
+	}
+
+	private OS_Element resolveIdentIA2(Context ctx, IdentIA ident_a, OS_Module module, List<InstructionArgument> s) {
+		OS_Element el = null;
+		Context ectx = ctx;
+
+		for (InstructionArgument ia2 : s) {
+			if (ia2 instanceof IntegerIA) {
+				VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia2));
+				final String text = vte.getName();
+/*
+				final LookupResultList lrl = ectx.lookup(text);
+				el = lrl.chooseBest(null);
+				if (el == null) {
+					module.parent.eee.reportError("1002 Can't resolve "+text);
+					return null;
+				} else {
+					ectx = el.getContext();
+				}
+*/
+				OS_Type attached = vte.type.attached;
+				if (attached != null)
+					ectx = attached.getClassOf().getContext();
+				else {
+					if (vte.potentialTypes().size() == 1) {
+						final ArrayList<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
+						vte.type.attached = pot.get(0).attached;
+					} else
+						System.out.println("1006 Can't find type of " + text);
+				}
+			} else if (ia2 instanceof IdentIA) {
+				final IdentTableEntry idte2 = getIdentTableEntry(((IdentIA) ia2).getIndex());
+				final String text = idte2.getIdent().getText();
+
+				final LookupResultList lrl = ectx.lookup(text);
+				el = lrl.chooseBest(null);
+				if (el == null) {
+					module.parent.eee.reportError("1007 Can't resolve "+text);
+					return null;
+				} else {
+					ectx = el.getContext();
+				}
+
+				int y=2;
+			}
 		}
 		return el;
 	}
