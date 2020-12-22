@@ -458,7 +458,7 @@ public class GenerateC {
 
 		if (x.getType() == OS_Type.Type.USER_CLASS) {
 			final String z = getTypeName(x);
-			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+			tos.put_string_ln(String.format("%s* %s;", z, target_name));
 			return;
 		} else if (x.getType() == OS_Type.Type.USER) {
 			final TypeName y = x.getTypeName();
