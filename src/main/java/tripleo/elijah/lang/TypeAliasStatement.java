@@ -12,6 +12,9 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
+
 /**
  * @author Tripleo(sb)
  *
@@ -27,7 +30,6 @@ public class TypeAliasStatement implements OS_Element {
 	}
 
     public void make(final IdentExpression x, final Qualident y) {
-		// TODO Auto-generated method stub
 		this.x=x;
 		this.y=y;
 	}
@@ -38,6 +40,21 @@ public class TypeAliasStatement implements OS_Element {
 	
 	public void setBecomes(final Qualident qq) {
 		y=qq;
+	}
+
+	@Override
+	public void visitGen(ICodeGen visit) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public OS_Element getParent() {
+		return parent;
+	}
+
+	@Override
+	public Context getContext() {
+		throw new NotImplementedException();
 	}
 }
 
