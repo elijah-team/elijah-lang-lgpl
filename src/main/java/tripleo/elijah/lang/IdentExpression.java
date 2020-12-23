@@ -138,6 +138,10 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
 	public static IdentExpression forString(final String string) {
 		return new IdentExpression(Helpers.makeToken(string));
 	}
+
+	public Token token() {
+		return text;
+	}
 }
 
 //
