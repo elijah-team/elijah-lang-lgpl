@@ -15,28 +15,43 @@
 package tripleo.elijah.lang;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ClassInheritance {
 
-	private final ClassStatement parent;
+	private ClassStatement parent;
 
+	/**
+	 * Just set parent
+	 * @param aStatement
+	 */
 	public ClassInheritance(final ClassStatement aStatement) {
-		parent=aStatement;
+		parent = aStatement;
 	}
 
-	public List<TypeName> tns=new ArrayList<TypeName>();
-	
-//	public NormalTypeName next() {
-//		NormalTypeName tn = new RegularTypeName();
-//		tn.setContext(parent.getContext());
-//		tns.add(tn);
-//		return tn;
-//	}
+	/**
+	 * Do nothing and wait for setParent and addAll.
+	 * Used by ClassBuilder
+	 */
+	public ClassInheritance() {
+	}
+
+	public List<TypeName> tns = new ArrayList<TypeName>();
 
 	public void add(final TypeName tn) {
-//		tn.setContext(parent.getContext());
 		tns.add(tn);
+	}
+
+	public void addAll(final Collection<TypeName> tns) {
+		tns.addAll(tns);
+	}
+
+	public void setParent(ClassStatement parent) {
+		this.parent = parent;
 	}
 }
 
+//
+//
+//
