@@ -35,7 +35,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	private OS_Package _packageName;
 	private List<AccessNotation> accesses = new ArrayList<AccessNotation>();
 
-	public NamespaceStatement(final OS_Element aElement) {
+	@Deprecated public NamespaceStatement(final OS_Element aElement) {
 		parent = aElement; // setParent
 		if (aElement instanceof  OS_Module) {
 			final OS_Module module = (OS_Module) aElement;
@@ -48,6 +48,22 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		} else {
 			throw new IllegalStateException(String.format("Cant add NamespaceStatement to %s", aElement));
 		}
+	}
+
+	public NamespaceStatement(final OS_Element aElement, final Context context) {
+		parent = aElement; // setParent
+		if (aElement instanceof  OS_Module) {
+			final OS_Module module = (OS_Module) aElement;
+			//
+			this.setPackageName(module.pullPackageName());
+			_packageName.addElement(this);
+			module.add(this);
+		} else if (aElement instanceof OS_Container) {
+			((OS_Container) aElement).add(this);
+		} else {
+			throw new IllegalStateException(String.format("Cant add NamespaceStatement to %s", aElement));
+		}
+		setContext(new NamespaceContext(context, this));
 	}
 
 	public void setPackageName(final OS_Package aPackageName) {
