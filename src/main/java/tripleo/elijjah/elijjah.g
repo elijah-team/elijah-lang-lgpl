@@ -42,7 +42,7 @@ indexingStatement[IndexingStatement idx]
 		{ExpressionList el=null;}
 	: "indexing" 
 		(i1:IDENT 			    {idx.setName(i1);}
-		 TOK_COLON 			    //{el=new ExpressionList();}
+		 TOK_COLON 			    
 		 el=expressionList2		{idx.setExprs(el);})*
 	;
 constantValue returns [IExpression e]
@@ -52,16 +52,6 @@ constantValue returns [IExpression e]
 	|n:NUM_INT        {e=new NumericExpression(n);}
 	|f:NUM_FLOAT      {e=new FloatExpression(f);}
 	;
-/*
-primitiveExpression  returns [IExpression e]
-		{e=null;ExpressionList el=null;}
-	: e=constantValue
-	| e=variableReference
-	| LBRACK        {e=new ListExpression();el=new ExpressionList();}
-	    expressionList[el]  {((ListExpression)e).setContents(el);}
-	  RBRACK
-	;
-*/
 qualident returns [Qualident q]
     {q=new Qualident();IdentExpression r1=null, r2=null;}
 	:
