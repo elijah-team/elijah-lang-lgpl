@@ -257,7 +257,7 @@ public class GeneratedFunction implements GeneratedNode {
 						} else // TODO what about FunctionDef, etc
 							code = -1;
 						// TODO what about overloaded functions
-						text = String.format("ZC%d%s", code, ((FunctionDef) resolved_element).name());
+						text = String.format("Z%d%s", code, ((FunctionDef) resolved_element).name());
 					} else {
 //						throw new NotImplementedException();
 						text = idte.getIdent().getText();
