@@ -110,6 +110,40 @@ public class GenerateC {
 		}
 	}
 
+	public void generate_namespace(GeneratedNamespace x) throws IOException {
+		int y=2;
+		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
+		try {
+			tos.put_string_ln("typedef struct {");
+			tos.incr_tabs();
+//			tos.put_string_ln("int _tag;");
+			for (GeneratedNamespace.VarTableEntry o : x.varTable){
+				tos.put_string_ln(String.format("%s* vm%s;", getTypeName(o.varType), o.nameToken));
+			}
+
+			String class_name = getTypeName(x.getNamespaceStatement());
+			int class_code = x.getNamespaceStatement()._a.getCode();
+
+			tos.dec_tabs();
+			tos.put_string_ln("");
+			tos.put_string_ln(String.format("} %s; // namespace `%s'", class_name, x.getName()));
+
+			tos.put_string_ln("");
+			tos.put_string_ln("");
+			tos.put_string_ln(String.format("%s* ZC%d() {", class_name, class_code));
+			tos.incr_tabs();
+			tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
+//			tos.put_string_ln(String.format("R->_tag = %d;", class_code));
+			tos.put_string_ln("return R;");
+			tos.dec_tabs();
+			tos.put_string_ln(String.format("} // namespace `%s'", x.getName()));
+			tos.put_string_ln("");
+			tos.flush();
+		} finally {
+			tos.close();
+		}
+	}
+
 	private void generateCodeForMethod(final GeneratedFunction gf) throws IOException {
 		if (gf.fd == null) return;
 		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
@@ -501,6 +535,11 @@ public class GenerateC {
 		System.err.println("8886 y is null (No typename specified)");
 	}
 
+	private String getTypeName(NamespaceStatement namespaceStatement) {
+		String z;
+		z = String.format("Z%d", namespaceStatement._a.getCode());
+		return z;
+	}
 
 	private String getTypeName(final OS_Type ty) {
 		if (ty == null) throw new IllegalArgumentException("ty is null");

@@ -77,7 +77,7 @@ public class GenerateFunctions {
 	}
 
 	private List<GeneratedNode> generateAllNamespaceFunctions(@NotNull final NamespaceStatement namespaceStatement) {
-		final List<GeneratedNode> R = new ArrayList<>();
+		final List<GeneratedNode> R = new ArrayList<GeneratedNode>();
 
 		for (final ClassItem item : namespaceStatement.getItems()) {
 			if (item instanceof FunctionDef) {
@@ -311,14 +311,62 @@ public class GenerateFunctions {
 		return gc;
 	}
 
+	public GeneratedNamespace generateNamespace(NamespaceStatement namespace1) {
+		GeneratedNamespace gn = new GeneratedNamespace(namespace1, module);
+		AccessNotation an = null;
+
+		for (ClassItem item : namespace1.getItems()) {
+			if (item instanceof AliasStatement) {
+				throw new NotImplementedException();
+			} else if (item instanceof ClassStatement) {
+				throw new NotImplementedException();
+			} else if (item instanceof ConstructorDef) {
+				throw new NotImplementedException();
+			} else if (item instanceof DestructorDef) {
+				throw new NotImplementedException();
+			} else if (item instanceof FunctionDef) {
+				//throw new NotImplementedException();
+				@NotNull GeneratedFunction f = generateFunction((FunctionDef) item, namespace1);
+				gn.addFunction((FunctionDef) item, f);
+			} else if (item instanceof DefFunctionDef) {
+				throw new NotImplementedException();
+			} else if (item instanceof NamespaceStatement) {
+				throw new NotImplementedException();
+			} else if (item instanceof VariableSequence) {
+				VariableSequence vsq = (VariableSequence) item;
+				for (VariableStatement vs : vsq.items()) {
+//					System.out.println("6999 "+vs);
+					gn.addVarTableEntry(an, vs);
+				}
+			} else if (item instanceof AccessNotation) {
+				//
+				// TODO two AccessNotation's can be active at once, for example if the first
+				//  one defined only classes and the second one defined only a category
+				//
+				an = (AccessNotation) item;
+//				gn.addAccessNotation(an);
+			} else
+				throw new NotImplementedException();
+		}
+
+		gn.createCtor0();
+
+		namespace1._a.setCode(nextClassCode());
+
+		return gn;
+	}
+
 	public List<GeneratedNode> generateAllTopLevelClasses() {
 		List<GeneratedNode> R = new ArrayList<>();
 
 		for (final ModuleItem item : module.getItems()) {
 			if (item instanceof NamespaceStatement) {
+				final NamespaceStatement namespaceStatement = (NamespaceStatement) item;
 //				final List<GeneratedNode> r;
 //				r = generateAllNamespaceFunctions(((NamespaceStatement) item));
 //				R.addAll(r);
+				GeneratedNamespace kl = generateNamespace(namespaceStatement);
+				R.add(kl);
 			} else if (item instanceof ClassStatement) {
 //				final List<GeneratedNode> r;
 				final ClassStatement classStatement = (ClassStatement) item;
