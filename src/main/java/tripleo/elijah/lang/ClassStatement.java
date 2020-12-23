@@ -40,7 +40,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 //	public ClassStatement() {
 //	}
 
-	public ClassStatement(final OS_Element aElement) {
+	@Deprecated public ClassStatement(final OS_Element aElement) {
 		parent = aElement; // setParent
 		if (aElement instanceof  OS_Module) {
 			final OS_Module module = (OS_Module) aElement;
@@ -84,7 +84,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		mDocs.add(aText.getText());
 	}
 
-	final ClassInheritance _inh = new ClassInheritance(this);
+	ClassInheritance _inh = new ClassInheritance(this); // remove final for ClassBuilder
 
 	public ClassInheritance classInheritance() {
 		return _inh;
@@ -251,6 +251,10 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	public IdentExpression getNameNode() {
 		return clsName;
+	}
+
+	public void setInheritance(ClassInheritance inh) {
+		_inh = inh;
 	}
 }
 
