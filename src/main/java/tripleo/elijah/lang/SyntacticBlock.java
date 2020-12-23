@@ -76,9 +76,11 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 		_items.add((FunctionItem) anElement);
 	}
 
-	@Override
-	public void addDocString(final Token s1) {
+	private final List<Token> _docstrings = new ArrayList<Token>();
 
+	@Override
+	public void addDocString(Token s1) {
+		_docstrings.add(s1);
 	}
 
 //	public final class SyntacticBlockScope implements Scope {
