@@ -705,11 +705,11 @@ caseConditional[CaseConditional mc]
 whileLoop[StatementClosure cr]
 	 {Loop loop=cr.loop();LoopContext ctx;}
 	:
-	( "while"                 {loop.type(LoopTypes2.WHILE);}
+	( "while"                 {loop.type(LoopTypes.WHILE);}
 	  expr=expression         {loop.expr(expr);}
 	                            {ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;}
 	  scope[loop.scope()]
-	| "do"                    {loop.type(LoopTypes2.DO_WHILE);}
+	| "do"                    {loop.type(LoopTypes.DO_WHILE);}
 	                            {ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;}
 	  scope[loop.scope()]
       "while" expr=expression {loop.expr(expr);}
@@ -719,14 +719,14 @@ frobeIteration[StatementClosure cr]
 	 {Loop loop=cr.loop();LoopContext ctx=null;IdentExpression i1=null, i2=null, i3=null;}
 	:"iterate"
 	                            {ctx=new LoopContext(cur, loop);loop.setContext(ctx);cur=ctx;}
-	( "from"                   {loop.type(LoopTypes2.FROM_TO_TYPE);}
+	( "from"                   {loop.type(LoopTypes.FROM_TO_TYPE);}
 	  expr=expression          {loop.frompart(expr);}
 	  "to" expr=expression     {loop.topart(expr);}
       	("with" i1=ident       {loop.iterName(i1);})?
-	| "to"                     {loop.type(LoopTypes2.TO_TYPE);}
+	| "to"                     {loop.type(LoopTypes.TO_TYPE);}
 	  expr=expression          {loop.topart(expr);}
       	("with" i2=ident       {loop.iterName(i2);})?
-	|                          {loop.type(LoopTypes2.EXPR_TYPE);}
+	|                          {loop.type(LoopTypes.EXPR_TYPE);}
 	  expr=expression          {loop.topart(expr);}
       	("with" i3=ident       {loop.iterName(i3);})?
     )

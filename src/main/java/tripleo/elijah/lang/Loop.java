@@ -16,10 +16,7 @@ import tripleo.elijah.util.NotImplementedException;
 import java.util.ArrayList;
 import java.util.List;
 
-// Referenced classes of package pak2:
-//			Statement, LoopTypes, Scope
-
-public class Loop implements /*Statement,*/ LoopTypes, StatementItem, FunctionItem, OS_Element {
+public class Loop implements  StatementItem, FunctionItem, OS_Element {
 
 	private final Scope _scope = new LoopScope();
 	private final List<String> docstrings = new ArrayList<String>();
@@ -33,7 +30,7 @@ public class Loop implements /*Statement,*/ LoopTypes, StatementItem, FunctionIt
 		parent = aParent;
 	}
 
-	public void type(final LoopTypes2 aType) {
+	public void type(final LoopTypes aType) {
 		type = aType;
 	}
 
@@ -62,7 +59,7 @@ public class Loop implements /*Statement,*/ LoopTypes, StatementItem, FunctionIt
 	/**
 	 * @category type
 	 */
-	private LoopTypes2 type;
+	private LoopTypes type;
 
 private IExpression topart,frompart;
 private IExpression expr;
@@ -81,7 +78,7 @@ private final Attached _a = new Attached();
 		return iterName.getText();
 	}
 	
-	public LoopTypes2 getType() {
+	public LoopTypes getType() {
 		return type;
 	}
 	

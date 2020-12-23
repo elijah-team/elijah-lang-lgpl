@@ -112,7 +112,7 @@ public class ExpandFunctions {
 
 	private void addFunctionItem_Loop(final Loop loop, final FunctionDef parent, final FunctionContext fc) {
 
-		if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
+		if (loop.getType() == LoopTypes.FROM_TO_TYPE) {
 			//
 			// DON'T MODIFY  NAMETABLE
 			//
@@ -150,7 +150,7 @@ public class ExpandFunctions {
 //				System.out.println("\t"+item);
 //			}
 //			System.out.println("}");
-		} else if (loop.getType() == LoopTypes2.EXPR_TYPE) {
+		} else if (loop.getType() == LoopTypes.EXPR_TYPE) {
 			addFunctionItem_Loop_EXPR_TYPE(loop, parent, fc);
 		} else throw new NotImplementedException();
 	}

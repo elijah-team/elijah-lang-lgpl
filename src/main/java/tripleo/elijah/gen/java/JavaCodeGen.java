@@ -129,7 +129,7 @@
 //			System.out.println(String.format("%s(%s);", pce./*target*/getLeft(), pce.exprList()));
 //		} else if (element instanceof Loop) {
 //			Loop loop = (Loop)element;
-//			if (loop.getType() == LoopTypes2.FROM_TO_TYPE) {
+//			if (loop.getType() == LoopTypes.FROM_TO_TYPE) {
 //				String varname="vt"+loop.getIterName();
 //				final NumericExpression fromPart = (NumericExpression)loop.getFromPart();
 //				if (loop.getToPart() instanceof NumericExpression) {
