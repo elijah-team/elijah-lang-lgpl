@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
@@ -16,8 +15,9 @@ import tripleo.elijah.util.NotImplementedException;
 public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_Element2, Resolvable {
 	private final OS_Element parent;
 	private IExpression expr;
-	private String name;
+//	private String name;
 	private OS_Element _resolvedElement;
+	private IdentExpression nameToken;
 
 	public AliasStatement(final OS_Element aParent) {
 		this.parent = aParent;
@@ -43,8 +43,8 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 		return expr;
 	}
 
-	public void setName(@NotNull final Token i1) {
-		this.name = i1.getText();
+	public void setName(@NotNull final IdentExpression i1) {
+		this.nameToken = i1;
 	}
 
 	@Override // OS_Element
@@ -64,7 +64,7 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 
 	@Override // OS_Element2
 	public String name() {
-		return this.name;
+		return this.nameToken.getText();
 	}
 
 	@Override
