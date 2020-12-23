@@ -14,15 +14,15 @@ class ConstString < String {}
 class interface Integer {
 }
 
-#[Primitive, C.repr("int64_t")]
+#[Primitive C.repr("int64_t")]
 class Integer64 < Integer {
 }
 
-#[Primitive, C.repr("int32_t")]
+#[Primitive C.repr("int32_t")]
 class Integer32 < Integer {
 }
 
-#[Primitive, C.repr("uint64_t")]
+#[Primitive C.repr("uint64_t")]
 class Unsigned64 < Integer {
 }
 
