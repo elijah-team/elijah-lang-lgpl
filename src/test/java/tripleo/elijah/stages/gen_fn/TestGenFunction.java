@@ -303,6 +303,10 @@ public class TestGenFunction {
 						GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 						ggc.generate_class(generatedClass);
 						ggc.generateCode2(generatedClass.functionMap.values());
+					} else if (generatedNode instanceof GeneratedNamespace) {
+						GeneratedNamespace generatedClass = (GeneratedNamespace) generatedNode;
+						ggc.generate_namespace(generatedClass);
+						ggc.generateCode2(generatedClass.functionMap.values());
 					} else {
 						System.out.println(lgc.getClass().getName());
 					}
