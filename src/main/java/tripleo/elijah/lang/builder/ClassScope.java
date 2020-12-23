@@ -41,6 +41,7 @@ public class ClassScope extends ClassOrNamespaceScope implements Documentable {
 
 	public FunctionDefBuilder funcDef() {
 		FunctionDefBuilder functionDefBuilder = new FunctionDefBuilder();
+		add(functionDefBuilder);
 		return functionDefBuilder;
 	}
 
