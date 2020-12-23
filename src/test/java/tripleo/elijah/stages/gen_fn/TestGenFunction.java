@@ -308,7 +308,7 @@ public class TestGenFunction {
 						ggc.generate_namespace(generatedClass);
 						ggc.generateCode2(generatedClass.functionMap.values());
 					} else {
-						System.out.println(lgc.getClass().getName());
+						System.out.println("2009 "+generatedNode.getClass().getName());
 					}
 				}
 			}
