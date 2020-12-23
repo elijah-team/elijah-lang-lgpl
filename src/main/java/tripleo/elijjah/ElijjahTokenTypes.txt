@@ -1,4 +1,4 @@
-// $ANTLR 2.7.1: elijjah.g -> ElijjahTokenTypes.txt$
+// $ANTLR 2.7.7 (20060906): elijjah.g -> ElijjahTokenTypes.txt$
 Elijjah    // output token vocab name
 AS="as"=4
 CAST_TO="cast_to"=5

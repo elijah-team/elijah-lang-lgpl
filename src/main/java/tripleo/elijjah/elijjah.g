@@ -371,8 +371,9 @@ scope2[BaseScope sc]
       | classStatement2[sc]
       | "continue"						{sc.continue_statement();}
       | "break" /* opt label? */		{sc.break_statement();}
-	  | "return" ((expression) =>  (expr=expression) {sc.return_expression(expr);}
-			|							{sc.return_expression(null);})
+	  | "return" ((expression) =>  (expr=expression)
+	  									{sc.return_expression(expr);}
+	  			| 						{sc.return_expression(null);})
       | withStatement2[sc]
       | syntacticBlockScope2[sc]
       ) opt_semi )*
@@ -447,8 +448,7 @@ functionScope2[FunctionDefScope sc]
             | classStatement2[sc]
 //            | "continue"				{sc.continue_statement();}
 //            | "break" /* opt label? */	{sc.break_statement();}
-            | ("return" ((expression) =>  (expr=expression) {sc.return_expression(expr);})
-			|							{sc.return_expression(null);})
+            | returnExpressionFunctionDefScope[sc]
             )
             opt_semi
         )*
@@ -457,6 +457,14 @@ functionScope2[FunctionDefScope sc]
 	  (postConditionSegment[sc])?
 	  RCURLY
     ;
+returnExpressionFunctionDefScope [FunctionDefScope sc]
+	: "return" 
+			(
+				(expression) =>  
+					(expr=expression) 	{sc.return_expression(expr);}
+			|							{sc.return_expression(null);}
+			)
+	;
 //invariantStatement2_ [ClassScope sc]
 //	: "pre" LCURLY
 //	    (p=invariantSegment 				{sc.addInvariant(p);})*
