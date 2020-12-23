@@ -47,7 +47,7 @@ public class DeduceTypesTest {
 		x.setContext(fctx);
 		vs.setName(x);
 		final Qualident qu = new Qualident();
-		qu.append(Helpers.makeToken("Integer"));
+		qu.append(Helpers.string_to_ident("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
 		fd.postConstruct();
 		cs.postConstruct();
@@ -73,7 +73,7 @@ public class DeduceTypesTest {
 	public void testDeduceIdentExpression2() {
 		final RegularTypeName tn = new RegularTypeName();
 		final Qualident tnq = new Qualident();
-		tnq.append(Helpers.makeToken("Integer"));
+		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn), x/*.getTypeName()*/);
 	}
@@ -81,7 +81,7 @@ public class DeduceTypesTest {
 	public void testDeduceIdentExpression3() {
 		final VariableTypeName tn = new VariableTypeName();
 		final Qualident tnq = new Qualident();
-		tnq.append(Helpers.makeToken("Integer"));
+		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
 		Assert.assertEquals(new OS_Type(tn), x);
@@ -90,7 +90,7 @@ public class DeduceTypesTest {
 	public void testDeduceIdentExpression4() {
 		final VariableTypeName tn = new VariableTypeName();
 		final Qualident tnq = new Qualident();
-		tnq.append(Helpers.makeToken("Integer"));
+		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
 //		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
 //		Assert.assertEquals(new OS_Type(tn), x);

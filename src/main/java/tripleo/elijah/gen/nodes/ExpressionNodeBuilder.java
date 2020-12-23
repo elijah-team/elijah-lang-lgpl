@@ -116,7 +116,7 @@ public class ExpressionNodeBuilder {
 	}
 	
 	@NotNull
-	@Contract("_, _, _ -> new")
+	@Contract("_, _, _, _ -> new")
 	public static IExpression binex(final TypeRef rt, final VariableReference left, final ExpressionOperators middle, final IExpression right) {
 		// TODO Auto-generated method stub
 		final ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
@@ -124,7 +124,7 @@ public class ExpressionNodeBuilder {
 	}
 
 	@NotNull
-	@Contract("_, _, _ -> new")
+	@Contract("_, _, _, _ -> new")
 	public static IExpression binex(final TypeRef rt, final VariableReference left, final ExpressionOperators middle, final TmpSSACtxNode right) { // todo wrong again
 		// TODO Auto-generated method stub
 		final ExpressionKind middle1 = Helpers.ExpressionOperatorToExpressionType(middle);
@@ -139,7 +139,7 @@ public class ExpressionNodeBuilder {
 	}
 	
 	@NotNull
-	@Contract(value = "_, _, _ -> new", pure = true)
+	@Contract(value = "_, _, _, _ -> new", pure = true)
 	public static IExpressionNode binex(final TypeRef rt, final VariableReferenceNode3 varref, final ExpressionOperators operators, final TmpSSACtxNode node) {
 		return new IExpressionNode() {
 			@Override
@@ -191,12 +191,10 @@ public class ExpressionNodeBuilder {
 	
 	@NotNull
 	public static IExpressionNode fncall(final MethRef aMeth, final List<LocalAgnTmpNode> of) { // TODO no so wrong anymore
-		// TODO Auto-generated method stub
 		final ProcedureCallExpression pce1 = new ProcedureCallExpression();
 		final Qualident xyz = new Qualident();
 		final Token t = new CommonToken();
-		t.setText(aMeth.getTitle());
-		xyz.append(t);
+		xyz.append(tripleo.elijah.util.Helpers.string_to_ident(aMeth.getTitle()));
 		pce1.identifier(xyz);
 		//
 		//
@@ -299,8 +297,8 @@ public class ExpressionNodeBuilder {
 		// TODO Auto-generated method stub
 		final ProcedureCallExpression pce1 = new ProcedureCallExpression();
 		final Qualident xyz = new Qualident();
-		final Token t = tripleo.elijah.util.Helpers.makeToken(string);
-		xyz.append(t);
+//		final Token t = tripleo.elijah.util.Helpers.makeToken(string);
+		xyz.append(tripleo.elijah.util.Helpers.string_to_ident(string));
 		pce1.identifier(xyz);
 		//
 		final ExpressionList expl = Helpers.LocalAgnTmpNodeToListVarRef(of);

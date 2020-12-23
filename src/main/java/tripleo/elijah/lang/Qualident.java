@@ -28,7 +28,7 @@ import java.util.Objects;
 public class Qualident  implements IExpression {
 
 	/** Look into creating a {@link DotExpression} from here */
-	public void append(final Token r1) {
+	public void append(final IdentExpression r1) {
 		if (r1.getText().contains("."))
 			throw new IllegalArgumentException("trying to create a Qualident with a dot from a user created Token");
 		parts.add(r1);
@@ -38,7 +38,7 @@ public class Qualident  implements IExpression {
 //		_syntax.appendDot(d1, parts.size());//parts.add(d1);
 	}
 	
-	private final List<Token> parts = new ArrayList<Token>();
+	private final List<IdentExpression> parts = new ArrayList<IdentExpression>();
 
 	@Override
 	public String toString() {
@@ -47,10 +47,10 @@ public class Qualident  implements IExpression {
 
 	@NotNull
 	public String asSimpleString() {
-		return Helpers.String_join(".", Collections2.transform(parts, new Function<Token, String>() {
+		return Helpers.String_join(".", Collections2.transform(parts, new Function<IdentExpression, String>() {
 			@Nullable
 			@Override
-			public String apply(@Nullable Token input) {
+			public String apply(@Nullable IdentExpression input) {
 				assert input != null;
 				return input.getText();
 			}
@@ -107,7 +107,7 @@ public class Qualident  implements IExpression {
 	public OS_Type getType() {
     	return _type;
 	}
-	public List<Token> parts() {
+	public List<IdentExpression> parts() {
 		return parts;
 	}
 
@@ -117,9 +117,9 @@ public class Qualident  implements IExpression {
 		if (!(o instanceof Qualident)) return false;
 		final Qualident qualident = (Qualident) o;
 		for (int i=0; i< parts.size();i++) {
-			final Token ppart = qualident.parts.get(i);
-			final Token part  = parts.get(i);
-			if (!equivalentTokens(ppart, part))
+			final IdentExpression ppart = qualident.parts.get(i);
+			final IdentExpression part  = parts.get(i);
+			if (!equivalentTokens(ppart.token(), part.token()))
 				return false;
 //			if (!qualident.parts.contains(token))
 //				return false;

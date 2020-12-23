@@ -62,10 +62,10 @@ primitiveExpression  returns [IExpression e]
 	;
 */
 qualident returns [Qualident q]
-    {q=new Qualident();}
+    {q=new Qualident();IdentExpression r1=null, r2=null;}
 	:
-     r1:IDENT /*ident2 */ {q.append(r1);}
-      (d1:DOT r2:IDENT {q.appendDot(d1); q.append(r2);})*
+     r1=ident {q.append(r1);}
+      (d1:DOT r2=ident {q.appendDot(d1); q.append(r2);})*
     ;
 classStatement [ClassStatement cls]
 		{AnnotationClause a=null;ClassContext ctx=null;IdentExpression i1=null;}

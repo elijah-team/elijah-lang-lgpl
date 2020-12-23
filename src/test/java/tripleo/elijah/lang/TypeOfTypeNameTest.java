@@ -103,7 +103,7 @@ public class TypeOfTypeNameTest {
 	static private Qualident string_to_qualident(String x) {
 		Qualident q = new Qualident();
 		for (String xx : x.split("\\.")) {
-			q.append(Helpers.makeToken(xx));
+			q.append(Helpers.string_to_ident(xx));
 		}
 		return q;
 	}

@@ -39,7 +39,7 @@ public class DeduceTypesTest2 {
 		final VariableStatement vs = vss.next();
 		vs.setName((Helpers.string_to_ident("x")));
 		final Qualident qu = new Qualident();
-		qu.append(Helpers.makeToken("Integer"));
+		qu.append(Helpers.string_to_ident("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
 		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		final IdentExpression x1 = Helpers.string_to_ident("x");
@@ -51,7 +51,7 @@ public class DeduceTypesTest2 {
 //		final RegularTypeName tn = new RegularTypeName();
 		final VariableTypeName tn = new VariableTypeName();
 		final Qualident tnq = new Qualident();
-		tnq.append(Helpers.makeToken("Integer"));
+		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
 		fd.postConstruct();
 		cs.postConstruct();

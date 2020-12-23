@@ -44,14 +44,14 @@ public class Helpers {
 		return qualidentToDotExpression2(q.parts(), 1);
 	}
 
-	public static IExpression qualidentToDotExpression2(@NotNull final List<Token> ts) {
+	public static IExpression qualidentToDotExpression2(@NotNull final List<IdentExpression> ts) {
 		return qualidentToDotExpression2(ts, 1);
 	}
 
-	public static IExpression qualidentToDotExpression2(@NotNull final List<Token> ts, int i) {
-		if (ts.size() == 1) return new IdentExpression(ts.get(0));
+	public static IExpression qualidentToDotExpression2(@NotNull final List<IdentExpression> ts, int i) {
+		if (ts.size() == 1) return ts.get(0);
 		if (ts.size() == 0) return null;
-		IExpression r = new IdentExpression(ts.get(0));
+		IExpression r = ts.get(0);
 //		int i=1;
 		while (ts.size() > i) {
 			final IExpression dotExpression = qualidentToDotExpression2(ts.subList(i++, ts.size()), i+1);

@@ -62,10 +62,10 @@ public class RootedImportStatement implements ImportStatement {
 		final List<Qualident> r = new ArrayList<Qualident>();
 		for (final Qualident qualident : importList.parts) {
 			final Qualident q = new Qualident();
-			for (final Token part : q.parts()) {
+			for (final IdentExpression part : q.parts()) {
 				q.append(part);
 			}
-			for (final Token part : qualident.parts()) {
+			for (final IdentExpression part : qualident.parts()) {
 				q.append(part);
 			}
 			r.add(q);

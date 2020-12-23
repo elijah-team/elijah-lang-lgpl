@@ -29,7 +29,7 @@ public class AssigningImportStatement implements ImportStatement {
 			throw new NotImplementedException();
 	}
 
-	public void addAssigningPart(final Token aToken, final Qualident aQualident) {
+	public void addAssigningPart(final IdentExpression aToken, final Qualident aQualident) {
 		final Part p = new Part();
 		p.name = aToken;
 		p.value = aQualident;
@@ -54,7 +54,7 @@ public class AssigningImportStatement implements ImportStatement {
 	public List<Qualident> parts() {
 		final List<Qualident> r = new ArrayList<Qualident>();
 		for (final Part part : _parts) {
-			r.add(tokenToQualident(part.name));
+			r.add(identToQualident(part.name));
 		}
 		return r;
 	}
@@ -64,9 +64,9 @@ public class AssigningImportStatement implements ImportStatement {
 		_ctx = ctx;
 	}
 
-	private static Qualident tokenToQualident(final Token token) {
+	private static Qualident identToQualident(final IdentExpression identExpression) {
 		final Qualident r = new Qualident();
-		r.append(token);
+		r.append(identExpression);
 		return r;
 	}
 

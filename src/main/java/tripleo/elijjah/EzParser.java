@@ -457,14 +457,11 @@ public EzParser(ParserSharedInputState state) {
 	public final Qualident  qualident() throws RecognitionException, TokenStreamException {
 		Qualident q;
 		
-		Token  r1 = null;
 		Token  d1 = null;
-		Token  r2 = null;
-		q=new Qualident();
+		q=new Qualident();IdentExpression r1=null, r2=null;
 		
 		try {      // for error handling
-			r1 = LT(1);
-			match(IDENT);
+			r1=ident();
 			if ( inputState.guessing==0 ) {
 				q.append(r1);
 			}
@@ -474,8 +471,7 @@ public EzParser(ParserSharedInputState state) {
 				if ((LA(1)==DOT)) {
 					d1 = LT(1);
 					match(DOT);
-					r2 = LT(1);
-					match(IDENT);
+					r2=ident();
 					if ( inputState.guessing==0 ) {
 						q.appendDot(d1); q.append(r2);
 					}
@@ -497,6 +493,31 @@ public EzParser(ParserSharedInputState state) {
 			}
 		}
 		return q;
+	}
+	
+	public final IdentExpression  ident() throws RecognitionException, TokenStreamException {
+		IdentExpression id;
+		
+		Token  r1 = null;
+		id=null;
+		
+		try {      // for error handling
+			r1 = LT(1);
+			match(IDENT);
+			if ( inputState.guessing==0 ) {
+				id=new IdentExpression(r1, cur);
+			}
+		}
+		catch (RecognitionException ex) {
+			if (inputState.guessing==0) {
+				reportError(ex);
+				consume();
+				consumeUntil(_tokenSet_8);
+			} else {
+			  throw ex;
+			}
+		}
+		return id;
 	}
 	
 	public final void docstrings(
@@ -622,31 +643,6 @@ public EzParser(ParserSharedInputState state) {
 			  throw ex;
 			}
 		}
-	}
-	
-	public final IdentExpression  ident() throws RecognitionException, TokenStreamException {
-		IdentExpression id;
-		
-		Token  r1 = null;
-		id=null;
-		
-		try {      // for error handling
-			r1 = LT(1);
-			match(IDENT);
-			if ( inputState.guessing==0 ) {
-				id=new IdentExpression(r1, cur);
-			}
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_8);
-			} else {
-			  throw ex;
-			}
-		}
-		return id;
 	}
 	
 	public final IExpression  assignmentExpression() throws RecognitionException, TokenStreamException {

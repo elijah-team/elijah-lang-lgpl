@@ -47,7 +47,7 @@ public class DeduceTypesTest3 {
 		final VariableStatement vs = vss.next();
 		vs.setName(Helpers.string_to_ident("x"));
 		final Qualident qu = new Qualident();
-		qu.append(Helpers.makeToken("Foo"));
+		qu.append(Helpers.string_to_ident("Foo"));
 		((NormalTypeName)vs.typeName()).setName(qu);
 		fd.postConstruct();
 		cs_foo.postConstruct();
@@ -73,7 +73,7 @@ public class DeduceTypesTest3 {
 	public void testDeduceIdentExpression2() {
 		final RegularTypeName tn = new RegularTypeName();
 		Qualident tnq = new Qualident();
-		tnq.append(Helpers.makeToken("Foo"));
+		tnq.append(Helpers.string_to_ident("Foo"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn), x/*.getTypeName()*/);
 	}
@@ -81,7 +81,7 @@ public class DeduceTypesTest3 {
 	public void testDeduceIdentExpression3() {
 		final VariableTypeName tn = new VariableTypeName();
 		final Qualident tnq = new Qualident();
-		tnq.append(tripleo.elijah.util.Helpers.makeToken("Foo"));
+		tnq.append(tripleo.elijah.util.Helpers.string_to_ident("Foo"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn), x);
 	}
@@ -89,7 +89,7 @@ public class DeduceTypesTest3 {
 	public void testDeduceIdentExpression3_5() {
 		final VariableTypeName tn = new VariableTypeName();
 		final Qualident tnq = new Qualident();
-		tnq.append(tripleo.elijah.util.Helpers.makeToken("Foo"));
+		tnq.append(tripleo.elijah.util.Helpers.string_to_ident("Foo"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
 	}
@@ -97,7 +97,7 @@ public class DeduceTypesTest3 {
 	public void testDeduceIdentExpression4() {
 		final VariableTypeName tn = new VariableTypeName();
 		final Qualident tnq = new Qualident();
-		tnq.append(tripleo.elijah.util.Helpers.makeToken("Foo"));
+		tnq.append(tripleo.elijah.util.Helpers.string_to_ident("Foo"));
 		tn.setName(tnq);
 		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());
 	}
