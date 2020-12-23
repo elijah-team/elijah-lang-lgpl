@@ -258,6 +258,13 @@ public class GeneratedFunction implements GeneratedNode {
 							code = -1;
 						// TODO what about overloaded functions
 						text = String.format("Z%d%s", code, ((FunctionDef) resolved_element).name());
+					} else if (resolved_element instanceof VariableStatement) {
+						// first getParent is VariableSequence
+						if (resolved_element.getParent().getParent() == getFD().getParent()) {
+							// A direct member value. Doesn't handle when indirect
+							text = "vsc->vm" + ((VariableStatement) resolved_element).getName();
+						} else
+							text = "vv"+((VariableStatement) resolved_element).getName();
 					} else {
 //						throw new NotImplementedException();
 						text = idte.getIdent().getText();
