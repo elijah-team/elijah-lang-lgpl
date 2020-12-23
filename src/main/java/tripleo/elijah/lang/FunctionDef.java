@@ -209,7 +209,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	// region name
 
-	public IdentExpression funName;
+	private IdentExpression funName;
 
 	public void setName(final IdentExpression aText) {
 		funName = aText;
