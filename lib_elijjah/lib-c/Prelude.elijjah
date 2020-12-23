@@ -1,17 +1,35 @@
 package Prelude;
 
+import C
+
 class interface String {
     to_int() -> Integer {
     }
     isInt() -> Boolean {
     }
 }
+
+class ConstString < String {}
+
 class interface Integer {
 }
+
+#[Primitive, C.repr("int64_t")]
 class Integer64 < Integer {
 }
+
+#[Primitive, C.repr("int32_t")]
 class Integer32 < Integer {
 }
+
+#[Primitive, C.repr("uint64_t")]
+class Unsigned64 < Integer {
+}
+
+#[Primitive, C.repr("uint32_t")]
+class Unsigned32 < Integer {
+}
+
 //enum
 class
  Boolean {
@@ -27,24 +45,39 @@ namespace {
 
 class interface IPrintable {
     // TODO forgot what to put here
-    printable() -> String {}
+    printable() -> ConstString {}
 }
 
 namespace {
     print (a: IPrintable) {
+		C.puts(String8(a.printable())
     }
     println (a: IPrintable) {
+		print(a)
+		print('\n')
     }
 }
 
 class Arguments {
-    arguments()-> SystemInteger {
+    arguments() -> SystemInteger {
+		Result = argument_count_
     }
-    argument(n: SystemInteger) -> String {
+    alias argument_count = arguments
+    argument(n: SystemInteger) -> ConstString {
+//		pre {
+//			valid_index: n <= argument_count
+//		}
+		Result = String8(argument_array[n])
     }
+access {NONE}
+	argument_array: C.Array[C.str]
+	argument_count_: SystemInteger
 }
 
-/*type*/ alias u64 = Integer64
+/*type*/ alias u64 = Unsigned64
+/*type*/ alias u32 = Unsigned64
+/*type*/ alias i64 = Integer64
+/*type*/ alias i32 = Integer32
 
 //
 //
