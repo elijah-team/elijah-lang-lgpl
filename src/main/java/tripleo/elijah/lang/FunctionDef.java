@@ -133,7 +133,11 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		return mFal;
 	}
 
-	private final FormalArgList mFal = new FormalArgList();
+	private FormalArgList mFal = new FormalArgList(); // remove final for FunctionDefBuilder
+
+	public void setFal(FormalArgList fal) {
+		mFal = fal;
+	}
 
 	// endregion
 
