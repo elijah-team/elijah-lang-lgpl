@@ -23,8 +23,13 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 	private OS_Element parent;
 	List<VariableStatement> stmts;
 
-	public VariableSequence() {
+	@Deprecated public VariableSequence() {
 		stmts = new ArrayList<VariableStatement>();
+	}
+
+	public VariableSequence(Context aContext) {
+		stmts = new ArrayList<VariableStatement>();
+		_ctx = aContext;
 	}
 
 	private TypeModifiers def;
