@@ -14,9 +14,14 @@ public class QualifiedImportStatement implements ImportStatement {
 	private final List<Part> _parts = new ArrayList<Part>();
 	private Context _ctx;
 
-	class Part {
+	public static class Part {
 		public Qualident base;
 		public IdentList idents;
+
+		public Part(Qualident q3, IdentList il) {
+			base = q3;
+			idents = il;
+		}
 	}
 
 	public QualifiedImportStatement(final OS_Element aParent) {
@@ -28,13 +33,13 @@ public class QualifiedImportStatement implements ImportStatement {
 	}
 
 	public void addSelectivePart(final Qualident aQualident, final IdentList il) {
-		final Part p = new Part();
-		p.base = aQualident;
-		p.idents = il;
+		final Part p = new Part(aQualident, il);
+//		p.base = aQualident;
+//		p.idents = il;
 		addPart(p);
 	}
 
-	private void addPart(final Part p) {
+	public void addPart(final Part p) {
 		_parts.add(p);
 	}
 

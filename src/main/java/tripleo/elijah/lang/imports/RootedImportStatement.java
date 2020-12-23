@@ -1,6 +1,5 @@
 package tripleo.elijah.lang.imports;
 
-import antlr.Token;
 import tripleo.elijah.contexts.ImportContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
@@ -13,7 +12,7 @@ import java.util.List;
  */
 public class RootedImportStatement implements ImportStatement {
 	final OS_Element parent;
-	private final QualidentList importList = new QualidentList();
+	private QualidentList importList = new QualidentList(); // remove final for ImportStatementBuilder
 	/** Used in from syntax
 	 * @category from
 	 */
@@ -78,4 +77,11 @@ public class RootedImportStatement implements ImportStatement {
 		_ctx = ctx;
 	}
 
+	public void setImportList(QualidentList qil) {
+		importList = qil;
+	}
 }
+
+//
+//
+//
