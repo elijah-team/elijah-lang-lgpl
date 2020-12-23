@@ -18,7 +18,7 @@ public interface Scope extends Documentable/*, OS_Element*/ {
 
 	BlockStatement blockStatement();
 
-	TypeAliasExpression typeAlias();
+	TypeAliasStatement typeAlias();
 	
 	InvariantStatement invariantStatement();
 	

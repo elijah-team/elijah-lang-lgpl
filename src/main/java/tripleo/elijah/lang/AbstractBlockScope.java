@@ -52,7 +52,7 @@ public abstract class AbstractBlockScope implements Scope {
 	public abstract Context getContext();
 
 	@Override
-	public TypeAliasExpression typeAlias() {
+	public TypeAliasStatement typeAlias() {
 		return null;
 	}
 

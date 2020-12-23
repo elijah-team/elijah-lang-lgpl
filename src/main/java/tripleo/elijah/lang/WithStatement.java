@@ -130,7 +130,7 @@ public class WithStatement implements OS_Element, OS_Container, FunctionItem, St
 //		}
 //
 //		@Override
-//		public TypeAliasExpression typeAlias() {
+//		public TypeAliasStatement typeAlias() {
 //			return null;
 //		}
 //

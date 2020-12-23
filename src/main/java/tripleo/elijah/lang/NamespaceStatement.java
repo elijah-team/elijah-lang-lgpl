@@ -94,7 +94,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 			}
 
 			@Override
-			public TypeAliasExpression typeAlias() {
+			public TypeAliasStatement typeAlias() {
 				return NamespaceStatement.this.typeAlias();
 			}
 
@@ -120,7 +120,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		});
 	}
 
-	public TypeAliasExpression typeAlias() {
+	public TypeAliasStatement typeAlias() {
 		throw new NotImplementedException();
 	}
 

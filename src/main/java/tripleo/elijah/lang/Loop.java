@@ -117,8 +117,8 @@ private final Attached _a = new Attached();
 		}
 		
 		@Override
-		public TypeAliasExpression typeAlias() {
-			return new TypeAliasExpression(Loop.this);
+		public TypeAliasStatement typeAlias() {
+			return new TypeAliasStatement(Loop.this);
 		}
 		
 		@Override

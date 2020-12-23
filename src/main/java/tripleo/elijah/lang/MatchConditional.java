@@ -170,7 +170,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public TypeAliasExpression typeAlias() {
+		public TypeAliasStatement typeAlias() {
 			throw new NotImplementedException();
 //			return null;
 		}

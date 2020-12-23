@@ -142,7 +142,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		}
 
 		@Override
-		public TypeAliasExpression typeAlias() {
+		public TypeAliasStatement typeAlias() {
 			throw new NotImplementedException();
 //			return null;
 		}

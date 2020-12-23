@@ -119,7 +119,7 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 //		}
 //
 //		@Override
-//		public TypeAliasExpression typeAlias() {
+//		public TypeAliasStatement typeAlias() {
 //			return null;
 //		}
 //

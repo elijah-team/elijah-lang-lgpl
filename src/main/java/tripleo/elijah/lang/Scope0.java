@@ -63,7 +63,7 @@ public class Scope0 implements Scope {
 	}
 
 	@Override
-	public TypeAliasExpression typeAlias() {
+	public TypeAliasStatement typeAlias() {
 		throw new NotImplementedException();
 
 	}

@@ -16,13 +16,13 @@ package tripleo.elijah.lang;
  * @author Tripleo(sb)
  *
  */
-public class TypeAliasExpression {
+public class TypeAliasStatement implements OS_Element {
 
 	private final OS_Element parent;
 	private IdentExpression x;
 	private Qualident y;
 
-	public TypeAliasExpression(final OS_Element aParent) {
+	public TypeAliasStatement(final OS_Element aParent) {
 		this.parent = aParent;
 	}
 

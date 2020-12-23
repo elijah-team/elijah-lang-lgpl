@@ -120,7 +120,7 @@ public class FuncExpr implements IExpression, OS_Element {
 		}
 
 		@Override
-		public TypeAliasExpression typeAlias() {
+		public TypeAliasStatement typeAlias() {
 			return null;
 		}
 

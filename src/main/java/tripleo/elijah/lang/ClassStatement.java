@@ -188,7 +188,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return new DestructorDef(this);
 	}
 	
-	public TypeAliasExpression typeAlias() {
+	public TypeAliasStatement typeAlias() {
 		NotImplementedException.raise();
 		return null;
 	}

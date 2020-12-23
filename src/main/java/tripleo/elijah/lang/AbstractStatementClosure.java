@@ -62,7 +62,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 			}
 
 			@Override
-			public TypeAliasExpression typeAlias() {
+			public TypeAliasStatement typeAlias() {
 				throw new NotImplementedException();
 			}
 

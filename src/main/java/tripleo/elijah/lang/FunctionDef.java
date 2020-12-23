@@ -75,7 +75,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		}
 
 		@Override
-		public TypeAliasExpression typeAlias() {
+		public TypeAliasStatement typeAlias() {
 			throw new NotImplementedException();
 		}
 

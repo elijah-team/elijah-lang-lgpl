@@ -65,7 +65,7 @@ public class DefFunctionDef implements ClassItem {
 		}
 		
 		@Override
-		public TypeAliasExpression typeAlias() {
+		public TypeAliasStatement typeAlias() {
 			return null;
 		}
 		
