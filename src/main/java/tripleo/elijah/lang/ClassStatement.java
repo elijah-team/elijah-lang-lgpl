@@ -199,7 +199,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 	
 	public ProgramClosure XXX() {
-		return null;
+		return new ProgramClosure() {};
 	}
 
 	@Override // OS_Element
