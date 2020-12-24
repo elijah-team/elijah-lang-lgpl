@@ -886,7 +886,15 @@ public class DeduceTypes2 {
 							}
 						}
 					}
-					ectx = el.getContext();
+					if (idte2.type != null) {
+						assert idte2.type.attached != null;
+						OS_Type rtype = resolve_type(idte2.type.attached, ectx);
+						ectx = rtype.getClassOf().getContext();
+						idte2.type.attached = rtype; // TODO may be losing alias information here
+					} else {
+//						throw new IllegalStateException("who knows");
+						System.out.println("2010 idte2.type == null for "+ text);
+					}
 				}
 
 				int y=2;
