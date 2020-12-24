@@ -28,7 +28,7 @@ public class DotExpressionToStackTest {
 
 	@Test
 	public void test_dot_expression_to_stack() {
-		DeduceTypes2 d = new DeduceTypes2(null);
+//		DeduceTypes2 d = new DeduceTypes2(null);
 		//
 		IdentExpression c = Helpers.string_to_ident("c");
 		IdentExpression b = Helpers.string_to_ident("b");
@@ -37,7 +37,7 @@ public class DotExpressionToStackTest {
 		DotExpression de2 = new DotExpression(b, c);
 		DotExpression de = new DotExpression(a, de2);
 		//
-		@NotNull Stack<IExpression> s = d.dot_expression_to_stack(de);
+		@NotNull Stack<IExpression> s = DeduceTypes2.dot_expression_to_stack(de);
 //		IExpression[] sa = (IExpression[]) s.toArray();
 		Assert.assertEquals(a, s.pop());
 		Assert.assertEquals(b, s.pop());
@@ -46,7 +46,7 @@ public class DotExpressionToStackTest {
 
 	@Test
 	public void test_dot_expression_to_stack2() {
-		DeduceTypes2 dt2 = new DeduceTypes2(null);
+//		DeduceTypes2 dt2 = new DeduceTypes2(null);
 		//
 		IdentExpression e = Helpers.string_to_ident("e");
 		IdentExpression d = Helpers.string_to_ident("d");
@@ -59,7 +59,7 @@ public class DotExpressionToStackTest {
 		DotExpression de2 = new DotExpression(b, de3);
 		DotExpression de = new DotExpression(a, de2);
 		//
-		@NotNull Stack<IExpression> s = dt2.dot_expression_to_stack(de);
+		@NotNull Stack<IExpression> s = DeduceTypes2.dot_expression_to_stack(de);
 //		IExpression[] sa = (IExpression[]) s.toArray();
 		Assert.assertEquals(a, s.pop());
 		Assert.assertEquals(b, s.pop());
