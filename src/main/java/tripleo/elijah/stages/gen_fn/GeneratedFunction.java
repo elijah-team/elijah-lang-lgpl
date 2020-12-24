@@ -198,6 +198,13 @@ public class GeneratedFunction implements GeneratedNode {
 					ectx = el.getContext();
 				}
 */
+				{
+					List<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
+					if (pot.size() == 1) {
+						ectx = pot.get(0).attached.getClassOf().getContext(); // TODO can combine later
+					}
+				}
+
 				OS_Type attached = vte.type.attached;
 				if (attached != null)
 					ectx = attached.getClassOf().getContext();
