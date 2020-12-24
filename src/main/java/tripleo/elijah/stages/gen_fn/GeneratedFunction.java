@@ -225,6 +225,13 @@ public class GeneratedFunction implements GeneratedNode {
 					module.parent.eee.reportError("1007 Can't resolve "+text);
 					return null;
 				} else {
+					if (idte2.type == null) {
+						if (el instanceof VariableStatement) {
+							VariableStatement vs = (VariableStatement) el;
+							TypeTableEntry tte = newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(vs.typeName())); // TODO where is expression? ie foo.x
+							idte2.type = tte;
+						}
+					}
 					ectx = el.getContext();
 				}
 
