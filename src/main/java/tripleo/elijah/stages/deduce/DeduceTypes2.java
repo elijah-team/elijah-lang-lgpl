@@ -358,7 +358,7 @@ public class DeduceTypes2 {
 		final int instructionIndex = instruction.getIndex();
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		IdentIA identIA = (IdentIA) pte.expression_num;
-		{
+		if (identIA != null){
 			@Nullable OS_Element y = generatedFunction.resolveIdentIA(ctx, identIA, module);
 			if (y == null) {
 				System.out.println("1005 Can't find element for " + generatedFunction.getIdentIAPathNormal(identIA));
