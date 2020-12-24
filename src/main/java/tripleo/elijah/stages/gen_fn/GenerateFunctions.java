@@ -407,22 +407,31 @@ public class GenerateFunctions {
 		}
 
 		public void ident(GeneratedFunction gf, IdentExpression left, IdentExpression right, Context cctx) {
-			final InstructionArgument iii = gf.vte_lookup(left.getText());
-			final int iii4;
-			int iii5=-1;
-			if (iii == null) {
-				iii4 = addIdentTableEntry(left, gf);
-			}
+			final InstructionArgument vte_left = gf.vte_lookup(left.getText());
+			final int ident_left;
+			int ident_right;
+			InstructionArgument some_left;
+			if (vte_left == null) {
+				ident_left = addIdentTableEntry(left, gf);
+				some_left = new IdentIA(ident_left, gf);
+			} else
+				some_left = vte_left;
 			final InstructionArgument iiii = gf.vte_lookup(right.getText());
+			final int inst;
 			if (iiii == null) {
-				iii5 = addIdentTableEntry(right, gf);
-			}
-			final int ia1 = add_i(gf, InstructionName.AGN, List_of(iii, iiii), cctx);
-			assert iii != null;
-			final VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(iii));
-			vte.addPotentialType(ia1,
-					gf.getVarTableEntry(DeduceTypes2.to_int(iiii/* != null ? iiii :
+				ident_right = addIdentTableEntry(right, gf);
+				inst = add_i(gf, InstructionName.AGN, List_of(some_left, new IdentIA(ident_right, gf)), cctx);
+			} else {
+				inst = add_i(gf, InstructionName.AGN, List_of(some_left, iiii), cctx);
+
+				// TODO this will break one day
+				assert vte_left != null;
+				final VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(vte_left));
+				// ^^
+				vte.addPotentialType(inst,
+						gf.getVarTableEntry(DeduceTypes2.to_int(iiii/* != null ? iiii :
 							gf.getVarTableEntry(iii5))*/)).type);
+			}
 		}
 
 		public void numeric(@NotNull GeneratedFunction gf, IExpression left, NumericExpression ne, Context cctx) {
