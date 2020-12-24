@@ -901,7 +901,7 @@ public class GenerateFunctions {
 //				throw new NotImplementedException();
 			}
 		default:
-			throw new NotImplementedException();
+			throw new IllegalStateException("Unexpected value: " + expressionKind);
 		}
 //		return null;
 	}
