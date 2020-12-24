@@ -1194,7 +1194,7 @@ regularQualifiers2[NormalTypeName fp]
 typeNameList2 returns [TypeNameList cr]
 		{TypeName tn=null;cr=new TypeNameList();}
 	: tn=typeName2                  {cr.add(tn);}
-	    (COMMA tn=typeName2)*       {cr.add(tn);}
+	    (COMMA tn=typeName2         {cr.add(tn);})*
 	;
 
 //
