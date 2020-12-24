@@ -22,6 +22,14 @@ public class AnnotationPart {
 	public void setExprs(final ExpressionList el) {
 		_exprs = el;
 	}
+
+	public Qualident annoClass() {
+		return _class;
+	}
+
+	public ExpressionList getExprs() {
+		return _exprs;
+	}
 }
 
 //
