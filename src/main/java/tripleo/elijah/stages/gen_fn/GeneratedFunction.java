@@ -159,12 +159,20 @@ public class GeneratedFunction implements GeneratedNode {
 							throw new NotImplementedException();
 						}
 					} else {
-						module.parent.eee.reportError("1000 Can't resolve "+text);
+						module.parent.eee.reportError("1000 Can't resolve " + text);
 						return null; // README cant resolve pte. Maybe report error
 					}
 				} else {
 //					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
-					return resolveIdentIA2(ctx, ident_a, module, s);
+					String z = getIdentIAPathNormal((IdentIA) ia);
+					OS_Element os_element = resolveIdentIA2(ctx, ident_a, module, s);
+					System.out.println(String.format("2001 Resolved %s to %s", z, os_element));
+					if (os_element != null)
+						idte.setResolvedElement(os_element);
+					else {
+						System.out.println("2002 Cant resolve " + z);
+					}
+					return os_element;
 				}
 			} else
 				throw new IllegalStateException("Really cant be here");
