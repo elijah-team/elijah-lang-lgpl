@@ -61,8 +61,15 @@ public class VariableTableEntry {
 				// leave as is
 			} else if (v.attached.equals(tte.attached)) {
 				// leave as is
-			} else
+			} else {
+				//
+				// Make sure you check the differences between USER and USER_CLASS types
+				// May not be any
+				//
+				System.err.println("v.attached: " + v.attached);
+				System.err.println("tte.attarhed: " + tte.attached);
 				assert false;
+			}
 		}
 	}
 
