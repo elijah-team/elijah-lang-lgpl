@@ -99,7 +99,7 @@ public class DeduceTypes2 {
 //								throw new IllegalStateException("Invalid InstructionArgument");
 //						}
 						final String x = generatedFunction.getIdentIAPathNormal(identIA);
-						@Nullable OS_Element y = generatedFunction.resolveIdentIA(context, identIA, module);
+						@Nullable OS_Element y = resolveIdentIA(context, identIA, module, generatedFunction);
 						if (y == null) {
 							module.parent.eee.reportError("1004 Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
 						} else {
@@ -217,7 +217,7 @@ public class DeduceTypes2 {
 //				final InstructionArgument i2 = (instruction.getArg(1));
 				{
 					String x = generatedFunction.getIdentIAPathNormal((IdentIA) fn1.expression_num);
-					@Nullable OS_Element el = generatedFunction.resolveIdentIA(context, (IdentIA) fn1.expression_num, module);
+					@Nullable OS_Element el = resolveIdentIA(context, (IdentIA) fn1.expression_num, module, generatedFunction);
 					assert el != null;
 					fn1.resolved = el;
 				}
@@ -359,7 +359,7 @@ public class DeduceTypes2 {
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		IdentIA identIA = (IdentIA) pte.expression_num;
 		if (identIA != null){
-			@Nullable OS_Element y = generatedFunction.resolveIdentIA(ctx, identIA, module);
+			@Nullable OS_Element y = resolveIdentIA(ctx, identIA, module, generatedFunction);
 			if (y == null) {
 				System.out.println("1005 Can't find element for " + generatedFunction.getIdentIAPathNormal(identIA));
 			} else {
@@ -438,7 +438,7 @@ public class DeduceTypes2 {
 			} else {
 				final int y=2;
 				final IdentIA ident_a = identIA;
-				final OS_Element el = generatedFunction.resolveIdentIA(ctx, ident_a, module);
+				final OS_Element el = resolveIdentIA(ctx, ident_a, module, generatedFunction);
 				if (el != null) {
 					pte.resolved = el;
 					if (el instanceof FunctionDef) {
@@ -716,6 +716,193 @@ public class DeduceTypes2 {
 	private OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) {
 		throw new NotImplementedException();
 	}
+
+	/**
+	 * Called from {@link DeduceTypes2#do_assign_call(GeneratedFunction, Context, VariableTableEntry, FnCallArgs, Instruction)}
+	 * @param ctx to do lookups
+	 * @param ident_a pte.expression_num
+	 * @param module to report errors
+	 * @param generatedFunction
+	 * @return
+	 */
+	@Nullable
+	public OS_Element resolveIdentIA(final Context ctx, @NotNull final IdentIA ident_a, @NotNull final OS_Module module, GeneratedFunction generatedFunction) {
+		final List<InstructionArgument> s = generatedFunction._getIdentIAPathList(ident_a);
+
+		OS_Element el = null;
+		Context ectx = ctx;
+		for (final InstructionArgument ia : s) {
+			if (ia instanceof IntegerIA) {
+				VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) ia).getIndex());
+				final String text = vte.getName();
+				final LookupResultList lrl = ectx.lookup(text);
+				el = lrl.chooseBest(null);
+				if (el != null) {
+					//
+					// TYPE INFORMATION IS CONTAINED IN VARIABLE DECLARATION
+					//
+					if (el instanceof VariableStatement) {
+						VariableStatement vs = (VariableStatement) el;
+						if (!vs.typeName().isNull()) {
+							ectx = vs.typeName().getContext();
+							continue;
+						}
+					}
+					//
+					// OTHERWISE TYPE INFORMATION MAY BE IN POTENTIAL_TYPES
+					//
+					@NotNull List<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
+					if (pot.size() == 1) {
+						OS_Type attached = pot.get(0).attached;
+						if (attached != null) {
+							if (attached.getType() == OS_Type.Type.USER_CLASS) {
+								ClassStatement x = attached.getClassOf();
+								ectx = x.getContext();
+							} else {
+								throw new IllegalStateException("Dont know what youre doing here.");
+							}
+						} else {
+							TypeTableEntry tte = pot.get(0);
+							OS_Element el2 = lookup(tte.expression.getLeft(), ectx);
+							if (el2 == null)
+								throw new IllegalStateException("foo bar");
+							else {
+								ectx = el2.getContext();
+								if (el2 instanceof ClassStatement)
+									tte.attached = new OS_Type((ClassStatement) el2);
+								else
+									throw new NotImplementedException();
+							}
+						}
+					}
+				} else {
+					module.parent.eee.reportError("1001 Can't resolve "+text);
+					return null;
+				}
+			} else if (ia instanceof IdentIA) {
+				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) ia).getIndex());
+				//assert idte.backlink == null;
+
+				if (idte.backlink == null) {
+					final String text = idte.getIdent().getText();
+					if (idte.resolved_element == null) {
+						final LookupResultList lrl = ectx.lookup(text);
+						el = lrl.chooseBest(null);
+					} else {
+						el = idte.resolved_element;
+					}
+					if (el != null) {
+						idte.setResolvedElement(el);
+						if (el.getContext() != null)
+							ectx = el.getContext();
+						else {
+							final int yy=2;
+							throw new NotImplementedException();
+						}
+					} else {
+						module.parent.eee.reportError("1000 Can't resolve " + text);
+						return null; // README cant resolve pte. Maybe report error
+					}
+				} else {
+//					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
+					String z = generatedFunction.getIdentIAPathNormal((IdentIA) ia);
+					OS_Element os_element = resolveIdentIA2(ctx, ident_a, module, s, generatedFunction);
+					System.out.println(String.format("2001 Resolved %s to %s", z, os_element));
+					if (os_element != null)
+						idte.setResolvedElement(os_element);
+					else {
+						System.out.println("2002 Cant resolve " + z);
+					}
+					return os_element;
+				}
+			} else
+				throw new IllegalStateException("Really cant be here");
+		}
+		return el;
+	}
+
+	private OS_Element resolveIdentIA2(Context ctx, IdentIA ident_a, OS_Module module, List<InstructionArgument> s, GeneratedFunction generatedFunction) {
+		OS_Element el = null;
+		Context ectx = ctx;
+
+		for (InstructionArgument ia2 : s) {
+			if (ia2 instanceof IntegerIA) {
+				VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(ia2));
+				final String text = vte.getName();
+/*
+				final LookupResultList lrl = ectx.lookup(text);
+				el = lrl.chooseBest(null);
+				if (el == null) {
+					module.parent.eee.reportError("1002 Can't resolve "+text);
+					return null;
+				} else {
+					ectx = el.getContext();
+				}
+*/
+				{
+					List<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
+					if (pot.size() == 1) {
+						ectx = pot.get(0).attached.getClassOf().getContext(); // TODO can combine later
+					}
+				}
+
+				OS_Type attached = vte.type.attached;
+				if (attached != null)
+					ectx = attached.getClassOf().getContext();
+				else {
+					if (vte.potentialTypes().size() == 1) {
+						final ArrayList<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
+						vte.type.attached = pot.get(0).attached;
+					} else
+						System.out.println("1006 Can't find type of " + text);
+				}
+			} else if (ia2 instanceof IdentIA) {
+				final IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(((IdentIA) ia2).getIndex());
+				final String text = idte2.getIdent().getText();
+
+				final LookupResultList lrl = ectx.lookup(text);
+				el = lrl.chooseBest(null);
+				if (el == null) {
+					module.parent.eee.reportError("1007 Can't resolve "+text);
+					return null;
+				} else {
+					if (idte2.type == null) {
+						if (el instanceof VariableStatement) {
+							VariableStatement vs = (VariableStatement) el;
+							if (!vs.typeName().isNull()) {
+								TypeTableEntry tte;
+								if (vs.initialValue() != IExpression.UNASSIGNED) {
+									tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(vs.typeName()), vs.initialValue());
+								} else {
+									tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(vs.typeName())); // TODO where is expression? ie foo.x
+								}
+								idte2.type = tte;
+							} else if (vs.initialValue() != IExpression.UNASSIGNED) {
+								TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+								idte2.type = tte;
+							}
+						}
+					}
+					ectx = el.getContext();
+				}
+
+				int y=2;
+			}
+		}
+		return el;
+	}
+
+	private OS_Element lookup(IExpression expression, Context ctx) {
+		switch (expression.getKind()) {
+		case IDENT:
+			LookupResultList lrl = ctx.lookup(((IdentExpression)expression).getText());
+			OS_Element best = lrl.chooseBest(null);
+			return best;
+		default:
+			throw new NotImplementedException();
+		}
+	}
+
 
 }
 

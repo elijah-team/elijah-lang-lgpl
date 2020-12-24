@@ -690,12 +690,12 @@ public class GenerateC {
 					final VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
 					sll.add(variableTableEntry.getName());
 				} else if (ia instanceof IdentIA) {
-					@org.jetbrains.annotations.Nullable
-					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
+//					@org.jetbrains.annotations.Nullable
+//					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
 					//String path = gf.getIAPath((IdentIA) ia));    // return x.y.z
 //				String path2 = gf.getIdentIAPath((IdentIA) ia); // return ZP105get_z(vvx.vmy)
 //				assert path.equals(path2); // should always fail
-					assert ident != null;
+//					assert ident != null;
 					throw new NotImplementedException();
 				} else {
 					throw new IllegalStateException("Cant be here: Invalid InstructionArgument");
