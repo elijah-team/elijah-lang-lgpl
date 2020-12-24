@@ -258,6 +258,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 	public void walkAnnotations(AnnotationWalker annotationWalker) {
+		if (annotations == null) return;
 		for (AnnotationClause annotationClause : annotations) {
 			for (AnnotationPart annotationPart : annotationClause.aps) {
 				annotationWalker.annotation(annotationPart);

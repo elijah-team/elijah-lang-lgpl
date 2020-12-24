@@ -129,12 +129,14 @@ public class VariableStatement implements OS_Element {
 	}
 
 	public void walkAnnotations(AnnotationWalker annotationWalker) {
-		// TODO also walk for parent
-		for (AnnotationClause annotationClause : _parent.annotations) {
-			for (AnnotationPart annotationPart : annotationClause.aps) {
-				annotationWalker.annotation(annotationPart);
+		if (_parent.annotations != null) {
+			for (AnnotationClause annotationClause : _parent.annotations) {
+				for (AnnotationPart annotationPart : annotationClause.aps) {
+					annotationWalker.annotation(annotationPart);
+				}
 			}
 		}
+		if (annotations == null) return;
 		for (AnnotationClause annotationClause : annotations) {
 			for (AnnotationPart annotationPart : annotationClause.aps) {
 				annotationWalker.annotation(annotationPart);

@@ -247,6 +247,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 
 	public void walkAnnotations(AnnotationWalker annotationWalker) {
+		if (annotations == null) return;
 		for (AnnotationClause annotationClause : annotations) {
 			for (AnnotationPart annotationPart : annotationClause.aps) {
 				annotationWalker.annotation(annotationPart);
