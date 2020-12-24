@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
 public class StringExpression extends AbstractExpression {
@@ -40,6 +41,10 @@ set(g.getText());
 
 	@Override
 	public String repr_() {return repr_;}
+
+	public String getText() {
+		return Helpers.remove_single_quotes_from_string(repr_); // TODO wont work with triple quoted string
+	}
 
 	public void set(final String g) {repr_ = g;}
 
