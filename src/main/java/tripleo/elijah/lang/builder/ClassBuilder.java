@@ -54,6 +54,7 @@ public class ClassBuilder {
 	}
 
 	public void annotations(AnnotationClause a) {
+		if (a == null) return;
 		annotations.add(a);
 	}
 
