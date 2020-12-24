@@ -506,8 +506,10 @@ functionDef2[FunctionDefBuilder fb]
 programStatement[ProgramClosure pc, OS_Element cont]
 		{ImportStatement imp=null;}
     : imp=importStatement[cont]
-    | namespaceStatement[pc.namespaceStatement(cont)]
-    | classStatement[cont, pc.classStatement(cont)]
+    | ("namespace")=> namespaceStatement[pc.namespaceStatement(cont)]
+    | ("class")=> classStatement[cont, pc.classStatement(cont)]
+    | (annotation_clause "namespace") => namespaceStatement[pc.namespaceStatement(cont)]
+    | (annotation_clause "class") => classStatement[cont, pc.classStatement(cont)]
     | aliasStatement[pc.aliasStatement(cont)]
     ;
 programStatement2[ClassOrNamespaceScope cont]
