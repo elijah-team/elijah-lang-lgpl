@@ -634,7 +634,7 @@ public class DeduceTypes2 {
 		return false;
 	}
 
-	public static int to_int(final InstructionArgument arg) {
+	public static int to_int(@NotNull final InstructionArgument arg) {
 		return ((IntegerIA) arg).getIndex();
 	}
 
