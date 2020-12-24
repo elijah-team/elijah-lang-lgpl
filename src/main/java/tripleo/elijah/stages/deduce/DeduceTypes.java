@@ -385,7 +385,7 @@ public class DeduceTypes {
 					} else
 						t = deduceTypeName((VariableStatement) best, ctx);
 				} else if (best instanceof FormalArgListItem) {
-					final NormalTypeName typeName = (NormalTypeName) ((FormalArgListItem) best).tn;
+					final NormalTypeName typeName = (NormalTypeName) ((FormalArgListItem) best).typeName();
 					if (typeName != null) {
 						t = new OS_Type(typeName);
 					} else
@@ -742,7 +742,7 @@ public class DeduceTypes {
 					else
 						return deduceTypeName((VariableStatement) element, context);
 				} else if (element instanceof FormalArgListItem) {
-					final NormalTypeName typeName = (NormalTypeName) ((FormalArgListItem) element).tn;
+					final NormalTypeName typeName = (NormalTypeName) ((FormalArgListItem) element).typeName();
 					if (typeName != null) {
 						final OS_Type t = deduceTypeName(typeName, context);
 						return t;
@@ -817,7 +817,7 @@ public class DeduceTypes {
 		if (element instanceof VariableStatement) {
 			return "<VariableStatement>";
 		} else if (element instanceof FormalArgListItem) {
-			return ((FormalArgListItem) element).name.getText();
+			return ((FormalArgListItem) element).name();
 		} else if (element instanceof OS_Element2) {
 			return ((OS_Element2) element).name();
 		}

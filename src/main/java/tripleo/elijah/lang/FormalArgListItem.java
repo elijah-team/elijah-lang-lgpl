@@ -12,17 +12,9 @@ import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
 public class FormalArgListItem implements OS_Element, OS_Element2 {
-	
-	public IdentExpression name;
-	public TypeName tn=null;
 
-	public TypeName typeName() {
-		return tn;
-	}
-
-	public void setName(final IdentExpression s) {
-		name=s;
-	}
+	private IdentExpression name;
+	private TypeName tn=null;
 
     @Override // OS_Element
     public void visitGen(final ICodeGen visit) {
@@ -50,8 +42,16 @@ public class FormalArgListItem implements OS_Element, OS_Element2 {
 		return name;
 	}
 
+	public void setName(final IdentExpression s) {
+		name=s;
+	}
+
 	public void setTypeName(final TypeName tn1) {
 		tn = tn1;
+	}
+
+	public TypeName typeName() {
+		return tn;
 	}
 }
 
