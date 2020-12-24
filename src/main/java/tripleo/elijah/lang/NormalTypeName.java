@@ -43,6 +43,8 @@ public interface NormalTypeName extends TypeName, Resolvable {
 	Collection<TypeModifiers> getModifiers();
 
 	TypeNameList getGenericPart();
+
+	Qualident getRealName();
 }
 
 //

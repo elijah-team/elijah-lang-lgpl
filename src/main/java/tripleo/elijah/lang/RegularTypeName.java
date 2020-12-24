@@ -117,6 +117,11 @@ public String getName() {
 	public TypeNameList getGenericPart() {
 		return genericPart;
 	}
+
+	@Override
+	public Qualident getRealName() {
+		return typeName;
+	}
 }
 
 //

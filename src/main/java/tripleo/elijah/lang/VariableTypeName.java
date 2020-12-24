@@ -73,6 +73,11 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 	}
 
 	@Override
+	public Qualident getRealName() {
+		return pr_name;
+	}
+
+	@Override
 	public Context getContext() {
 		return _ctx;
 	}
