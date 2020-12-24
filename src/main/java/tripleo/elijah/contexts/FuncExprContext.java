@@ -50,7 +50,7 @@ public class FuncExprContext extends Context {
 			}
 		}
 		for (final FormalArgListItem arg : carrier.getArgs()) {
-			if (arg.name.getText().equals(name)) {
+			if (arg.name().equals(name)) {
 				Result.add(name, level, arg, this);
 			}
 		}
