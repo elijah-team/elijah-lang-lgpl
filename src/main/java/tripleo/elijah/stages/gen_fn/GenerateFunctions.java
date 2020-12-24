@@ -863,6 +863,57 @@ public class GenerateFunctions {
 			final int ii = addConstantTableEntry2(null, cle, cle.getType(), gf);
 			return new ConstTableIA(ii, gf);
 		}
+		case GET_ITEM:
+			{
+				final GetItemExpression gie = (GetItemExpression) expression;
+				final IExpression left = gie.getLeft();
+				final IExpression right = gie.index;
+				final InstructionArgument left_instruction;
+				final InstructionArgument right_instruction;
+				if (left.is_simple()) {
+					if (left instanceof IdentExpression) {
+						left_instruction = simplify_expression(left, gf, cctx);
+					} else {
+						// a constant
+						assert IExpression.isConstant(right);
+						final int left_constant_num = addConstantTableEntry2(null, left, left.getType(), gf);
+						left_instruction = new ConstTableIA(left_constant_num, gf);
+					}
+				} else {
+					// create a tmp var
+					left_instruction = simplify_expression(left, gf, cctx);
+				}
+				if (right.is_simple()) {
+					if (right instanceof IdentExpression) {
+						right_instruction = simplify_expression(right, gf, cctx);
+					} else {
+						// a constant
+						assert IExpression.isConstant(right);
+						final int right_constant_num = addConstantTableEntry2(null, right, right.getType(), gf);
+						right_instruction = new ConstTableIA(right_constant_num, gf);
+					}
+				} else {
+					// create a tmp var
+					right_instruction = simplify_expression(right, gf, cctx);
+				}
+				{
+					// create a call
+					final IdentExpression expr_kind_name = Helpers.string_to_ident(SpecialFunctions.of(expressionKind));
+	//					TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, expr_kind_name);
+					final TypeTableEntry tte_left = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, left);
+					final TypeTableEntry tte_right = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, right);
+					final int pte = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
+					final int tmp = addTempTableEntry(expression.getType(), // README should be Boolean
+							gf);
+					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), cctx);
+					final Instruction inst = new Instruction();
+					inst.setName(InstructionName.CALLS);
+					inst.setArgs(List_of(new IntegerIA(pte), left_instruction, right_instruction));
+					final FnCallArgs fca = new FnCallArgs(inst, gf);
+					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp), fca), cctx);
+					return new IntegerIA(tmp);
+				}
+			}
 		case LT_: case GT: // TODO all BinaryExpressions go here
 			{
 				final BasicBinaryExpression bbe = (BasicBinaryExpression) expression;
