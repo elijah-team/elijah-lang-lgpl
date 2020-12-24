@@ -21,11 +21,13 @@ public class AccessNotation {
 	private TypeNameList tnl;
 
 	public void setCategory(final Token category) {
+		if (category == null) return;
 		assert category.getType() == ElijjahTokenTypes.STRING_LITERAL;
 		this.category = category;
 	}
 
 	public void setShortHand(final Token shorthand) {
+		if (shorthand == null) return;
 		assert shorthand.getType() == ElijjahTokenTypes.IDENT;
 		this.shorthand = shorthand;
 	}
