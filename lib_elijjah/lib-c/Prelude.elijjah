@@ -26,7 +26,7 @@ class Integer32 < Integer {
 class Unsigned64 < Integer {
 }
 
-#[Primitive, C.repr("uint32_t")]
+#[Primitive C.repr("uint32_t")]
 class Unsigned32 < Integer {
 }
 
@@ -50,7 +50,7 @@ class interface IPrintable {
 
 namespace {
     print (a: IPrintable) {
-		C.puts(String8(a.printable())
+		C.puts(String8(a.printable()))
     }
     println (a: IPrintable) {
 		print(a)
@@ -70,8 +70,8 @@ class Arguments {
 		Result = String8(argument_array[n])
     }
 access {NONE}
-	argument_array: C.Array[C.str]
-	argument_count_: SystemInteger
+	var argument_array: C.Array[C.str]
+	var argument_count_: SystemInteger
 }
 
 /*type*/ alias u64 = Unsigned64
