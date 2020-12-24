@@ -245,6 +245,14 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	public void addAccess(final AccessNotation acs) {
 		accesses.add(acs);
 	}
+
+	public void walkAnnotations(AnnotationWalker annotationWalker) {
+		for (AnnotationClause annotationClause : annotations) {
+			for (AnnotationPart annotationPart : annotationClause.aps) {
+				annotationWalker.annotation(annotationPart);
+			}
+		}
+	}
 }
 
 //

@@ -11,6 +11,9 @@ package tripleo.elijah.lang;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Referenced classes of package pak:
 //			TypeRef, IExpression
 
@@ -115,6 +118,28 @@ public class VariableStatement implements OS_Element {
 
 	public TypeModifiers getTypeModifiers() {
 		return typeModifiers;
+	}
+
+	List<AnnotationClause> annotations = null;
+
+	public void addAnnotation(final AnnotationClause a) {
+		if (annotations == null)
+			annotations = new ArrayList<AnnotationClause>();
+		annotations.add(a);
+	}
+
+	public void walkAnnotations(AnnotationWalker annotationWalker) {
+		// TODO also walk for parent
+		for (AnnotationClause annotationClause : _parent.annotations) {
+			for (AnnotationPart annotationPart : annotationClause.aps) {
+				annotationWalker.annotation(annotationPart);
+			}
+		}
+		for (AnnotationClause annotationClause : annotations) {
+			for (AnnotationPart annotationPart : annotationClause.aps) {
+				annotationWalker.annotation(annotationPart);
+			}
+		}
 	}
 }
 

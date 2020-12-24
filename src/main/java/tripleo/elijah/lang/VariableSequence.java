@@ -80,6 +80,13 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 //		return (stmts.stream().map(n -> n.getName()).collect(Collectors.toList())).toString();
 	}
 
+	List<AnnotationClause> annotations = null;
+
+	public void addAnnotation(final AnnotationClause a) {
+		if (annotations == null)
+			annotations = new ArrayList<AnnotationClause>();
+		annotations.add(a);
+	}
 }
 
 //
