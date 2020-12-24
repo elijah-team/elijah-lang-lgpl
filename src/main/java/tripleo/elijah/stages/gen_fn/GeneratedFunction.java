@@ -427,6 +427,10 @@ public class GeneratedFunction implements GeneratedNode {
 	}
 
 	public int addIdentTableEntry(final IdentExpression ident) {
+		for (int i = 0; i < idte_list.size(); i++) {
+			if (idte_list.get(i).getIdent() == ident)
+				return i;
+		}
 		final IdentTableEntry idte = new IdentTableEntry(idte_list.size(), ident);
 		idte_list.add(idte);
 		return idte.getIndex();
