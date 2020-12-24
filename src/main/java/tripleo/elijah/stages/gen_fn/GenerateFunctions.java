@@ -272,7 +272,8 @@ public class GenerateFunctions {
 
 		for (ClassItem item : klass.getItems()) {
 			if (item instanceof AliasStatement) {
-				throw new NotImplementedException();
+				System.out.println("Skip alias statement for now");
+//				throw new NotImplementedException();
 			} else if (item instanceof ClassStatement) {
 				throw new NotImplementedException();
 			} else if (item instanceof ConstructorDef) {
