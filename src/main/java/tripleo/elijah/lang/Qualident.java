@@ -116,16 +116,18 @@ public class Qualident  implements IExpression {
 		if (this == o) return true;
 		if (!(o instanceof Qualident)) return false;
 		final Qualident qualident = (Qualident) o;
+		if (qualident.parts.size() != parts.size()) return false;
 		for (int i=0; i< parts.size();i++) {
 			final IdentExpression ppart = qualident.parts.get(i);
 			final IdentExpression part  = parts.get(i);
-			if (!equivalentTokens(ppart.token(), part.token()))
+//			if (!equivalentTokens(ppart.token(), part.token()))
+			if (!part.getText().equals(ppart.getText()))
 				return false;
 //			if (!qualident.parts.contains(token))
 //				return false;
 		}
 //		if (Objects.equals(parts, qualident.parts))
-		return Objects.equals(_type, qualident._type);
+		return true;//Objects.equals(_type, qualident._type);
 	}
 
 	private static boolean equivalentTokens(final Token token1, final Token token2) {
