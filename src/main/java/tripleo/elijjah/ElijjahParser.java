@@ -7839,13 +7839,11 @@ inputState.guessing--;
 		DefFunctionDef fd
 	) throws RecognitionException, TokenStreamException {
 		
-		Token  i1 = null;
-		FormalArgList op=null;TypeName tn=null;
+		FormalArgList op=null;TypeName tn=null;IdentExpression i1=null;
 		
 		try {      // for error handling
 			match(LITERAL_def);
-			i1 = LT(1);
-			match(IDENT);
+			i1=ident();
 			op=opfal2();
 			{
 			switch ( LA(1)) {
@@ -7889,7 +7887,7 @@ inputState.guessing--;
 			match(BECOMES);
 			expr=expression();
 			if ( inputState.guessing==0 ) {
-				fd.setType(DefFunctionDef.DEF_FUN); fd.setName(i1); fd.setOpfal(op); fd.setExpr(expr);
+				fd.setType(DefFunctionDef.Type.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr);
 			}
 		}
 		catch (RecognitionException ex) {
