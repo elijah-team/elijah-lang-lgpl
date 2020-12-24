@@ -329,7 +329,10 @@ public class DeduceTypes2 {
 					final String tn = ((NormalTypeName) tn1).getName();
 					System.out.println("799 [resolving USER type named] "+tn);
 					final LookupResultList lrl = tn1.getContext().lookup(tn); // TODO is this right?
-					final OS_Element best = lrl.chooseBest(null);
+					OS_Element best = lrl.chooseBest(null);
+					while (best instanceof AliasStatement) {
+						best = _resolveAlias((AliasStatement) best);
+					}
 					return new OS_Type((ClassStatement) best);
 				}
 				throw new NotImplementedException(); // TODO might be Qualident, etc
