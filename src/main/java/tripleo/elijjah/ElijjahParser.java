@@ -5904,15 +5904,15 @@ inputState.guessing--;
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
 					tn=typeName2();
+					if ( inputState.guessing==0 ) {
+						cr.add(tn);
+					}
 				}
 				else {
 					break _loop394;
 				}
 				
 			} while (true);
-			}
-			if ( inputState.guessing==0 ) {
-				cr.add(tn);
 			}
 		}
 		catch (RecognitionException ex) {
