@@ -94,6 +94,14 @@ public class Helpers {
 		// since Java 1.8
 		return String.join(separator, stringIterable);
 	}
+
+	public static Qualident string_to_qualident(String x) {
+		Qualident q = new Qualident();
+		for (String xx : x.split("\\.")) {
+			q.append(string_to_ident(xx));
+		}
+		return q;
+	}
 }
 
 //

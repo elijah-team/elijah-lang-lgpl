@@ -31,7 +31,7 @@ public class TypeOfTypeNameTest {
 		VariableStatement var_x = new VariableStatement(null);
 		var_x.setName(Helpers.string_to_ident("x")); // not necessary
 		RegularTypeName rtn = new RegularTypeName(ctx);
-		rtn.setName(string_to_qualident(typeNameString));
+		rtn.setName(Helpers.string_to_qualident(typeNameString));
 		var_x.setTypeName(rtn);
 
 		LookupResultList lrl = new LookupResultList();
@@ -41,7 +41,7 @@ public class TypeOfTypeNameTest {
 		// CREATE VARIABLE UNDER TEST
 		//
 		TypeOfTypeName t = new TypeOfTypeName(ctx);
-		t.typeOf(string_to_qualident(var_x.getName()));
+		t.typeOf(Helpers.string_to_qualident(var_x.getName()));
 
 		//
 		// SET UP EXPECTATIONS
@@ -73,7 +73,7 @@ public class TypeOfTypeNameTest {
 		VariableStatement var_x = new VariableStatement(null);
 		var_x.setName(Helpers.string_to_ident("x")); // not necessary
 		RegularTypeName rtn = new RegularTypeName(ctx);
-		rtn.setName(string_to_qualident(typeNameString));
+		rtn.setName(Helpers.string_to_qualident(typeNameString));
 		var_x.setTypeName(rtn);
 
 		LookupResultList lrl = new LookupResultList();
@@ -83,7 +83,7 @@ public class TypeOfTypeNameTest {
 		// CREATE VARIABLE UNDER TEST
 		//
 		TypeOfTypeName t = new TypeOfTypeName(ctx);
-		t.typeOf(string_to_qualident("x"));
+		t.typeOf(Helpers.string_to_qualident("x"));
 
 		//
 		// SET UP EXPECTATIONS
@@ -100,13 +100,6 @@ public class TypeOfTypeNameTest {
 		Assert.assertEquals(typeNameString, tn.toString());
 	}
 
-	static private Qualident string_to_qualident(String x) {
-		Qualident q = new Qualident();
-		for (String xx : x.split("\\.")) {
-			q.append(Helpers.string_to_ident(xx));
-		}
-		return q;
-	}
 }
 
 //
