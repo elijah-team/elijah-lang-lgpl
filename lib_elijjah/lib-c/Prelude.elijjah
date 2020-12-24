@@ -12,6 +12,14 @@ class interface String {
 class ConstString < String {}
 
 class interface Integer {
+	__preinc__() -> typeof self {
+		var tmp = Value
+		Value = Value + 1
+		Result = tmp
+	}
+	__imult__(other: Integer) {
+		Value = Value * other
+	}
 }
 
 #[Primitive C.repr("int64_t")]
