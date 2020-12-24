@@ -143,7 +143,7 @@ public class GenerateFunctions {
 			throw new NotImplementedException();
 		} else if (item instanceof ClassStatement) {
 			GeneratedClass gc = generateClass((ClassStatement) item);
-			int ite_index = addIdentTableEntry(((ClassStatement) item).getNameNode(), gf);
+			int ite_index = gf.addIdentTableEntry(((ClassStatement) item).getNameNode());
 			IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
 			ite.resolve(gc);
 		} else if (item instanceof StatementWrapper) {
@@ -412,14 +412,14 @@ public class GenerateFunctions {
 			int ident_right;
 			InstructionArgument some_left;
 			if (vte_left == null) {
-				ident_left = addIdentTableEntry(left, gf);
+				ident_left = gf.addIdentTableEntry(left);
 				some_left = new IdentIA(ident_left, gf);
 			} else
 				some_left = vte_left;
 			final InstructionArgument iiii = gf.vte_lookup(right.getText());
 			final int inst;
 			if (iiii == null) {
-				ident_right = addIdentTableEntry(right, gf);
+				ident_right = gf.addIdentTableEntry(right);
 				inst = add_i(gf, InstructionName.AGN, List_of(some_left, new IdentIA(ident_right, gf)), cctx);
 			} else {
 				inst = add_i(gf, InstructionName.AGN, List_of(some_left, iiii), cctx);
@@ -466,7 +466,7 @@ public class GenerateFunctions {
 
 	private void generate_item_dot_expression(@org.jetbrains.annotations.Nullable final InstructionArgument backlink, final IExpression left, @NotNull final IExpression right, @NotNull final GeneratedFunction gf, final Context cctx) {
 		final int y=2;
-		final int x = addIdentTableEntry((IdentExpression) left, gf);
+		final int x = gf.addIdentTableEntry((IdentExpression) left);
 		if (backlink != null) {
 			gf.getIdentTableEntry(x).backlink = backlink;
 		}
@@ -765,7 +765,7 @@ public class GenerateFunctions {
 				if (left.is_simple()) {
 					if (left instanceof IdentExpression) {
 						// for ident(xyz...)
-						final int x = addIdentTableEntry((IdentExpression) left, gf);
+						final int x = gf.addIdentTableEntry((IdentExpression) left);
 						// TODO attach to var/const or lookup later in deduce
 						left_ia = new IdentIA(x, gf);
 					} else if (left instanceof SubExpression) {
@@ -793,7 +793,7 @@ public class GenerateFunctions {
 					if (arg.is_simple()) {
 						final int y=2;
 						if (arg instanceof IdentExpression) {
-							final int x = addIdentTableEntry((IdentExpression) arg, gf);
+							final int x = gf.addIdentTableEntry((IdentExpression) arg);
 							// TODO attach to var/const or lookup later in deduce
 							ia = new IdentIA(x, gf);
 							iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
@@ -844,7 +844,7 @@ public class GenerateFunctions {
 			if (i == null) {
 				IdentTableEntry x = gf.getIdentTableEntryFor(expression);
 				if (x == null) {
-					int ii = addIdentTableEntry((IdentExpression) expression, gf);
+					int ii = gf.addIdentTableEntry((IdentExpression) expression);
 					i = new IdentIA(ii, gf);
 				} else {
 					i = new IdentIA(x.getIndex(), gf);
@@ -994,7 +994,7 @@ public class GenerateFunctions {
 					// WHEN VTE_LOOKUP FAILS, IE WHEN A MEMBER VARIABLE
 					//
 					int y=2;
-					int idte_index = addIdentTableEntry((IdentExpression) arg, gf);
+					int idte_index = gf.addIdentTableEntry((IdentExpression) arg);
 					tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, arg);
 					gf.getIdentTableEntry(idte_index).type = tte;
 				}
@@ -1049,12 +1049,6 @@ public class GenerateFunctions {
 	//
 	// region add-table-entries
 	//
-
-	public int addIdentTableEntry(final IdentExpression ident, @NotNull final GeneratedFunction gf) {
-		final IdentTableEntry idte = new IdentTableEntry(gf.idte_list.size(), ident);
-		gf.idte_list.add(idte);
-		return idte.getIndex();
-	}
 
 	private int addVariableTableEntry(final String name, final TypeTableEntry type, @NotNull final GeneratedFunction gf) {
 		return addVariableTableEntry(name, VariableTableType.VAR, type, gf);

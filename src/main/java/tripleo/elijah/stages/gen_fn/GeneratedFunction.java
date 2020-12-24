@@ -352,7 +352,7 @@ public class GeneratedFunction implements GeneratedNode {
 				final InstructionArgument lookup = vte_lookup(text); // IntegerIA(variable) or ConstTableIA or null
 				if (lookup != null)
 					return lookup;
-				final int ite = generateFunctions.addIdentTableEntry(ie, this);
+				final int ite = addIdentTableEntry(ie);
 				return new IdentIA(ite, this);
 			}
 		default:
@@ -381,7 +381,7 @@ public class GeneratedFunction implements GeneratedNode {
 		case IDENT:
 			{
 				final IdentExpression ie = (IdentExpression) expression;
-				final int ite = generateFunctions.addIdentTableEntry(ie, this);
+				final int ite = addIdentTableEntry(ie);
 				final IdentIA identIA = new IdentIA(ite, this);
 				identIA.setPrev(prev);
 				return identIA;
@@ -424,6 +424,12 @@ public class GeneratedFunction implements GeneratedNode {
 			}
 		}
 		return null;
+	}
+
+	public int addIdentTableEntry(final IdentExpression ident) {
+		final IdentTableEntry idte = new IdentTableEntry(idte_list.size(), ident);
+		idte_list.add(idte);
+		return idte.getIndex();
 	}
 }
 
