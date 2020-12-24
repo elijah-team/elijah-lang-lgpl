@@ -33,9 +33,9 @@ public class FuncExpr implements IExpression, OS_Element {
 	private FuncExprContext _ctx;
 
 
-	public void type(final TypeModifiers function) {
-		// TODO Auto-generated method stub
-		NotImplementedException.raise();
+	public void type(final TypeModifiers modifier) {
+		assert modifier == TypeModifiers.FUNCTION ||
+				modifier == TypeModifiers.PROCEDURE;
 	}
 
 	public FormalArgList argList() {
