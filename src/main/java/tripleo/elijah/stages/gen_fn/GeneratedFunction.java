@@ -144,8 +144,12 @@ public class GeneratedFunction implements GeneratedNode {
 
 				if (idte.backlink == null) {
 					final String text = idte.getIdent().getText();
-					final LookupResultList lrl = ectx.lookup(text);
-					el = lrl.chooseBest(null);
+					if (idte.resolved_element == null) {
+						final LookupResultList lrl = ectx.lookup(text);
+						el = lrl.chooseBest(null);
+					} else {
+						el = idte.resolved_element;
+					}
 					if (el != null) {
 						idte.setResolvedElement(el);
 						if (el.getContext() != null)
