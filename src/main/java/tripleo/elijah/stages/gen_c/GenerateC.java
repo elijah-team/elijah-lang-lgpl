@@ -112,8 +112,12 @@ public class GenerateC {
 			tos.put_string_ln("typedef struct {");
 			tos.incr_tabs();
 			tos.put_string_ln("int _tag;");
-			for (GeneratedClass.VarTableEntry o : x.varTable){
-				tos.put_string_ln(String.format("void *vm%s;", o.nameToken));
+			if (!decl.prim) {
+				for (GeneratedClass.VarTableEntry o : x.varTable){
+					tos.put_string_ln(String.format("void *vm%s;", o.nameToken));
+				}
+			} else {
+				tos.put_string_ln(String.format("%s vsv;", decl.prim_decl));
 			}
 
 			String class_name = getTypeName(new OS_Type(x.getKlass()));//getName();
