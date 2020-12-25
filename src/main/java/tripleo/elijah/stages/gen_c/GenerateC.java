@@ -125,7 +125,8 @@ public class GenerateC {
 
 			tos.dec_tabs();
 			tos.put_string_ln("");
-			tos.put_string_ln(String.format("} %s;", class_name));
+//			tos.put_string_ln(String.format("} %s;", class_name));
+			tos.put_string_ln(String.format("} %s;  // class %s%s", class_name, decl.prim ? "box " : "", x.getName()));
 
 			tos.put_string_ln("");
 			tos.put_string_ln("");
