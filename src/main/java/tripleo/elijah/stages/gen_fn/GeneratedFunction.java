@@ -422,7 +422,7 @@ public class GeneratedFunction implements GeneratedNode {
 	 */
 	public IdentTableEntry getIdentTableEntryFor(IExpression expression) {
 		for (IdentTableEntry identTableEntry : idte_list) {
-			if (identTableEntry.getIdent().equals(expression)) {
+			if (identTableEntry.getIdent().getText().equals(((IdentExpression) expression).getText())) {
 				return identTableEntry;
 			}
 		}
