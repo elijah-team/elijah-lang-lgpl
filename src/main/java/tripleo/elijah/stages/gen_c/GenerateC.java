@@ -133,6 +133,12 @@ public class GenerateC {
 			tos.incr_tabs();
 			tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
 			tos.put_string_ln(String.format("R->_tag = %d;", class_code));
+			if (decl.prim) {
+				if (!decl.prim_decl.equals("bool"))
+					tos.put_string_ln("R->vsv = 0;");
+				else if (decl.prim_decl.equals("bool"))
+					tos.put_string_ln("R->vsv = false;");
+			}
 			tos.put_string_ln("return R;");
 			tos.dec_tabs();
 			tos.put_string_ln(String.format("} // class %s", x.getName()));
