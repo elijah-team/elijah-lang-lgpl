@@ -158,7 +158,7 @@ public class GenerateC {
 			tos.incr_tabs();
 //			tos.put_string_ln("int _tag;");
 			for (GeneratedNamespace.VarTableEntry o : x.varTable){
-				tos.put_string_ln(String.format("%s* vm%s;", getTypeName(o.varType), o.nameToken));
+				tos.put_string_ln(String.format("%s* vm%s;", o.varType == null ? "void " : getTypeName(o.varType), o.nameToken));
 			}
 
 			String class_name = getTypeName(x.getNamespaceStatement());
