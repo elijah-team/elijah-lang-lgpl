@@ -629,9 +629,16 @@ public class GenerateC {
 				final String realTargetName = getRealTargetName(gf, (IntegerIA) ia);
 				sl3.add(realTargetName);
 			} else if (ia instanceof IdentIA) {
-				final int y=2;
+				final int y = 2;
 				String text = gf.getIdentIAPath((IdentIA) ia);
 				sl3.add(text);
+			} else if (ia instanceof ConstTableIA) {
+				ConstTableIA c = (ConstTableIA) ia;
+				ConstantTableEntry cte = gf.getConstTableEntry(c.getIndex());
+				if (cte.initialValue instanceof CharLitExpression) {
+					sl3.add(String.format("'%s'", cte.initialValue.toString()));
+				}
+				int y=2;
 			} else {
 				System.err.println(ia.getClass().getName());
 				throw new IllegalStateException("Invalid InstructionArgument");
