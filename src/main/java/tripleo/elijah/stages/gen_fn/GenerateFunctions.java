@@ -95,12 +95,12 @@ public class GenerateFunctions {
 	}
 
 	private @NotNull GeneratedFunction generateDefFunction(@NotNull final DefFunctionDef fd, final OS_Element parent) {
-		System.err.println("601 fn "+fd.funName);
+		System.err.println("601 fn "+fd.name());
 		final GeneratedFunction gf = new GeneratedFunction(fd);
 		final Context cctx = fd.getContext();
 		final int e1 = add_i(gf, InstructionName.E, null, cctx);
 		add_i(gf, InstructionName.X, List_of(new IntegerIA(e1)), cctx);
-		System.out.println(String.format("602 %s %s", fd.funName, gf.instructionsList));
+		System.out.println(String.format("602 %s %s", fd.name(), gf.instructionsList));
 		System.out.println(gf.vte_list);
 		System.out.println(gf.cte_list);
 		System.out.println(gf.prte_list);

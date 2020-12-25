@@ -214,7 +214,7 @@ public class GeneratedFunction implements GeneratedNode {
 	}
 
 	public String name() {
-		return fd != null ? fd.name() : dfd.funName;
+		return fd != null ? fd.name() : dfd.name();
 	}
 
 	// endregion
