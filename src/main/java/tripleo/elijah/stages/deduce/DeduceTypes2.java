@@ -559,6 +559,10 @@ public class DeduceTypes2 {
 		}
 	}
 
+	private void forFunction(FunctionDef fd, ForFunction forFunction) {
+		phase.forFunction(this, fd, forFunction);
+	}
+
 	private LookupResultList lookupExpression(final IExpression left, final Context ctx) {
 		switch (left.getKind()) {
 		case QIDENT:
