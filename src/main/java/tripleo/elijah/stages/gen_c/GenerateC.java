@@ -806,7 +806,7 @@ public class GenerateC {
 		return "vv" + vte_name;
 	}
 
-	private String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
+	String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		List<String> ls = new LinkedList<String>();
 		// TODO in Deduce set property lookupType to denote what type of lookup it is: MEMBER, LOCAL, or CLOSURE
