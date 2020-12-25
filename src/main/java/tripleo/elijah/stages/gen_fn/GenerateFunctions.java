@@ -752,7 +752,7 @@ public class GenerateFunctions {
 		return pte.index;
 	}
 
-	private InstructionArgument simplify_expression(@NotNull final IExpression expression, @NotNull final GeneratedFunction gf, final Context cctx) {
+	InstructionArgument simplify_expression(@NotNull final IExpression expression, @NotNull final GeneratedFunction gf, final Context cctx) {
 		final ExpressionKind expressionKind = expression.getKind();
 		switch (expressionKind) {
 		case PROCEDURE_CALL:
