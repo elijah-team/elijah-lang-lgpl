@@ -72,6 +72,13 @@ public class GenerateC {
 				} catch (final IOException e) {
 					module.parent.eee.exception(e);
 				}
+			} else if (generatedNode instanceof GeneratedNamespace) {
+				try {
+					GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+					generate_namespace(generatedNamespace);
+				} catch (final IOException e) {
+					module.parent.eee.exception(e);
+				}
 			}
 		}
 	}
