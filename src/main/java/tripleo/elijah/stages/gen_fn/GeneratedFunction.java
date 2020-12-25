@@ -288,8 +288,10 @@ public class GeneratedFunction implements GeneratedNode {
 		return typeTableEntry;
 	}
 
-	public @Nullable OS_Element getFD() {
-		return fd != null ? fd : dfd;
+	public @NotNull OS_Element getFD() {
+		if (fd != null) return fd;
+		if (dfd != null) return dfd;
+		throw new IllegalStateException("No function");
 	}
 
 	public void addContext(final Context context, final Range r) {
