@@ -30,6 +30,8 @@ public class SpecialFunctions {
 	public static String reverse_name(final String pn) {
 		if (pn.equals("__gt__")) // README  explicitly disallow
 			return null;
+		System.out.println("reverse_name: "+pn);
+//		assert false;
 		return null;
 	}
 }
