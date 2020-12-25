@@ -173,7 +173,11 @@ public class DeduceTypes2 {
 						} else if (i2 instanceof ConstTableIA) {
 							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
 						} else if (i2 instanceof IdentIA) {
-							throw new NotImplementedException();
+//							throw new NotImplementedException();
+							IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) i2).getIndex());
+							assert idte.type != null;
+							assert idte.resolved_element != null;
+							vte.addPotentialType(instruction.getIndex(), idte.type);
 						} else
 							throw new NotImplementedException();
 					} else if (agn_lhs instanceof IdentIA) {
