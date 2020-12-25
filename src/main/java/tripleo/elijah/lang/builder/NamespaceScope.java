@@ -39,7 +39,7 @@ public class NamespaceScope extends ClassOrNamespaceScope implements Documentabl
 	}
 
 	public void addAccess(AccessNotation acs) {
-		_items.add(acs);
+		// _items.add(acs);
 	}
 
 	public TypeAliasBuilder typeAlias() {
