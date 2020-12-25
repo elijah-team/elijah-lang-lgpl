@@ -80,6 +80,10 @@ public class IdentTableEntry {
 		resolved_element = el;
 	}
 
+	public boolean hasResolvedElement() {
+		return resolved_element != null;
+	}
+
 	public int getIndex() {
 		return index;
 	}
