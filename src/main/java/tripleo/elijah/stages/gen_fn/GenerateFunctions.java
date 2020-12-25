@@ -113,11 +113,11 @@ public class GenerateFunctions {
 		System.err.println("601.1 fn "+fd.name());
 		final GeneratedFunction gf = new GeneratedFunction(fd);
 		if (parent instanceof ClassStatement)
-			addVariableTableEntry("self", VariableTableType.SELF, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent), IdentExpression.forString("self")), gf);
-		addVariableTableEntry("Result", VariableTableType.RESULT, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fd.returnType()), IdentExpression.forString("Result")), gf); // TODO what about Unit returns?
+			gf.addVariableTableEntry("self", VariableTableType.SELF, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent), IdentExpression.forString("self")));
+		gf.addVariableTableEntry("Result", VariableTableType.RESULT, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fd.returnType()), IdentExpression.forString("Result"))); // TODO what about Unit returns?
 		for (final FormalArgListItem fali : fd.fal().falis) {
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
-			addVariableTableEntry(fali.name(), VariableTableType.ARG, tte, gf);
+			gf.addVariableTableEntry(fali.name(), VariableTableType.ARG, tte);
 		} // TODO Exception !!??
 		//
 		final Context cctx = fd.getContext();
@@ -1051,13 +1051,7 @@ public class GenerateFunctions {
 	//
 
 	private int addVariableTableEntry(final String name, final TypeTableEntry type, @NotNull final GeneratedFunction gf) {
-		return addVariableTableEntry(name, VariableTableType.VAR, type, gf);
-	}
-
-	private int addVariableTableEntry(final String name, final VariableTableType vtt, final TypeTableEntry type, @NotNull final GeneratedFunction gf) {
-		final VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), vtt, name, type);
-		gf.vte_list.add(vte);
-		return vte.getIndex();
+		return gf.addVariableTableEntry(name, VariableTableType.VAR, type);
 	}
 
 	private int addTempTableEntry(final OS_Type type, @NotNull final GeneratedFunction gf) {
