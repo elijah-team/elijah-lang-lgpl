@@ -765,6 +765,7 @@ public class DeduceTypes2 {
 			if (t != null && (t.getType() == OS_Type.Type.USER_CLASS || t.getType() == OS_Type.Type.FUNCTION))
 				ctx = t.getClassOf().getContext();
 			t = deduceExpression(ss, ctx);
+			if (t == null) break;
 			ss.setType(t);  // TODO should this be here?
 			s.pop();
 		}
