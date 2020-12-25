@@ -47,6 +47,8 @@ public class DeduceTypes2 {
 		final OS_Element fd = generatedFunction.getFD();
 		final Context fd_ctx = fd.getContext();
 		//
+		System.err.println("** deduce_generated_function "+((FunctionDef)fd).name());//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
+		//
 		for (final Instruction instruction : generatedFunction.instructions()) {
 			final Context context = generatedFunction.getContextFromPC(instruction.getIndex());
 //			System.out.println("8006 " + instruction);
@@ -80,7 +82,7 @@ public class DeduceTypes2 {
 							}
 						default:
 							{
-								System.err.println(iv.getKind());
+								System.err.println("8192 "+iv.getKind());
 								throw new NotImplementedException();
 							}
 						}
@@ -114,6 +116,8 @@ public class DeduceTypes2 {
 										ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, ((VariableStatement) y).initialValue());
 									ite.type.attached = new OS_Type(typeName);
 								}
+							} else {
+								System.out.println("2009 "+y);
 							}
 						}
 					}
@@ -421,9 +425,7 @@ public class DeduceTypes2 {
 				}
 				break;
 			default:
-				{
-					throw new NotImplementedException();
-				}
+				throw new IllegalStateException("Unexpected value: " + e.getKind());
 			}
 		}
 		{
