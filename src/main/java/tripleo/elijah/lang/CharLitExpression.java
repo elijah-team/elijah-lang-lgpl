@@ -13,6 +13,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.util.Helpers;
 
 /**
  * @author Tripleo(sb)
@@ -23,7 +24,6 @@ public class CharLitExpression implements IExpression {
 	private final Token char_lit_raw;
 
 	public CharLitExpression(final Token c) {
-		// TODO Auto-generated constructor stub
 		char_lit_raw = c;
 	}
 
@@ -67,8 +67,7 @@ public class CharLitExpression implements IExpression {
 	 */
 	@Override
 	public String repr_() {
-		// TODO Auto-generated method stub
-		return null;
+		return String.format("<CharLitExpression %s>", char_lit_raw);
 	}
 
 	@Override
@@ -88,6 +87,10 @@ public class CharLitExpression implements IExpression {
     	return _type;
 	}
 
+	@Override
+	public String toString() {
+		return Helpers.remove_single_quotes_from_string(char_lit_raw.getText());
+	}
 }
 
 //
