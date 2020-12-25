@@ -15,7 +15,7 @@ import tripleo.elijah.stages.gen_fn.GeneratedFunction;
  */
 public class IdentIA implements InstructionArgument {
 	private final int id;
-	private final GeneratedFunction gf;
+	public final GeneratedFunction gf;
 //	private InstructionArgument prev;
 
 /*

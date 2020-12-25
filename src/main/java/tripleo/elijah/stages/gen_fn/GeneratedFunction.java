@@ -78,6 +78,7 @@ public class GeneratedFunction implements GeneratedNode {
 	//
 
 	public String getIdentIAPath(final IdentIA ia2) {
+		assert ia2.gf == this;
 		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
 
 		//
