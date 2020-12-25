@@ -404,13 +404,36 @@ public class DeduceTypes2 {
 */
 					final InstructionArgument vte_index = generatedFunction.vte_lookup(((IdentExpression) e).getText());
 //					System.out.println("10000 "+vte_index);
-					final Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(vte_index)).potentialTypes();
-					final List<TypeTableEntry> ll = new ArrayList<>(c);
-					if (ll.size() == 1) {
-						tte.attached = ll.get(0).attached;
-						vte.addPotentialType(instructionIndex, ll.get(0));
-					} else
-						throw new NotImplementedException();
+					if (vte_index != null) {
+						final Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(vte_index)).potentialTypes();
+						final List<TypeTableEntry> ll = new ArrayList<TypeTableEntry>(c);
+						if (ll.size() == 1) {
+							tte.attached = ll.get(0).attached;
+							vte.addPotentialType(instructionIndex, ll.get(0));
+						} else {
+							LookupResultList lrl = ctx.lookup(((IdentExpression)e).getText());
+							OS_Element best = lrl.chooseBest(null);
+							if (best instanceof FormalArgListItem) {
+								@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
+								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
+										TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
+								vte.type = tte1;
+								tte.attached = tte1.attached;
+							} else {
+								int y = 2;
+								throw new NotImplementedException();
+							}
+						}
+					} else {
+						int ia = generatedFunction.addIdentTableEntry((IdentExpression) e);
+						IdentIA ident_a = new IdentIA(ia, generatedFunction);
+						@Nullable OS_Element x = resolveIdentIA(ctx, ident_a, module, generatedFunction);
+						IdentTableEntry idte = generatedFunction.getIdentTableEntry(ia);
+						@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, null, e);
+						idte.type = tte;
+//						tte.attached = tte1.attached; // TODO is this right? please investigate
+						int y=2;
+					}
 				}
 				break;
 			case PROCEDURE_CALL:
