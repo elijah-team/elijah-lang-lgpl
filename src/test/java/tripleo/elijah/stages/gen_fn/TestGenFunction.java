@@ -16,7 +16,7 @@ import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
-import tripleo.elijah.stages.deduce.DeduceTypes2;
+import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
@@ -78,7 +78,10 @@ public class TestGenFunction {
 			}
 		}
 
-		new DeduceTypes2(m).deduceFunctions(lgf);
+		DeducePhase dp = new DeducePhase();
+		dp.deduceModule(m, lgf);
+		dp.finish();
+//		new DeduceTypes2(m).deduceFunctions(lgf);
 
 		for (final GeneratedNode gn : lgf) {
 			if (gn instanceof GeneratedFunction) {
@@ -134,7 +137,10 @@ public class TestGenFunction {
 //			}
 //		}
 
-		new DeduceTypes2(m).deduceFunctions(lgf);
+		DeducePhase dp = new DeducePhase();
+		dp.deduceModule(m, lgf);
+		dp.finish();
+//		new DeduceTypes2(m).deduceFunctions(lgf);
 
 		new GenerateC(m).generateCode(lgf);
 	}
@@ -169,7 +175,10 @@ public class TestGenFunction {
 			}
 		}
 
-		new DeduceTypes2(m).deduceFunctions(lgf);
+		DeducePhase dp = new DeducePhase();
+		dp.deduceModule(m, lgf);
+		dp.finish();
+//		new DeduceTypes2(m).deduceFunctions(lgf);
 
 		for (final GeneratedNode gn : lgf) {
 			if (gn instanceof GeneratedFunction) {
@@ -219,10 +228,14 @@ public class TestGenFunction {
 		}
 
 		Runnable1 runnable = new Runnable1() {
+			final DeducePhase dp = new DeducePhase();
+
 			@Override
 			public void run() {
 				try {
 					run2();
+					dp.finish();
+					run3();
 				} catch (IOException e) {
 					mod.parent.eee.exception(e);
 				}
@@ -235,10 +248,12 @@ public class TestGenFunction {
 				mod = mm;
 			}
 
-			public void run2() throws IOException {
+			List<GeneratedNode> lgc = null;
+
+			public void run2() {
 				final GenerateFunctions gfm = new GenerateFunctions(mod);
 //				final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
-				final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+				lgc = gfm.generateAllTopLevelClasses();
 
 				final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 				for (GeneratedNode lgci : lgc) {
@@ -256,45 +271,23 @@ public class TestGenFunction {
 //					}
 //				}
 
-				new DeduceTypes2(mod).deduceFunctions(lgf);
-//				Collection<GeneratedNode> classes = Collections2.filter(lgc, new Predicate<GeneratedNode>() {
-//					@Override
-//					public boolean apply(@Nullable GeneratedNode input) {
-//						return input instanceof GeneratedClass;
-//					}
-//				});
-//				new DeduceTypes2(mod).deduceFunctions(new Iterable<GeneratedNode>() {
-//					@NotNull
-//					@Override
-//					public Iterator<GeneratedNode> iterator() {
-//						return new Iterator<GeneratedNode>() {
-//
-//							Iterator<GeneratedClass> ci = (Iterator<GeneratedClass>)classes.iterator();
-//
-//							@Override
-//							public boolean hasNext() {
-//								return ci.hasNext();
-//							}
-//
-//							@Override
-//							public GeneratedFunction next() {
-//								return ci.next().;
-//							}
-//						};
-//					}
-//				}));
+				dp.deduceModule(mod, lgf);
+//				new DeduceTypes2(mod).deduceFunctions(lgf);
 
-				for (final GeneratedNode gn : lgf) {
-					if (gn instanceof GeneratedFunction) {
-						GeneratedFunction gf = (GeneratedFunction) gn;
-						System.out.println("----------------------------------------------------------");
-						System.out.println(gf.name());
-						System.out.println("----------------------------------------------------------");
+//				for (final GeneratedNode gn : lgf) {
+//					if (gn instanceof GeneratedFunction) {
+//						GeneratedFunction gf = (GeneratedFunction) gn;
+//						System.out.println("----------------------------------------------------------");
+//						System.out.println(gf.name());
+//						System.out.println("----------------------------------------------------------");
 //						GeneratedFunction.printTables(gf);
 //						System.out.println("----------------------------------------------------------");
-					}
-				}
+//					}
+//				}
 
+			}
+
+			public void run3() throws IOException {
 				GenerateC ggc = new GenerateC(mod);
 //				ggc.generateCode(lgf);
 

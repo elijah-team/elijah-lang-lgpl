@@ -26,9 +26,11 @@ import java.util.*;
  */
 public class DeduceTypes2 {
 	private final OS_Module module;
+	private final DeducePhase phase;
 
-	public DeduceTypes2(final OS_Module m) {
-		module = m;
+	public DeduceTypes2(OS_Module module, DeducePhase phase) {
+		this.module = module;
+		this.phase = phase;
 	}
 
 	public void deduceFunctions(final Iterable<GeneratedNode> lgf) {
@@ -36,6 +38,7 @@ public class DeduceTypes2 {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				deduce_generated_function(generatedFunction);
+				phase.addFunction(generatedFunction, (FunctionDef) generatedFunction.getFD());
 			}
 		}
 	}
