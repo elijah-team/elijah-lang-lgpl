@@ -816,7 +816,16 @@ public class DeduceTypes2 {
 	}
 
 	private OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) {
-		throw new NotImplementedException();
+		// is this right?
+		LookupResultList lrl = ctx.lookup(ident.getText());
+		OS_Element best = lrl.chooseBest(null);
+		while (best instanceof AliasStatement) {
+			best = _resolveAlias((AliasStatement) best);
+		}
+		if (best instanceof ClassStatement)
+			return new OS_Type((ClassStatement) best);
+		else
+			return null;
 	}
 
 	/**
