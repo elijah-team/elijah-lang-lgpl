@@ -739,11 +739,14 @@ public class GenerateC {
 				} else if (ia instanceof IdentIA) {
 //					@org.jetbrains.annotations.Nullable
 //					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
-					//String path = gf.getIAPath((IdentIA) ia));    // return x.y.z
-//				String path2 = gf.getIdentIAPath((IdentIA) ia); // return ZP105get_z(vvx.vmy)
+					//String path = gf.getIAPathNormal((IdentIA) ia));    // return x.y.z
+					String path2 = gf.getIdentIAPath((IdentIA) ia); // return ZP105get_z(vvx.vmy)
 //				assert path.equals(path2); // should always fail
 //					assert ident != null;
-					throw new NotImplementedException();
+					IdentTableEntry ite = gf.getIdentTableEntry(((IdentIA) ia).getIndex());
+					sll.add(ite.getIdent().getText());
+					System.out.println("743 "+path2);
+//					throw new NotImplementedException();
 				} else {
 					throw new IllegalStateException("Cant be here: Invalid InstructionArgument");
 				}
