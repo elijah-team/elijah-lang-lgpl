@@ -338,14 +338,17 @@ public class DeduceTypes2 {
 			{
 				final TypeName tn1 = type.getTypeName();
 				if (tn1 instanceof NormalTypeName) {
-					final String tn = ((NormalTypeName) tn1).getName();
+					final Qualident tn = ((NormalTypeName) tn1).getRealName();
 					System.out.println("799 [resolving USER type named] "+tn);
-					final LookupResultList lrl = tn1.getContext().lookup(tn); // TODO is this right?
+					final LookupResultList lrl = lookupExpression(tn, tn1.getContext());
 					OS_Element best = lrl.chooseBest(null);
 					while (best instanceof AliasStatement) {
 						best = _resolveAlias((AliasStatement) best);
 					}
-					return new OS_Type((ClassStatement) best);
+					if (best != null)
+						return new OS_Type((ClassStatement) best);
+					else
+						return null;
 				}
 				throw new NotImplementedException(); // TODO might be Qualident, etc
 			}
