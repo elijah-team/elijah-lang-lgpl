@@ -75,7 +75,8 @@ public class DeduceTypes2 {
 								assert a != null;
 								assert a.getType() != null;
 								if (a.getType() == OS_Type.Type.BUILT_IN && a.getBType() == BuiltInTypes.Boolean) {
-									assert cte.getName().equals("true") || cte.getName().equals("false");
+									assert cte.getName().equals("true") || cte.getName().equals("false")
+										|| cte.getName().equals("True") || cte.getName().equals("False");
 								} else
 									throw new NotImplementedException();
 								break;
