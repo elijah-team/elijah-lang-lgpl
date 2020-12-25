@@ -84,9 +84,9 @@ public class GeneratedFunction implements GeneratedNode {
 		//
 		// TODO NOT LOOKING UP THINGS, IE PROPERTIES, MEMBERS
 		//
+		String text = "";
 		List<String> sl = new ArrayList<String>();
 		for (final InstructionArgument ia : s) {
-			final String text;
 			if (ia instanceof IntegerIA) { // should only be the first element if at all
 				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
 				text = "vv"+vte.getName();
@@ -109,7 +109,8 @@ public class GeneratedFunction implements GeneratedNode {
 						} else // TODO what about FunctionDef, etc
 							code = -1;
 						// TODO what about overloaded functions
-						text = String.format("Z%d%s", code, ((FunctionDef) resolved_element).name());
+						sl.clear();
+						text = String.format("Z%d%s(%s)", code, ((FunctionDef) resolved_element).name(), text);
 					} else if (resolved_element instanceof VariableStatement) {
 						// first getParent is VariableSequence
 						if (resolved_element.getParent().getParent() == getFD().getParent()) {
@@ -118,9 +119,9 @@ public class GeneratedFunction implements GeneratedNode {
 						} else
 							text = "vv"+((VariableStatement) resolved_element).getName();
 					} else {
-//						throw new NotImplementedException();
-						text = idte.getIdent().getText();
-						System.out.println("1008 "+resolved_element.getClass().getName());
+						throw new NotImplementedException();
+//						text = idte.getIdent().getText();
+//						System.out.println("1008 "+resolved_element.getClass().getName());
 					}
 				} else
 					text = idte.getIdent().getText();
