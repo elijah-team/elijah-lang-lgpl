@@ -85,6 +85,28 @@ public class GenerateC {
 
 	public void generate_class(GeneratedClass x) throws IOException {
 		int y=2;
+		final ClassStatement xx = x.getKlass();
+//		xx.annotationsOf();
+		final CClassDecl decl = new CClassDecl(x);
+		xx.walkAnnotations(new AnnotationWalker() {
+			@Override
+			public void annotation(AnnotationPart anno) {
+				if (anno.annoClass().equals(Helpers.string_to_qualident("C.repr"))) {
+					if (anno.getExprs() != null) {
+						final ArrayList<IExpression> expressions = new ArrayList<IExpression>(anno.getExprs().expressions());
+						final IExpression str0 = expressions.get(0);
+						if (str0 instanceof StringExpression) {
+							final String str = ((StringExpression) str0).getText();
+							decl.setDecl(str);
+						} else {
+							System.out.println("Illegal C.decl");
+						}
+					}
+				}
+				if (anno.annoClass().equals(Helpers.string_to_qualident("Primitive")))
+					decl.setPrimitive();
+			}
+		});
 		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
 		try {
 			tos.put_string_ln("typedef struct {");
