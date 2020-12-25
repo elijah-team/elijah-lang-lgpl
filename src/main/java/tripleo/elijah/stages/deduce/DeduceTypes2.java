@@ -573,7 +573,7 @@ public class DeduceTypes2 {
 		case IDENT:
 			return ctx.lookup(((IdentExpression) left).getText());
 		default:
-			throw new IllegalStateException();
+			throw new IllegalArgumentException();
 		}
 
 	}
