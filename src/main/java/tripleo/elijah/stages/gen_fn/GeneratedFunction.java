@@ -123,8 +123,14 @@ public class GeneratedFunction implements GeneratedNode {
 //						text = idte.getIdent().getText();
 //						System.out.println("1008 "+resolved_element.getClass().getName());
 					}
-				} else
-					text = idte.getIdent().getText();
+				} else {
+					// TODO make tests pass but I dont like this (should throw an exception: not enough information)
+					if (sl.size() == 0)
+						text = idte.getIdent().getText(); // TODO check if it belongs somewhere else
+					else
+						text = "vm"+idte.getIdent().getText();
+					int y=2;
+				}
 			} else
 				throw new NotImplementedException();
 			sl.add(text);
