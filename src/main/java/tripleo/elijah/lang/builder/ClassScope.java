@@ -36,7 +36,8 @@ public class ClassScope extends ClassOrNamespaceScope implements Documentable {
 	}
 
 	public void addAccess(AccessNotation acs) {
-		_items.add(acs);
+		// TODO find something to do with this
+		// _items.add(acs);
 	}
 
 	public FunctionDefBuilder funcDef() {
