@@ -142,7 +142,7 @@ public class GenerateC {
 			}
 			tos.put_string_ln("return R;");
 			tos.dec_tabs();
-			tos.put_string_ln(String.format("} // class %s", x.getName()));
+			tos.put_string_ln(String.format("} // class %s%s", decl.prim ? "box " : "", x.getName()));
 			tos.put_string_ln("");
 			tos.flush();
 		} finally {
