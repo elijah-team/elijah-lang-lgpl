@@ -346,7 +346,7 @@ scope[Scope sc]
     : LCURLY docstrings[sc]
       ((statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);} //expr.setContext(cur);
-      | classStatement[sc.getParent(), new ClassStatement(sc.getParent())]
+      | classStatement[sc.getParent(), new ClassStatement(sc.getParent(), cur)]
       | "continue"
       | "break" // opt label?
       | "return" ((expression) => (expr=expression)|)
@@ -418,7 +418,7 @@ functionScope[Scope sc]
         (
             ( statement[sc.statementClosure(), sc.getParent()]
             | expr=expression {sc.statementWrapper(expr);}
-            | classStatement[sc.getParent(), new ClassStatement(sc.getParent())]
+            | classStatement[sc.getParent(), new ClassStatement(sc.getParent(), cur)]
             | "continue"
             | "break" // opt label?
             | "return" ((expression) => (expr=expression)|)
@@ -994,7 +994,7 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 	   ( BOR formalArgList[sc.fal()] BOR )?
 	  (statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);}
-      | classStatement[sc.getParent(), new ClassStatement(sc.getParent())]
+      | classStatement[sc.getParent(), new ClassStatement(sc.getParent(), cur)]
       )*
       RCURLY
 	
