@@ -506,7 +506,7 @@ public class GenerateFunctions {
 						final Context context = mc1.getContext();
 
 						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), context);
-						final int cast_inst = add_i(gf, InstructionName.CAST, List_of(new IntegerIA(tmp), new IntegerIA(t.getIndex()), (i)), context);
+						final int cast_inst = add_i(gf, InstructionName.CAST_TO, List_of(new IntegerIA(tmp), new IntegerIA(t.getIndex()), (i)), context);
 						vte_tmp.addPotentialType(cast_inst, t); // TODO in the future instructionIndex may be unsigned
 
 						for (final FunctionItem item : mc1.getItems()) {
@@ -830,6 +830,20 @@ public class GenerateFunctions {
 					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp_var), new FnCallArgs(i, gf)), cctx);
 					return new IntegerIA(tmp_var); // return tmp_var instead of expression assigning it
 				}
+			}
+		case CAST_TO:
+			{
+				TypeCastExpression tce = (TypeCastExpression) expression;
+				InstructionArgument simp = simplify_expression(tce.getLeft(), gf, cctx);
+				@NotNull TypeTableEntry tte_index = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(tce.getTypeName()));
+				final int x = add_i(gf, InstructionName.CAST_TO, List_of(simp, new IntegerIA(tte_index.getIndex())), cctx);
+			}
+		case AS_CAST:
+			{
+				TypeCastExpression tce = (TypeCastExpression) expression;
+				InstructionArgument simp = simplify_expression(tce.getLeft(), gf, cctx);
+				@NotNull TypeTableEntry tte_index = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(tce.getTypeName()));
+				final int x = add_i(gf, InstructionName.AS_CAST, List_of(simp, new IntegerIA(tte_index.getIndex())), cctx);
 			}
 		case DOT_EXP:
 			{

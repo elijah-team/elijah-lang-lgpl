@@ -933,7 +933,12 @@ ee=pce;}
 		|	// nothing
 		)
 
-		( (AS|CAST_TO) {tc=new TypeCastExpression();ee=tc;} tn=typeName2 {tc.setTypeName(tn);})?
+ 		(
+								{tc=new TypeCastExpression();ee=tc;}
+			( AS				{tc.setKind(ExpressionKind.AS_CAST);}
+			| CAST_TO			{tc.setKind(ExpressionKind.CAST_TO);})  
+			tn=typeName2 		{tc.setTypeName(tn);}
+		)?
 		
 		// look for int.class and int[].class
 //	|	builtInType

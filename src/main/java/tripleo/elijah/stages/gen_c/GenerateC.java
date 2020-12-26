@@ -489,7 +489,7 @@ public class GenerateC {
 					generate_method_decl(instruction, tos, gf);
 				}
 				break;
-			case CAST:
+			case CAST_TO:
 				{
 					generate_method_cast(instruction, tos, gf);
 				}

@@ -6819,16 +6819,25 @@ inputState.guessing--;
 			}
 			{
 			if ((LA(1)==AS||LA(1)==CAST_TO) && (_tokenSet_74.member(LA(2)))) {
+				if ( inputState.guessing==0 ) {
+					tc=new TypeCastExpression();ee=tc;
+				}
 				{
 				switch ( LA(1)) {
 				case AS:
 				{
 					match(AS);
+					if ( inputState.guessing==0 ) {
+						tc.setKind(ExpressionKind.AS_CAST);
+					}
 					break;
 				}
 				case CAST_TO:
 				{
 					match(CAST_TO);
+					if ( inputState.guessing==0 ) {
+						tc.setKind(ExpressionKind.CAST_TO);
+					}
 					break;
 				}
 				default:
@@ -6836,9 +6845,6 @@ inputState.guessing--;
 					throw new NoViableAltException(LT(1), getFilename());
 				}
 				}
-				}
-				if ( inputState.guessing==0 ) {
-					tc=new TypeCastExpression();ee=tc;
 				}
 				tn=typeName2();
 				if ( inputState.guessing==0 ) {

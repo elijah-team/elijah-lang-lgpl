@@ -260,7 +260,7 @@ public class DeduceTypes2 {
 				break;
 			case PC:
 				break;
-			case CAST:
+			case CAST_TO:
 				// README potentialType info is already added by MatchConditional
 				break;
 			case DECL:

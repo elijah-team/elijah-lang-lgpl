@@ -23,7 +23,6 @@ public enum ExpressionKind {
 	AUG_BXOR,
 	AUG_BOR,
 
-	INC, DEC,
 	INCREMENT, DECREMENT,
 	POST_INCREMENT, POST_DECREMENT,
 
@@ -51,7 +50,7 @@ public enum ExpressionKind {
 
 	DOT_EXP, /*INDEX_OF,*/ GET_ITEM, SET_ITEM, FUNC_EXPR, TO_EXPR,
 
-	IS_A
+	CAST_TO, AS_CAST, IS_A
 
 }
 
