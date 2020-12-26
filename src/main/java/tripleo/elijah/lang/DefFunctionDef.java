@@ -26,13 +26,7 @@ public class DefFunctionDef extends FunctionDef implements ClassItem {
 		super(element, context);
 	}
 
-	public enum Type {
-		DEF_FUN,
-		REG_FUN
-	}
-//
 	private IExpression _expr;
-	private Type _type;
 //	private FormalArgList fal;
 
 	public void setExpr(final IExpression aExpr) {
@@ -40,19 +34,6 @@ public class DefFunctionDef extends FunctionDef implements ClassItem {
 		_items.add((FunctionItem) _expr);
 	}
 
-	/**
-	 * TODO WTF is this?
-	 *
-	 * @param aType
-	 */
-	public void setType(final Type aType) {
-		_type = aType;
-	}
-
-//	public void setOpfal(final FormalArgList fal) {
-//		this.fal=fal;
-//	}
-//
 //	static class StatementWrapper implements StatementItem, FunctionItem {
 //
 //		private final IExpression expr;

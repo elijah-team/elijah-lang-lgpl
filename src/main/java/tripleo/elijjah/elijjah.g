@@ -175,6 +175,7 @@ classScope[ClassStatement cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | typeAlias[cr.typeAlias()]
     | programStatement[cr.XXX(), cr]
+    | propertyStatement[cr.prop()]
     | acs=accessNotation {cr.addAccess(acs);}
     )*
     (invariantStatement[cr.invariantStatement()])?
@@ -1222,6 +1223,13 @@ formalArgListItem_priv[FormalArgListItem fali]
 		)
 	;
 
+propertyStatement[PropertyStatement ps]
+		{IdentExpression prop_name=null;TypeName tn=null;}
+	: ("prop"|"property") prop_name=ident {ps.setName(prop_name);}
+			TOK_COLON tn=typeName2 {ps.setTypeName(tn);} LCURLY
+	("get" scope[ps.get_scope()]
+	|"set" scope[ps.set_scope()])*
+	;
 
 
 //----------------------------------------------------------------------------

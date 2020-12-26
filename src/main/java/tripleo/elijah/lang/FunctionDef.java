@@ -28,6 +28,8 @@ import java.util.List;
 // TODO FunctionDef is not a Container is it?
 public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
 
+	protected Type _type;
+
 	public Iterable<FormalArgListItem> getArgs() {
 		return mFal.items();
 	}
@@ -36,7 +38,15 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		this._returnType = tn;
 	}
 
-	public final class FunctionDefScope implements Scope {
+	public enum Type {
+		DEF_FUN,
+		PROP_SET, PROP_GET, REG_FUN
+	}
+
+	public static class FunctionDefScope implements Scope, Documentable {
+
+		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+		private final List<String> mDocs = new ArrayList<String>();
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this, getParent());
 
@@ -149,6 +159,10 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	// region items
 
 	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+
+	public void setType(final Type aType) {
+		_type = aType;
+	}
 
 	public List<FunctionItem> getItems() {
 		return items;

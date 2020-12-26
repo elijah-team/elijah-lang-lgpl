@@ -15,7 +15,8 @@ package tripleo.elijah.lang2;
  */
 public enum BuiltInTypes {
 	SystemInteger(80),
-	Boolean(79);
+	Boolean(79),
+	Unit(0);
 
 	final int _code;
 	
