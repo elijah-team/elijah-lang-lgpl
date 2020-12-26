@@ -263,7 +263,7 @@ public ElijjahParser(ParserSharedInputState state) {
 inputState.guessing--;
 				}
 				if ( synPredMatched202 ) {
-					namespaceStatement(pc.namespaceStatement(cont));
+					namespaceStatement(pc.namespaceStatement(cont, cur));
 				}
 				else {
 					boolean synPredMatched204 = false;
@@ -283,7 +283,7 @@ inputState.guessing--;
 inputState.guessing--;
 					}
 					if ( synPredMatched204 ) {
-						classStatement(cont, pc.classStatement(cont));
+						classStatement(cont, pc.classStatement(cont, cur));
 					}
 					else {
 						boolean synPredMatched206 = false;
@@ -304,7 +304,7 @@ inputState.guessing--;
 inputState.guessing--;
 						}
 						if ( synPredMatched206 ) {
-							namespaceStatement(pc.namespaceStatement(cont));
+							namespaceStatement(pc.namespaceStatement(cont, cur));
 						}
 						else {
 							boolean synPredMatched208 = false;
@@ -325,7 +325,7 @@ inputState.guessing--;
 inputState.guessing--;
 							}
 							if ( synPredMatched208 ) {
-								classStatement(cont, pc.classStatement(cont));
+								classStatement(cont, pc.classStatement(cont, cur));
 							}
 						else {
 							throw new NoViableAltException(LT(1), getFilename());

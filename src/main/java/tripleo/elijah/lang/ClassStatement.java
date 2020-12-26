@@ -40,20 +40,20 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 //	public ClassStatement() {
 //	}
 
-	@Deprecated public ClassStatement(final OS_Element aElement) {
-		parent = aElement; // setParent
-		if (aElement instanceof  OS_Module) {
-			final OS_Module module = (OS_Module) aElement;
-			//
-			this.setPackageName(module.pullPackageName());
-			_packageName.addElement(this);
-			module.add(this);
-		} else if (aElement instanceof OS_Container) {
-			((OS_Container) aElement).add(this);
-		} else {
-			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", aElement));
-		}
-	}
+//	@Deprecated public ClassStatement(final OS_Element aElement) {
+//		parent = aElement; // setParent
+//		if (aElement instanceof  OS_Module) {
+//			final OS_Module module = (OS_Module) aElement;
+//			//
+//			this.setPackageName(module.pullPackageName());
+//			_packageName.addElement(this);
+//			module.add(this);
+//		} else if (aElement instanceof OS_Container) {
+//			((OS_Container) aElement).add(this);
+//		} else {
+//			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", aElement));
+//		}
+//	}
 
 	public ClassStatement(final OS_Element aElement, final Context parentContext) {
 		parent = aElement; // setParent
@@ -91,7 +91,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 	public FunctionDef funcDef() {
-		return new FunctionDef(this);
+		return new FunctionDef(this, getContext());
 	}
 	
 	public String getName() {

@@ -26,17 +26,17 @@ public class ParserClosure extends ProgramClosure {
 		compilation.addModule(module, fn);
 	}
 
-	public ClassStatement classStatement() {
-		return super.classStatement(module());
-	}
+//	public ClassStatement classStatement() {
+//		return super.classStatement(module());
+//	}
 
 //	public ImportStatement importStatement() {
 //		return super.importStatement(module());
 //	}
 
-	public NamespaceStatement namespaceStatement() {
-		return super.namespaceStatement(module());
-	}
+//	public NamespaceStatement namespaceStatement() {
+//		return super.namespaceStatement(module());
+//	}
 
 	private OS_Module module() {
 		return module;

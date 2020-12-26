@@ -14,7 +14,6 @@ import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
-import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.*;
@@ -31,19 +30,13 @@ public class DeduceTypesTest3 {
 		final DeduceTypes d = new DeduceTypes(mod);
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
-		final ClassStatement cs = new ClassStatement(mod);
+		final ClassStatement cs = new ClassStatement(mod, mctx);
 		cs.setName(Helpers.string_to_ident("Test"));
-		final ClassContext cctx = new ClassContext(mctx, cs);
-		cs.setContext(cctx);
-		final ClassStatement cs_foo = new ClassStatement(mod);
+		final ClassStatement cs_foo = new ClassStatement(mod, mctx);
 		cs_foo.setName(Helpers.string_to_ident("Foo"));
-		final ClassContext cctx_foo = new ClassContext(mctx, cs_foo);
-		cs_foo.setContext(cctx_foo);
 		final FunctionDef fd = cs.funcDef();
 		fd.setName(Helpers.string_to_ident("test"));
-		final FunctionContext fctx = new FunctionContext(cctx, fd);
-		fd.setContext(fctx);
-		final VariableSequence vss = fd.scope().statementClosure().varSeq(fctx);
+		final VariableSequence vss = fd.scope().statementClosure().varSeq(fd.getContext());
 		final VariableStatement vs = vss.next();
 		vs.setName(Helpers.string_to_ident("x"));
 		final Qualident qu = new Qualident();
@@ -54,7 +47,6 @@ public class DeduceTypesTest3 {
 		cs.postConstruct();
 		mod.postConstruct();
 		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
-		assert fc == fctx;
 		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
 		this.x = d.deduceExpression(x1, fc);
