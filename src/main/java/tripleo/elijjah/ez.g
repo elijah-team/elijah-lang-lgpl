@@ -317,8 +317,8 @@ multiplicativeExpression returns [IExpression ee]
 unaryExpression returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
-	:	INC/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.INC);}
-	|	DEC/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.DEC);}
+	:	INC/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.INCREMENT);}
+	|	DEC/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.DECREMENT);}
 	|	MINUS/*^*/ /*{#MINUS.setType(UNARY_MINUS);}*/ ee=unaryExpression {ee.setKind(ExpressionKind.NEG);}
 	|	PLUS/*^*/  /*{#PLUS.setType(UNARY_PLUS);}*/ ee=unaryExpression {ee.setKind(ExpressionKind.POS);}
 	|	ee=unaryExpressionNotPlusMinus
@@ -368,6 +368,14 @@ pce.setArgs(el);
 ee=pce;}
 			RPAREN/*!*/
 		)*
+
+		// possibly add on a post-increment or post-decrement.
+		// allows INC/DEC on too much, but semantics can check
+		(	in:INC/*^*/ {ee.setKind(ExpressionKind.POST_INCREMENT);} /*{#in.setType(POST_INC);}*/
+	 	|	de:DEC/*^*/ {ee.setKind(ExpressionKind.POST_DECREMENT);} /*{#de.setType(POST_DEC);}*/
+		|	// nothing
+		)
+
 
 	;
 

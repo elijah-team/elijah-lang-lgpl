@@ -1,4 +1,4 @@
-// $ANTLR 2.7.1: ez.g -> EzTokenTypes.txt$
+// $ANTLR 2.7.7 (20060906): ez.g -> EzTokenTypes.txt$
 Ez    // output token vocab name
 LITERAL_program="program"=4
 LITERAL_library="library"=5

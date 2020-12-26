@@ -164,16 +164,16 @@ public class BasicBinaryExpression implements IBinaryExpression {
 				sb.append(" >= ");
 				sb.append(abe.getRight().toString());
 				break;
-			case INC:
-				sb.append(abe.getLeft().toString());
-				sb.append(abe.getRight().toString());
-				sb.append("++");
-				break;
-			case DEC:
-				sb.append(abe.getLeft().toString());
-				sb.append(abe.getRight().toString());
-				sb.append("--");
-				break;
+//			case INC:
+//				sb.append(abe.getLeft().toString());
+//				sb.append(abe.getRight().toString());
+//				sb.append("++");
+//				break;
+//			case DEC:
+//				sb.append(abe.getLeft().toString());
+//				sb.append(abe.getRight().toString());
+//				sb.append("--");
+//				break;
 			case LAND:
 				sb.append(abe.getLeft().toString());
 				sb.append(" & ");

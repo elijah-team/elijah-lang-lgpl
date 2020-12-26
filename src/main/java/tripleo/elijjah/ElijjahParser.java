@@ -6566,7 +6566,7 @@ inputState.guessing--;
 				match(INC);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.setKind(ExpressionKind.INC);
+					ee.setKind(ExpressionKind.INCREMENT);
 				}
 				break;
 			}
@@ -6575,7 +6575,7 @@ inputState.guessing--;
 				match(DEC);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.setKind(ExpressionKind.DEC);
+					ee.setKind(ExpressionKind.DECREMENT);
 				}
 				break;
 			}
@@ -6799,10 +6799,16 @@ inputState.guessing--;
 			if ((LA(1)==INC) && (_tokenSet_9.member(LA(2)))) {
 				in = LT(1);
 				match(INC);
+				if ( inputState.guessing==0 ) {
+					ee.setKind(ExpressionKind.POST_INCREMENT);
+				}
 			}
 			else if ((LA(1)==DEC) && (_tokenSet_9.member(LA(2)))) {
 				de = LT(1);
 				match(DEC);
+				if ( inputState.guessing==0 ) {
+					ee.setKind(ExpressionKind.POST_DECREMENT);
+				}
 			}
 			else if ((_tokenSet_9.member(LA(1))) && (_tokenSet_70.member(LA(2)))) {
 			}

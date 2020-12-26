@@ -1,4 +1,4 @@
-// $ANTLR 2.7.1: "ez.g" -> "EzParser.java"$
+// $ANTLR 2.7.7 (20060906): "ez.g" -> "EzParser.java"$
 
   package tripleo.elijjah;
 

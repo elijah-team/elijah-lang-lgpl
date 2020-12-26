@@ -1,4 +1,4 @@
-// $ANTLR 2.7.1: "ez.g" -> "EzParser.java"$
+// $ANTLR 2.7.7 (20060906): "ez.g" -> "EzParser.java"$
 
   package tripleo.elijjah;
 
@@ -10,8 +10,7 @@ import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 
-public class EzParser extends antlr.LLkParser
-       implements EzTokenTypes
+public class EzParser extends antlr.LLkParser       implements EzTokenTypes
  {
 
 //Qualident xy;
@@ -102,8 +101,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_0);
+				recover(ex,_tokenSet_0);
 			} else {
 			  throw ex;
 			}
@@ -144,8 +142,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_1);
+				recover(ex,_tokenSet_1);
 			} else {
 			  throw ex;
 			}
@@ -196,8 +193,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_2);
+				recover(ex,_tokenSet_2);
 			} else {
 			  throw ex;
 			}
@@ -234,8 +230,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_3);
+				recover(ex,_tokenSet_3);
 			} else {
 			  throw ex;
 			}
@@ -321,8 +316,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_4);
+				recover(ex,_tokenSet_4);
 			} else {
 			  throw ex;
 			}
@@ -341,8 +335,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -380,8 +373,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_6);
+				recover(ex,_tokenSet_6);
 			} else {
 			  throw ex;
 			}
@@ -445,8 +437,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -486,8 +477,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_7);
+				recover(ex,_tokenSet_7);
 			} else {
 			  throw ex;
 			}
@@ -511,8 +501,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_8);
+				recover(ex,_tokenSet_8);
 			} else {
 			  throw ex;
 			}
@@ -565,8 +554,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_0);
+				recover(ex,_tokenSet_0);
 			} else {
 			  throw ex;
 			}
@@ -598,8 +586,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_0);
+				recover(ex,_tokenSet_0);
 			} else {
 			  throw ex;
 			}
@@ -637,8 +624,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_0);
+				recover(ex,_tokenSet_0);
 			} else {
 			  throw ex;
 			}
@@ -774,8 +760,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -814,8 +799,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_0);
+				recover(ex,_tokenSet_0);
 			} else {
 			  throw ex;
 			}
@@ -910,8 +894,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_0);
+				recover(ex,_tokenSet_0);
 			} else {
 			  throw ex;
 			}
@@ -930,8 +913,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -967,8 +949,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1003,8 +984,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1039,8 +1019,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1076,8 +1055,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1113,8 +1091,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1174,8 +1151,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1255,8 +1231,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1323,8 +1298,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1383,8 +1357,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1451,8 +1424,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1473,7 +1445,7 @@ public EzParser(ParserSharedInputState state) {
 				match(INC);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.setKind(ExpressionKind.INC);
+					ee.setKind(ExpressionKind.INCREMENT);
 				}
 				break;
 			}
@@ -1482,7 +1454,7 @@ public EzParser(ParserSharedInputState state) {
 				match(DEC);
 				ee=unaryExpression();
 				if ( inputState.guessing==0 ) {
-					ee.setKind(ExpressionKind.DEC);
+					ee.setKind(ExpressionKind.DECREMENT);
 				}
 				break;
 			}
@@ -1530,8 +1502,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1589,8 +1560,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1604,6 +1574,8 @@ public EzParser(ParserSharedInputState state) {
 		Token  lb = null;
 		Token  rb = null;
 		Token  lp = null;
+		Token  in = null;
+		Token  de = null;
 		ee=null;TypeCastExpression tc=null;TypeName tn=null;
 				IExpression e3=null;ExpressionList el=null;
 		
@@ -1693,12 +1665,33 @@ public EzParser(ParserSharedInputState state) {
 				
 			} while (true);
 			}
+			{
+			if ((LA(1)==INC) && (_tokenSet_5.member(LA(2)))) {
+				in = LT(1);
+				match(INC);
+				if ( inputState.guessing==0 ) {
+					ee.setKind(ExpressionKind.POST_INCREMENT);
+				}
+			}
+			else if ((LA(1)==DEC) && (_tokenSet_5.member(LA(2)))) {
+				de = LT(1);
+				match(DEC);
+				if ( inputState.guessing==0 ) {
+					ee.setKind(ExpressionKind.POST_DECREMENT);
+				}
+			}
+			else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_10.member(LA(2)))) {
+			}
+			else {
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			
+			}
 		}
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1781,8 +1774,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1859,8 +1851,7 @@ public EzParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				consume();
-				consumeUntil(_tokenSet_5);
+				recover(ex,_tokenSet_5);
 			} else {
 			  throw ex;
 			}
@@ -1949,29 +1940,65 @@ public EzParser(ParserSharedInputState state) {
 		"FLOAT_SUFFIX"
 	};
 	
-	private static final long _tokenSet_0_data_[] = { 2L, 0L };
-	public static final BitSet _tokenSet_0 = new BitSet(_tokenSet_0_data_);
-	private static final long _tokenSet_1_data_[] = { 112L, 0L };
-	public static final BitSet _tokenSet_1 = new BitSet(_tokenSet_1_data_);
-	private static final long _tokenSet_2_data_[] = { 32768L, 0L };
-	public static final BitSet _tokenSet_2 = new BitSet(_tokenSet_2_data_);
-	private static final long _tokenSet_3_data_[] = { 256L, 0L };
-	public static final BitSet _tokenSet_3 = new BitSet(_tokenSet_3_data_);
-	private static final long _tokenSet_4_data_[] = { 36992L, 0L };
-	public static final BitSet _tokenSet_4 = new BitSet(_tokenSet_4_data_);
-	private static final long _tokenSet_5_data_[] = { 72057594034807280L, 0L };
-	public static final BitSet _tokenSet_5 = new BitSet(_tokenSet_5_data_);
-	private static final long _tokenSet_6_data_[] = { 16793840L, 0L };
-	public static final BitSet _tokenSet_6 = new BitSet(_tokenSet_6_data_);
-	private static final long _tokenSet_7_data_[] = { 4194306L, 0L };
-	public static final BitSet _tokenSet_7 = new BitSet(_tokenSet_7_data_);
-	private static final long _tokenSet_8_data_[] = { 72057594034807282L, 0L };
-	public static final BitSet _tokenSet_8 = new BitSet(_tokenSet_8_data_);
-	private static final long _tokenSet_9_data_[] = { -65302194587553664L, 0L };
-	public static final BitSet _tokenSet_9 = new BitSet(_tokenSet_9_data_);
-	private static final long _tokenSet_10_data_[] = { -2164238L, 0L };
-	public static final BitSet _tokenSet_10 = new BitSet(_tokenSet_10_data_);
-	private static final long _tokenSet_11_data_[] = { -65302194570776448L, 0L };
-	public static final BitSet _tokenSet_11 = new BitSet(_tokenSet_11_data_);
+	private static final long[] mk_tokenSet_0() {
+		long[] data = { 2L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_0 = new BitSet(mk_tokenSet_0());
+	private static final long[] mk_tokenSet_1() {
+		long[] data = { 112L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_1 = new BitSet(mk_tokenSet_1());
+	private static final long[] mk_tokenSet_2() {
+		long[] data = { 32768L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_2 = new BitSet(mk_tokenSet_2());
+	private static final long[] mk_tokenSet_3() {
+		long[] data = { 256L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_3 = new BitSet(mk_tokenSet_3());
+	private static final long[] mk_tokenSet_4() {
+		long[] data = { 36992L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_4 = new BitSet(mk_tokenSet_4());
+	private static final long[] mk_tokenSet_5() {
+		long[] data = { 288230376148591088L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_5 = new BitSet(mk_tokenSet_5());
+	private static final long[] mk_tokenSet_6() {
+		long[] data = { 16793840L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_6 = new BitSet(mk_tokenSet_6());
+	private static final long[] mk_tokenSet_7() {
+		long[] data = { 4194306L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_7 = new BitSet(mk_tokenSet_7());
+	private static final long[] mk_tokenSet_8() {
+		long[] data = { 288230376148591090L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_8 = new BitSet(mk_tokenSet_8());
+	private static final long[] mk_tokenSet_9() {
+		long[] data = { -65302194587553664L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_9 = new BitSet(mk_tokenSet_9());
+	private static final long[] mk_tokenSet_10() {
+		long[] data = { -2164238L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_10 = new BitSet(mk_tokenSet_10());
+	private static final long[] mk_tokenSet_11() {
+		long[] data = { -65302194570776448L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_11 = new BitSet(mk_tokenSet_11());
 	
 	}
