@@ -16,7 +16,7 @@ done automatically in maven but not IDEA.
 
 Much work is needed.
 
-See [Language Overview](elijjah.md) for more details on the language.
+See [Language Overview](docs/language-overview.md) for more details on the language.
 
 All of this is a work in progress and your support would be appreciated.
 
@@ -30,5 +30,4 @@ oluoluolu+elijah (at) gmail.com
 
 [Elijjah by Example](https://elijjah-by-example.github.io)
 
-[Elijjah by Example](https://oluoluolu-gh.gitbook.io/elijjah-by-example/)
-
+[GitBook: Elijjah by Example](https://oluoluolu-gh.gitbook.io/elijjah-by-example/)
