@@ -49,6 +49,11 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		private final List<String> mDocs = new ArrayList<String>();
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this, getParent());
+		private final OS_Element _Parent;
+
+		public FunctionDefScope(OS_Element aParent) {
+			_Parent = aParent;
+		}
 
 		@Override
 		public void add(final StatementItem aItem) {
@@ -81,7 +86,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 		@Override
 		public void statementWrapper(final IExpression aExpr) {
-			add(new StatementWrapper(aExpr, getContext(), getParent()));
+			add(new StatementWrapper(aExpr, getParent().getContext(), getParent()));
 		}
 
 		@Override
@@ -94,8 +99,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		 */
 		@Override
 		public OS_Element getParent() {
-			// TODO Auto-generated method stub
-			return FunctionDef.this;
+			return this._Parent;
 		}
 
 		/* (non-Javadoc)
@@ -103,13 +107,13 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		 */
 		@Override
 		public OS_Element getElement() {
-			return FunctionDef.this;
+			return _Parent;
 		}
 	}
 
 	public Attached _a = new Attached();
 	private TypeName _returnType = null;
-	private final FunctionDefScope mScope2 = new FunctionDefScope();
+	private final FunctionDefScope mScope2 = new FunctionDefScope(this);
 
 	// region constructor
 
@@ -165,7 +169,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	}
 
 	public List<FunctionItem> getItems() {
-		return items;
+		return mScope2.items;
 	}
 
 	@Override // OS_Container
@@ -188,7 +192,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	@Override // OS_Container
 	public void add(final OS_Element anElement) {
 		if (anElement instanceof FunctionItem)
-			items.add((FunctionItem) anElement);
+			mScope2.add((StatementItem) anElement);
 		else
 			throw new IllegalStateException(String.format("Cant add %s to FunctionDef", anElement));
 	}
@@ -271,12 +275,10 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	// endregion
 
 	// region Documentable
-
-	private final List<String> mDocs = new ArrayList<String>();
-
+	
 	@Override  // Documentable
 	public void addDocString(final Token aText) {
-		mDocs.add(aText.getText());
+		mScope2.mDocs.add(aText.getText());
 	}
 
 	// endregion
