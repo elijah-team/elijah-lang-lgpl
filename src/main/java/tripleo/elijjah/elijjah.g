@@ -1208,7 +1208,7 @@ defFunctionDef[DefFunctionDef fd]
 	: "def" i1=ident op=opfal2/*[fd.fal()]*/
 	  ((TOK_COLON|TOK_ARROW) tn=typeName2 {fd.setReturnType(tn);})?
 	  BECOMES expr=expression
-	   {fd.setType(DefFunctionDef.Type.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr); }
+	   {fd.setType(FunctionDef.Type.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr); }
 	;
 formalArgList[FormalArgList fal]
 	: (formalArgListItem_priv[fal.next()]
