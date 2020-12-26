@@ -65,7 +65,11 @@ public class DeduceTypes2 {
 							{
 								final OS_Type a = cte.getTypeTableEntry().attached;
 								if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
-									cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);
+									try {
+										cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);
+									} catch (ResolveError resolveError) {
+										resolveError.printStackTrace(); // TODO print diagnostic
+									}
 								}
 								break;
 							}
@@ -303,7 +307,8 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private OS_Type resolve_type(final OS_Type type, final Context ctx) {
+	@NotNull
+	private OS_Type resolve_type(final OS_Type type, final Context ctx) throws ResolveError {
 		switch (type.getType()) {
 
 		case BUILT_IN:
@@ -348,7 +353,7 @@ public class DeduceTypes2 {
 					if (best != null)
 						return new OS_Type((ClassStatement) best);
 					else
-						return null;
+						throw new ResolveError(tn1, lrl);
 				}
 				throw new NotImplementedException(); // TODO might be Qualident, etc
 			}
@@ -479,9 +484,12 @@ public class DeduceTypes2 {
 									ty = idte.type.attached;
 								}
 								assert ty != null;
-								OS_Type rtype = resolve_type(ty, ctx);
-								if (rtype == null) {
-									module.parent.eee.reportError("Cant resolve " + ty);
+								OS_Type rtype = null;
+								try {
+									rtype = resolve_type(ty, ctx);
+								} catch (ResolveError resolveError) {
+//									resolveError.printStackTrace();
+									module.parent.eee.reportError("Cant resolve " + ty); // TODO print better diagnostic
 									continue;
 								}
 								LookupResultList lrl2 = rtype.getClassOf().getContext().lookup("__getitem__");
@@ -996,9 +1004,14 @@ public class DeduceTypes2 {
 					}
 					if (idte2.type != null) {
 						assert idte2.type.attached != null;
-						OS_Type rtype = resolve_type(idte2.type.attached, ectx);
-						ectx = rtype.getClassOf().getContext();
-						idte2.type.attached = rtype; // TODO may be losing alias information here
+						try {
+							OS_Type rtype = resolve_type(idte2.type.attached, ectx);
+							ectx = rtype.getClassOf().getContext();
+							idte2.type.attached = rtype; // TODO may be losing alias information here
+						} catch (ResolveError resolveError) {
+							resolveError.printStackTrace(); // TODO print diagnostic
+							continue;
+						}
 					} else {
 //						throw new IllegalStateException("who knows");
 						System.out.println("2010 idte2.type == null for "+ text);
