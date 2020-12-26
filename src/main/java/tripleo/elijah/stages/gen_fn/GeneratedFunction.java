@@ -86,10 +86,11 @@ public class GeneratedFunction implements GeneratedNode {
 		//
 		String text = "";
 		List<String> sl = new ArrayList<String>();
-		for (final InstructionArgument ia : s) {
+		for (int i = 0, sSize = s.size(); i < sSize; i++) {
+			InstructionArgument ia = s.get(i);
 			if (ia instanceof IntegerIA) { // should only be the first element if at all
 				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
-				text = "vv"+vte.getName();
+				text = "vv" + vte.getName();
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
 				OS_Element resolved_element = idte.resolved_element;
@@ -98,17 +99,21 @@ public class GeneratedFunction implements GeneratedNode {
 						// Assuming constructor call
 						// TODO what about named contrcuctors
 						int code = ((ClassStatement) resolved_element)._a.getCode();
-						text = String.format("ZC%d", code);
+						assert i == sSize-1; // Make sure we are ending with a constructor call
+						text = String.format("ZC%d%s(%s)", code, ((ClassStatement) resolved_element).name(), text);
 					} else if (resolved_element instanceof FunctionDef) {
 						OS_Element parent = resolved_element.getParent();
 						int code;
-						if (parent instanceof ClassStatement)
+						if (parent instanceof ClassStatement) {
 							code = ((ClassStatement) parent)._a.getCode();
-						else if (parent instanceof NamespaceStatement) {
+						} else if (parent instanceof NamespaceStatement) {
 							code = ((NamespaceStatement) parent)._a.getCode();
-						} else // TODO what about FunctionDef, etc
+						} else {
+							// TODO what about FunctionDef, etc
 							code = -1;
+						}
 						// TODO what about overloaded functions
+						assert i == sSize-1; // Make sure we are ending with a ProcedureCall
 						sl.clear();
 						text = String.format("Z%d%s(%s)", code, ((FunctionDef) resolved_element).name(), text);
 					} else if (resolved_element instanceof VariableStatement) {
@@ -116,8 +121,9 @@ public class GeneratedFunction implements GeneratedNode {
 						if (resolved_element.getParent().getParent() == getFD().getParent()) {
 							// A direct member value. Doesn't handle when indirect
 							text = "vsc->vm" + ((VariableStatement) resolved_element).getName();
-						} else
-							text = "vv"+((VariableStatement) resolved_element).getName();
+						} else {
+							text = "vv" + ((VariableStatement) resolved_element).getName();
+						}
 					} else {
 						throw new NotImplementedException();
 //						text = idte.getIdent().getText();
@@ -125,14 +131,16 @@ public class GeneratedFunction implements GeneratedNode {
 					}
 				} else {
 					// TODO make tests pass but I dont like this (should throw an exception: not enough information)
-					if (sl.size() == 0)
+					if (sl.size() == 0) {
 						text = idte.getIdent().getText(); // TODO check if it belongs somewhere else
-					else
-						text = "vm"+idte.getIdent().getText();
-					int y=2;
+					} else {
+						text = "vm" + idte.getIdent().getText();
+					}
+					int y = 2;
 				}
-			} else
+			} else {
 				throw new NotImplementedException();
+			}
 			sl.add(text);
 		}
 		return Helpers.String_join(".", sl);
