@@ -21,8 +21,6 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 	private FunctionDefScope _scope = new FunctionDefScope();
 	private List<FunctionModifiers> _mods = new ArrayList<FunctionModifiers>();
 	private TypeName _returnType;
-	private Context _parent_context;
-	private OS_Element _parent;
 	private IdentExpression _name;
 	private FormalArgList _fal;
 	private Context _context;
@@ -41,9 +39,9 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 
 	@Override
 	public FunctionDef build() {
-		FunctionDef functionDef = new FunctionDef(_parent, _parent_context);
+		FunctionDef functionDef = new FunctionDef(_parent, _context);
 		functionDef.setName(_name);
-		functionDef.setFal(_fal);
+		functionDef.setFal(_fal == null ? new FormalArgList() : _fal);
 		functionDef.setReturnType(_returnType);
 		for (FunctionModifiers mod : _mods) {
 			functionDef.set(mod);

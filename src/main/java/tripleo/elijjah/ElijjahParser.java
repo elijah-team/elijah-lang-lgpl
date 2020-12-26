@@ -561,7 +561,7 @@ inputState.guessing--;
 				}
 				match(LCURLY);
 				if ( inputState.guessing==0 ) {
-					/*ctx=new ClassContext(cur, cls);cls.setContext(ctx);*/cur=cls.getContext();assert cur!=null;
+					/*ctx=new ClassContext(cur, cls);cls.setContext(ctx);*/cur=cls.getContext();ctx=(ClassContext)cur;assert cur!=null;
 				}
 				{
 				switch ( LA(1)) {
@@ -628,7 +628,7 @@ inputState.guessing--;
 			}
 			else if ((LA(1)==LITERAL_class) && (LA(2)==LITERAL_interface)) {
 				if ( inputState.guessing==0 ) {
-					cb = new ClassBuilder();cb.annotations(a);
+					cb = new ClassBuilder();cb.annotations(a);cb.setParent(parent);cb.setParentContext(cur);
 				}
 				classDefinition_interface(cb);
 				if ( inputState.guessing==0 ) {

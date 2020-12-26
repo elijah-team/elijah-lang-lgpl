@@ -68,13 +68,13 @@ classStatement [OS_Element parent, ClassStatement cls]
       i1=ident              {cls.setName(i1);}
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
-    LCURLY                  {/*ctx=new ClassContext(cur, cls);cls.setContext(ctx);*/cur=cls.getContext();assert cur!=null;}
+    LCURLY                  {/*ctx=new ClassContext(cur, cls);cls.setContext(ctx);*/cur=cls.getContext();ctx=(ClassContext)cur;assert cur!=null;}
      (classScope[cls]
      |"abstract"         {cls.setType(ClassTypes.ABSTRACT);}
       (invariantStatement[cls.invariantStatement()])?
      )
     RCURLY {cls.postConstruct();cur=ctx.getParent();}
-    | {cb = new ClassBuilder();cb.annotations(a);}
+    | {cb = new ClassBuilder();cb.annotations(a);cb.setParent(parent);cb.setParentContext(cur);}
 	  classDefinition_interface[cb] // want to cb.build() here 
 	  					{((OS_Container)parent).add(cb.build());}
 	)
