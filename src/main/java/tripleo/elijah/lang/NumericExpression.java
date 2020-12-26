@@ -16,9 +16,12 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.diagnostic.Locatable;
 import tripleo.elijah.util.NotImplementedException;
 
-public class NumericExpression implements IExpression {
+import java.io.File;
+
+public class NumericExpression implements IExpression, Locatable {
 
 	int carrier;
 	private Token n;
@@ -95,6 +98,52 @@ public class NumericExpression implements IExpression {
 	public int getValue() {
 		return carrier;
 	}
+
+	// region Locatable
+
+	private Token token() {
+		return n;
+	}
+
+	@Override
+	public int getLine() {
+		if (token() != null)
+			return token().getLine();
+		return 0;
+	}
+
+	@Override
+	public int getColumn() {
+		if (token() != null)
+			return token().getColumn();
+		return 0;
+	}
+
+	@Override
+	public int getLineEnd() {
+		if (token() != null)
+			return token().getLine();
+		return 0;
+	}
+
+	@Override
+	public int getColumnEnd() {
+		if (token() != null)
+			return token().getColumn();
+		return 0;
+	}
+
+	@Override
+	public File getFile() {
+		if (token() != null) {
+			String filename = token().getFilename();
+			if (filename != null)
+				return new File(filename);
+		}
+		return null;
+	}
+
+	// endregion
 }
 
 //

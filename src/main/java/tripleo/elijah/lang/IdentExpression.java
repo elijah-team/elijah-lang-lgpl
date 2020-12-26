@@ -13,15 +13,18 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.diagnostic.Locatable;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
+
+import java.io.File;
 
 /**
  * @author Tripleo(sb)
  *
  */
-public class IdentExpression implements IExpression, OS_Element, Resolvable {
+public class IdentExpression implements IExpression, OS_Element, Resolvable, Locatable {
 
 	private Token text;
 	public  Attached _a;
@@ -142,6 +145,38 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable {
 	public Token token() {
 		return text;
 	}
+
+	// region Locatable
+
+	@Override
+	public int getLine() {
+		return token().getLine();
+	}
+
+	@Override
+	public int getColumn() {
+		return token().getColumn();
+	}
+
+	@Override
+	public int getLineEnd() {
+		return token().getLine();
+	}
+
+	@Override
+	public int getColumnEnd() {
+		return token().getColumn();
+	}
+
+	@Override
+	public File getFile() {
+		String filename = token().getFilename();
+		if (filename == null)
+			return null;
+		return new File(filename);
+	}
+
+	// endregion
 }
 
 //
