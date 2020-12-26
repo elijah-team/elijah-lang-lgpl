@@ -29,6 +29,7 @@ public class DefFunctionDef extends FunctionDef implements ClassItem {
 	private IExpression _expr;
 //	private FormalArgList fal;
 
+	// wont use parent scope.items.add so this is ok
 	public void setExpr(final IExpression aExpr) {
 		_expr = aExpr;
 		_items.add((FunctionItem) _expr);
