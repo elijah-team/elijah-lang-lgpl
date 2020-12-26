@@ -299,6 +299,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	private FunctionModifiers _mod;
 
 	public void set(final FunctionModifiers mod) {
+		assert _mod == null;
 		_mod = mod;
 	}
 
