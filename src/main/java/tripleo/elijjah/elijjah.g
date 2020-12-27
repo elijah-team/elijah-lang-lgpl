@@ -982,7 +982,7 @@ primaryExpression returns [IExpression ee]
 	  RBRACK
 	;
 funcExpr[FuncExpr pc] // remove scope to use in `typeName's
-		{Scope0 sc = new Scope0(pc);TypeName tn=null;FuncExprContext ctx=null;}
+		{Scope sc = pc.scope();TypeName tn=null;FuncExprContext ctx=null;}
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
 	  (opfal[pc.argList()])
@@ -995,7 +995,7 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 	  scope[pc.scope()]
 	| 
       LCURLY                  {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
-	   ( BOR formalArgList[sc.fal()] BOR )?
+	   ( BOR formalArgList[pc.fal()] BOR )?
 	  (statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);}
       | classStatement[sc.getParent(), new ClassStatement(sc.getParent(), cur)]

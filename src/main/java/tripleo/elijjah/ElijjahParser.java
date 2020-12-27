@@ -2011,7 +2011,7 @@ inputState.guessing--;
 		FunctionDefBuilder fb
 	) throws RecognitionException, TokenStreamException {
 		
-		AnnotationClause a=null;/*FunctionContext ctx=null;*/IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;
+		AnnotationClause a=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;
 		
 		try {      // for error handling
 			{
@@ -7048,7 +7048,7 @@ inputState.guessing--;
 		FuncExpr pc
 	) throws RecognitionException, TokenStreamException {
 		
-		Scope0 sc = new Scope0(pc);TypeName tn=null;FuncExprContext ctx=null;
+		Scope sc = pc.scope();TypeName tn=null;FuncExprContext ctx=null;
 		
 		try {      // for error handling
 			{
@@ -7225,7 +7225,7 @@ inputState.guessing--;
 				case BOR:
 				{
 					match(BOR);
-					formalArgList(sc.fal());
+					formalArgList(pc.fal());
 					match(BOR);
 					break;
 				}
