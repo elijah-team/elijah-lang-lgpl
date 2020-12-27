@@ -28,11 +28,11 @@ public class ClassScope extends ClassOrNamespaceScope implements Documentable {
 	}
 
 	public TypeAliasBuilder typeAlias() {
-		return new TypeAliasBuilder();
+		TypeAliasBuilder typeAliasBuilder = new TypeAliasBuilder();
+		add(typeAliasBuilder);
+		return typeAliasBuilder;
 	}
 
-	public void addCtor(ConstructorDef cd) {
-	}
 }
 
 //
