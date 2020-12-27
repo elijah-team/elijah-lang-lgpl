@@ -495,14 +495,13 @@ functionDef[FunctionDef fd]
     {fd.postConstruct();}
     ;
 functionDef2[FunctionDefBuilder fb]
-    	{AnnotationClause a=null;/*FunctionContext ctx=null;*/IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}
+    	{AnnotationClause a=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}
     : (a=annotation_clause      {fb.addAnnotation(a);})*
     i1=ident                    {fb.setName(i1);}
     ( "const"                   {fb.set(FunctionModifiers.CONST);}
     | "immutable"               {fb.set(FunctionModifiers.IMMUTABLE);})?
     fal=opfal2					{fb.fal(fal);}
     (TOK_ARROW tn=typeName2 	{fb.setReturnType(tn);})?
-                                //{ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
     functionScope2[fb.scope()]
     ;
 programStatement[ProgramClosure pc, OS_Element cont]
