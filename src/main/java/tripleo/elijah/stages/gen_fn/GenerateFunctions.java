@@ -816,17 +816,17 @@ public class GenerateFunctions {
 			}
 			return i;
 		case NUMERIC:
-		{
-			final NumericExpression ne = (NumericExpression) expression;
-			final int ii = addConstantTableEntry2(null, ne, ne.getType(), gf);
-			return new ConstTableIA(ii, gf);
-		}
+			{
+				final NumericExpression ne = (NumericExpression) expression;
+				final int ii = addConstantTableEntry2(null, ne, ne.getType(), gf);
+				return new ConstTableIA(ii, gf);
+			}
 		case CHAR_LITERAL:
-		{
-			final CharLitExpression cle = (CharLitExpression) expression;
-			final int ii = addConstantTableEntry2(null, cle, cle.getType(), gf);
-			return new ConstTableIA(ii, gf);
-		}
+			{
+				final CharLitExpression cle = (CharLitExpression) expression;
+				final int ii = addConstantTableEntry2(null, cle, cle.getType(), gf);
+				return new ConstTableIA(ii, gf);
+			}
 		case GET_ITEM:
 			{
 				final GetItemExpression gie = (GetItemExpression) expression;
