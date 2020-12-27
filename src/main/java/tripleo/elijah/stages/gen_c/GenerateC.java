@@ -594,7 +594,7 @@ public class GenerateC {
 			z = "<function>";
 			break;
 		case USER:
-			System.err.println("Warning: USER TypeName in GenerateC");
+			System.err.println("Warning: USER TypeName in GenerateC "+ty.getTypeName());
 			z = String.format("Z<%s>", ty.getTypeName().toString());
 			break;
 		case BUILT_IN:
