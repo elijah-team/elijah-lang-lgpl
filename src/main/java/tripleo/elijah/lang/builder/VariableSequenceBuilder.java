@@ -28,6 +28,7 @@ public class VariableSequenceBuilder extends ElBuilder {
 	}
 
 	public void next() {
+		if (_initial == null) _initial = IExpression.UNASSIGNED;
 		triples.add(new Triple(_initial, _name, _tn));
 		_initial = null;
 		_name = null;
