@@ -22,6 +22,8 @@ public class SpecialFunctions {
 		case AUG_MULT:			return "__imult__";
 		case ASSIGNMENT:		return "__assign__";
 		case GET_ITEM:			return "__getitem__";
+		case ADDITION:			return "__add__";
+		case MULTIPLY:			return "__mult__";
 		default:
 			throw new IllegalStateException("Unexpected value: " + kind);
 		}

@@ -441,6 +441,26 @@ public class GenerateFunctions {
 			final int agn_inst = add_i(gf, InstructionName.AGN, List_of(agn_path, new ConstTableIA(cte, gf)), cctx);
 			// TODO what now??
 		}
+
+		public void mathematical(GeneratedFunction gf, IExpression left, ExpressionKind kind, IExpression right1, Context cctx) {
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, right1.getType(), right1);
+
+			InstructionArgument left_ia = simplify_expression(left, gf, cctx);
+			InstructionArgument right_ia = simplify_expression(right1, gf, cctx);
+
+			final int instruction_number = add_i(gf, InstructionName.AGN, List_of(left_ia, right_ia), cctx);
+			final Instruction instruction = gf.getInstruction(instruction_number);
+			if (left_ia instanceof IntegerIA) {
+				// Assuming this points to a variable and not ie a function
+				final VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(left_ia));
+//				vte.type = tte;
+				vte.addPotentialType(instruction.getIndex(), tte);
+			} else if (left_ia instanceof IdentIA) {
+				final IdentTableEntry idte = gf.getIdentTableEntry(((IdentIA)left_ia).getIndex());
+//				idte.type = tte;
+				idte.addPotentialType(instruction.getIndex(), tte);
+			}
+		}
 	}
 
 	private void generate_item_assignment(@NotNull final IExpression x, @NotNull final GeneratedFunction gf, final Context cctx) {
@@ -457,6 +477,10 @@ public class GenerateFunctions {
 			break;
 		case NUMERIC:
 			gia.numeric(gf, bbe.getLeft(), (NumericExpression) right1, cctx);
+			break;
+		case ADDITION:
+		case MULTIPLY:
+			gia.mathematical(gf, bbe.getLeft(), right1.getKind(), right1, cctx);
 			break;
 		default:
 			System.err.println("right1.getKind(): "+right1.getKind());
@@ -854,7 +878,7 @@ public class GenerateFunctions {
 					return new IntegerIA(tmp);
 				}
 			}
-		case LT_: case GT: // TODO all BinaryExpressions go here
+		case LT_: case GT: case ADDITION: case MULTIPLY: // TODO all BinaryExpressions go here
 			{
 				final BasicBinaryExpression bbe = (BasicBinaryExpression) expression;
 				final IExpression left = bbe.getLeft();
