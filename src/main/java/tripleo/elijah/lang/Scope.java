@@ -8,7 +8,7 @@
  */
 package tripleo.elijah.lang;
 
-public interface Scope extends Documentable/*, OS_Element*/ {
+public interface Scope extends Documentable {
 
 	void add(StatementItem aItem);
 
