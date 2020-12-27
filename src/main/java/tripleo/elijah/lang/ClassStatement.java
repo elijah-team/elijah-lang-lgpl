@@ -150,10 +150,9 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	@Override // OS_Container
 	public void add(final OS_Element anElement) {
-		if (anElement instanceof ClassItem)
-			items.add((ClassItem) anElement);
-		else
+		if (!(anElement instanceof ClassItem))
 			throw new IllegalStateException(String.format("Cant add %s to ClassStatement", anElement));
+		items.add((ClassItem) anElement);
 	}
 
 	@Override
