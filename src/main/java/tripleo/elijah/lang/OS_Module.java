@@ -192,33 +192,67 @@ public class OS_Module implements OS_Element, OS_Container {
 				final String element_name = ((OS_Element2) anElement).name();
 				// TODO make and check a nametable, will fail for imports
 				if (element_name == null) {
-//					throw new IllegalArgumentException("element2 with null name");
-					System.err.println(String.format("*** OS_Element2 (%s) with null name", anElement));
+					throw new IllegalArgumentException("element2 with null name");
+//					System.err.println(String.format("*** OS_Element2 (%s) with null name", anElement));
 				} else {
 					for (final ModuleItem item : items) { // TODO Use Multimap
 						if (item instanceof OS_Element2 && item != anElement)
 							if (element_name.equals(((OS_Element2) item).name())) {
 								parent.eee.reportWarning(String.format(
-										"[Module#add] Already has a member by the name of %s",
-										element_name));
-								return;
+										"[Module#add] %s Already has a member by the name of %s",
+										this, element_name));
+//								return;
+								break;
 							}
 					}
 				}
 			}
-			//
-			// FIND ALL ENTRY POINTS (should only be one per module)
-			//
-			for (final ModuleItem item : items) {
-				if (item instanceof ClassStatement) {
-					if (((ClassStatement) item).getPackageName() == OS_Package.default_package) {
-						entryPoints.add((ClassStatement) item);
+		}
+		//
+		// FIND ALL ENTRY POINTS (should only be one per module)
+		//
+		for (final ModuleItem item : items) {
+			if (item instanceof ClassStatement) {
+				ClassStatement classStatement = (ClassStatement) item;
+				if (classStatement.getPackageName() == OS_Package.default_package) {
+					if (classStatement.name().equals("Main")) { // TODO what about Library (for windows dlls) etc?
+						Collection<ClassItem> x = classStatement.findFunction("main");
+						Collection<ClassItem> found = Collections2.filter(x, new Predicate<ClassItem>() {
+							@Override
+							public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable ClassItem input) {
+								assert input != null;
+								FunctionDef fd = (FunctionDef) input;
+								return is_main_function_with_no_args(fd);
+							}
+						});
+						final int eps = entryPoints.size();
+						for (ClassItem classItem : found) {
+							entryPoints.add((ClassStatement) classItem.getParent());
+						}
+						assert entryPoints.size() == eps || entryPoints.size() == eps+1;
+
+						System.out.println("243 " + entryPoints);
 //						break; // allow for "extend" class
 					}
 				}
 			}
-		}
 
+
+		}
+	}
+
+	private boolean is_main_function_with_no_args(FunctionDef fd) {
+		if (fd._type == FunctionDef.Type.REG_FUN) {
+			if (fd.name().equals("main")) {
+				boolean found = false;
+				for (FormalArgListItem _fali : fd.getArgs()) {
+					found = true;
+					break;
+				}
+				return found;
+			}
+		}
+		return false;
 	}
 
 	public void setContext(final ModuleContext mctx) {
