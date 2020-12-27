@@ -342,20 +342,28 @@ public class DeduceTypes2 {
 		case USER:
 			{
 				final TypeName tn1 = type.getTypeName();
-				if (tn1 instanceof NormalTypeName) {
-					final Qualident tn = ((NormalTypeName) tn1).getRealName();
-					System.out.println("799 [resolving USER type named] "+tn);
-					final LookupResultList lrl = lookupExpression(tn, tn1.getContext());
-					OS_Element best = lrl.chooseBest(null);
-					while (best instanceof AliasStatement) {
-						best = _resolveAlias((AliasStatement) best);
-					}
-					if (best != null)
+				switch (tn1.kindOfType()) {
+				case NORMAL:
+					{
+						final Qualident tn = ((NormalTypeName) tn1).getRealName();
+						System.out.println("799 [resolving USER type named] " + tn);
+						final LookupResultList lrl = lookupExpression(tn, tn1.getContext());
+						OS_Element best = lrl.chooseBest(null);
+						while (best instanceof AliasStatement) {
+							best = _resolveAlias((AliasStatement) best);
+						}
+						if (best == null)
+							throw new ResolveError(tn1, lrl);
+
 						return new OS_Type((ClassStatement) best);
-					else
-						throw new ResolveError(tn1, lrl);
+					}
+				case FUNCTION:
+				case GENERIC:
+				case TYPE_OF:
+					throw new NotImplementedException();
+				default:
+					throw new IllegalStateException("414 Unexpected value: " + tn1.kindOfType());
 				}
-				throw new NotImplementedException(); // TODO might be Qualident, etc
 			}
 		case USER_CLASS:
 			return type;
