@@ -28,7 +28,7 @@ import java.util.List;
  * variables
  * 
  */
-public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, FunctionItem, OS_Element, OS_Element2, Documentable, OS_Container {
+public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, StatementItem, FunctionItem, OS_Element, OS_Element2, Documentable, OS_Container {
 	
 	private OS_Package _packageName;
 	private ClassTypes _type;
