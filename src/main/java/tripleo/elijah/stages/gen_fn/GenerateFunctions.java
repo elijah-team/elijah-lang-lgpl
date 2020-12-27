@@ -697,16 +697,16 @@ public class GenerateFunctions {
 			final ProcedureCallExpression pce = (ProcedureCallExpression) value;
 			final FnCallArgs fnCallArgs = new FnCallArgs(expression_to_call(pce, gf, cctx), gf);
 			final int ii2 = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), fnCallArgs), cctx);
-			final VariableTableEntry vte2 = gf.getVarTableEntry(vte);
-			final TypeTableEntry tte2 = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
-			fnCallArgs.setType(tte2);
-			vte2.addPotentialType(ii2, tte2);
+			final VariableTableEntry vte_proccall = gf.getVarTableEntry(vte);
+			final TypeTableEntry tte_proccall = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
+			fnCallArgs.setType(tte_proccall);
+			vte_proccall.addPotentialType(ii2, tte_proccall);
 			break;
 		case NUMERIC:
 			final int ci = addConstantTableEntry(null, value, value.getType(), gf);
 			final int ii = add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(vte), new ConstTableIA(ci, gf)), cctx);
-			final VariableTableEntry vte1 = gf.getVarTableEntry(vte);
-			vte1.addPotentialType(ii, gf.getConstTableEntry(ci).type);
+			final VariableTableEntry vte_numeric = gf.getVarTableEntry(vte);
+			vte_numeric.addPotentialType(ii, gf.getConstTableEntry(ci).type);
 			break;
 		default:
 			throw new NotImplementedException();
