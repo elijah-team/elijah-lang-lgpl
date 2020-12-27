@@ -64,6 +64,8 @@ public class VariableSequenceBuilder extends ElBuilder {
 	protected VariableSequence build() {
 		VariableSequence variableSequence = new VariableSequence(_context);
 		variableSequence.defaultModifiers(def);
+		if (_name != null)
+			next(); // create singular entry
 		for (Triple triple : triples) {
 			VariableStatement vs = variableSequence.next();
 			vs.setTypeName(triple._tn);
