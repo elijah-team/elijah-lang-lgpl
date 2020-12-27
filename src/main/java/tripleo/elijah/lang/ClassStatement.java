@@ -269,6 +269,10 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	public PropertyStatement prop() {
 		return new PropertyStatement(this, getContext());
 	}
+
+	public boolean hasItem(OS_Element element) {
+		return items.contains(element);
+	}
 }
 
 //

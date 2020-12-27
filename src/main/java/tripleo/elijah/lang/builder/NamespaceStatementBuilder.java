@@ -48,7 +48,8 @@ public class NamespaceStatementBuilder extends ElBuilder implements Documentable
 			builder.setParent(cs);
 			builder.setContext(cs.getContext());
 			built = builder.build();
-			cs.add(built);
+			if (!(cs.hasItem(built))) // already added by constructor
+				cs.add(built);
 		}
 		cs.postConstruct();
 		return cs;

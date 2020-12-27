@@ -22,8 +22,8 @@ public class ClassBuilder {
 	private OS_Element _parent;
 	private Context _parent_context;
 	private IdentExpression _name;
-	private ClassScope _scope = new ClassScope();
-	private ClassInheritance _inh = new ClassInheritance();
+	private final ClassScope _scope = new ClassScope();
+	private final ClassInheritance _inh = new ClassInheritance();
 
 	public void setType(ClassTypes classTypes) {
 		_type = classTypes;
@@ -32,6 +32,7 @@ public class ClassBuilder {
 	public ClassStatement build() {
 		ClassStatement cs = new ClassStatement(_parent, _parent_context);
 		cs.setType(_type);
+		assert  _name != null;
 		cs.setName(_name);
 		for (AnnotationClause annotation : annotations) {
 			cs.addAnnotation(annotation);
@@ -46,7 +47,8 @@ public class ClassBuilder {
 			builder.setParent(cs);
 			builder.setContext(cs.getContext());
 			built = builder.build();
-			cs.add(built);
+			if (!(cs.hasItem(built))) // already added by constructor
+				cs.add(built);
 		}
 		_inh.setParent(cs);
 		cs.setInheritance(_inh);

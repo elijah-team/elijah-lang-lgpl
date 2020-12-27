@@ -224,6 +224,11 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 			}
 		}
 	}
+
+	public boolean hasItem(OS_Element element) {
+		return items.contains(element);
+	}
+
 }
 
 //

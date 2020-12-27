@@ -278,6 +278,9 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		}
 	}
 
+	public boolean hasItem(OS_Element element) {
+		return items.contains(element);
+	}
 }
 
 //

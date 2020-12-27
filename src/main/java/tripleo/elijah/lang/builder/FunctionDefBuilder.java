@@ -51,7 +51,9 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 		for (ElBuilder b : _scope.items()) {
 			b.setParent(functionDef);
 			b.setContext(functionDef.getContext());
-			b.build();
+			OS_Element built = b.build();
+			if (!(functionDef.hasItem(built))) // already added by constructor
+				functionDef.add(built);
 		}
 		functionDef.postConstruct();
 		return functionDef;
