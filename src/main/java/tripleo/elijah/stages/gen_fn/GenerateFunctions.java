@@ -709,7 +709,7 @@ public class GenerateFunctions {
 			vte_numeric.addPotentialType(ii, gf.getConstTableEntry(ci).type);
 			break;
 		default:
-			throw new NotImplementedException();
+			throw new IllegalStateException("Unexpected value: " + value.getKind());
 		}
 	}
 
