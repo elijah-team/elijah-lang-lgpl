@@ -756,81 +756,7 @@ public class GenerateFunctions {
 		final ExpressionKind expressionKind = expression.getKind();
 		switch (expressionKind) {
 		case PROCEDURE_CALL:
-			{
-				final ProcedureCallExpression pce = (ProcedureCallExpression) expression;
-				final IExpression    left = pce.getLeft();
-				final ExpressionList args = pce.getArgs();
-				final InstructionArgument left_ia;
-				final List<InstructionArgument> right_ia = new ArrayList<InstructionArgument>(args.size());
-				if (left.is_simple()) {
-					if (left instanceof IdentExpression) {
-						// for ident(xyz...)
-						final int x = gf.addIdentTableEntry((IdentExpression) left);
-						// TODO attach to var/const or lookup later in deduce
-						left_ia = new IdentIA(x, gf);
-					} else if (left instanceof SubExpression) {
-						// for (1).toString() etc
-						final SubExpression se = (SubExpression) left;
-						final InstructionArgument ia = simplify_expression(se.getExpression(), gf, cctx);
-						//return ia;  // TODO is this correct?
-						left_ia = ia;
-					} else {
-						// for "".strip() etc
-						assert IExpression.isConstant(left);
-						final int x = addConstantTableEntry(null, left, left.getType(), gf);
-						left_ia = new ConstTableIA(x, gf);
-//						throw new IllegalStateException("Cant be here");
-					}
-				} else {
-					final InstructionArgument x = simplify_expression(left, gf, cctx);
-					final int y=2;
-					left_ia = x;
-				}
-				final List<TypeTableEntry> args1 = new ArrayList<>();
-				for (final IExpression arg : args) {
-					final InstructionArgument ia;
-					final TypeTableEntry iat;
-					if (arg.is_simple()) {
-						final int y=2;
-						if (arg instanceof IdentExpression) {
-							final int x = gf.addIdentTableEntry((IdentExpression) arg);
-							// TODO attach to var/const or lookup later in deduce
-							ia = new IdentIA(x, gf);
-							iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
-						} else if (arg instanceof SubExpression) {
-							final SubExpression se = (SubExpression) arg;
-							final InstructionArgument ia2 = simplify_expression(se.getExpression(), gf, cctx);
-							//return ia;  // TODO is this correct?
-							ia = ia2;
-							iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
-						} else {
-							assert IExpression.isConstant(arg);
-							final int x = addConstantTableEntry(null, arg, arg.getType(), gf);
-							ia = new ConstTableIA(x, gf);
-							iat = gf.getConstTableEntry(x).type;
-						}
-					} else {
-						final InstructionArgument x = simplify_expression(left, gf, cctx);
-						final int y=2;
-						ia = x;
-						iat = null;
-					}
-					right_ia.add(ia);
-					args1.add(iat);
-				}
-				final int pte = addProcTableEntry(expression, left_ia, args1, gf);
-				right_ia.add(0, new IntegerIA(pte));
-				{
-					final int tmp_var = addTempTableEntry(null, gf);
-					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp_var)), cctx);
-					final Instruction i = new Instruction();
-					i.setName(InstructionName.CALL);
-					i.setArgs(right_ia);
-					// TODO should be AGNC
-					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp_var), new FnCallArgs(i, gf)), cctx);
-					return new IntegerIA(tmp_var); // return tmp_var instead of expression assigning it
-				}
-			}
+			return simplify_expression_procedure_call(expression, gf, cctx);
 		case CAST_TO:
 			{
 				TypeCastExpression tce = (TypeCastExpression) expression;
@@ -985,6 +911,83 @@ public class GenerateFunctions {
 			throw new IllegalStateException("Unexpected value: " + expressionKind);
 		}
 //		return null;
+	}
+
+	@NotNull
+	private InstructionArgument simplify_expression_procedure_call(@NotNull IExpression expression, @NotNull GeneratedFunction gf, Context cctx) {
+		final ProcedureCallExpression pce = (ProcedureCallExpression) expression;
+		final IExpression    left = pce.getLeft();
+		final ExpressionList args = pce.getArgs();
+		final InstructionArgument left_ia;
+		final List<InstructionArgument> right_ia = new ArrayList<InstructionArgument>(args.size());
+		if (left.is_simple()) {
+			if (left instanceof IdentExpression) {
+				// for ident(xyz...)
+				final int x = gf.addIdentTableEntry((IdentExpression) left);
+				// TODO attach to var/const or lookup later in deduce
+				left_ia = new IdentIA(x, gf);
+			} else if (left instanceof SubExpression) {
+				// for (1).toString() etc
+				final SubExpression se = (SubExpression) left;
+				final InstructionArgument ia = simplify_expression(se.getExpression(), gf, cctx);
+				//return ia;  // TODO is this correct?
+				left_ia = ia;
+			} else {
+				// for "".strip() etc
+				assert IExpression.isConstant(left);
+				final int x = addConstantTableEntry(null, left, left.getType(), gf);
+				left_ia = new ConstTableIA(x, gf);
+//						throw new IllegalStateException("Cant be here");
+			}
+		} else {
+			final InstructionArgument x = simplify_expression(left, gf, cctx);
+			final int y=2;
+			left_ia = x;
+		}
+		final List<TypeTableEntry> args1 = new ArrayList<>();
+		for (final IExpression arg : args) {
+			final InstructionArgument ia;
+			final TypeTableEntry iat;
+			if (arg.is_simple()) {
+				final int y=2;
+				if (arg instanceof IdentExpression) {
+					final int x = gf.addIdentTableEntry((IdentExpression) arg);
+					// TODO attach to var/const or lookup later in deduce
+					ia = new IdentIA(x, gf);
+					iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
+				} else if (arg instanceof SubExpression) {
+					final SubExpression se = (SubExpression) arg;
+					final InstructionArgument ia2 = simplify_expression(se.getExpression(), gf, cctx);
+					//return ia;  // TODO is this correct?
+					ia = ia2;
+					iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
+				} else {
+					assert IExpression.isConstant(arg);
+					final int x = addConstantTableEntry(null, arg, arg.getType(), gf);
+					ia = new ConstTableIA(x, gf);
+					iat = gf.getConstTableEntry(x).type;
+				}
+			} else {
+				final InstructionArgument x = simplify_expression(left, gf, cctx);
+				final int y=2;
+				ia = x;
+				iat = null;
+			}
+			right_ia.add(ia);
+			args1.add(iat);
+		}
+		final int pte = addProcTableEntry(expression, left_ia, args1, gf);
+		right_ia.add(0, new IntegerIA(pte));
+		{
+			final int tmp_var = addTempTableEntry(null, gf);
+			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp_var)), cctx);
+			final Instruction i = new Instruction();
+			i.setName(InstructionName.CALL);
+			i.setArgs(right_ia);
+			// TODO should be AGNC
+			final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp_var), new FnCallArgs(i, gf)), cctx);
+			return new IntegerIA(tmp_var); // return tmp_var instead of expression assigning it
+		}
 	}
 
 	private @NotNull List<TypeTableEntry> get_args_types(@org.jetbrains.annotations.Nullable final ExpressionList args, @NotNull final GeneratedFunction gf) {
