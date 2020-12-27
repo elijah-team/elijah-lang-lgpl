@@ -12,15 +12,10 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import org.jetbrains.annotations.Contract;
 import tripleo.elijah.contexts.IfConditionalContext;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-// Referenced classes of package pak2:
-//			StatementClosure, VariableSequence, ProcedureCallExpression, Loop, 
-//			YieldExpression, IfExpression
 
 public final class AbstractStatementClosure implements StatementClosure, StatementItem {
 
@@ -34,7 +29,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	public AbstractStatementClosure(final ClassStatement classStatement) {
 		// TODO check final member
 		_parent = classStatement;
-		parent_scope = new Scope() {
+		parent_scope = new AbstractScope2(_parent) {
 
 			@Override
 			public void addDocString(final Token s1) {
@@ -42,43 +37,13 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 			}
 
 			@Override
-			public void statementWrapper(final IExpression aExpr) {
-				throw new NotImplementedException();
-			}
-
-			@Override
 			public StatementClosure statementClosure() {
-				throw new NotImplementedException();
-			}
-
-			@Override
-			public BlockStatement blockStatement() {
-				throw new NotImplementedException();
+				return AbstractStatementClosure.this; // TODO is this right?
 			}
 
 			@Override
 			public void add(final StatementItem aItem) {
 				classStatement.add((ClassItem) aItem);
-			}
-
-			@Override
-			public TypeAliasStatement typeAlias() {
-				throw new NotImplementedException();
-			}
-
-			@Override
-			public InvariantStatement invariantStatement() {
-				throw new NotImplementedException();
-			}
-
-			@Override
-			public OS_Element getParent() {
-				return _parent;
-			}
-
-			@Override
-			public OS_Element getElement() {
-				return _parent;
 			}
 
 		};
@@ -130,7 +95,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	@Override
 	public VariableSequence varSeq(final Context ctx) {
-		vsq=new VariableSequence();
+		vsq=new VariableSequence(ctx);
 		vsq.setParent(parent_scope.getParent()/*this.getParent()*/); // TODO look at this
 		vsq.setContext(ctx);
 		return (VariableSequence) add(vsq);

@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
 import tripleo.elijah.contexts.FuncExprContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
@@ -23,7 +22,6 @@ import java.util.List;
  */
 public class FuncExpr implements IExpression, OS_Element {
 
-	private final List<String> docstrings = new ArrayList<String>();
 	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 	//	private final TypeNameList argList = new TypeNameList();
 	private final FormalArgList argList = new FormalArgList();
@@ -70,12 +68,13 @@ public class FuncExpr implements IExpression, OS_Element {
 		return argList.falis;
 	}
 
-	final static class FuncExprScope implements Scope {
+	final static class FuncExprScope extends AbstractScope2 {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 		private final FuncExpr funcExpr;
 
 		public FuncExprScope(final FuncExpr funcExpr) {
+			super(funcExpr);
 			this.funcExpr = funcExpr;
 		}
 
@@ -87,24 +86,10 @@ public class FuncExpr implements IExpression, OS_Element {
 				System.err.println(String.format("adding false FunctionItem %s",
 					aItem.getClass().getName()));
 		}
-		
-		@Override
-		public void addDocString(final Token aS) {
-			funcExpr.docstrings.add(aS.getText());
-		}
-		
-		@Override
-		public BlockStatement blockStatement() {
-			return new BlockStatement(this);
-		}
-		
-		@Override
-		public InvariantStatement invariantStatement() {
-			return null;
-		}
 
 		@Override
 		public OS_Element getElement() {
+			assert super.getElement() == funcExpr;
 			return funcExpr;
 		}
 
@@ -112,28 +97,12 @@ public class FuncExpr implements IExpression, OS_Element {
 		public StatementClosure statementClosure() {
 			return asc;
 		}
+	}
 
-		@Override
-		public void statementWrapper(final IExpression aExpr) {
-			add(new StatementWrapper(aExpr, getParent().getContext(), getParent()));
-//			throw new NotImplementedException(); // TODO
-		}
+	private final FormalArgList formalArgList = new FormalArgList();
 
-		@Override
-		public TypeAliasStatement typeAlias() {
-			return null;
-		}
-
-		/* (non-Javadoc)
-		 * @see tripleo.elijah.lang.Scope#getParent()
-		 */
-		@Override
-		public OS_Element getParent() {
-			// TODO Auto-generated method stub
-			return funcExpr;
-		}
-		
-		
+	public FormalArgList fal() {
+		return formalArgList;
 	}
 
 	/****** FOR IEXPRESSION ******/
@@ -186,7 +155,8 @@ public class FuncExpr implements IExpression, OS_Element {
 
 	@Override
 	public OS_Element getParent() {
-		return null; // getContext().getParent().carrier() except if it is an Expression; but Expression is not an Element
+		throw new NotImplementedException();
+//		return null; // getContext().getParent().carrier() except if it is an Expression; but Expression is not an Element
 	}
 
 	@Override

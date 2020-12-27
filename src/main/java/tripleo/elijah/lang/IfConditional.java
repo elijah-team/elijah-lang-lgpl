@@ -24,7 +24,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 //	private int order = 0;
 	private IExpression expr;
 	private final List<OS_Element> _items = new ArrayList<OS_Element>();
-	final IfConditionalScope _scope = new IfConditionalScope();
+	final IfConditionalScope _scope = new IfConditionalScope(this);
 	private final OS_Element _parent;
 	private Context _ctx;
 //	private final IfExpression if_parent;
@@ -109,8 +109,13 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		_ctx = ifConditionalContext;
 	}
 
-	private class IfConditionalScope implements Scope {
+	private class IfConditionalScope extends AbstractScope2 {
 		private List<Token> mDocs;
+
+		protected IfConditionalScope(OS_Element aParent) {
+			super(aParent);
+			assert aParent == IfConditional.this;
+		}
 
 		@Override
 		public void addDocString(final Token s) {
@@ -119,12 +124,12 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 			mDocs.add(s);
 		}
 
-		/*@ requires parent != null; */
-		@Override
-		public void statementWrapper(final IExpression aExpr) {
-			//if (parent_scope == null) throw new IllegalStateException("parent is null");
-			add(new StatementWrapper(aExpr, getContext(), getParent()));
-		}
+//		/*@ requires parent != null; */
+//		@Override
+//		public void statementWrapper(final IExpression aExpr) {
+//			//if (parent_scope == null) throw new IllegalStateException("parent is null");
+//			add(new StatementWrapper(aExpr, getContext(), getParent()));
+//		}
 
 	    @Override
 		public StatementClosure statementClosure() {
@@ -132,36 +137,9 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		}
 
 		@Override
-		public BlockStatement blockStatement() {
-			return new BlockStatement(this); // TODO
-		}
-
-		@Override
 		public void add(final StatementItem aItem) {
 			IfConditional.this.add(aItem);
 		}
-
-		@Override
-		public TypeAliasStatement typeAlias() {
-			throw new NotImplementedException();
-//			return null;
-		}
-
-		@Override
-		public InvariantStatement invariantStatement() {
-			throw new NotImplementedException();
-//			return null;
-		}
-
-	    @Override
-	    public OS_Element getParent() {
-		    return IfConditional.this;
-	    }
-
-	    @Override
-	    public OS_Element getElement() {
-		    return IfConditional.this;
-	    }
 	}
 
 	private void add(final StatementItem aItem) {

@@ -43,16 +43,15 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		PROP_SET, PROP_GET, REG_FUN
 	}
 
-	public static class FunctionDefScope implements Scope, Documentable {
+	public static class FunctionDefScope extends AbstractScope2 implements Documentable {
 
 		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 		private final List<String> mDocs = new ArrayList<String>();
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this, getParent());
-		private final OS_Element _Parent;
 
 		public FunctionDefScope(OS_Element aParent) {
-			_Parent = aParent;
+			super(aParent);
 		}
 
 		@Override
@@ -70,45 +69,10 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		}
 		
 		@Override
-		public BlockStatement blockStatement() {
-			return new BlockStatement(this);
-		}
-		
-		@Override
-		public InvariantStatement invariantStatement() {
-			throw new NotImplementedException();
-		}
-
-		@Override
 		public StatementClosure statementClosure() {
 			return asc;
 		}
 
-		@Override
-		public void statementWrapper(final IExpression aExpr) {
-			add(new StatementWrapper(aExpr, getParent().getContext(), getParent()));
-		}
-
-		@Override
-		public TypeAliasStatement typeAlias() {
-			throw new NotImplementedException();
-		}
-
-		/* (non-Javadoc)
-		 * @see tripleo.elijah.lang.Scope#getParent()
-		 */
-		@Override
-		public OS_Element getParent() {
-			return this._Parent;
-		}
-
-		/* (non-Javadoc)
-		 * @see tripleo.elijah.lang.Scope#getElement()
-		 */
-		@Override
-		public OS_Element getElement() {
-			return _Parent;
-		}
 	}
 
 	public Attached _a = new Attached();

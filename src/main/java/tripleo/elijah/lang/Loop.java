@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
 import tripleo.elijah.contexts.LoopContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
@@ -18,16 +17,23 @@ import java.util.List;
 
 public class Loop implements  StatementItem, FunctionItem, OS_Element {
 
-	private final Scope _scope = new LoopScope();
-	private final List<String> docstrings = new ArrayList<String>();
+	private final Scope _scope = new LoopScope(this);
 	private final List<StatementItem> items = new ArrayList<StatementItem>();
 	private final OS_Element parent;
 
-	public Loop(final OS_Element aParent) {
+	@Deprecated public Loop(final OS_Element aParent) {
 		// document assumption
 		if (!(aParent instanceof FunctionDef) && !(aParent instanceof Loop))
 			System.out.println("parent is not FunctionDef or Loop");
 		parent = aParent;
+	}
+
+	public Loop(final OS_Element aParent, final Context ctx) {
+		// document assumption
+		if (!(aParent instanceof FunctionDef) && !(aParent instanceof Loop))
+			System.out.println("parent is not FunctionDef or Loop");
+		parent = aParent;
+		_a.setContext(new LoopContext(ctx, this));
 	}
 
 	public void type(final LoopTypes aType) {
@@ -102,9 +108,13 @@ private final Attached _a = new Attached();
 		return iterName;
 	}
 
-    private final class LoopScope implements Scope {
+    private final class LoopScope extends AbstractScope2 {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
+
+		protected LoopScope(OS_Element aParent) {
+			super(aParent);
+		}
 
 		@Override
 		public void add(final StatementItem aItem) {
@@ -117,44 +127,8 @@ private final Attached _a = new Attached();
 		}
 		
 		@Override
-		public TypeAliasStatement typeAlias() {
-			return new TypeAliasStatement(Loop.this);
-		}
-		
-		@Override
-		public InvariantStatement invariantStatement() {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public OS_Element getParent() {
-			return Loop.this;
-		}
-
-		@Override
-		public OS_Element getElement() {
-			return Loop.this;
-		}
-
-		@Override
-		public void addDocString(final Token aS) {
-			docstrings.add(aS.getText());
-		}
-
-		@Override
-		public BlockStatement blockStatement() {
-			return new BlockStatement(this);
-		}
-
-		@Override
 		public StatementClosure statementClosure() {
 			return asc;
-		}
-
-		@Override
-		public void statementWrapper(final IExpression aExpr) {
-			add(new StatementWrapper(aExpr, getContext(), getParent()));
-//			throw new NotImplementedException(); // TODO
 		}
 	}
 
@@ -165,7 +139,7 @@ private final Attached _a = new Attached();
 
 	@Override
 	public Context getContext() {
-		return _a ._context;
+		return _a.getContext();
 	}
 
 }

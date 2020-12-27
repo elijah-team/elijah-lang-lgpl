@@ -113,20 +113,27 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		return p;
 	}
 
-	public interface MC1 extends Documentable {
+	public interface MC1 extends OS_Element, Documentable {
 		void add(FunctionItem aItem);
 
+		@Override
 		Context getContext();
 
 		Iterable<? extends FunctionItem> getItems();
+
+		@Override
+		default void visitGen(ICodeGen visit) {
+			throw new NotImplementedException();
+		}
 	}
 
-	private final class MatchConditionalScope implements Scope {
+	private final class MatchConditionalScope extends AbstractScope2 {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
 		private final MC1 element;
 
 		public MatchConditionalScope(final MC1 part1) {
+			super((OS_Element) part1);
 			element = part1;
 		}
 
@@ -140,48 +147,14 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public void addDocString(final Token aS) {
-			element.addDocString(aS);
-		}
-
-		@Override
-		public BlockStatement blockStatement() {
-			return new BlockStatement(this);
-		}
-
-		@Override
-		public InvariantStatement invariantStatement() {
-			return null;
-		}
-
-		@Override
-		public OS_Element getElement() {
-			return MatchConditional.this;
-		}
-
-		@Override
 		public StatementClosure statementClosure() {
 			return asc;
 		}
 
-		@Override
-		public void statementWrapper(final IExpression aExpr) {
-			element.add(new StatementWrapper(aExpr, getContext(), /*MatchConditional.this.*/getParent()));
-		}
-
-		@Override
-		public TypeAliasStatement typeAlias() {
-			throw new NotImplementedException();
-//			return null;
-		}
-
-		/* (non-Javadoc)
-		 * @see tripleo.elijah.lang.Scope#getParent()
-		 */
-		@Override
-		public OS_Element getParent() {
-			return MatchConditional.this;
-		}
+//		@Override
+//		public void statementWrapper(final IExpression aExpr) {
+//			element.add(new StatementWrapper(aExpr, getContext(), /*MatchConditional.this.*/getParent()));
+//		}
 	}
 
 	public class MatchConditionalPart3 implements MC1 {
@@ -220,6 +193,11 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 			if (docstrings == null)
 				docstrings = new ArrayList<Token>();
 			docstrings.add(text);
+		}
+
+		@Override
+		public OS_Element getParent() {
+			return MatchConditional.this;
 		}
 	}
 
@@ -263,6 +241,11 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		@Override
 		public Context getContext() {
 			return ___ctx;
+		}
+
+		@Override
+		public OS_Element getParent() {
+			return MatchConditional.this;
 		}
 	}
 
@@ -319,6 +302,11 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		@Override
 		public Context getContext() {
 			return ___ctx;
+		}
+
+		@Override
+		public OS_Element getParent() {
+			return MatchConditional.this;
 		}
 	}
 

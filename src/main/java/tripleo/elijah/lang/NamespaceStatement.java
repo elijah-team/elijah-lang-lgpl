@@ -86,7 +86,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 
 	public StatementClosure statementClosure() {
-		return new AbstractStatementClosure(new Scope() {
+		return new AbstractStatementClosure(new AbstractScope2(this) {
 			@Override
 			public void statementWrapper(final IExpression aExpr) {
 				throw new NotImplementedException();
@@ -99,40 +99,10 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 			}
 
 			@Override
-			public BlockStatement blockStatement() {
-				throw new NotImplementedException();
-//				return null;
-			}
-
-			@Override
 			public void add(final StatementItem aItem) {
 				NamespaceStatement.this.add((OS_Element) aItem);
 			}
 
-			@Override
-			public TypeAliasStatement typeAlias() {
-				return NamespaceStatement.this.typeAlias();
-			}
-
-			@Override
-			public InvariantStatement invariantStatement() {
-				return NamespaceStatement.this.invariantStatement();
-			}
-
-			@Override
-			public OS_Element getParent() {
-				return NamespaceStatement.this;
-			}
-
-			@Override
-			public OS_Element getElement() {
-				return NamespaceStatement.this;
-			}
-
-			@Override
-			public void addDocString(final Token s1) {
-				NamespaceStatement.this.addDocString(s1);
-			}
 		});
 	}
 
