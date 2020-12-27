@@ -492,7 +492,7 @@ functionDef[FunctionDef fd]
     (TOK_ARROW tn=typeName2 {fd.setReturnType(tn);})?
                                 {ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
     functionScope[fd.scope()] 
-    {fd.postConstruct();}
+    {fd.setType(FunctionDef.Type.REG_FUN);fd.postConstruct();}
     ;
 functionDef2[FunctionDefBuilder fb]
     	{AnnotationClause a=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}

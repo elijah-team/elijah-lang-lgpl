@@ -1632,7 +1632,7 @@ inputState.guessing--;
 			}
 			functionScope(fd.scope());
 			if ( inputState.guessing==0 ) {
-				fd.postConstruct();
+				fd.setType(FunctionDef.Type.REG_FUN);fd.postConstruct();
 			}
 		}
 		catch (RecognitionException ex) {
