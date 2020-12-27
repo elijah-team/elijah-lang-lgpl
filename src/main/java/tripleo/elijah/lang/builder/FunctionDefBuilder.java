@@ -21,7 +21,6 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 	private FunctionDefScope _scope = new FunctionDefScope();
 	private List<FunctionModifiers> _mods = new ArrayList<FunctionModifiers>();
 	private TypeName _returnType;
-	private IdentExpression _name;
 	private FormalArgList _fal;
 	private Context _context;
 
