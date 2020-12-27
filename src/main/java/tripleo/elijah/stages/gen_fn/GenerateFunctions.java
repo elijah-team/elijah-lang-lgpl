@@ -708,6 +708,13 @@ public class GenerateFunctions {
 			final VariableTableEntry vte_numeric = gf.getVarTableEntry(vte);
 			vte_numeric.addPotentialType(ii, gf.getConstTableEntry(ci).type);
 			break;
+		case IDENT:
+			InstructionArgument ia1 = simplify_expression(value, gf, cctx);
+			final int ii3 = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), ia1), cctx);
+			final VariableTableEntry vte3_ident = gf.getVarTableEntry(vte);
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
+			vte3_ident.addPotentialType(ii3, tte);
+			break;
 		default:
 			throw new IllegalStateException("Unexpected value: " + value.getKind());
 		}
