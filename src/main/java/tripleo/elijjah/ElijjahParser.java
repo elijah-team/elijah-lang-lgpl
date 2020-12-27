@@ -1776,7 +1776,7 @@ inputState.guessing--;
 			}
 			match(LCURLY);
 			{
-			_loop409:
+			_loop410:
 			do {
 				switch ( LA(1)) {
 				case LITERAL_get:
@@ -1793,7 +1793,7 @@ inputState.guessing--;
 				}
 				default:
 				{
-					break _loop409;
+					break _loop410;
 				}
 				}
 			} while (true);
@@ -4894,14 +4894,14 @@ inputState.guessing--;
 			{
 				formalArgListItem_priv(fal.next());
 				{
-				_loop401:
+				_loop402:
 				do {
 					if ((LA(1)==COMMA)) {
 						match(COMMA);
 						formalArgListItem_priv(fal.next());
 					}
 					else {
-						break _loop401;
+						break _loop402;
 					}
 					
 				} while (true);
@@ -5983,7 +5983,7 @@ inputState.guessing--;
 				cr.add(tn);
 			}
 			{
-			_loop394:
+			_loop395:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
@@ -5993,7 +5993,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop394;
+					break _loop395;
 				}
 				
 			} while (true);
@@ -7578,7 +7578,7 @@ inputState.guessing--;
 	public final GenericTypeName  genericTypeName2() throws RecognitionException, TokenStreamException {
 		GenericTypeName tn;
 		
-		tn=new GenericTypeName(cur);
+		tn=new GenericTypeName(cur);TypeName tn2=null;
 		
 		try {      // for error handling
 			{
@@ -7602,6 +7602,13 @@ inputState.guessing--;
 			xy=qualident();
 			if ( inputState.guessing==0 ) {
 				tn.typeName(xy); tn.set(TypeModifiers.GENERIC);
+			}
+			{
+			match(LT_);
+			tn2=typeName2();
+			if ( inputState.guessing==0 ) {
+				tn.setConstraint(tn2);
+			}
 			}
 		}
 		catch (RecognitionException ex) {

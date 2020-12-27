@@ -20,6 +20,7 @@ public class GenericTypeName implements TypeName {
 	private final Context _ctx;
 	private Qualident _typeName;
 	private TypeModifiers modifiers;
+	private TypeName constraint;
 
 	public GenericTypeName(final Context cur) {
 		_ctx=cur;
@@ -51,5 +52,9 @@ public class GenericTypeName implements TypeName {
 	@Override
 	public Type kindOfType() {
 		return Type.GENERIC;
+	}
+
+	public void setConstraint(TypeName aConstraint) {
+		constraint = aConstraint;
 	}
 }

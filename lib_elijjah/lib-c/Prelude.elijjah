@@ -12,6 +12,8 @@ class interface String {
 class ConstString < String {}
 
 class interface Integer {
+	var Value : ?A < Integer
+
 	__preinc__() -> typeof self {
 		var tmp = Value
 		Value = Value + 1

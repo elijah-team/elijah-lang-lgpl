@@ -1163,9 +1163,10 @@ typeName2 returns [TypeName cr]
 	| cr=functionTypeName2
 	;
 genericTypeName2 returns [GenericTypeName tn]
-		{tn=new GenericTypeName(cur);}
+		{tn=new GenericTypeName(cur);TypeName tn2=null;}
 	: ("generic"|QUESTION) xy=qualident
-		{tn.typeName(xy); tn.set(TypeModifiers.GENERIC);}
+		{tn.typeName(xy); tn.set(TypeModifiers.GENERIC);} 
+	  (LT_ tn2=typeName2   {tn.setConstraint(tn2);})
 	;
 typeOfTypeName2 returns [TypeOfTypeName tn]
 		{tn=new TypeOfTypeName(cur);}
