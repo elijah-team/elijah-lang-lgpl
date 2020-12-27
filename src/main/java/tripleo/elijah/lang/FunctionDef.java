@@ -278,6 +278,11 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		}
 	}
 
+	@Override
+	public String toString() {
+		return String.format("<Function %s %s %s>", parent, name(), getArgs());
+	}
+
 	public boolean hasItem(OS_Element element) {
 		return items.contains(element);
 	}
