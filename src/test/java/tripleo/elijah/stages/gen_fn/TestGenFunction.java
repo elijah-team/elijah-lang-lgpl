@@ -203,11 +203,8 @@ public class TestGenFunction {
 		}
 	}
 
-	interface Runnable1 {
-
-		void set(OS_Module m);
-
-		void run();
+	interface PipelineLogic {
+		void run(OS_Module mod);
 	}
 
 	@Test
@@ -227,30 +224,23 @@ public class TestGenFunction {
 			c.use(ci, false);
 		}
 
-		Runnable1 runnable = new Runnable1() {
+		PipelineLogic runnable = new PipelineLogic() {
 			final DeducePhase dp = new DeducePhase();
 
 			@Override
-			public void run() {
+			public void run(OS_Module mod) {
 				try {
-					run2();
+					run2(mod);
 					dp.finish();
-					run3();
+					run3(mod);
 				} catch (IOException e) {
 					mod.parent.eee.exception(e);
 				}
 			}
 
-			private OS_Module mod;
-
-			@Override
-			public void set(OS_Module mm) {
-				mod = mm;
-			}
-
 			List<GeneratedNode> lgc = null;
 
-			public void run2() {
+			public void run2(OS_Module mod) {
 				final GenerateFunctions gfm = new GenerateFunctions(mod);
 //				final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
 				lgc = gfm.generateAllTopLevelClasses();
@@ -287,7 +277,7 @@ public class TestGenFunction {
 
 			}
 
-			public void run3() throws IOException {
+			public void run3(OS_Module mod) throws IOException {
 				GenerateC ggc = new GenerateC(mod);
 //				ggc.generateCode(lgf);
 
@@ -307,10 +297,8 @@ public class TestGenFunction {
 			}
 		};
 
-		runnable.set(m);
-		runnable.run();
-		runnable.set(m.prelude);
-		runnable.run();
+		runnable.run(m);
+		runnable.run(m.prelude);
 	}
 
 }
