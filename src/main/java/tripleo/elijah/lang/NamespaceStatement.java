@@ -115,7 +115,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 	}
 	
 	public FunctionDef funcDef() {
-		return new FunctionDef(this);
+		return new FunctionDef(this, getContext());
 	}
 	
 	public ProgramClosure XXX() {
