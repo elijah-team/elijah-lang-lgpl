@@ -796,6 +796,16 @@ public class GenerateC {
 			throw new NotImplementedException();
 		}
 
+		public String IntegerIA(IntegerIA integerIA, GeneratedFunction gf) {
+			VariableTableEntry vte = gf.getVarTableEntry(integerIA.getIndex());
+			String x = getRealTargetName(gf, vte);
+			return x;
+		}
+
+		public String IdentIA(IdentIA identIA, GeneratedFunction gf) {
+			String x = gf.getIdentIAPath(identIA);
+			return x;
+		}
 	}
 
 	@NotNull
@@ -811,6 +821,17 @@ public class GenerateC {
 			return gav.ConstTableIA(constTableIA, gf);
 		}
 
+		if (value instanceof IntegerIA) {
+			IntegerIA integerIA = (IntegerIA) value;
+			return gav.IntegerIA(integerIA, gf);
+		}
+
+		if (value instanceof IdentIA) {
+			IdentIA identIA = (IdentIA) value;
+			return gav.IdentIA(identIA, gf);
+		}
+
+		System.err.println(String.format("783 %s %s", value.getClass().getName(), value));
 		return ""+value;
 	}
 
