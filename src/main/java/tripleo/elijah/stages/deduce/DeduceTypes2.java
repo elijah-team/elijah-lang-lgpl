@@ -99,32 +99,13 @@ public class DeduceTypes2 {
 					for (IdentTableEntry ite : generatedFunction.idte_list) {
 						if (ite.resolved_element != null)
 							continue;
-						IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
-//						@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(identIA);
-//						for (InstructionArgument ia : x) {
-//							if (ia instanceof IntegerIA) {
-//								int y=2;
-//							} else if (ia instanceof IdentIA) {
-//								int y=2;
-//							} else
-//								throw new IllegalStateException("Invalid InstructionArgument");
-//						}
+						final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
 						final String x = generatedFunction.getIdentIAPathNormal(identIA);
 						@Nullable OS_Element y = resolveIdentIA(context, identIA, module, generatedFunction);
 						if (y == null) {
 							module.parent.eee.reportError("1004 Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
 						} else {
-							//ite.resolved_element = y; // resolveIdentIA does this automatically
-							if (y instanceof VariableStatement) {
-								TypeName typeName = ((VariableStatement) y).typeName();
-								if (!(typeName.isNull())) {
-									if (ite.type == null)
-										ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, ((VariableStatement) y).initialValue());
-									ite.type.attached = new OS_Type(typeName);
-								}
-							} else {
-								System.out.println("2009 "+y);
-							}
+							found_element_for_ite(generatedFunction, ite, y);
 						}
 					}
 				}
@@ -356,6 +337,38 @@ public class DeduceTypes2 {
 					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
 				}
 			}
+		}
+	}
+
+	void found_element_for_ite(GeneratedFunction generatedFunction, IdentTableEntry ite, @Nullable OS_Element y) {
+		assert y == ite.resolved_element;
+
+		if (y instanceof VariableStatement) {
+			TypeName typeName = ((VariableStatement) y).typeName();
+			if (!(typeName.isNull())) {
+				if (ite.type == null)
+					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, ((VariableStatement) y).initialValue());
+				ite.type.attached = new OS_Type(typeName);
+			}
+		} else if (y instanceof ClassStatement) {
+			ClassStatement classStatement = ((ClassStatement) y);
+			OS_Type attached = new OS_Type(classStatement);
+			if (ite.type == null) {
+				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+			} else
+				ite.type.attached = attached;
+		} else if (y instanceof FunctionDef) {
+			FunctionDef functionDef = ((FunctionDef) y);
+			OS_Type attached = new OS_FuncType(functionDef);
+			if (ite.type == null) {
+				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+			} else
+				ite.type.attached = attached;
+//							} else if (y instanceof ClassStatement) {
+
+		} else {
+			//LookupResultList exp = lookupExpression();
+			System.out.println("2009 "+y);
 		}
 	}
 
