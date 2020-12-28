@@ -231,10 +231,18 @@ public class GenerateC {
 		if (gf.fd.getParent() instanceof ClassStatement) {
 			ClassStatement st = (ClassStatement) gf.fd.getParent();
 			final String class_name = getTypeName(new OS_Type(st));
+			System.out.println("234 " + class_name);
 			final String if_args = args.length() == 0 ? "" : ", ";
 			tos.put_string_ln(String.format("%s %s%s(%s* vsc%s%s) {", returnType, class_name, name, class_name, if_args, args));
-		} else {
+		} else if (gf.fd.getParent() instanceof NamespaceStatement) {
+			NamespaceStatement st = (NamespaceStatement) gf.fd.getParent();
+			final String class_name = getTypeName(st/*new OS_Type(st)*/);
+			System.out.println("240 " + class_name);
+			final String if_args = args.length() == 0 ? "" : ", ";
 			// TODO vsi for namespace instance??
+//			tos.put_string_ln(String.format("%s %s%s(%s* vsi%s%s) {", returnType, class_name, name, class_name, if_args, args));
+			tos.put_string_ln(String.format("%s %s%s(%s) {", returnType, class_name, name, args));
+		} else {
 			tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
 		}
 		tos.incr_tabs();
