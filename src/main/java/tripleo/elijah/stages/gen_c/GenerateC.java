@@ -115,7 +115,7 @@ public class GenerateC {
 			tos.put_string_ln("int _tag;");
 			if (!decl.prim) {
 				for (GeneratedClass.VarTableEntry o : x.varTable){
-					tos.put_string_ln(String.format("void *vm%s;", o.nameToken));
+					tos.put_string_ln(String.format("void*/*%s*/ vm%s;", o.varType, o.nameToken));
 				}
 			} else {
 				tos.put_string_ln(String.format("%s vsv;", decl.prim_decl));
