@@ -100,7 +100,7 @@ public class GenerateC {
 							final String str = ((StringExpression) str0).getText();
 							decl.setDecl(str);
 						} else {
-							System.out.println("Illegal C.decl");
+							System.out.println("Illegal C.repr");
 						}
 					}
 				}
