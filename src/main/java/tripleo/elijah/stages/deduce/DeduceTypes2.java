@@ -1079,7 +1079,10 @@ public class DeduceTypes2 {
 						assert idte2.type.attached != null;
 						try {
 							OS_Type rtype = resolve_type(idte2.type.attached, ectx);
-							ectx = rtype.getClassOf().getContext();
+							if (rtype.getType() == OS_Type.Type.USER_CLASS)
+								ectx = rtype.getClassOf().getContext();
+							else if (rtype.getType() == OS_Type.Type.FUNCTION)
+								ectx = ((OS_FuncType) rtype).getElement().getContext();
 							idte2.type.attached = rtype; // TODO may be losing alias information here
 						} catch (ResolveError resolveError) {
 							System.out.println("1089 Can't attach type to "+idte2.type.attached);
