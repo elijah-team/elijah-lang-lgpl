@@ -539,7 +539,13 @@ public class GenerateC {
 		if (attached.getType() == OS_Type.Type.USER_CLASS) {
 			return attached.getClassOf().name();
 		} else if (attached.getType() == OS_Type.Type.USER) {
-			return ((NormalTypeName) attached.getTypeName()).getName();
+			TypeName typeName = attached.getTypeName();
+			String name;
+			if (typeName instanceof NormalTypeName)
+				name = ((NormalTypeName) typeName).getName();
+			else
+				name = ((GenericTypeName) typeName).toString();
+			return String.format(Emit.emit("/*543*/")+"Z<%s>*", name);
 		} else
 			throw new NotImplementedException();
 	}
