@@ -284,7 +284,7 @@ public class GenerateC {
 					} else {
 						realTarget = getRealTargetName(gf, (IdentIA) target);
 					}
-					String s = String.format("%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
+					String s = String.format("/*267*/%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
 					tos.put_string_ln(s);
 					final int y = 2;
 				}
@@ -295,7 +295,7 @@ public class GenerateC {
 					final InstructionArgument value  = instruction.getArg(1);
 
 					final String realTarget = getRealTargetName(gf, (IntegerIA) target);
-					String s = String.format("%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
+					String s = String.format("/*278*/%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
 					tos.put_string_ln(s);
 					final int y = 2;
 				}
@@ -698,7 +698,7 @@ public class GenerateC {
 					String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
 					sb.append(path);
 				}
-				sb.append("(");
+				sb.append("/*671*/(");
 				{
 					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
 					sb.append(Helpers.String_join(", ", sll));
@@ -711,6 +711,7 @@ public class GenerateC {
 				if (pte.expression_num == null) {
 					final int y=2;
 					final IdentExpression ptex = (IdentExpression) pte.expression;
+					sb.append("/*684*/");
 					sb.append(ptex.getText());
 				} else {
 					final IExpression ptex = pte.expression;
@@ -765,7 +766,7 @@ public class GenerateC {
 					sll.add(""+ const_to_string(constTableEntry.initialValue));
 				} else if (ia instanceof IntegerIA) {
 					final VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
-					sll.add(variableTableEntry.getName());
+					sll.add("/*739*/"+getRealTargetName(gf, variableTableEntry));
 				} else if (ia instanceof IdentIA) {
 //					@org.jetbrains.annotations.Nullable
 //					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
@@ -774,7 +775,7 @@ public class GenerateC {
 //				assert path.equals(path2); // should always fail
 //					assert ident != null;
 					IdentTableEntry ite = gf.getIdentTableEntry(((IdentIA) ia).getIndex());
-					sll.add(ite.getIdent().getText());
+					sll.add("/*748*/"+ite.getIdent().getText());
 					System.out.println("743 "+path2);
 //					throw new NotImplementedException();
 				} else {
