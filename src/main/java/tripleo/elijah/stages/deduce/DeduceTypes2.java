@@ -68,7 +68,8 @@ public class DeduceTypes2 {
 									try {
 										cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);
 									} catch (ResolveError resolveError) {
-										resolveError.printStackTrace(); // TODO print diagnostic
+										System.out.println("71 Can't be here");
+//										resolveError.printStackTrace(); // TODO print diagnostic
 									}
 								}
 								break;
@@ -172,7 +173,7 @@ public class DeduceTypes2 {
 											ite.type.attached = xx;
 										} catch (ResolveError resolveError) {
 											System.out.println("192 Can't attach type to "+path);
-											resolveError.printStackTrace(); // TODO print diagnostic
+//											resolveError.printStackTrace(); // TODO print diagnostic
 											continue;
 										}
 									}
@@ -189,8 +190,8 @@ public class DeduceTypes2 {
 														OS_Type xx = resolve_type(ite.type.attached, fd_ctx);
 														ite.type.attached = xx;
 													} catch (ResolveError resolveError) {
-														System.out.println("210 Can;t attch type to "+ite.getIdent());
-														resolveError.printStackTrace(); // TODO print diagnostic
+														System.out.println("210 Can't attach type to "+ite.getIdent());
+//														resolveError.printStackTrace(); // TODO print diagnostic
 														continue;
 													}
 												}
@@ -1068,7 +1069,8 @@ public class DeduceTypes2 {
 							ectx = rtype.getClassOf().getContext();
 							idte2.type.attached = rtype; // TODO may be losing alias information here
 						} catch (ResolveError resolveError) {
-							resolveError.printStackTrace(); // TODO print diagnostic
+							System.out.println("1089 Can't attach type to "+idte2.type.attached);
+//							resolveError.printStackTrace(); // TODO print diagnostic
 							continue;
 						}
 					} else {
