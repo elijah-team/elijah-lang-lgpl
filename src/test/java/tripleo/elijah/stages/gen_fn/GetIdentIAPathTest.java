@@ -32,12 +32,12 @@ public class GetIdentIAPathTest {
 		mod = mock(OS_Module.class);
 		FunctionDef fd = mock(FunctionDef.class);
 		gf = new GeneratedFunction(fd);
+
+		Emit.emitting = false;
 	}
 
 	@Test
 	public void testManualXDotFoo() {
-		Emit.emitting = false;
-
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
@@ -55,8 +55,6 @@ public class GetIdentIAPathTest {
 
 	@Test
 	public void testManualXDotFoo2() {
-		Emit.emitting = false;
-
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
@@ -84,8 +82,6 @@ public class GetIdentIAPathTest {
 
 	@Test
 	public void testManualXDotFoo3() {
-		Emit.emitting = false;
-
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
@@ -112,8 +108,6 @@ public class GetIdentIAPathTest {
 
 	@Test
 	public void testManualXDotFooWithFooBeingFunction() {
-		Emit.emitting = false;
-
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
