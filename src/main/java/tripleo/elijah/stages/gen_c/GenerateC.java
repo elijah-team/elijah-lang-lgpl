@@ -784,9 +784,13 @@ public class GenerateC {
 				} else if (ia instanceof IdentIA) {
 //					@org.jetbrains.annotations.Nullable
 //					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
-					//String path = gf.getIAPathNormal((IdentIA) ia));    // return x.y.z
+					String path = gf.getIdentIAPathNormal((IdentIA) ia);    // return x.y.z
 					String path2 = gf.getIdentIAPath((IdentIA) ia); // return ZP105get_z(vvx.vmy)
-//				assert path.equals(path2); // should always fail
+					if (path.equals(path2)) {
+						// should always fail
+						//throw new AssertionError();
+						System.err.println(String.format("778 should always fail but didn't %s %s", path, path2));
+					}
 //					assert ident != null;
 //					IdentTableEntry ite = gf.getIdentTableEntry(((IdentIA) ia).getIndex());
 //					sll.add(Emit.emit("/*748*/")+""+ite.getIdent().getText());
