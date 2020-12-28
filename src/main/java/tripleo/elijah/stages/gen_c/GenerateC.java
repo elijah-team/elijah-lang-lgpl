@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_c;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
@@ -200,14 +201,33 @@ public class GenerateC {
 		}
 		//
 		name = gf.fd.name();
-		final String args = Helpers.String_join(", ", Collections2.transform(gf.fd.fal().falis, new Function<FormalArgListItem, String>() {
-			@Nullable
-			@Override
-			public String apply(@Nullable final FormalArgListItem input) {
-				assert input != null;
-				return String.format("%s va%s", getTypeName(input.typeName()), input.name());
-			}
-		}));
+		final String args;
+		if (false) {
+			args = Helpers.String_join(", ", Collections2.transform(gf.fd.fal().falis, new Function<FormalArgListItem, String>() {
+				@Nullable
+				@Override
+				public String apply(@Nullable final FormalArgListItem input) {
+					assert input != null;
+					return String.format("%s va%s", getTypeName(input.typeName()), input.name());
+				}
+			}));
+		} else {
+			Collection<VariableTableEntry> x = Collections2.filter(gf.vte_list, new Predicate<VariableTableEntry>() {
+				@Override
+				public boolean apply(@Nullable VariableTableEntry input) {
+					assert input != null;
+					return input.vtt == VariableTableType.ARG;
+				}
+			});
+			args = Helpers.String_join(", ", Collections2.transform(x, new Function<VariableTableEntry, String>() {
+				@Nullable
+				@Override
+				public String apply(@Nullable VariableTableEntry input) {
+					assert input != null;
+					return String.format("%s va%s", getTypeNameForVariableEntry(input), input.getName());
+				}
+			}));
+		}
 		if (gf.fd.getParent() instanceof ClassStatement) {
 			ClassStatement st = (ClassStatement) gf.fd.getParent();
 			final String class_name = getTypeName(new OS_Type(st));
@@ -504,6 +524,16 @@ public class GenerateC {
 		tos.put_string_ln("}");
 		tos.flush();
 		tos.close();
+	}
+
+	private String getTypeNameForVariableEntry(VariableTableEntry input) {
+		OS_Type attached = input.type.attached;
+		if (attached.getType() == OS_Type.Type.USER_CLASS) {
+			return attached.getClassOf().name();
+		} else if (attached.getType() == OS_Type.Type.USER) {
+			return ((NormalTypeName) attached.getTypeName()).getName();
+		} else
+			throw new NotImplementedException();
 	}
 
 	private void generate_method_cast(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
