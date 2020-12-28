@@ -7604,11 +7604,19 @@ inputState.guessing--;
 				tn.typeName(xy); tn.set(TypeModifiers.GENERIC);
 			}
 			{
-			match(LT_);
-			tn2=typeName2();
-			if ( inputState.guessing==0 ) {
-				tn.setConstraint(tn2);
+			if ((LA(1)==LT_) && (_tokenSet_74.member(LA(2)))) {
+				match(LT_);
+				tn2=typeName2();
+				if ( inputState.guessing==0 ) {
+					tn.setConstraint(tn2);
+				}
 			}
+			else if ((_tokenSet_9.member(LA(1))) && (_tokenSet_79.member(LA(2)))) {
+			}
+			else {
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			
 			}
 		}
 		catch (RecognitionException ex) {
