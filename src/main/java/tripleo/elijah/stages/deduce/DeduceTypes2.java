@@ -154,6 +154,57 @@ public class DeduceTypes2 {
 							}
 						}
 					}
+					//
+					// ATTACH A TYPE TO IDTE'S
+					//
+					for (IdentTableEntry ite : generatedFunction.idte_list) {
+						int y=2;
+						if (!ite.hasResolvedElement()) {
+							IdentIA ident_a = new IdentIA(ite.getIndex(), generatedFunction);
+							String path = generatedFunction.getIdentIAPathNormal(ident_a);
+							@Nullable OS_Element x = resolveIdentIA(context, ident_a, module, generatedFunction);
+							if (x != null) {
+								ite.setResolvedElement(x);
+								if (ite.type != null && ite.type.attached != null) {
+									if (ite.type.attached.getType() == OS_Type.Type.USER) {
+										try {
+											OS_Type xx = resolve_type(ite.type.attached, fd_ctx);
+											ite.type.attached = xx;
+										} catch (ResolveError resolveError) {
+											System.out.println("192 Can't attach type to "+path);
+											resolveError.printStackTrace(); // TODO print diagnostic
+											continue;
+										}
+									}
+								} else {
+									int yy=2;
+									if (!ite.hasResolvedElement()) {
+										LookupResultList lrl = lookupExpression(ite.getIdent(), fd_ctx);
+										OS_Element best = lrl.chooseBest(null);
+										if (best != null) {
+											ite.setResolvedElement(x);
+											if (ite.type != null && ite.type.attached != null) {
+												if (ite.type.attached.getType() == OS_Type.Type.USER) {
+													try {
+														OS_Type xx = resolve_type(ite.type.attached, fd_ctx);
+														ite.type.attached = xx;
+													} catch (ResolveError resolveError) {
+														System.out.println("210 Can;t attch type to "+ite.getIdent());
+														resolveError.printStackTrace(); // TODO print diagnostic
+														continue;
+													}
+												}
+											}
+										} else {
+											System.err.println("184 Couldn't resolve "+ite.getIdent());
+										}
+									}
+								}
+							} else {
+								module.parent.eee.reportError("165 Can't resolve "+path);
+							}
+						}
+					}
 					int y=2;
 				}
 				break;
