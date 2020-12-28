@@ -75,9 +75,13 @@ public class OS_Type {
 	}
 
 	public OS_Element getElement() {
-		if (type_of_type != Type.FUNCTION || type_of_type != Type.USER_CLASS)
+		switch (type_of_type) {
+		case USER_CLASS:
+		case FUNCTION:
+			return etype;
+		default:
 			throw new IllegalArgumentException();
-		return etype;
+		}
 	}
 
 	public OS_Type resolve(final Context ctx) {
