@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
+import tripleo.elijah.stages.gen_c.Emit;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
@@ -122,7 +123,7 @@ public class GeneratedFunction implements GeneratedNode {
 							// A direct member value. Doesn't handle when indirect
 							text = "vsc->vm" + ((VariableStatement) resolved_element).getName();
 						} else {
-							text = "vv" + ((VariableStatement) resolved_element).getName();
+							text = Emit.emit("/*125*/")+"vv" + ((VariableStatement) resolved_element).getName();
 						}
 					} else {
 						throw new NotImplementedException();
@@ -134,7 +135,7 @@ public class GeneratedFunction implements GeneratedNode {
 					if (sl.size() == 0) {
 						text = idte.getIdent().getText(); // TODO check if it belongs somewhere else
 					} else {
-						text = "vm" + idte.getIdent().getText();
+						text = Emit.emit("/*137*/")+"vm" + idte.getIdent().getText();
 					}
 					int y = 2;
 				}

@@ -284,7 +284,7 @@ public class GenerateC {
 					} else {
 						realTarget = getRealTargetName(gf, (IdentIA) target);
 					}
-					String s = String.format("/*267*/%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
+					String s = String.format(Emit.emit("/*267*/")+"%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
 					tos.put_string_ln(s);
 					final int y = 2;
 				}
@@ -295,7 +295,7 @@ public class GenerateC {
 					final InstructionArgument value  = instruction.getArg(1);
 
 					final String realTarget = getRealTargetName(gf, (IntegerIA) target);
-					String s = String.format("/*278*/%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
+					String s = String.format(Emit.emit("/*278*/")+"%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
 					tos.put_string_ln(s);
 					final int y = 2;
 				}
@@ -413,10 +413,10 @@ public class GenerateC {
 							@org.jetbrains.annotations.Nullable InstructionArgument xx = gf.vte_lookup(text);
 							assert xx != null;
 							String xxx = getRealTargetName(gf, (IntegerIA) xx);
-							sb.append(xxx);
+							sb.append(Emit.emit("/*424*/")+""+""+xxx);
 						} else {
 							String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
-							sb.append(path);
+							sb.append(Emit.emit("/*427*/")+""+""+path);
 						}
 						{
 							sb.append('(');
@@ -657,11 +657,11 @@ public class GenerateC {
 			if (ia instanceof IntegerIA) {
 //				VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(ia));
 				final String realTargetName = getRealTargetName(gf, (IntegerIA) ia);
-				sl3.add(realTargetName);
+				sl3.add(Emit.emit("/*669*/")+""+realTargetName);
 			} else if (ia instanceof IdentIA) {
 				final int y = 2;
 				String text = gf.getIdentIAPath((IdentIA) ia);
-				sl3.add(text);
+				sl3.add(Emit.emit("/*673*/")+""+text);
 			} else if (ia instanceof ConstTableIA) {
 				ConstTableIA c = (ConstTableIA) ia;
 				ConstantTableEntry cte = gf.getConstTableEntry(c.getIndex());
@@ -698,7 +698,7 @@ public class GenerateC {
 					String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
 					sb.append(path);
 				}
-				sb.append("/*671*/(");
+				sb.append(Emit.emit("/*671*/")+"(");
 				{
 					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
 					sb.append(Helpers.String_join(", ", sll));
@@ -711,7 +711,7 @@ public class GenerateC {
 				if (pte.expression_num == null) {
 					final int y=2;
 					final IdentExpression ptex = (IdentExpression) pte.expression;
-					sb.append("/*684*/");
+					sb.append(Emit.emit("/*684*/")+"");
 					sb.append(ptex.getText());
 				} else {
 					final IExpression ptex = pte.expression;
@@ -721,7 +721,7 @@ public class GenerateC {
 						sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
 					}
 				}
-				sb.append("(");
+				sb.append(Emit.emit("/*724*/")+"(");
 				{
 					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
 					sb.append(Helpers.String_join(", ", sll));
@@ -766,7 +766,7 @@ public class GenerateC {
 					sll.add(""+ const_to_string(constTableEntry.initialValue));
 				} else if (ia instanceof IntegerIA) {
 					final VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
-					sll.add("/*739*/"+getRealTargetName(gf, variableTableEntry));
+					sll.add(Emit.emit("/*739*/")+""+getRealTargetName(gf, variableTableEntry));
 				} else if (ia instanceof IdentIA) {
 //					@org.jetbrains.annotations.Nullable
 //					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
@@ -774,8 +774,9 @@ public class GenerateC {
 					String path2 = gf.getIdentIAPath((IdentIA) ia); // return ZP105get_z(vvx.vmy)
 //				assert path.equals(path2); // should always fail
 //					assert ident != null;
-					IdentTableEntry ite = gf.getIdentTableEntry(((IdentIA) ia).getIndex());
-					sll.add("/*748*/"+ite.getIdent().getText());
+//					IdentTableEntry ite = gf.getIdentTableEntry(((IdentIA) ia).getIndex());
+//					sll.add(Emit.emit("/*748*/")+""+ite.getIdent().getText());
+					sll.add(Emit.emit("/*748*/")+""+path2);
 					System.out.println("743 "+path2);
 //					throw new NotImplementedException();
 				} else {
@@ -865,7 +866,7 @@ public class GenerateC {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		List<String> ls = new LinkedList<String>();
 		// TODO in Deduce set property lookupType to denote what type of lookup it is: MEMBER, LOCAL, or CLOSURE
-		ls.add("vm"+identTableEntry.getIdent().getText()); // TODO blindly adding "vm" might not always work, also put in loop
+		ls.add(Emit.emit("/*872*/")+"vm"+identTableEntry.getIdent().getText()); // TODO blindly adding "vm" might not always work, also put in loop
 		InstructionArgument backlink = identTableEntry.backlink;
 		while (backlink != null) {
 			if (backlink instanceof IntegerIA) {
@@ -878,7 +879,7 @@ public class GenerateC {
 				int identIAIndex = identIA.getIndex();
 				IdentTableEntry identTableEntry1 = gf.getIdentTableEntry(identIAIndex);
 				String identTableEntryName = identTableEntry1.getIdent().getText();
-				ls.add(0, "vm"+identTableEntryName); // TODO blindly adding "vm" might not always be right
+				ls.add(0, Emit.emit("/*885*/")+"vm"+identTableEntryName); // TODO blindly adding "vm" might not always be right
 				backlink = identTableEntry1.backlink;
 			} else
 				throw new IllegalStateException("Invalid InstructionArgument for backlink");

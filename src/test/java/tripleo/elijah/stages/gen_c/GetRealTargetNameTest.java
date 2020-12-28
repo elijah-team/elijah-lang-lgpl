@@ -55,6 +55,7 @@ public class GetRealTargetNameTest {
 		//
 		GenerateC c = new GenerateC(mod);
 		//
+		Emit.emitting = false;
 		String x = c.getRealTargetName(gf, ident_ia);
 		Assert.assertEquals("vvx->vmfoo", x);
 	}

@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.gen_c.Emit;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
@@ -35,6 +36,8 @@ public class GetIdentIAPathTest {
 
 	@Test
 	public void testManualXDotFoo() {
+		Emit.emitting = false;
+
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
@@ -52,6 +55,8 @@ public class GetIdentIAPathTest {
 
 	@Test
 	public void testManualXDotFoo2() {
+		Emit.emitting = false;
+
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
@@ -79,6 +84,8 @@ public class GetIdentIAPathTest {
 
 	@Test
 	public void testManualXDotFoo3() {
+		Emit.emitting = false;
+
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
@@ -105,6 +112,8 @@ public class GetIdentIAPathTest {
 
 	@Test
 	public void testManualXDotFooWithFooBeingFunction() {
+		Emit.emitting = false;
+
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
