@@ -840,7 +840,7 @@ public class GenerateC {
 		return getRealTargetName(gf, varTableEntry);
 	}
 
-	private String getRealTargetName(final GeneratedFunction gf, final VariableTableEntry varTableEntry) {
+	static String getRealTargetName(final GeneratedFunction gf, final VariableTableEntry varTableEntry) {
 		final String vte_name = varTableEntry.getName();
 		if (varTableEntry.vtt == VariableTableType.TEMP) {
 			if (varTableEntry.getName() == null) {
