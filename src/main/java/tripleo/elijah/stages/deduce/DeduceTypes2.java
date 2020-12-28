@@ -852,7 +852,7 @@ public class DeduceTypes2 {
 		}
 		if (t == null) {
 			NotImplementedException.raise();
-			return new LookupResultList();
+			return new LookupResultList(); // TODO throw ResolveError
 		} else
 			return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
 	}
