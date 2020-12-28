@@ -796,7 +796,6 @@ public class GenerateC {
 //					sll.add(Emit.emit("/*748*/")+""+ite.getIdent().getText());
 					sll.add(Emit.emit("/*748*/")+""+path2);
 					System.out.println("743 "+path2);
-//					throw new NotImplementedException();
 				} else {
 					throw new IllegalStateException("Cant be here: Invalid InstructionArgument");
 				}
