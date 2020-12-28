@@ -121,7 +121,7 @@ public class GenerateC {
 				tos.put_string_ln(String.format("%s vsv;", decl.prim_decl));
 			}
 
-			String class_name = getTypeName(new OS_Type(x.getKlass()));//getName();
+			String class_name = getTypeName(new OS_Type(x.getKlass()));
 			int class_code = x.getKlass()._a.getCode();
 
 			tos.dec_tabs();
