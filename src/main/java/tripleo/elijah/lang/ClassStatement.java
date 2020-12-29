@@ -283,7 +283,8 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 	public boolean hasItem(OS_Element element) {
-		return items.contains(element);
+		if (!(element instanceof ClassItem)) return false;
+		return items.contains((ClassItem) element);
 	}
 }
 
