@@ -277,7 +277,9 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 	public PropertyStatement prop() {
-		return new PropertyStatement(this, getContext());
+		PropertyStatement propertyStatement = new PropertyStatement(this, getContext());
+		add(propertyStatement);
+		return propertyStatement;
 	}
 
 	public boolean hasItem(OS_Element element) {
