@@ -875,8 +875,31 @@ public class GenerateC {
 			return "va" + vte_name;
 		} else if (SpecialVariables.contains(vte_name)) {
 			return SpecialVariables.get(vte_name);
+		} else if (isValue(gf, vte_name)) {
+			return "vsc->vsv";
 		}
-		return "vv" + vte_name;
+		return Emit.emit("/*879*/")+"vv" + vte_name;
+	}
+
+	private static boolean isValue(GeneratedFunction gf, String name) {
+		if (!name.equals("Value")) return false;
+		//
+		FunctionDef fd = (FunctionDef) gf.getFD();
+		switch (fd.getType()) {
+		case REG_FUN:
+		case DEF_FUN:
+			for (AnnotationPart anno : fd.annotationIterable()) {
+				if (anno.annoClass().equals(Helpers.string_to_qualident("Primitive"))) {
+					return true;
+				}
+			}
+			return false;
+		case PROP_GET:
+		case PROP_SET:
+			return true;
+		default:
+			throw new IllegalStateException("Unexpected value: " + fd.getType());
+		}
 	}
 
 	String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
@@ -889,7 +912,7 @@ public class GenerateC {
 			if (backlink instanceof IntegerIA) {
 				IntegerIA integerIA = (IntegerIA) backlink;
 				String realTargetName = getRealTargetName(gf, integerIA);
-				ls.add(0, realTargetName);
+				ls.add(0, Emit.emit("/*892*/")+realTargetName);
 				backlink = null;
 			} else if (backlink instanceof IdentIA) {
 				IdentIA identIA = (IdentIA) backlink;
