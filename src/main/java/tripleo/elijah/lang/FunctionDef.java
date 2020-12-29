@@ -278,6 +278,21 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		}
 	}
 
+	public Type getType() {
+		return _type;
+	}
+
+	public Iterable<AnnotationPart> annotationIterable() {
+		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
+		if (annotations == null) return aps;
+		for (AnnotationClause annotationClause : annotations) {
+			for (AnnotationPart annotationPart : annotationClause.aps) {
+				aps.add(annotationPart);
+			}
+		}
+		return aps;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("<Function %s %s %s>", parent, name(), getArgs());
