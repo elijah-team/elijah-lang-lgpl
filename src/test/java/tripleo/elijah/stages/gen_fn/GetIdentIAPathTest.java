@@ -108,7 +108,7 @@ public class GetIdentIAPathTest {
 
 	@Test
 	public void testManualXDotFooWithFooBeingFunction() {
-		IdentExpression x_ident = Helpers.string_to_ident("x");
+		@NotNull IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
 		GenerateFunctions gen = new GenerateFunctions(mod);
@@ -119,12 +119,15 @@ public class GetIdentIAPathTest {
 		LookupResultList lrl2 = new LookupResultList();
 
 		expect(mod.pullPackageName()).andReturn(OS_Package.default_package);
+//		expect(mod.add(classStatement)); // really want this but cant mock void functions
 		mod.add(anyObject(ClassStatement.class));
 		replay(mod);
 
+		ClassStatement classStatement = new ClassStatement(mod, ctx);
+
+
 //		expect(mockContext.lookup(foo_ident.getText())).andReturn(lrl2);
 
-		ClassStatement classStatement = new ClassStatement(mod, ctx);
 
 //		expect(classStatement.getContext().lookup(foo_ident.getText())).andReturn(lrl2);
 //		expect(classStatement.getContext().lookup(foo_ident.getText(), anyInt(), anyObject(LookupResultList.class), anyObject(List.class), anyBoolean()));//.andReturn(lrl2);
@@ -158,11 +161,8 @@ public class GetIdentIAPathTest {
 		//
 		IdentIA ident_ia = (IdentIA) xx;
 		IdentTableEntry ite = gf.getIdentTableEntry(ident_ia.getIndex());
-//		System.out.println(ite.backlink);
-//		((IntegerIA)ite.backlink).setResolvedElement();
 		ite.setResolvedElement(functionDef);
 		String x = gf.getIdentIAPath(ident_ia);
-//		Assert.assertEquals("vvx->vmfoo", x); // TODO real expectation
 		verify(mod);
 		verify(ctx);
 		verify(mockContext);
