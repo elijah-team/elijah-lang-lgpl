@@ -301,8 +301,13 @@ public class GenerateFunctions {
 				//
 				an = (AccessNotation) item;
 //				gc.addAccessNotation(an);
-			} else
+			} else if (item instanceof PropertyStatement) {
+				PropertyStatement ps = (PropertyStatement) item;
+				System.err.println("307 Skipping property for now");
+			} else {
+				System.err.println("305 "+item.getClass().getName());
 				throw new NotImplementedException();
+			}
 		}
 
 		gc.createCtor0();

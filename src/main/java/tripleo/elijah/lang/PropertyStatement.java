@@ -26,6 +26,8 @@ public class PropertyStatement implements OS_Element, OS_Element2, ClassItem {
 	public FunctionDef get_fn;
 	private IdentExpression prop_name;
 	private TypeName typeName;
+	private boolean _set_is_abstract;
+	private boolean _get_is_abstract;
 
 	public PropertyStatement(OS_Element parent, Context cur) {
 		this.parent = parent;
@@ -88,6 +90,14 @@ public class PropertyStatement implements OS_Element, OS_Element2, ClassItem {
 		return set_fn.scope();
 	}
 
+	public FunctionDef get_fn() {
+		return get_fn;
+	}
+
+	public FunctionDef set_fn() {
+		return set_fn;
+	}
+
 	@Override
 	public String name() {
 		return prop_name.getText();
@@ -102,6 +112,15 @@ public class PropertyStatement implements OS_Element, OS_Element2, ClassItem {
 
 	public TypeName getTypeName() {
 		return typeName;
+	}
+
+
+	public void addGet() {
+		_get_is_abstract = true;
+	}
+
+	public void addSet() {
+		_set_is_abstract = true;
 	}
 
 }

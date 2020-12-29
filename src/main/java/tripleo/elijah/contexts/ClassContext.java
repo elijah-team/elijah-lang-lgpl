@@ -40,7 +40,8 @@ public class ClassContext extends Context {
 				!(item instanceof NamespaceStatement) &&
 				!(item instanceof FunctionDef) &&
 				!(item instanceof VariableSequence) &&
-				!(item instanceof AliasStatement)
+				!(item instanceof AliasStatement) &&
+				!(item instanceof PropertyStatement)
 			) continue;
 			if (item instanceof OS_Element2) {
 				if (((OS_Element2) item).name().equals(name)) {

@@ -127,7 +127,7 @@ classDefinition_signature [ClassBuilder cb]
 	  							//{cb.setParent(parent); cb.setParentContext(cur);}
 	  							//{cls = cb.build();} // building before done. arrgh
       LCURLY                  	//{ctx=(ClassContext)cls.getContext();cur=ctx;}
-     (classScope2[cb.getScope()]
+     (classScope2_signature[cb.getScope()]
 //     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // interface cant be abstract
 //      (invariantStatement2[sc])?
      )
@@ -155,7 +155,7 @@ classDefinition_interface [ClassBuilder cb]
 	  							//{cb.setParent(parent); cb.setParentContext(cur);}
 	  							//{cls = cb.build();} // building before done. arrgh
       LCURLY                  	//{ctx=(ClassContext)cls.getContext();cur=ctx;}
-     (classScope2[cb.getScope()]
+     (classScope2_interface[cb.getScope()]
 //     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // interface cant be abstract
 //      (invariantStatement2[sc])?
      )
@@ -190,6 +190,36 @@ classScope2[ClassScope cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | typeAlias2[cr.typeAlias()]
     | programStatement2[cr]
+    | acs=accessNotation {cr.addAccess(acs);}
+    )*
+    (invariantStatement2[cr])?
+    ;
+classScope2_signature[ClassScope cr]
+        {AccessNotation acs=null;}
+    : docstrings[cr]
+    ( //constructorDef2[cr]
+    //| destructorDef2[cr]
+    | functionDef2[cr.funcDef()]
+    | varStmt2[cr] // TODO lint shouldn't have var's, but maybe consts
+    | "type" IDENT BECOMES IDENT ( BOR IDENT)*
+    | typeAlias2[cr.typeAlias()]
+    | programStatement2[cr]
+    | acs=accessNotation {cr.addAccess(acs);}
+    )*
+    (invariantStatement2[cr])?
+    ;
+classScope2_interface[ClassScope cr]
+        {AccessNotation acs=null;}
+    : docstrings[cr]
+    ( constructorDef2[cr]
+    | destructorDef2[cr]
+    | functionDef2[cr.funcDef()]
+    | varStmt2[cr]
+    | "type" IDENT BECOMES IDENT ( BOR IDENT)*
+    | typeAlias2[cr.typeAlias()]
+    | programStatement2[cr]
+	| propertyStatement2[cr]
+	| propertyStatement2_abstract[cr]
     | acs=accessNotation {cr.addAccess(acs);}
     )*
     (invariantStatement2[cr])?
@@ -1231,9 +1261,26 @@ formalArgListItem_priv[FormalArgListItem fali]
 propertyStatement[PropertyStatement ps]
 		{IdentExpression prop_name=null;TypeName tn=null;}
 	: ("prop"|"property") prop_name=ident {ps.setName(prop_name);}
-			TOK_COLON tn=typeName2 {ps.setTypeName(tn);} LCURLY
-	("get" scope[ps.get_scope()]
-	|"set" scope[ps.set_scope()])*
+			(TOK_COLON|TOK_ARROW) tn=typeName2 {ps.setTypeName(tn);} LCURLY
+	("get" (SEMI {ps.addGet();} | scope[ps.get_scope()])
+	|"set" (SEMI {ps.addSet();} | scope[ps.set_scope()])
+	)* RCURLY // account for multitude
+	;
+propertyStatement2_abstract[ClassScope cr]
+		{PropertyStatementBuilder ps=new PropertyStatementBuilder();IdentExpression prop_name=null;TypeName tn=null;}
+	: ("prop"|"property") prop_name=ident {ps.setName(prop_name);}
+			(TOK_COLON|TOK_ARROW) tn=typeName2 {ps.setTypeName(tn);} LCURLY
+	("get" SEMI {ps.addGet();}
+	|"set" SEMI {ps.addSet();}
+	)* RCURLY {cr.addProp(ps);}
+	;
+propertyStatement2[ClassScope cr]
+		{PropertyStatementBuilder ps=new PropertyStatementBuilder();IdentExpression prop_name=null;TypeName tn=null;}
+	: ("prop"|"property") prop_name=ident {ps.setName(prop_name);}
+			(TOK_COLON|TOK_ARROW) tn=typeName2 {ps.setTypeName(tn);} LCURLY
+	("get" (SEMI {ps.addGet();} | scope2[ps.get_scope()])
+	|"set" (SEMI {ps.addSet();} | scope2[ps.set_scope()])
+	)* RCURLY {cr.addProp(ps);} // account for multitude
 	;
 
 

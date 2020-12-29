@@ -20,6 +20,10 @@ import java.util.List;
  */
 public abstract class ClassOrNamespaceScope extends BaseScope {
 
+	public void addProp(PropertyStatementBuilder ps) {
+		add(ps);
+	}
+
 	static class IspPart {
 		final IdentExpression ident;
 		final IExpression expr;
