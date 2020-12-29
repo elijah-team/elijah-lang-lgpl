@@ -280,12 +280,13 @@ public class GenerateFunctions {
 				throw new NotImplementedException();
 			} else if (item instanceof DestructorDef) {
 				throw new NotImplementedException();
+			} else if (item instanceof DefFunctionDef) {
+				@NotNull GeneratedFunction f = generateFunction((DefFunctionDef) item, klass);
+				gc.addFunction((DefFunctionDef) item, f);
 			} else if (item instanceof FunctionDef) {
 				//throw new NotImplementedException();
 				@NotNull GeneratedFunction f = generateFunction((FunctionDef) item, klass);
 				gc.addFunction((FunctionDef) item, f);
-			} else if (item instanceof DefFunctionDef) {
-				throw new NotImplementedException();
 			} else if (item instanceof NamespaceStatement) {
 				throw new NotImplementedException();
 			} else if (item instanceof VariableSequence) {
