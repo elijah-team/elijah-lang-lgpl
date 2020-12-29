@@ -12,7 +12,7 @@ class interface String {
 class ConstString < String {}
 
 class interface Integer {
-	var Value : ?A < Integer
+	prop Value : ?A < Integer { get; set; }
 
 	__preinc__() -> typeof self {
 		var tmp = Value
