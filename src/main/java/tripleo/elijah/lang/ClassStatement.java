@@ -265,6 +265,17 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		}
 	}
 
+	public Iterable<AnnotationPart> annotationIterable() {
+		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
+		if (annotations == null) return aps;
+		for (AnnotationClause annotationClause : annotations) {
+			for (AnnotationPart annotationPart : annotationClause.aps) {
+				aps.add(annotationPart);
+			}
+		}
+		return aps;
+	}
+
 	public PropertyStatement prop() {
 		return new PropertyStatement(this, getContext());
 	}

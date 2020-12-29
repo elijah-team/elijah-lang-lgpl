@@ -888,7 +888,8 @@ public class GenerateC {
 		switch (fd.getType()) {
 		case REG_FUN:
 		case DEF_FUN:
-			for (AnnotationPart anno : fd.annotationIterable()) {
+			if (!(fd.getParent() instanceof ClassStatement)) return false;
+			for (AnnotationPart anno : ((ClassStatement) fd.getParent()).annotationIterable()) {
 				if (anno.annoClass().equals(Helpers.string_to_qualident("Primitive"))) {
 					return true;
 				}
