@@ -795,7 +795,7 @@ public class GenerateC {
 //					IdentTableEntry ite = gf.getIdentTableEntry(((IdentIA) ia).getIndex());
 //					sll.add(Emit.emit("/*748*/")+""+ite.getIdent().getText());
 					sll.add(Emit.emit("/*748*/")+""+path2);
-					System.out.println("743 "+path2);
+					System.out.println("743 "+path2+" "+path);
 				} else {
 					throw new IllegalStateException("Cant be here: Invalid InstructionArgument");
 				}

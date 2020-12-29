@@ -121,9 +121,9 @@ public class GeneratedFunction implements GeneratedNode {
 						// first getParent is VariableSequence
 						if (resolved_element.getParent().getParent() == getFD().getParent()) {
 							// A direct member value. Doesn't handle when indirect
-							text = "vsc->vm" + ((VariableStatement) resolved_element).getName();
+							text = Emit.emit("/*124*/")+"vsc->vm" + ((VariableStatement) resolved_element).getName();
 						} else {
-							text = Emit.emit("/*125*/")+"vv" + ((VariableStatement) resolved_element).getName();
+							text = Emit.emit("/*126*/")+"vv" + ((VariableStatement) resolved_element).getName();
 						}
 					} else {
 						throw new NotImplementedException();
