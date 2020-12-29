@@ -45,6 +45,11 @@ public class GetRealTargetNameTest {
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
+		// create x.foo, where x is a VAR and foo is unknown
+		// neither has type information
+		// GenerateC#getRealTargetName doesn't use type information
+		// TODO but what if foo was a property instead of a member
+		//
 		OS_Type type = null;
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
 		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte);
