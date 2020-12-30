@@ -80,14 +80,14 @@ public class GenerateFunctions {
 		final List<GeneratedNode> R = new ArrayList<GeneratedNode>();
 
 		for (final ClassItem item : namespaceStatement.getItems()) {
-			if (item instanceof FunctionDef) {
+			if (item instanceof DefFunctionDef) {
+				final DefFunctionDef defFunctionDef = (DefFunctionDef) item;
+				generateFunction/*generateDefFunction*/(defFunctionDef, namespaceStatement);
+//				defFunctionDef._a.setCode(nextFunctionCode());
+			} else if (item instanceof FunctionDef) {
 				final FunctionDef function_def = (FunctionDef) item;
 				generateFunction(function_def, namespaceStatement);
-				function_def._a.setCode(nextFunctionCode());
-			} else if (item instanceof DefFunctionDef) {
-				final DefFunctionDef defFunctionDef = (DefFunctionDef) item;
-				generateDefFunction(defFunctionDef, namespaceStatement);
-				defFunctionDef._a.setCode(nextFunctionCode());
+//				function_def._a.setCode(nextFunctionCode());
 			}
 		}
 
