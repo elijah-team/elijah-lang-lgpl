@@ -143,9 +143,9 @@ public class GeneratedFunction implements GeneratedNode {
 						if (text.equals("")) text = "vsc";
 						text = String.format("ZP%dget_%s(%s)", code, ((PropertyStatement) resolved_element).name(), text); // TODO Don't know if get or set!
 					} else {
-						throw new NotImplementedException();
 //						text = idte.getIdent().getText();
-//						System.out.println("1008 "+resolved_element.getClass().getName());
+						System.out.println("1008 "+resolved_element.getClass().getName());
+						throw new NotImplementedException();
 					}
 				} else {
 					// TODO make tests pass but I dont like this (should throw an exception: not enough information)
