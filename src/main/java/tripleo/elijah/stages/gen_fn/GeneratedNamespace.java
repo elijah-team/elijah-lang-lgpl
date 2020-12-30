@@ -28,7 +28,7 @@ public class GeneratedNamespace implements GeneratedNode {
 	private final OS_Module module;
 	private final NamespaceStatement namespaceStatement;
 	public List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
-	protected Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
+	public Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
 
 	public void addVarTableEntry(AccessNotation an, VariableStatement vs) {
 		// TODO dont ignore AccessNotation
