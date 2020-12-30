@@ -150,9 +150,9 @@ public class GeneratedFunction implements GeneratedNode {
 				} else {
 					// TODO make tests pass but I dont like this (should throw an exception: not enough information)
 					if (sl.size() == 0) {
-						text = idte.getIdent().getText(); // TODO check if it belongs somewhere else
+						text = Emit.emit("/*149*/")+idte.getIdent().getText(); // TODO check if it belongs somewhere else
 					} else {
-						text = Emit.emit("/*137*/")+"vm" + idte.getIdent().getText();
+						text = Emit.emit("/*152*/")+"vm" + idte.getIdent().getText();
 					}
 					int y = 2;
 				}
