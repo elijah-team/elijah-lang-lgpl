@@ -25,14 +25,17 @@ import java.util.List;
  */
 public class PipelineLogic {
 	final DeducePhase dp = new DeducePhase();
+	final List<OS_Module> mods = new ArrayList<OS_Module>();
 
-	public void run(OS_Module mod) {
-		try {
-			run2(mod);
-			dp.finish();
-			run3(mod);
-		} catch (IOException e) {
-			mod.parent.eee.exception(e);
+	public void run() {
+		for (OS_Module mod : mods) {
+			try {
+				run2(mod);
+				dp.finish();
+				run3(mod);
+			} catch (IOException e) {
+				mod.parent.eee.exception(e);
+			}
 		}
 	}
 
@@ -109,6 +112,14 @@ public class PipelineLogic {
 			}
 		}
 	}
+
+	public void addModule(OS_Module m) {
+		mods.add(m);
+	}
+
+//	public void generateCode() {
+//		run();
+//	}
 
 
 //	private int nextClassCode() { return module.parent.nextClassCode(); }

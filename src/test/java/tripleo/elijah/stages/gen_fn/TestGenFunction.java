@@ -221,8 +221,10 @@ public class TestGenFunction {
 
 		PipelineLogic pipelineLogic = new PipelineLogic();
 
-		pipelineLogic.run(m);
-		pipelineLogic.run(m.prelude);
+		pipelineLogic.addModule(m);
+		pipelineLogic.addModule(m.prelude);
+
+		pipelineLogic./*generateCode*/run();
 	}
 
 }
