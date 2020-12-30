@@ -183,7 +183,8 @@ public class GeneratedFunction implements GeneratedNode {
 	/**
 	 * Returns a string that represents the path encoded in ia2.
 	 * Does not transform the string into target language (ie C).
-	 * Called from {@link DeduceTypes2.do_assign_call}
+	 * Called from {@link DeduceTypes2.do_assign_call} or {@link DeduceTypes2.deduce_generated_function}
+	 * or {@link DeduceTypes2.resolveIdentIA}
 	 *
 	 * @param ia2 the path
 	 * @return a string that represents the path encoded in ia2
