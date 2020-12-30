@@ -571,7 +571,11 @@ public class GenerateC {
 
 		final OS_Type x = vte.type.attached;
 		if (x == null) {
-			System.err.println("8885 x is null (No typename specified) for "+ vte.getName());
+			if (vte.vtt == VariableTableType.TEMP) {
+				System.err.println("8884 temp variable has no type "+vte);
+			} else {
+				System.err.println("8885 x is null (No typename specified) for " + vte.getName());
+			}
 			return;
 		}
 
