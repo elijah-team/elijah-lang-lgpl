@@ -14,6 +14,7 @@ import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
@@ -756,9 +757,7 @@ public class GenerateC {
 				return ("" + ((NumericExpression) cte.initialValue).getValue());
 			case IDENT:
 				final String text = ((IdentExpression) cte.initialValue).getText();
-				if (text.equals("true") || text.equals("false"))
-					return text;
-				else if (text.equals("True") || text.equals("False"))
+				if (BuiltInTypes.isBooleanText(text))
 					return text;
 				else
 					throw new NotImplementedException();
