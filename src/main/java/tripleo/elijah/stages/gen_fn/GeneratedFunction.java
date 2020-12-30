@@ -128,6 +128,20 @@ public class GeneratedFunction implements GeneratedNode {
 							else
 								text = Emit.emit("/*126*/")+"vm" + ((VariableStatement) resolved_element).getName();
 						}
+					} else if (resolved_element instanceof PropertyStatement) {
+						OS_Element parent = resolved_element.getParent();
+						int code;
+						if (parent instanceof ClassStatement) {
+							code = ((ClassStatement) parent)._a.getCode();
+						} else if (parent instanceof NamespaceStatement) {
+							code = ((NamespaceStatement) parent)._a.getCode();
+						} else {
+//							code = -1;
+							throw new IllegalStateException("PropertyStatement cant have other parent than ns or cls. "+resolved_element.getClass().getName());
+						}
+						sl.clear();  // don't we want all the text including from sl?
+						if (text.equals("")) text = "vsc";
+						text = String.format("ZP%dget_%s(%s)", code, ((PropertyStatement) resolved_element).name(), text); // TODO Don't know if get or set!
 					} else {
 						throw new NotImplementedException();
 //						text = idte.getIdent().getText();
