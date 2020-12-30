@@ -907,8 +907,11 @@ public class GenerateC {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		List<String> ls = new LinkedList<String>();
 		// TODO in Deduce set property lookupType to denote what type of lookup it is: MEMBER, LOCAL, or CLOSURE
-		ls.add(Emit.emit("/*872*/")+"vm"+identTableEntry.getIdent().getText()); // TODO blindly adding "vm" might not always work, also put in loop
 		InstructionArgument backlink = identTableEntry.backlink;
+		if (backlink == null)
+			ls.add(Emit.emit("/*912*/")+"vsc->vm"+identTableEntry.getIdent().getText()); // TODO blindly adding "vm" might not always work, also put in loop
+		else
+			ls.add(Emit.emit("/*872*/")+"vm"+identTableEntry.getIdent().getText()); // TODO blindly adding "vm" might not always work, also put in loop
 		while (backlink != null) {
 			if (backlink instanceof IntegerIA) {
 				IntegerIA integerIA = (IntegerIA) backlink;
