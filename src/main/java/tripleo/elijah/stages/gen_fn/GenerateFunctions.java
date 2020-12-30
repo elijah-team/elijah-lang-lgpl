@@ -1123,7 +1123,7 @@ public class GenerateFunctions {
 	}
 
 	/**
-	 * Add a Constant Table Entry of type with Type Table Entry type {@link TypeTableEntry.Type.SPECIFIED}
+	 * Add a Constant Table Entry of type with Type Table Entry type {@link TypeTableEntry.Type#SPECIFIED}
 	 * @param name
 	 * @param initialValue
 	 * @param type
@@ -1138,7 +1138,7 @@ public class GenerateFunctions {
 	}
 
 	/**
-	 * Add a Constant Table Entry of type with Type Table Entry type {@link TypeTableEntry.Type.TRANSIENT}
+	 * Add a Constant Table Entry of type with Type Table Entry type {@link TypeTableEntry.Type#TRANSIENT}
 	 * @param name
 	 * @param initialValue
 	 * @param type
