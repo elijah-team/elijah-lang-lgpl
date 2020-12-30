@@ -123,7 +123,10 @@ public class GeneratedFunction implements GeneratedNode {
 							// A direct member value. Doesn't handle when indirect
 							text = Emit.emit("/*124*/")+"vsc->vm" + ((VariableStatement) resolved_element).getName();
 						} else {
-							text = Emit.emit("/*126*/")+"vv" + ((VariableStatement) resolved_element).getName();
+							if (resolved_element.getParent().getParent() == getFD())
+								text = Emit.emit("/*126*/")+"vv" + ((VariableStatement) resolved_element).getName();
+							else
+								text = Emit.emit("/*126*/")+"vm" + ((VariableStatement) resolved_element).getName();
 						}
 					} else {
 						throw new NotImplementedException();
