@@ -105,7 +105,7 @@ public class DeduceTypes2 {
 						if (y == null) {
 							module.parent.eee.reportError("1004 Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
 						} else {
-							found_element_for_ite(generatedFunction, ite, y);
+							found_element_for_ite(generatedFunction, ite, y, context);
 						}
 					}
 				}
@@ -340,7 +340,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	void found_element_for_ite(GeneratedFunction generatedFunction, IdentTableEntry ite, @Nullable OS_Element y) {
+	void found_element_for_ite(GeneratedFunction generatedFunction, IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
 		assert y == ite.resolved_element;
 
 		if (y instanceof VariableStatement) {
@@ -366,6 +366,30 @@ public class DeduceTypes2 {
 				ite.type.attached = attached;
 //							} else if (y instanceof ClassStatement) {
 
+		} else if (y instanceof PropertyStatement) {
+			PropertyStatement ps = (PropertyStatement) y;
+			OS_Type attached;
+			switch (ps.getTypeName().kindOfType()) {
+			case GENERIC:
+				attached = new OS_Type(ps.getTypeName());
+				break;
+			case NORMAL:
+				try {
+					attached = new OS_Type(resolve_type(new OS_Type(ps.getTypeName()), ctx).getClassOf());
+				} catch (ResolveError resolveError) {
+					System.err.println("378 resolveError");
+					resolveError.printStackTrace();
+					return;
+				}
+				break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + ps.getTypeName().kindOfType());
+			}
+			if (ite.type == null) {
+				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+			} else
+				ite.type.attached = attached;
+			int yy=2;
 		} else {
 			//LookupResultList exp = lookupExpression();
 			System.out.println("2009 "+y);
