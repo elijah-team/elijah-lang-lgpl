@@ -928,7 +928,11 @@ public class GenerateC {
 			} else
 				throw new IllegalStateException("Invalid InstructionArgument for backlink");
 		}
-		return Helpers.String_join("->", ls);
+		String path = gf.getIdentIAPath(target);
+		System.out.println("932 "+path);
+		String s = Helpers.String_join("->", ls);
+		System.out.println("933 "+s);
+		return s;
 	}
 }
 
