@@ -323,7 +323,7 @@ public class GeneratedFunction implements GeneratedNode {
 		return typeTableEntry;
 	}
 
-	public @NotNull OS_Element getFD() {
+	public @NotNull FunctionDef getFD() {
 		if (fd != null) return fd;
 		if (dfd != null) return dfd;
 		throw new IllegalStateException("No function");

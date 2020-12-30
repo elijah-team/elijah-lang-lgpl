@@ -44,7 +44,7 @@ public class DeduceTypes2 {
 	}
 
 	public void deduce_generated_function(final GeneratedFunction generatedFunction) {
-		final OS_Element fd = generatedFunction.getFD();
+		final FunctionDef fd = generatedFunction.getFD();
 		final Context fd_ctx = fd.getContext();
 		//
 		System.err.println("** deduce_generated_function "+((FunctionDef)fd).name());//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
