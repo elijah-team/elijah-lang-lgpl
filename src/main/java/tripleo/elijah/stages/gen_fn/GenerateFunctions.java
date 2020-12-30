@@ -58,7 +58,7 @@ public class GenerateFunctions {
 	}
 
 	private List<GeneratedNode> generateAllClassFunctions(@NotNull final ClassStatement classStatement) {
-		final List<GeneratedNode> R = new ArrayList<>();
+		final List<GeneratedNode> R = new ArrayList<GeneratedNode>();
 
 		for (final ClassItem item : classStatement.getItems()) {
 			if (item instanceof FunctionDef) {
@@ -364,7 +364,7 @@ public class GenerateFunctions {
 	}
 
 	public List<GeneratedNode> generateAllTopLevelClasses() {
-		List<GeneratedNode> R = new ArrayList<>();
+		List<GeneratedNode> R = new ArrayList<GeneratedNode>();
 
 		for (final ModuleItem item : module.getItems()) {
 			if (item instanceof NamespaceStatement) {
@@ -981,7 +981,7 @@ public class GenerateFunctions {
 			final int y=2;
 			left_ia = x;
 		}
-		final List<TypeTableEntry> args1 = new ArrayList<>();
+		final List<TypeTableEntry> args1 = new ArrayList<TypeTableEntry>();
 		for (final IExpression arg : args) {
 			final InstructionArgument ia;
 			final TypeTableEntry iat;
@@ -1028,7 +1028,7 @@ public class GenerateFunctions {
 	}
 
 	private @NotNull List<TypeTableEntry> get_args_types(@org.jetbrains.annotations.Nullable final ExpressionList args, @NotNull final GeneratedFunction gf) {
-		final List<TypeTableEntry> R = new ArrayList<>();
+		final List<TypeTableEntry> R = new ArrayList<TypeTableEntry>();
 		if (args == null) return R;
 		//
 		for (final IExpression arg : args) {
@@ -1082,7 +1082,7 @@ public class GenerateFunctions {
 	private Instruction expression_to_call_add_entry(@NotNull final GeneratedFunction gf, @NotNull final ProcedureCallExpression pce, final IExpression left, final Context cctx) {
 		final Instruction i = new Instruction();
 		i.setName(InstructionName.CALL); // TODO see line 686
-		final List<InstructionArgument> li = new ArrayList<>();
+		final List<InstructionArgument> li = new ArrayList<InstructionArgument>();
 //			int ii = addIdentTableEntry((IdentExpression) expression.getLeft(), gf);
 		final int pte_num = addProcTableEntry(left, gf.get_assignment_path(left, this), get_args_types(pce.getArgs(), gf), gf);
 		li.add(new IntegerIA(pte_num));

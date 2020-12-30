@@ -612,7 +612,7 @@ public class GenerateC {
 		// MTL A TEMP VARIABLE
 		//
 		@NotNull final Collection<TypeTableEntry> pt_ = vte.potentialTypes();
-		final List<TypeTableEntry> pt = new ArrayList<>(pt_);
+		final List<TypeTableEntry> pt = new ArrayList<TypeTableEntry>(pt_);
 		if (pt.size() == 1) {
 			final TypeTableEntry ty = pt.get(0);
 //			System.err.println("8885 " +ty.attached);
@@ -773,7 +773,7 @@ public class GenerateC {
 		@NotNull
 		private List<String> getAssignmentValueArgs(final Instruction inst, final GeneratedFunction gf, OS_Module module) {
 			final int args_size = inst.getArgsSize();
-			final List<String> sll = new ArrayList<>();
+			final List<String> sll = new ArrayList<String>();
 			for (int i = 1; i < args_size; i++) {
 				final InstructionArgument ia = inst.getArg(i);
 				final int y=2;

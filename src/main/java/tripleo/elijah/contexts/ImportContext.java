@@ -33,7 +33,7 @@ public class ImportContext extends Context {
 		for (final Qualident importStatementItem : carrier.parts()) {
 //			System.err.println("2005 "+importStatementItem);
 			if (module().isPackage(importStatementItem.toString())) {
-				final List<OS_Element> l = new ArrayList<>();
+				final List<OS_Element> l = new ArrayList<OS_Element>();
 				final OS_Package aPackage = module().getPackage(importStatementItem);
 //				LogEvent.logEvent(4003 , ""+aPackage.getElements());
 				for (final OS_Element element : aPackage.getElements()) {

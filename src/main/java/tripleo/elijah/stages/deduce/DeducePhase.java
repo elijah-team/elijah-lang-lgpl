@@ -42,7 +42,7 @@ public class DeducePhase {
 		}
 	}
 
-	private List<Triplet> forFunctions = new ArrayList<>();
+	private List<Triplet> forFunctions = new ArrayList<Triplet>();
 	private Multimap<FunctionDef, GeneratedFunction> functionMap = ArrayListMultimap.create();
 
 	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgf) {
