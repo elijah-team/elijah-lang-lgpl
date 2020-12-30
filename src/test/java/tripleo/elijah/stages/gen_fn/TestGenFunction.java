@@ -10,6 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.junit.Assert;
 import org.junit.Test;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
@@ -22,8 +23,6 @@ import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -203,10 +202,6 @@ public class TestGenFunction {
 		}
 	}
 
-	interface PipelineLogic {
-		void run(OS_Module mod);
-	}
-
 	@Test
 	public void testBasic1Backlink3Elijah() throws Exception {
 		final StdErrSink eee = new StdErrSink();
@@ -224,81 +219,10 @@ public class TestGenFunction {
 			c.use(ci, false);
 		}
 
-		PipelineLogic runnable = new PipelineLogic() {
-			final DeducePhase dp = new DeducePhase();
+		PipelineLogic pipelineLogic = new PipelineLogic();
 
-			@Override
-			public void run(OS_Module mod) {
-				try {
-					run2(mod);
-					dp.finish();
-					run3(mod);
-				} catch (IOException e) {
-					mod.parent.eee.exception(e);
-				}
-			}
-
-			List<GeneratedNode> lgc = null;
-
-			public void run2(OS_Module mod) {
-				final GenerateFunctions gfm = new GenerateFunctions(mod);
-//				final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
-				lgc = gfm.generateAllTopLevelClasses();
-
-				final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
-				for (GeneratedNode lgci : lgc) {
-					if (lgci instanceof GeneratedClass) {
-						lgf.addAll(((GeneratedClass) lgci).functionMap.values());
-					}
-				}
-
-//				for (final GeneratedNode gn : lgc) {
-//					if (gn instanceof GeneratedFunction) {
-//						GeneratedFunction gf = (GeneratedFunction) gn;
-//						for (final Instruction instruction : gf.instructions()) {
-//							System.out.println("8100 " + instruction);
-//						}
-//					}
-//				}
-
-				dp.deduceModule(mod, lgf);
-//				new DeduceTypes2(mod).deduceFunctions(lgf);
-
-//				for (final GeneratedNode gn : lgf) {
-//					if (gn instanceof GeneratedFunction) {
-//						GeneratedFunction gf = (GeneratedFunction) gn;
-//						System.out.println("----------------------------------------------------------");
-//						System.out.println(gf.name());
-//						System.out.println("----------------------------------------------------------");
-//						GeneratedFunction.printTables(gf);
-//						System.out.println("----------------------------------------------------------");
-//					}
-//				}
-
-			}
-
-			public void run3(OS_Module mod) throws IOException {
-				GenerateC ggc = new GenerateC(mod);
-//				ggc.generateCode(lgf);
-
-				for (GeneratedNode generatedNode : lgc) {
-					if (generatedNode instanceof GeneratedClass) {
-						GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-						ggc.generate_class(generatedClass);
-						ggc.generateCode2(generatedClass.functionMap.values());
-					} else if (generatedNode instanceof GeneratedNamespace) {
-						GeneratedNamespace generatedClass = (GeneratedNamespace) generatedNode;
-						ggc.generate_namespace(generatedClass);
-						ggc.generateCode2(generatedClass.functionMap.values());
-					} else {
-						System.out.println("2009 "+generatedNode.getClass().getName());
-					}
-				}
-			}
-		};
-
-		runnable.run(m);
-		runnable.run(m.prelude);
+		pipelineLogic.run(m);
+		pipelineLogic.run(m.prelude);
 	}
 
 }

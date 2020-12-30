@@ -1,0 +1,121 @@
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ *
+ * The contents of this library are released under the LGPL licence v3,
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ *
+ */
+package tripleo.elijah.comp;
+
+import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.NamespaceStatement;
+import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.stages.deduce.DeducePhase;
+import tripleo.elijah.stages.gen_c.GenerateC;
+import tripleo.elijah.stages.gen_fn.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created 12/30/20 2:14 AM
+ */
+public class PipelineLogic {
+	final DeducePhase dp = new DeducePhase();
+
+	public void run(OS_Module mod) {
+		try {
+			run2(mod);
+			dp.finish();
+			run3(mod);
+		} catch (IOException e) {
+			mod.parent.eee.exception(e);
+		}
+	}
+
+	List<GeneratedNode> lgc = null;
+
+	public void run2(OS_Module mod) {
+		final GenerateFunctions gfm = new GenerateFunctions(mod);
+//		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
+		lgc = gfm.generateAllTopLevelClasses();
+
+		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
+		for (GeneratedNode lgci : lgc) {
+			if (lgci instanceof GeneratedClass) {
+				lgf.addAll(((GeneratedClass) lgci).functionMap.values());
+			}
+		}
+
+//		for (final GeneratedNode gn : lgc) {
+//			if (gn instanceof GeneratedFunction) {
+//				GeneratedFunction gf = (GeneratedFunction) gn;
+//				for (final Instruction instruction : gf.instructions()) {
+//					System.out.println("8100 " + instruction);
+//				}
+//			}
+//		}
+
+		for (final GeneratedNode generatedNode : lgc) {
+			if (generatedNode instanceof GeneratedFunction) {
+				final FunctionDef fd = ((GeneratedFunction) generatedNode).getFD();
+				if (fd._a.getCode() == 0)
+					fd._a.setCode(mod.parent.nextFunctionCode());
+			} else if (generatedNode instanceof GeneratedClass) {
+				ClassStatement classStatement = ((GeneratedClass) generatedNode).getKlass();
+				if (classStatement._a.getCode() == 0)
+					classStatement._a.setCode(mod.parent.nextClassCode());
+			} else if (generatedNode instanceof GeneratedNamespace) {
+				NamespaceStatement namespaceStatement = ((GeneratedNamespace) generatedNode).getNamespaceStatement();
+				if (namespaceStatement._a.getCode() == 0)
+					namespaceStatement._a.setCode(mod.parent.nextClassCode());
+			}
+		}
+
+		dp.deduceModule(mod, lgf);
+//		new DeduceTypes2(mod).deduceFunctions(lgf);
+//
+//		for (final GeneratedNode gn : lgf) {
+//			if (gn instanceof GeneratedFunction) {
+//				GeneratedFunction gf = (GeneratedFunction) gn;
+//				System.out.println("----------------------------------------------------------");
+//				System.out.println(gf.name());
+//				System.out.println("----------------------------------------------------------");
+//				GeneratedFunction.printTables(gf);
+//				System.out.println("----------------------------------------------------------");
+//			}
+//		}
+
+	}
+
+	public void run3(OS_Module mod) throws IOException {
+		GenerateC ggc = new GenerateC(mod);
+//		ggc.generateCode(lgf);
+
+		for (GeneratedNode generatedNode : lgc) {
+			if (generatedNode instanceof GeneratedClass) {
+				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				ggc.generate_class(generatedClass);
+				ggc.generateCode2(generatedClass.functionMap.values());
+			} else if (generatedNode instanceof GeneratedNamespace) {
+				GeneratedNamespace generatedClass = (GeneratedNamespace) generatedNode;
+				ggc.generate_namespace(generatedClass);
+				ggc.generateCode2(generatedClass.functionMap.values());
+			} else {
+				System.out.println("2009 " + generatedNode.getClass().getName());
+			}
+		}
+	}
+
+
+//	private int nextClassCode() { return module.parent.nextClassCode(); }
+//	private int nextFunctionCode() { return module.parent.nextFunctionCode(); }
+
+}
+
+//
+//
+//
