@@ -258,6 +258,12 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		if (!(element instanceof ClassItem)) return false;
 		return items.contains((ClassItem) element);
 	}
+
+	public void addAnnotations(List<AnnotationClause> as) {
+		for (AnnotationClause annotationClause : as) {
+			addAnnotation(annotationClause);
+		}
+	}
 }
 
 //

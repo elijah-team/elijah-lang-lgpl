@@ -229,6 +229,11 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 		return items.contains(element);
 	}
 
+	public void addAnnotations(List<AnnotationClause> as) {
+		for (AnnotationClause annotationClause : as) {
+			addAnnotation(annotationClause);
+		}
+	}
 }
 
 //

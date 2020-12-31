@@ -32,7 +32,7 @@ public class ClassBuilder {
 	public ClassStatement build() {
 		ClassStatement cs = new ClassStatement(_parent, _parent_context);
 		cs.setType(_type);
-		assert  _name != null;
+		assert _name != null;
 		cs.setName(_name);
 		for (AnnotationClause annotation : annotations) {
 			cs.addAnnotation(annotation);
@@ -55,7 +55,7 @@ public class ClassBuilder {
 		return cs;
 	}
 
-	public void annotations(AnnotationClause a) {
+	public void annotation_clause(AnnotationClause a) {
 		if (a == null) return;
 		annotations.add(a);
 	}
@@ -80,6 +80,11 @@ public class ClassBuilder {
 		return _inh;
 	}
 
+	public void annotations(List<AnnotationClause> as) {
+		for (AnnotationClause annotationClause : as) {
+			annotation_clause(annotationClause);
+		}
+	}
 }
 
 //

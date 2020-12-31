@@ -3,6 +3,8 @@ header {
 }
 
 {
+import java.util.List;
+import java.util.ArrayList;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang.builder.*;
 import tripleo.elijah.contexts.*;
@@ -74,16 +76,38 @@ classStatement [OS_Element parent, ClassStatement cls]
       (invariantStatement[cls.invariantStatement()])?
      )
     RCURLY {cls.postConstruct();cur=ctx.getParent();}
-    | {cb = new ClassBuilder();cb.annotations(a);cb.setParent(parent);cb.setParentContext(cur);}
+    | {cb = new ClassBuilder();cb.annotation_clause(a);cb.setParent(parent);cb.setParentContext(cur);}
 	  classDefinition_interface[cb] // want to cb.build() here 
-	  					{((OS_Container)parent).add(cb.build());}
+	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
+	)
+	;
+
+classStatement__ [OS_Element parent, ClassStatement cls, List<AnnotationClause> as]
+		{AnnotationClause a=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;}
+	: {cls.addAnnotations(as);}
+    ("class"
+            ("struct"       {cls.setType(ClassTypes.STRUCTURE);}
+            |"signature"    {cls.setType(ClassTypes.SIGNATURE);}
+            |"abstract"     {cls.setType(ClassTypes.ABSTRACT);})?
+      i1=ident              {cls.setName(i1);}
+    ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
+    | classInheritanceRuby [cls.classInheritance()] )?
+    LCURLY                  {/*ctx=new ClassContext(cur, cls);cls.setContext(ctx);*/cur=cls.getContext();ctx=(ClassContext)cur;assert cur!=null;}
+     (classScope[cls]
+     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);}
+      (invariantStatement[cls.invariantStatement()])?
+     )
+    RCURLY {cls.postConstruct();cur=ctx.getParent();}
+    | {cb = new ClassBuilder();cb.annotations(as);cb.setParent(parent);cb.setParentContext(cur);}
+	  classDefinition_interface[cb] // want to cb.build() here 
+	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
 	)
 	;
 classStatement2 [BaseScope sc]
 		{AnnotationClause a=null;ClassBuilder cb=null;}
 	: {cb = new ClassBuilder();}
-	(a=annotation_clause  {cb.annotations(a);})*
-	  {cb.annotations(a);}
+	(a=annotation_clause  {cb.annotation_clause(a);})*
+	  //{cb.annotations(a);}
 	( classDefinition_normal[cb] 
     | classDefinition_struct[cb] 
     | classDefinition_signature[cb] 
@@ -233,9 +257,9 @@ annotation_clause returns [AnnotationClause a]
 			)?                                  {a.add(ap);}
 		)+ RBRACK
 	;
-namespaceStatement [NamespaceStatement cls]
+namespaceStatement__ [NamespaceStatement cls, List<AnnotationClause> as]
 		{AnnotationClause a=null;NamespaceContext ctx=null;IdentExpression i1=null;}
-	: (a=annotation_clause      {cls.addAnnotation(a);})*
+	: {cls.addAnnotations(as);}
     "namespace"
     (  i1=ident  	            {cls.setName(i1);}
     | 				            {cls.setType(NamespaceTypes.MODULE);}
@@ -535,13 +559,17 @@ functionDef2[FunctionDefBuilder fb]
     functionScope2[fb.scope()]
     ;
 programStatement[ProgramClosure pc, OS_Element cont]
-		{ImportStatement imp=null;}
+		{ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();}
     : imp=importStatement[cont]
-    | ("namespace")=> namespaceStatement[pc.namespaceStatement(cont, cur)]
-    | ("class")=> classStatement[cont, pc.classStatement(cont, cur)]
-    | (annotation_clause "namespace") => namespaceStatement[pc.namespaceStatement(cont, cur)]
-    | (annotation_clause "class") => classStatement[cont, pc.classStatement(cont, cur)]
-    | aliasStatement[pc.aliasStatement(cont)]
+	| ( (a=annotation_clause      {as.add(a);})*
+    | namespaceStatement__[new NamespaceStatement(cont, cur), as]
+    | classStatement__[cont, new ClassStatement(cont, cur), as]
+	)
+/*    | ("namespace")=> namespaceStatement[new NamespaceStatement(cont, cur)]
+    | ("class")=> classStatement[cont, new ClassStatement(cont, cur)]
+    | (annotation_clause "namespace") => namespaceStatement[new NamespaceStatement(cont, cur)]
+    | (annotation_clause "class") => classStatement[cont, new ClassStatement(cont, cur)]
+*/    | aliasStatement[pc.aliasStatement(cont)]
     ;
 programStatement2[ClassOrNamespaceScope cont]
 	: importStatement2[cont]
