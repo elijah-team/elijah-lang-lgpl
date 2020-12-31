@@ -267,6 +267,10 @@ public class OS_Module implements OS_Element, OS_Container {
 	public void addDocString(final Token s1) {
 		throw new NotImplementedException();
 	}
+
+	public void remove(ClassStatement cls) {
+		items.remove(cls);
+	}
 }
 
 //

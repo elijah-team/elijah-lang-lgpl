@@ -78,6 +78,7 @@ classStatement [OS_Element parent, ClassStatement cls]
     RCURLY {cls.postConstruct();cur=ctx.getParent();}
     | {cb = new ClassBuilder();cb.annotation_clause(a);cb.setParent(parent);cb.setParentContext(cur);}
 	  classDefinition_interface[cb] // want to cb.build() here 
+	  					{if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);}
 	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
 	)
 	;
@@ -100,6 +101,7 @@ classStatement__ [OS_Element parent, ClassStatement cls, List<AnnotationClause> 
     RCURLY {cls.postConstruct();cur=ctx.getParent();}
     | {cb = new ClassBuilder();cb.annotations(as);cb.setParent(parent);cb.setParentContext(cur);}
 	  classDefinition_interface[cb] // want to cb.build() here 
+	  					{if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);}
 	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
 	)
 	;
