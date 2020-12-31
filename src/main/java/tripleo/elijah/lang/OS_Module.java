@@ -192,22 +192,25 @@ public class OS_Module implements OS_Element, OS_Container {
 				final String element_name = ((OS_Element2) anElement).name();
 				// TODO make and check a nametable, will fail for imports
 				if (element_name == null) {
-//					throw new IllegalArgumentException("element2 with null name");
-					System.err.println(String.format("*** OS_Element2 (%s) with null name", anElement));
+					throw new IllegalArgumentException("element2 with null name");
+//					System.err.println(String.format("*** OS_Element2 (%s) with null name", anElement));
 				} else {
 					for (final ModuleItem item : items) { // TODO Use Multimap
-						if (item instanceof OS_Element2 && item != anElement)
-							if (element_name.equals(((OS_Element2) item).name())) {
-								if (anElement instanceof NamespaceStatement && item instanceof NamespaceStatement) {
-								} else {
-									if (!(element_name.equals("")))
-										parent.eee.reportWarning(String.format(
-											"[Module#add] %s Already has a member by the name of %s",
-											this, element_name));
-								}
-//								return;
-								break;
-							}
+						if (!(item instanceof OS_Element2 && item != anElement))
+							continue;
+						final String item_name = ((OS_Element2) item).name();
+						if (!(element_name.equals(item_name)))
+							continue;
+						if (anElement instanceof NamespaceStatement && item instanceof NamespaceStatement)
+							continue;
+
+						if (!(element_name.equals(""))) {
+							parent.eee.reportWarning(String.format(
+								"[Module#add] %s Already has a member by the name of %s",
+								this, element_name));
+							break;
+						}
+
 					}
 				}
 			}
