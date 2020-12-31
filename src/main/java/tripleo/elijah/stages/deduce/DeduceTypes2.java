@@ -10,6 +10,7 @@ package tripleo.elijah.stages.deduce;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
@@ -27,10 +28,12 @@ import java.util.*;
 public class DeduceTypes2 {
 	private final OS_Module module;
 	private final DeducePhase phase;
+	private final ErrSink errSink;
 
 	public DeduceTypes2(OS_Module module, DeducePhase phase) {
 		this.module = module;
 		this.phase = phase;
+		this.errSink = module.parent.eee;
 	}
 
 	public void deduceFunctions(final Iterable<GeneratedNode> lgf) {
@@ -102,7 +105,7 @@ public class DeduceTypes2 {
 						final String x = generatedFunction.getIdentIAPathNormal(identIA);
 						@Nullable OS_Element y = resolveIdentIA(context, identIA, module, generatedFunction);
 						if (y == null) {
-							module.parent.eee.reportError("1004 Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
+							errSink.reportError("1004 Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
 						} else {
 							found_element_for_ite(generatedFunction, ite, y, context);
 						}
@@ -127,7 +130,7 @@ public class DeduceTypes2 {
 									best = _resolveAlias((AliasStatement) best);
 								}
 								if (!(OS_Type.isConcreteType(best))) {
-									module.parent.eee.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
+									errSink.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
 								} else {
 //									System.out.println("705 " + best);
 									vte.type.attached = new OS_Type((ClassStatement) best);
@@ -182,7 +185,7 @@ public class DeduceTypes2 {
 									}
 								}
 							} else {
-								module.parent.eee.reportError("165 Can't resolve "+path);
+								errSink.reportError("165 Can't resolve "+path);
 							}
 						}
 					}
@@ -585,7 +588,7 @@ public class DeduceTypes2 {
 									rtype = resolve_type(ty, ctx);
 								} catch (ResolveError resolveError) {
 //									resolveError.printStackTrace();
-									module.parent.eee.reportError("Cant resolve " + ty); // TODO print better diagnostic
+									errSink.reportError("Cant resolve " + ty); // TODO print better diagnostic
 									continue;
 								}
 								LookupResultList lrl2 = rtype.getClassOf().getContext().lookup("__getitem__");
@@ -631,7 +634,7 @@ public class DeduceTypes2 {
 					if (best != null)
 						pte.resolved = best; // TODO do we need to add a dependency for class?
 					else {
-						module.parent.eee.reportError("Cant resolve "+text);
+						errSink.reportError("Cant resolve "+text);
 					}
 				} else {
 					implement_calls(generatedFunction, ctx.getParent(), instruction.getArg(1), pte, instructionIndex);
@@ -786,7 +789,7 @@ public class DeduceTypes2 {
 
 							if (!found) {
 								//throw new NotImplementedException(); // TODO
-								module.parent.eee.reportError("Special Function not found " + pn);
+								errSink.reportError("Special Function not found " + pn);
 							}
 						} else {
 							throw new NotImplementedException(); // Cant find vte, should never happen
@@ -811,7 +814,7 @@ public class DeduceTypes2 {
 
 							if (!found) {
 								//throw new NotImplementedException(); // TODO
-								module.parent.eee.reportError("Special Function not found " + pn);
+								errSink.reportError("Special Function not found " + pn);
 							}
 						} else
 							assert false;
@@ -991,7 +994,7 @@ public class DeduceTypes2 {
 						}
 					}
 				} else {
-					module.parent.eee.reportError("1001 Can't resolve "+text);
+					errSink.reportError("1001 Can't resolve "+text);
 					return null;
 				}
 			} else if (ia instanceof IdentIA) {
@@ -1015,7 +1018,7 @@ public class DeduceTypes2 {
 							throw new NotImplementedException();
 						}
 					} else {
-						module.parent.eee.reportError("1000 Can't resolve " + text);
+						errSink.reportError("1000 Can't resolve " + text);
 						return null; // README cant resolve pte. Maybe report error
 					}
 				} else {
@@ -1048,7 +1051,7 @@ public class DeduceTypes2 {
 				final LookupResultList lrl = ectx.lookup(text);
 				el = lrl.chooseBest(null);
 				if (el == null) {
-					module.parent.eee.reportError("1002 Can't resolve "+text);
+					errSink.reportError("1002 Can't resolve "+text);
 					return null;
 				} else {
 					ectx = el.getContext();
@@ -1078,7 +1081,7 @@ public class DeduceTypes2 {
 				final LookupResultList lrl = ectx.lookup(text);
 				el = lrl.chooseBest(null);
 				if (el == null) {
-					module.parent.eee.reportError("1007 Can't resolve "+text);
+					errSink.reportError("1007 Can't resolve "+text);
 					return null;
 				} else {
 					if (idte2.type == null) {
