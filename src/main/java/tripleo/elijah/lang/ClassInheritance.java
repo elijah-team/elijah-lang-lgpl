@@ -34,7 +34,7 @@ public class ClassInheritance {
 	}
 
 	public void addAll(final Collection<TypeName> tns) {
-		tns.addAll(tns);
+		this.tns.addAll(tns);
 	}
 
 }
