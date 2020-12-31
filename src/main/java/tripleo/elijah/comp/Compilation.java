@@ -126,16 +126,23 @@ public class Compilation {
 					// do nothing. job over
 				} else {
 					for (final OS_Module module : modules) {
-						new DeduceTypes(module).deduce();
-						for (final OS_Element2 item : module.items()) {
-							if (item instanceof ClassStatement || item instanceof NamespaceStatement)
-								System.err.println("8001 "+item);
-						}
-						new TranslateModule(module).translate();
-//						new ExpandFunctions(module).expand();
+						PipelineLogic pipeline = new PipelineLogic();
+						if (false) {
+							new DeduceTypes(module).deduce();
+							for (final OS_Element2 item : module.items()) {
+								if (item instanceof ClassStatement || item instanceof NamespaceStatement) {
+									System.err.println("8001 "+item);
+								}
+							}
+							new TranslateModule(module).translate();
+//							new ExpandFunctions(module).expand();
 //
-//      				final JavaCodeGen visit = new JavaCodeGen();
-//		        		module.visitGen(visit);
+//  	    				final JavaCodeGen visit = new JavaCodeGen();
+//			        		module.visitGen(visit);
+						} else {
+							pipeline.addModule(module);
+						}
+						pipeline.run();
 					}
 				}
 			} else {
