@@ -544,7 +544,7 @@ functionDef[FunctionDef fd]
     | "immutable"               {fd.set(FunctionModifiers.IMMUTABLE);})?
     opfal[fd.fal()]
     (TOK_ARROW tn=typeName2 {fd.setReturnType(tn);})?
-                                {ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
+                                {assert fd.getContext()!=null;ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
     functionScope[fd.scope()] 
     {fd.setType(FunctionDef.Type.REG_FUN);fd.postConstruct();}
     ;
