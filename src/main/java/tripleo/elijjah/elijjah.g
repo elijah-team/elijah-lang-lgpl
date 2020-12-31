@@ -80,6 +80,7 @@ classStatement [OS_Element parent, ClassStatement cls]
 	  classDefinition_interface[cb] // want to cb.build() here 
 	  					{if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);}
 	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
+						{cb.build();}
 	)
 	;
 
@@ -93,7 +94,7 @@ classStatement__ [OS_Element parent, ClassStatement cls, List<AnnotationClause> 
       i1=ident              {cls.setName(i1);}
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
-    LCURLY                  {/*ctx=new ClassContext(cur, cls);cls.setContext(ctx);*/cur=cls.getContext();ctx=(ClassContext)cur;assert cur!=null;}
+    LCURLY                  {cur=cls.getContext();ctx=(ClassContext)cur;}
      (classScope[cls]
      |"abstract"         {cls.setType(ClassTypes.ABSTRACT);}
       (invariantStatement[cls.invariantStatement()])?
@@ -103,6 +104,7 @@ classStatement__ [OS_Element parent, ClassStatement cls, List<AnnotationClause> 
 	  classDefinition_interface[cb] // want to cb.build() here 
 	  					{if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);}
 	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
+						{cb.build();}
 	)
 	;
 classStatement2 [BaseScope sc]

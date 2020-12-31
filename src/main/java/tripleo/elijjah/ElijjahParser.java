@@ -600,6 +600,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				if ( inputState.guessing==0 ) {
 					if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);
 				}
+				if ( inputState.guessing==0 ) {
+					cb.build();
+				}
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -1030,7 +1033,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				match(LCURLY);
 				if ( inputState.guessing==0 ) {
-					/*ctx=new ClassContext(cur, cls);cls.setContext(ctx);*/cur=cls.getContext();ctx=(ClassContext)cur;assert cur!=null;
+					cur=cls.getContext();ctx=(ClassContext)cur;
 				}
 				{
 				switch ( LA(1)) {
@@ -1102,6 +1105,9 @@ public ElijjahParser(ParserSharedInputState state) {
 				classDefinition_interface(cb);
 				if ( inputState.guessing==0 ) {
 					if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);
+				}
+				if ( inputState.guessing==0 ) {
+					cb.build();
 				}
 			}
 			else {
