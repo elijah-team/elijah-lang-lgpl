@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
-import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
@@ -38,7 +37,7 @@ public class DeduceTypes2 {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				deduce_generated_function(generatedFunction);
-				phase.addFunction(generatedFunction, (FunctionDef) generatedFunction.getFD());
+				phase.addFunction(generatedFunction, generatedFunction.getFD());
 			}
 		}
 	}
@@ -47,7 +46,7 @@ public class DeduceTypes2 {
 		final FunctionDef fd = generatedFunction.getFD();
 		final Context fd_ctx = fd.getContext();
 		//
-		System.err.println("** deduce_generated_function "+((FunctionDef)fd).name());//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
+		System.err.println("** deduce_generated_function "+ fd.name()+" "+fd);//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
 		//
 		for (final Instruction instruction : generatedFunction.instructions()) {
 			final Context context = generatedFunction.getContextFromPC(instruction.getIndex());
@@ -486,7 +485,7 @@ public class DeduceTypes2 {
 			}
 		}
 		for (final TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
-			System.out.println("770 "+tte);
+//			System.out.println("770 "+tte);
 			final IExpression e = tte.expression;
 			if (e == null) continue;
 			switch (e.getKind()) {
@@ -766,6 +765,8 @@ public class DeduceTypes2 {
 			}
 
 			if (i2 instanceof IntegerIA) {
+				throw new Error();
+/*
 				final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
 				final Context ctx = gf.getContextFromPC(pc); // might be inside a loop or something
 				final String vteName = vte.getName();
@@ -818,12 +819,13 @@ public class DeduceTypes2 {
 					} else
 						assert false;
 				}
-			} else {
+*/			} else {
 				final int y=2;
 				System.err.println("i2 is not IntegerIA ("+i2.getClass().getName()+")");
 			}
-		} else
-			throw new NotImplementedException(); // pn1 is not IdentExpression
+		}
+//	else
+//			throw new NotImplementedException(); // pn1 is not IdentExpression
 	}
 
 	private boolean lookup_name_calls(final Context ctx, final String pn, final ProcTableEntry fn1) {
