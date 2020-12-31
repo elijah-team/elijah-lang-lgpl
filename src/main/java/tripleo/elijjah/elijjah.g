@@ -1049,7 +1049,7 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 	  scope[pc.scope()]
 	| 
       LCURLY                  {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
-	   ( BOR formalArgList[pc.fal()] BOR )?
+	   BOR ( formalArgList[pc.fal()] )? BOR
 	  (statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);}
       | classStatement[sc.getParent(), new ClassStatement(sc.getParent(), cur)]
