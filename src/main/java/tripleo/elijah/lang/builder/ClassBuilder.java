@@ -50,7 +50,7 @@ public class ClassBuilder {
 			if (!(cs.hasItem(built))) // already added by constructor
 				cs.add(built);
 		}
-		_inh.setParent(cs);
+//		_inh.setParent(cs);
 		cs.setInheritance(_inh);
 		return cs;
 	}

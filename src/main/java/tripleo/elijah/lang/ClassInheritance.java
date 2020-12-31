@@ -20,18 +20,8 @@ import java.util.List;
 
 public class ClassInheritance {
 
-	private ClassStatement parent;
-
 	/**
-	 * Just set parent
-	 * @param aStatement
-	 */
-	public ClassInheritance(final ClassStatement aStatement) {
-		parent = aStatement;
-	}
-
-	/**
-	 * Do nothing and wait for setParent and addAll.
+	 * Do nothing and wait for addAll or add.
 	 * Used by ClassBuilder
 	 */
 	public ClassInheritance() {
@@ -47,9 +37,6 @@ public class ClassInheritance {
 		tns.addAll(tns);
 	}
 
-	public void setParent(ClassStatement parent) {
-		this.parent = parent;
-	}
 }
 
 //
