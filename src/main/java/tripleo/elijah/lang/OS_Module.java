@@ -198,9 +198,11 @@ public class OS_Module implements OS_Element, OS_Container {
 					for (final ModuleItem item : items) { // TODO Use Multimap
 						if (item instanceof OS_Element2 && item != anElement)
 							if (element_name.equals(((OS_Element2) item).name())) {
-								parent.eee.reportWarning(String.format(
-										"[Module#add] %s Already has a member by the name of %s",
-										this, element_name));
+								if (!(anElement instanceof NamespaceStatement && item instanceof NamespaceStatement)) {
+									parent.eee.reportWarning(String.format(
+											"[Module#add] %s Already has a member by the name of %s",
+											this, element_name));
+								}
 //								return;
 								break;
 							}
