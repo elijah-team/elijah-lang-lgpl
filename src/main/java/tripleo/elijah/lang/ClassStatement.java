@@ -34,27 +34,6 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	private ClassTypes _type;
 	private List<AccessNotation> accesses = new ArrayList<AccessNotation>();
 
-//	/**
-//	 * For XMLBeans. Must use setParent.
-//	 */
-//	public ClassStatement() {
-//	}
-
-//	@Deprecated public ClassStatement(final OS_Element aElement) {
-//		parent = aElement; // setParent
-//		if (aElement instanceof  OS_Module) {
-//			final OS_Module module = (OS_Module) aElement;
-//			//
-//			this.setPackageName(module.pullPackageName());
-//			_packageName.addElement(this);
-//			module.add(this);
-//		} else if (aElement instanceof OS_Container) {
-//			((OS_Container) aElement).add(this);
-//		} else {
-//			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", aElement));
-//		}
-//	}
-
 	public ClassStatement(final OS_Element aElement, final Context parentContext) {
 		parent = aElement; // setParent
 		if (aElement instanceof  OS_Module) {
@@ -70,14 +49,6 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		}
 		setContext(new ClassContext(parentContext, this));
 	}
-
-//	/**
-//	 * A simple add-to-list operation
-//	 * @param aDef
-//	 */
-//	public void add(ClassItem aDef) {
-//		items.add(aDef);
-//	}
 
 	@Override
 	public void addDocString(final Token aText) {
