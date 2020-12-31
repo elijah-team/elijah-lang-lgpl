@@ -565,11 +565,7 @@ programStatement[ProgramClosure pc, OS_Element cont]
     | namespaceStatement__[new NamespaceStatement(cont, cur), as]
     | classStatement__[cont, new ClassStatement(cont, cur), as]
 	)
-/*    | ("namespace")=> namespaceStatement[new NamespaceStatement(cont, cur)]
-    | ("class")=> classStatement[cont, new ClassStatement(cont, cur)]
-    | (annotation_clause "namespace") => namespaceStatement[new NamespaceStatement(cont, cur)]
-    | (annotation_clause "class") => classStatement[cont, new ClassStatement(cont, cur)]
-*/    | aliasStatement[pc.aliasStatement(cont)]
+    | aliasStatement[pc.aliasStatement(cont)]
     ;
 programStatement2[ClassOrNamespaceScope cont]
 	: importStatement2[cont]
