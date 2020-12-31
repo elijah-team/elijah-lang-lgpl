@@ -644,7 +644,7 @@ public class DeduceTypes2 {
 					pte.resolved = el;
 					if (el instanceof FunctionDef) {
 						FunctionDef fd = (FunctionDef) el;
-						OS_Type type = new OS_Type(fd.returnType());
+						OS_Type type = new OS_Type(fd.returnType()); // TODO what if returnType is not specified?
 						@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression);
 						vte.addPotentialType(instructionIndex, tte);
 					} else if (el instanceof ClassStatement) {
