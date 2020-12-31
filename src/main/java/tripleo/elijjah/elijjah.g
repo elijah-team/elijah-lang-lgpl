@@ -70,7 +70,7 @@ classStatement [OS_Element parent, ClassStatement cls]
       i1=ident              {cls.setName(i1);}
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
-    LCURLY                  {/*ctx=new ClassContext(cur, cls);cls.setContext(ctx);*/cur=cls.getContext();ctx=(ClassContext)cur;assert cur!=null;}
+    LCURLY                  {cur=cls.getContext();ctx=(ClassContext)cur;assert cur!=null;}
      (classScope[cls]
      |"abstract"         {cls.setType(ClassTypes.ABSTRACT);}
       (invariantStatement[cls.invariantStatement()])?
