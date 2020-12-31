@@ -561,7 +561,7 @@ functionDef2[FunctionDefBuilder fb]
 programStatement[ProgramClosure pc, OS_Element cont]
 		{ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();}
     : imp=importStatement[cont]
-	| ( (a=annotation_clause      {as.add(a);})*
+	| ( (a=annotation_clause      {as.add(a);})+
     | namespaceStatement__[new NamespaceStatement(cont, cur), as]
     | classStatement__[cont, new ClassStatement(cont, cur), as]
 	)
