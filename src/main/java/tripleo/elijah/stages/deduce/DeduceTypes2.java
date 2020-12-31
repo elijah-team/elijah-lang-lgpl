@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
+import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
@@ -765,8 +766,6 @@ public class DeduceTypes2 {
 			}
 
 			if (i2 instanceof IntegerIA) {
-				throw new Error();
-/*
 				final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
 				final Context ctx = gf.getContextFromPC(pc); // might be inside a loop or something
 				final String vteName = vte.getName();
@@ -819,13 +818,12 @@ public class DeduceTypes2 {
 					} else
 						assert false;
 				}
-*/			} else {
+			} else {
 				final int y=2;
 				System.err.println("i2 is not IntegerIA ("+i2.getClass().getName()+")");
 			}
-		}
-//	else
-//			throw new NotImplementedException(); // pn1 is not IdentExpression
+		} else
+			throw new NotImplementedException(); // pn1 is not IdentExpression
 	}
 
 	private boolean lookup_name_calls(final Context ctx, final String pn, final ProcTableEntry fn1) {
