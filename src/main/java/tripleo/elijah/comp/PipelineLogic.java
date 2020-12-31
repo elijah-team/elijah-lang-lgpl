@@ -29,9 +29,11 @@ public class PipelineLogic {
 
 	public void run() {
 		for (OS_Module mod : mods) {
+			run2(mod);
+			dp.finish();
+		}
+		for (OS_Module mod : mods) {
 			try {
-				run2(mod);
-				dp.finish();
 				run3(mod);
 			} catch (IOException e) {
 				mod.parent.eee.exception(e);
