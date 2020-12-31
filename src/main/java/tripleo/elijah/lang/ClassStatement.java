@@ -203,7 +203,8 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		_a.setContext(ctx);
 	}
 
-	public void postConstruct() { // TODO
+	public void postConstruct() {
+		assert clsName != null;
 	}
 
 	List<AnnotationClause> annotations = null;
