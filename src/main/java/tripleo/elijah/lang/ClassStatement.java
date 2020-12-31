@@ -66,8 +66,8 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 	
 	public String getName() {
-		if (clsName == null)
-			return "";
+//		if (clsName == null)
+//			return "";
 		return clsName.getText();
 	}
 	
