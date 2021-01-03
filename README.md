@@ -20,15 +20,16 @@ See [Language Overview](elijjah.md) for more details on the language.
 
 All of this is a work in progress and your support would be appreciated.
 
-oluoluolu+elijah (at) gmail.com
+oluoluolu+elijah \(at\) gmail.com
+[@tripleo33177393 Twitter](https://twitter.com/tripleo33177393)
 
 [google group](https://groups.google.com/forum/#!forum/elijjah)
 
-[Technical Wiki](https://gitlab.com/elijah-team/elijah-lang/-/wikis/home)
+[wiki](https://gitlab.com/elijah-team/elijah-lang/-/wikis/home)
 
 [GitBook: The Elijjah Book](https://oluoluolu-gh.gitbook.io/elijjah-book/)
 
-[Elijjah by Example](https://elijjah-by-example.github.io)
+[The Elijjah Book: mdbook](https://tripleo1.github.io/elijjah-book/) \(this one is better\)
 
 [GitBook: Elijjah by Example](https://oluoluolu-gh.gitbook.io/elijjah-by-example/)
 
