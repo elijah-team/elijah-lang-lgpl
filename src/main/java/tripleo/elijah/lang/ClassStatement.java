@@ -151,11 +151,11 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 	public ConstructorDef addCtor(final IdentExpression aConstructorName) {
-		return new ConstructorDef(aConstructorName, this);
+		return new ConstructorDef(aConstructorName, this, getContext());
 	}
 	
 	public DestructorDef addDtor() {
-		return new DestructorDef(this);
+		return new DestructorDef(this, getContext());
 	}
 	
 	public TypeAliasStatement typeAlias() {
