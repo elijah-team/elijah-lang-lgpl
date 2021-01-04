@@ -21,7 +21,6 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 	private FunctionDefScope _scope = new FunctionDefScope();
 	private List<FunctionModifiers> _mods = new ArrayList<FunctionModifiers>();
 	private TypeName _returnType;
-	private FormalArgList _fal;
 	private Context _context;
 
 	public FunctionDefScope scope() {
@@ -40,10 +39,13 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 	public FunctionDef build() {
 		FunctionDef functionDef = new FunctionDef(_parent, _context);
 		functionDef.setName(_name);
-		functionDef.setFal(_fal == null ? new FormalArgList() : _fal);
+		functionDef.setFal(mFal == null ? new FormalArgList() : mFal);
 		functionDef.setReturnType(_returnType);
 		for (FunctionModifiers mod : _mods) {
 			functionDef.set(mod);
+		}
+		for (AnnotationClause a : annotations) {
+			functionDef.addAnnotation(a);
 		}
 		if (_scope.isAbstract()) {
 			functionDef.setAbstract(true);
