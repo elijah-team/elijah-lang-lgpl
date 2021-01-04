@@ -62,8 +62,8 @@ qualident returns [Qualident q]
       (d1:DOT r2=ident {q.appendDot(d1); q.append(r2);})*
     ;
 
-classStatement3__ [OS_Element parent, Context cctx, List<AnnotationClause> as]
-		{AnnotationClause a=null;ClassStatement cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;}
+classStatement3__ [OS_Element parent, Context cctx, List<AnnotationClause> as] returns [ClassStatement cls]
+		{AnnotationClause a=null;cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;}
 	: 
     ("class"				{cls = new ClassStatement(parent, cctx);cls.addAnnotations(as);}
             ("struct"       {cls.setType(ClassTypes.STRUCTURE);}
@@ -82,7 +82,7 @@ classStatement3__ [OS_Element parent, Context cctx, List<AnnotationClause> as]
 	  classDefinition_interface[cb] // want to cb.build() here 
 	  					{if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);}
 	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
-						{cb.build();}
+						{cls=cb.build();}
 	)
 	;
 classStatement2 [BaseScope sc]
@@ -372,11 +372,11 @@ namespaceScope2[NamespaceScope cr]
     (invariantStatement[cr.invariantStatement()])?
     ;
 scope3[OS_Element parent] returns [Scope3 sc]
-		{sc=new Scope3(parent);}
+		{sc=new Scope3(parent);ClassStatement cls=null;}
     : LCURLY docstrings[sc]
       ((statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);} //expr.setContext(cur);
-      | classStatement3__[sc.getParent(), cur, null/*annotations*/]
+      | cls=classStatement3__[sc.getParent(), cur, null/*annotations*/] {sc.add(cls);}
       | "continue"
       | "break" // opt label?
       | "return" ((expression) => (expr=expression)|)
@@ -442,14 +442,14 @@ syntacticBlockScope2[BaseScope sc]
 									{sc.add(sbb);}
 	;
 functionScope[FunctionDef parent] returns [Scope3 sc]
-		{sc=new Scope3(parent);}
+		{sc=new Scope3(parent);ClassStatement cls=null;}
     : LCURLY docstrings[sc]
 //	  (preConditionSegment[sc])? 
       (
         (
             ( statement[sc.statementClosure(), sc.getParent()]
             | expr=expression {sc.statementWrapper(expr);}
-            | classStatement3__[sc.getParent(), cur, null/*annotations*/]
+            | cls=classStatement3__[sc.getParent(), cur, null/*annotations*/] {sc.add(cls);}
             | "continue"
             | "break" // opt label?
             | "return" ((expression) => (expr=expression)|)
@@ -540,7 +540,7 @@ programStatement[ProgramClosure pc, OS_Element cont]
     : imp=importStatement[cont]
 	| ( (a=annotation_clause      {as.add(a);})+
     | namespaceStatement__[new NamespaceStatement(cont, cur), as]
-    | classStatement3__[cont, cur, as]
+    | classStatement3__[cont, cur, as] // TODO check if class in class works
 	)
     | aliasStatement[pc.aliasStatement(cont)]
     ;
