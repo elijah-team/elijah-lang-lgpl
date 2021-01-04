@@ -30,7 +30,8 @@ public class DeduceTypesTest2 {
 		cs.setName(Helpers.string_to_ident("Test"));
 		final FunctionDef fd = cs.funcDef();
 		fd.setName((Helpers.string_to_ident("test")));
-		final VariableSequence vss = fd.scope().statementClosure().varSeq(fd.getContext());
+		Scope3 scope3 = new Scope3(fd);
+		final VariableSequence vss = scope3.statementClosure().varSeq(fd.getContext());
 		final VariableStatement vs = vss.next();
 		vs.setName((Helpers.string_to_ident("x")));
 		final Qualident qu = new Qualident();
@@ -39,6 +40,11 @@ public class DeduceTypesTest2 {
 		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
+		fd.scope(scope3);
+		fd.postConstruct();
+		cs.postConstruct();
+		mod.postConstruct();
+
 		final DeduceTypes d = new DeduceTypes(mod);
 		final OS_Type x = d.deduceExpression(x1, fc);
 		System.out.println(x);
@@ -48,9 +54,7 @@ public class DeduceTypesTest2 {
 		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
-		fd.postConstruct();
-		cs.postConstruct();
-		mod.postConstruct();
+
 //		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
 		Assert.assertEquals(new OS_Type(tn), x);
 //		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());

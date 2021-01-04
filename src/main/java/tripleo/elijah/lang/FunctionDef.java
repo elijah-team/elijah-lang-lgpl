@@ -14,21 +14,18 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 // TODO FunctionDef is not a Container is it?
 public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
 
 	protected Type _type;
+	private Scope3 scope3;
 
 	public Iterable<FormalArgListItem> getArgs() {
 		return mFal.items();
@@ -38,46 +35,17 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		this._returnType = tn;
 	}
 
+	public void scope(Scope3 sco) {
+		scope3 = sco;
+	}
+
 	public enum Type {
 		DEF_FUN,
 		PROP_SET, PROP_GET, REG_FUN
 	}
 
-	public static class FunctionDefScope extends AbstractScope2 implements Documentable {
-
-		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
-		private final List<String> mDocs = new ArrayList<String>();
-
-		private final AbstractStatementClosure asc = new AbstractStatementClosure(this, getParent());
-
-		public FunctionDefScope(OS_Element aParent) {
-			super(aParent);
-		}
-
-		@Override
-		public void add(final StatementItem aItem) {
-			if (!(aItem instanceof FunctionItem)) {
-				System.err.println(String.format("Will not add false StatementItem, is not FunctionItem %s", aItem.getClass().getName()));
-				return;
-			}
-			items.add((FunctionItem) aItem);
-		}
-		
-		@Override
-		public void addDocString(final Token aS) {
-			mDocs.add(aS.getText());
-		}
-		
-		@Override
-		public StatementClosure statementClosure() {
-			return asc;
-		}
-
-	}
-
 	public Attached _a = new Attached();
 	private TypeName _returnType = null;
-	private final FunctionDefScope mScope2 = new FunctionDefScope(this);
 
 	// region constructor
 
@@ -135,31 +103,31 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	}
 
 	public List<FunctionItem> getItems() {
-		return mScope2.items;
+		List<FunctionItem> collection = new ArrayList<FunctionItem>();
+		for (OS_Element element : scope3.items()) {
+			if (element instanceof FunctionItem)
+				collection.add((FunctionItem) element);
+		}
+		return collection;
+		//return mScope2.items;
 	}
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
-		final Collection<FunctionItem> c = Collections2.filter(getItems(), new Predicate<FunctionItem>() {
-			@Override
-			public boolean apply(@Nullable final FunctionItem input) {
-				final boolean b = input instanceof OS_Element2;
-//				System.out.println(String.format("%s %b", input, b));
-				return b;
-			}
-		});
 		final ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
-		for (final FunctionItem functionItem : c) {
-			a.add((OS_Element2) functionItem);
+		for (final OS_Element functionItem : scope3.items()) {
+			if (functionItem instanceof OS_Element2)
+				a.add((OS_Element2) functionItem);
 		}
 		return a;
 	}
 
 	@Override // OS_Container
 	public void add(final OS_Element anElement) {
-		if (anElement instanceof FunctionItem)
-			mScope2.add((StatementItem) anElement);
-		else
+		if (anElement instanceof FunctionItem) {
+//			mScope2.add((StatementItem) anElement);
+			scope3.add(anElement);
+		} else
 			throw new IllegalStateException(String.format("Cant add %s to FunctionDef", anElement));
 	}
 
@@ -177,10 +145,6 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	public TypeName returnType() {
 //		if (_returnType.isNull()) System.err.println("101 NULL (Unresolved) returnType");
 		return _returnType;
-	}
-
-	public Scope scope() {
-		return mScope2;
 	}
 
 //	public void visit(JavaCodeGen gen) {
@@ -238,13 +202,34 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		annotations.add(a);
 	}
 
+	public void walkAnnotations(AnnotationWalker annotationWalker) {
+		if (annotations == null) return;
+		for (AnnotationClause annotationClause : annotations) {
+			for (AnnotationPart annotationPart : annotationClause.aps) {
+				annotationWalker.annotation(annotationPart);
+			}
+		}
+	}
+
+	public Iterable<AnnotationPart> annotationIterable() {
+		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
+		if (annotations == null) return aps;
+		for (AnnotationClause annotationClause : annotations) {
+			for (AnnotationPart annotationPart : annotationClause.aps) {
+				aps.add(annotationPart);
+			}
+		}
+		return aps;
+	}
+
 	// endregion
 
 	// region Documentable
 	
 	@Override  // Documentable
 	public void addDocString(final Token aText) {
-		mScope2.mDocs.add(aText.getText());
+//		mScope2.mDocs.add(aText.getText());
+		scope3.addDocString(aText);
 	}
 
 	// endregion
@@ -271,28 +256,8 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	// endregion
 
-	public void walkAnnotations(AnnotationWalker annotationWalker) {
-		if (annotations == null) return;
-		for (AnnotationClause annotationClause : annotations) {
-			for (AnnotationPart annotationPart : annotationClause.aps) {
-				annotationWalker.annotation(annotationPart);
-			}
-		}
-	}
-
 	public Type getType() {
 		return _type;
-	}
-
-	public Iterable<AnnotationPart> annotationIterable() {
-		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
-		if (annotations == null) return aps;
-		for (AnnotationClause annotationClause : annotations) {
-			for (AnnotationPart annotationPart : annotationClause.aps) {
-				aps.add(annotationPart);
-			}
-		}
-		return aps;
 	}
 
 	@Override

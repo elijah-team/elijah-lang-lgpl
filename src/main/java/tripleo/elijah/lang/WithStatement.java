@@ -11,6 +11,7 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.contexts.WithContext;
 import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,17 +24,13 @@ public class WithStatement implements OS_Element, OS_Container, FunctionItem, St
 	private final OS_Element _parent;
 	private WithContext ctx;
 	private final List<FunctionItem> _items = new ArrayList<FunctionItem>();
-	private final List<String> mDocs = new ArrayList<String>();
-	private Scope _scope = new /*WithScope*/AbstractBlockScope(this) {
-		@Override
-		public Context getContext() {
-			return WithStatement.this.getContext();
-		}
-	};
+//	private final List<String> mDocs = new ArrayList<String>();
+	private Scope3 scope3;
 
 	@Override
 	public void addDocString(final Token aText) {
-		mDocs.add(aText.getText());
+		scope3.addDocString(aText);
+//		mDocs.add(aText.getText());
 	}
 
 	public WithStatement(final OS_Element aParent) {
@@ -42,7 +39,7 @@ public class WithStatement implements OS_Element, OS_Container, FunctionItem, St
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-
+		throw new NotImplementedException();
 	}
 
 	@Override
@@ -73,10 +70,6 @@ public class WithStatement implements OS_Element, OS_Container, FunctionItem, St
 		this.ctx = ctx;
 	}
 
-	public Scope scope() {
-		return _scope;
-	}
-
 	public void postConstruct() {
 	}
 
@@ -92,63 +85,10 @@ public class WithStatement implements OS_Element, OS_Container, FunctionItem, St
 		_items.add((FunctionItem) anElement);
 	}
 
-//	public final class WithScope implements Scope {
-//
-//		private final AbstractStatementClosure asc = new AbstractStatementClosure(this, getParent());
-//
-//		@Override
-//		public void add(StatementItem aItem) {
-//			if (aItem instanceof FunctionItem)
-//				_items.add((FunctionItem) aItem);
-//			else
-//				System.err.println(String.format("adding false FunctionItem %s", aItem.getClass().getName()));
-//		}
-//
-//		@Override
-//		public void addDocString(Token aS) {
-//			mDocs.add(aS.getText());
-//		}
-//
-//		@Override
-//		public BlockStatement blockStatement() {
-//			return new BlockStatement(this);
-//		}
-//
-//		@Override
-//		public InvariantStatement invariantStatement() {
-//			return null;
-//		}
-//
-//		@Override
-//		public StatementClosure statementClosure() {
-//			return asc;
-//		}
-//
-//		@Override
-//		public void statementWrapper(IExpression aExpr) {
-//			add(new StatementWrapper(aExpr, getContext(), getParent()));
-//		}
-//
-//		@Override
-//		public TypeAliasStatement typeAlias() {
-//			return null;
-//		}
-//
-//		/* (non-Javadoc)
-//		 * @see tripleo.elijah.lang.Scope#getParent()
-//		 */
-//		@Override
-//		public OS_Element getParent() {
-//			return WithStatement.this;
-//		}
-//
-//		@Override
-//		public OS_Element getElement() {
-//			return WithStatement.this;
-//		}
-//
-//
-//	}
+	public void scope(Scope3 sco) {
+		scope3 = sco;
+	}
+
 }
 
 //

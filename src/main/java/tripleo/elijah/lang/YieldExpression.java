@@ -8,16 +8,34 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
-public class YieldExpression extends BasicBinaryExpression implements StatementItem {
-
-	public YieldExpression(final Scope aScope) {
-		throw new NotImplementedException();
-	}
+public class YieldExpression /*extends BasicBinaryExpression*/ implements OS_Element, StatementItem {
 
 	public YieldExpression(final IExpression aExpr) {
 		// TODO Auto-generated constructor stub
 		throw new NotImplementedException();
 	}
+
+	@Override
+	public void visitGen(ICodeGen visit) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public OS_Element getParent() {
+		throw new NotImplementedException();
+//		return null;
+	}
+
+	@Override
+	public Context getContext() {
+		throw new NotImplementedException();
+//		return null;
+	}
 }
+
+//
+//
+//

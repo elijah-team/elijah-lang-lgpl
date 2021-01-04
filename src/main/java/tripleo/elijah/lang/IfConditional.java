@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
 import tripleo.elijah.contexts.IfConditionalContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
@@ -18,37 +17,28 @@ import java.util.List;
 
 public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 
-//	private final Scope parent_scope;
-	private final IfConditional sibling;
+//	private final IfConditional sibling;
 	private final List<IfConditional> parts = new ArrayList<IfConditional>();
-//	private int order = 0;
 	private IExpression expr;
-	private final List<OS_Element> _items = new ArrayList<OS_Element>();
-	final IfConditionalScope _scope = new IfConditionalScope(this);
+//	private final List<OS_Element> _items = new ArrayList<OS_Element>();
+//	final IfConditionalScope _scope = new IfConditionalScope(this);
 	private final OS_Element _parent;
 	private Context _ctx;
-//	private final IfExpression if_parent;
+	private Scope3 scope3;
 
 	public IfConditional(final OS_Element _parent) {
 		this._parent = _parent;
 		this._ctx = null;
-		this.sibling = null;
+//		this.sibling = null;
 	}
 
 	public IfConditional(final IfConditional ifExpression) {
-		this.sibling = ifExpression;
-//		this.order = ++sibling/*if_parent*/.order;
+//		this.sibling = ifExpression;
 		//
 		this._ctx = new IfConditionalContext(ifExpression._ctx, this, true);
 		this._parent = ifExpression._parent;
-//		this.parent_scope = this.sibling.parent_scope;
 	}
 	
-//	public IfConditional(Scope aClosure) {
-//		this.parent_scope = aClosure;
-//		this.sibling = null; // top
-//	}
-
 	@Override
 	public void visitGen(final ICodeGen visit) {
 		throw new NotImplementedException();
@@ -88,17 +78,10 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 	public void expr(final IExpression expr) {
 		this.expr = expr;
 	}
-	
-	/**
-	 * will always be nonnull
-	 *
-	 */
-	public Scope scope() {
-		return _scope;
-	}
-	
+
 	public List<OS_Element> getItems() {
-		return _items;
+		return scope3.items();
+//		return _items;
 	}
 
 	public List<IfConditional> getParts() {
@@ -109,7 +92,11 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		_ctx = ifConditionalContext;
 	}
 
-	private class IfConditionalScope extends AbstractScope2 {
+	public void scope(Scope3 sco) {
+		scope3 = sco;
+	}
+
+	/*private class IfConditionalScope extends AbstractScope2 {
 		private List<Token> mDocs;
 
 		protected IfConditionalScope(OS_Element aParent) {
@@ -124,7 +111,7 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 			mDocs.add(s);
 		}
 
-//		/*@ requires parent != null; */
+//		/*@ requires parent != null; * /
 //		@Override
 //		public void statementWrapper(final IExpression aExpr) {
 //			//if (parent_scope == null) throw new IllegalStateException("parent is null");
@@ -140,10 +127,11 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		public void add(final StatementItem aItem) {
 			IfConditional.this.add(aItem);
 		}
-	}
+	}*/
 
 	private void add(final StatementItem aItem) {
-		_items.add((OS_Element) aItem);
+		scope3.add((OS_Element) aItem);
+		//_items.add((OS_Element) aItem);
 	}
 
 }

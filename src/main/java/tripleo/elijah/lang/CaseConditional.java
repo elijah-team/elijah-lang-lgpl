@@ -35,6 +35,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 	private HashMap<IExpression, CaseScope> scopes = new LinkedHashMap<IExpression, CaseScope>();
 	private CaseScope default_case_scope = null;
 	private CaseContext __ctx = null; // TODO look into removing this
+	private Scope3 scope3;
 
 	public CaseConditional(final OS_Element parent, final Context parentContext) {
         this.parent = parent;
@@ -80,6 +81,11 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 
 	public void setContext(final CaseContext ctx) {
 		__ctx = ctx;
+	}
+
+	public void scope(Scope3 sco, IExpression expr) {
+		scope3 = sco;
+		this.expr = expr;
 	}
 
 	public class CaseScope implements OS_Container, OS_Element {

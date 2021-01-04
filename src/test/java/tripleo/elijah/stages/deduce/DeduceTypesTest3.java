@@ -36,12 +36,14 @@ public class DeduceTypesTest3 {
 		cs_foo.setName(Helpers.string_to_ident("Foo"));
 		final FunctionDef fd = cs.funcDef();
 		fd.setName(Helpers.string_to_ident("test"));
-		final VariableSequence vss = fd.scope().statementClosure().varSeq(fd.getContext());
+		Scope3 scope3 = new Scope3(fd);
+		final VariableSequence vss = scope3.statementClosure().varSeq(fd.getContext());
 		final VariableStatement vs = vss.next();
 		vs.setName(Helpers.string_to_ident("x"));
 		final Qualident qu = new Qualident();
 		qu.append(Helpers.string_to_ident("Foo"));
 		((NormalTypeName)vs.typeName()).setName(qu);
+		fd.scope(scope3);
 		fd.postConstruct();
 		cs_foo.postConstruct();
 		cs.postConstruct();

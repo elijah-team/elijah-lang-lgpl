@@ -28,23 +28,27 @@ public class PropertyStatementBuilder extends ElBuilder {
 		ps.setName(this.prop_name);
 		ps.setTypeName(this.tn);
 		if (_get_scope != null) {
+			Scope3 scope3 = new Scope3(ps.get_fn);
 			for (ElBuilder gsi : _get_scope.items()) {
 				gsi.setParent(ps);
 				gsi.setContext(ps.getContext());
 				OS_Element built = gsi.build();
-				ps.get_scope().add((StatementItem) built);
+				scope3.add(built);
 			}
+			ps.get_fn.scope(scope3);
 		} else if (_get_is_abstract) {
 			ps.get_fn.setAbstract(true);
 		} else
 			ps.get_fn = null;
 		if (_set_scope != null) {
+			Scope3 scope3 = new Scope3(ps.set_fn);
 			for (ElBuilder gsi : _set_scope.items()) {
 				gsi.setParent(ps);
 				gsi.setContext(ps.getContext());
 				OS_Element built = gsi.build();
-				ps.set_scope().add((StatementItem) built);
+				scope3.add(built);
 			}
+			ps.set_fn.scope(scope3);
 		} else if (_set_is_abstract) {
 			ps.set_fn.setAbstract(true);
 		} else

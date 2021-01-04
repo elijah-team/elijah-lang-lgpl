@@ -6,15 +6,11 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  *
  */
-/**
- *
- */
 package tripleo.elijah.lang;
 
 import antlr.Token;
 import tripleo.elijah.contexts.MatchConditionalContext;
 import tripleo.elijah.contexts.MatchContext;
-import tripleo.elijah.contexts.SingleIdentContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -28,7 +24,7 @@ import java.util.List;
  */
 public class MatchConditional implements OS_Element, StatementItem, FunctionItem {
 
-	private final SingleIdentContext _ctx;
+//	private final SingleIdentContext _ctx;
 	private final List<MC1> parts = new ArrayList<MC1>();
 	private IExpression expr;
 	private OS_Element parent;
@@ -36,7 +32,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 	public MatchConditional(final OS_Element parent, final Context parentContext) {
 		this.parent = parent;
-		this._ctx = new SingleIdentContext(parentContext, this);
+//		this._ctx = new SingleIdentContext(parentContext, this);
 	}
 
 	public List<MC1> getParts() {
@@ -127,6 +123,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 	}
 
+/*
 	private final class MatchConditionalScope extends AbstractScope2 {
 
 		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
@@ -153,29 +150,22 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 //		@Override
 //		public void statementWrapper(final IExpression aExpr) {
-//			element.add(new StatementWrapper(aExpr, getContext(), /*MatchConditional.this.*/getParent()));
+//			element.add(new StatementWrapper(aExpr, getContext(), /*MatchConditional.this.* /getParent()));
 //		}
 	}
+*/
 
 	public class MatchConditionalPart3 implements MC1 {
 
 		private final Context ___ctx = new MatchConditionalContext(MatchConditional.this.getContext(), this);
 
-		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+//		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 		private List<Token> docstrings = null;
 		private IdentExpression matching_expression;
+		private Scope3 scope3;
 
 		public void expr(final IdentExpression expr) {
 			this.matching_expression = expr;
-		}
-
-		public Scope scope() {
-			return new MatchConditionalScope(this);
-		}
-
-		@Override
-		public void add(final FunctionItem aItem) {
-			items.add(aItem);
 		}
 
 		@Override
@@ -184,20 +174,37 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 
 		@Override
-		public Iterable<? extends FunctionItem> getItems() {
-			return items;
+		public void add(final FunctionItem aItem) {
+			scope3.add((OS_Element) aItem);
+			//items.add(aItem);
 		}
 
 		@Override
 		public void addDocString(final Token text) {
-			if (docstrings == null)
-				docstrings = new ArrayList<Token>();
-			docstrings.add(text);
+//			if (docstrings == null)
+//				docstrings = new ArrayList<Token>();
+//			docstrings.add(text);
+			scope3.addDocString(text);
+		}
+
+		@Override
+		public List<FunctionItem> getItems() {
+			List<FunctionItem> collection = new ArrayList<FunctionItem>();
+			for (OS_Element element : scope3.items()) {
+				if (element instanceof FunctionItem)
+					collection.add((FunctionItem) element);
+			}
+			return collection;
+//			return items;
 		}
 
 		@Override
 		public OS_Element getParent() {
 			return MatchConditional.this;
+		}
+
+		public void scope(Scope3 sco) {
+			scope3=sco;
 		}
 	}
 
@@ -205,14 +212,10 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 		private final Context ___ctx = new MatchConditionalContext(MatchConditional.this.getContext(), this);
 
-		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
-		private List<Token> docstrings = new ArrayList<Token>();
+//		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+//		private List<Token> docstrings = new ArrayList<Token>();
 		private IExpression matching_expression;
-
-		@Override
-		public List<FunctionItem> getItems() {
-			return items;
-		}
+		private Scope3 scope3;
 
 		public IExpression getMatchingExpression() {
 			return matching_expression;
@@ -222,20 +225,29 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 			this.matching_expression = expr;
 		}
 
-		public Scope scope() {
-			return new MatchConditionalScope(this);
-		}
-
 		@Override
 		public void add(final FunctionItem aItem) {
-			items.add(aItem);
+			scope3.add((OS_Element) aItem);
+			//items.add(aItem);
 		}
 
 		@Override
 		public void addDocString(final Token text) {
-			if (docstrings == null)
-				docstrings = new ArrayList<Token>();
-			docstrings.add(text);
+//			if (docstrings == null)
+//				docstrings = new ArrayList<Token>();
+//			docstrings.add(text);
+			scope3.addDocString(text);
+		}
+
+		@Override
+		public List<FunctionItem> getItems() {
+			List<FunctionItem> collection = new ArrayList<FunctionItem>();
+			for (OS_Element element : scope3.items()) {
+				if (element instanceof FunctionItem)
+					collection.add((FunctionItem) element);
+			}
+			return collection;
+//			return items;
 		}
 
 		@Override
@@ -247,44 +259,49 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		public OS_Element getParent() {
 			return MatchConditional.this;
 		}
+
+		public void scope(Scope3 sco) {
+			scope3 = sco;
+		}
 	}
 
 	public class MatchConditionalPart1 implements MC1 {
 
-		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+//		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 		private final Context ___ctx = new MatchConditionalContext(MatchConditional.this.getContext(), this);
 
 		TypeName tn /*= new RegularTypeName()*/;
-		private List<Token> docstrings = new ArrayList<Token>();
+//		private List<Token> docstrings = new ArrayList<Token>();
 		private IdentExpression ident;
+		private Scope3 scope3;
 
 		public void ident(final IdentExpression i1) {
 			this.ident = i1;
 		}
 
-//		public TypeName typeName() {
-//			return tn;
-//		}
-
-		public Scope scope() {
-			return new MatchConditionalScope(this);
-		}
-
 		@Override
 		public void add(final FunctionItem aItem) {
-			items.add(aItem);
+			scope3.add((OS_Element) aItem);
+			//items.add(aItem);
 		}
 
 		@Override
 		public void addDocString(final Token text) {
-			if (docstrings == null)
-				docstrings = new ArrayList<Token>();
-			docstrings.add(text);
+//			if (docstrings == null)
+//				docstrings = new ArrayList<Token>();
+//			docstrings.add(text);
+			scope3.addDocString(text);
 		}
 
 		@Override
 		public List<FunctionItem> getItems() {
-			return items;
+			List<FunctionItem> collection = new ArrayList<FunctionItem>();
+			for (OS_Element element : scope3.items()) {
+				if (element instanceof FunctionItem)
+					collection.add((FunctionItem) element);
+			}
+			return collection;
+//			return items;
 		}
 
 		public TypeName getTypeName() {
@@ -307,6 +324,10 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		@Override
 		public OS_Element getParent() {
 			return MatchConditional.this;
+		}
+
+		public void scope(Scope3 sco) {
+			scope3 = sco;
 		}
 	}
 

@@ -23,12 +23,13 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 	private final List<FunctionItem> _items = new ArrayList<FunctionItem>();
 	private final OS_Element _parent;
 	private SyntacticBlockContext ctx;
-	private Scope _scope = new /*SyntacticBlockScope*/AbstractBlockScope(this) {
-		@Override
-		public Context getContext() {
-			return SyntacticBlock.this.getContext();
-		}
-	};
+	//	private Scope _scope = new /*SyntacticBlockScope*/AbstractBlockScope(this) {
+//		@Override
+//		public Context getContext() {
+//			return SyntacticBlock.this.getContext();
+//		}
+//	};
+	private Scope3 scope3;
 
 	public SyntacticBlock(final OS_Element aParent) {
 		_parent = aParent;
@@ -50,15 +51,17 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 	}
 
 	public List<FunctionItem> getItems() {
-		return _items;
+		List<FunctionItem> collection = new ArrayList<FunctionItem>();
+		for (OS_Element element : scope3.items()) {
+			if (element instanceof FunctionItem)
+				collection.add((FunctionItem) element);
+		}
+		return collection;
+		//return _items;
 	}
 
 	public void setContext(final SyntacticBlockContext ctx) {
 		this.ctx = ctx;
-	}
-
-	public Scope scope() {
-		return _scope;
 	}
 
 	public void postConstruct() {
@@ -83,63 +86,10 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 		_docstrings.add(s1);
 	}
 
-//	public final class SyntacticBlockScope implements Scope {
-//
-//		private final AbstractStatementClosure asc = new AbstractStatementClosure(this, getParent());
-//
-//		@Override
-//		public void add(StatementItem aItem) {
-//			if (aItem instanceof FunctionItem)
-//				_items.add((FunctionItem) aItem);
-//			else
-//				System.err.println(String.format("adding false FunctionItem %s", aItem.getClass().getName()));
-//		}
-//
-//		@Override
-//		public void addDocString(Token aS) {
-//			mDocs.add(aS.getText());
-//		}
-//
-//		@Override
-//		public BlockStatement blockStatement() {
-//			return new BlockStatement(this);
-//		}
-//
-//		@Override
-//		public InvariantStatement invariantStatement() {
-//			return null;
-//		}
-//
-//		@Override
-//		public StatementClosure statementClosure() {
-//			return asc;
-//		}
-//
-//		@Override
-//		public void statementWrapper(IExpression aExpr) {
-//			add(new StatementWrapper(aExpr, getContext(), getParent()));
-//		}
-//
-//		@Override
-//		public TypeAliasStatement typeAlias() {
-//			return null;
-//		}
-//
-//		/* (non-Javadoc)
-//		 * @see tripleo.elijah.lang.Scope#getParent()
-//		 */
-//		@Override
-//		public OS_Element getParent() {
-//			return SyntacticBlock.this;
-//		}
-//
-//		@Override
-//		public OS_Element getElement() {
-//			return SyntacticBlock.this;
-//		}
-//
-//
-//	}
+	public void scope(Scope3 sco) {
+		scope3 = sco;
+	}
+
 }
 
 //

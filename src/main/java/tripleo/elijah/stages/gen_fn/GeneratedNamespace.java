@@ -42,16 +42,17 @@ public class GeneratedNamespace implements GeneratedNode {
 	public void createCtor0() {
 		// TODO implement me
 		FunctionDef fd = new FunctionDef(namespaceStatement, namespaceStatement.getContext());
+		Scope3 scope3 = new Scope3(fd);
 		for (VarTableEntry varTableEntry : varTable) {
 			if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
 				IExpression left = varTableEntry.nameToken;
 				IExpression right = varTableEntry.initialValue;
 
 				IExpression e = ExpressionBuilder.build(left, ExpressionKind.ASSIGNMENT, right);
-				fd.add(new StatementWrapper(e, fd.getContext(), fd));
+				scope3.add(new StatementWrapper(e, fd.getContext(), fd));
 			} else {
 				if (getPragma("auto_construct")) {
-					fd.add(new ConstructExpression(fd, fd.getContext(), varTableEntry.nameToken, null));
+					scope3.add(new ConstructExpression(fd, fd.getContext(), varTableEntry.nameToken, null));
 				}
 			}
 		}

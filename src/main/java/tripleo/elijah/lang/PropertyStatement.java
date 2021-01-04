@@ -82,13 +82,17 @@ public class PropertyStatement implements OS_Element, OS_Element2, ClassItem {
 //		return tn;
 //	}
 
+/*
 	public Scope get_scope() {
-		return get_fn.scope();
+		throw new NotImplementedException();
+//		return get_fn.scope();
 	}
 
 	public Scope set_scope() {
-		return set_fn.scope();
+		throw new NotImplementedException();
+//		return set_fn.scope();
 	}
+*/
 
 	public FunctionDef get_fn() {
 		return get_fn;
@@ -123,6 +127,13 @@ public class PropertyStatement implements OS_Element, OS_Element2, ClassItem {
 		_set_is_abstract = true;
 	}
 
+	public void get_scope(Scope3 sco) {
+		get_fn.scope(sco);
+	}
+
+	public void set_scope(Scope3 sco) {
+		set_fn.scope(sco);
+	}
 }
 
 //

@@ -31,6 +31,7 @@ Qualident xy;
 public Out out;
 IExpression expr;
 Context cur;
+Scope3 sco;
 }
 
 program
@@ -342,20 +343,20 @@ docstrings[Documentable sc]:
     |)
     ;
 constructorDef[ClassStatement cr]
-        {ConstructorDef cd=null;IdentExpression x1=null;}
+        {ConstructorDef cd=null;IdentExpression x1=null;FormalArgList fal=null;}
 	: ("constructor"|"ctor")
 		(x1=ident   {cd=cr.addCtor(x1);}
 		|           {cd=cr.addCtor(null);}
 		)
-		opfal[cd.fal()]
-		scope[cd.scope()]
+		fal=opfal2 {cd.setFal(fal);}
+		sco=scope3[cd] {cd.scope(sco);}
 					{cd.postConstruct();}
 	;
 destructorDef[ClassStatement cr]
-        {DestructorDef dd=null;}
+        {DestructorDef dd=null;FormalArgList fal=null;}
 	: ("destructor"|"dtor") {dd=cr.addDtor();}
-		opfal[dd.fal()]
-		scope[dd.scope()]
+		fal=opfal2 {dd.setFal(fal);}
+		sco=scope3[dd] {dd.scope(sco);}
 					{dd.postConstruct();}
 	;
 constructorDef2[ClassScope cr]
@@ -393,8 +394,8 @@ namespaceScope2[NamespaceScope cr]
     | acs=accessNotation {cr.addAccess(acs);}) opt_semi )*
     (invariantStatement[cr.invariantStatement()])?
     ;
-scope[Scope sc]
-      //{IExpression expr;}
+scope3[OS_Element parent] returns [Scope3 sc]
+		{sc=new Scope3(parent);}
     : LCURLY docstrings[sc]
       ((statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);} //expr.setContext(cur);
@@ -442,14 +443,14 @@ withStatement[OS_Element aParent]
 		{WithStatement ws=new WithStatement(aParent);WithContext ctx=null;}
 	: "with" varStmt_i[ws.nextVarStmt()] (COMMA varStmt_i[ws.nextVarStmt()])
 	                            {ctx=new WithContext(ws, cur);ws.setContext(ctx);cur=ctx;}
-       scope[ws.scope()]
+       sco=scope3[ws] {ws.scope(sco);}
                                 {ws.postConstruct();cur=cur.getParent();}
 	;
 syntacticBlockScope[OS_Element aParent]
 		{SyntacticBlock sb=new SyntacticBlock(aParent);SyntacticBlockContext ctx=null;}
 	: 	                            {ctx=new SyntacticBlockContext(sb, cur);sb.setContext(ctx);cur=ctx;}
 
-		scope[sb.scope()]
+		sco=scope3[sb] {sb.scope(sco);}
 									{sb.postConstruct();cur=cur.getParent();}
 	;
 withStatement2[BaseScope sc]
@@ -463,7 +464,8 @@ syntacticBlockScope2[BaseScope sc]
 	: 	scope2[sbb.scope()]
 									{sc.add(sbb);}
 	;
-functionScope[Scope sc]
+functionScope[FunctionDef parent] returns [Scope3 sc]
+		{sc=new Scope3(parent);}
     : LCURLY docstrings[sc]
 //	  (preConditionSegment[sc])? 
       (
@@ -477,7 +479,7 @@ functionScope[Scope sc]
             )
             opt_semi
         )*
-      | "abstract" opt_semi {((FunctionDef)((FunctionDef.FunctionDefScope)sc).getParent()).setAbstract(true);}
+      | "abstract" opt_semi {parent.setAbstract(true);}
       ) 
 //	  (postConditionSegment[sc])?
 	  RCURLY
@@ -535,15 +537,15 @@ postcondition returns [Postcondition postc]
 	: (id=ident TOK_COLON {postc.id(id);})? expr=expression {postc.expr(expr);}
 	;
 functionDef[FunctionDef fd]
-    	{AnnotationClause a=null;FunctionContext ctx=null;IdentExpression i1=null;TypeName tn=null;}
+    	{AnnotationClause a=null;FunctionContext ctx=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}
     : (a=annotation_clause      {fd.addAnnotation(a);})*
     i1=ident                    {fd.setName(i1);}
     ( "const"                   {fd.set(FunctionModifiers.CONST);}
     | "immutable"               {fd.set(FunctionModifiers.IMMUTABLE);})?
-    opfal[fd.fal()]
+    fal=opfal2 {fd.setFal(fal);}
     (TOK_ARROW tn=typeName2 {fd.setReturnType(tn);})?
                                 {assert fd.getContext()!=null;ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
-    functionScope[fd.scope()] 
+    sco=functionScope[fd] {fd.scope(sco);}
     {fd.setType(FunctionDef.Type.REG_FUN);fd.postConstruct();}
     ;
 functionDef2[FunctionDefBuilder fb]
@@ -1034,25 +1036,25 @@ primaryExpression returns [IExpression ee]
 	  RBRACK
 	;
 funcExpr[FuncExpr pc] // remove scope to use in `typeName's
-		{Scope sc = pc.scope();TypeName tn=null;FuncExprContext ctx=null;FormalArgList fal=null;}
+		{Scope3 sc = null;TypeName tn=null;FuncExprContext ctx=null;FormalArgList fal=null;}
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
 	  (fal=opfal2 {pc.setArgList(fal);})
                               {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
-	  scope[pc.scope()]
-	  ((TOK_ARROW|TOK_COLON) tn=typeName2 {pc.setReturnType(tn);} )?
+	  sco=scope3[pc] {pc.scope(sco);}
+	  	  ((TOK_ARROW|TOK_COLON) tn=typeName2 {pc.setReturnType(tn);} )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
 	  (fal=opfal2 {pc.setArgList(fal);})
 				              {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
-	  scope[pc.scope()]
-	| 
+	  sco=scope3[pc] {pc.scope(sco);}
+	| 							{sc=new Scope3(pc);}
       LCURLY                  {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
-	   BOR ( formalArgList[pc.fal()] )? BOR
+	   BOR ( fal=opfal2 {pc.setArgList(fal);} )? BOR
 	  (statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);}
       | classStatement3__[sc.getParent(), cur, null/*annotations*/]
       )*
-      RCURLY
+      RCURLY 					{pc.scope(sc);}
 	
 	) {pc.postConstruct();cur=cur.getParent();}
 	;
@@ -1062,13 +1064,13 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 ifConditional[IfConditional ifex]
         {IfConditionalContext ifc_top=null,ifc=null;IfConditional else_=null;}
 	: "if" expr=expression {ifex.expr(expr);cur=ifex.getContext();}
-	scope[ifex.scope()] {cur=cur.getParent();}
+	sco=scope3[ifex] {ifex.scope(sco);} {cur=cur.getParent();}
 	( ("else" "if")=> elseif_part[ifex.elseif()] )*
-	( "else" {else_=ifex.else_();cur=else_.getContext();} scope[else_!=null?else_.scope():null] {cur=cur.getParent();})?
+	( "else" {else_=ifex.else_();cur=else_.getContext();} sco=scope3[else_] {if(else_!=null) else_.scope(sco);} {cur=cur.getParent();})?
 	;
 elseif_part[IfConditional ifex]
 	: ("elseif" | "else" "if") expr=expression {ifex.expr(expr);cur=ifex.getContext();}
-	scope[ifex.scope()] {cur=cur.getParent();}
+	sco=scope3[ifex] {ifex.scope(sco);} {cur=cur.getParent();}
 	;
 matchConditional[MatchConditional mc, OS_Element aParent]
 		{MatchConditional.MatchConditionalPart1 mcp1=null;
@@ -1080,11 +1082,11 @@ matchConditional[MatchConditional mc, OS_Element aParent]
     : "match" expr=expression {/*mc.setParent(aParent);*/mc.expr(expr);}
       LCURLY                {ctx=new MatchContext(cur, mc);mc.setContext(ctx);cur=ctx;}
       ( { mcp1 = mc.typeMatch();} 
-      		i1=ident {mcp1.ident(i1);} TOK_COLON tn=typeName2 {mcp1.setTypeName(tn);} scope[mcp1.scope()]
+      		i1=ident {mcp1.ident(i1);} TOK_COLON tn=typeName2 {mcp1.setTypeName(tn);} sco=scope3[mcp1] {mcp1.scope(sco);}
       | { mcp2 = mc.normal();}
-      		expr=expression {mcp2.expr(expr);} scope[mcp2.scope()]
+      		expr=expression {mcp2.expr(expr);} sco=scope3[mcp2] {mcp2.scope(sco);}
       | { mcp3 = mc.valNormal();}
-      		"val" i1=ident {mcp3.expr(i1);} scope[mcp3.scope()]
+      		"val" i1=ident {mcp3.expr(i1);} sco=scope3[mcp3] {mcp3.scope(sco);}
       )+
       RCURLY {mc.postConstruct();cur=ctx.getParent();}
     ;
@@ -1092,7 +1094,7 @@ caseConditional[CaseConditional mc]
            {CaseContext ctx = null;}
     : "case" expr=expression {mc.expr(expr);}
       LCURLY                {ctx=new CaseContext(cur, mc);mc.setContext(ctx);cur=ctx;}
-      ( expr=expression scope[mc.scope(expr)] )*
+      ( expr=expression sco=scope3[mc] {mc.scope(sco, expr);} )*
       RCURLY {mc.postConstruct();cur=ctx.getParent();}
     ;
 
@@ -1102,10 +1104,10 @@ whileLoop[StatementClosure cr]
 	( "while"                 {loop.type(LoopTypes.WHILE);}
 	  expr=expression         {loop.expr(expr);}
 	                            {ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;}
-	  scope[loop.scope()]
+	  sco=scope3[loop] {loop.scope(sco);}
 	| "do"                    {loop.type(LoopTypes.DO_WHILE);}
 	                            {ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;}
-	  scope[loop.scope()]
+	  sco=scope3[loop] {loop.scope(sco);}
       "while" expr=expression {loop.expr(expr);}
     )
     ;
@@ -1124,7 +1126,7 @@ frobeIteration[StatementClosure cr]
 	  expr=expression          {loop.topart(expr);}
       	("with" i3=ident       {loop.iterName(i3);})?
     )
-    scope[loop.scope()]
+    sco=scope3[loop] {loop.scope(sco);}
     ;
 ifConditional2[BaseScope sc]
         {IfConditionalBuilder ifb = new IfConditionalBuilder();}
@@ -1262,10 +1264,10 @@ typeNameList2 returns [TypeNameList cr]
 
 defFunctionDef[DefFunctionDef fd]
 		{FormalArgList op=null;TypeName tn=null;IdentExpression i1=null;}
-	: "def" i1=ident op=opfal2/*[fd.fal()]*/
+	: "def" i1=ident op=opfal2
 	  ((TOK_COLON|TOK_ARROW) tn=typeName2 {fd.setReturnType(tn);})?
 	  BECOMES expr=expression
-	   {fd.setType(FunctionDef.Type.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr); }
+	   									{fd.setType(FunctionDef.Type.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr); }
 	;
 formalArgList[FormalArgList fal]
 	: (formalArgListItem_priv[fal.next()]
@@ -1275,8 +1277,8 @@ formalArgListItem_priv[FormalArgListItem fali]
 		{ TypeName tn=null;IdentExpression i=null; }
 	:
 		( (regularQualifiers2[(NormalTypeName)fali.typeName()])? // TODO there is a problem here not to mention NPE
-		  i=ident  {	fali.setName(i);	}
-		  ( TOK_COLON tn=typeName2  { fali.setTypeName(tn); } )?
+		  i=ident  						{ fali.setName(i);	}
+		  ( TOK_COLON tn=typeName2  	{ fali.setTypeName(tn); } )?
 		)
 	;
 
@@ -1284,8 +1286,8 @@ propertyStatement[PropertyStatement ps]
 		{IdentExpression prop_name=null;TypeName tn=null;}
 	: ("prop"|"property") prop_name=ident {ps.setName(prop_name);}
 			(TOK_COLON|TOK_ARROW) tn=typeName2 {ps.setTypeName(tn);} LCURLY
-	("get" (SEMI {ps.addGet();} | scope[ps.get_scope()])
-	|"set" (SEMI {ps.addSet();} | scope[ps.set_scope()])
+	("get" (SEMI {ps.addGet();} | sco=scope3[ps] {ps.get_scope(sco);})
+	|"set" (SEMI {ps.addSet();} | sco=scope3[ps] {ps.set_scope(sco);})
 	)* RCURLY // account for multitude
 	;
 propertyStatement2_abstract[ClassScope cr]

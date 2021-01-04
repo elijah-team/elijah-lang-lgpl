@@ -47,13 +47,14 @@ public class LoopBuilder extends ElBuilder {
 		loop.topart(_topart);
 		loop.iterName(_iterName);
 		loop.expr(expr);
-		Scope scope = loop.scope();
+		Scope3 scope = new Scope3(loop);
 		for (ElBuilder builder : _scope.items()) {
 			builder.setParent(loop);
 			builder.setContext(loop.getContext());
 			OS_Element built = builder.build();
-			scope.add((StatementItem) built);
+			scope.add(built);
 		}
+		loop.scope(scope);
 		return loop;
 	}
 

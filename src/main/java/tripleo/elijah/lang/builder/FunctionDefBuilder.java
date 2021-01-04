@@ -50,6 +50,8 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 		if (_scope.isAbstract()) {
 			functionDef.setAbstract(true);
 		}
+		Scope3 scope3 = new Scope3(functionDef);
+		functionDef.scope(scope3);
 		for (ElBuilder b : _scope.items()) {
 			b.setParent(functionDef);
 			b.setContext(functionDef.getContext());

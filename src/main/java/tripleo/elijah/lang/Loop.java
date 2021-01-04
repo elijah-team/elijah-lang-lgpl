@@ -17,9 +17,8 @@ import java.util.List;
 
 public class Loop implements  StatementItem, FunctionItem, OS_Element {
 
-	private final Scope _scope = new LoopScope(this);
-	private final List<StatementItem> items = new ArrayList<StatementItem>();
 	private final OS_Element parent;
+	private Scope3 scope3;
 
 	@Deprecated public Loop(final OS_Element aParent) {
 		// document assumption
@@ -38,10 +37,6 @@ public class Loop implements  StatementItem, FunctionItem, OS_Element {
 
 	public void type(final LoopTypes aType) {
 		type = aType;
-	}
-
-	public Scope scope() {
-		return _scope ;
 	}
 
 	public void expr(final IExpression aExpr) {
@@ -72,7 +67,13 @@ private IExpression expr;
 private final Attached _a = new Attached();
 
 	public List<StatementItem> getItems() {
-		return items;
+		List<StatementItem> collection = new ArrayList<StatementItem>();
+		for (OS_Element element : scope3.items()) {
+			if (element instanceof FunctionItem)
+				collection.add((StatementItem) element);
+		}
+		return collection;
+//		return items;
 	}
 
 	@Override // OS_Element
@@ -108,28 +109,8 @@ private final Attached _a = new Attached();
 		return iterName;
 	}
 
-    private final class LoopScope extends AbstractScope2 {
-
-		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
-
-		protected LoopScope(OS_Element aParent) {
-			super(aParent);
-		}
-
-		@Override
-		public void add(final StatementItem aItem) {
-//			if (aItem instanceof FunctionItem)
-//				items.add((FunctionItem) aItem);
-//			else
-//				System.err.println(String.format("adding false StatementItem %s",
-//					aItem.getClass().getName()));
-			items.add(aItem);
-		}
-		
-		@Override
-		public StatementClosure statementClosure() {
-			return asc;
-		}
+	public void scope(Scope3 sco) {
+		scope3 = sco;
 	}
 
 	@Override

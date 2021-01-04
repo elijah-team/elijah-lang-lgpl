@@ -22,14 +22,13 @@ import java.util.List;
  */
 public class FuncExpr implements IExpression, OS_Element {
 
-	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
+//	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 	//	private final TypeNameList argList = new TypeNameList();
-	private final FormalArgList argList = new FormalArgList();
-	private final FuncExprScope funcExprScope = new FuncExprScope(this);
-	private TypeName _returnType = null/*new RegularTypeName()*/;
+	private FormalArgList argList = new FormalArgList();
+	private TypeName _returnType;
 	private OS_Type _type;
 	private FuncExprContext _ctx;
-
+	private Scope3 scope3;
 
 	public void type(final TypeModifiers modifier) {
 		assert modifier == TypeModifiers.FUNCTION ||
@@ -44,16 +43,18 @@ public class FuncExpr implements IExpression, OS_Element {
 		return _returnType;
 	}
 
-	public Scope scope() {
-		return funcExprScope;
-	}
-
 	public void setReturnType(final TypeName tn) {
 		_returnType = tn;
 	}
 
 	public List<FunctionItem> getItems() {
-		return items;
+		List<FunctionItem> collection = new ArrayList<FunctionItem>();
+		for (OS_Element element : scope3.items()) {
+			if (element instanceof FunctionItem)
+				collection.add((FunctionItem) element);
+		}
+		return collection;
+//		return items;
 	}
 
 	public void setContext(final FuncExprContext ctx) {
@@ -68,35 +69,8 @@ public class FuncExpr implements IExpression, OS_Element {
 		return argList.falis;
 	}
 
-	final static class FuncExprScope extends AbstractScope2 {
-
-		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
-		private final FuncExpr funcExpr;
-
-		public FuncExprScope(final FuncExpr funcExpr) {
-			super(funcExpr);
-			this.funcExpr = funcExpr;
-		}
-
-		@Override
-		public void add(final StatementItem aItem) {
-			if (aItem instanceof FunctionItem)
-				funcExpr.items.add((FunctionItem) aItem);
-			else
-				System.err.println(String.format("adding false FunctionItem %s",
-					aItem.getClass().getName()));
-		}
-
-		@Override
-		public OS_Element getElement() {
-			assert super.getElement() == funcExpr;
-			return funcExpr;
-		}
-
-		@Override
-		public StatementClosure statementClosure() {
-			return asc;
-		}
+	public void setArgList(FormalArgList argList) {
+		this.argList = argList;
 	}
 
 	private final FormalArgList formalArgList = new FormalArgList();
@@ -162,6 +136,10 @@ public class FuncExpr implements IExpression, OS_Element {
 	@Override
 	public Context getContext() {
 		return _ctx;
+	}
+
+	public void scope(Scope3 sco) {
+		scope3 = sco;
 	}
 }
 

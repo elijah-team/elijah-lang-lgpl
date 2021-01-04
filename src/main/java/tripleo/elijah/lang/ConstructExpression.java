@@ -24,9 +24,6 @@ public class ConstructExpression extends AbstractExpression implements FunctionI
 	private final FormalArgList _args;
 	private OS_Type _type;
 
-//	public ConstructExpression(Scope aScope) {
-//	}
-
 	public ConstructExpression(final OS_Element parent, final Context context, final IExpression aExpr, final FormalArgList aO) {
 		this.parent = parent;
 		this.context = context;
