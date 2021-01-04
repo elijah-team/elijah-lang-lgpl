@@ -84,10 +84,10 @@ classStatement [OS_Element parent, ClassStatement cls]
 	)
 	;
 
-classStatement__ [OS_Element parent, ClassStatement cls, List<AnnotationClause> as]
-		{AnnotationClause a=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;}
-	: {cls.addAnnotations(as);}
-    ("class"
+classStatement3__ [OS_Element parent, Context cctx, List<AnnotationClause> as]
+		{AnnotationClause a=null;ClassStatement cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;}
+	: 
+    ("class"				{cls = new ClassStatement(parent, cctx);cls.addAnnotations(as);}
             ("struct"       {cls.setType(ClassTypes.STRUCTURE);}
             |"signature"    {cls.setType(ClassTypes.SIGNATURE);}
             |"abstract"     {cls.setType(ClassTypes.ABSTRACT);})?
@@ -404,7 +404,7 @@ scope[Scope sc]
     : LCURLY docstrings[sc]
       ((statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);} //expr.setContext(cur);
-      | classStatement[sc.getParent(), new ClassStatement(sc.getParent(), cur)]
+      | classStatement3__[sc.getParent(), cur, null/*annotations*/]
       | "continue"
       | "break" // opt label?
       | "return" ((expression) => (expr=expression)|)
@@ -476,7 +476,7 @@ functionScope[Scope sc]
         (
             ( statement[sc.statementClosure(), sc.getParent()]
             | expr=expression {sc.statementWrapper(expr);}
-            | classStatement[sc.getParent(), new ClassStatement(sc.getParent(), cur)]
+            | classStatement3__[sc.getParent(), cur, null/*annotations*/]
             | "continue"
             | "break" // opt label?
             | "return" ((expression) => (expr=expression)|)
@@ -567,7 +567,7 @@ programStatement[ProgramClosure pc, OS_Element cont]
     : imp=importStatement[cont]
 	| ( (a=annotation_clause      {as.add(a);})+
     | namespaceStatement__[new NamespaceStatement(cont, cur), as]
-    | classStatement__[cont, new ClassStatement(cont, cur), as]
+    | classStatement3__[cont, cur, as]
 	)
     | aliasStatement[pc.aliasStatement(cont)]
     ;
@@ -1056,7 +1056,7 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 	   BOR ( formalArgList[pc.fal()] )? BOR
 	  (statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);}
-      | classStatement[sc.getParent(), new ClassStatement(sc.getParent(), cur)]
+      | classStatement3__[sc.getParent(), cur, null/*annotations*/]
       )*
       RCURLY
 	
