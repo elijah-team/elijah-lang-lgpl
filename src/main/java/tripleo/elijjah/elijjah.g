@@ -61,29 +61,6 @@ qualident returns [Qualident q]
      r1=ident {q.append(r1);}
       (d1:DOT r2=ident {q.appendDot(d1); q.append(r2);})*
     ;
-classStatement [OS_Element parent, ClassStatement cls]
-		{AnnotationClause a=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;}
-	: (a=annotation_clause  {cls.addAnnotation(a);})*
-    ("class"
-            ("struct"       {cls.setType(ClassTypes.STRUCTURE);}
-            |"signature"    {cls.setType(ClassTypes.SIGNATURE);}
-            |"abstract"     {cls.setType(ClassTypes.ABSTRACT);})?
-      i1=ident              {cls.setName(i1);}
-    ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
-    | classInheritanceRuby [cls.classInheritance()] )?
-    LCURLY                  {cur=cls.getContext();ctx=(ClassContext)cur;assert cur!=null;}
-     (classScope[cls]
-     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);}
-      (invariantStatement[cls.invariantStatement()])?
-     )
-    RCURLY {cls.postConstruct();cur=ctx.getParent();}
-    | {cb = new ClassBuilder();cb.annotation_clause(a);cb.setParent(parent);cb.setParentContext(cur);}
-	  classDefinition_interface[cb] // want to cb.build() here 
-	  					{if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);}
-	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
-						{cb.build();}
-	)
-	;
 
 classStatement3__ [OS_Element parent, Context cctx, List<AnnotationClause> as]
 		{AnnotationClause a=null;ClassStatement cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;}
