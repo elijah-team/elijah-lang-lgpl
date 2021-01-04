@@ -1034,15 +1034,15 @@ primaryExpression returns [IExpression ee]
 	  RBRACK
 	;
 funcExpr[FuncExpr pc] // remove scope to use in `typeName's
-		{Scope sc = pc.scope();TypeName tn=null;FuncExprContext ctx=null;}
+		{Scope sc = pc.scope();TypeName tn=null;FuncExprContext ctx=null;FormalArgList fal=null;}
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
-	  (opfal[pc.argList()])
+	  (fal=opfal2 {pc.setArgList(fal);})
                               {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
 	  scope[pc.scope()]
 	  ((TOK_ARROW|TOK_COLON) tn=typeName2 {pc.setReturnType(tn);} )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
-	  (opfal[pc.argList()])
+	  (fal=opfal2 {pc.setArgList(fal);})
 				              {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
 	  scope[pc.scope()]
 	| 
