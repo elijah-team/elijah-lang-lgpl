@@ -221,31 +221,34 @@ public class OS_Module implements OS_Element, OS_Container {
 		for (final ModuleItem item : items) {
 			if (item instanceof ClassStatement) {
 				ClassStatement classStatement = (ClassStatement) item;
-				if (classStatement.getPackageName() == OS_Package.default_package) {
-					if (classStatement.name().equals("Main")) { // TODO what about Library (for windows dlls) etc?
-						Collection<ClassItem> x = classStatement.findFunction("main");
-						Collection<ClassItem> found = Collections2.filter(x, new Predicate<ClassItem>() {
-							@Override
-							public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable ClassItem input) {
-								assert input != null;
-								FunctionDef fd = (FunctionDef) input;
-								return is_main_function_with_no_args(fd);
-							}
-						});
-						final int eps = entryPoints.size();
-						for (ClassItem classItem : found) {
-							entryPoints.add((ClassStatement) classItem.getParent());
+				if (isMainClass(classStatement)) {
+					Collection<ClassItem> x = classStatement.findFunction("main");
+					Collection<ClassItem> found = Collections2.filter(x, new Predicate<ClassItem>() {
+						@Override
+						public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable ClassItem input) {
+							assert input != null;
+							FunctionDef fd = (FunctionDef) input;
+							return is_main_function_with_no_args(fd);
 						}
-						assert entryPoints.size() == eps || entryPoints.size() == eps+1;
-
-						System.out.println("243 " + entryPoints);
-//						break; // allow for "extend" class
+					});
+					final int eps = entryPoints.size();
+					for (ClassItem classItem : found) {
+						entryPoints.add((ClassStatement) classItem.getParent());
 					}
+					assert entryPoints.size() == eps || entryPoints.size() == eps+1;
+
+					System.out.println("243 " + entryPoints);
+//					break; // allow for "extend" class
 				}
 			}
 
 
 		}
+	}
+
+	public static boolean isMainClass(ClassStatement classStatement) {
+		// TODO what about Library (for windows dlls) etc?
+		return classStatement.getPackageName() == OS_Package.default_package && classStatement.name().equals("Main");
 	}
 
 	private boolean is_main_function_with_no_args(FunctionDef fd) {

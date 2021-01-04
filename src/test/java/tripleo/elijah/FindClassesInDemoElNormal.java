@@ -15,6 +15,7 @@ import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.util.Helpers;
 
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
  * @author Tripleo
  *
  */
-public class DeductionTests {
+public class FindClassesInDemoElNormal {
 
 	@Test
 	public final void testParseFile() {
@@ -43,7 +44,7 @@ public class DeductionTests {
 
 	@Test
 	public final void testListFolders() {
-		final List<String> args = Helpers.List_of(/*"test/demo-el-normal/listfolders2.elijah",*/ "test/demo-el-normal/listfolders/", "-sE");
+		final List<String> args = Helpers.List_of("test/demo-el-normal/listfolders/", "-sE");
 		final ErrSink eee = new StdErrSink();
 		final Compilation c = new Compilation(eee, new IO());
 
@@ -51,6 +52,8 @@ public class DeductionTests {
 
 		final List<ClassStatement> aClassList = c.findClass("Main");
 		Assert.assertEquals(1, aClassList.size());
+
+		Assert.assertTrue("isMainClass", OS_Module.isMainClass(aClassList.get(0));
 	}
 
 }

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="DeductionTests.testParseFile" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+  <configuration default="false" name="FindClassesInDemoElNormal.testParseFile" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
     <module name="test" />
     <useClassPathOnly />
     <extension name="coverage">
@@ -9,7 +9,7 @@
       </pattern>
     </extension>
     <option name="PACKAGE_NAME" value="tripleo.elijah" />
-    <option name="MAIN_CLASS_NAME" value="tripleo.elijah.DeductionTests" />
+    <option name="MAIN_CLASS_NAME" value="tripleo.elijah.FindClassesInDemoElNormal" />
     <option name="METHOD_NAME" value="testParseFile" />
     <option name="TEST_OBJECT" value="method" />
     <option name="PARAMETERS" value="" />
