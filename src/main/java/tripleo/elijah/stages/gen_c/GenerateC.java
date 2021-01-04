@@ -730,13 +730,15 @@ public class GenerateC {
 				if (pte.expression_num == null) {
 					final int y=2;
 					final IdentExpression ptex = (IdentExpression) pte.expression;
-					sb.append(Emit.emit("/*684*/")+"");
+					sb.append(Emit.emit("/*684*/"));
 					sb.append(ptex.getText());
 				} else {
 					final IExpression ptex = pte.expression;
 					if (ptex instanceof IdentExpression) {
+						sb.append(Emit.emit("/*737*/"));
 						sb.append(((IdentExpression) ptex).getText());
 					} else if (ptex instanceof ProcedureCallExpression) {
+						sb.append(Emit.emit("/*739*/"));
 						sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
 					}
 				}
