@@ -154,24 +154,21 @@ classDefinition_signature [ClassBuilder cb]
       ( classDefinition_inheritance[cb] )?
 	  							//{cb.setParent(parent); cb.setParentContext(cur);}
 	  							//{cls = cb.build();} // building before done. arrgh
-      LCURLY                  	//{ctx=(ClassContext)cls.getContext();cur=ctx;}
-     (classScope2_signature[cb.getScope()]
-//     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // interface cant be abstract
-//      (invariantStatement2[sc])?
-     )
+      LCURLY                  	
+     classScope2_signature[cb.getScope()]
      RCURLY //{cls.postConstruct();cur=ctx.getParent();}
  	;
 classDefinition_abstract [ClassBuilder cb]
-		{ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;}
+		{ClassStatement cls=null;IdentExpression i1=null;}
 	: "class" "abstract"    	{cb.setType(ClassTypes.ABSTRACT);}
       i1=ident               	{cb.setName(i1);}
       ( classDefinition_inheritance[cb] )?
 	  							//{cb.setParent(parent); cb.setParentContext(cur);}
 	  							//{cls = cb.build();} // building before done. arrgh
-      LCURLY                  	//{ctx=(ClassContext)cls.getContext();cur=ctx;}
+      LCURLY                  	
      (classScope2[cb.getScope()]
-//     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // interface cant be abstract
-//      (invariantStatement2[sc])?
+     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} 
+      (invariantStatement2[cb.getScope()])?
      )
      RCURLY //{cls.postConstruct();cur=ctx.getParent();}
  	;
@@ -182,11 +179,8 @@ classDefinition_interface [ClassBuilder cb]
       ( classDefinition_inheritance[cb] )?
 	  							//{cb.setParent(parent); cb.setParentContext(cur);}
 	  							//{cls = cb.build();} // building before done. arrgh
-      LCURLY                  	//{ctx=(ClassContext)cls.getContext();cur=ctx;}
-     (classScope2_interface[cb.getScope()]
-//     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // interface cant be abstract
-//      (invariantStatement2[sc])?
-     )
+      LCURLY                  	
+     classScope2_interface[cb.getScope()]
      RCURLY //{cls.postConstruct();cur=ctx.getParent();}
  	;
 classDefinition_inheritance [ClassBuilder cb]
