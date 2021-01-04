@@ -17,13 +17,6 @@ import tripleo.elijah.util.Helpers;
  */
 public class ConstructorDef extends FunctionDef {
 
-	@Deprecated public ConstructorDef(final IdentExpression aConstructorName, final ClassStatement aParent) {
-		super(aParent);
-		if (aConstructorName != null)
-			setName(aConstructorName);
-		else setName(Helpers.string_to_ident("<>")); // hack for Context#lookup
-	}
-
 	public ConstructorDef(final IdentExpression aConstructorName, final ClassStatement aParent, final Context cur) {
 		super(aParent, cur);
 		if (aConstructorName != null)

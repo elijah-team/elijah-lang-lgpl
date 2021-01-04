@@ -15,11 +15,6 @@ package tripleo.elijah.lang;
  */
 public class DestructorDef extends FunctionDef {
 
-	@Deprecated public DestructorDef(final ClassStatement classStatement) {
-		super(classStatement);
-//		parent = classStatement;
-	}
-
 	public DestructorDef(final ClassStatement classStatement, final Context cur) {
 		super(classStatement, cur);
 //		parent = classStatement;
