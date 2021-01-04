@@ -53,7 +53,7 @@ public class FindClassesInDemoElNormal {
 		final List<ClassStatement> aClassList = c.findClass("Main");
 		Assert.assertEquals(1, aClassList.size());
 
-		Assert.assertFalse("isMainClass", !OS_Module.isMainClass(aClassList.get(0)));
+		Assert.assertFalse("isMainClass", OS_Module.isMainClass(aClassList.get(0)));
 	}
 
 }
