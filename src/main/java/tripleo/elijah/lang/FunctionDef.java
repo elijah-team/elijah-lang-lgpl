@@ -96,8 +96,6 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	// region items
 
-	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
-
 	public void setType(final Type aType) {
 		_type = aType;
 	}
@@ -266,7 +264,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	}
 
 	public boolean hasItem(OS_Element element) {
-		return items.contains(element);
+		return scope3.items().contains(element);
 	}
 }
 
