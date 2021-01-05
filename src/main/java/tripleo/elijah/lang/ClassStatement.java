@@ -262,6 +262,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 	public void addAnnotations(List<AnnotationClause> as) {
+		if (as == null) return;
 		for (AnnotationClause annotationClause : as) {
 			addAnnotation(annotationClause);
 		}
