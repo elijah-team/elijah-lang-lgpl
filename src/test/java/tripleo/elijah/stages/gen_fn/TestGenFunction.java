@@ -136,12 +136,19 @@ public class TestGenFunction {
 //			}
 //		}
 
-		DeducePhase dp = new DeducePhase();
-		dp.deduceModule(m, lgf);
-		dp.finish();
+		if (false) {
+			DeducePhase dp = new DeducePhase();
+			dp.deduceModule(m, lgf);
+			dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);
 
-		new GenerateC(m).generateCode(lgf);
+			new GenerateC(m).generateCode(lgf);
+		} else {
+			PipelineLogic pipelineLogic = new PipelineLogic();
+			pipelineLogic.addModule(m.prelude);
+			pipelineLogic.addModule(m);
+			pipelineLogic.run();
+		}
 	}
 
 	@Test
