@@ -18,10 +18,6 @@ import java.util.List;
 
 public class DefFunctionDef extends FunctionDef implements ClassItem {
 
-	@Deprecated public DefFunctionDef(OS_Element aElement) {
-		super(aElement);
-	}
-
 	public DefFunctionDef(OS_Element element, Context context) {
 		super(element, context);
 	}
