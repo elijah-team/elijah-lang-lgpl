@@ -505,8 +505,11 @@ public class GenerateC {
 							} else
 								System.err.println("8886 " + y.getClass().getName());
 						} else if (x.getType() == OS_Type.Type.USER_CLASS) {
-							final String z = x.getClassOf().name();
-							tos.put_string_ln(String.format("vsb = ZS<%s>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
+							final int z = getTypeNumber(new OS_Type(x.getClassOf()));
+							if (z == 0 || z == -1) {
+								System.err.println("510 TypeName not assigned a code: "+x.getClassOf());
+							}
+							tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
 							tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
 						}
 					} else {
@@ -654,6 +657,33 @@ public class GenerateC {
 			break;
 		default:
 			throw new IllegalStateException("Unexpected value: " + ty.getType());
+		}
+		return z;
+	}
+
+	private int getTypeNumber(final OS_Type ty) {
+		if (ty == null) throw new IllegalArgumentException("ty is null");
+		//
+		int z;
+		switch (ty.getType()) {
+		case USER_CLASS:
+			final ClassStatement el = ty.getClassOf();
+			z = el._a.getCode();
+			break;
+//		case FUNCTION:
+//			z = "<function>";
+//			break;
+//		case USER:
+//			System.err.println("Warning: USER TypeName in GenerateC "+ty.getTypeName());
+//			z = String.format("Z<%s>", ty.getTypeName().toString());
+//			break;
+		case BUILT_IN:
+			System.err.println("Warning: BUILT_IN TypeName in GenerateC");
+			z = ty.getBType().getCode();  // README should not even be here, but look at .name() for other code gen schemes
+			break;
+		default:
+			z = -1; // bad input
+			//throw new IllegalStateException("Unexpected value: " + ty.getType());
 		}
 		return z;
 	}
