@@ -231,6 +231,20 @@ public class OS_Module implements OS_Element, OS_Container {
 							return is_main_function_with_no_args(fd);
 						}
 					});
+//					Iterator<ClassStatement> zz = x.stream()
+//							.filter(ci -> ci instanceof FunctionDef)
+//							.filter(fd -> is_main_function_with_no_args((FunctionDef) fd))
+//							.map(found1 -> (ClassStatement) found1.getParent())
+//							.iterator();
+
+/*
+					List<ClassStatement> entrypoints_stream = x.stream()
+							.filter(ci -> ci instanceof FunctionDef)
+							.filter(fd -> is_main_function_with_no_args((FunctionDef) fd))
+							.map(found1 -> (ClassStatement) found1.getParent())
+							.collect(Collectors.toList());
+*/
+
 					final int eps = entryPoints.size();
 					for (ClassItem classItem : found) {
 						entryPoints.add((ClassStatement) classItem.getParent());
