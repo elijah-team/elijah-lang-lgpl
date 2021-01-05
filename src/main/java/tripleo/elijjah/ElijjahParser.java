@@ -252,8 +252,8 @@ public ElijjahParser(ParserSharedInputState state) {
 				case ANNOT:
 				{
 					{
-					int _cnt219=0;
-					_loop219:
+					int _cnt210=0;
+					_loop210:
 					do {
 						if ((LA(1)==ANNOT) && (LA(2)==IDENT)) {
 							a=annotation_clause();
@@ -262,10 +262,10 @@ public ElijjahParser(ParserSharedInputState state) {
 							}
 						}
 						else {
-							if ( _cnt219>=1 ) { break _loop219; } else {throw new NoViableAltException(LT(1), getFilename());}
+							if ( _cnt210>=1 ) { break _loop210; } else {throw new NoViableAltException(LT(1), getFilename());}
 						}
 						
-						_cnt219++;
+						_cnt210++;
 					} while (true);
 					}
 					break;
@@ -320,7 +320,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				el.next(expr);
 			}
 			{
-			_loop264:
+			_loop255:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
@@ -330,7 +330,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop264;
+					break _loop255;
 				}
 				
 			} while (true);
@@ -435,527 +435,12 @@ public ElijjahParser(ParserSharedInputState state) {
 		return id;
 	}
 	
-	public final void classStatement(
-		OS_Element parent, ClassStatement cls
-	) throws RecognitionException, TokenStreamException {
-		
-		AnnotationClause a=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;
-		
-		try {      // for error handling
-			{
-			_loop14:
-			do {
-				if ((LA(1)==ANNOT)) {
-					a=annotation_clause();
-					if ( inputState.guessing==0 ) {
-						cls.addAnnotation(a);
-					}
-				}
-				else {
-					break _loop14;
-				}
-				
-			} while (true);
-			}
-			{
-			if ((LA(1)==LITERAL_class) && (_tokenSet_10.member(LA(2)))) {
-				match(LITERAL_class);
-				{
-				switch ( LA(1)) {
-				case LITERAL_struct:
-				{
-					match(LITERAL_struct);
-					if ( inputState.guessing==0 ) {
-						cls.setType(ClassTypes.STRUCTURE);
-					}
-					break;
-				}
-				case LITERAL_signature:
-				{
-					match(LITERAL_signature);
-					if ( inputState.guessing==0 ) {
-						cls.setType(ClassTypes.SIGNATURE);
-					}
-					break;
-				}
-				case LITERAL_abstract:
-				{
-					match(LITERAL_abstract);
-					if ( inputState.guessing==0 ) {
-						cls.setType(ClassTypes.ABSTRACT);
-					}
-					break;
-				}
-				case IDENT:
-				{
-					break;
-				}
-				default:
-				{
-					throw new NoViableAltException(LT(1), getFilename());
-				}
-				}
-				}
-				i1=ident();
-				if ( inputState.guessing==0 ) {
-					cls.setName(i1);
-				}
-				{
-				switch ( LA(1)) {
-				case LPAREN:
-				{
-					{
-					match(LPAREN);
-					classInheritance_(cls.classInheritance());
-					match(RPAREN);
-					}
-					break;
-				}
-				case LT_:
-				{
-					classInheritanceRuby(cls.classInheritance());
-					break;
-				}
-				case LCURLY:
-				{
-					break;
-				}
-				default:
-				{
-					throw new NoViableAltException(LT(1), getFilename());
-				}
-				}
-				}
-				match(LCURLY);
-				if ( inputState.guessing==0 ) {
-					cur=cls.getContext();ctx=(ClassContext)cur;assert cur!=null;
-				}
-				{
-				switch ( LA(1)) {
-				case IDENT:
-				case STRING_LITERAL:
-				case LITERAL_class:
-				case RCURLY:
-				case LITERAL_type:
-				case ANNOT:
-				case LITERAL_namespace:
-				case LITERAL_from:
-				case LITERAL_import:
-				case LITERAL_constructor:
-				case LITERAL_ctor:
-				case LITERAL_destructor:
-				case LITERAL_dtor:
-				case LITERAL_const:
-				case LITERAL_var:
-				case LITERAL_val:
-				case LITERAL_alias:
-				case LITERAL_invariant:
-				case LITERAL_access:
-				case LITERAL_prop:
-				case LITERAL_property:
-				{
-					classScope(cls);
-					break;
-				}
-				case LITERAL_abstract:
-				{
-					match(LITERAL_abstract);
-					if ( inputState.guessing==0 ) {
-						cls.setType(ClassTypes.ABSTRACT);
-					}
-					{
-					switch ( LA(1)) {
-					case LITERAL_invariant:
-					{
-						invariantStatement(cls.invariantStatement());
-						break;
-					}
-					case RCURLY:
-					{
-						break;
-					}
-					default:
-					{
-						throw new NoViableAltException(LT(1), getFilename());
-					}
-					}
-					}
-					break;
-				}
-				default:
-				{
-					throw new NoViableAltException(LT(1), getFilename());
-				}
-				}
-				}
-				match(RCURLY);
-				if ( inputState.guessing==0 ) {
-					cls.postConstruct();cur=ctx.getParent();
-				}
-			}
-			else if ((LA(1)==LITERAL_class) && (LA(2)==LITERAL_interface)) {
-				if ( inputState.guessing==0 ) {
-					cb = new ClassBuilder();cb.annotation_clause(a);cb.setParent(parent);cb.setParentContext(cur);
-				}
-				classDefinition_interface(cb);
-				if ( inputState.guessing==0 ) {
-					if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);
-				}
-				if ( inputState.guessing==0 ) {
-					cb.build();
-				}
-			}
-			else {
-				throw new NoViableAltException(LT(1), getFilename());
-			}
-			
-			}
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				recover(ex,_tokenSet_1);
-			} else {
-			  throw ex;
-			}
-		}
-	}
-	
-	public final AnnotationClause  annotation_clause() throws RecognitionException, TokenStreamException {
-		AnnotationClause a;
-		
-		Qualident q=null;ExpressionList el=null;a=new AnnotationClause();AnnotationPart ap=null;
-		
-		try {      // for error handling
-			match(ANNOT);
-			{
-			int _cnt75=0;
-			_loop75:
-			do {
-				if ((LA(1)==IDENT)) {
-					if ( inputState.guessing==0 ) {
-						ap=new AnnotationPart();
-					}
-					q=qualident();
-					if ( inputState.guessing==0 ) {
-						ap.setClass(q);
-					}
-					{
-					switch ( LA(1)) {
-					case LPAREN:
-					{
-						match(LPAREN);
-						el=expressionList2();
-						match(RPAREN);
-						if ( inputState.guessing==0 ) {
-							ap.setExprs(el);
-						}
-						break;
-					}
-					case IDENT:
-					case RBRACK:
-					{
-						break;
-					}
-					default:
-					{
-						throw new NoViableAltException(LT(1), getFilename());
-					}
-					}
-					}
-					if ( inputState.guessing==0 ) {
-						a.add(ap);
-					}
-				}
-				else {
-					if ( _cnt75>=1 ) { break _loop75; } else {throw new NoViableAltException(LT(1), getFilename());}
-				}
-				
-				_cnt75++;
-			} while (true);
-			}
-			match(RBRACK);
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				recover(ex,_tokenSet_6);
-			} else {
-			  throw ex;
-			}
-		}
-		return a;
-	}
-	
-	public final void classInheritance_(
-		ClassInheritance ci
-	) throws RecognitionException, TokenStreamException {
-		
-		TypeName tn=null;
-		
-		try {      // for error handling
-			tn=inhTypeName();
-			if ( inputState.guessing==0 ) {
-				ci.add(tn);
-			}
-			{
-			_loop114:
-			do {
-				if ((LA(1)==COMMA)) {
-					match(COMMA);
-					tn=inhTypeName();
-					if ( inputState.guessing==0 ) {
-						ci.add(tn);
-					}
-				}
-				else {
-					break _loop114;
-				}
-				
-			} while (true);
-			}
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				recover(ex,_tokenSet_11);
-			} else {
-			  throw ex;
-			}
-		}
-	}
-	
-	public final void classInheritanceRuby(
-		ClassInheritance ci
-	) throws RecognitionException, TokenStreamException {
-		
-		
-		try {      // for error handling
-			match(LT_);
-			classInheritance_(ci);
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				recover(ex,_tokenSet_12);
-			} else {
-			  throw ex;
-			}
-		}
-	}
-	
-	public final void classScope(
-		ClassStatement cr
-	) throws RecognitionException, TokenStreamException {
-		
-		AccessNotation acs=null;
-		
-		try {      // for error handling
-			docstrings(cr);
-			{
-			_loop52:
-			do {
-				switch ( LA(1)) {
-				case LITERAL_constructor:
-				case LITERAL_ctor:
-				{
-					constructorDef(cr);
-					break;
-				}
-				case LITERAL_destructor:
-				case LITERAL_dtor:
-				{
-					destructorDef(cr);
-					break;
-				}
-				case LITERAL_const:
-				case LITERAL_var:
-				case LITERAL_val:
-				{
-					varStmt(cr.statementClosure(), cr);
-					break;
-				}
-				case LITERAL_prop:
-				case LITERAL_property:
-				{
-					propertyStatement(cr.prop());
-					break;
-				}
-				case LITERAL_access:
-				{
-					acs=accessNotation();
-					if ( inputState.guessing==0 ) {
-						cr.addAccess(acs);
-					}
-					break;
-				}
-				default:
-					if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_13.member(LA(2)))) {
-						functionDef(cr.funcDef());
-					}
-					else if ((LA(1)==LITERAL_type) && (LA(2)==IDENT)) {
-						match(LITERAL_type);
-						match(IDENT);
-						match(BECOMES);
-						match(IDENT);
-						{
-						_loop51:
-						do {
-							if ((LA(1)==BOR)) {
-								match(BOR);
-								match(IDENT);
-							}
-							else {
-								break _loop51;
-							}
-							
-						} while (true);
-						}
-					}
-					else if ((LA(1)==LITERAL_type) && (LA(2)==LITERAL_alias)) {
-						typeAlias(cr.typeAlias());
-					}
-					else if ((_tokenSet_14.member(LA(1))) && (_tokenSet_15.member(LA(2)))) {
-						programStatement(cr.XXX(), cr);
-					}
-				else {
-					break _loop52;
-				}
-				}
-			} while (true);
-			}
-			{
-			switch ( LA(1)) {
-			case LITERAL_invariant:
-			{
-				invariantStatement(cr.invariantStatement());
-				break;
-			}
-			case RCURLY:
-			{
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(LT(1), getFilename());
-			}
-			}
-			}
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				recover(ex,_tokenSet_16);
-			} else {
-			  throw ex;
-			}
-		}
-	}
-	
-	public final void invariantStatement(
-		InvariantStatement cr
-	) throws RecognitionException, TokenStreamException {
-		
-		Token  i1 = null;
-		InvariantStatementPart isp=null;
-		
-		try {      // for error handling
-			match(LITERAL_invariant);
-			{
-			_loop268:
-			do {
-				if ((_tokenSet_17.member(LA(1)))) {
-					if ( inputState.guessing==0 ) {
-						isp = new InvariantStatementPart(cr, i1);
-					}
-					{
-					if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
-						i1 = LT(1);
-						match(IDENT);
-						match(TOK_COLON);
-					}
-					else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
-					}
-					else {
-						throw new NoViableAltException(LT(1), getFilename());
-					}
-					
-					}
-					expr=expression();
-					if ( inputState.guessing==0 ) {
-						isp.setExpr(expr);
-					}
-				}
-				else {
-					break _loop268;
-				}
-				
-			} while (true);
-			}
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				recover(ex,_tokenSet_16);
-			} else {
-			  throw ex;
-			}
-		}
-	}
-	
-	public final void classDefinition_interface(
-		ClassBuilder cb
-	) throws RecognitionException, TokenStreamException {
-		
-		ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;
-		
-		try {      // for error handling
-			match(LITERAL_class);
-			match(LITERAL_interface);
-			if ( inputState.guessing==0 ) {
-				cb.setType(ClassTypes.INTERFACE);
-			}
-			i1=ident();
-			if ( inputState.guessing==0 ) {
-				cb.setName(i1);
-			}
-			{
-			switch ( LA(1)) {
-			case LPAREN:
-			case LT_:
-			{
-				classDefinition_inheritance(cb);
-				break;
-			}
-			case LCURLY:
-			{
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(LT(1), getFilename());
-			}
-			}
-			}
-			match(LCURLY);
-			classScope2_interface(cb.getScope());
-			match(RCURLY);
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				recover(ex,_tokenSet_4);
-			} else {
-			  throw ex;
-			}
-		}
-	}
-	
-	public final void classStatement3__(
+	public final ClassStatement  classStatement3__(
 		OS_Element parent, Context cctx, List<AnnotationClause> as
 	) throws RecognitionException, TokenStreamException {
+		ClassStatement cls;
 		
-		AnnotationClause a=null;ClassStatement cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;
+		AnnotationClause a=null;cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;
 		
 		try {      // for error handling
 			{
@@ -1103,10 +588,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				classDefinition_interface(cb);
 				if ( inputState.guessing==0 ) {
-					if (parent instanceof OS_Module) ((OS_Module)parent).remove(cls);
-				}
-				if ( inputState.guessing==0 ) {
-					cb.build();
+					cls=cb.build();
 				}
 			}
 			else {
@@ -1118,7 +600,272 @@ public ElijjahParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_19);
+				recover(ex,_tokenSet_11);
+			} else {
+			  throw ex;
+			}
+		}
+		return cls;
+	}
+	
+	public final void classInheritance_(
+		ClassInheritance ci
+	) throws RecognitionException, TokenStreamException {
+		
+		TypeName tn=null;
+		
+		try {      // for error handling
+			tn=inhTypeName();
+			if ( inputState.guessing==0 ) {
+				ci.add(tn);
+			}
+			{
+			_loop105:
+			do {
+				if ((LA(1)==COMMA)) {
+					match(COMMA);
+					tn=inhTypeName();
+					if ( inputState.guessing==0 ) {
+						ci.add(tn);
+					}
+				}
+				else {
+					break _loop105;
+				}
+				
+			} while (true);
+			}
+		}
+		catch (RecognitionException ex) {
+			if (inputState.guessing==0) {
+				reportError(ex);
+				recover(ex,_tokenSet_12);
+			} else {
+			  throw ex;
+			}
+		}
+	}
+	
+	public final void classInheritanceRuby(
+		ClassInheritance ci
+	) throws RecognitionException, TokenStreamException {
+		
+		
+		try {      // for error handling
+			match(LT_);
+			classInheritance_(ci);
+		}
+		catch (RecognitionException ex) {
+			if (inputState.guessing==0) {
+				reportError(ex);
+				recover(ex,_tokenSet_13);
+			} else {
+			  throw ex;
+			}
+		}
+	}
+	
+	public final void classScope(
+		ClassStatement cr
+	) throws RecognitionException, TokenStreamException {
+		
+		AccessNotation acs=null;
+		
+		try {      // for error handling
+			docstrings(cr);
+			{
+			_loop43:
+			do {
+				switch ( LA(1)) {
+				case LITERAL_constructor:
+				case LITERAL_ctor:
+				{
+					constructorDef(cr);
+					break;
+				}
+				case LITERAL_destructor:
+				case LITERAL_dtor:
+				{
+					destructorDef(cr);
+					break;
+				}
+				case LITERAL_const:
+				case LITERAL_var:
+				case LITERAL_val:
+				{
+					varStmt(cr.statementClosure(), cr);
+					break;
+				}
+				case LITERAL_prop:
+				case LITERAL_property:
+				{
+					propertyStatement(cr.prop());
+					break;
+				}
+				case LITERAL_access:
+				{
+					acs=accessNotation();
+					if ( inputState.guessing==0 ) {
+						cr.addAccess(acs);
+					}
+					break;
+				}
+				default:
+					if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_14.member(LA(2)))) {
+						functionDef(cr.funcDef());
+					}
+					else if ((LA(1)==LITERAL_type) && (LA(2)==IDENT)) {
+						match(LITERAL_type);
+						match(IDENT);
+						match(BECOMES);
+						match(IDENT);
+						{
+						_loop42:
+						do {
+							if ((LA(1)==BOR)) {
+								match(BOR);
+								match(IDENT);
+							}
+							else {
+								break _loop42;
+							}
+							
+						} while (true);
+						}
+					}
+					else if ((LA(1)==LITERAL_type) && (LA(2)==LITERAL_alias)) {
+						typeAlias(cr.typeAlias());
+					}
+					else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
+						programStatement(cr.XXX(), cr);
+					}
+				else {
+					break _loop43;
+				}
+				}
+			} while (true);
+			}
+			{
+			switch ( LA(1)) {
+			case LITERAL_invariant:
+			{
+				invariantStatement(cr.invariantStatement());
+				break;
+			}
+			case RCURLY:
+			{
+				break;
+			}
+			default:
+			{
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			}
+			}
+		}
+		catch (RecognitionException ex) {
+			if (inputState.guessing==0) {
+				reportError(ex);
+				recover(ex,_tokenSet_17);
+			} else {
+			  throw ex;
+			}
+		}
+	}
+	
+	public final void invariantStatement(
+		InvariantStatement cr
+	) throws RecognitionException, TokenStreamException {
+		
+		Token  i1 = null;
+		InvariantStatementPart isp=null;
+		
+		try {      // for error handling
+			match(LITERAL_invariant);
+			{
+			_loop259:
+			do {
+				if ((_tokenSet_18.member(LA(1)))) {
+					if ( inputState.guessing==0 ) {
+						isp = new InvariantStatementPart(cr, i1);
+					}
+					{
+					if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
+						i1 = LT(1);
+						match(IDENT);
+						match(TOK_COLON);
+					}
+					else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_19.member(LA(2)))) {
+					}
+					else {
+						throw new NoViableAltException(LT(1), getFilename());
+					}
+					
+					}
+					expr=expression();
+					if ( inputState.guessing==0 ) {
+						isp.setExpr(expr);
+					}
+				}
+				else {
+					break _loop259;
+				}
+				
+			} while (true);
+			}
+		}
+		catch (RecognitionException ex) {
+			if (inputState.guessing==0) {
+				reportError(ex);
+				recover(ex,_tokenSet_17);
+			} else {
+			  throw ex;
+			}
+		}
+	}
+	
+	public final void classDefinition_interface(
+		ClassBuilder cb
+	) throws RecognitionException, TokenStreamException {
+		
+		ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;
+		
+		try {      // for error handling
+			match(LITERAL_class);
+			match(LITERAL_interface);
+			if ( inputState.guessing==0 ) {
+				cb.setType(ClassTypes.INTERFACE);
+			}
+			i1=ident();
+			if ( inputState.guessing==0 ) {
+				cb.setName(i1);
+			}
+			{
+			switch ( LA(1)) {
+			case LPAREN:
+			case LT_:
+			{
+				classDefinition_inheritance(cb);
+				break;
+			}
+			case LCURLY:
+			{
+				break;
+			}
+			default:
+			{
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			}
+			}
+			match(LCURLY);
+			classScope2_interface(cb.getScope());
+			match(RCURLY);
+		}
+		catch (RecognitionException ex) {
+			if (inputState.guessing==0) {
+				reportError(ex);
+				recover(ex,_tokenSet_4);
 			} else {
 			  throw ex;
 			}
@@ -1136,7 +883,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				cb = new ClassBuilder();
 			}
 			{
-			_loop30:
+			_loop21:
 			do {
 				if ((LA(1)==ANNOT)) {
 					a=annotation_clause();
@@ -1145,7 +892,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop30;
+					break _loop21;
 				}
 				
 			} while (true);
@@ -1180,6 +927,72 @@ public ElijjahParser(ParserSharedInputState state) {
 			  throw ex;
 			}
 		}
+	}
+	
+	public final AnnotationClause  annotation_clause() throws RecognitionException, TokenStreamException {
+		AnnotationClause a;
+		
+		Qualident q=null;ExpressionList el=null;a=new AnnotationClause();AnnotationPart ap=null;
+		
+		try {      // for error handling
+			match(ANNOT);
+			{
+			int _cnt66=0;
+			_loop66:
+			do {
+				if ((LA(1)==IDENT)) {
+					if ( inputState.guessing==0 ) {
+						ap=new AnnotationPart();
+					}
+					q=qualident();
+					if ( inputState.guessing==0 ) {
+						ap.setClass(q);
+					}
+					{
+					switch ( LA(1)) {
+					case LPAREN:
+					{
+						match(LPAREN);
+						el=expressionList2();
+						match(RPAREN);
+						if ( inputState.guessing==0 ) {
+							ap.setExprs(el);
+						}
+						break;
+					}
+					case IDENT:
+					case RBRACK:
+					{
+						break;
+					}
+					default:
+					{
+						throw new NoViableAltException(LT(1), getFilename());
+					}
+					}
+					}
+					if ( inputState.guessing==0 ) {
+						a.add(ap);
+					}
+				}
+				else {
+					if ( _cnt66>=1 ) { break _loop66; } else {throw new NoViableAltException(LT(1), getFilename());}
+				}
+				
+				_cnt66++;
+			} while (true);
+			}
+			match(RBRACK);
+		}
+		catch (RecognitionException ex) {
+			if (inputState.guessing==0) {
+				reportError(ex);
+				recover(ex,_tokenSet_6);
+			} else {
+			  throw ex;
+			}
+		}
+		return a;
 	}
 	
 	public final void classDefinition_normal(
@@ -1462,7 +1275,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_12);
+				recover(ex,_tokenSet_13);
 			} else {
 			  throw ex;
 			}
@@ -1478,7 +1291,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			docstrings(cr);
 			{
-			_loop58:
+			_loop49:
 			do {
 				switch ( LA(1)) {
 				case LITERAL_constructor:
@@ -1509,7 +1322,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					break;
 				}
 				default:
-					if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_13.member(LA(2)))) {
+					if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_14.member(LA(2)))) {
 						functionDef2(cr.funcDef());
 					}
 					else if ((LA(1)==LITERAL_type) && (LA(2)==IDENT)) {
@@ -1518,14 +1331,14 @@ public ElijjahParser(ParserSharedInputState state) {
 						match(BECOMES);
 						match(IDENT);
 						{
-						_loop57:
+						_loop48:
 						do {
 							if ((LA(1)==BOR)) {
 								match(BOR);
 								match(IDENT);
 							}
 							else {
-								break _loop57;
+								break _loop48;
 							}
 							
 						} while (true);
@@ -1534,11 +1347,11 @@ public ElijjahParser(ParserSharedInputState state) {
 					else if ((LA(1)==LITERAL_type) && (LA(2)==LITERAL_alias)) {
 						typeAlias2(cr.typeAlias());
 					}
-					else if ((_tokenSet_14.member(LA(1))) && (_tokenSet_21.member(LA(2)))) {
+					else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_21.member(LA(2)))) {
 						programStatement2(cr);
 					}
 				else {
-					break _loop58;
+					break _loop49;
 				}
 				}
 			} while (true);
@@ -1564,7 +1377,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_16);
+				recover(ex,_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -1580,11 +1393,11 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			docstrings(cr);
 			{
-			_loop64:
+			_loop55:
 			do {
 				if ((_tokenSet_22.member(LA(1))) && (_tokenSet_23.member(LA(2)))) {
 				}
-				else if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_13.member(LA(2)))) {
+				else if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_14.member(LA(2)))) {
 					functionDef2(cr.funcDef());
 				}
 				else if ((LA(1)==LITERAL_const||LA(1)==LITERAL_var||LA(1)==LITERAL_val) && (LA(2)==IDENT)) {
@@ -1596,14 +1409,14 @@ public ElijjahParser(ParserSharedInputState state) {
 					match(BECOMES);
 					match(IDENT);
 					{
-					_loop63:
+					_loop54:
 					do {
 						if ((LA(1)==BOR)) {
 							match(BOR);
 							match(IDENT);
 						}
 						else {
-							break _loop63;
+							break _loop54;
 						}
 						
 					} while (true);
@@ -1612,7 +1425,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				else if ((LA(1)==LITERAL_type) && (LA(2)==LITERAL_alias)) {
 					typeAlias2(cr.typeAlias());
 				}
-				else if ((_tokenSet_14.member(LA(1))) && (_tokenSet_24.member(LA(2)))) {
+				else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_24.member(LA(2)))) {
 					programStatement2(cr);
 				}
 				else if ((LA(1)==LITERAL_access) && (LA(2)==IDENT||LA(2)==STRING_LITERAL||LA(2)==LCURLY)) {
@@ -1622,7 +1435,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop64;
+					break _loop55;
 				}
 				
 			} while (true);
@@ -1648,7 +1461,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_16);
+				recover(ex,_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -1664,20 +1477,20 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			match(LITERAL_invariant);
 			{
-			_loop272:
+			_loop263:
 			do {
-				if ((_tokenSet_17.member(LA(1)))) {
+				if ((_tokenSet_18.member(LA(1)))) {
 					{
 					if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
 						i1=ident();
 						match(TOK_COLON);
 					}
-					else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
+					else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_19.member(LA(2)))) {
 						if ( inputState.guessing==0 ) {
 							i1=null;
 						}
 					}
-					else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
+					else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_19.member(LA(2)))) {
 					}
 					else {
 						throw new NoViableAltException(LT(1), getFilename());
@@ -1690,7 +1503,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					break _loop272;
+					break _loop263;
 				}
 				
 			} while (true);
@@ -1699,7 +1512,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_16);
+				recover(ex,_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -1715,7 +1528,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			docstrings(cr);
 			{
-			_loop70:
+			_loop61:
 			do {
 				switch ( LA(1)) {
 				case LITERAL_constructor:
@@ -1746,7 +1559,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					break;
 				}
 				default:
-					if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_13.member(LA(2)))) {
+					if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_14.member(LA(2)))) {
 						functionDef2(cr.funcDef());
 					}
 					else if ((LA(1)==LITERAL_type) && (LA(2)==IDENT)) {
@@ -1755,14 +1568,14 @@ public ElijjahParser(ParserSharedInputState state) {
 						match(BECOMES);
 						match(IDENT);
 						{
-						_loop69:
+						_loop60:
 						do {
 							if ((LA(1)==BOR)) {
 								match(BOR);
 								match(IDENT);
 							}
 							else {
-								break _loop69;
+								break _loop60;
 							}
 							
 						} while (true);
@@ -1771,7 +1584,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					else if ((LA(1)==LITERAL_type) && (LA(2)==LITERAL_alias)) {
 						typeAlias2(cr.typeAlias());
 					}
-					else if ((_tokenSet_14.member(LA(1))) && (_tokenSet_25.member(LA(2)))) {
+					else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_25.member(LA(2)))) {
 						programStatement2(cr);
 					}
 					else if ((LA(1)==LITERAL_prop||LA(1)==LITERAL_property) && (LA(2)==IDENT)) {
@@ -1781,7 +1594,7 @@ public ElijjahParser(ParserSharedInputState state) {
 						propertyStatement2_abstract(cr);
 					}
 				else {
-					break _loop70;
+					break _loop61;
 				}
 				}
 			} while (true);
@@ -1807,7 +1620,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_16);
+				recover(ex,_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -1822,10 +1635,10 @@ public ElijjahParser(ParserSharedInputState state) {
 		
 		try {      // for error handling
 			{
-			boolean synPredMatched119 = false;
+			boolean synPredMatched110 = false;
 			if (((LA(1)==STRING_LITERAL) && (_tokenSet_26.member(LA(2))))) {
-				int _m119 = mark();
-				synPredMatched119 = true;
+				int _m110 = mark();
+				synPredMatched110 = true;
 				inputState.guessing++;
 				try {
 					{
@@ -1833,15 +1646,15 @@ public ElijjahParser(ParserSharedInputState state) {
 					}
 				}
 				catch (RecognitionException pe) {
-					synPredMatched119 = false;
+					synPredMatched110 = false;
 				}
-				rewind(_m119);
+				rewind(_m110);
 inputState.guessing--;
 			}
-			if ( synPredMatched119 ) {
+			if ( synPredMatched110 ) {
 				{
-				int _cnt121=0;
-				_loop121:
+				int _cnt112=0;
+				_loop112:
 				do {
 					if ((LA(1)==STRING_LITERAL) && (_tokenSet_26.member(LA(2)))) {
 						s1 = LT(1);
@@ -1851,10 +1664,10 @@ inputState.guessing--;
 						}
 					}
 					else {
-						if ( _cnt121>=1 ) { break _loop121; } else {throw new NoViableAltException(LT(1), getFilename());}
+						if ( _cnt112>=1 ) { break _loop112; } else {throw new NoViableAltException(LT(1), getFilename());}
 					}
 					
-					_cnt121++;
+					_cnt112++;
 				} while (true);
 				}
 			}
@@ -2004,7 +1817,7 @@ inputState.guessing--;
 		
 		try {      // for error handling
 			{
-			_loop208:
+			_loop199:
 			do {
 				if ((LA(1)==ANNOT)) {
 					a=annotation_clause();
@@ -2013,7 +1826,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop208;
+					break _loop199;
 				}
 				
 			} while (true);
@@ -2138,14 +1951,14 @@ inputState.guessing--;
 			{
 			varStmt_i(vsq.next());
 			{
-			_loop225:
+			_loop216:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
 					varStmt_i(vsq.next());
 				}
 				else {
-					break _loop225;
+					break _loop216;
 				}
 				
 			} while (true);
@@ -2244,7 +2057,7 @@ inputState.guessing--;
 			}
 			match(LCURLY);
 			{
-			_loop424:
+			_loop415:
 			do {
 				switch ( LA(1)) {
 				case LITERAL_get:
@@ -2307,7 +2120,7 @@ inputState.guessing--;
 				}
 				default:
 				{
-					break _loop424;
+					break _loop415;
 				}
 				}
 			} while (true);
@@ -2530,7 +2343,7 @@ inputState.guessing--;
 		
 		try {      // for error handling
 			{
-			_loop213:
+			_loop204:
 			do {
 				if ((LA(1)==ANNOT)) {
 					a=annotation_clause();
@@ -2539,7 +2352,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop213;
+					break _loop204;
 				}
 				
 			} while (true);
@@ -2652,7 +2465,7 @@ inputState.guessing--;
 			{
 			varStmt_i2(vsqb);
 			{
-			_loop233:
+			_loop224:
 			do {
 				if ((LA(1)==COMMA)) {
 					if ( inputState.guessing==0 ) {
@@ -2662,7 +2475,7 @@ inputState.guessing--;
 					varStmt_i2(vsqb);
 				}
 				else {
-					break _loop233;
+					break _loop224;
 				}
 				
 			} while (true);
@@ -2804,7 +2617,7 @@ inputState.guessing--;
 			}
 			match(LCURLY);
 			{
-			_loop436:
+			_loop427:
 			do {
 				switch ( LA(1)) {
 				case LITERAL_get:
@@ -2861,7 +2674,7 @@ inputState.guessing--;
 				}
 				default:
 				{
-					break _loop436;
+					break _loop427;
 				}
 				}
 			} while (true);
@@ -2934,7 +2747,7 @@ inputState.guessing--;
 			}
 			match(LCURLY);
 			{
-			_loop429:
+			_loop420:
 			do {
 				switch ( LA(1)) {
 				case LITERAL_get:
@@ -2957,7 +2770,7 @@ inputState.guessing--;
 				}
 				default:
 				{
-					break _loop429;
+					break _loop420;
 				}
 				}
 			} while (true);
@@ -3036,7 +2849,7 @@ inputState.guessing--;
 		try {      // for error handling
 			docstrings(cr);
 			{
-			_loop135:
+			_loop126:
 			do {
 				if ((_tokenSet_32.member(LA(1)))) {
 					{
@@ -3062,10 +2875,10 @@ inputState.guessing--;
 						break;
 					}
 					default:
-						if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_13.member(LA(2)))) {
+						if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_14.member(LA(2)))) {
 							functionDef(cr.funcDef());
 						}
-						else if ((_tokenSet_14.member(LA(1))) && (_tokenSet_15.member(LA(2)))) {
+						else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
 							programStatement(cr.XXX(), cr);
 						}
 					else {
@@ -3076,7 +2889,7 @@ inputState.guessing--;
 					opt_semi();
 				}
 				else {
-					break _loop135;
+					break _loop126;
 				}
 				
 			} while (true);
@@ -3102,7 +2915,7 @@ inputState.guessing--;
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_16);
+				recover(ex,_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -3117,7 +2930,7 @@ inputState.guessing--;
 		
 		try {      // for error handling
 			{
-			_loop80:
+			_loop71:
 			do {
 				if ((LA(1)==ANNOT)) {
 					a=annotation_clause();
@@ -3126,7 +2939,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop80;
+					break _loop71;
 				}
 				
 			} while (true);
@@ -3177,7 +2990,7 @@ inputState.guessing--;
 		try {      // for error handling
 			docstrings(cr);
 			{
-			_loop140:
+			_loop131:
 			do {
 				if ((_tokenSet_32.member(LA(1)))) {
 					{
@@ -3203,10 +3016,10 @@ inputState.guessing--;
 						break;
 					}
 					default:
-						if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_13.member(LA(2)))) {
+						if ((LA(1)==IDENT||LA(1)==ANNOT) && (_tokenSet_14.member(LA(2)))) {
 							functionDef2(cr.funcDef());
 						}
-						else if ((_tokenSet_14.member(LA(1))) && (_tokenSet_24.member(LA(2)))) {
+						else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_24.member(LA(2)))) {
 							programStatement2(cr);
 						}
 					else {
@@ -3217,7 +3030,7 @@ inputState.guessing--;
 					opt_semi();
 				}
 				else {
-					break _loop140;
+					break _loop131;
 				}
 				
 			} while (true);
@@ -3243,7 +3056,7 @@ inputState.guessing--;
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_16);
+				recover(ex,_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -3278,10 +3091,10 @@ inputState.guessing--;
 			{
 				match(LITERAL_import);
 				{
-				boolean synPredMatched85 = false;
+				boolean synPredMatched76 = false;
 				if (((LA(1)==IDENT) && (LA(2)==BECOMES))) {
-					int _m85 = mark();
-					synPredMatched85 = true;
+					int _m76 = mark();
+					synPredMatched76 = true;
 					inputState.guessing++;
 					try {
 						{
@@ -3290,35 +3103,35 @@ inputState.guessing--;
 						}
 					}
 					catch (RecognitionException pe) {
-						synPredMatched85 = false;
+						synPredMatched76 = false;
 					}
-					rewind(_m85);
+					rewind(_m76);
 inputState.guessing--;
 				}
-				if ( synPredMatched85 ) {
+				if ( synPredMatched76 ) {
 					if ( inputState.guessing==0 ) {
 						pc=new AssigningImportStatement(el);ctx=new ImportContext(cur, pc);pc.setContext(ctx);cur=ctx;
 					}
 					importPart1((AssigningImportStatement)pc);
 					{
-					_loop87:
+					_loop78:
 					do {
 						if ((LA(1)==COMMA)) {
 							match(COMMA);
 							importPart1((AssigningImportStatement)pc);
 						}
 						else {
-							break _loop87;
+							break _loop78;
 						}
 						
 					} while (true);
 					}
 				}
 				else {
-					boolean synPredMatched89 = false;
+					boolean synPredMatched80 = false;
 					if (((LA(1)==IDENT) && (LA(2)==DOT||LA(2)==LCURLY))) {
-						int _m89 = mark();
-						synPredMatched89 = true;
+						int _m80 = mark();
+						synPredMatched80 = true;
 						inputState.guessing++;
 						try {
 							{
@@ -3327,25 +3140,25 @@ inputState.guessing--;
 							}
 						}
 						catch (RecognitionException pe) {
-							synPredMatched89 = false;
+							synPredMatched80 = false;
 						}
-						rewind(_m89);
+						rewind(_m80);
 inputState.guessing--;
 					}
-					if ( synPredMatched89 ) {
+					if ( synPredMatched80 ) {
 						if ( inputState.guessing==0 ) {
 							pc=new QualifiedImportStatement(el);ctx=new ImportContext(cur, pc);pc.setContext(ctx);cur=ctx;
 						}
 						importPart2((QualifiedImportStatement)pc);
 						{
-						_loop91:
+						_loop82:
 						do {
 							if ((LA(1)==COMMA)) {
 								match(COMMA);
 								importPart2((QualifiedImportStatement)pc);
 							}
 							else {
-								break _loop91;
+								break _loop82;
 							}
 							
 						} while (true);
@@ -3357,14 +3170,14 @@ inputState.guessing--;
 						}
 						importPart3((NormalImportStatement)pc);
 						{
-						_loop93:
+						_loop84:
 						do {
 							if ((LA(1)==COMMA)) {
 								match(COMMA);
 								importPart3((NormalImportStatement)pc);
 							}
 							else {
-								break _loop93;
+								break _loop84;
 							}
 							
 						} while (true);
@@ -3407,7 +3220,7 @@ inputState.guessing--;
 				qal.add(qid);
 			}
 			{
-			_loop257:
+			_loop248:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
@@ -3417,7 +3230,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop257;
+					break _loop248;
 				}
 				
 			} while (true);
@@ -3528,10 +3341,10 @@ inputState.guessing--;
 			{
 				match(LITERAL_import);
 				{
-				boolean synPredMatched97 = false;
+				boolean synPredMatched88 = false;
 				if (((LA(1)==IDENT) && (LA(2)==BECOMES))) {
-					int _m97 = mark();
-					synPredMatched97 = true;
+					int _m88 = mark();
+					synPredMatched88 = true;
 					inputState.guessing++;
 					try {
 						{
@@ -3540,32 +3353,32 @@ inputState.guessing--;
 						}
 					}
 					catch (RecognitionException pe) {
-						synPredMatched97 = false;
+						synPredMatched88 = false;
 					}
-					rewind(_m97);
+					rewind(_m88);
 inputState.guessing--;
 				}
-				if ( synPredMatched97 ) {
+				if ( synPredMatched88 ) {
 					importPart1_(ib);
 					{
-					_loop99:
+					_loop90:
 					do {
 						if ((LA(1)==COMMA)) {
 							match(COMMA);
 							importPart1_(ib);
 						}
 						else {
-							break _loop99;
+							break _loop90;
 						}
 						
 					} while (true);
 					}
 				}
 				else {
-					boolean synPredMatched101 = false;
+					boolean synPredMatched92 = false;
 					if (((_tokenSet_28.member(LA(1))) && (_tokenSet_35.member(LA(2))))) {
-						int _m101 = mark();
-						synPredMatched101 = true;
+						int _m92 = mark();
+						synPredMatched92 = true;
 						inputState.guessing++;
 						try {
 							{
@@ -3574,24 +3387,24 @@ inputState.guessing--;
 							}
 						}
 						catch (RecognitionException pe) {
-							synPredMatched101 = false;
+							synPredMatched92 = false;
 						}
-						rewind(_m101);
+						rewind(_m92);
 inputState.guessing--;
 					}
-					if ( synPredMatched101 ) {
+					if ( synPredMatched92 ) {
 					}
 					else if ((LA(1)==IDENT) && (LA(2)==DOT||LA(2)==LCURLY)) {
 						importPart2_(ib);
 						{
-						_loop103:
+						_loop94:
 						do {
 							if ((LA(1)==COMMA)) {
 								match(COMMA);
 								importPart2_(ib);
 							}
 							else {
-								break _loop103;
+								break _loop94;
 							}
 							
 						} while (true);
@@ -3600,14 +3413,14 @@ inputState.guessing--;
 					else if ((LA(1)==IDENT) && (_tokenSet_36.member(LA(2)))) {
 						importPart3_(ib);
 						{
-						_loop105:
+						_loop96:
 						do {
 							if ((LA(1)==COMMA)) {
 								match(COMMA);
 								importPart3_(ib);
 							}
 							else {
-								break _loop105;
+								break _loop96;
 							}
 							
 						} while (true);
@@ -3648,7 +3461,7 @@ inputState.guessing--;
 				qal.add(qid);
 			}
 			{
-			_loop260:
+			_loop251:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
@@ -3658,7 +3471,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop260;
+					break _loop251;
 				}
 				
 			} while (true);
@@ -3757,7 +3570,7 @@ inputState.guessing--;
 				ail.push(s);
 			}
 			{
-			_loop251:
+			_loop242:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
@@ -3767,7 +3580,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop251;
+					break _loop242;
 				}
 				
 			} while (true);
@@ -3776,7 +3589,7 @@ inputState.guessing--;
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_16);
+				recover(ex,_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -3853,20 +3666,23 @@ inputState.guessing--;
 	) throws RecognitionException, TokenStreamException {
 		Scope3 sc;
 		
-		sc=new Scope3(parent);
+		sc=new Scope3(parent);ClassStatement cls=null;
 		
 		try {      // for error handling
 			match(LCURLY);
 			docstrings(sc);
 			{
-			_loop149:
+			_loop140:
 			do {
 				if ((_tokenSet_40.member(LA(1)))) {
 					{
 					switch ( LA(1)) {
 					case LITERAL_class:
 					{
-						classStatement3__(sc.getParent(), cur, null/*annotations*/);
+						cls=classStatement3__(sc.getParent(), cur, null/*annotations*/);
+						if ( inputState.guessing==0 ) {
+							sc.add(cls);
+						}
 						break;
 					}
 					case LITERAL_continue:
@@ -3883,10 +3699,10 @@ inputState.guessing--;
 					{
 						match(LITERAL_return);
 						{
-						boolean synPredMatched147 = false;
-						if (((_tokenSet_17.member(LA(1))) && (_tokenSet_41.member(LA(2))))) {
-							int _m147 = mark();
-							synPredMatched147 = true;
+						boolean synPredMatched138 = false;
+						if (((_tokenSet_18.member(LA(1))) && (_tokenSet_41.member(LA(2))))) {
+							int _m138 = mark();
+							synPredMatched138 = true;
 							inputState.guessing++;
 							try {
 								{
@@ -3894,12 +3710,12 @@ inputState.guessing--;
 								}
 							}
 							catch (RecognitionException pe) {
-								synPredMatched147 = false;
+								synPredMatched138 = false;
 							}
-							rewind(_m147);
+							rewind(_m138);
 inputState.guessing--;
 						}
-						if ( synPredMatched147 ) {
+						if ( synPredMatched138 ) {
 							{
 							expr=expression();
 							}
@@ -3922,7 +3738,7 @@ inputState.guessing--;
 						if ((_tokenSet_44.member(LA(1))) && (_tokenSet_45.member(LA(2)))) {
 							statement(sc.statementClosure(), sc.getParent());
 						}
-						else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_41.member(LA(2)))) {
+						else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_41.member(LA(2)))) {
 							expr=expression();
 							if ( inputState.guessing==0 ) {
 								sc.statementWrapper(expr);
@@ -3939,7 +3755,7 @@ inputState.guessing--;
 					opt_semi();
 				}
 				else {
-					break _loop149;
+					break _loop140;
 				}
 				
 			} while (true);
@@ -3966,7 +3782,7 @@ inputState.guessing--;
 			match(LCURLY);
 			docstrings(sc);
 			{
-			_loop165:
+			_loop156:
 			do {
 				if ((_tokenSet_48.member(LA(1)))) {
 					{
@@ -3997,10 +3813,10 @@ inputState.guessing--;
 					{
 						match(LITERAL_return);
 						{
-						boolean synPredMatched163 = false;
-						if (((_tokenSet_17.member(LA(1))) && (_tokenSet_49.member(LA(2))))) {
-							int _m163 = mark();
-							synPredMatched163 = true;
+						boolean synPredMatched154 = false;
+						if (((_tokenSet_18.member(LA(1))) && (_tokenSet_49.member(LA(2))))) {
+							int _m154 = mark();
+							synPredMatched154 = true;
 							inputState.guessing++;
 							try {
 								{
@@ -4008,12 +3824,12 @@ inputState.guessing--;
 								}
 							}
 							catch (RecognitionException pe) {
-								synPredMatched163 = false;
+								synPredMatched154 = false;
 							}
-							rewind(_m163);
+							rewind(_m154);
 inputState.guessing--;
 						}
-						if ( synPredMatched163 ) {
+						if ( synPredMatched154 ) {
 							{
 							expr=expression();
 							}
@@ -4042,7 +3858,7 @@ inputState.guessing--;
 						if ((_tokenSet_44.member(LA(1))) && (_tokenSet_52.member(LA(2)))) {
 							statement2(sc);
 						}
-						else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_49.member(LA(2)))) {
+						else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_49.member(LA(2)))) {
 							expr=expression();
 							if ( inputState.guessing==0 ) {
 								sc.statementWrapper(expr);
@@ -4059,7 +3875,7 @@ inputState.guessing--;
 					opt_semi();
 				}
 				else {
-					break _loop165;
+					break _loop156;
 				}
 				
 			} while (true);
@@ -4085,7 +3901,7 @@ inputState.guessing--;
 			match(LCURLY);
 			docstrings(sc);
 			{
-			_loop157:
+			_loop148:
 			do {
 				if ((_tokenSet_48.member(LA(1)))) {
 					{
@@ -4116,10 +3932,10 @@ inputState.guessing--;
 					{
 						match(LITERAL_return);
 						{
-						boolean synPredMatched155 = false;
-						if (((_tokenSet_17.member(LA(1))) && (_tokenSet_49.member(LA(2))))) {
-							int _m155 = mark();
-							synPredMatched155 = true;
+						boolean synPredMatched146 = false;
+						if (((_tokenSet_18.member(LA(1))) && (_tokenSet_49.member(LA(2))))) {
+							int _m146 = mark();
+							synPredMatched146 = true;
 							inputState.guessing++;
 							try {
 								{
@@ -4127,12 +3943,12 @@ inputState.guessing--;
 								}
 							}
 							catch (RecognitionException pe) {
-								synPredMatched155 = false;
+								synPredMatched146 = false;
 							}
-							rewind(_m155);
+							rewind(_m146);
 inputState.guessing--;
 						}
-						if ( synPredMatched155 ) {
+						if ( synPredMatched146 ) {
 							{
 							expr=expression();
 							}
@@ -4161,7 +3977,7 @@ inputState.guessing--;
 						if ((_tokenSet_44.member(LA(1))) && (_tokenSet_52.member(LA(2)))) {
 							statement2(sc);
 						}
-						else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_49.member(LA(2)))) {
+						else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_49.member(LA(2)))) {
 							expr=expression();
 							if ( inputState.guessing==0 ) {
 								sc.statementWrapper(expr);
@@ -4178,7 +3994,7 @@ inputState.guessing--;
 					opt_semi();
 				}
 				else {
-					break _loop157;
+					break _loop148;
 				}
 				
 			} while (true);
@@ -4876,7 +4692,7 @@ inputState.guessing--;
 	) throws RecognitionException, TokenStreamException {
 		Scope3 sc;
 		
-		sc=new Scope3(parent);
+		sc=new Scope3(parent);ClassStatement cls=null;
 		
 		try {      // for error handling
 			match(LCURLY);
@@ -4921,14 +4737,17 @@ inputState.guessing--;
 			case LITERAL_iterate:
 			{
 				{
-				_loop180:
+				_loop171:
 				do {
 					if ((_tokenSet_59.member(LA(1)))) {
 						{
 						switch ( LA(1)) {
 						case LITERAL_class:
 						{
-							classStatement3__(sc.getParent(), cur, null/*annotations*/);
+							cls=classStatement3__(sc.getParent(), cur, null/*annotations*/);
+							if ( inputState.guessing==0 ) {
+								sc.add(cls);
+							}
 							break;
 						}
 						case LITERAL_continue:
@@ -4945,10 +4764,10 @@ inputState.guessing--;
 						{
 							match(LITERAL_return);
 							{
-							boolean synPredMatched178 = false;
-							if (((_tokenSet_17.member(LA(1))) && (_tokenSet_60.member(LA(2))))) {
-								int _m178 = mark();
-								synPredMatched178 = true;
+							boolean synPredMatched169 = false;
+							if (((_tokenSet_18.member(LA(1))) && (_tokenSet_60.member(LA(2))))) {
+								int _m169 = mark();
+								synPredMatched169 = true;
 								inputState.guessing++;
 								try {
 									{
@@ -4956,12 +4775,12 @@ inputState.guessing--;
 									}
 								}
 								catch (RecognitionException pe) {
-									synPredMatched178 = false;
+									synPredMatched169 = false;
 								}
-								rewind(_m178);
+								rewind(_m169);
 inputState.guessing--;
 							}
-							if ( synPredMatched178 ) {
+							if ( synPredMatched169 ) {
 								{
 								expr=expression();
 								}
@@ -4979,7 +4798,7 @@ inputState.guessing--;
 							if ((_tokenSet_44.member(LA(1))) && (_tokenSet_63.member(LA(2)))) {
 								statement(sc.statementClosure(), sc.getParent());
 							}
-							else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_60.member(LA(2)))) {
+							else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_60.member(LA(2)))) {
 								expr=expression();
 								if ( inputState.guessing==0 ) {
 									sc.statementWrapper(expr);
@@ -4993,7 +4812,7 @@ inputState.guessing--;
 						opt_semi();
 					}
 					else {
-						break _loop180;
+						break _loop171;
 					}
 					
 				} while (true);
@@ -5129,7 +4948,7 @@ inputState.guessing--;
 			case LITERAL_iterate:
 			{
 				{
-				_loop186:
+				_loop177:
 				do {
 					if ((_tokenSet_64.member(LA(1)))) {
 						{
@@ -5149,7 +4968,7 @@ inputState.guessing--;
 							if ((_tokenSet_44.member(LA(1))) && (_tokenSet_65.member(LA(2)))) {
 								statement2(sc);
 							}
-							else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_66.member(LA(2)))) {
+							else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_66.member(LA(2)))) {
 								expr=expression();
 								if ( inputState.guessing==0 ) {
 									sc.statementWrapper(expr);
@@ -5163,7 +4982,7 @@ inputState.guessing--;
 						opt_semi();
 					}
 					else {
-						break _loop186;
+						break _loop177;
 					}
 					
 				} while (true);
@@ -5224,16 +5043,16 @@ inputState.guessing--;
 			match(LITERAL_pre);
 			match(LCURLY);
 			{
-			_loop195:
+			_loop186:
 			do {
-				if ((_tokenSet_17.member(LA(1)))) {
+				if ((_tokenSet_18.member(LA(1)))) {
 					p=precondition();
 					if ( inputState.guessing==0 ) {
 						sc.addPreCondition(p);
 					}
 				}
 				else {
-					break _loop195;
+					break _loop186;
 				}
 				
 			} while (true);
@@ -5258,10 +5077,10 @@ inputState.guessing--;
 		try {      // for error handling
 			match(LITERAL_return);
 			{
-			boolean synPredMatched191 = false;
-			if (((_tokenSet_17.member(LA(1))) && (_tokenSet_66.member(LA(2))))) {
-				int _m191 = mark();
-				synPredMatched191 = true;
+			boolean synPredMatched182 = false;
+			if (((_tokenSet_18.member(LA(1))) && (_tokenSet_66.member(LA(2))))) {
+				int _m182 = mark();
+				synPredMatched182 = true;
 				inputState.guessing++;
 				try {
 					{
@@ -5269,12 +5088,12 @@ inputState.guessing--;
 					}
 				}
 				catch (RecognitionException pe) {
-					synPredMatched191 = false;
+					synPredMatched182 = false;
 				}
-				rewind(_m191);
+				rewind(_m182);
 inputState.guessing--;
 			}
-			if ( synPredMatched191 ) {
+			if ( synPredMatched182 ) {
 				{
 				expr=expression();
 				}
@@ -5315,16 +5134,16 @@ inputState.guessing--;
 			if ((LA(1)==LCURLY) && (_tokenSet_70.member(LA(2)))) {
 				match(LCURLY);
 				{
-				_loop199:
+				_loop190:
 				do {
-					if ((_tokenSet_17.member(LA(1)))) {
+					if ((_tokenSet_18.member(LA(1)))) {
 						po=postcondition();
 						if ( inputState.guessing==0 ) {
 							sc.addPostCondition(po);
 						}
 					}
 					else {
-						break _loop199;
+						break _loop190;
 					}
 					
 				} while (true);
@@ -5333,16 +5152,16 @@ inputState.guessing--;
 			}
 			else if ((_tokenSet_70.member(LA(1))) && (_tokenSet_71.member(LA(2)))) {
 				{
-				_loop201:
+				_loop192:
 				do {
-					if ((_tokenSet_17.member(LA(1)))) {
+					if ((_tokenSet_18.member(LA(1)))) {
 						po=postcondition();
 						if ( inputState.guessing==0 ) {
 							sc.addPostCondition(po);
 						}
 					}
 					else {
-						break _loop201;
+						break _loop192;
 					}
 					
 				} while (true);
@@ -5357,7 +5176,7 @@ inputState.guessing--;
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
 				reportError(ex);
-				recover(ex,_tokenSet_16);
+				recover(ex,_tokenSet_17);
 			} else {
 			  throw ex;
 			}
@@ -5378,7 +5197,7 @@ inputState.guessing--;
 					prec.id(id);
 				}
 			}
-			else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
+			else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_19.member(LA(2)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -5415,7 +5234,7 @@ inputState.guessing--;
 					postc.id(id);
 				}
 			}
-			else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
+			else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_19.member(LA(2)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -5585,14 +5404,14 @@ inputState.guessing--;
 			{
 				formalArgListItem_priv(fal.next());
 				{
-				_loop413:
+				_loop404:
 				do {
 					if ((LA(1)==COMMA)) {
 						match(COMMA);
 						formalArgListItem_priv(fal.next());
 					}
 					else {
-						break _loop413;
+						break _loop404;
 					}
 					
 				} while (true);
@@ -5628,7 +5447,7 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=conditionalExpression();
 			{
-			if ((_tokenSet_73.member(LA(1))) && (_tokenSet_17.member(LA(2)))) {
+			if ((_tokenSet_73.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
 				{
 				switch ( LA(1)) {
 				case BECOMES:
@@ -5777,12 +5596,12 @@ inputState.guessing--;
 				cur=cur.getParent();
 			}
 			{
-			_loop345:
+			_loop336:
 			do {
-				boolean synPredMatched344 = false;
+				boolean synPredMatched335 = false;
 				if (((LA(1)==LITERAL_else||LA(1)==LITERAL_elseif) && (_tokenSet_75.member(LA(2))))) {
-					int _m344 = mark();
-					synPredMatched344 = true;
+					int _m335 = mark();
+					synPredMatched335 = true;
 					inputState.guessing++;
 					try {
 						{
@@ -5791,16 +5610,16 @@ inputState.guessing--;
 						}
 					}
 					catch (RecognitionException pe) {
-						synPredMatched344 = false;
+						synPredMatched335 = false;
 					}
-					rewind(_m344);
+					rewind(_m335);
 inputState.guessing--;
 				}
-				if ( synPredMatched344 ) {
+				if ( synPredMatched335 ) {
 					elseif_part(ifex.elseif());
 				}
 				else {
-					break _loop345;
+					break _loop336;
 				}
 				
 			} while (true);
@@ -5902,8 +5721,8 @@ inputState.guessing--;
 				ctx=new MatchContext(cur, mc);mc.setContext(ctx);cur=ctx;
 			}
 			{
-			int _cnt351=0;
-			_loop351:
+			int _cnt342=0;
+			_loop342:
 			do {
 				if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
 					if ( inputState.guessing==0 ) {
@@ -5923,7 +5742,7 @@ inputState.guessing--;
 						mcp1.scope(sco);
 					}
 				}
-				else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_76.member(LA(2)))) {
+				else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_76.member(LA(2)))) {
 					if ( inputState.guessing==0 ) {
 						mcp2 = mc.normal();
 					}
@@ -5951,10 +5770,10 @@ inputState.guessing--;
 					}
 				}
 				else {
-					if ( _cnt351>=1 ) { break _loop351; } else {throw new NoViableAltException(LT(1), getFilename());}
+					if ( _cnt342>=1 ) { break _loop342; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt351++;
+				_cnt342++;
 			} while (true);
 			}
 			match(RCURLY);
@@ -5989,9 +5808,9 @@ inputState.guessing--;
 				ctx=new CaseContext(cur, mc);mc.setContext(ctx);cur=ctx;
 			}
 			{
-			_loop354:
+			_loop345:
 			do {
-				if ((_tokenSet_17.member(LA(1)))) {
+				if ((_tokenSet_18.member(LA(1)))) {
 					expr=expression();
 					sco=scope3(mc);
 					if ( inputState.guessing==0 ) {
@@ -5999,7 +5818,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop354;
+					break _loop345;
 				}
 				
 			} while (true);
@@ -6254,13 +6073,13 @@ inputState.guessing--;
 			}
 			scope2(ifb.base_expr.scope());
 			{
-			_loop364:
+			_loop355:
 			do {
 				if ((LA(1)==LITERAL_else||LA(1)==LITERAL_elseif) && (_tokenSet_75.member(LA(2)))) {
 					elseif_part2(ifb.new_expr());
 				}
 				else {
-					break _loop364;
+					break _loop355;
 				}
 				
 			} while (true);
@@ -6352,8 +6171,8 @@ inputState.guessing--;
 			}
 			match(LCURLY);
 			{
-			int _cnt370=0;
-			_loop370:
+			int _cnt361=0;
+			_loop361:
 			do {
 				if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
 					i1=ident();
@@ -6361,7 +6180,7 @@ inputState.guessing--;
 					tn=typeName2();
 					scope2(mc.typeMatchscope(i1, tn));
 				}
-				else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_76.member(LA(2)))) {
+				else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_76.member(LA(2)))) {
 					expr=expression();
 					scope2(mc.normalscope(expr));
 				}
@@ -6371,10 +6190,10 @@ inputState.guessing--;
 					scope2(mc.valNormalscope(i1));
 				}
 				else {
-					if ( _cnt370>=1 ) { break _loop370; } else {throw new NoViableAltException(LT(1), getFilename());}
+					if ( _cnt361>=1 ) { break _loop361; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt370++;
+				_cnt361++;
 			} while (true);
 			}
 			match(RCURLY);
@@ -6406,14 +6225,14 @@ inputState.guessing--;
 			}
 			match(LCURLY);
 			{
-			_loop373:
+			_loop364:
 			do {
-				if ((_tokenSet_17.member(LA(1)))) {
+				if ((_tokenSet_18.member(LA(1)))) {
 					expr=expression();
 					scope2(mc.scope(expr));
 				}
 				else {
-					break _loop373;
+					break _loop364;
 				}
 				
 			} while (true);
@@ -6699,7 +6518,7 @@ inputState.guessing--;
 				cr.add(tn);
 			}
 			{
-			_loop406:
+			_loop397:
 			do {
 				if ((LA(1)==COMMA)) {
 					match(COMMA);
@@ -6709,7 +6528,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop406;
+					break _loop397;
 				}
 				
 			} while (true);
@@ -6754,9 +6573,9 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=logicalAndExpression();
 			{
-			_loop283:
+			_loop274:
 			do {
-				if ((LA(1)==LOR) && (_tokenSet_17.member(LA(2)))) {
+				if ((LA(1)==LOR) && (_tokenSet_18.member(LA(2)))) {
 					match(LOR);
 					e3=logicalAndExpression();
 					if ( inputState.guessing==0 ) {
@@ -6764,7 +6583,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop283;
+					break _loop274;
 				}
 				
 			} while (true);
@@ -6789,9 +6608,9 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=inclusiveOrExpression();
 			{
-			_loop286:
+			_loop277:
 			do {
-				if ((LA(1)==LAND) && (_tokenSet_17.member(LA(2)))) {
+				if ((LA(1)==LAND) && (_tokenSet_18.member(LA(2)))) {
 					match(LAND);
 					e3=inclusiveOrExpression();
 					if ( inputState.guessing==0 ) {
@@ -6799,7 +6618,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop286;
+					break _loop277;
 				}
 				
 			} while (true);
@@ -6824,9 +6643,9 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=exclusiveOrExpression();
 			{
-			_loop289:
+			_loop280:
 			do {
-				if ((LA(1)==BOR) && (_tokenSet_17.member(LA(2)))) {
+				if ((LA(1)==BOR) && (_tokenSet_18.member(LA(2)))) {
 					match(BOR);
 					e3=exclusiveOrExpression();
 					if ( inputState.guessing==0 ) {
@@ -6834,7 +6653,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop289;
+					break _loop280;
 				}
 				
 			} while (true);
@@ -6860,9 +6679,9 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=andExpression();
 			{
-			_loop292:
+			_loop283:
 			do {
-				if ((LA(1)==BXOR) && (_tokenSet_17.member(LA(2)))) {
+				if ((LA(1)==BXOR) && (_tokenSet_18.member(LA(2)))) {
 					match(BXOR);
 					e3=andExpression();
 					if ( inputState.guessing==0 ) {
@@ -6870,7 +6689,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop292;
+					break _loop283;
 				}
 				
 			} while (true);
@@ -6896,9 +6715,9 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=equalityExpression();
 			{
-			_loop295:
+			_loop286:
 			do {
-				if ((LA(1)==BAND) && (_tokenSet_17.member(LA(2)))) {
+				if ((LA(1)==BAND) && (_tokenSet_18.member(LA(2)))) {
 					match(BAND);
 					e3=equalityExpression();
 					if ( inputState.guessing==0 ) {
@@ -6906,7 +6725,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop295;
+					break _loop286;
 				}
 				
 			} while (true);
@@ -6933,9 +6752,9 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=relationalExpression();
 			{
-			_loop299:
+			_loop290:
 			do {
-				if ((LA(1)==EQUAL||LA(1)==NOT_EQUAL) && (_tokenSet_17.member(LA(2)))) {
+				if ((LA(1)==EQUAL||LA(1)==NOT_EQUAL) && (_tokenSet_18.member(LA(2)))) {
 					{
 					switch ( LA(1)) {
 					case NOT_EQUAL:
@@ -6966,7 +6785,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop299;
+					break _loop290;
 				}
 				
 			} while (true);
@@ -6996,9 +6815,9 @@ inputState.guessing--;
 			{
 			if ((_tokenSet_8.member(LA(1))) && (_tokenSet_74.member(LA(2)))) {
 				{
-				_loop304:
+				_loop295:
 				do {
-					if ((_tokenSet_78.member(LA(1))) && (_tokenSet_17.member(LA(2)))) {
+					if ((_tokenSet_78.member(LA(1))) && (_tokenSet_18.member(LA(2)))) {
 						{
 						switch ( LA(1)) {
 						case LT_:
@@ -7046,7 +6865,7 @@ inputState.guessing--;
 						}
 					}
 					else {
-						break _loop304;
+						break _loop295;
 					}
 					
 				} while (true);
@@ -7085,9 +6904,9 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=additiveExpression();
 			{
-			_loop308:
+			_loop299:
 			do {
-				if (((LA(1) >= SL && LA(1) <= BSR)) && (_tokenSet_17.member(LA(2)))) {
+				if (((LA(1) >= SL && LA(1) <= BSR)) && (_tokenSet_18.member(LA(2)))) {
 					{
 					switch ( LA(1)) {
 					case SL:
@@ -7126,7 +6945,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop308;
+					break _loop299;
 				}
 				
 			} while (true);
@@ -7152,9 +6971,9 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=multiplicativeExpression();
 			{
-			_loop312:
+			_loop303:
 			do {
-				if ((LA(1)==PLUS||LA(1)==MINUS) && (_tokenSet_17.member(LA(2)))) {
+				if ((LA(1)==PLUS||LA(1)==MINUS) && (_tokenSet_18.member(LA(2)))) {
 					{
 					switch ( LA(1)) {
 					case PLUS:
@@ -7185,7 +7004,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop312;
+					break _loop303;
 				}
 				
 			} while (true);
@@ -7211,9 +7030,9 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=unaryExpression();
 			{
-			_loop316:
+			_loop307:
 			do {
-				if (((LA(1) >= STAR && LA(1) <= MOD)) && (_tokenSet_17.member(LA(2)))) {
+				if (((LA(1) >= STAR && LA(1) <= MOD)) && (_tokenSet_18.member(LA(2)))) {
 					{
 					switch ( LA(1)) {
 					case STAR:
@@ -7252,7 +7071,7 @@ inputState.guessing--;
 					}
 				}
 				else {
-					break _loop316;
+					break _loop307;
 				}
 				
 			} while (true);
@@ -7425,7 +7244,7 @@ inputState.guessing--;
 		try {      // for error handling
 			ee=primaryExpression();
 			{
-			_loop324:
+			_loop315:
 			do {
 				if ((LA(1)==DOT) && (LA(2)==IDENT)) {
 					match(DOT);
@@ -7433,7 +7252,7 @@ inputState.guessing--;
 					ee=dot_expression_or_procedure_call(ee);
 					}
 				}
-				else if ((LA(1)==LBRACK) && (_tokenSet_17.member(LA(2)))) {
+				else if ((LA(1)==LBRACK) && (_tokenSet_18.member(LA(2)))) {
 					lb = LT(1);
 					match(LBRACK);
 					expr=expression();
@@ -7443,7 +7262,7 @@ inputState.guessing--;
 						ee=new GetItemExpression(ee, expr);((GetItemExpression)ee).parens(lb,rb);
 					}
 					{
-					if ((LA(1)==BECOMES) && (_tokenSet_17.member(LA(2)))) {
+					if ((LA(1)==BECOMES) && (_tokenSet_18.member(LA(2)))) {
 						match(BECOMES);
 						expr=expression();
 						if ( inputState.guessing==0 ) {
@@ -7506,7 +7325,7 @@ inputState.guessing--;
 					match(RPAREN);
 				}
 				else {
-					break _loop324;
+					break _loop315;
 				}
 				
 			} while (true);
@@ -7974,12 +7793,12 @@ inputState.guessing--;
 				}
 				match(BOR);
 				{
-				_loop340:
+				_loop331:
 				do {
 					if ((_tokenSet_44.member(LA(1))) && (_tokenSet_81.member(LA(2)))) {
 						statement(sc.statementClosure(), sc.getParent());
 					}
-					else if ((_tokenSet_17.member(LA(1))) && (_tokenSet_82.member(LA(2)))) {
+					else if ((_tokenSet_18.member(LA(1))) && (_tokenSet_82.member(LA(2)))) {
 						expr=expression();
 						if ( inputState.guessing==0 ) {
 							sc.statementWrapper(expr);
@@ -7989,7 +7808,7 @@ inputState.guessing--;
 						classStatement3__(sc.getParent(), cur, null/*annotations*/);
 					}
 					else {
-						break _loop340;
+						break _loop331;
 					}
 					
 				} while (true);
@@ -8966,47 +8785,47 @@ inputState.guessing--;
 	}
 	public static final BitSet _tokenSet_10 = new BitSet(mk_tokenSet_10());
 	private static final long[] mk_tokenSet_11() {
-		long[] data = { 3145728L, 0L};
+		long[] data = { 35910036499250626L, 1689386730225664L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_11 = new BitSet(mk_tokenSet_11());
 	private static final long[] mk_tokenSet_12() {
-		long[] data = { 2097152L, 0L};
+		long[] data = { 3145728L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_12 = new BitSet(mk_tokenSet_12());
 	private static final long[] mk_tokenSet_13() {
-		long[] data = { 52776558657792L, 0L};
+		long[] data = { 2097152L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_13 = new BitSet(mk_tokenSet_13());
 	private static final long[] mk_tokenSet_14() {
-		long[] data = { 562953845768192L, 0L};
+		long[] data = { 52776558657792L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_14 = new BitSet(mk_tokenSet_14());
 	private static final long[] mk_tokenSet_15() {
-		long[] data = { 10944768L, 0L};
+		long[] data = { 562953845768192L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_15 = new BitSet(mk_tokenSet_15());
 	private static final long[] mk_tokenSet_16() {
-		long[] data = { 4194304L, 0L};
+		long[] data = { 10944768L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_16 = new BitSet(mk_tokenSet_16());
 	private static final long[] mk_tokenSet_17() {
-		long[] data = { 2637056L, 2146533376L, 0L, 0L};
+		long[] data = { 4194304L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_17 = new BitSet(mk_tokenSet_17());
 	private static final long[] mk_tokenSet_18() {
-		long[] data = { -36028788321518288L, 2147483647L, 0L, 0L};
+		long[] data = { 2637056L, 2146533376L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_18 = new BitSet(mk_tokenSet_18());
 	private static final long[] mk_tokenSet_19() {
-		long[] data = { 35910036499250626L, 1689386730225664L, 0L, 0L};
+		long[] data = { -36028788321518288L, 2147483647L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_19 = new BitSet(mk_tokenSet_19());
