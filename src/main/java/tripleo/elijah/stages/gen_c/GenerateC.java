@@ -511,6 +511,9 @@ public class GenerateC {
 							}
 							tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
 							tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
+						} else {
+							module.parent.eee.reportError("512 Bad TypeName in GenerateC: "+x);
+							break;
 						}
 					} else {
 						System.err.println("8885 testing_type.attached is null " + testing_type);
