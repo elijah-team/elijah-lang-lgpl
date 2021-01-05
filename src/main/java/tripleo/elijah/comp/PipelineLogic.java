@@ -27,6 +27,8 @@ public class PipelineLogic {
 	final DeducePhase dp = new DeducePhase();
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
 
+	List<GeneratedNode> lgc = null;
+
 	public void run() {
 		for (OS_Module mod : mods) {
 			run2(mod);
@@ -40,8 +42,6 @@ public class PipelineLogic {
 			}
 		}
 	}
-
-	List<GeneratedNode> lgc = null;
 
 	public void run2(OS_Module mod) {
 		final GenerateFunctions gfm = new GenerateFunctions(mod);
