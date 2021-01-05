@@ -497,9 +497,11 @@ public class GenerateC {
 						if (x.getType() == OS_Type.Type.USER) {
 							final TypeName y = x.getTypeName();
 							if (y instanceof NormalTypeName) {
-								final String z = ((NormalTypeName) y).getName();
-								tos.put_string_ln(String.format("vsb = ZS<%s>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
-								tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
+								module.parent.eee.reportError("500 USER TypeName in GenerateC: "+y);
+								break;
+//								final int z = getTypeNumber((NormalTypeName) y);
+//								tos.put_string_ln(String.format("vsb = ZS<%d>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
+//								tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
 							} else
 								System.err.println("8886 " + y.getClass().getName());
 						} else if (x.getType() == OS_Type.Type.USER_CLASS) {
