@@ -266,14 +266,9 @@ public class OS_Module implements OS_Element, OS_Container {
 	}
 
 	private boolean is_main_function_with_no_args(FunctionDef fd) {
-		if (fd._type == FunctionDef.Type.REG_FUN) {
+		if (fd._type == FunctionDef.Type.REG_FUN || fd._type == FunctionDef.Type.DEF_FUN) {
 			if (fd.name().equals("main")) {
-				boolean found = true;
-				for (FormalArgListItem _fali : fd.getArgs()) {
-					found = false;
-					break;
-				}
-				return found;
+				return !fd.getArgs().iterator().hasNext();
 			}
 		}
 		return false;
