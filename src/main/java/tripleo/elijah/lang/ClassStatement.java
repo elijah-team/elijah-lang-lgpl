@@ -34,10 +34,10 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	private ClassTypes _type;
 	private List<AccessNotation> accesses = new ArrayList<AccessNotation>();
 
-	public ClassStatement(final OS_Element aElement, final Context parentContext) {
-		parent = aElement; // setParent
-		if (aElement instanceof  OS_Module) {
-			final OS_Module module = (OS_Module) aElement;
+	public ClassStatement(final OS_Element parentElement, final Context parentContext) {
+		parent = parentElement; // setParent
+		if (parentElement instanceof  OS_Module) {
+			final OS_Module module = (OS_Module) parentElement;
 			//
 			this.setPackageName(module.pullPackageName());
 			_packageName.addElement(this);
@@ -47,7 +47,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		} else if (parentElement instanceof OS_Container) {
 			((OS_Container) parentElement).add(this);
 		} else {
-			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", aElement));
+			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", parentElement));
 		}
 		setContext(new ClassContext(parentContext, this));
 	}
