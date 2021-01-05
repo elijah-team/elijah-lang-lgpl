@@ -251,7 +251,7 @@ public class OS_Module implements OS_Element, OS_Container {
 					}
 					assert entryPoints.size() == eps || entryPoints.size() == eps+1;
 
-					System.out.println("243 " + entryPoints);
+					System.out.println("243 " + entryPoints +" "+ _fileName);
 //					break; // allow for "extend" class
 				}
 			}
