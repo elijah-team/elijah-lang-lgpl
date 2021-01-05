@@ -42,8 +42,10 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 			this.setPackageName(module.pullPackageName());
 			_packageName.addElement(this);
 			module.add(this);
-		} else if (aElement instanceof OS_Container && !(aElement instanceof FunctionDef)) {
-			((OS_Container) aElement).add(this);
+		} else if (parentElement instanceof FunctionDef) {
+			// do nothing
+		} else if (parentElement instanceof OS_Container) {
+			((OS_Container) parentElement).add(this);
 		} else {
 			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", aElement));
 		}
