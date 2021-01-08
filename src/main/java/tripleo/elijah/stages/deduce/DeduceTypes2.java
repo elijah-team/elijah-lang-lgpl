@@ -929,10 +929,14 @@ public class DeduceTypes2 {
 		while (best instanceof AliasStatement) {
 			best = _resolveAlias((AliasStatement) best);
 		}
-		if (best instanceof ClassStatement)
+		if (best instanceof ClassStatement) {
 			return new OS_Type((ClassStatement) best);
-		else
-			return null;
+		} else if (best instanceof VariableStatement) {
+			final VariableStatement vs = (VariableStatement) best;
+			if (!vs.typeName().isNull())
+				return new OS_Type(vs.typeName());
+		}
+		return null;
 	}
 
 	/**
