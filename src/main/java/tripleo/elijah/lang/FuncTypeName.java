@@ -2,6 +2,8 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
 
+import java.io.File;
+
 /**
  * Created 8/16/20 2:16 AM
  */
@@ -46,5 +48,30 @@ public class FuncTypeName implements TypeName {
 	@Override
 	public Context getContext() {
 		return _ctx;
+	}
+
+	@Override
+	public int getLine() {
+		return -1;
+	}
+
+	@Override
+	public int getColumn() {
+		return -1;
+	}
+
+	@Override
+	public int getLineEnd() {
+		return -1;
+	}
+
+	@Override
+	public int getColumnEnd() {
+		return -1;
+	}
+
+	@Override
+	public File getFile() {
+		return null;
 	}
 }

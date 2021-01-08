@@ -14,6 +14,8 @@
  */
 package tripleo.elijah.lang;
 
+import java.io.File;
+
 public class RegularTypeName extends AbstractTypeName2 implements NormalTypeName {
 
 	private TypeNameList genericPart;
@@ -122,6 +124,38 @@ public String getName() {
 	public Qualident getRealName() {
 		return typeName;
 	}
+
+	// region Locatable
+
+	@Override
+	public int getLine() {
+		return getRealName().parts().get(0).getLine();
+	}
+
+	@Override
+	public int getColumn() {
+		return getRealName().parts().get(0).getColumn();
+	}
+
+	// TODO what about generic part
+	@Override
+	public int getColumnEnd() {
+		return getRealName().parts().get(getRealName().parts().size()).getColumnEnd();
+	}
+
+	// TODO what about generic part
+	@Override
+	public int getLineEnd() {
+		return getRealName().parts().get(getRealName().parts().size()).getLineEnd();
+	}
+
+	@Override
+	public File getFile() {
+		return getRealName().parts().get(0).getFile();
+	}
+
+	// endregion
+
 }
 
 //

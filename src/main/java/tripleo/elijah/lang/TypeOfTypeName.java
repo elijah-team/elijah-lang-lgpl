@@ -2,6 +2,8 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
 
+import java.io.File;
+
 /**
  * Created 8/16/20 7:42 AM
  */
@@ -52,4 +54,39 @@ public class TypeOfTypeName implements TypeName {
 			return ((VariableStatement) best).typeName();
 		return null;
 	}
+
+	// region Locatable
+
+	// TODO what about keyword
+	@Override
+	public int getColumn() {
+		return _typeOf.parts().get(0).getColumn();
+	}
+
+	// TODO what about keyword
+	@Override
+	public int getLine() {
+		return _typeOf.parts().get(0).getLine();
+	}
+
+	@Override
+	public int getLineEnd() {
+		return _typeOf.parts().get(_typeOf.parts().size()).getLineEnd();
+	}
+
+	@Override
+	public int getColumnEnd() {
+		return _typeOf.parts().get(_typeOf.parts().size()).getColumnEnd();
+	}
+
+	@Override
+	public File getFile() {
+		return _typeOf.parts().get(0).getFile();
+	}
+
+	// endregion
 }
+
+//
+//
+//

@@ -13,6 +13,8 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.util.NotImplementedException;
 
+import java.io.File;
+
 /**
  * Created 8/16/20 7:42 AM
  */
@@ -57,4 +59,37 @@ public class GenericTypeName implements TypeName {
 	public void setConstraint(TypeName aConstraint) {
 		constraint = aConstraint;
 	}
+
+	// region Locatable
+
+	@Override
+	public int getLine() {
+		return _typeName.parts().get(0).getLine();
+	}
+
+	@Override
+	public int getColumn() {
+		return _typeName.parts().get(0).getColumn();
+	}
+
+	@Override
+	public int getLineEnd() {
+		return _typeName.parts().get(_typeName.parts().size()).getLineEnd();
+	}
+
+	@Override
+	public int getColumnEnd() {
+		return _typeName.parts().get(_typeName.parts().size()).getColumnEnd();
+	}
+
+	@Override
+	public File getFile() {
+		return _typeName.parts().get(0).getFile();
+	}
+
+	// endregion
 }
+
+//
+//
+//
