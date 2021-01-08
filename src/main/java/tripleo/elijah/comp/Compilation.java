@@ -225,15 +225,19 @@ public class Compilation {
 
 	private CompilerInstructions parseEzFile(final File f, final String file_name, final ErrSink errSink) throws Exception {
 		System.out.println((String.format("   %s", f.getAbsolutePath())));
-		if (f.exists()) {
-			final CompilerInstructions m = realParseEzFile(file_name, io.readFile(f), f);
-			return m;
-//			m.prelude = this.findPrelude("c"); // TODO extract Prelude for all modules from here
-		} else {
+		if (!f.exists()) {
 			errSink.reportError(
 					"File doesn't exist " + f.getAbsolutePath());
+			return null;
 		}
-		return null;
+
+		String prelude = null;
+		final CompilerInstructions m = realParseEzFile(file_name, io.readFile(f), f);
+		System.err.println("230 "+m.genLang());
+		if (m.genLang() == null) prelude = "c"; // TODO should be java for eljc
+		return m;
+//		m.prelude = this.findPrelude("c");
+
 	}
 
 	private void parseElijjahFile(@NotNull final File f, final String file_name, final ErrSink errSink, final boolean do_out) throws Exception {
