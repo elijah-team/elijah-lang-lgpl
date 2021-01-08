@@ -883,7 +883,13 @@ public class DeduceTypes2 {
 			return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
 	}
 
-	@NotNull static Stack<IExpression> dot_expression_to_stack(final DotExpression de) {
+	/**
+	 * @see {@link tripleo.elijah.stages.deduce.DotExpressionToStackTest}
+	 * @param de The {@link DotExpression} to turn into a {@link Stack}
+	 * @return a "flat" {@link Stack<IExpression>} of expressions
+	 */
+	@NotNull
+	static Stack<IExpression> dot_expression_to_stack(final DotExpression de) {
 		final Stack<IExpression> right_stack = new Stack<IExpression>();
 		IExpression right = de.getRight();
 		right_stack.push(de.getLeft());
