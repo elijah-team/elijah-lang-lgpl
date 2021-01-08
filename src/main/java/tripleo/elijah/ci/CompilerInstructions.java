@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class CompilerInstructions {
 	private IndexingStatement _idx;
-	private List<GenerateStatement> gens = new ArrayList<GenerateStatement>();
+	private GenerateStatement gen;
 	public List<LibraryStatementPart> lsps = new ArrayList<LibraryStatementPart>();
 	private String filename;
 
@@ -28,7 +28,8 @@ public class CompilerInstructions {
 	}
 
 	public void add(final GenerateStatement generateStatement) {
-		gens.add(generateStatement);
+		assert gen == null;
+		gen = generateStatement;
 	}
 
 	public void add(final LibraryStatementPart libraryStatementPart) {
