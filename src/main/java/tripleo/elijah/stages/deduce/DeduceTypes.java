@@ -123,7 +123,7 @@ public class DeduceTypes {
 			System.out.println("92 Fount if conditional "+ expr); // TODO lookup expr, wrap with __bool__
 			for (final OS_Element item : ((IfConditional) element).getItems()) {
 				System.out.println("93 \t"+ item);
-				deduceExpression_(expr, ((IfConditional) element).getContext());
+				deduceExpression_(expr, ((IfConditional) element).getContext()); // $$BREAKPOINT$$
 /*
 				if (item instanceof IExpression)
 					deduceExpression_((IExpression)item, ((IfConditional) element).getContext());
@@ -133,7 +133,7 @@ public class DeduceTypes {
 				addItem(item, parent);
 			}
 		}  else if (element instanceof StatementWrapper) {
-			final IExpression expr = ((StatementWrapper) element).getExpr();
+			final IExpression expr = ((StatementWrapper) element).getExpr(); // $$BREAKPOINT$$
 			switch (expr.getKind()) {
 				case ASSIGNMENT:
 					NotImplementedException.raise();
@@ -164,7 +164,7 @@ public class DeduceTypes {
 //			parent._a.getContext().nameTable().add((OS_Element) element, ((ClassStatement) element).getName(), new OS_Type((ClassStatement) element));
 		} else if (element instanceof CaseConditional) {
 			NotImplementedException.raise();
-			final CaseConditional cc = (CaseConditional) element;
+			final CaseConditional cc = (CaseConditional) element; // $$BREAKPOINT$$
 			deduceExpression_(cc.getExpr(), cc.getContext());
 			final HashMap<IExpression, CaseConditional.CaseScope> scopes = cc.getScopes();
 			final Set<IExpression> ks = scopes.keySet();
@@ -181,14 +181,14 @@ public class DeduceTypes {
 					} else {
 						final LookupResultList lrl = ident_k.getContext().lookup(identKText);
 						if (lrl.results().size() == 0) {
-							k.setType(cc.getExpr().getType());
+							k.setType(cc.getExpr().getType()); // $$BREAKPOINT$$
 							if (found_default != null)
 								module.parent.eee.reportError("Already found default "+ found_default);
 							else
 								found_default = k;
 						}
 					}
-					if (k != null)
+					if (k != null) // $$BREAKPOINT$$
 						scopes.get(k).setDefault();
 				} else {
 					final OS_Type t = deduceExpression(k, cc.getContext());
@@ -200,7 +200,7 @@ public class DeduceTypes {
 			}
 		} else {
 			System.out.println("91 "+element);
-			throw new NotImplementedException();
+			throw new NotImplementedException(); // $$BREAKPOINT$$
 		}
 	}
 
@@ -211,7 +211,7 @@ public class DeduceTypes {
 
 	private void addFunctionItem_Loop(final Loop loop, final FunctionDef parent) {
 
-		if (loop.getType() == LoopTypes.FROM_TO_TYPE) {
+		if (loop.getType() == LoopTypes.FROM_TO_TYPE) { // $$BREAKPOINT$$
 			//
 			//   DON'T MODIFY NAMESPACE
 			//
@@ -370,14 +370,14 @@ public class DeduceTypes {
 			else if (de instanceof IdentExpression)
 				lrl = ctx.lookup(((IdentExpression) de).getText());
 			else
-				throw new NotImplementedException();
+				throw new NotImplementedException(); // $$BREAKPOINT$$
 			//
 			final List<Predicate> pl = new ArrayList<Predicate>();
 //			pl.add(new DeduceUtils.MatchConstructorArgs(pce));
 			pl.add(new DeduceUtils.MatchFunctionArgs(pce));
 			final OS_Element best = lrl.chooseBest(pl);
 			if (best != null){
-				if (best instanceof VariableStatement) {
+				if (best instanceof VariableStatement) { // $$BREAKPOINT$$
 					final TypeName typeName = ((VariableStatement) best).typeName();
 					if (typeName != null) {
 						// TODO lookup typename.
@@ -399,14 +399,14 @@ public class DeduceTypes {
 					System.err.println("189 "+ best.getClass().getName());
 					module.parent.eee.reportError("type not specified: "+ getElementName(best));
 					NotImplementedException.raise();
-					return false;
+					return false; // $$BREAKPOINT$$
 				}
 				if (pce.getLeft() instanceof IdentExpression)
 					((IdentExpression) pce.getLeft()).setResolvedElement(best);
 				pce.setType(t);
 			} else {
 				if (!(de instanceof IdentExpression)) System.err.println("1002 "+de.getClass().getName()+" "+de);
-				module.parent.eee.reportError(String.format("1001 IDENT not found: %s", de));
+				module.parent.eee.reportError(String.format("1001 IDENT not found: %s", de)); // $$BREAKPOINT$$
 				NotImplementedException.raise();
 				return false;
 			}
@@ -433,10 +433,11 @@ public class DeduceTypes {
 					//  - module.parent.eee.reportError(...)
 				}
 			} else {
-				t = null; // TODO build a control flow graph her and search for exit types
+				// TODO build a control flow graph her and search for exit types
+				t = null; // $$BREAKPOINT$$
 				for (final FunctionItem item : element.getItems()) {
 					if (item instanceof StatementWrapper) {
-						NotImplementedException.raise();
+						NotImplementedException.raise(); // $$BREAKPOINT$$
 					}
 				}
 			}
@@ -459,7 +460,7 @@ public class DeduceTypes {
 			s.pop();
 		}
 		if (t == null) {
-			NotImplementedException.raise();
+			NotImplementedException.raise(); // $$BREAKPOINT$$
 			return new LookupResultList();
 		} else
 			return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
@@ -471,13 +472,13 @@ public class DeduceTypes {
 	}
 
 	private void lookup_and_set(final Context ctx, final IExpression exp, final String function_name) {
-		final LookupResultList lrl = ctx.lookup(function_name);
+		final LookupResultList lrl = ctx.lookup(function_name); // $$BREAKPOINT$$
 		final OS_Element best = lrl.chooseBest(null);
 		if (best == null) {
 			module.parent.eee.reportError("function not found " + function_name);
 			return;
 		}
-		{
+		{ // $$BREAKPOINT$$
 			if (best instanceof ClassStatement) {
 				final OS_Type t = new OS_Type((ClassStatement) best);
 				exp.setType(t);
@@ -580,12 +581,12 @@ public class DeduceTypes {
 			best2 = lrl2.results().get(0).getElement();
 			typeName.setResolvedElement(best2);
 		}
-		pce.setType(new OS_Type((ClassStatement) best2));
+		pce.setType(new OS_Type((ClassStatement) best2)); // $$BREAKPOINT$$
 		deduceProcedureCall_ARGS(pce, context);
 	}
 
 	private OS_Type findFunctionType(final FunctionDef fd) {
-		NotImplementedException.raise();
+		NotImplementedException.raise(); // $$BREAKPOINT$$
 		final TypeName typeName1 = fd.returnType();
 		if (typeName1 != null) {
 			if (typeName1 instanceof NormalTypeName) {
@@ -665,7 +666,7 @@ public class DeduceTypes {
 		});
 //		List<OS_Type> q = Lists.newArrayList(qq);
 
-//		System.out.println("190 " + pce.getArgs()+" "+qq);
+//		System.out.println("190 " + pce.getArgs()+" "+qq); // $$BREAKPOINT$$
 
 		int i = 0;
 		for (final OS_Type os_type : qq) {
@@ -713,7 +714,7 @@ public class DeduceTypes {
 								System.err.println("998 no results for "+left);
 							}
 						} else
-							throw new NotImplementedException();
+							throw new NotImplementedException(); // $$BREAKPOINT$$
 					}
 					if (dtype != null) {
 						iv.setType(dtype);
@@ -732,13 +733,13 @@ public class DeduceTypes {
 		/*if (n.hasResolvedElement()) {
 			return (n.getResolvedElement()).getType();
 		} else*/ {
-			final LookupResultList lrl = n.getContext().lookup(n.getText());
+			final LookupResultList lrl = n.getContext().lookup(n.getText()); // $$BREAKPOINT$$
 			if (lrl.results().size() == 1) { // TODO the reason were having problems here is constraints vs shadowing
 				final OS_Element element = lrl.results().get(0).getElement();
 				if (element instanceof VariableStatement) {
 					final NormalTypeName tn = (NormalTypeName) ((VariableStatement) element).typeName();
 					if (!tn.isNull())
-						return new OS_Type(tn);
+						return new OS_Type(tn); // $$BREAKPOINT$$
 					else
 						return deduceTypeName((VariableStatement) element, context);
 				} else if (element instanceof FormalArgListItem) {
@@ -803,14 +804,14 @@ public class DeduceTypes {
 			final OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
 			NotImplementedException.raise();
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
-			deduceProcedureCall((ProcedureCallExpression) n, context);
+			deduceProcedureCall((ProcedureCallExpression) n, context); // $$BREAKPOINT$$
 			return n.getType();
 		} else if (n.getKind() == ExpressionKind.QIDENT) {
 			final IExpression expression = Helpers.qualidentToDotExpression2(((Qualident) n));
-			return deduceExpression(expression, context);
+			return deduceExpression(expression, context); // $$BREAKPOINT$$
 		}
 		
-		return null;
+		return null; // $$BREAKPOINT$$
 	}
 
 	private String getElementName(final OS_Element element) {
@@ -821,7 +822,7 @@ public class DeduceTypes {
 		} else if (element instanceof OS_Element2) {
 			return ((OS_Element2) element).name();
 		}
-		return "<"+element.getClass().getName()+">";
+		return "<"+element.getClass().getName()+">"; // $$BREAKPOINT$$
 	}
 
 	private void addImport(final ImportStatement imp, final OS_Module parent) {
@@ -881,7 +882,7 @@ public class DeduceTypes {
 						if (fd.fal().falis.size() == 0 /*&& fd.returnType().isNull()*/) {
 							// TODO we dont know for sure the return type
 							// TODO Also check return type is Unit or NoneType
-							addClassItem(fd, classStatement);
+							addClassItem(fd, classStatement); // $$BREAKPOINT$$
 						}
 					}
 				}

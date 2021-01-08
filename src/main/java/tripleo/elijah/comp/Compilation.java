@@ -19,9 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.Out;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.LibraryStatementPart;
-import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.deduce.DeduceTypes;
-import tripleo.elijah.stages.translate.TranslateModule;
+import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.lang.OS_Package;
+import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
@@ -128,6 +129,7 @@ public class Compilation {
 					for (final OS_Module module : modules) {
 						PipelineLogic pipeline = new PipelineLogic();
 						if (false) {
+/*
 							new DeduceTypes(module).deduce();
 							for (final OS_Element2 item : module.items()) {
 								if (item instanceof ClassStatement || item instanceof NamespaceStatement) {
@@ -135,6 +137,7 @@ public class Compilation {
 								}
 							}
 							new TranslateModule(module).translate();
+*/
 //							new ExpandFunctions(module).expand();
 //
 //  	    				final JavaCodeGen visit = new JavaCodeGen();
