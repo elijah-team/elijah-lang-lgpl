@@ -13,6 +13,8 @@ import com.google.common.collect.Multimap;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.stages.gen_fn.GenerateFunctions;
+import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 
@@ -45,10 +47,25 @@ public class DeducePhase {
 	private List<Triplet> forFunctions = new ArrayList<Triplet>();
 	private Multimap<FunctionDef, GeneratedFunction> functionMap = ArrayListMultimap.create();
 
-	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgf) {
-		new DeduceTypes2(m, this).deduceFunctions(lgf);
+	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf) {
+		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this);
+		deduceTypes2.deduceFunctions(lgf);
+		return deduceTypes2;
 	}
 
+	public DeduceTypes2 deduceModule(OS_Module m) {
+		final GenerateFunctions gfm = new GenerateFunctions(m);
+		List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+
+		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
+		for (GeneratedNode lgci : lgc) {
+			if (lgci instanceof GeneratedClass) {
+				lgf.addAll(((GeneratedClass) lgci).functionMap.values());
+			}
+		}
+
+		return deduceModule(m, lgf);
+	}
 	public void forFunction(DeduceTypes2 deduceTypes2, FunctionDef fd, ForFunction forFunction) {
 		forFunctions.add(new Triplet(deduceTypes2, fd, forFunction));
 	}
