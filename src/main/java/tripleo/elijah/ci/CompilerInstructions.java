@@ -8,8 +8,6 @@
  */
 package tripleo.elijah.ci;
 
-import tripleo.elijah.lang.IndexingStatement;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class CompilerInstructions {
 
 	public IndexingStatement indexingStatement() {
 		if (_idx == null)
-			_idx = new IndexingStatement(null); // TODO ride this till the wheels fall off
+			_idx = new IndexingStatement(this);
 
 		return _idx;
 	}
