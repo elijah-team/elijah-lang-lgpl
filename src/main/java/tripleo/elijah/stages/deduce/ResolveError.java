@@ -8,9 +8,14 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.diagnostic.Diagnostic;
+import tripleo.elijah.diagnostic.Locatable;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.TypeName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created 12/26/20 5:08 AM
@@ -22,6 +27,26 @@ public class ResolveError extends Exception implements Diagnostic {
 	public ResolveError(TypeName typeName, LookupResultList lrl) {
 		this.typeName = typeName;
 		this.lrl = lrl;
+	}
+
+	@Override
+	public String code() {
+		return "S1000";
+	}
+
+	@Override
+	public Severity severity() {
+		return Severity.ERROR;
+	}
+
+	@Override
+	public @NotNull Locatable primary() {
+		return typeName;
+	}
+
+	@Override
+	public @NotNull List<Locatable> secondary() {
+		return new ArrayList<Locatable>();
 	}
 }
 
