@@ -45,6 +45,7 @@ public class DeduceTypesTest {
 		final Qualident qu = new Qualident();
 		qu.append(Helpers.string_to_ident("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
+		((NormalTypeName)vs.typeName()).setContext(fd.getContext());
 		fd.scope(scope3);
 		fd.postConstruct();
 		cs.postConstruct();
@@ -52,7 +53,12 @@ public class DeduceTypesTest {
 		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
-		final DeduceTypes d = new DeduceTypes(mod);
+		//
+		//
+		//
+		DeducePhase dp = new DeducePhase();
+		DeduceTypes2 d = dp.deduceModule(mod);
+//		final DeduceTypes d = new DeduceTypes(mod);
 		this.x = d.deduceExpression(x1, fc);
 		System.out.println(this.x);
 	}
