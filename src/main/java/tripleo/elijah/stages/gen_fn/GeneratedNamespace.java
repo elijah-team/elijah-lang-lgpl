@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.*;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class GeneratedNamespace implements GeneratedNode {
 	public void createCtor0() {
 		// TODO implement me
 		FunctionDef fd = new FunctionDef(namespaceStatement, namespaceStatement.getContext());
+		fd.setName(Helpers.string_to_ident("<ctor$0>"));
 		Scope3 scope3 = new Scope3(fd);
 		for (VarTableEntry varTableEntry : varTable) {
 			if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
