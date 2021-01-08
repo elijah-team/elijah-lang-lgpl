@@ -2,19 +2,30 @@
 
   package tripleo.elijjah;
 
-import antlr.*;
+import antlr.TokenBuffer;
+import antlr.TokenStreamException;
+import antlr.TokenStreamIOException;
+import antlr.ANTLRException;
+import antlr.LLkParser;
+import antlr.Token;
+import antlr.TokenStream;
+import antlr.RecognitionException;
+import antlr.NoViableAltException;
+import antlr.MismatchedTokenException;
+import antlr.SemanticException;
+import antlr.ParserSharedInputState;
 import antlr.collections.impl.BitSet;
-import tripleo.elijah.ci.CompilerInstructions;
-import tripleo.elijah.ci.GenerateStatement;
-import tripleo.elijah.ci.LibraryStatementPart;
+
 import tripleo.elijah.lang.*;
-import tripleo.elijah.lang2.BuiltInTypes;
+import tripleo.elijah.contexts.*;
+import tripleo.elijah.ci.*;
+import tripleo.elijah.ci.IndexingStatement;
+import tripleo.elijah.lang2.*;
+import tripleo.elijah.*;
 
 public class EzParser extends antlr.LLkParser       implements EzTokenTypes
  {
 
-//Qualident xy;
-//public Out out;
 IExpression expr;
 Context cur=null;
 public CompilerInstructions ci = new CompilerInstructions();

@@ -6,6 +6,7 @@ header {
 import tripleo.elijah.lang.*;
 import tripleo.elijah.contexts.*;
 import tripleo.elijah.ci.*;
+import tripleo.elijah.ci.IndexingStatement;
 import tripleo.elijah.lang2.*;
 import tripleo.elijah.*;
 }
@@ -18,30 +19,22 @@ options {
 	exportVocab=Ez;
 //	defaultErrorHandler=false;
 	k=2;
-//	buildAST = true;
 }
 
-//tokens {
-    //"tokens";
-//}
-
 {
-//Qualident xy;
-//public Out out;
 IExpression expr;
 Context cur=null;
 public CompilerInstructions ci = new CompilerInstructions();
 }
 
 program
-        //{ParserClosure pc = out.closure();cur=new ModuleContext(out.module());out.module().setContext((ModuleContext)cur);}
         {GenerateStatement gen=null;}
     : (indexingStatement[ci.indexingStatement()])?
       ("program"|"library"|"shared") IDENT
       library_statement
       gen=generate_statement        {ci.add(gen);}
 	  "end"
-	  EOF //{out.module().postConstruct();out.FinishModule();}
+	  EOF
 	;
 library_statement
 		{LibraryStatementPart lsp=null;}
