@@ -595,9 +595,6 @@ typeAlias2[TypeAliasBuilder tab]
 		BECOMES q=qualident 		{tab.setBecomes(q);}
 									//{tab.build();}
 	;
-opfal[FormalArgList fal]:
-	LPAREN formalArgList[fal] RPAREN
-	;
 opfal2 returns [FormalArgList fal]
 		{fal=new FormalArgList();}
 	: LPAREN formalArgList[fal] RPAREN
