@@ -27,7 +27,7 @@ public class DeduceTypesTest3 {
 	public void setUp() {
 		final OS_Module mod = new OS_Module();
 		mod.parent = new Compilation(new StdErrSink(), new IO());
-		final DeduceTypes d = new DeduceTypes(mod);
+//		final DeduceTypes d = new DeduceTypes(mod);
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		final ClassStatement cs = new ClassStatement(mod, mctx);
@@ -43,6 +43,7 @@ public class DeduceTypesTest3 {
 		final Qualident qu = new Qualident();
 		qu.append(Helpers.string_to_ident("Foo"));
 		((NormalTypeName)vs.typeName()).setName(qu);
+		((NormalTypeName)vs.typeName()).setContext(fd.getContext());
 		fd.scope(scope3);
 		fd.postConstruct();
 		cs_foo.postConstruct();
@@ -51,6 +52,12 @@ public class DeduceTypesTest3 {
 		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
 		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
+		//
+		//
+		//
+		DeducePhase dp = new DeducePhase();
+		DeduceTypes2 d = dp.deduceModule(mod);
+//		final DeduceTypes d = new DeduceTypes(mod);
 		this.x = d.deduceExpression(x1, fc);
 		System.out.println(this.x);
 	}
