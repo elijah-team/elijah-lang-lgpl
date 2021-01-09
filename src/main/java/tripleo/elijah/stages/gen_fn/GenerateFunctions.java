@@ -1113,8 +1113,8 @@ public class GenerateFunctions {
 			return expression_to_call_add_entry(gf, pce, pce.getLeft(), cctx);
 		}
 		case DOT_EXP: {
-			simplify_dot_expression((DotExpression) pce.getLeft(), gf); // TODO ??
-			return expression_to_call_add_entry(gf, pce, pce.getLeft(), cctx);
+			@NotNull InstructionArgument x = simplify_dot_expression((DotExpression) pce.getLeft(), gf); // TODO ??
+			return expression_to_call_add_entry(gf, pce, pce.getLeft(), x, cctx);
 		}
 		default:
 			throw new NotImplementedException();
@@ -1139,12 +1139,31 @@ public class GenerateFunctions {
 		return i;
 	}
 
+	@NotNull
+	private Instruction expression_to_call_add_entry(@NotNull final GeneratedFunction gf,
+													 @NotNull final ProcedureCallExpression pce,
+													 final IExpression left,
+													 final InstructionArgument left1,
+													 final Context cctx) {
+		final Instruction i = new Instruction();
+		i.setName(InstructionName.CALL);
+		final List<InstructionArgument> li = new ArrayList<InstructionArgument>();
+		final int pte_num = addProcTableEntry(left, left1, get_args_types(pce.getArgs(), gf), gf);
+		li.add(new IntegerIA(pte_num));
+		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf, cctx);
+		li.addAll(args_);
+		i.setArgs(li);
+		return i;
+	}
+
 	private void simplify_qident(final Qualident left, final GeneratedFunction gf) {
 		throw new NotImplementedException();
 	}
 
-	private void simplify_dot_expression(final DotExpression left, final GeneratedFunction gf) {
-		throw new NotImplementedException();
+	private @NotNull InstructionArgument simplify_dot_expression(final DotExpression dotExpression, final GeneratedFunction gf) {
+		@NotNull InstructionArgument x = gf.get_assignment_path(dotExpression, this);
+		System.err.println("1117 " + x);
+		return x;
 	}
 
 	//
