@@ -975,7 +975,8 @@ public class DeduceTypes2 {
 	}
 
 	private void deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx) {
-		throw new NotImplementedException();
+		//throw new NotImplementedException();
+		System.err.println("979 Skipping deduceProcedureCall "+pce);
 	}
 
 	private OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) {
