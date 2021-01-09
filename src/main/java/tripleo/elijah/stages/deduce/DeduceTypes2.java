@@ -1186,7 +1186,10 @@ public class DeduceTypes2 {
 								ectx = ((OS_FuncType) rtype).getElement().getContext();
 							idte2.type.attached = rtype; // TODO may be losing alias information here
 						} catch (ResolveError resolveError) {
-							System.out.println("1089 Can't attach type to "+idte2.type.attached);
+							if (resolveError.resultsList().size() > 1)
+								errSink.reportDignostic(resolveError);
+							else
+								System.out.println("1089 Can't attach type to "+idte2.type.attached);
 //							resolveError.printStackTrace(); // TODO print diagnostic
 							continue;
 						}
