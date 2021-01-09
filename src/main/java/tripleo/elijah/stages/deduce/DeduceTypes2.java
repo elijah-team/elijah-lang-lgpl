@@ -538,8 +538,16 @@ public class DeduceTypes2 {
 										TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
 								vte.type = tte1;
 								tte.attached = tte1.attached;
+							} else if (best instanceof VariableStatement) {
+								final VariableStatement vs = (VariableStatement) best;
+								int y=2;
+								@Nullable InstructionArgument x = generatedFunction.vte_lookup(vs.getName());
+								VariableTableEntry xx = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(x));
+								vte.type = xx.type;
+								tte.attached = vte.type.attached;
 							} else {
 								int y = 2;
+								System.err.println("543 "+best.getClass().getName());
 								throw new NotImplementedException();
 							}
 						}
