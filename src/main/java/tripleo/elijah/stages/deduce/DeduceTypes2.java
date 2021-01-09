@@ -1058,9 +1058,10 @@ public class DeduceTypes2 {
 						} else {
 							TypeTableEntry tte = pot.get(0);
 							OS_Element el2 = lookup(tte.expression.getLeft(), ectx);
-							if (el2 == null)
+							if (el2 == null) {
+								System.err.println("1062 "+tte.expression.getLeft());
 								throw new IllegalStateException("foo bar");
-							else {
+							} else {
 								ectx = el2.getContext();
 								if (el2 instanceof ClassStatement)
 									tte.attached = new OS_Type((ClassStatement) el2);
