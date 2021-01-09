@@ -210,27 +210,33 @@ public class CReference {
 				text = Emit.emit("/*124*/")+"vsc->vm" + ref.text;
 				sb.append(text);
 				break;
-			case FUNCTION:
-				text = String.format("%s(%s", ref.text, sb.toString());
+			case FUNCTION: {
+				final String s = sb.toString();
+				text = String.format("%s(%s", ref.text, s);
 				sb = new StringBuilder();
 				open = true;
-				needs_comma = true;
+				if (!s.equals("")) needs_comma = true;
 				sb.append(text);
 				break;
-			case CONSTRUCTOR:
-				text = String.format("%s(%s", ref.text, sb.toString());
+			}
+			case CONSTRUCTOR: {
+				final String s = sb.toString();
+				text = String.format("%s(%s", ref.text, s);
 				sb = new StringBuilder();
 				open = true;
-				needs_comma = true;
+				if (!s.equals("")) needs_comma = true;
 				sb.append(text);
 				break;
-			case PROPERTY:
-				text = String.format("%s(%s", ref.text, sb.toString());
+			}
+			case PROPERTY: {
+				final String s = sb.toString();
+				text = String.format("%s(%s", ref.text, s);
 				sb = new StringBuilder();
 				open = true;
-				needs_comma = true;
+				if (!s.equals("")) needs_comma = true;
 				sb.append(text);
 				break;
+			}
 			default:
 				throw new IllegalStateException("Unexpected value: " + ref.type);
 			}
