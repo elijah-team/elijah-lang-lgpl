@@ -1122,12 +1122,16 @@ public class GenerateFunctions {
 	}
 
 	@NotNull
-	private Instruction expression_to_call_add_entry(@NotNull final GeneratedFunction gf, @NotNull final ProcedureCallExpression pce, final IExpression left, final Context cctx) {
+	private Instruction expression_to_call_add_entry(@NotNull final GeneratedFunction gf,
+													 @NotNull final ProcedureCallExpression pce,
+													 final IExpression left,
+													 final Context cctx) {
 		final Instruction i = new Instruction();
 		i.setName(InstructionName.CALL); // TODO see line 686
 		final List<InstructionArgument> li = new ArrayList<InstructionArgument>();
-//			int ii = addIdentTableEntry((IdentExpression) expression.getLeft(), gf);
-		final int pte_num = addProcTableEntry(left, gf.get_assignment_path(left, this), get_args_types(pce.getArgs(), gf), gf);
+		final InstructionArgument assignment_path = gf.get_assignment_path(left, this);
+		final List<TypeTableEntry> args_types = get_args_types(pce.getArgs(), gf);
+		final int pte_num = addProcTableEntry(left, assignment_path, args_types, gf);
 		li.add(new IntegerIA(pte_num));
 		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf, cctx);
 		li.addAll(args_);
