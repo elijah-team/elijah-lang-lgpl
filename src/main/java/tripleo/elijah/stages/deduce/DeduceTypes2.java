@@ -409,7 +409,10 @@ public class DeduceTypes2 {
 					{
 						String typeName = type.getBType().name();
 						assert typeName.equals("SystemInteger");
-						final LookupResultList lrl = module.prelude.getContext().lookup(typeName);
+						OS_Module prelude = module.prelude;
+						if (prelude == null) // README Assume `module' IS prelude
+							prelude = module;
+						final LookupResultList lrl = prelude.getContext().lookup(typeName);
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
@@ -423,7 +426,10 @@ public class DeduceTypes2 {
 					}
 				case Boolean:
 					{
-						final LookupResultList lrl = module.prelude.getContext().lookup("Boolean");
+						OS_Module prelude = module.prelude;
+						if (prelude == null) // README Assume `module' IS prelude
+							prelude = module;
+						final LookupResultList lrl = prelude.getContext().lookup("Boolean");
 						final OS_Element best = lrl.chooseBest(null);
 						return new OS_Type((ClassStatement) best); // TODO might change to Type
 					}
