@@ -84,6 +84,15 @@ access {NONE}
 	var argument_count_: SystemInteger
 }
 
+//type NoneType = 
+//	None
+
+namespace {
+	//#[Primitive]
+	val None = 0
+}
+
+
 /*type*/ alias u64 = Unsigned64
 /*type*/ alias u32 = Unsigned64
 /*type*/ alias i64 = Integer64
