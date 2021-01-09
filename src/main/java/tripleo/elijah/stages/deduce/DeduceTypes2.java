@@ -1240,7 +1240,16 @@ public class DeduceTypes2 {
 			LookupResultList lrl = ctx.lookup(((IdentExpression)expression).getText());
 			OS_Element best = lrl.chooseBest(null);
 			return best;
+		case PROCEDURE_CALL:
+			LookupResultList lrl2 = lookupExpression(expression.getLeft(), ctx);
+			OS_Element best2 = lrl2.chooseBest(null);
+			return best2;
+		case DOT_EXP:
+			LookupResultList lrl3 = lookupExpression(expression, ctx);
+			OS_Element best3 = lrl3.chooseBest(null);
+			return best3;
 		default:
+			System.err.println("1242 "+expression);
 			throw new NotImplementedException();
 		}
 	}
