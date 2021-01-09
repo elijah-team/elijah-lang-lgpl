@@ -369,7 +369,8 @@ public class GeneratedFunction implements GeneratedNode {
 		return null;
 	}
 
-	public @NotNull InstructionArgument get_assignment_path(@NotNull final IExpression expression, @NotNull final GenerateFunctions generateFunctions) {
+	public @NotNull InstructionArgument get_assignment_path(@NotNull final IExpression expression,
+															@NotNull final GenerateFunctions generateFunctions) {
 		switch (expression.getKind()) {
 		case DOT_EXP:
 			{
@@ -380,7 +381,11 @@ public class GeneratedFunction implements GeneratedNode {
 		case QIDENT:
 			throw new NotImplementedException();
 		case PROCEDURE_CALL:
-			throw new NotImplementedException();
+			{
+				ProcedureCallExpression pce = (ProcedureCallExpression) expression;
+				return get_assignment_path(pce.getLeft(), generateFunctions); // TODO this looks wrong. what are we supposed to be doing here?
+//				throw new NotImplementedException();
+			}
 		case GET_ITEM:
 			throw new NotImplementedException();
 		case IDENT:
