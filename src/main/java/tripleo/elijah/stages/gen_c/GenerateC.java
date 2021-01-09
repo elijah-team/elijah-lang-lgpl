@@ -423,15 +423,19 @@ public class GenerateC {
 							assert xx != null;
 							String xxx = getRealTargetName(gf, (IntegerIA) xx);
 							sb.append(Emit.emit("/*424*/")+""+""+xxx);
-						} else {
-							String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
-							sb.append(Emit.emit("/*427*/")+""+""+path);
-						}
-						{
 							sb.append('(');
 							final List<String> sl3 = getArgumentStrings(gf, instruction);
 							sb.append(Helpers.String_join(", ", sl3));
 							sb.append(");");
+						} else {
+							final CReference reference = new CReference();
+							final IdentIA ia2 = (IdentIA) pte.expression_num;
+							final List<String> sl3 = getArgumentStrings(gf, instruction);
+							reference.getIdentIAPath(ia2, gf);
+							reference.args(sl3);
+							String path = reference.build();
+
+							sb.append(Emit.emit("/*427*/")+path);
 						}
 					}
 					tos.put_string_ln(sb.toString());
@@ -445,6 +449,7 @@ public class GenerateC {
 					assert x instanceof IntegerIA;
 					final ProcTableEntry pte = gf.getProcTableEntry(((IntegerIA) x).getIndex());
 					{
+						CReference reference = null;
 						if (pte.expression_num == null) {
 							final int y = 2;
 							final IdentExpression ptex = (IdentExpression) pte.expression;
@@ -457,12 +462,17 @@ public class GenerateC {
 								xxx = text;
 								System.err.println("xxx is null " + text);
 							}
-							sb.append(xxx);
+							sb.append(Emit.emit("/*460*/")+xxx);
 						} else {
-							String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
-							sb.append(path);
+							final IdentIA ia2 = (IdentIA) pte.expression_num;
+							reference = new CReference();
+							reference.getIdentIAPath(ia2, gf);
+							final List<String> sl3 = getArgumentStrings(gf, instruction);
+							reference.args(sl3);
+							String path = reference.build();
+							sb.append(Emit.emit("/*463*/")+path);
 						}
-						{
+						if (reference == null){
 							sb.append('(');
 							final List<String> sl3 = getArgumentStrings(gf, instruction);
 							sb.append(Helpers.String_join(", ", sl3));
@@ -714,7 +724,9 @@ public class GenerateC {
 				sl3.add(Emit.emit("/*669*/")+""+realTargetName);
 			} else if (ia instanceof IdentIA) {
 				final int y = 2;
-				String text = gf.getIdentIAPath((IdentIA) ia);
+				final CReference reference = new CReference();
+				reference.getIdentIAPath((IdentIA) ia, gf);
+				String text = reference.build();
 				sl3.add(Emit.emit("/*673*/")+""+text);
 			} else if (ia instanceof ConstTableIA) {
 				ConstTableIA c = (ConstTableIA) ia;
@@ -748,16 +760,21 @@ public class GenerateC {
 //					assert false; // TODO synthetic methods
 					final IdentExpression ptex = (IdentExpression) pte.expression;
 					sb.append(ptex.getText());
-				} else {
-					String path = gf.getIdentIAPath((IdentIA) pte.expression_num);
-					sb.append(path);
-				}
-				sb.append(Emit.emit("/*671*/")+"(");
-				{
+					sb.append(Emit.emit("/*671*/")+"(");
+
 					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
 					sb.append(Helpers.String_join(", ", sll));
+
+					sb.append(")");
+				} else {
+					final CReference reference = new CReference();
+					final IdentIA ia2 = (IdentIA) pte.expression_num;
+					reference.getIdentIAPath(ia2, gf);
+					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
+					reference.args(sll);
+					String path = reference.build();
+					sb.append(path);
 				}
-				sb.append(")");
 				return sb.toString();
 			}
 			case CALLS:
@@ -825,7 +842,9 @@ public class GenerateC {
 //					@org.jetbrains.annotations.Nullable
 //					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
 					String path = gf.getIdentIAPathNormal((IdentIA) ia);    // return x.y.z
-					String path2 = gf.getIdentIAPath((IdentIA) ia); // return ZP105get_z(vvx.vmy)
+					final CReference reference = new CReference();
+					reference.getIdentIAPath((IdentIA) ia, gf);
+					String path2 = reference.build();						// return ZP105get_z(vvx.vmy)
 					if (path.equals(path2)) {
 						// should always fail
 						//throw new AssertionError();
@@ -861,8 +880,9 @@ public class GenerateC {
 		}
 
 		public String IdentIA(IdentIA identIA, GeneratedFunction gf) {
-			String x = gf.getIdentIAPath(identIA);
-			return x;
+			final CReference reference = new CReference();
+			reference.getIdentIAPath(identIA, gf);
+			return reference.build();
 		}
 	}
 
@@ -968,7 +988,9 @@ public class GenerateC {
 			} else
 				throw new IllegalStateException("Invalid InstructionArgument for backlink");
 		}
-		String path = gf.getIdentIAPath(target);
+		final CReference reference = new CReference();
+		reference.getIdentIAPath(target, gf);
+		String path = reference.build();
 		System.out.println("932 "+path);
 		String s = Helpers.String_join("->", ls);
 		System.out.println("933 "+s);

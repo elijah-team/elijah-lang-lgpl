@@ -22,7 +22,7 @@ import tripleo.elijah.util.Helpers;
 
 import static org.easymock.EasyMock.*;
 
-public class GetIdentIAPathTest {
+public class GetIdentIAPathTest_ForC {
 
 	GeneratedFunction gf;
 	OS_Module mod;
@@ -50,7 +50,7 @@ public class GetIdentIAPathTest {
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		String x = gf.getIdentIAPath(ident_ia);
 //		Assert.assertEquals("vvx->vmfoo", x);  // TODO real expectation
-		Assert.assertEquals("vvx.vmfoo", x);
+		Assert.assertEquals("vvx->vmfoo", x);
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class GetIdentIAPathTest {
 		String x = gf.getIdentIAPath(ident_ia);
 //		Assert.assertEquals("vvx->vmfoo", x);
 		// TODO actually compiler should comlain that it can't find x
-		Assert.assertEquals("x.vmfoo", x);
+		Assert.assertEquals("->vmx->vmfoo", x);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class GetIdentIAPathTest {
 		IdentIA ident_ia = (IdentIA) xx;//new IdentIA(ite_index, gf);
 		String x = gf.getIdentIAPath(ident_ia);
 //		Assert.assertEquals("vvx->vmfoo", x); // TODO real expectation
-		Assert.assertEquals("vvx.vmfoo", x);
+		Assert.assertEquals("vvx->vmfoo", x);
 	}
 
 	@Test

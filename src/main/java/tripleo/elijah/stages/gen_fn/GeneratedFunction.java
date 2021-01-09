@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
-import tripleo.elijah.stages.gen_c.Emit;
+import tripleo.elijah.stages.gen_c.CReference;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
@@ -78,100 +78,11 @@ public class GeneratedFunction implements GeneratedNode {
 	// region Ident-IA
 	//
 
-	public String getIdentIAPath(final IdentIA ia2) {
-		assert ia2.gf == this;
-		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
-
-		//
-		// TODO NOT LOOKING UP THINGS, IE PROPERTIES, MEMBERS
-		//
-		String text = "";
-		List<String> sl = new ArrayList<String>();
-		for (int i = 0, sSize = s.size(); i < sSize; i++) {
-			InstructionArgument ia = s.get(i);
-			if (ia instanceof IntegerIA) { // should only be the first element if at all
-				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
-				text = "vv" + vte.getName();
-			} else if (ia instanceof IdentIA) {
-				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
-				OS_Element resolved_element = idte.resolved_element;
-				if (resolved_element != null) {
-					text = _getIdentIAPath_IdentIAHelper(text, sl, i, sSize, resolved_element);
-				} else {
-					// TODO make tests pass but I dont like this (should throw an exception: not enough information)
-					if (sl.size() == 0) {
-						text = Emit.emit("/*149*/")+idte.getIdent().getText(); // TODO check if it belongs somewhere else
-					} else {
-						text = Emit.emit("/*152*/")+"vm" + idte.getIdent().getText();
-					}
-					int y = 2;
-				}
-			} else {
-				throw new NotImplementedException();
-			}
-			sl.add(text);
-		}
-		return Helpers.String_join(".", sl);
-	}
-
-	public String _getIdentIAPath_IdentIAHelper(String text, List<String> sl, int i, int sSize, OS_Element resolved_element) {
-		if (resolved_element instanceof ClassStatement) {
-			// Assuming constructor call
-			// TODO what about named contrcuctors
-			int code = ((ClassStatement) resolved_element)._a.getCode();
-			assert i == sSize-1; // Make sure we are ending with a constructor call
-			text = String.format("ZC%d%s(%s)", code, ((ClassStatement) resolved_element).name(), text);
-		} else if (resolved_element instanceof FunctionDef) {
-			OS_Element parent = resolved_element.getParent();
-			int code;
-			if (parent instanceof ClassStatement) {
-				code = ((ClassStatement) parent)._a.getCode();
-			} else if (parent instanceof NamespaceStatement) {
-				code = ((NamespaceStatement) parent)._a.getCode();
-			} else {
-				// TODO what about FunctionDef, etc
-				code = -1;
-			}
-			// TODO what about overloaded functions
-			assert i == sSize-1; // Make sure we are ending with a ProcedureCall
-			sl.clear();
-			text = String.format("Z%d%s(%s)", code, ((FunctionDef) resolved_element).name(), text);
-		} else if (resolved_element instanceof VariableStatement) {
-			// first getParent is VariableSequence
-			if (resolved_element.getParent().getParent() == getFD().getParent()) {
-				// A direct member value. Doesn't handle when indirect
-				text = Emit.emit("/*124*/")+"vsc->vm" + ((VariableStatement) resolved_element).getName();
-			} else {
-				if (resolved_element.getParent().getParent() == getFD())
-					text = Emit.emit("/*126*/")+"vv" + ((VariableStatement) resolved_element).getName();
-				else
-					text = Emit.emit("/*126*/")+"vm" + ((VariableStatement) resolved_element).getName();
-			}
-		} else if (resolved_element instanceof PropertyStatement) {
-			OS_Element parent = resolved_element.getParent();
-			int code;
-			if (parent instanceof ClassStatement) {
-				code = ((ClassStatement) parent)._a.getCode();
-			} else if (parent instanceof NamespaceStatement) {
-				code = ((NamespaceStatement) parent)._a.getCode();
-			} else {
-//							code = -1;
-				throw new IllegalStateException("PropertyStatement cant have other parent than ns or cls. " + resolved_element.getClass().getName());
-			}
-			sl.clear();  // don't we want all the text including from sl?
-			if (text.equals("")) text = "vsc";
-			text = String.format("ZP%dget_%s(%s)", code, ((PropertyStatement) resolved_element).name(), text); // TODO Don't know if get or set!
-		} else if (resolved_element instanceof AliasStatement) {
-			int y=2;
-			NotImplementedException.raise();
-			text = Emit.emit("/*167*/")+((AliasStatement)resolved_element).name();
-//			return _getIdentIAPath_IdentIAHelper(text, sl, i, sSize, _res)
-		} else {
-//						text = idte.getIdent().getText();
-			System.out.println("1008 "+resolved_element.getClass().getName());
-			throw new NotImplementedException();
-		}
-		return text;
+	// TODO This should be removed by somebody
+	String getIdentIAPath(final IdentIA ia2) {
+		final CReference reference = new CReference();
+		reference.getIdentIAPath(ia2, this);
+		return reference.build();
 	}
 
 	public @NotNull List<InstructionArgument> _getIdentIAPathList(@NotNull InstructionArgument oo) {
