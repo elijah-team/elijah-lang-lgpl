@@ -64,7 +64,7 @@ public class Compilation {
 	}
 
 	public void feedCmdLine(final List<String> args) {
-		main(args, new StdErrSink());
+		main(args, eee == null ? new StdErrSink() : eee);
 	}
 
 	public IO getIO() {
