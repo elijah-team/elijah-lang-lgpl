@@ -29,6 +29,10 @@ public class PipelineLogic {
 
 	List<GeneratedNode> lgc = null;
 
+	public List<GeneratedNode> __nodes() {
+		return lgc;
+	}
+
 	public void run() {
 		for (OS_Module mod : mods) {
 			run2(mod);

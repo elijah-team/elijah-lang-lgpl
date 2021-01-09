@@ -23,6 +23,7 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
@@ -48,6 +49,14 @@ public class Compilation {
 	private final Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
 	private int _packageCode = 1;
 	public final List<CompilerInstructions> cis = new ArrayList<CompilerInstructions>();
+
+	//
+	//
+	//
+	public List<GeneratedNode> __nodes = new ArrayList<GeneratedNode>();
+	//
+	//
+	//
 
 	public Compilation(final ErrSink eee, final IO io) {
 		this.eee = eee;
@@ -146,6 +155,7 @@ public class Compilation {
 							pipeline.addModule(module);
 						}
 						pipeline.run();
+						__nodes.addAll(pipeline.__nodes());
 					}
 				}
 			} else {
