@@ -17,7 +17,6 @@ import tripleo.elijah.contexts.SingleIdentContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,7 +34,6 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 	private HashMap<IExpression, CaseScope> scopes = new LinkedHashMap<IExpression, CaseScope>();
 	private CaseScope default_case_scope = null;
 	private CaseContext __ctx = null; // TODO look into removing this
-	private Scope3 scope3;
 
 	public CaseConditional(final OS_Element parent, final Context parentContext) {
         this.parent = parent;
@@ -65,6 +63,10 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		return _ctx;
 	}
 
+	public void addScopeFor(final IExpression expression, final Scope3 caseScope) {
+		addScopeFor(expression, new CaseScope(expression, caseScope));
+	}
+
 	private void addScopeFor(final IExpression expression, final CaseScope caseScope) {
 		if (scopes.containsKey(expression))
 			System.err.println("already has an expression" + expression); // TODO put in some verify step
@@ -83,42 +85,38 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 		__ctx = ctx;
 	}
 
-	public void scope(Scope3 sco, IExpression expr) {
-		scope3 = sco;
-		this.expr = expr;
+	public void scope(Scope3 sco, IExpression expr1) {
+		addScopeFor(expr1, new CaseScope(expr1, sco));
 	}
 
 	public class CaseScope implements OS_Container, OS_Element {
 
 		private final IExpression expr;
-		private List<OS_Element> _items = new ArrayList<OS_Element>();
-		private ArrayList<Token> mDocs = null;
+		private final Scope3 cscope3;
 		private boolean _isDefault = false;
 
-		public CaseScope(final IExpression expression) {
+		public CaseScope(final IExpression expression, Scope3 aScope3) {
 			this.expr = expression;
-			addScopeFor(expr, this);
+			this.cscope3 = aScope3;
 		}
 
 		@Override
 		public List<OS_Element2> items() {
-			return null;
+			throw new NotImplementedException();
 		}
 
 		@Override
 		public void add(final OS_Element anElement) {
-			_items.add(anElement);
+			cscope3.add(anElement);
 		}
 
 		public List<OS_Element> getItems() {
-			return _items;
+			return cscope3.items();
 		}
 
 		@Override
 		public void addDocString(final Token s1) {
-			if (mDocs == null)
-				mDocs = new ArrayList<Token>();
-			mDocs.add(s1);
+			cscope3.addDocString(s1);
 		}
 
 		@Override
@@ -141,15 +139,6 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 			default_case_scope = this;
 			_ctx.carrier = (IdentExpression) expr;
 		}
-	}
-
-	public Scope scope(final IExpression expression) {
-		return new AbstractBlockScope(new CaseScope(expression)) {
-			@Override
-			public Context getContext() {
-				return CaseConditional.this.getContext();
-			}
-		};
 	}
 }
 

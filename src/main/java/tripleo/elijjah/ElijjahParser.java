@@ -5775,7 +5775,7 @@ inputState.guessing--;
 		CaseConditional mc
 	) throws RecognitionException, TokenStreamException {
 		
-		CaseContext ctx = null;
+		CaseContext ctx = null;IExpression expr1=null;
 		
 		try {      // for error handling
 			match(LITERAL_case);
@@ -5791,10 +5791,10 @@ inputState.guessing--;
 			_loop344:
 			do {
 				if ((_tokenSet_18.member(LA(1)))) {
-					expr=expression();
+					expr1=expression();
 					sco=scope3(mc);
 					if ( inputState.guessing==0 ) {
-						mc.scope(sco, expr);
+						mc.scope(sco, expr1);
 					}
 				}
 				else {

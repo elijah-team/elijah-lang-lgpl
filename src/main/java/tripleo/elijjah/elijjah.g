@@ -1064,10 +1064,10 @@ matchConditional[MatchConditional mc, OS_Element aParent]
       RCURLY {mc.postConstruct();cur=ctx.getParent();}
     ;
 caseConditional[CaseConditional mc]
-           {CaseContext ctx = null;}
+           {CaseContext ctx = null;IExpression expr1=null;}
     : "case" expr=expression {mc.expr(expr);}
       LCURLY                {ctx=new CaseContext(cur, mc);mc.setContext(ctx);cur=ctx;}
-      ( expr=expression sco=scope3[mc] {mc.scope(sco, expr);} )*
+      ( expr1=expression sco=scope3[mc] {mc.scope(sco, expr1);} )*
       RCURLY {mc.postConstruct();cur=ctx.getParent();}
     ;
 

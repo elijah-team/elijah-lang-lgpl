@@ -37,14 +37,15 @@ public class CaseConditionalBuilder extends ElBuilder {
 		CaseConditional caseConditional = new CaseConditional(_parent, _context);
 		caseConditional.expr(expr);
 		for (Part part : parts) {
-			Scope sc = caseConditional.scope(part.expr);
-			OS_Element built;
+			Scope3 scope3 = new Scope3(caseConditional);
 			for (ElBuilder item : part.scope.items()) {
 				item.setParent(caseConditional);
 				item.setContext(caseConditional.getContext());
-				built = item.build();
-				sc.add((StatementItem) built);
+				OS_Element built = item.build();
+				scope3.add(built);
 			}
+//			Scope sc = caseConditional.scope(part.expr);
+			caseConditional.addScopeFor(part.expr, scope3);
 		}
 		caseConditional.postConstruct();
 		return caseConditional;
