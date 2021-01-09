@@ -866,7 +866,7 @@ public class DeduceTypes2 {
 		return ((IntegerIA) arg).getIndex();
 	}
 
-	private OS_Element _resolveAlias(final AliasStatement aliasStatement) {
+	@Nullable private OS_Element _resolveAlias(final AliasStatement aliasStatement) {
 		final LookupResultList lrl2;
 		if (aliasStatement.getExpression() instanceof Qualident) {
 			final IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
