@@ -1006,10 +1006,25 @@ public class DeduceTypes2 {
 					if (pot.size() == 1) {
 						OS_Type attached = pot.get(0).attached;
 						if (attached != null) {
-							if (attached.getType() == OS_Type.Type.USER_CLASS) {
+							switch (attached.getType()) {
+							case USER_CLASS: {
 								ClassStatement x = attached.getClassOf();
 								ectx = x.getContext();
-							} else {
+								break;
+							}
+							case FUNCTION: {
+								int y = 2;
+								System.err.println("1005");
+								FunctionDef x = (FunctionDef) attached.getElement();
+								ectx = x.getContext();
+								break;
+							}
+							case USER:
+								ectx = attached.getTypeName().getContext(); // TODO is this right?
+
+								break;
+							default:
+								System.err.println("1010 " + attached.getType());
 								throw new IllegalStateException("Dont know what youre doing here.");
 							}
 						} else {
@@ -1093,14 +1108,37 @@ public class DeduceTypes2 {
 				{
 					List<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
 					if (pot.size() == 1) {
-						ectx = pot.get(0).attached.getClassOf().getContext(); // TODO can combine later
+						final OS_Type attached = pot.get(0).attached;
+						switch (attached.getType()) {
+						case USER_CLASS:
+							ectx = attached.getClassOf().getContext(); // TODO can combine later
+							break;
+						case FUNCTION:
+							ectx = ((OS_FuncType) attached).getElement().getContext();
+							break;
+						case USER:
+							ectx = attached.getTypeName().getContext();
+							break;
+						default:
+							System.err.println("1098 " + attached.getType());
+							throw new IllegalStateException("Can't be here.");
+						}
 					}
 				}
 
 				OS_Type attached = vte.type.attached;
-				if (attached != null)
-					ectx = attached.getClassOf().getContext();
-				else {
+				if (attached != null) {
+					switch (attached.getType()) {
+					case USER_CLASS:
+						ectx = attached.getClassOf().getContext();
+						break;
+					case FUNCTION:
+						ectx = attached.getElement().getContext();
+						break;
+					default:
+						throw new NotImplementedException();
+					}
+				} else {
 					if (vte.potentialTypes().size() == 1) {
 						final ArrayList<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
 						vte.type.attached = pot.get(0).attached;
