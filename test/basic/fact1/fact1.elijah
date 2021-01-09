@@ -3,7 +3,7 @@ package wprust.demo.fact
 class Main {
   main() {
     const kl = 3
-    val f1 = factorial(k1)
+    val f1 = factorial(kl)
     println(f1)
   }
 }
@@ -13,7 +13,7 @@ namespace /*__MODULE__*/ {
   factorial_r(i: u64) -> u64 {
      case i {
         0 { Result = 0 }
-        n { Result = n * factorial(n-1) } // _r/_i // also tailcall
+        n { Result = n * factorial(n-1) } // _r/_i // also tailcall (not a tailcall, but thanks for the reminder)
      }
   }
   factorial_i(i: u64) -> u64 {
@@ -21,7 +21,7 @@ namespace /*__MODULE__*/ {
      iterate from 2 to i with num {
         acc *= num
      }
-     // BUG: Result = acc
+     Result = acc
   }
 
   alias factorial = factorial_r
