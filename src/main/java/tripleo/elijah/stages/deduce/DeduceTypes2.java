@@ -230,7 +230,34 @@ public class DeduceTypes2 {
 							final FnCallArgs fca = (FnCallArgs) i2;
 							do_assign_call(generatedFunction, fd_ctx, idte, fca, instruction.getIndex());
 						} else if (i2 instanceof IdentIA) {
-							throw new NotImplementedException();
+							IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(((IdentIA) i2).getIndex());
+							if (idte2.type == null) {
+								idte2.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, idte2.getIdent());
+							}
+							LookupResultList lrl1 = fd_ctx.lookup(idte2.getIdent().getText());
+							OS_Element best1 = lrl1.chooseBest(null);
+							if (best1 != null) {
+								idte2.setResolvedElement(best1);
+								// TODO check for elements which may contain type information
+							} else {
+								System.err.println("242 Bad lookup" + idte2.getIdent().getText());
+							}
+/*
+							final InstructionArgument i3 = instruction.getArg(2);
+							IdentTableEntry idte3 = generatedFunction.getIdentTableEntry(((IdentIA) i3).getIndex());
+							if (idte3.type == null) {
+								idte3.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, idte3.getIdent());
+							}
+							LookupResultList lrl2 = fd_ctx.lookup(idte3.getIdent().getText());
+							OS_Element best2 = lrl2.chooseBest(null);
+							if (best2 != null) {
+								idte3.setResolvedElement(best2);
+								// TODO check for elements which may contain type information
+							} else {
+								System.err.println("256 Bad lookup" + idte3.getIdent().getText());
+							}
+*/
+							idte.addPotentialType(instruction.getIndex(), idte2.type);
 						} else if (i2 instanceof ConstTableIA) {
 							do_assign_constant(generatedFunction, instruction, idte, (ConstTableIA) i2);
 						} else
