@@ -391,7 +391,16 @@ public class DeduceTypes2 {
 				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
 			} else
 				ite.type.attached = attached;
-			int yy=2;
+			int yy = 2;
+		} else if (y instanceof AliasStatement) {
+			System.err.println("396 AliasStatement");
+			OS_Element x = _resolveAlias((AliasStatement) y);
+			if (x == null) {
+				errSink.reportError("399 resolveAlias returned null");
+			} else {
+				ite.setResolvedElement(x);
+				found_element_for_ite(generatedFunction, ite, x, ctx);
+			}
 		} else {
 			//LookupResultList exp = lookupExpression();
 			System.out.println("2009 "+y);

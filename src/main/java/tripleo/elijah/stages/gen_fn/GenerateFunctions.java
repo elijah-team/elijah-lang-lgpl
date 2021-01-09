@@ -324,7 +324,8 @@ public class GenerateFunctions {
 
 		for (ClassItem item : namespace1.getItems()) {
 			if (item instanceof AliasStatement) {
-				throw new NotImplementedException();
+				System.err.println("328 Skip AliasStatement for now");
+//				throw new NotImplementedException();
 			} else if (item instanceof ClassStatement) {
 				throw new NotImplementedException();
 			} else if (item instanceof ConstructorDef) {
