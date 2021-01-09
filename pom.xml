@@ -171,6 +171,21 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <groups>
+                        <group>
+                            <title>User packages</title>
+                            <packages>tripleo.elijah:tripleo.elijah.diagnostic:tripleo.elijah.lang2:tripleo.elijah.util</packages>
+                        </group>
+                        <group>
+                            <title>Implementation packages</title>
+                            <packages>tripleo.elijah.ci:tripleo.elijah.comp:tripleo.elijah.contexts:tripleo.elijah.gen:tripleo.elijah.lang:
+                                tripleo.elijah.stages.deduce:tripleo.elijah.stages.expand:tripleo.elijah.stages.gen_c:tripleo.elijah.stages.gen_fn:
+                                tripleo.elijah.stages.generate:tripleo.elijah.stages.instructions:tripleo.elijah.stages.translate
+                            </packages>
+                        </group>
+                    </groups>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
