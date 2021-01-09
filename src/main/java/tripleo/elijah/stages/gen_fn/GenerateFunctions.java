@@ -140,7 +140,8 @@ public class GenerateFunctions {
 		if (item instanceof AliasStatement) {
 			throw new NotImplementedException();
 		} else if (item instanceof CaseConditional) {
-			throw new NotImplementedException();
+			generate_case_conditional((CaseConditional) item);
+			return;
 		} else if (item instanceof ClassStatement) {
 			GeneratedClass gc = generateClass((ClassStatement) item);
 			int ite_index = gf.addIdentTableEntry(((ClassStatement) item).getNameNode());
@@ -508,6 +509,12 @@ public class GenerateFunctions {
 			generate_item_dot_expression(new IdentIA(x, gf), right.getLeft(), ((IdentExpression)right), gf, cctx);
 		else
 			generate_item_dot_expression(new IdentIA(x, gf), right.getLeft(), ((BasicBinaryExpression)right).getRight(), gf, cctx);
+	}
+
+	private void generate_case_conditional(CaseConditional cc) {
+		int y=2;
+		System.err.println("Skip CaseConditional for now");
+//		throw new NotImplementedException();
 	}
 
 	private void generate_match_conditional(@NotNull final MatchConditional mc, @NotNull final GeneratedFunction gf) {
