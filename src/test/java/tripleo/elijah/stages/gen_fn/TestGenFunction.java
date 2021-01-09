@@ -214,7 +214,7 @@ public class TestGenFunction {
 		final StdErrSink eee = new StdErrSink();
 		final Compilation c = new Compilation(eee, new IO());
 
-		final String f = "test/basic1/backlink3.elijah";
+		final String f = "test/basic1/backlink3/backlink3.elijah";
 		final File file = new File(f);
 		final OS_Module m = c.realParseElijjahFile(f, file, false);
 		Assert.assertEquals("Method parsed correctly", 0, c.errorCount());
