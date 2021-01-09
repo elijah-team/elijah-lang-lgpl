@@ -729,6 +729,14 @@ public class GenerateFunctions {
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
 			vte3_ident.addPotentialType(ii3, tte);
 			break;
+		case FUNC_EXPR:
+			FuncExpr fe = (FuncExpr) value;
+			int pte_index = addProcTableEntry(fe, null, get_args_types(fe.getArgs(), gf), gf);
+			final int ii4 = add_i(gf, InstructionName.AGNF, List_of(new IntegerIA(vte), new IntegerIA(pte_index)), cctx);
+			final VariableTableEntry vte3_func = gf.getVarTableEntry(vte);
+			final TypeTableEntry tte_func = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
+			vte3_func.addPotentialType(ii4, tte_func);
+			break;
 		default:
 			throw new IllegalStateException("Unexpected value: " + value.getKind());
 		}
@@ -1070,6 +1078,26 @@ public class GenerateFunctions {
 				R.add(tte);
 			} else
 				R.add(getType(arg, gf));
+		}
+		assert R.size() == args.size();
+		return R;
+	}
+
+	private @NotNull List<TypeTableEntry> get_args_types(@NotNull final List<FormalArgListItem> args,
+														 @NotNull final GeneratedFunction gf) {
+		final List<TypeTableEntry> R = new ArrayList<TypeTableEntry>();
+		//
+		for (final FormalArgListItem arg : args) {
+			final TypeTableEntry tte;
+			OS_Type ty;
+			if (arg.typeName() == null || arg.typeName().isNull())
+				ty = null;
+			else
+				ty = new OS_Type(arg.typeName());
+
+			tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, ty, arg.getNameToken());
+
+			R.add(tte);
 		}
 		assert R.size() == args.size();
 		return R;
