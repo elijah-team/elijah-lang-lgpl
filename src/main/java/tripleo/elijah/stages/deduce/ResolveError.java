@@ -8,13 +8,19 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.diagnostic.Diagnostic;
 import tripleo.elijah.diagnostic.Locatable;
+import tripleo.elijah.lang.LookupResult;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.TypeName;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -46,7 +52,39 @@ public class ResolveError extends Exception implements Diagnostic {
 
 	@Override
 	public @NotNull List<Locatable> secondary() {
+		Collection<Locatable> x = Collections2.transform(resultsList(), new Function<LookupResult, Locatable>() {
+			@Nullable
+			@Override
+			public Locatable apply(@Nullable LookupResult input) {
+				if (input.getElement() instanceof Locatable) {
+					return (Locatable) input.getElement();
+				}
+				return null;
+			}
+		});
 		return new ArrayList<Locatable>();
+	}
+
+	@Override
+	public void report(PrintStream stream) {
+		stream.println(String.format("---[%s]---: %s", code(), message()));
+		// linecache.print(primary);
+		for (Locatable sec : secondary()) {
+			//linecache.print(sec)
+		}
+		stream.flush();
+	}
+
+	private String message() {
+		if (resultsList().size() > 1)
+			return "Can't choose between alternatives";
+		else
+			return "Can't resolve";
+	}
+
+	@NotNull
+	public List<LookupResult> resultsList() {
+		return lrl.results();
 	}
 }
 
