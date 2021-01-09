@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.comp;
 
+import tripleo.elijah.diagnostic.Diagnostic;
+
 public interface ErrSink {
 	
 	void exception(Exception exception);
@@ -21,7 +23,9 @@ public interface ErrSink {
 
     void info(String format);
 
-    enum Errors {
+	void reportDignostic(Diagnostic diagnostic);
+
+	enum Errors {
         ERROR, WARNING, INFO
     }
 }

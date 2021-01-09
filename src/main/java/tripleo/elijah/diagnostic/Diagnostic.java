@@ -11,6 +11,7 @@ package tripleo.elijah.diagnostic;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.PrintStream;
 import java.util.List;
 
 /**
@@ -23,6 +24,8 @@ public interface Diagnostic {
 	Locatable primary();
 	@NotNull
 	List<Locatable> secondary();
+
+	void report(PrintStream stream);
 
 	public enum Severity {
 		INFO, LINT, WARN, ERROR
