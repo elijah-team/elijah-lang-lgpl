@@ -964,7 +964,12 @@ public class GenerateFunctions {
 		final IExpression    left = pce.getLeft();
 		final ExpressionList args = pce.getArgs();
 		final InstructionArgument left_ia;
-		final List<InstructionArgument> right_ia = new ArrayList<InstructionArgument>(args.size());
+		final List<InstructionArgument> right_ia;
+		if (args != null)
+			right_ia = new ArrayList<InstructionArgument>(args.size()+1);
+		else {
+			right_ia = new ArrayList<InstructionArgument>(1);
+		}
 		if (left.is_simple()) {
 			if (left instanceof IdentExpression) {
 				// for ident(xyz...)
@@ -990,36 +995,38 @@ public class GenerateFunctions {
 			left_ia = x;
 		}
 		final List<TypeTableEntry> args1 = new ArrayList<TypeTableEntry>();
-		for (final IExpression arg : args) {
-			final InstructionArgument ia;
-			final TypeTableEntry iat;
-			if (arg.is_simple()) {
-				final int y=2;
-				if (arg instanceof IdentExpression) {
-					final int x = gf.addIdentTableEntry((IdentExpression) arg);
-					// TODO attach to var/const or lookup later in deduce
-					ia = new IdentIA(x, gf);
-					iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
-				} else if (arg instanceof SubExpression) {
-					final SubExpression se = (SubExpression) arg;
-					final InstructionArgument ia2 = simplify_expression(se.getExpression(), gf, cctx);
-					//return ia;  // TODO is this correct?
-					ia = ia2;
-					iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
+		if (args != null) {
+			for (final IExpression arg : args) {
+				final InstructionArgument ia;
+				final TypeTableEntry iat;
+				if (arg.is_simple()) {
+					final int y=2;
+					if (arg instanceof IdentExpression) {
+						final int x = gf.addIdentTableEntry((IdentExpression) arg);
+						// TODO attach to var/const or lookup later in deduce
+						ia = new IdentIA(x, gf);
+						iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
+					} else if (arg instanceof SubExpression) {
+						final SubExpression se = (SubExpression) arg;
+						final InstructionArgument ia2 = simplify_expression(se.getExpression(), gf, cctx);
+						//return ia;  // TODO is this correct?
+						ia = ia2;
+						iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
+					} else {
+						assert IExpression.isConstant(arg);
+						final int x = addConstantTableEntry(null, arg, arg.getType(), gf);
+						ia = new ConstTableIA(x, gf);
+						iat = gf.getConstTableEntry(x).type;
+					}
 				} else {
-					assert IExpression.isConstant(arg);
-					final int x = addConstantTableEntry(null, arg, arg.getType(), gf);
-					ia = new ConstTableIA(x, gf);
-					iat = gf.getConstTableEntry(x).type;
+					final InstructionArgument x = simplify_expression(left, gf, cctx);
+					final int y=2;
+					ia = x;
+					iat = null;
 				}
-			} else {
-				final InstructionArgument x = simplify_expression(left, gf, cctx);
-				final int y=2;
-				ia = x;
-				iat = null;
+				right_ia.add(ia);
+				args1.add(iat);
 			}
-			right_ia.add(ia);
-			args1.add(iat);
 		}
 		final int pte = addProcTableEntry(expression, left_ia, args1, gf);
 		right_ia.add(0, new IntegerIA(pte));
