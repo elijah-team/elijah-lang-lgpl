@@ -908,6 +908,7 @@ public class GenerateFunctions {
 				}
 			}
 		case LT_: case GT: case ADDITION: case MULTIPLY: // TODO all BinaryExpressions go here
+		case NOT_EQUAL: case EQUAL:
 			{
 				final BasicBinaryExpression bbe = (BasicBinaryExpression) expression;
 				final IExpression left = bbe.getLeft();

@@ -24,6 +24,8 @@ public class SpecialFunctions {
 		case GET_ITEM:			return "__getitem__";
 		case ADDITION:			return "__add__";
 		case MULTIPLY:			return "__mult__";
+		case NOT_EQUAL:			return "__neq__";
+		case EQUAL:				return "__eq__";
 		default:
 			throw new IllegalStateException("Unexpected value: " + kind);
 		}
@@ -32,6 +34,8 @@ public class SpecialFunctions {
 	public static String reverse_name(final String pn) {
 		if (pn.equals("__gt__")) // README  explicitly disallow
 			return null;
+//		if (pn.equals("__eq__"))
+//			return "__req__";
 		System.out.println("reverse_name: "+pn);
 //		assert false;
 		return null;
