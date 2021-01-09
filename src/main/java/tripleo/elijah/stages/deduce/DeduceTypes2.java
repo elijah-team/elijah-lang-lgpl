@@ -1036,8 +1036,12 @@ public class DeduceTypes2 {
 								ectx = el2.getContext();
 								if (el2 instanceof ClassStatement)
 									tte.attached = new OS_Type((ClassStatement) el2);
-								else
+								else if (el2 instanceof FunctionDef) {
+									tte.attached = new OS_FuncType((FunctionDef) el2);
+								} else {
+									System.err.println("1017 "+el2.getClass().getName());
 									throw new NotImplementedException();
+								}
 							}
 						}
 					}
