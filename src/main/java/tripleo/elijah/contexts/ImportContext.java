@@ -11,7 +11,6 @@ package tripleo.elijah.contexts;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.lang.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,9 +31,9 @@ public class ImportContext extends Context {
 //		System.err.println("2002 "+importStatement.importList());
 		for (final Qualident importStatementItem : carrier.parts()) {
 //			System.err.println("2005 "+importStatementItem);
-			if (module().isPackage(importStatementItem.toString())) {
-				final List<OS_Element> l = new ArrayList<OS_Element>();
-				final OS_Package aPackage = module().getPackage(importStatementItem);
+			if (compilation().isPackage(importStatementItem.toString())) {
+//				final List<OS_Element> l = new ArrayList<OS_Element>();
+				final OS_Package aPackage = compilation().getPackage(importStatementItem);
 //				LogEvent.logEvent(4003 , ""+aPackage.getElements());
 				for (final OS_Element element : aPackage.getElements()) {
 //					System.err.println("4002 "+element);
@@ -60,11 +59,16 @@ public class ImportContext extends Context {
 		return _parent;
 	}
 
-	private Compilation module() {
+	private OS_Module module() {
 		Context ctx = _parent;
 		while (!(ctx instanceof ModuleContext))
 			ctx = ctx.getParent();
-		return ((ModuleContext) ctx).carrier.parent;
+		return ((ModuleContext) ctx).carrier;
+	}
+
+	private Compilation compilation() {
+		OS_Module module = module();
+		return module.parent;
 	}
 }
 
