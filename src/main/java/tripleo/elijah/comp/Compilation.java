@@ -127,6 +127,9 @@ public class Compilation {
 					}
 				}
 
+				System.err.println("130 GEN_LANG: "+cis.get(0).genLang());
+				findStdLib("c"); // TODO find a better place for this
+
 				for (final CompilerInstructions ci : cis) {
 					use(ci, do_out);
 				}
