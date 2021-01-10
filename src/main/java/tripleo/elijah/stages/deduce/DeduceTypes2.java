@@ -964,8 +964,8 @@ public class DeduceTypes2 {
 			final OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
 			NotImplementedException.raise();
 		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
-			deduceProcedureCall((ProcedureCallExpression) n, context);
-			return n.getType();
+			OS_Type ty = deduceProcedureCall((ProcedureCallExpression) n, context);
+			return ty/*n.getType()*/;
 		} else if (n.getKind() == ExpressionKind.QIDENT) {
 			final IExpression expression = Helpers.qualidentToDotExpression2(((Qualident) n));
 			return deduceExpression(expression, context);
@@ -974,9 +974,29 @@ public class DeduceTypes2 {
 		return null;
 	}
 
-	private void deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx) {
-		//throw new NotImplementedException();
+	/**
+	 * Try to find the type of a ProcedureCall. Will either be a constructor or function call, most likely
+	 *
+	 * @param pce the procedure call
+	 * @param ctx the context to use for lookup
+	 * @return the deduced type or {@code null}. Do not {@code pce.setType}
+	 */
+	@Nullable
+	private OS_Type deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx) {
 		System.err.println("979 Skipping deduceProcedureCall "+pce);
+		OS_Element best = lookup(pce.getLeft(), ctx);
+		if (best == null) return null;
+		int y=2;
+		if (best instanceof ClassStatement) {
+			return new OS_Type((ClassStatement) best);
+		} else if (best instanceof FunctionDef) {
+			return new OS_FuncType((FunctionDef) best);
+		} else if (best instanceof FuncExpr) {
+			return new OS_FuncExprType((FuncExpr) best);
+		} else {
+			System.err.println("992 "+best.getClass().getName());
+			throw new NotImplementedException();
+		}
 	}
 
 	private OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) {
