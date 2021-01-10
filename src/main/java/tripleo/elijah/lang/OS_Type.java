@@ -77,7 +77,7 @@ public class OS_Type {
 	public OS_Element getElement() {
 		switch (type_of_type) {
 		case USER_CLASS:
-		case FUNCTION:
+//		case FUNCTION: // defined in subclass
 			return etype;
 		default:
 			throw new IllegalArgumentException();
