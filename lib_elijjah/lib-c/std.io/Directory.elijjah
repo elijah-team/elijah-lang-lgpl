@@ -1,0 +1,12 @@
+package std.io
+
+import std.collections
+
+class Directory {
+	listFiles() -> List[File] {
+	}
+}
+
+class File {
+}
+
