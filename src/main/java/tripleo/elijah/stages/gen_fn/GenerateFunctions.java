@@ -1040,7 +1040,7 @@ public class GenerateFunctions {
 		final int pte = addProcTableEntry(expression, left_ia, args1, gf);
 		right_ia.add(0, new IntegerIA(pte));
 		{
-			final int tmp_var = addTempTableEntry(null, gf);
+			final int tmp_var = addTempTableEntry(null, gf); // line 686 is here
 			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp_var)), cctx);
 			final Instruction i = new Instruction();
 			i.setName(InstructionName.CALL);
