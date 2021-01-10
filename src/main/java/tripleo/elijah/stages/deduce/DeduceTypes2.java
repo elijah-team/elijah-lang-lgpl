@@ -929,8 +929,10 @@ public class DeduceTypes2 {
 		if (t == null) {
 			NotImplementedException.raise();
 			return new LookupResultList(); // TODO throw ResolveError
-		} else
-			return t.getElement().getParent().getContext().lookup(((IdentExpression)ss).getText());
+		} else {
+			final LookupResultList lrl = t.getElement().getParent().getContext().lookup(((IdentExpression) ss).getText());
+			return lrl;
+		}
 	}
 
 	/**
@@ -953,24 +955,25 @@ public class DeduceTypes2 {
 	}
 
 	public OS_Type deduceExpression(@NotNull final IExpression n, final Context context) {
-		if (n.getKind() == ExpressionKind.IDENT) {
-			return deduceIdentExpression((IdentExpression)n, context);
-		} else if (n.getKind() == ExpressionKind.NUMERIC) {
+		switch (n.getKind()) {
+		case IDENT:
+			return deduceIdentExpression((IdentExpression) n, context);
+		case NUMERIC:
 			return new OS_Type(BuiltInTypes.SystemInteger);
-		} else if (n.getKind() == ExpressionKind.DOT_EXP) {
+		case DOT_EXP:
 			final DotExpression de = (DotExpression) n;
 			final LookupResultList lrl = lookup_dot_expression(context, de);
 			final OS_Type left_type = deduceExpression(de.getLeft(), context);
 			final OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
 			NotImplementedException.raise();
-		} else if (n.getKind() == ExpressionKind.PROCEDURE_CALL) {
+			break;
+		case PROCEDURE_CALL:
 			OS_Type ty = deduceProcedureCall((ProcedureCallExpression) n, context);
 			return ty/*n.getType()*/;
-		} else if (n.getKind() == ExpressionKind.QIDENT) {
+		case QIDENT:
 			final IExpression expression = Helpers.qualidentToDotExpression2(((Qualident) n));
 			return deduceExpression(expression, context);
 		}
-
 		return null;
 	}
 
