@@ -397,7 +397,7 @@ public class Compilation {
 	}
 
 	//
-	//  PACKAGES
+	// region PACKAGES
 	//
 
 	public boolean isPackage(final String pkg) {
@@ -421,7 +421,7 @@ public class Compilation {
 		return _packageCode++;
 	}
 
-
+	// endregion
 }
 
 //
