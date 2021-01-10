@@ -31,9 +31,9 @@ public class ImportContext extends Context {
 //		System.err.println("2002 "+importStatement.importList());
 		for (final Qualident importStatementItem : carrier.parts()) {
 //			System.err.println("2005 "+importStatementItem);
-			if (compilation().isPackage(importStatementItem.toString())) {
-//				final List<OS_Element> l = new ArrayList<OS_Element>();
-				final OS_Package aPackage = compilation().getPackage(importStatementItem);
+			Compilation compilation = compilation();
+			if (compilation.isPackage(importStatementItem.toString())) {
+				final OS_Package aPackage = compilation.getPackage(importStatementItem);
 //				LogEvent.logEvent(4003 , ""+aPackage.getElements());
 				for (final OS_Element element : aPackage.getElements()) {
 //					System.err.println("4002 "+element);
@@ -42,6 +42,37 @@ public class ImportContext extends Context {
 						final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
 						alreadySearched.add(namespaceContext);
 						namespaceContext.lookup(name, level, Result, alreadySearched, true);
+					}
+				}
+			} else {
+				// find directly imported elements
+				List<IdentExpression> x = importStatementItem.parts();
+				final IdentExpression last = x.get(x.size() - 1);
+				if (last.getText().equals(name)) {
+					Qualident cl = new Qualident();
+					for (int i = 0; i < x.size() - 1; i++) {
+						cl.append(x.get(i));
+					}
+					// SAME AS ABOVE, WITH ADDITIONS
+					if (compilation.isPackage(cl.toString())) {
+						final OS_Package aPackage = compilation.getPackage(cl);
+//						LogEvent.logEvent(4003 , ""+aPackage.getElements());
+						for (final OS_Element element : aPackage.getElements()) {
+//							System.err.println("4002 "+element);
+							if (element instanceof NamespaceStatement && ((NamespaceStatement) element).getKind() == NamespaceTypes.MODULE) {
+//		                		LogEvent.logEvent(4103, "");
+								final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
+								alreadySearched.add(namespaceContext);
+								namespaceContext.lookup(name, level, Result, alreadySearched, true);
+							} else {
+								if (element instanceof OS_Element2) {
+									final String element_name = ((OS_Element2) element).name();
+									if (element_name.equals(name)) {
+										Result.add(name, level, element, aPackage.getContext()); // TODO which context do we set it to?
+									}
+								}
+							}
+						}
 					}
 				}
 			}
