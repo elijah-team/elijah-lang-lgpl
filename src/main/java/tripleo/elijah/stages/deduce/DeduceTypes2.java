@@ -1015,6 +1015,9 @@ public class DeduceTypes2 {
 			final VariableStatement vs = (VariableStatement) best;
 			if (!vs.typeName().isNull())
 				return new OS_Type(vs.typeName());
+		} else if (best instanceof FunctionDef) {
+			final FunctionDef functionDef = (FunctionDef) best;
+			return new OS_FuncType(functionDef);
 		}
 		return null;
 	}
