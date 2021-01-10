@@ -10,6 +10,9 @@ package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.LookupResultList;
+import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.lang.OS_Element2;
+import tripleo.elijah.lang.OS_Package;
 
 import java.util.List;
 
@@ -18,17 +21,30 @@ import java.util.List;
  */
 public class PackageContext extends Context {
 	private final Context _parent;
+	private final OS_Package carrier;
 
-	public PackageContext(final Context aParent) {
+	public PackageContext(final Context aParent, OS_Package os_package) {
 		_parent = aParent;
+		carrier = os_package;
 	}
 
 	@Override
 	public LookupResultList lookup(final String name, final int level, final LookupResultList Result, final List<Context> alreadySearched, final boolean one) {
-		// TODO since we are not maintaining an item list, pass to parent
-		// TODO implement me
 		alreadySearched.add(this);
-		return getParent().lookup(name, level, Result, alreadySearched, one);
+		for (OS_Element element : carrier.getElements()) {
+			if (element instanceof OS_Element2) {
+				final OS_Element2 element2 = (OS_Element2) element;
+				if (element2.name().equals(name)) {
+					Result.add(name, level, element, this);
+				}
+			}
+		}
+		if (getParent() != null) {
+			final Context context = getParent();
+			if (!alreadySearched.contains(context) || !one)
+				return context.lookup(name, level + 1, Result, alreadySearched, false);
+		}
+		return Result;
 	}
 
 	@Override

@@ -79,7 +79,7 @@ public ElijjahParser(ParserSharedInputState state) {
 						xy=qualident();
 						opt_semi();
 						if ( inputState.guessing==0 ) {
-							pc.packageName(xy);cur=new PackageContext(cur);
+							pc.packageName(xy);cur=new PackageContext(cur, pc.module.parent.makePackage(xy));
 						}
 						break;
 					}

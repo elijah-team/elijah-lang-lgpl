@@ -37,7 +37,7 @@ Scope3 sco;
 program
         {ParserClosure pc = out.closure();cur=new ModuleContext(out.module());out.module().setContext((ModuleContext)cur);}
     : (( indexingStatement[pc.indexingStatement()]
-	  |"package" xy=qualident opt_semi {pc.packageName(xy);cur=new PackageContext(cur);}
+	  |"package" xy=qualident opt_semi {pc.packageName(xy);cur=new PackageContext(cur, pc.module.parent.makePackage(xy));}
 	  |programStatement[pc, out.module()]) opt_semi)*
 	  EOF {out.module().postConstruct();out.FinishModule();}
 	;
