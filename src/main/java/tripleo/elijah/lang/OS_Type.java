@@ -130,7 +130,7 @@ public class OS_Type {
 	}
 
 	public enum Type {
-		BUILT_IN, USER, USER_CLASS, FUNCTION
+		BUILT_IN, USER, USER_CLASS, FUNC_EXPR, FUNCTION
 	}
 
 	public Type getType() {
