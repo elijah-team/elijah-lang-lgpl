@@ -90,6 +90,8 @@ access {NONE}
 namespace {
 	//#[Primitive]
 	val None = 0
+	
+	var ExitCode = ExitSuccess
 }
 
 
