@@ -1145,7 +1145,7 @@ public class DeduceTypes2 {
 						if (el.getContext() != null)
 							ectx = el.getContext();
 						else {
-							final int yy=2;
+							final int yy = 2;
 							throw new NotImplementedException();
 						}
 					} else {

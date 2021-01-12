@@ -71,19 +71,19 @@ public class CReference {
 				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) ia).getIndex());
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
-					if (i+1 >= sSize)
+					if (i + 1 >= sSize)
 						_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction);
 					else {
-						boolean b = _getIdentIAPath_IdentIAHelper(s.get(i+1), sl, i, sSize, resolved_element, generatedFunction);
+						boolean b = _getIdentIAPath_IdentIAHelper(s.get(i + 1), sl, i, sSize, resolved_element, generatedFunction);
 						if (b) i++;
 					}
 //					addRef(text, Ref.MEMBER);
 				} else {
 					// TODO make tests pass but I dont like this (should throw an exception: not enough information)
 					if (sl.size() == 0) {
-						text = Emit.emit("/*149*/")+idte.getIdent().getText(); // TODO check if it belongs somewhere else
+						text = Emit.emit("/*149*/") + idte.getIdent().getText(); // TODO check if it belongs somewhere else
 					} else {
-						text = Emit.emit("/*152*/")+"vm" + idte.getIdent().getText();
+						text = Emit.emit("/*152*/") + "vm" + idte.getIdent().getText();
 					}
 					String text2 = idte.getIdent().getText();
 					addRef(text2, Ref.MEMBER);
