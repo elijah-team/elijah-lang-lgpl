@@ -69,7 +69,12 @@ public class CReference {
 				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) ia).getIndex());
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
-					_getIdentIAPath_IdentIAHelper(sl, i, sSize, resolved_element, generatedFunction);
+					if (i+1 >= sSize)
+						_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction);
+					else {
+						boolean b = _getIdentIAPath_IdentIAHelper(s.get(i+1), sl, i, sSize, resolved_element, generatedFunction);
+						if (b) i++;
+					}
 //					addRef(text, Ref.MEMBER);
 				} else {
 					// TODO make tests pass but I dont like this (should throw an exception: not enough information)
@@ -90,19 +95,43 @@ public class CReference {
 		return rtext;
 	}
 
-	public void _getIdentIAPath_IdentIAHelper(List<String> sl,
-											  int i,
-											  int sSize,
-											  OS_Element resolved_element,
-											  GeneratedFunction generatedFunction) {
+	public boolean _getIdentIAPath_IdentIAHelper(InstructionArgument ia_next,
+												 List<String> sl,
+												 int i,
+												 int sSize,
+												 OS_Element resolved_element,
+												 GeneratedFunction generatedFunction) {
+		boolean b = false;
 		if (resolved_element instanceof ClassStatement) {
 			// Assuming constructor call
-			// TODO what about named constructors
 			int code = ((ClassStatement) resolved_element)._a.getCode();
-			// TODO might be calling reflect or Type or Name
-			assert i == sSize-1; // Make sure we are ending with a constructor call
-			String text2 = String.format("ZC%d%s", code, ((ClassStatement) resolved_element).name());
-			addRef(text2, Ref.CONSTRUCTOR);
+			// README might be calling reflect or Type or Name
+			// TODO what about named constructors -- should be called with construct keyword
+			if (ia_next instanceof IdentIA) {
+				IdentTableEntry ite = generatedFunction.getIdentTableEntry(((IdentIA) ia_next).getIndex());
+				final String text = ite.getIdent().getText();
+				if (text.equals("reflect")) {
+					b = true;
+					String text2 = String.format("ZS%d_reflect", code);
+					addRef(text2, Ref.FUNCTION);
+				} else if (text.equals("Type")) {
+					b = true;
+					String text2 = String.format("ZST%d", code); // return a TypeInfo structure
+					addRef(text2, Ref.FUNCTION);
+				} else if (text.equals("Name")) {
+					b = true;
+					String text2 = String.format("ZSN%d", code);
+					addRef(text2, Ref.FUNCTION); // TODO make this not a function
+				} else {
+					assert i == sSize-1; // Make sure we are ending with a constructor call
+					String text2 = String.format("ZC%d%s", code, ((ClassStatement) resolved_element).name()); // TODO why classname ??
+					addRef(text2, Ref.CONSTRUCTOR);
+				}
+			} else {
+				assert i == sSize-1; // Make sure we are ending with a constructor call
+				String text2 = String.format("ZC%d%s", code, ((ClassStatement) resolved_element).name());
+				addRef(text2, Ref.CONSTRUCTOR);
+			}
 		} else if (resolved_element instanceof FunctionDef) {
 			OS_Element parent = resolved_element.getParent();
 			int code;
@@ -163,6 +192,7 @@ public class CReference {
 			System.out.println("1008 "+resolved_element.getClass().getName());
 			throw new NotImplementedException();
 		}
+		return b;
 	}
 
 	@NotNull
