@@ -22,4 +22,6 @@ class interface List[T] < Collection[T] {
 	insert(index: CollectionSize, item: T)
 	//remove(item: T) 	
 	removeAt(index: CollectionSize) 
+
+	forEach(f: function(x: ?A)->?B) -> List[B]
 }
