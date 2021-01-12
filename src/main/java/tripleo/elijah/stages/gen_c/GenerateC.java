@@ -430,8 +430,8 @@ public class GenerateC {
 						} else {
 							final CReference reference = new CReference();
 							final IdentIA ia2 = (IdentIA) pte.expression_num;
-							final List<String> sl3 = getArgumentStrings(gf, instruction);
 							reference.getIdentIAPath(ia2, gf);
+							final List<String> sl3 = getArgumentStrings(gf, instruction);
 							reference.args(sl3);
 							String path = reference.build();
 
