@@ -12,6 +12,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 import tripleo.elijah.stages.gen_fn.TypeTableEntry;
@@ -30,7 +31,7 @@ public class FnCallArgs implements InstructionArgument {
 
 	@Override
 	public String toString() {
-		final int index = ((IntegerIA) expression_to_call.args.get(0)).getIndex();
+		final int index = DeduceTypes2.to_int(expression_to_call.args.get(0));
 		final List<InstructionArgument> instructionArguments = getInstructionArguments();
 /*
         final List<String> collect = instructionArguments
