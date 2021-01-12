@@ -99,6 +99,7 @@ public class CReference {
 			// Assuming constructor call
 			// TODO what about named constructors
 			int code = ((ClassStatement) resolved_element)._a.getCode();
+			// TODO might be calling reflect or Type or Name
 			assert i == sSize-1; // Make sure we are ending with a constructor call
 			String text2 = String.format("ZC%d%s", code, ((ClassStatement) resolved_element).name());
 			addRef(text2, Ref.CONSTRUCTOR);
