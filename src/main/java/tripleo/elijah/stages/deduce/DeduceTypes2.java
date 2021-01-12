@@ -295,6 +295,7 @@ public class DeduceTypes2 {
 //				final InstructionArgument i2 = (instruction.getArg(1));
 				{
 					String x = generatedFunction.getIdentIAPathNormal((IdentIA) fn1.expression_num);
+					System.err.println("298 "+x);
 					@Nullable OS_Element el = resolveIdentIA(context, (IdentIA) fn1.expression_num, module, generatedFunction);
 					assert el != null;
 					fn1.resolved = el;
