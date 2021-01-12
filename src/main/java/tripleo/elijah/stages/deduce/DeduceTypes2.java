@@ -1242,19 +1242,40 @@ public class DeduceTypes2 {
 					List<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
 					if (pot.size() == 1) {
 						final OS_Type attached = pot.get(0).attached;
-						switch (attached.getType()) {
-						case USER_CLASS:
-							ectx = attached.getClassOf().getContext(); // TODO can combine later
-							break;
-						case FUNCTION:
-							ectx = ((OS_FuncType) attached).getElement().getContext();
-							break;
-						case USER:
-							ectx = attached.getTypeName().getContext();
-							break;
-						default:
-							System.err.println("1098 " + attached.getType());
-							throw new IllegalStateException("Can't be here.");
+						if (attached == null) {
+							LookupResultList lrl = lookupExpression(pot.get(0).expression.getLeft(), ctx);
+							OS_Element best = lrl.chooseBest(Helpers.List_of(
+									new DeduceUtils.MatchFunctionArgs(
+											(ProcedureCallExpression) pot.get(0).expression)));
+							FunctionDef fd = null;
+							if (best instanceof FunctionDef) {
+								fd = (FunctionDef) best;
+							} else {
+								System.err.println("1195 Can't find match");
+							}
+							if (fd != null) {
+								forFunction(fd, new ForFunction() {
+									@Override
+									public void typeDecided(OS_Type aType) {
+										pot.get(0).attached = aType;
+									}
+								});
+							}
+						} else {
+							switch (attached.getType()) {
+							case USER_CLASS:
+								ectx = attached.getClassOf().getContext(); // TODO can combine later
+								break;
+							case FUNCTION:
+								ectx = ((OS_FuncType) attached).getElement().getContext();
+								break;
+							case USER:
+								ectx = attached.getTypeName().getContext();
+								break;
+							default:
+								System.err.println("1098 " + attached.getType());
+								throw new IllegalStateException("Can't be here.");
+							}
 						}
 					}
 				}
