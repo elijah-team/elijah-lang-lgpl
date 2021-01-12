@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialVariables;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
@@ -413,8 +414,8 @@ public class GenerateC {
 					final StringBuilder sb = new StringBuilder();
 // 					System.err.println("9000 "+inst.getName());
 					final InstructionArgument x = instruction.getArg(0);
-					assert x instanceof IntegerIA;
-					final ProcTableEntry pte = gf.getProcTableEntry(((IntegerIA) x).getIndex());
+					assert x instanceof ProcIA;
+					final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) x).getIndex());
 					{
 						if (pte.expression_num == null) {
 							final IdentExpression ptex = (IdentExpression) pte.expression;
@@ -446,8 +447,8 @@ public class GenerateC {
 				{
 					final StringBuilder sb = new StringBuilder();
 					final InstructionArgument x = instruction.getArg(0);
-					assert x instanceof IntegerIA;
-					final ProcTableEntry pte = gf.getProcTableEntry(((IntegerIA) x).getIndex());
+					assert x instanceof ProcIA;
+					final ProcTableEntry pte = gf.getProcTableEntry(DeduceTypes2.to_int(x));
 					{
 						CReference reference = null;
 						if (pte.expression_num == null) {
@@ -734,7 +735,10 @@ public class GenerateC {
 				if (cte.initialValue instanceof CharLitExpression) {
 					sl3.add(String.format("'%s'", cte.initialValue.toString()));
 				}
-				int y=2;
+				int y = 2;
+			} else if (ia instanceof ProcIA) {
+				System.err.println("740 ProcIA");
+				throw new NotImplementedException();
 			} else {
 				System.err.println(ia.getClass().getName());
 				throw new IllegalStateException("Invalid InstructionArgument");
@@ -750,8 +754,8 @@ public class GenerateC {
 			final Instruction inst = fca.getExpression();
 //			System.err.println("9000 "+inst.getName());
 			final InstructionArgument x = inst.getArg(0);
-			assert x instanceof IntegerIA;
-			final ProcTableEntry pte = gf.getProcTableEntry(((IntegerIA)x).getIndex());
+			assert x instanceof ProcIA;
+			final ProcTableEntry pte = gf.getProcTableEntry(DeduceTypes2.to_int(x));
 //			System.err.println("9000-2 "+pte);
 			switch (inst.getName()) {
 			case CALL:
@@ -855,6 +859,9 @@ public class GenerateC {
 //					sll.add(Emit.emit("/*748*/")+""+ite.getIdent().getText());
 					sll.add(Emit.emit("/*748*/")+""+path2);
 					System.out.println("743 "+path2+" "+path);
+				} else if (ia instanceof ProcIA) {
+					System.err.println("863 ProcIA");
+					throw new NotImplementedException();
 				} else {
 					throw new IllegalStateException("Cant be here: Invalid InstructionArgument");
 				}

@@ -170,7 +170,7 @@ public class GenerateFunctions {
 						final List<TypeTableEntry> argument_types = List_of(gf.getVarTableEntry(to_int(left)).type, gf.getVarTableEntry(to_int(right)).type);
 //						System.out.println("801.2 "+argument_types);
 						final int fn_aug = addProcTableEntry(fn_aug_name, null, argument_types, gf);
-						final int i = add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(fn_aug), left, right), cctx);
+						final int i = add_i(gf, InstructionName.CALLS, List_of(new ProcIA(fn_aug, gf), left, right), cctx);
 						//
 						// SEE IF CALL SHOULD BE DEFERRED
 						//
@@ -658,7 +658,7 @@ public class GenerateFunctions {
 				final IdentExpression pre_inc_name = Helpers.string_to_ident("__preinc__");
 				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 				final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
-				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(iter_temp)), cctx);
+				add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(iter_temp)), cctx);
 				add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
 				gf.place(label_bottom);
 			}
@@ -687,7 +687,7 @@ public class GenerateFunctions {
 				final IdentExpression pre_inc_name = Helpers.string_to_ident(txt);
 				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 				final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte), gf);
-				add_i(gf, InstructionName.CALLS, List_of(new IntegerIA(pre_inc), new IntegerIA(loop_iterator)), cctx);
+				add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(loop_iterator)), cctx);
 				add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
 				gf.place(label_bottom);
 			}
@@ -757,7 +757,7 @@ public class GenerateFunctions {
 		}
 		final int i = addProcTableEntry(left, expression_num, get_args_types(args, gf), gf);
 		final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
-		l.add(new IntegerIA(i));
+		l.add(new ProcIA(i, gf));
 		l.addAll(simplify_args(args, gf, cctx));
 		add_i(gf, InstructionName.CALL, l, cctx);
 	}
@@ -799,7 +799,7 @@ public class GenerateFunctions {
 		return R;
 	}
 
-	private int addProcTableEntry(final IExpression expression, final InstructionArgument expression_num, final List<TypeTableEntry> args, @NotNull final GeneratedFunction gf) {
+	public int addProcTableEntry(final IExpression expression, final InstructionArgument expression_num, final List<TypeTableEntry> args, @NotNull final GeneratedFunction gf) {
 		final ProcTableEntry pte = new ProcTableEntry(gf.prte_list.size(), expression, expression_num, args);
 		gf.prte_list.add(pte);
 		return pte.index;
@@ -901,7 +901,7 @@ public class GenerateFunctions {
 					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), cctx);
 					final Instruction inst = new Instruction();
 					inst.setName(InstructionName.CALLS);
-					inst.setArgs(List_of(new IntegerIA(pte), left_instruction, right_instruction));
+					inst.setArgs(List_of(new ProcIA(pte, gf), left_instruction, right_instruction));
 					final FnCallArgs fca = new FnCallArgs(inst, gf);
 					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp), fca), cctx);
 					return new IntegerIA(tmp);
@@ -953,7 +953,7 @@ public class GenerateFunctions {
 					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), cctx);
 					final Instruction inst = new Instruction();
 					inst.setName(InstructionName.CALLS);
-					inst.setArgs(List_of(new IntegerIA(pte), left_instruction, right_instruction));
+					inst.setArgs(List_of(new ProcIA(pte, gf), left_instruction, right_instruction));
 					final FnCallArgs fca = new FnCallArgs(inst, gf);
 					// TODO should be AGNC
 					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp), fca), cctx);
@@ -1038,7 +1038,7 @@ public class GenerateFunctions {
 			}
 		}
 		final int pte = addProcTableEntry(expression, left_ia, args1, gf);
-		right_ia.add(0, new IntegerIA(pte));
+		right_ia.add(0, new ProcIA(pte, gf));
 		{
 			final int tmp_var = addTempTableEntry(null, gf); // line 686 is here
 			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp_var)), cctx);
@@ -1051,7 +1051,7 @@ public class GenerateFunctions {
 		}
 	}
 
-	private @NotNull List<TypeTableEntry> get_args_types(@org.jetbrains.annotations.Nullable final ExpressionList args, @NotNull final GeneratedFunction gf) {
+	@NotNull List<TypeTableEntry> get_args_types(@org.jetbrains.annotations.Nullable final ExpressionList args, @NotNull final GeneratedFunction gf) {
 		final List<TypeTableEntry> R = new ArrayList<TypeTableEntry>();
 		if (args == null) return R;
 		//
@@ -1133,7 +1133,7 @@ public class GenerateFunctions {
 		final InstructionArgument assignment_path = gf.get_assignment_path(left, this);
 		final List<TypeTableEntry> args_types = get_args_types(pce.getArgs(), gf);
 		final int pte_num = addProcTableEntry(left, assignment_path, args_types, gf);
-		li.add(new IntegerIA(pte_num));
+		li.add(new ProcIA(pte_num, gf));
 		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf, cctx);
 		li.addAll(args_);
 		i.setArgs(li);
@@ -1150,7 +1150,7 @@ public class GenerateFunctions {
 		i.setName(InstructionName.CALL);
 		final List<InstructionArgument> li = new ArrayList<InstructionArgument>();
 		final int pte_num = addProcTableEntry(left, left1, get_args_types(pce.getArgs(), gf), gf);
-		li.add(new IntegerIA(pte_num));
+		li.add(new ProcIA(pte_num, gf));
 		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf, cctx);
 		li.addAll(args_);
 		i.setArgs(li);

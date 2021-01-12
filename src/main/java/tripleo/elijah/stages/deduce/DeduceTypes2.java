@@ -225,6 +225,8 @@ public class DeduceTypes2 {
 							assert idte.type != null;
 							assert idte.resolved_element != null;
 							vte.addPotentialType(instruction.getIndex(), idte.type);
+						} else if (i2 instanceof ProcIA) {
+							throw new NotImplementedException();
 						} else
 							throw new NotImplementedException();
 					} else if (agn_lhs instanceof IdentIA) {
@@ -268,6 +270,8 @@ public class DeduceTypes2 {
 							idte.addPotentialType(instruction.getIndex(), idte2.type);
 						} else if (i2 instanceof ConstTableIA) {
 							do_assign_constant(generatedFunction, instruction, idte, (ConstTableIA) i2);
+						} else if (i2 instanceof ProcIA) {
+							throw new NotImplementedException();
 						} else
 							throw new NotImplementedException();
 					}
@@ -298,7 +302,7 @@ public class DeduceTypes2 {
 			case JMP:
 				break;
 			case CALL: {
-				final int pte_num = to_int(instruction.getArg(0));
+				final int pte_num = ((ProcIA)instruction.getArg(0)).getIndex();
 				final ProcTableEntry fn1 = generatedFunction.getProcTableEntry(pte_num);
 //				final InstructionArgument i2 = (instruction.getArg(1));
 				{
@@ -899,7 +903,11 @@ public class DeduceTypes2 {
 	}
 
 	public static int to_int(@NotNull final InstructionArgument arg) {
-		return ((IntegerIA) arg).getIndex();
+		if (arg instanceof IntegerIA)
+			return ((IntegerIA) arg).getIndex();
+		if (arg instanceof ProcIA)
+			return ((ProcIA) arg).getIndex();
+		throw new NotImplementedException();
 	}
 
 	@Nullable private OS_Element _resolveAlias(final AliasStatement aliasStatement) {
@@ -1159,17 +1167,10 @@ public class DeduceTypes2 {
 							System.out.println("2002 Cant resolve " + z);
 						}
 					});
-
-/*
-					System.out.println(String.format("2001 Resolved %s to %s", z, os_element));
-					if (os_element != null)
-						idte.setResolvedElement(os_element);
-					else {
-						System.out.println("2002 Cant resolve " + z);
-					}
-					return os_element;
-*/
 				}
+			} else if (ia instanceof ProcIA) {
+				ProcTableEntry prte = generatedFunction.getProcTableEntry(DeduceTypes2.to_int(ia));
+				int y=2;
 			} else
 				throw new IllegalStateException("Really cant be here");
 		}
@@ -1364,7 +1365,11 @@ public class DeduceTypes2 {
 				}
 
 				int yy=2;
-			}
+			} else if (ia2 instanceof ProcIA) {
+				System.err.println("1373 ProcIA");
+//				throw new NotImplementedException();
+			} else
+				throw new NotImplementedException();
 		}
 		foundElement.doFoundElement(el);
 	}

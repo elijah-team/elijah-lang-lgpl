@@ -13,10 +13,12 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
+import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 import tripleo.elijah.stages.gen_fn.VariableTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
+import tripleo.elijah.stages.instructions.ProcIA;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -86,6 +88,11 @@ public class CReference {
 					String text2 = idte.getIdent().getText();
 					addRef(text2, Ref.MEMBER);
 				}
+			} else if (ia instanceof ProcIA) {
+				final ProcTableEntry prte = generatedFunction.getProcTableEntry(DeduceTypes2.to_int(ia));
+				text = (prte.expression.getLeft()).toString();
+//				assert i == sSize-1;
+				addRef(text, Ref.FUNCTION); // TODO needs to use name of resolved function
 			} else {
 				throw new NotImplementedException();
 			}
@@ -206,6 +213,10 @@ public class CReference {
 				final IdentTableEntry ite1 = generatedFunction.getIdentTableEntry(((IdentIA) oo).getIndex());
 				s.add(0, oo);
 				oo = ite1.backlink;
+			} else if (oo instanceof ProcIA) {
+				final ProcTableEntry prte = generatedFunction.getProcTableEntry(DeduceTypes2.to_int(oo));
+				s.add(0, oo);
+				oo = null;
 			} else
 				throw new IllegalStateException("Invalid InstructionArgument");
 		}

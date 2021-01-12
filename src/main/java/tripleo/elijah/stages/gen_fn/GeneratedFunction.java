@@ -95,6 +95,9 @@ public class GeneratedFunction implements GeneratedNode {
 				final IdentTableEntry ite1 = getIdentTableEntry(((IdentIA) oo).getIndex());
 				s.add(0, oo);
 				oo = ite1.backlink;
+			} else if (oo instanceof ProcIA) {
+				s.add(0, oo);
+				oo = null;
 			} else
 				throw new IllegalStateException("Invalid InstructionArgument");
 		}
@@ -126,6 +129,9 @@ public class GeneratedFunction implements GeneratedNode {
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
 				text = idte.getIdent().getText();
+			} else if (ia instanceof ProcIA) {
+				final ProcTableEntry prte = getProcTableEntry(DeduceTypes2.to_int(ia));
+				text = prte.expression.toString(); // TODO this is wrong but I don't see any other way without adding new fields
 			} else
 				throw new NotImplementedException();
 			sl.add(text);
@@ -304,6 +310,10 @@ public class GeneratedFunction implements GeneratedNode {
 		case PROCEDURE_CALL:
 			{
 				ProcedureCallExpression pce = (ProcedureCallExpression) expression;
+				if (pce.getLeft() instanceof IdentExpression) {
+					int i = generateFunctions.addProcTableEntry(pce, null, generateFunctions.get_args_types(pce.getArgs(), this), this);
+					return new ProcIA(i, this); // TODO do we need an IdentIA?
+				}
 				return get_assignment_path(pce.getLeft(), generateFunctions); // TODO this looks wrong. what are we supposed to be doing here?
 //				throw new NotImplementedException();
 			}
