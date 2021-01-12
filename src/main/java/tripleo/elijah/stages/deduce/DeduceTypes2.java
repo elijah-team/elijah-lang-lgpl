@@ -1158,11 +1158,14 @@ public class DeduceTypes2 {
 //					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
 					String z = generatedFunction.getIdentIAPathNormal((IdentIA) ia);
 					resolveIdentIA2_(context, identIA, module, s, generatedFunction, new FoundElement(phase) {
-						@Override void foundElement(OS_Element e) {
+						@Override
+						void foundElement(OS_Element e) {
 							foundElement.doFoundElement(e);
 							idte.setResolvedElement(e);
 						}
-						@Override void noFoundElement() {
+
+						@Override
+						void noFoundElement() {
 							foundElement.noFoundElement();
 							System.out.println("2002 Cant resolve " + z);
 						}
