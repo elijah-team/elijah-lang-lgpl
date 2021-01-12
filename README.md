@@ -1,3 +1,7 @@
+[![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/master/graph/badge.svg?token=WATHC960NB)](https://codecov.io/gl/elijah-team/elijah-lang)
+
+[![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/genericA/graph/badge.svg?token=WATHC960NB)](https://app.codecov.io/gl/elijah-team/elijah-lang/branch/genericA)
+
 Elijjah is a high-level language suitable for replacement Java and C++. It is meant to
 integrate into current C and Java projects. It will feature a REPL and a graphical environment as well, 
 along the lines Smalltalk/Tunes Slate.
@@ -35,6 +39,6 @@ oluoluolu+elijah \(at\) gmail.com
 
 [Documentation on GitLab](https://elijah-team.gitlab.io/elijah-lang/) (look here first)
 
-----
+## Coverage
 
 Look at my [code coverage](https://codecov.io/gl/elijah-team/elijah-lang/branch/master): `master`'s only at 13%
