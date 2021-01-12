@@ -102,13 +102,21 @@ public class DeduceTypes2 {
 						if (ite.resolved_element != null)
 							continue;
 						final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
-						final String x = generatedFunction.getIdentIAPathNormal(identIA);
-						@Nullable OS_Element y = resolveIdentIA(context, identIA, module, generatedFunction);
-						if (y == null) {
-							errSink.reportError("1004 Can't find element for "+ generatedFunction.getIdentIAPathNormal(identIA));
-						} else {
-							found_element_for_ite(generatedFunction, ite, y, context);
-						}
+						resolveIdentIA_(context, identIA, module, generatedFunction, new FoundElement(phase) {
+
+							final String x = generatedFunction.getIdentIAPathNormal(identIA);
+
+							@Override
+							void foundElement(OS_Element e) {
+								ite.setResolvedElement(e);
+								found_element_for_ite(generatedFunction, ite, e, context);
+							}
+
+							@Override
+							void noFoundElement() {
+								errSink.reportError("1004 Can't find element for "+ x);
+							}
+						});
 					}
 				}
 				break;
@@ -1023,20 +1031,11 @@ public class DeduceTypes2 {
 		return null;
 	}
 
-	/**
-	 * Called from {@link DeduceTypes2#do_assign_call(GeneratedFunction, Context, VariableTableEntry, FnCallArgs, Instruction)}
-	 * @param ctx to do lookups
-	 * @param ident_a pte.expression_num
-	 * @param module to report errors
-	 * @param generatedFunction
-	 * @return
-	 */
-	@Nullable
-	public OS_Element resolveIdentIA(final Context ctx, @NotNull final IdentIA ident_a, @NotNull final OS_Module module, GeneratedFunction generatedFunction) {
-		final List<InstructionArgument> s = generatedFunction._getIdentIAPathList(ident_a);
+	public void resolveIdentIA_(Context context, IdentIA identIA, OS_Module module, GeneratedFunction generatedFunction, FoundElement foundElement) {
+		final List<InstructionArgument> s = generatedFunction._getIdentIAPathList(identIA);
 
 		OS_Element el = null;
-		Context ectx = ctx;
+		Context ectx = context;
 		for (final InstructionArgument ia : s) {
 			if (ia instanceof IntegerIA) {
 				VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) ia).getIndex());
@@ -1068,7 +1067,7 @@ public class DeduceTypes2 {
 								break;
 							}
 							case FUNCTION: {
-								int y = 2;
+								int yy = 2;
 								System.err.println("1005");
 								FunctionDef x = (FunctionDef) attached.getElement();
 								ectx = x.getContext();
@@ -1090,10 +1089,24 @@ public class DeduceTypes2 {
 								throw new IllegalStateException("foo bar");
 							} else {
 								ectx = el2.getContext();
-								if (el2 instanceof ClassStatement)
+								if (el2 instanceof ClassStatement) {
 									tte.attached = new OS_Type((ClassStatement) el2);
-								else if (el2 instanceof FunctionDef) {
-									tte.attached = new OS_FuncType((FunctionDef) el2);
+								} else if (el2 instanceof FunctionDef) {
+									assert tte.attached == null;
+									switch (tte.expression.getKind()) {
+									case PROCEDURE_CALL:
+										final TypeName returnType = ((FunctionDef) el2).returnType();
+										if (returnType != null && !returnType.isNull()) {
+											tte.attached = new OS_Type(returnType);
+										} else {
+											// TODO we must find type at a later point
+											System.err.println("1105 we must find type at a later point for "+tte.expression);
+										}
+										break;
+									default:
+										tte.attached = new OS_FuncType((FunctionDef) el2);
+										break;
+									}
 								} else {
 									System.err.println("1017 "+el2.getClass().getName());
 									throw new NotImplementedException();
@@ -1103,7 +1116,9 @@ public class DeduceTypes2 {
 					}
 				} else {
 					errSink.reportError("1001 Can't resolve "+text);
-					return null;
+					//return null;
+					foundElement.doNoFoundElement();
+					return;
 				}
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) ia).getIndex());
@@ -1127,12 +1142,25 @@ public class DeduceTypes2 {
 						}
 					} else {
 						errSink.reportError("1000 Can't resolve " + text);
-						return null; // README cant resolve pte. Maybe report error
+//						return null; // README cant resolve pte. Maybe report error
+						foundElement.doNoFoundElement();
+						return;
 					}
 				} else {
 //					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
 					String z = generatedFunction.getIdentIAPathNormal((IdentIA) ia);
-					OS_Element os_element = resolveIdentIA2(ctx, ident_a, module, s, generatedFunction);
+					resolveIdentIA2_(context, identIA, module, s, generatedFunction, new FoundElement(phase) {
+						@Override void foundElement(OS_Element e) {
+							foundElement.doFoundElement(e);
+							idte.setResolvedElement(e);
+						}
+						@Override void noFoundElement() {
+							foundElement.noFoundElement();
+							System.out.println("2002 Cant resolve " + z);
+						}
+					});
+
+/*
 					System.out.println(String.format("2001 Resolved %s to %s", z, os_element));
 					if (os_element != null)
 						idte.setResolvedElement(os_element);
@@ -1140,14 +1168,59 @@ public class DeduceTypes2 {
 						System.out.println("2002 Cant resolve " + z);
 					}
 					return os_element;
+*/
 				}
 			} else
 				throw new IllegalStateException("Really cant be here");
 		}
-		return el;
+		//return el;
+		foundElement.doFoundElement(el);
 	}
 
-	private OS_Element resolveIdentIA2(Context ctx, IdentIA ident_a, OS_Module module, List<InstructionArgument> s, GeneratedFunction generatedFunction) {
+
+	/**
+	 * Called from {@link DeduceTypes2#do_assign_call(GeneratedFunction, Context, VariableTableEntry, FnCallArgs, Instruction)}
+	 * @param ctx to do lookups
+	 * @param ident_a pte.expression_num
+	 * @param module to report errors
+	 * @param generatedFunction
+	 * @return
+	 */
+	@Nullable
+	public OS_Element resolveIdentIA(final Context ctx, @NotNull final IdentIA ident_a, @NotNull final OS_Module module, GeneratedFunction generatedFunction) {
+		Holder<OS_Element> hel =new Holder<>();
+		resolveIdentIA_(ctx, ident_a, module, generatedFunction, new FoundElement(phase) {
+			@Override
+			void foundElement(OS_Element e) {
+				hel.set(e);
+			}
+
+			@Override
+			void noFoundElement() {
+
+			}
+		});
+		return hel.get();
+	}
+
+	static class Holder<T> {
+		private T el;
+
+		public void set(T el) {
+			this.el = el;
+		}
+
+		public T get() {
+			return el;
+		}
+	}
+
+	public void resolveIdentIA2_(@NotNull final Context ctx,
+								 @NotNull final IdentIA ident_a,
+								 @NotNull final OS_Module module,
+								 @NotNull final List<InstructionArgument> s,
+								 @NotNull final GeneratedFunction generatedFunction,
+								 @NotNull final FoundElement foundElement) {
 		OS_Element el = null;
 		Context ectx = ctx;
 
@@ -1213,7 +1286,8 @@ public class DeduceTypes2 {
 				el = lrl.chooseBest(null);
 				if (el == null) {
 					errSink.reportError("1007 Can't resolve "+text);
-					return null;
+					foundElement.doNoFoundElement();
+					return;
 				} else {
 					if (idte2.type == null) {
 						if (el instanceof VariableStatement) {
@@ -1255,10 +1329,10 @@ public class DeduceTypes2 {
 					}
 				}
 
-				int y=2;
+				int yy=2;
 			}
 		}
-		return el;
+		foundElement.doFoundElement(el);
 	}
 
 	private OS_Element lookup(IExpression expression, Context ctx) {
