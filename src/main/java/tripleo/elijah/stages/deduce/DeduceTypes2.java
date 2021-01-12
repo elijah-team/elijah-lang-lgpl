@@ -1289,8 +1289,21 @@ public class DeduceTypes2 {
 					case FUNCTION:
 						ectx = attached.getElement().getContext();
 						break;
+//					default:
+//						throw new NotImplementedException();
+					case USER:
+						{
+							try {
+								@NotNull OS_Type ty = resolve_type(attached, ctx);
+								ectx = ty.getClassOf().getContext();
+							} catch (ResolveError resolveError) {
+								System.err.println("1300 Can't resolve " + attached);
+								resolveError.printStackTrace();
+							}
+						}
+						break;
 					default:
-						throw new NotImplementedException();
+						throw new IllegalStateException("Unexpected value: " + attached.getType());
 					}
 				} else {
 					if (vte.potentialTypes().size() == 1) {
