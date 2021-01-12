@@ -27,8 +27,14 @@ import java.util.List;
  */
 public class DeducePhase {
 
+	private List<FoundElement> foundElements = new ArrayList<FoundElement>();
+
 	public void addFunction(GeneratedFunction generatedFunction, FunctionDef fd) {
 		functionMap.put(fd, generatedFunction);
+	}
+
+	public void registerFound(FoundElement foundElement) {
+		foundElements.add(foundElement);
 	}
 
 	static class Triplet {
@@ -83,6 +89,11 @@ public class DeducePhase {
 		for (Triplet triplet : forFunctions) {
 			Collection<GeneratedFunction> x = functionMap.get(triplet.fd);
 //			triplet.forFunction.finish();
+		}
+		for (FoundElement foundElement : foundElements) {
+			if (foundElement.didntFind()) {
+				foundElement.noFoundElement();
+			}
 		}
 	}
 }
