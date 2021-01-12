@@ -69,7 +69,7 @@ public class CReference {
 				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) ia).getIndex());
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
-					text = _getIdentIAPath_IdentIAHelper(text, sl, i, sSize, resolved_element, generatedFunction);
+					_getIdentIAPath_IdentIAHelper(sl, i, sSize, resolved_element, generatedFunction);
 //					addRef(text, Ref.MEMBER);
 				} else {
 					// TODO make tests pass but I dont like this (should throw an exception: not enough information)
@@ -90,19 +90,16 @@ public class CReference {
 		return rtext;
 	}
 
-	public String _getIdentIAPath_IdentIAHelper(String text1,
-												List<String> sl,
-												int i,
-												int sSize,
-												OS_Element resolved_element,
-												GeneratedFunction generatedFunction) {
-		String text = "";
+	public void _getIdentIAPath_IdentIAHelper(List<String> sl,
+											  int i,
+											  int sSize,
+											  OS_Element resolved_element,
+											  GeneratedFunction generatedFunction) {
 		if (resolved_element instanceof ClassStatement) {
 			// Assuming constructor call
 			// TODO what about named constructors
 			int code = ((ClassStatement) resolved_element)._a.getCode();
 			assert i == sSize-1; // Make sure we are ending with a constructor call
-			text = String.format("ZC%d%s(%s)", code, ((ClassStatement) resolved_element).name(), text);
 			String text2 = String.format("ZC%d%s", code, ((ClassStatement) resolved_element).name());
 			addRef(text2, Ref.CONSTRUCTOR);
 		} else if (resolved_element instanceof FunctionDef) {
@@ -119,7 +116,6 @@ public class CReference {
 			// TODO what about overloaded functions
 			assert i == sSize-1; // Make sure we are ending with a ProcedureCall
 			sl.clear();
-			text = String.format("Z%d%s(%s)", code, ((FunctionDef) resolved_element).name(), text);
 			String text2 = String.format("Z%d%s", code, ((FunctionDef) resolved_element).name());
 			addRef(text2, Ref.FUNCTION);
 		} else if (resolved_element instanceof VariableStatement) {
@@ -127,16 +123,16 @@ public class CReference {
 			final String text2 = ((VariableStatement) resolved_element).getName();
 			if (resolved_element.getParent().getParent() == generatedFunction.getFD().getParent()) {
 				// A direct member value. Doesn't handle when indirect
-				text = Emit.emit("/*124*/")+"vsc->vm" + text2;
+//				text = Emit.emit("/*124*/")+"vsc->vm" + text2;
 				addRef(text2, Ref.DIRECT_MEMBER);
 			} else {
 				if (resolved_element.getParent().getParent() == generatedFunction.getFD()) {
 //					final String text2 = ((VariableStatement) resolved_element).getName();
-					text = Emit.emit("/*126*/")+"vv" + text2;
+//					text = Emit.emit("/*126*/")+"vv" + text2;
 					addRef(text2, Ref.LOCAL);
 				} else {
 //					final String text2 = ((VariableStatement) resolved_element).getName();
-					text = Emit.emit("/*126*/")+"vm" + text2;
+//					text = Emit.emit("/*126*/")+"vm" + text2;
 					addRef(text2, Ref.MEMBER);
 				}
 			}
@@ -152,21 +148,20 @@ public class CReference {
 				throw new IllegalStateException("PropertyStatement cant have other parent than ns or cls. " + resolved_element.getClass().getName());
 			}
 			sl.clear();  // don't we want all the text including from sl?
-			if (text.equals("")) text = "vsc";
-			text = String.format("ZP%dget_%s(%s)", code, ((PropertyStatement) resolved_element).name(), text); // TODO Don't know if get or set!
+//			if (text.equals("")) text = "vsc";
+//			text = String.format("ZP%dget_%s(%s)", code, ((PropertyStatement) resolved_element).name(), text); // TODO Don't know if get or set!
 			String text2 = String.format("ZP%dget_%s", code, ((PropertyStatement) resolved_element).name()); // TODO Don't know if get or set!
 			addRef(text2, Ref.PROPERTY);
 		} else if (resolved_element instanceof AliasStatement) {
 			int y=2;
 			NotImplementedException.raise();
-			text = Emit.emit("/*167*/")+((AliasStatement)resolved_element).name();
+//			text = Emit.emit("/*167*/")+((AliasStatement)resolved_element).name();
 //			return _getIdentIAPath_IdentIAHelper(text, sl, i, sSize, _res)
 		} else {
 //						text = idte.getIdent().getText();
 			System.out.println("1008 "+resolved_element.getClass().getName());
 			throw new NotImplementedException();
 		}
-		return text;
 	}
 
 	@NotNull
