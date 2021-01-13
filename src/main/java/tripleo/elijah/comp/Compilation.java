@@ -210,12 +210,12 @@ public class Compilation {
 				dir = instruction_dir/*.getAbsoluteFile()*/.getParentFile();
 			else
 				dir = new File(instruction_dir, dir_name);
-			use_internal(dir, do_out);
+			use_internal(dir, do_out, lsp);
 		}
-		use_internal(instruction_dir, do_out);
+		use_internal(instruction_dir, do_out, null); // TODO null lsp
 	}
 
-	private void use_internal(final File dir, final boolean do_out) throws Exception {
+	private void use_internal(final File dir, final boolean do_out, LibraryStatementPart lsp) throws Exception {
 		if (!dir.isDirectory()) {
 			eee.reportError("9997 Not a directory " + dir.toString());
 			return;
@@ -232,7 +232,7 @@ public class Compilation {
 		final File[] files = dir.listFiles(accept_source_files);
 		if (files != null) {
 			for (final File file : files) {
-				parseElijjahFile(file, file.toString(), eee, do_out);
+				parseElijjahFile(file, file.toString(), eee, do_out, lsp);
 			}
 		}
 	}
@@ -254,10 +254,15 @@ public class Compilation {
 
 	}
 
-	private void parseElijjahFile(@NotNull final File f, final String file_name, final ErrSink errSink, final boolean do_out) throws Exception {
+	private void parseElijjahFile(@NotNull final File f,
+								  final String file_name,
+								  final ErrSink errSink,
+								  final boolean do_out,
+								  LibraryStatementPart lsp) throws Exception {
 		System.out.println((String.format("   %s", f.getAbsolutePath())));
 		if (f.exists()) {
 			final OS_Module m = realParseElijjahFile(file_name, f, do_out);
+			m.lsp = lsp;
 			m.prelude = this.findPrelude("c"); // TODO we dont know which prelude to find yet
 		} else {
 			errSink.reportError(
