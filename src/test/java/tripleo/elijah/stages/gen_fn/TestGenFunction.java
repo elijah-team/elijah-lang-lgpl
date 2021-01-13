@@ -147,7 +147,8 @@ public class TestGenFunction {
 			PipelineLogic pipelineLogic = new PipelineLogic();
 			pipelineLogic.addModule(m.prelude);
 			pipelineLogic.addModule(m);
-			pipelineLogic.run();
+			pipelineLogic.everythingBeforeGenerate();
+			pipelineLogic.generate();
 		}
 	}
 
@@ -231,7 +232,8 @@ public class TestGenFunction {
 		pipelineLogic.addModule(m);
 		pipelineLogic.addModule(m.prelude);
 
-		pipelineLogic./*generateCode*/run();
+		pipelineLogic.everythingBeforeGenerate();
+		pipelineLogic.generate();
 	}
 
 }

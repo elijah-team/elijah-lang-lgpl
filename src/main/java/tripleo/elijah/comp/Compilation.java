@@ -138,8 +138,8 @@ public class Compilation {
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
+					PipelineLogic pipeline = new PipelineLogic();
 					for (final OS_Module module : modules) {
-						PipelineLogic pipeline = new PipelineLogic();
 						if (false) {
 /*
 							new DeduceTypes(module).deduce();
@@ -157,9 +157,10 @@ public class Compilation {
 						} else {
 							pipeline.addModule(module);
 						}
-						pipeline.run();
+						pipeline.everythingBeforeGenerate();
 						__nodes.addAll(pipeline.__nodes());
 					}
+					pipeline.generate();
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or file names>");

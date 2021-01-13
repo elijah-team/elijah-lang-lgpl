@@ -33,11 +33,14 @@ public class PipelineLogic {
 		return lgc;
 	}
 
-	public void run() {
+	public void everythingBeforeGenerate() {
 		for (OS_Module mod : mods) {
 			run2(mod);
 			dp.finish();
 		}
+	}
+
+	public void generate() {
 		for (OS_Module mod : mods) {
 			try {
 				run3(mod);
