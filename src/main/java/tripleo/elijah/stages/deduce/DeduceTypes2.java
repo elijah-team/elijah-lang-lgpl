@@ -252,21 +252,6 @@ public class DeduceTypes2 {
 							} else {
 								System.err.println("242 Bad lookup" + idte2.getIdent().getText());
 							}
-/*
-							final InstructionArgument i3 = instruction.getArg(2);
-							IdentTableEntry idte3 = generatedFunction.getIdentTableEntry(((IdentIA) i3).getIndex());
-							if (idte3.type == null) {
-								idte3.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, idte3.getIdent());
-							}
-							LookupResultList lrl2 = fd_ctx.lookup(idte3.getIdent().getText());
-							OS_Element best2 = lrl2.chooseBest(null);
-							if (best2 != null) {
-								idte3.setResolvedElement(best2);
-								// TODO check for elements which may contain type information
-							} else {
-								System.err.println("256 Bad lookup" + idte3.getIdent().getText());
-							}
-*/
 							idte.addPotentialType(instruction.getIndex(), idte2.type);
 						} else if (i2 instanceof ConstTableIA) {
 							do_assign_constant(generatedFunction, instruction, idte, (ConstTableIA) i2);
