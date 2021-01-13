@@ -45,6 +45,7 @@ public class GeneratedNamespace implements GeneratedNode {
 		FunctionDef fd = new FunctionDef(namespaceStatement, namespaceStatement.getContext());
 		fd.setName(Helpers.string_to_ident("<ctor$0>"));
 		Scope3 scope3 = new Scope3(fd);
+		fd.scope(scope3);
 		for (VarTableEntry varTableEntry : varTable) {
 			if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
 				IExpression left = varTableEntry.nameToken;
