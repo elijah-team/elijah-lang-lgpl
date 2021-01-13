@@ -91,6 +91,10 @@ public class DeducePhase {
 //			triplet.forFunction.finish();
 		}
 		for (FoundElement foundElement : foundElements) {
+			// TODO As we are using this, didntFind will never fail because
+			//  we call doFoundElement manually in resolveIdentIA
+			//  As the code matures, maybe this will change and the interface
+			//  will be improved, namely calling doFoundElement from here as well
 			if (foundElement.didntFind()) {
 				foundElement.doNoFoundElement();
 			}
