@@ -38,7 +38,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	public OS_Module prelude;
 
 	public Compilation parent;
-	private final List<IndexingItem> indexingItems = new ArrayList<IndexingItem>();
+	public LibraryStatementPart lsp;
 	private String _fileName;
 	public List<ClassStatement> entryPoints = new ArrayList<ClassStatement>();
 	private IndexingStatement indexingStatement;
@@ -99,7 +99,8 @@ public class OS_Module implements OS_Element, OS_Container {
 	public void add(final OS_Element anElement) {
 		if (!(anElement instanceof ModuleItem)) {
 			parent.eee.info(String.format(
-					"[Module#add] adding %s to OS_Module", anElement.getClass().getName()));
+					"[Module#add] not adding %s to OS_Module", anElement.getClass().getName()));
+			return;
 		}
 		items.add((ModuleItem) anElement);
 	}
