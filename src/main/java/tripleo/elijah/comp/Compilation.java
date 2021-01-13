@@ -163,7 +163,7 @@ public class Compilation {
 					pipeline.generate();
 				}
 			} else {
-				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or file names>");
+				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
 			}
 		} catch (final Exception e) {
 			errSink.exception(e);
