@@ -35,10 +35,12 @@ Scope3 sco;
 }
 
 program
-        {ParserClosure pc = out.closure();cur=new ModuleContext(out.module());out.module().setContext((ModuleContext)cur);}
-    : (( indexingStatement[pc.indexingStatement()]
-	  |"package" xy=qualident opt_semi {pc.packageName(xy);cur=new PackageContext(cur, pc.module.parent.makePackage(xy));}
-	  |programStatement[pc, out.module()]) opt_semi)*
+        {ParserClosure pc = out.closure();ModuleContext mctx=new ModuleContext(out.module());out.module().setContext(mctx);cur=mctx;IndexingStatement idx=null;}
+    : (( 								{idx=pc.indexingStatement();}
+		indexingStatement[idx]			{pc.module.addIndexingStatement(idx);})?
+	  (
+	  |"package" xy=qualident opt_semi 	{pc.packageName(xy);cur=new PackageContext(cur, pc.module.parent.makePackage(xy));}
+	  | programStatement[pc, out.module()]) opt_semi)*
 	  EOF {out.module().postConstruct();out.FinishModule();}
 	;
 indexingStatement[IndexingStatement idx]

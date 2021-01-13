@@ -19,6 +19,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.eclipse.jdt.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.gen.ICodeGen;
@@ -40,10 +41,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	private final List<IndexingItem> indexingItems = new ArrayList<IndexingItem>();
 	private String _fileName;
 	public List<ClassStatement> entryPoints = new ArrayList<ClassStatement>();
-
-//	public void addIndexingItem(Token i1, IExpression c1) {
-//		indexingItems.add(new IndexingItem(i1, c1));
-//	}
+	private IndexingStatement indexingStatement;
 
 	public OS_Element findClass(final String className) {
 		for (final ModuleItem item : items) {
@@ -285,6 +283,10 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	public void remove(ClassStatement cls) {
 		items.remove(cls);
+	}
+
+	public void addIndexingStatement(IndexingStatement indexingStatement) {
+		this.indexingStatement = indexingStatement;
 	}
 }
 
