@@ -274,10 +274,11 @@ public class DeduceTypes2 {
 			case AGNT:
 				break;
 			case AGNF:
+				System.err.println("292 Encountered AGNF");
 				break;
 			case JE:
 				{
-
+					System.err.println("296 Encountered JE");
 				}
 				break;
 			case JNE:
