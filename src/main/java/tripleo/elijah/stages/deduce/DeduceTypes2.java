@@ -372,11 +372,14 @@ public class DeduceTypes2 {
 		assert y == ite.resolved_element;
 
 		if (y instanceof VariableStatement) {
-			TypeName typeName = ((VariableStatement) y).typeName();
+			final VariableStatement vs = (VariableStatement) y;
+			TypeName typeName = vs.typeName();
 			if (!(typeName.isNull())) {
 				if (ite.type == null)
-					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, ((VariableStatement) y).initialValue());
+					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
 				ite.type.attached = new OS_Type(typeName);
+			} else {
+				System.err.println("394 typename is null "+ vs.getName());
 			}
 		} else if (y instanceof ClassStatement) {
 			ClassStatement classStatement = ((ClassStatement) y);
