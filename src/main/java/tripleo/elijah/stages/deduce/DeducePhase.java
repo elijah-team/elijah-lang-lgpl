@@ -92,7 +92,7 @@ public class DeducePhase {
 		}
 		for (FoundElement foundElement : foundElements) {
 			if (foundElement.didntFind()) {
-				foundElement.noFoundElement();
+				foundElement.doNoFoundElement();
 			}
 		}
 	}
