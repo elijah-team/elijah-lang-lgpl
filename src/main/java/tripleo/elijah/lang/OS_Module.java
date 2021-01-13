@@ -100,7 +100,7 @@ public class OS_Module implements OS_Element, OS_Container {
 		if (!(anElement instanceof ModuleItem)) {
 			parent.eee.info(String.format(
 					"[Module#add] not adding %s to OS_Module", anElement.getClass().getName()));
-			return;
+			return; // TODO FalseAddDiagnostic
 		}
 		items.add((ModuleItem) anElement);
 	}
