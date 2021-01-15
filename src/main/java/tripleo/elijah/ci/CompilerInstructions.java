@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.ci;
 
+import antlr.Token;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -28,6 +29,7 @@ public class CompilerInstructions {
 	private GenerateStatement gen;
 	public List<LibraryStatementPart> lsps = new ArrayList<LibraryStatementPart>();
 	private String filename;
+	private String name;
 
 	public IndexingStatement indexingStatement() {
 		if (_idx == null)
@@ -70,6 +72,18 @@ public class CompilerInstructions {
 		IExpression lang_raw = gi.next().getExpression();
 		assert lang_raw instanceof StringExpression;
 		return Helpers.remove_single_quotes_from_string(((StringExpression)lang_raw).getText());
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setName(Token name) {
+		this.name = name.getText();
 	}
 }
 

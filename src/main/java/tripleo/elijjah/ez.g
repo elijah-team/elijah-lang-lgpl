@@ -30,7 +30,7 @@ public CompilerInstructions ci = new CompilerInstructions();
 program
         {GenerateStatement gen=null;}
     : (indexingStatement[ci.indexingStatement()])?
-      ("program"|"library"|"shared") IDENT
+      ("program"|"library"|"shared") i1:IDENT {ci.setName(i1);}
       library_statement
       gen=generate_statement        {ci.add(gen);}
 	  "end"

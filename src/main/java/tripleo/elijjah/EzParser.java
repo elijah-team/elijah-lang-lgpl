@@ -55,6 +55,7 @@ public EzParser(ParserSharedInputState state) {
 
 	public final void program() throws RecognitionException, TokenStreamException {
 		
+		Token  i1 = null;
 		GenerateStatement gen=null;
 		
 		try {      // for error handling
@@ -100,7 +101,11 @@ public EzParser(ParserSharedInputState state) {
 			}
 			}
 			}
+			i1 = LT(1);
 			match(IDENT);
+			if ( inputState.guessing==0 ) {
+				ci.setName(i1);
+			}
 			library_statement();
 			gen=generate_statement();
 			if ( inputState.guessing==0 ) {
