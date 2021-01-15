@@ -36,11 +36,13 @@ Scope3 sco;
 
 program
         {ParserClosure pc = out.closure();ModuleContext mctx=new ModuleContext(out.module());out.module().setContext(mctx);cur=mctx;IndexingStatement idx=null;}
-    : (( 								{idx=pc.indexingStatement();}
-		indexingStatement[idx]			{pc.module.addIndexingStatement(idx);})?
+    : ( 									{idx=pc.indexingStatement();}
+		indexingStatement[idx]				{pc.module.addIndexingStatement(idx);}
+	  )?
 	  (
-	  |"package" xy=qualident opt_semi 	{pc.packageName(xy);cur=new PackageContext(cur, pc.module.parent.makePackage(xy));}
-	  | programStatement[pc, out.module()]) opt_semi)*
+	    "package" xy=qualident opt_semi 	{pc.packageName(xy);cur=new PackageContext(cur, pc.module.parent.makePackage(xy));}
+	  | programStatement[pc, out.module()] opt_semi
+	  )*
 	  EOF {out.module().postConstruct();out.FinishModule();}
 	;
 indexingStatement[IndexingStatement idx]
@@ -167,14 +169,14 @@ classDefinition_inheritance [ClassBuilder cb]
     | classInheritanceRuby      [cb.classInheritance()]
 	;
 classScope[ClassStatement cr]
-        {AccessNotation acs=null;}
+        {AccessNotation acs=null;TypeAliasStatement tal=null;}
     : docstrings[cr]
     ( constructorDef[cr]
     | destructorDef[cr]
     | functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure(), cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
-    | typeAlias[cr.typeAlias()]
+    | tal=typeAlias[cr]     {cr.add(tal);} //[cr.typeAlias()]
     | programStatement[cr.XXX(), cr]
     | propertyStatement[cr.prop()]
     | acs=accessNotation {cr.addAccess(acs);}
@@ -353,13 +355,13 @@ destructorDef2[ClassScope cr]
 		scope2[dd.scope()]
 	;
 namespaceScope[NamespaceStatement cr]
-        {AccessNotation acs=null;}
+        {AccessNotation acs=null;TypeAliasStatement tal=null;}
     : docstrings[cr]
     (( functionDef[cr.funcDef()]
     | varStmt[cr.statementClosure(), cr]
-    | typeAlias[cr.typeAlias()]
+    | tal=typeAlias[cr]						{cr.add(tal);} //[cr.typeAlias()]
     | programStatement[cr.XXX(), cr]
-    | acs=accessNotation {cr.addAccess(acs);}) opt_semi )*
+    | acs=accessNotation 					{cr.addAccess(acs);}) opt_semi )*
     (invariantStatement[cr.invariantStatement()])?
     ;
 namespaceScope2[NamespaceScope cr]
@@ -537,13 +539,13 @@ functionDef2[FunctionDefBuilder fb]
     functionScope2[fb.scope()]
     ;
 programStatement[ProgramClosure pc, OS_Element cont]
-		{ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();}
+		{ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();AliasStatement als=null;}
     : imp=importStatement[cont]
 	| ( (a=annotation_clause      {as.add(a);})+
     | namespaceStatement__[new NamespaceStatement(cont, cur), as]
     | classStatement3__[cont, cur, as] // TODO check if class in class works
 	)
-    | aliasStatement[pc.aliasStatement(cont)]
+    | als=aliasStatement[cont] 			//{cont.add(als);} //[pc.aliasStatement(cont)]
     ;
 programStatement2[ClassOrNamespaceScope cont]
 	: importStatement2[cont]
@@ -584,11 +586,11 @@ varStmt_i2[VariableSequenceBuilder vsb]
 	( TOK_COLON tn=typeName2    {vsb.setTypeName(tn);})?
 	( BECOMES expr=expression   {vsb.setInitial(expr);})?
 	;
-typeAlias[TypeAliasStatement cr]
-		{Qualident q=null;IdentExpression i=null;}
-	:
-	"type" "alias" i=ident {cr.setIdent(i);}
-		BECOMES q=qualident {cr.setBecomes(q);}
+typeAlias[OS_Element cont] returns [TypeAliasStatement cr]
+		{TypeAliasBuilder tab=new TypeAliasBuilder();cr=null;}
+	: typeAlias2[tab]				{tab.setParent(cont);
+									 tab.setContext(cur);
+									 cr=tab.build();}
 	;
 typeAlias2[TypeAliasBuilder tab]
 		{Qualident q=null;IdentExpression i=null;}
@@ -646,8 +648,8 @@ expression returns [IExpression ee]
 		{ee=null;}
 	: ee=assignmentExpression
 	;
-aliasStatement[AliasStatement pc]
-		{IdentExpression i1=null;}
+aliasStatement[OS_Element cont] returns [AliasStatement pc]
+		{IdentExpression i1=null;pc=new AliasStatement(cont);}
 	: "alias" i1=ident {pc.setName(i1);} BECOMES xy=qualident {pc.setExpression(xy);}
 	;
 aliasStatement2[BaseScope sc]

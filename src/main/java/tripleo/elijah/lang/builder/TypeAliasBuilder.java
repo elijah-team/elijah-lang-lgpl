@@ -43,7 +43,7 @@ public class TypeAliasBuilder extends ElBuilder {
 	}
 
 	@Override
-	protected void setContext(Context context) {
+	public void setContext(Context context) {
 		_context = context;
 	}
 }
