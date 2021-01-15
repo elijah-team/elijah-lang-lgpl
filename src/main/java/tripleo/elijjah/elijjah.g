@@ -606,8 +606,7 @@ opfal2 returns [FormalArgList fal]
 statement[StatementClosure cr, OS_Element aParent]
 		{Qualident q=null;FormalArgList o=null;}
 	:
-	( expr=assignmentExpression/*postfixExpression*/ {cr.statementWrapper(expr);}
-	//procedureCallStatement[cr.procCallExpr()]
+	( expr=assignmentExpression {cr.statementWrapper(expr);}
 	| ifConditional[cr.ifConditional(aParent, cur)]
 	| matchConditional[cr.matchConditional(cur), aParent]
 	| caseConditional[cr.caseConditional(cur)]
@@ -669,29 +668,10 @@ ident returns [IdentExpression id]
 		{id=null;}
 	: r1:IDENT {id=new IdentExpression(r1, cur);}
 	;
-/*
-expressionList[ExpressionList el]
-	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
-	;
-*/
 expressionList2 returns [ExpressionList el]
 		{el = new ExpressionList();}
 	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
 	;
-/*
-variableReference returns [IExpression ee]
-		{ProcedureCallExpression pcx;ExpressionList el=null;ee=null;IdentExpression r1=null, r2=null;}
-	: r1=ident  {ee=r1;}
-	( DOT r2=ident {ee=new DotExpression(ee, r2);}
-	| LBRACK expr=expression RBRACK {ee=new GetItemExpression(ee, expr);}
-	| lp:LPAREN	(el=expressionList2)?
-      {ProcedureCallExpression pce=new ProcedureCallExpression();
-      pce.identifier(ee);
-      pce.setArgs(el);
-      ee=pce;} RPAREN
-	)
-	;
-*/
 invariantStatement[InvariantStatement cr]
         {InvariantStatementPart isp=null;}
 	: "invariant"
