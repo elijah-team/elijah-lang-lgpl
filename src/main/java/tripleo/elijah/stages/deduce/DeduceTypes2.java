@@ -711,27 +711,34 @@ public class DeduceTypes2 {
 				}
 			} else {
 				final int y=2;
-				final IdentIA ident_a = identIA;
-				final OS_Element el = resolveIdentIA(ctx, ident_a, module, generatedFunction);
-				if (el != null) {
-					pte.resolved = el;
-					if (el instanceof FunctionDef) {
-						FunctionDef fd = (FunctionDef) el;
-						OS_Type type = new OS_Type(fd.returnType()); // TODO what if returnType is not specified?
-						@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression);
-						vte.addPotentialType(instructionIndex, tte);
-					} else if (el instanceof ClassStatement) {
-						ClassStatement kl = (ClassStatement) el;
-						OS_Type type = new OS_Type(kl);
-						@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression);
-						vte.addPotentialType(instructionIndex, tte);
-					} else {
-						System.err.println("7890 "+el.getClass().getName());
-//						assert false;
+				resolveIdentIA_(ctx, identIA, module, generatedFunction, new FoundElement(phase) {
+					@Override
+					void foundElement(OS_Element el) {
+						pte.resolved = el;
+						if (el instanceof FunctionDef) {
+							FunctionDef fd = (FunctionDef) el;
+							forFunction(fd, new ForFunction() {
+								@Override
+								public void typeDecided(OS_Type aType) {
+									@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, pte.expression);
+									vte.addPotentialType(instructionIndex, tte);
+								}
+							});
+						} else if (el instanceof ClassStatement) {
+							ClassStatement kl = (ClassStatement) el;
+							OS_Type type = new OS_Type(kl);
+							@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression);
+							vte.addPotentialType(instructionIndex, tte);
+						} else {
+							System.err.println("7890 "+el.getClass().getName());
+						}
 					}
-				} else {
-					System.err.println("IdentIA path cannot be resolved "+generatedFunction.getIdentIAPathNormal(ident_a));
-				}
+
+					@Override
+					void noFoundElement() {
+						System.err.println("IdentIA path cannot be resolved "+generatedFunction.getIdentIAPathNormal(identIA));
+					}
+				});
 			}
 		}
 	}
