@@ -197,6 +197,25 @@ public class DeduceTypes2 {
 							}
 						}
 					}
+					//
+					// RESOLVE FUNCTION RETURN TYPES
+					//
+					final InstructionArgument vte_index = generatedFunction.vte_lookup("Result");
+					final VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(vte_index));
+					if (vte.type.attached != null) {
+						phase.typeDecided(generatedFunction.getFD(), vte.type.attached);
+					} else {
+						@NotNull Collection<TypeTableEntry> pot1 = vte.potentialTypes();
+						ArrayList<TypeTableEntry> pot = new ArrayList<>(pot1);
+						if (pot.size() == 1) {
+							phase.typeDecided(generatedFunction.getFD(), pot.get(0).attached);
+						} else if (pot.size() == 0) {
+							phase.typeDecided(generatedFunction.getFD(), new OS_Type(BuiltInTypes.Unit));
+						} else {
+							// TODO report some kind of error/diagnostic and/or let ForFunction know...
+						}
+
+					}
 					int y=2;
 				}
 				break;
