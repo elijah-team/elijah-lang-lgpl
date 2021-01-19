@@ -673,7 +673,6 @@ public class DeduceTypes2 {
 											idte.type = tte1;
 										}
 									});
-//									fd.returnType();
 								} else
 									throw new NotImplementedException();
 							}
