@@ -724,12 +724,6 @@ accessNotation returns [AccessNotation acs]
 //            ( 2)  * / %
 //            ( 1)  ++ -- +(unary) -(unary)  ~  !  (type)
 //                  []   () (method call)  . (dot -- identifier qualification)
-//                  new   ()  (explicit parenthesis)
-//
-// the last two are not usually on a precedence chart; I put them in
-// to point out that new has a higher precedence than '.', so you
-// can validy use
-//     new Frame().show()
 //
 // Note that the above precedence levels map to the rules below...
 // Once you have a precedence chart, writing the appropriate rules as below
