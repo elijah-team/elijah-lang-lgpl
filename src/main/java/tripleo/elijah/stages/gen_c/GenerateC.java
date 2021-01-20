@@ -605,7 +605,11 @@ public class GenerateC {
 		} else if (x.getType() == OS_Type.Type.USER) {
 			final TypeName y = x.getTypeName();
 			if (y instanceof NormalTypeName) {
-				final String z = getTypeName(y);
+				final String z;
+				if (((NormalTypeName) y).getName().equals("Any"))
+					z = "void *";  // TODO Technically this is wrong
+				else
+					z = getTypeName(y);
 				tos.put_string_ln(String.format("%s %s;", z, target_name));
 				return;
 			}
