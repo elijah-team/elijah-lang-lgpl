@@ -539,7 +539,11 @@ public class DeduceTypes2 {
 		vte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
-	private void do_assign_call(final GeneratedFunction generatedFunction, final Context ctx, final VariableTableEntry vte, final FnCallArgs fca, final Instruction instruction) {
+	private void do_assign_call(final GeneratedFunction generatedFunction,
+								final Context ctx,
+								final VariableTableEntry vte,
+								final FnCallArgs fca,
+								final Instruction instruction) {
 		final int instructionIndex = instruction.getIndex();
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		IdentIA identIA = (IdentIA) pte.expression_num;
@@ -779,7 +783,11 @@ public class DeduceTypes2 {
 		idte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
-	private void do_assign_call(final GeneratedFunction generatedFunction, final Context ctx, final IdentTableEntry idte, final FnCallArgs fca, final int instructionIndex) {
+	private void do_assign_call(final GeneratedFunction generatedFunction,
+								final Context ctx,
+								final IdentTableEntry idte,
+								final FnCallArgs fca,
+								final int instructionIndex) {
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		for (final TypeTableEntry tte : pte.getArgs()) {
 			System.out.println("771 "+tte);
