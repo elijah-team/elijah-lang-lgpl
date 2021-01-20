@@ -140,7 +140,7 @@ public class PipelineLogic {
 
 	}
 
-	private void run3(OS_Module mod) throws IOException {
+	protected void run3(OS_Module mod) throws IOException {
 		GenerateC ggc = new GenerateC(mod);
 //		ggc.generateCode(lgf);
 
@@ -162,14 +162,6 @@ public class PipelineLogic {
 	public void addModule(OS_Module m) {
 		mods.add(m);
 	}
-
-//	public void generateCode() {
-//		run();
-//	}
-
-
-//	private int nextClassCode() { return module.parent.nextClassCode(); }
-//	private int nextFunctionCode() { return module.parent.nextFunctionCode(); }
 
 }
 
