@@ -797,7 +797,7 @@ public class DeduceTypes2 {
 			case NUMERIC:
 			{
 				tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
-				idte.type = tte; // TODO this looks wrong
+				idte.type = tte; // TODO why not addPotentialType ? see below for example
 			}
 			break;
 			case IDENT:
