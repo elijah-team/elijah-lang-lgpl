@@ -6,19 +6,9 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  * 
  */
-/*
- * Created on Sep 1, 2005 8:16:32 PM
- * 
- * $Id$
- *
- */
-/**
- * 
- */
 package tripleo.elijah.lang;
 
 import tripleo.elijah.lang2.BuiltInTypes;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.Objects;
 
@@ -26,6 +16,7 @@ import java.util.Objects;
  *
  * This class represents all the different type of types in the system possible
  *
+ * Created on Sep 1, 2005 8:16:32 PM
  *
  * @author Tripleo(sb)
  *
@@ -111,8 +102,12 @@ public class OS_Type {
 						best = r.chooseBest(null);
 						return new OS_Type((ClassStatement) best);
 					}
+				case Unit:
+					{
+						return new OS_UnitType();
+					}
 				default:
-					throw new NotImplementedException();
+					throw new IllegalStateException("Unexpected value: " + getBType());
 				}
 			}
 		case USER:
@@ -129,8 +124,12 @@ public class OS_Type {
 		}
 	}
 
+	public boolean isUnitType() {
+		return false;
+	}
+
 	public enum Type {
-		BUILT_IN, USER, USER_CLASS, FUNC_EXPR, FUNCTION
+		BUILT_IN, USER, USER_CLASS, FUNC_EXPR, UNIT_TYPE, FUNCTION
 	}
 
 	public Type getType() {
@@ -179,6 +178,23 @@ public class OS_Type {
 		return ttype;
 	}
 
+	private class OS_UnitType extends OS_Type {
+
+		public OS_UnitType() {
+			super();
+			type_of_type = Type.UNIT_TYPE;
+		}
+
+		@Override
+		public boolean isUnitType() {
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "<UnitType>";
+		}
+	}
 }
 
 //
