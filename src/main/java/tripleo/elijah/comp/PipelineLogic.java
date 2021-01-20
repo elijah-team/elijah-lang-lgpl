@@ -50,7 +50,7 @@ public class PipelineLogic {
 		}
 	}
 
-	public void run2(OS_Module mod) {
+	protected void run2(OS_Module mod) {
 		final GenerateFunctions gfm = new GenerateFunctions(mod);
 //		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
 		lgc = gfm.generateAllTopLevelClasses();
@@ -71,13 +71,50 @@ public class PipelineLogic {
 //			}
 //		}
 
+		List<GeneratedNode> resolved_nodes = new ArrayList<>();
+
 		for (final GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedFunction) {
 				final FunctionDef fd = ((GeneratedFunction) generatedNode).getFD();
 				if (fd._a.getCode() == 0)
 					fd._a.setCode(mod.parent.nextFunctionCode());
 			} else if (generatedNode instanceof GeneratedClass) {
-				ClassStatement classStatement = ((GeneratedClass) generatedNode).getKlass();
+				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				ClassStatement classStatement = generatedClass.getKlass();
+				if (classStatement._a.getCode() == 0)
+					classStatement._a.setCode(mod.parent.nextClassCode());
+				for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
+					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+						if (identTableEntry.isResolved()) {
+							GeneratedNode node = identTableEntry.resolved();
+							resolved_nodes.add(node);
+						}
+					}
+				}
+			} else if (generatedNode instanceof GeneratedNamespace) {
+				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+				NamespaceStatement namespaceStatement = generatedNamespace.getNamespaceStatement();
+				if (namespaceStatement._a.getCode() == 0)
+					namespaceStatement._a.setCode(mod.parent.nextClassCode());
+				for (GeneratedFunction generatedFunction : generatedNamespace.functionMap.values()) {
+					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+						if (identTableEntry.isResolved()) {
+							GeneratedNode node = identTableEntry.resolved();
+							resolved_nodes.add(node);
+						}
+					}
+				}
+			}
+		}
+
+		for (final GeneratedNode generatedNode : resolved_nodes) {
+			if (generatedNode instanceof GeneratedFunction) {
+				final FunctionDef fd = ((GeneratedFunction) generatedNode).getFD();
+				if (fd._a.getCode() == 0)
+					fd._a.setCode(mod.parent.nextFunctionCode());
+			} else if (generatedNode instanceof GeneratedClass) {
+				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				ClassStatement classStatement = generatedClass.getKlass();
 				if (classStatement._a.getCode() == 0)
 					classStatement._a.setCode(mod.parent.nextClassCode());
 			} else if (generatedNode instanceof GeneratedNamespace) {
@@ -103,7 +140,7 @@ public class PipelineLogic {
 
 	}
 
-	public void run3(OS_Module mod) throws IOException {
+	private void run3(OS_Module mod) throws IOException {
 		GenerateC ggc = new GenerateC(mod);
 //		ggc.generateCode(lgf);
 
