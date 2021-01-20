@@ -633,62 +633,10 @@ public class DeduceTypes2 {
 			case GET_ITEM:
 				{
 					final GetItemExpression gie = (GetItemExpression) e;
-					final LookupResultList lrl = lookupExpression(gie.getLeft(), ctx);
-					final OS_Element best = lrl.chooseBest(null);
-					if (best != null) {
-						if (best instanceof VariableStatement) { // TODO what about alias?
-							VariableStatement vs = (VariableStatement) best;
-							String s = vs.getName();
-							@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(s);
-							if (vte_ia != null) {
-								VariableTableEntry vte1 = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(vte_ia));
-								throw new NotImplementedException();
-							} else {
-								final IdentTableEntry idte = generatedFunction.getIdentTableEntryFor(vs.getNameToken());
-								assert idte != null;
-								@Nullable OS_Type ty = idte.type.attached;
-								if (ty == null) {
-									@NotNull TypeTableEntry tte3 = generatedFunction.newTypeTableEntry(
-											TypeTableEntry.Type.SPECIFIED, new OS_Type(vs.typeName()), vs.getNameToken());
-									idte.type = tte3;
-									ty = idte.type.attached;
-								}
-								assert ty != null;
-								OS_Type rtype = null;
-								try {
-									rtype = resolve_type(ty, ctx);
-								} catch (ResolveError resolveError) {
-//									resolveError.printStackTrace();
-									errSink.reportError("Cant resolve " + ty); // TODO print better diagnostic
-									continue;
-								}
-								LookupResultList lrl2 = rtype.getClassOf().getContext().lookup("__getitem__");
-								OS_Element best2 = lrl2.chooseBest(null);
-								if (best2 != null && best2 instanceof FunctionDef) {
-									FunctionDef fd = (FunctionDef) best2;
-									forFunction(fd, new ForFunction() {
-										@Override
-										public void typeDecided(final OS_Type aType) {
-											@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType); // TODO expression?
-											idte.type = tte1;
-										}
-									});
-								} else
-									throw new NotImplementedException();
-							}
-
-							tte.attached = new OS_FuncType((FunctionDef) best);
-							//vte.addPotentialType(instructionIndex, tte);
-						} else {
-							final int y=2;
-							throw new NotImplementedException();
-						}
-					} else {
-						final int y=2;
-						throw new NotImplementedException();
-					}
+					do_assign_call_GET_ITEM(gie, tte, generatedFunction, ctx);
+					continue;
 				}
-				break;
+//				break;
 
 			default:
 				throw new IllegalStateException("Unexpected value: " + e.getKind());
@@ -740,6 +688,63 @@ public class DeduceTypes2 {
 					}
 				});
 			}
+		}
+	}
+
+	private void do_assign_call_GET_ITEM(GetItemExpression gie, TypeTableEntry tte, GeneratedFunction generatedFunction, Context ctx) {
+		final LookupResultList lrl = lookupExpression(gie.getLeft(), ctx);
+		final OS_Element best = lrl.chooseBest(null);
+		if (best != null) {
+			if (best instanceof VariableStatement) { // TODO what about alias?
+				VariableStatement vs = (VariableStatement) best;
+				String s = vs.getName();
+				@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(s);
+				if (vte_ia != null) {
+					VariableTableEntry vte1 = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(vte_ia));
+					throw new NotImplementedException();
+				} else {
+					final IdentTableEntry idte = generatedFunction.getIdentTableEntryFor(vs.getNameToken());
+					assert idte != null;
+					@Nullable OS_Type ty = idte.type.attached;
+					if (ty == null) {
+						@NotNull TypeTableEntry tte3 = generatedFunction.newTypeTableEntry(
+								TypeTableEntry.Type.SPECIFIED, new OS_Type(vs.typeName()), vs.getNameToken());
+						idte.type = tte3;
+						ty = idte.type.attached;
+					}
+					assert ty != null;
+					OS_Type rtype = null;
+					try {
+						rtype = resolve_type(ty, ctx);
+					} catch (ResolveError resolveError) {
+//									resolveError.printStackTrace();
+						errSink.reportError("Cant resolve " + ty); // TODO print better diagnostic
+						return;
+					}
+					LookupResultList lrl2 = rtype.getClassOf().getContext().lookup("__getitem__");
+					OS_Element best2 = lrl2.chooseBest(null);
+					if (best2 != null && best2 instanceof FunctionDef) {
+						FunctionDef fd = (FunctionDef) best2;
+						forFunction(fd, new ForFunction() {
+							@Override
+							public void typeDecided(final OS_Type aType) {
+								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType); // TODO expression?
+								idte.type = tte1;
+							}
+						});
+					} else
+						throw new NotImplementedException();
+				}
+
+				tte.attached = new OS_FuncType((FunctionDef) best);
+				//vte.addPotentialType(instructionIndex, tte);
+			} else {
+				final int y=2;
+				throw new NotImplementedException();
+			}
+		} else {
+			final int y=2;
+			throw new NotImplementedException();
 		}
 	}
 
