@@ -134,12 +134,13 @@ public class CReference {
 					addRef(text2, Ref.FUNCTION); // TODO make this not a function
 				} else {
 					assert i == sSize-1; // Make sure we are ending with a constructor call
-					String text2 = String.format("ZC%d%s", code, ((ClassStatement) resolved_element).name()); // TODO why classname ??
+					// README Assuming this is for named constructors
+					String text2 = String.format("ZC%d%s", code, text);
 					addRef(text2, Ref.CONSTRUCTOR);
 				}
 			} else {
 				assert i == sSize-1; // Make sure we are ending with a constructor call
-				String text2 = String.format("ZC%d%s", code, ((ClassStatement) resolved_element).name());
+				String text2 = String.format("ZC%d", code);
 				addRef(text2, Ref.CONSTRUCTOR);
 			}
 		} else if (resolved_element instanceof FunctionDef) {
