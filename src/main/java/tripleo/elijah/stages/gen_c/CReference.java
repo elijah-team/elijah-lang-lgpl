@@ -112,6 +112,9 @@ public class CReference {
 		if (resolved_element instanceof ClassStatement) {
 			// Assuming constructor call
 			int code = ((ClassStatement) resolved_element)._a.getCode();
+			if (code == 0) {
+				System.err.println("** 31116 ClassStatement with 0 code "+resolved_element);
+			}
 			// README might be calling reflect or Type or Name
 			// TODO what about named constructors -- should be called with construct keyword
 			if (ia_next instanceof IdentIA) {
