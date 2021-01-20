@@ -157,6 +157,9 @@ public class CReference {
 			// TODO what about overloaded functions
 			assert i == sSize-1; // Make sure we are ending with a ProcedureCall
 			sl.clear();
+			if (code == -1) {
+//				text2 = String.format("ZT%d_%d", enclosing_function._a.getCode(), closure_index);
+			}
 			String text2 = String.format("Z%d%s", code, ((FunctionDef) resolved_element).name());
 			addRef(text2, Ref.FUNCTION);
 		} else if (resolved_element instanceof VariableStatement) {
