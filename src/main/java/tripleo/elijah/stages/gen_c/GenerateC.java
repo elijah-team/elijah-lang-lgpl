@@ -436,7 +436,7 @@ public class GenerateC {
 							reference.args(sl3);
 							String path = reference.build();
 
-							sb.append(Emit.emit("/*427*/")+path);
+							sb.append(Emit.emit("/*427*/")+path+";");
 						}
 					}
 					tos.put_string_ln(sb.toString());
