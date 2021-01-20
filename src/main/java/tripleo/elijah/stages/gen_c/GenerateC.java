@@ -621,13 +621,17 @@ public class GenerateC {
 				System.err.println("8887 "+y.getClass().getName());
 				return;
 			}
-		} else if(x.getType() == OS_Type.Type.BUILT_IN) {
+		} else if (x.getType() == OS_Type.Type.BUILT_IN) {
 			final Context context = gf.getFD().getContext();
 			assert context != null;
 			final OS_Type type = x.resolve(context);
-			System.err.println("Bad potentialTypes size " + type);
-			final String z = getTypeName(type);
-			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+			if (type.isUnitType()) {
+				tos.put_string_ln(String.format("void %s;", target_name));
+			} else {
+				System.err.println("Bad potentialTypes size " + type);
+				final String z = getTypeName(type);
+				tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+			}
 		}
 
 		//
