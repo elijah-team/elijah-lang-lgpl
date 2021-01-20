@@ -423,7 +423,7 @@ public class GenerateC {
 							@org.jetbrains.annotations.Nullable InstructionArgument xx = gf.vte_lookup(text);
 							assert xx != null;
 							String xxx = getRealTargetName(gf, (IntegerIA) xx);
-							sb.append(Emit.emit("/*424*/")+""+""+xxx);
+							sb.append(Emit.emit("/*424*/")+xxx);
 							sb.append('(');
 							final List<String> sl3 = getArgumentStrings(gf, instruction);
 							sb.append(Helpers.String_join(", ", sl3));
