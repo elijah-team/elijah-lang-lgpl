@@ -19,8 +19,9 @@ import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created 12/24/20 3:59 AM
@@ -40,12 +41,12 @@ public class DeducePhase {
 	static class Triplet {
 
 		private final DeduceTypes2 deduceTypes2;
-		private final FunctionDef fd;
+		private final FunctionInvocation gf;
 		private final ForFunction forFunction;
 
-		public Triplet(DeduceTypes2 deduceTypes2, FunctionDef fd, ForFunction forFunction) {
+		public Triplet(DeduceTypes2 deduceTypes2, FunctionInvocation gf, ForFunction forFunction) {
 			this.deduceTypes2 = deduceTypes2;
-			this.fd = fd;
+			this.gf = gf;
 			this.forFunction = forFunction;
 		}
 	}
@@ -72,22 +73,35 @@ public class DeducePhase {
 
 		return deduceModule(m, lgf);
 	}
-	public void forFunction(DeduceTypes2 deduceTypes2, FunctionDef fd, ForFunction forFunction) {
-		forFunctions.add(new Triplet(deduceTypes2, fd, forFunction));
+
+/*
+	public void forFunction(DeduceTypes2 deduceTypes2, GeneratedFunction gf, ForFunction forFunction) {
+		forFunctions.add(new Triplet(deduceTypes2, gf, forFunction));
+	}
+*/
+
+	public void forFunction(DeduceTypes2 deduceTypes2, FunctionInvocation gf, ForFunction forFunction) {
+		forFunctions.add(new Triplet(deduceTypes2, gf, forFunction));
 	}
 
-	public void typeDecided(FunctionDef fd, final OS_Type aType) {
-		for (Triplet triplet : forFunctions) {
-			Collection<GeneratedFunction> x = functionMap.get(fd);
-			synchronized (triplet.deduceTypes2) {
-				triplet.forFunction.typeDecided(aType);
-			}
-		}
+	Map<GeneratedFunction, OS_Type> typeDedcideds = new HashMap<GeneratedFunction, OS_Type>();
+
+	public void typeDecided(GeneratedFunction gf, final OS_Type aType) {
+		typeDedcideds.put(gf, aType);
 	}
 
 	public void finish() {
+		for (Map.Entry<GeneratedFunction, OS_Type> entry : typeDedcideds.entrySet()) {
+			for (Triplet triplet : forFunctions) {
+				if (triplet.gf.getGenerated() == entry.getKey()) {
+					synchronized (triplet.deduceTypes2) {
+						triplet.forFunction.typeDecided(entry.getValue());
+					}
+				}
+			}
+		}
 		for (Triplet triplet : forFunctions) {
-			Collection<GeneratedFunction> x = functionMap.get(triplet.fd);
+//			Collection<GeneratedFunction> x = functionMap.get(triplet.gf);
 //			triplet.forFunction.finish();
 		}
 		for (FoundElement foundElement : foundElements) {

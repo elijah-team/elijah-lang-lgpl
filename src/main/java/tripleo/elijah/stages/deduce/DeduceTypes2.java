@@ -203,14 +203,14 @@ public class DeduceTypes2 {
 					final InstructionArgument vte_index = generatedFunction.vte_lookup("Result");
 					final VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(vte_index));
 					if (vte.type.attached != null) {
-						phase.typeDecided(generatedFunction.getFD(), vte.type.attached);
+						phase.typeDecided(generatedFunction, vte.type.attached);
 					} else {
 						@NotNull Collection<TypeTableEntry> pot1 = vte.potentialTypes();
 						ArrayList<TypeTableEntry> pot = new ArrayList<>(pot1);
 						if (pot.size() == 1) {
-							phase.typeDecided(generatedFunction.getFD(), pot.get(0).attached);
+							phase.typeDecided(generatedFunction, pot.get(0).attached);
 						} else if (pot.size() == 0) {
-							phase.typeDecided(generatedFunction.getFD(), new OS_Type(BuiltInTypes.Unit));
+							phase.typeDecided(generatedFunction, new OS_Type(BuiltInTypes.Unit));
 						} else {
 							// TODO report some kind of error/diagnostic and/or let ForFunction know...
 						}
@@ -669,9 +669,11 @@ public class DeduceTypes2 {
 						pte.resolved = el;
 						if (el instanceof FunctionDef) {
 							FunctionDef fd = (FunctionDef) el;
-							forFunction(fd, new ForFunction() {
+							forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
 								@Override
 								public void typeDecided(OS_Type aType) {
+									assert fd == generatedFunction.getFD();
+									//
 									@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, pte.expression);
 									vte.addPotentialType(instructionIndex, tte);
 								}
@@ -729,9 +731,12 @@ public class DeduceTypes2 {
 					OS_Element best2 = lrl2.chooseBest(null);
 					if (best2 != null && best2 instanceof FunctionDef) {
 						FunctionDef fd = (FunctionDef) best2;
-						forFunction(fd, new ForFunction() {
+						ProcTableEntry pte = null;
+						forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
 							@Override
 							public void typeDecided(final OS_Type aType) {
+								assert fd == generatedFunction.getFD();
+								//
 								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType); // TODO expression?
 								idte.type = tte1;
 							}
@@ -752,8 +757,14 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private void forFunction(FunctionDef fd, ForFunction forFunction) {
-		phase.forFunction(this, fd, forFunction);
+/*
+	private void forFunction(GeneratedFunction gf, ForFunction forFunction) {
+		phase.forFunction(this, gf, forFunction);
+	}
+*/
+
+	private void forFunction(FunctionInvocation gf, ForFunction forFunction) {
+		phase.forFunction(this, gf, forFunction);
 	}
 
 	private LookupResultList lookupExpression(final IExpression left, final Context ctx) {
@@ -1278,16 +1289,20 @@ public class DeduceTypes2 {
 							OS_Element best = lrl.chooseBest(Helpers.List_of(
 									new DeduceUtils.MatchFunctionArgs(
 											(ProcedureCallExpression) pot.get(0).expression)));
-							FunctionDef fd = null;
+							final FunctionDef fd;
 							if (best instanceof FunctionDef) {
 								fd = (FunctionDef) best;
 							} else {
+								fd = null;
 								System.err.println("1195 Can't find match");
 							}
 							if (fd != null) {
-								forFunction(fd, new ForFunction() {
+								ProcTableEntry pte = null;
+								forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
 									@Override
 									public void typeDecided(OS_Type aType) {
+										assert fd == generatedFunction.getFD();
+										//
 										pot.get(0).attached = aType;
 									}
 								});
