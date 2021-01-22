@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.lang;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -46,54 +47,25 @@ public class VariableStatement implements OS_Element {
 		initialValue=aExpr;
 	}
 
-/*
-	public void printDeclare() {
-		System.out.print("** Declare Variable: ");
-		System.out.print(name);
-		System.out.print(" as ");
-//		System.out.print(getTypeString());
-		System.out.println(" (agn not shown at all) **");
-	}
-*/
-
 	public void set(final TypeModifiers y) {
 		typeModifiers = y;
 	}
 
-	public TypeName typeName() {
+	public TypeModifiers getTypeModifiers() {
+		return typeModifiers;
+	}
+
+	@NotNull public TypeName typeName() {
 		return typeName;
 	}
-	
-	public IExpression initialValue() {
+
+	public void setTypeName(@NotNull final TypeName tn) {
+		typeName = tn;
+	}
+
+	@NotNull public IExpression initialValue() {
 		return initialValue;
 	}
-	
-/*	public String initialValueType() {
-		if (initialValue instanceof NumericExpression)
-			return "int";
-		else if (initialValue instanceof ProcedureCallExpression)
-			return ((ProcedureCallExpression) initialValue).getReturnTypeString();
-		else if (initialValue instanceof CharLitExpression)
-			return "char";
-		else if (initialValue instanceof StringExpression)
-			return "char*";
-		else if (initialValue instanceof IdentExpression)
-//			return "Z"+((IdentExpression)initialValue).getText();
-			return "---------------10";
-		else if (initialValue instanceof Qualident)
-			return "---------------8";
-//		else if (initialValue instanceof AbstractExpression)
-//			return "---------------9";
-		else if (initialValue instanceof VariableReference)
-			return "---------------11";
-//		else if (initialValue instanceof OS_Integer)
-//			return "int";
-		else if (initialValue instanceof ListExpression)
-			return "void*"; // TODO
-		
-		else
-			return "Z0*";
-	}*/
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
@@ -108,17 +80,10 @@ public class VariableStatement implements OS_Element {
 
 	@Override
 	public Context getContext() {
-		// TODO is this correct?
 		return getParent().getContext();
 	}
 
-	public void setTypeName(final TypeName tn) {
-		typeName = tn;
-	}
-
-	public TypeModifiers getTypeModifiers() {
-		return typeModifiers;
-	}
+	// region annotations
 
 	List<AnnotationClause> annotations = null;
 
@@ -143,6 +108,8 @@ public class VariableStatement implements OS_Element {
 			}
 		}
 	}
+
+	// endregion
 }
 
 //
