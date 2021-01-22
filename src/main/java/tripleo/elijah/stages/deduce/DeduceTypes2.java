@@ -1187,8 +1187,7 @@ public class DeduceTypes2 {
 							throw new NotImplementedException();
 						}
 					} else {
-						errSink.reportError("1000 Can't resolve " + text);
-//						return null; // README cant resolve pte. Maybe report error
+//						errSink.reportError("1179 Can't resolve " + text);
 						foundElement.doNoFoundElement();
 						return;
 					}

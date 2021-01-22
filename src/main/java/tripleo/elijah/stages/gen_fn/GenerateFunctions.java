@@ -110,7 +110,7 @@ public class GenerateFunctions {
 	}
 
 	private @NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd, final OS_Element parent) {
-		System.err.println("601.1 fn "+fd.name());
+		System.err.println("601.1 fn "+fd.name() + " " + parent);
 		final GeneratedFunction gf = new GeneratedFunction(fd);
 		if (parent instanceof ClassStatement)
 			gf.addVariableTableEntry("self", VariableTableType.SELF, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent), IdentExpression.forString("self")));
@@ -128,7 +128,7 @@ public class GenerateFunctions {
 		}
 		final int x1 = add_i(gf, InstructionName.X, List_of(new IntegerIA(e1)), cctx);
 		gf.addContext(fd.getContext(), new Range(e1, x1)); // TODO remove interior contexts
-		System.out.println(String.format("602.1 %s", fd.name()));
+//		System.out.println(String.format("602.1 %s", fd.name()));
 //		for (Instruction instruction : gf.instructionsList) {
 //			System.out.println(instruction);
 //		}
@@ -514,7 +514,7 @@ public class GenerateFunctions {
 		{
 			final IExpression expr = mc.getExpr();
 			final InstructionArgument i = simplify_expression(expr, gf, cctx);
-			System.out.println("710 " + i);
+//			System.out.println("710 " + i);
 
 			Label label_next = gf.addLabel();
 			final Label label_end  = gf.addLabel();

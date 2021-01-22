@@ -69,7 +69,7 @@ public class VariableTableEntry {
 				//
 //				System.err.println("v.attached: " + v.attached);
 //				System.err.println("tte.attached: " + tte.attached);
-				System.out.println("WARNING two types at the same location.");
+				System.out.println("72 WARNING two types at the same location.");
 				if ((tte.attached != null && tte.attached.getType() != OS_Type.Type.USER) || v.attached.getType() != OS_Type.Type.USER_CLASS) {
 					// TODO prefer USER_CLASS as we are assuming it is a resolved version of the other one
 					if (tte.attached == null)

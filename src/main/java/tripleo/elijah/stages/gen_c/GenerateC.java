@@ -799,10 +799,10 @@ public class GenerateC {
 				} else {
 					final IExpression ptex = pte.expression;
 					if (ptex instanceof IdentExpression) {
-						sb.append(Emit.emit("/*737*/"));
+						sb.append(Emit.emit("/*803*/"));
 						sb.append(((IdentExpression) ptex).getText());
 					} else if (ptex instanceof ProcedureCallExpression) {
-						sb.append(Emit.emit("/*739*/"));
+						sb.append(Emit.emit("/*806*/"));
 						sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
 					}
 				}
@@ -849,7 +849,7 @@ public class GenerateC {
 					sll.add(""+ const_to_string(constTableEntry.initialValue));
 				} else if (ia instanceof IntegerIA) {
 					final VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
-					sll.add(Emit.emit("/*739*/")+""+getRealTargetName(gf, variableTableEntry));
+					sll.add(Emit.emit("/*853*/")+""+getRealTargetName(gf, variableTableEntry));
 				} else if (ia instanceof IdentIA) {
 //					@org.jetbrains.annotations.Nullable
 //					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
@@ -860,7 +860,7 @@ public class GenerateC {
 					if (path.equals(path2)) {
 						// should always fail
 						//throw new AssertionError();
-						System.err.println(String.format("778 should always fail but didn't %s %s", path, path2));
+						System.err.println(String.format("864 should always fail but didn't %s %s", path, path2));
 					}
 //					assert ident != null;
 //					IdentTableEntry ite = gf.getIdentTableEntry(((IdentIA) ia).getIndex());
