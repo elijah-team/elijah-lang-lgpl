@@ -378,7 +378,7 @@ public class Compilation {
 	}
 
 	//
-	// MODULE STUFF
+	// region MODULE STUFF
 	//
 
 	public void addModule(final OS_Module module, final String fn) {
@@ -393,8 +393,10 @@ public class Compilation {
         return null;
     }
 
+	// endregion
+
     //
-	//  CLASS AND FUNCTION CODES
+	// region CLASS AND FUNCTION CODES
 	//
 
 	private int _classCode = 101;
@@ -407,6 +409,8 @@ public class Compilation {
 	public int nextFunctionCode() {
 		return _functionCode++;
 	}
+
+	// endregion
 
 	//
 	// region PACKAGES
