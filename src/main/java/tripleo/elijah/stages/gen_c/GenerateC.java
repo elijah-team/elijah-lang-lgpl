@@ -618,7 +618,7 @@ public class GenerateC {
 				//
 				// VARIABLE WASN'T FULLY DEDUCED YET
 				//
-				System.err.println("8887 "+y.getClass().getName());
+				System.err.println("8885 "+y.getClass().getName());
 				return;
 			}
 		} else if (x.getType() == OS_Type.Type.BUILT_IN) {
