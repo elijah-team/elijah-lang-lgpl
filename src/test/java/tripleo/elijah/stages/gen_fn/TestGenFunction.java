@@ -144,8 +144,13 @@ public class TestGenFunction {
 			new GenerateC(m).generateCode(lgf);
 		} else {
 			PipelineLogic pipelineLogic = new PipelineLogic();
+/*
 			pipelineLogic.addModule(m.prelude);
 			pipelineLogic.addModule(m);
+*/
+			for (OS_Module module : c.modules) {
+				pipelineLogic.addModule(module);
+			}
 			pipelineLogic.everythingBeforeGenerate();
 			pipelineLogic.generate();
 		}
