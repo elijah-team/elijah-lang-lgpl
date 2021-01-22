@@ -213,9 +213,8 @@ public class GenerateFunctions {
 		} else if (item instanceof IfConditional) {
 			final IfConditional ifc = (IfConditional) item;
 			generate_if(ifc, gf);
-//			throw new NotImplementedException();
 		} else if (item instanceof Loop) {
-			System.err.println("800");
+			System.err.println("800 -- generateLoop");
 			final Loop loop = (Loop) item;
 			generate_loop(loop, gf);
 		} else if (item instanceof MatchConditional) {
