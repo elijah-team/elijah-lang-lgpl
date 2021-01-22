@@ -297,54 +297,55 @@ public class GeneratedFunction implements GeneratedNode {
 	}
 
 	public @NotNull InstructionArgument get_assignment_path(@NotNull final IExpression expression,
-															@NotNull final GenerateFunctions generateFunctions) {
+															@NotNull final GenerateFunctions generateFunctions,
+															Context context) {
 		switch (expression.getKind()) {
 		case DOT_EXP:
-			{
-				final DotExpression de = (DotExpression) expression;
-				final InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions);
-				return get_assignment_path(left_part, de.getRight(), generateFunctions);
-			}
+		{
+			final DotExpression de = (DotExpression) expression;
+			final InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions, context);
+			return get_assignment_path(left_part, de.getRight(), generateFunctions, context);
+		}
 		case QIDENT:
 			throw new NotImplementedException();
 		case PROCEDURE_CALL:
-			{
-				ProcedureCallExpression pce = (ProcedureCallExpression) expression;
-				if (pce.getLeft() instanceof IdentExpression) {
-					int i = generateFunctions.addProcTableEntry(pce, null, generateFunctions.get_args_types(pce.getArgs(), this), this);
-					return new ProcIA(i, this); // TODO do we need an IdentIA?
-				}
-				return get_assignment_path(pce.getLeft(), generateFunctions); // TODO this looks wrong. what are we supposed to be doing here?
-//				throw new NotImplementedException();
+		{
+			ProcedureCallExpression pce = (ProcedureCallExpression) expression;
+			if (pce.getLeft() instanceof IdentExpression) {
+				int i = generateFunctions.addProcTableEntry(pce, null, generateFunctions.get_args_types(pce.getArgs(), this, context), this);
+				return new ProcIA(i, this); // TODO do we need an IdentIA?
 			}
+			return get_assignment_path(pce.getLeft(), generateFunctions, context); // TODO this looks wrong. what are we supposed to be doing here?
+//				throw new NotImplementedException();
+		}
 		case GET_ITEM:
 			throw new NotImplementedException();
 		case IDENT:
-			{
-				final IdentExpression ie = (IdentExpression) expression;
-				final String text = ie.getText();
-				final InstructionArgument lookup = vte_lookup(text); // IntegerIA(variable) or ConstTableIA or null
-				if (lookup != null)
-					return lookup;
-				final int ite = addIdentTableEntry(ie);
-				return new IdentIA(ite, this);
-			}
+		{
+			final IdentExpression ie = (IdentExpression) expression;
+			final String text = ie.getText();
+			final InstructionArgument lookup = vte_lookup(text); // IntegerIA(variable) or ConstTableIA or null
+			if (lookup != null)
+				return lookup;
+			final int ite = addIdentTableEntry(ie, context);
+			return new IdentIA(ite, this);
+		}
 		default:
 			throw new IllegalStateException("Unexpected value: " + expression.getKind());
 		}
 	}
 
-	private @NotNull InstructionArgument get_assignment_path(final InstructionArgument prev, @NotNull final IExpression expression, @NotNull final GenerateFunctions generateFunctions) {
+	private @NotNull InstructionArgument get_assignment_path(final InstructionArgument prev, @NotNull final IExpression expression, @NotNull final GenerateFunctions generateFunctions, Context context) {
 		switch (expression.getKind()) {
 		case DOT_EXP:
 		{
 			final DotExpression de = (DotExpression) expression;
-			final InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions);
+			final InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions, context);
 			if (left_part instanceof IdentIA) {
 				((IdentIA)left_part).setPrev(prev);
 			} else
 				throw new NotImplementedException();
-			return get_assignment_path(left_part, de.getRight(), generateFunctions);
+			return get_assignment_path(left_part, de.getRight(), generateFunctions, context);
 		}
 		case QIDENT:
 			throw new NotImplementedException();
@@ -355,7 +356,7 @@ public class GeneratedFunction implements GeneratedNode {
 		case IDENT:
 			{
 				final IdentExpression ie = (IdentExpression) expression;
-				final int ite = addIdentTableEntry(ie);
+				final int ite = addIdentTableEntry(ie, context);
 				final IdentIA identIA = new IdentIA(ite, this);
 				identIA.setPrev(prev);
 				return identIA;
@@ -400,12 +401,12 @@ public class GeneratedFunction implements GeneratedNode {
 		return null;
 	}
 
-	public int addIdentTableEntry(final IdentExpression ident) {
+	public int addIdentTableEntry(final IdentExpression ident, final Context context) {
 		for (int i = 0; i < idte_list.size(); i++) {
-			if (idte_list.get(i).getIdent() == ident)
+			if (idte_list.get(i).getIdent() == ident && idte_list.get(i).getPC() == context)
 				return i;
 		}
-		final IdentTableEntry idte = new IdentTableEntry(idte_list.size(), ident);
+		final IdentTableEntry idte = new IdentTableEntry(idte_list.size(), ident, context);
 		idte_list.add(idte);
 		return idte.getIndex();
 	}

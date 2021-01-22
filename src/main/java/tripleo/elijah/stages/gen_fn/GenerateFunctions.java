@@ -144,7 +144,7 @@ public class GenerateFunctions {
 			return;
 		} else if (item instanceof ClassStatement) {
 			GeneratedClass gc = generateClass((ClassStatement) item);
-			int ite_index = gf.addIdentTableEntry(((ClassStatement) item).getNameNode());
+			int ite_index = gf.addIdentTableEntry(((ClassStatement) item).getNameNode(), cctx);
 			IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
 			ite.resolve(gc);
 		} else if (item instanceof StatementWrapper) {
@@ -420,30 +420,28 @@ public class GenerateFunctions {
 			int ident_right;
 			InstructionArgument some_left;
 			if (vte_left == null) {
-				ident_left = gf.addIdentTableEntry(left);
+				ident_left = gf.addIdentTableEntry(left, cctx);
 				some_left = new IdentIA(ident_left, gf);
 			} else
 				some_left = vte_left;
-			final InstructionArgument iiii = gf.vte_lookup(right.getText());
+			final InstructionArgument vte_right = gf.vte_lookup(right.getText());
 			final int inst;
-			if (iiii == null) {
-				ident_right = gf.addIdentTableEntry(right);
+			if (vte_right == null) {
+				ident_right = gf.addIdentTableEntry(right, cctx);
 				inst = add_i(gf, InstructionName.AGN, List_of(some_left, new IdentIA(ident_right, gf)), cctx);
 			} else {
-				inst = add_i(gf, InstructionName.AGN, List_of(some_left, iiii), cctx);
+				inst = add_i(gf, InstructionName.AGN, List_of(some_left, vte_right), cctx);
 
 				// TODO this will break one day
 				assert vte_left != null;
 				final VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(vte_left));
 				// ^^
-				vte.addPotentialType(inst,
-						gf.getVarTableEntry(DeduceTypes2.to_int(iiii/* != null ? iiii :
-							gf.getVarTableEntry(iii5))*/)).type);
+				vte.addPotentialType(inst, gf.getVarTableEntry(DeduceTypes2.to_int(vte_right)).type);
 			}
 		}
 
 		public void numeric(@NotNull GeneratedFunction gf, IExpression left, NumericExpression ne, Context cctx) {
-			@NotNull final InstructionArgument agn_path = gf.get_assignment_path(left, GenerateFunctions.this);
+			@NotNull final InstructionArgument agn_path = gf.get_assignment_path(left, GenerateFunctions.this, cctx);
 			final int cte = addConstantTableEntry("", ne, ne.getType(), gf);
 
 			final int agn_inst = add_i(gf, InstructionName.AGN, List_of(agn_path, new ConstTableIA(cte, gf)), cctx);
@@ -498,7 +496,7 @@ public class GenerateFunctions {
 
 	private void generate_item_dot_expression(@org.jetbrains.annotations.Nullable final InstructionArgument backlink, final IExpression left, @NotNull final IExpression right, @NotNull final GeneratedFunction gf, final Context cctx) {
 		final int y=2;
-		final int x = gf.addIdentTableEntry((IdentExpression) left);
+		final int x = gf.addIdentTableEntry((IdentExpression) left, cctx);
 		if (backlink != null) {
 			gf.getIdentTableEntry(x).backlink = backlink;
 		}
@@ -753,9 +751,9 @@ public class GenerateFunctions {
 		//
 		InstructionArgument expression_num = simplify_expression(left, gf, cctx);
 		if (expression_num == null) {
-			expression_num = gf.get_assignment_path(left, this);
+			expression_num = gf.get_assignment_path(left, this, cctx);
 		}
-		final int i = addProcTableEntry(left, expression_num, get_args_types(args, gf), gf);
+		final int i = addProcTableEntry(left, expression_num, get_args_types(args, gf, cctx), gf);
 		final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
 		l.add(new ProcIA(i, gf));
 		l.addAll(simplify_args(args, gf, cctx));
@@ -827,7 +825,7 @@ public class GenerateFunctions {
 		case DOT_EXP:
 			{
 				final DotExpression de = (DotExpression) expression;
-				return gf.get_assignment_path(de, this);
+				return gf.get_assignment_path(de, this, cctx);
 			}
 		case QIDENT:
 			throw new NotImplementedException();
@@ -837,7 +835,7 @@ public class GenerateFunctions {
 			if (i == null) {
 				IdentTableEntry x = gf.getIdentTableEntryFor(expression);
 				if (x == null) {
-					int ii = gf.addIdentTableEntry((IdentExpression) expression);
+					int ii = gf.addIdentTableEntry((IdentExpression) expression, cctx);
 					i = new IdentIA(ii, gf);
 				} else {
 					i = new IdentIA(x.getIndex(), gf);
@@ -982,7 +980,7 @@ public class GenerateFunctions {
 		if (left.is_simple()) {
 			if (left instanceof IdentExpression) {
 				// for ident(xyz...)
-				final int x = gf.addIdentTableEntry((IdentExpression) left);
+				final int x = gf.addIdentTableEntry((IdentExpression) left, cctx);
 				// TODO attach to var/const or lookup later in deduce
 				left_ia = new IdentIA(x, gf);
 			} else if (left instanceof SubExpression) {
@@ -1011,7 +1009,7 @@ public class GenerateFunctions {
 				if (arg.is_simple()) {
 					final int y=2;
 					if (arg instanceof IdentExpression) {
-						final int x = gf.addIdentTableEntry((IdentExpression) arg);
+						final int x = gf.addIdentTableEntry((IdentExpression) arg, cctx);
 						// TODO attach to var/const or lookup later in deduce
 						ia = new IdentIA(x, gf);
 						iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
@@ -1051,7 +1049,7 @@ public class GenerateFunctions {
 		}
 	}
 
-	@NotNull List<TypeTableEntry> get_args_types(@org.jetbrains.annotations.Nullable final ExpressionList args, @NotNull final GeneratedFunction gf) {
+	@NotNull List<TypeTableEntry> get_args_types(@org.jetbrains.annotations.Nullable final ExpressionList args, @NotNull final GeneratedFunction gf, Context instructionIndex) {
 		final List<TypeTableEntry> R = new ArrayList<TypeTableEntry>();
 		if (args == null) return R;
 		//
@@ -1072,7 +1070,7 @@ public class GenerateFunctions {
 					// WHEN VTE_LOOKUP FAILS, IE WHEN A MEMBER VARIABLE
 					//
 					int y=2;
-					int idte_index = gf.addIdentTableEntry((IdentExpression) arg);
+					int idte_index = gf.addIdentTableEntry((IdentExpression) arg, instructionIndex);
 					tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, arg);
 					gf.getIdentTableEntry(idte_index).type = tte;
 				}
@@ -1114,7 +1112,7 @@ public class GenerateFunctions {
 			return expression_to_call_add_entry(gf, pce, pce.getLeft(), cctx);
 		}
 		case DOT_EXP: {
-			@NotNull InstructionArgument x = simplify_dot_expression((DotExpression) pce.getLeft(), gf); // TODO ??
+			@NotNull InstructionArgument x = simplify_dot_expression((DotExpression) pce.getLeft(), gf, cctx); // TODO ??
 			return expression_to_call_add_entry(gf, pce, pce.getLeft(), x, cctx);
 		}
 		default:
@@ -1130,8 +1128,8 @@ public class GenerateFunctions {
 		final Instruction i = new Instruction();
 		i.setName(InstructionName.CALL); // TODO see line 686
 		final List<InstructionArgument> li = new ArrayList<InstructionArgument>();
-		final InstructionArgument assignment_path = gf.get_assignment_path(left, this);
-		final List<TypeTableEntry> args_types = get_args_types(pce.getArgs(), gf);
+		final InstructionArgument assignment_path = gf.get_assignment_path(left, this, cctx);
+		final List<TypeTableEntry> args_types = get_args_types(pce.getArgs(), gf, cctx);
 		final int pte_num = addProcTableEntry(left, assignment_path, args_types, gf);
 		li.add(new ProcIA(pte_num, gf));
 		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf, cctx);
@@ -1149,7 +1147,7 @@ public class GenerateFunctions {
 		final Instruction i = new Instruction();
 		i.setName(InstructionName.CALL);
 		final List<InstructionArgument> li = new ArrayList<InstructionArgument>();
-		final int pte_num = addProcTableEntry(left, left1, get_args_types(pce.getArgs(), gf), gf);
+		final int pte_num = addProcTableEntry(left, left1, get_args_types(pce.getArgs(), gf, cctx), gf);
 		li.add(new ProcIA(pte_num, gf));
 		final List<InstructionArgument> args_ = simplify_args(pce.getArgs(), gf, cctx);
 		li.addAll(args_);
@@ -1161,8 +1159,8 @@ public class GenerateFunctions {
 		throw new NotImplementedException();
 	}
 
-	private @NotNull InstructionArgument simplify_dot_expression(final DotExpression dotExpression, final GeneratedFunction gf) {
-		@NotNull InstructionArgument x = gf.get_assignment_path(dotExpression, this);
+	private @NotNull InstructionArgument simplify_dot_expression(final DotExpression dotExpression, final GeneratedFunction gf, Context cctx) {
+		@NotNull InstructionArgument x = gf.get_assignment_path(dotExpression, this, cctx);
 		System.err.println("1117 " + x);
 		return x;
 	}

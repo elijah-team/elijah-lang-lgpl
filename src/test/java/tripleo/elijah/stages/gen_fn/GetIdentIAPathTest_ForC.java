@@ -44,7 +44,7 @@ public class GetIdentIAPathTest_ForC {
 		OS_Type type = null;
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
 		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte);
-		int ite_index = gf.addIdentTableEntry(foo_ident);
+		int ite_index = gf.addIdentTableEntry(foo_ident, null);
 		IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
 		ite.backlink = new IntegerIA(int_index);
 		IdentIA ident_ia = new IdentIA(ite_index, gf);

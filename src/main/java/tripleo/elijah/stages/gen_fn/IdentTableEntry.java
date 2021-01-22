@@ -10,9 +10,12 @@ package tripleo.elijah.stages.gen_fn;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
+import tripleo.elijah.stages.instructions.IntegerIA;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,9 +27,10 @@ import java.util.Map;
 public class IdentTableEntry {
     private final int index;
     private final IdentExpression ident;
+	private final Context pc;
 	/**
-	 * Either an {@link tripleo.elijah.stages.instructions.IntegerIA} which is a vte
-	 * or a {@link tripleo.elijah.stages.instructions.IdentIA} which is an idte
+	 * Either an {@link IntegerIA} which is a vte
+	 * or a {@link IdentIA} which is an idte
 	 */
 	public InstructionArgument backlink;
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
@@ -34,9 +38,10 @@ public class IdentTableEntry {
 	private GeneratedNode resolved;
 	public OS_Element resolved_element;
 
-	public IdentTableEntry(final int index, final IdentExpression ident) {
+	public IdentTableEntry(final int index, final IdentExpression ident, Context pc) {
         this.index = index;
         this.ident = ident;
+        this.pc    = pc;
     }
 
 	public void addPotentialType(final int instructionIndex, final TypeTableEntry tte) {
@@ -86,6 +91,10 @@ public class IdentTableEntry {
 
 	public int getIndex() {
 		return index;
+	}
+
+	public Context getPC() {
+		return pc;
 	}
 }
 

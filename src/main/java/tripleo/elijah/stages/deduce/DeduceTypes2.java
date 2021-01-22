@@ -102,7 +102,7 @@ public class DeduceTypes2 {
 						if (ite.resolved_element != null)
 							continue;
 						final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
-						resolveIdentIA_(context, identIA, module, generatedFunction, new FoundElement(phase) {
+						resolveIdentIA_(ite.getPC(), identIA, generatedFunction, new FoundElement(phase) {
 
 							final String x = generatedFunction.getIdentIAPathNormal(identIA);
 
@@ -604,7 +604,7 @@ public class DeduceTypes2 {
 							}
 						}
 					} else {
-						int ia = generatedFunction.addIdentTableEntry((IdentExpression) e);
+						int ia = generatedFunction.addIdentTableEntry((IdentExpression) e, ctx);
 						IdentIA ident_a = new IdentIA(ia, generatedFunction);
 //						@Nullable OS_Element x = resolveIdentIA(ctx, ident_a, module, generatedFunction); // README generating 2 ite's for Value
 						IdentTableEntry idte = generatedFunction.getIdentTableEntry(ia);
