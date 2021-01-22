@@ -526,8 +526,8 @@ public class GenerateFunctions {
 
 			{
 				for (final MatchConditional.MC1 part : mc.getParts()) {
-					if (part instanceof MatchConditional.MatchConditionalPart1) {
-						final MatchConditional.MatchConditionalPart1 mc1 = (MatchConditional.MatchConditionalPart1) part;
+					if (part instanceof MatchConditional.MatchArm_TypeMatch) {
+						final MatchConditional.MatchArm_TypeMatch mc1 = (MatchConditional.MatchArm_TypeMatch) part;
 						final TypeName tn = mc1.getTypeName();
 						final IdentExpression id = mc1.getIdent();
 

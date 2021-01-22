@@ -5705,7 +5705,7 @@ inputState.guessing--;
 		MatchConditional mc, OS_Element aParent
 	) throws RecognitionException, TokenStreamException {
 		
-		MatchConditional.MatchConditionalPart1 mcp1=null;
+		MatchConditional.MatchArm_TypeMatch mcp1=null;
 				 MatchConditional.MatchConditionalPart2 mcp2=null;
 				 MatchConditional.MatchConditionalPart3 mcp3=null;
 				 TypeName tn=null;

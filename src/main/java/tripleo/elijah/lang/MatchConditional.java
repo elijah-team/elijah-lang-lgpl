@@ -91,8 +91,8 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 	//
 	//
 	//
-	public MatchConditionalPart1 typeMatch() {
-		final MatchConditionalPart1 p = new MatchConditionalPart1();
+	public MatchArm_TypeMatch typeMatch() {
+		final MatchArm_TypeMatch p = new MatchArm_TypeMatch();
 		parts.add(p);
 		return p;
 	}
@@ -122,38 +122,6 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 			throw new NotImplementedException();
 		}
 	}
-
-/*
-	private final class MatchConditionalScope extends AbstractScope2 {
-
-		private final AbstractStatementClosure asc = new AbstractStatementClosure(this);
-		private final MC1 element;
-
-		public MatchConditionalScope(final MC1 part1) {
-			super((OS_Element) part1);
-			element = part1;
-		}
-
-		@Override
-		public void add(final StatementItem aItem) {
-			if (aItem instanceof FunctionItem)
-				element.add((FunctionItem) aItem);
-			else
-				System.err.println(String.format("adding false StatementItem %s to MatchConditional",
-						aItem.getClass().getName()));
-		}
-
-		@Override
-		public StatementClosure statementClosure() {
-			return asc;
-		}
-
-//		@Override
-//		public void statementWrapper(final IExpression aExpr) {
-//			element.add(new StatementWrapper(aExpr, getContext(), /*MatchConditional.this.* /getParent()));
-//		}
-	}
-*/
 
 	public class MatchConditionalPart3 implements MC1 {
 
@@ -265,7 +233,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		}
 	}
 
-	public class MatchConditionalPart1 implements MC1 {
+	public class MatchArm_TypeMatch implements MC1 {
 
 //		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
 		private final Context ___ctx = new MatchConditionalContext(MatchConditional.this.getContext(), this);
