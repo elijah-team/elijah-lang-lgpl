@@ -1098,14 +1098,13 @@ public class DeduceTypes2 {
 			if (fd.returnType() != null && !fd.returnType().isNull()) {
 				return new OS_Type(fd.returnType());
 			}
-			return new OS_UnknownType(fd);
+			return new OS_UnknownType(fd);			// TODO still must register somewhere
 		} else if (best instanceof FuncExpr) {
-//			return new OS_FuncExprType((FuncExpr) best);
 			final FuncExpr funcExpr = (FuncExpr) best;
 			if (funcExpr.returnType() != null && !funcExpr.returnType().isNull()) {
 				return new OS_Type(funcExpr.returnType());
 			}
-			return new OS_UnknownType(funcExpr);
+			return new OS_UnknownType(funcExpr);	// TODO still must register somewhere
 		} else {
 			System.err.println("992 "+best.getClass().getName());
 			throw new NotImplementedException();
