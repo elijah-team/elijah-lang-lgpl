@@ -1047,7 +1047,9 @@ public class GenerateFunctions {
 		}
 	}
 
-	@NotNull List<TypeTableEntry> get_args_types(@org.jetbrains.annotations.Nullable final ExpressionList args, @NotNull final GeneratedFunction gf, Context instructionIndex) {
+	@NotNull List<TypeTableEntry> get_args_types(@org.jetbrains.annotations.Nullable final ExpressionList args,
+												 @NotNull final GeneratedFunction gf,
+												 Context instructionIndex) {
 		final List<TypeTableEntry> R = new ArrayList<TypeTableEntry>();
 		if (args == null) return R;
 		//
