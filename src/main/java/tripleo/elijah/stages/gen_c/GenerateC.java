@@ -500,8 +500,8 @@ public class GenerateC {
 					final VariableTableEntry testing_var  = gf.getVarTableEntry(testing_var_.getIndex());
 					final TypeTableEntry     testing_type = gf.getTypeTableEntry(testing_type_.getIndex());
 
-					System.err.println("8887 " + testing_var);
-					System.err.println("8888 " + testing_type);
+//					System.err.println("8887 " + testing_var);
+//					System.err.println("8888 " + testing_type);
 
 					final OS_Type x = testing_type.attached;
 					if (x != null) {
