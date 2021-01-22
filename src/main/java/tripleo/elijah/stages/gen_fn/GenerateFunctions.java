@@ -377,6 +377,7 @@ public class GenerateFunctions {
 				@NotNull GeneratedClass kl = generateClass(classStatement);
 				R.add(kl);
 			}
+			// TODO enums, datatypes, (type)aliases
 		}
 
 		return R;
