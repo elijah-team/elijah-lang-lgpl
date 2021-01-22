@@ -26,7 +26,6 @@ import tripleo.elijah.stages.instructions.VariableTableType;
 import tripleo.elijah.util.Helpers;
 
 import static org.easymock.EasyMock.mock;
-import static org.junit.Assert.*;
 
 public class GetRealTargetNameTest {
 

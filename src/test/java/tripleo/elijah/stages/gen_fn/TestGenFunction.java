@@ -127,20 +127,19 @@ public class TestGenFunction {
 			c.use(ci, false);
 		}
 
-		final GenerateFunctions gfm = new GenerateFunctions(m);
-		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
-
-//		for (GeneratedFunction gf : lgf) {
-//			for (Instruction instruction : gf.instructions()) {
-//				System.out.println("8100 "+instruction);
-//			}
-//		}
-
 		if (false) {
+			final GenerateFunctions gfm = new GenerateFunctions(m);
+			final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
+
+//			for (GeneratedFunction gf : lgf) {
+//				for (Instruction instruction : gf.instructions()) {
+//					System.out.println("8100 "+instruction);
+//				}
+//			}
+
 			DeducePhase dp = new DeducePhase();
 			dp.deduceModule(m, lgf);
 			dp.finish();
-//		new DeduceTypes2(m).deduceFunctions(lgf);
 
 			new GenerateC(m).generateCode(lgf);
 		} else {

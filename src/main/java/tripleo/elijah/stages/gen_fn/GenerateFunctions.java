@@ -220,7 +220,6 @@ public class GenerateFunctions {
 		} else if (item instanceof MatchConditional) {
 			final MatchConditional mc = (MatchConditional) item;
 			generate_match_conditional(mc, gf);
-//			throw new NotImplementedException();
 		} else if (item instanceof NamespaceStatement) {
 //			System.out.println("Skip namespace for now "+((NamespaceStatement) item).name());
 			throw new NotImplementedException();
@@ -371,16 +370,10 @@ public class GenerateFunctions {
 		for (final ModuleItem item : module.getItems()) {
 			if (item instanceof NamespaceStatement) {
 				final NamespaceStatement namespaceStatement = (NamespaceStatement) item;
-//				final List<GeneratedNode> r;
-//				r = generateAllNamespaceFunctions(((NamespaceStatement) item));
-//				R.addAll(r);
 				GeneratedNamespace kl = generateNamespace(namespaceStatement);
 				R.add(kl);
 			} else if (item instanceof ClassStatement) {
-//				final List<GeneratedNode> r;
 				final ClassStatement classStatement = (ClassStatement) item;
-//				r = generateAllClassFunctions(classStatement);
-//				R.addAll(r);
 				@NotNull GeneratedClass kl = generateClass(classStatement);
 				R.add(kl);
 			}
