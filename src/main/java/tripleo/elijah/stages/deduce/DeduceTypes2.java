@@ -1374,14 +1374,22 @@ public class DeduceTypes2 {
 							VariableStatement vs = (VariableStatement) el;
 							if (!vs.typeName().isNull()) {
 								TypeTableEntry tte;
+								OS_Type attached;
+								if (vs.typeName() == null && vs.initialValue() != IExpression.UNASSIGNED) {
+									attached = deduceExpression(vs.initialValue(), ectx);
+								} else if (vs.typeName() != null) {
+									attached = new OS_Type(vs.typeName());
+								} else
+									attached = null;
 								if (vs.initialValue() != IExpression.UNASSIGNED) {
-									tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(vs.typeName()), vs.initialValue());
+									tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 								} else {
 									tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(vs.typeName())); // TODO where is expression? ie foo.x
 								}
 								idte2.type = tte;
 							} else if (vs.initialValue() != IExpression.UNASSIGNED) {
-								TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+								OS_Type attached = deduceExpression(vs.initialValue(), ectx);
+								TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 								idte2.type = tte;
 							}
 						}
