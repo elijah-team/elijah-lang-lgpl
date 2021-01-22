@@ -973,6 +973,8 @@ public class DeduceTypes2 {
 			return ((IntegerIA) arg).getIndex();
 		if (arg instanceof ProcIA)
 			return ((ProcIA) arg).getIndex();
+		if (arg instanceof IdentIA)
+			return ((IdentIA) arg).getIndex();
 		throw new NotImplementedException();
 	}
 
