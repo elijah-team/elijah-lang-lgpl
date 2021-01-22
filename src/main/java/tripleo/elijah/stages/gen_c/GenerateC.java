@@ -791,12 +791,22 @@ public class GenerateC {
 			}
 			case CALLS:
 			{
+				CReference reference = null;
 				if (pte.expression_num == null) {
 					final int y=2;
 					final IdentExpression ptex = (IdentExpression) pte.expression;
 					sb.append(Emit.emit("/*684*/"));
 					sb.append(ptex.getText());
 				} else {
+					// TODO Why not expression_num?
+					reference = new CReference();
+					final IdentIA ia2 = (IdentIA) pte.expression_num;
+					reference.getIdentIAPath(ia2, gf);
+					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
+					reference.args(sll);
+					String path = reference.build();
+					sb.append(Emit.emit("/*807*/")+path);
+
 					final IExpression ptex = pte.expression;
 					if (ptex instanceof IdentExpression) {
 						sb.append(Emit.emit("/*803*/"));
@@ -806,12 +816,14 @@ public class GenerateC {
 						sb.append(ptex.getLeft()); // TODO Qualident, IdentExpression, DotExpression
 					}
 				}
-				sb.append(Emit.emit("/*724*/")+"(");
-				{
-					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
-					sb.append(Helpers.String_join(", ", sll));
+				if (true /*reference == null*/) {
+					sb.append(Emit.emit("/*810*/") + "(");
+					{
+						final List<String> sll = getAssignmentValueArgs(inst, gf, module);
+						sb.append(Helpers.String_join(", ", sll));
+					}
+					sb.append(");");
 				}
-				sb.append(");");
 				return sb.toString();
 			}
 			default:
