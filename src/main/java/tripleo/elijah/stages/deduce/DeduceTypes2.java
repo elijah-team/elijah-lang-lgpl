@@ -1094,9 +1094,18 @@ public class DeduceTypes2 {
 		if (best instanceof ClassStatement) {
 			return new OS_Type((ClassStatement) best);
 		} else if (best instanceof FunctionDef) {
-			return new OS_FuncType((FunctionDef) best);
+			final FunctionDef fd = (FunctionDef) best;
+			if (fd.returnType() != null && !fd.returnType().isNull()) {
+				return new OS_Type(fd.returnType());
+			}
+			return new OS_UnknownType(fd);
 		} else if (best instanceof FuncExpr) {
-			return new OS_FuncExprType((FuncExpr) best);
+//			return new OS_FuncExprType((FuncExpr) best);
+			final FuncExpr funcExpr = (FuncExpr) best;
+			if (funcExpr.returnType() != null && !funcExpr.returnType().isNull()) {
+				return new OS_Type(funcExpr.returnType());
+			}
+			return new OS_UnknownType(funcExpr);
 		} else {
 			System.err.println("992 "+best.getClass().getName());
 			throw new NotImplementedException();
