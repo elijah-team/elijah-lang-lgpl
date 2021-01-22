@@ -1008,7 +1008,6 @@ public class DeduceTypes2 {
 				ctx = t.getClassOf().getContext();
 			t = deduceExpression(ss, ctx);
 			if (t == null) break;
-			ss.setType(t);  // TODO should this be here?
 			s.pop();
 		}
 		if (t == null) {
