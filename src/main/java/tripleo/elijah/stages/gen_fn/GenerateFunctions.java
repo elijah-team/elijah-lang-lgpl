@@ -456,7 +456,7 @@ public class GenerateFunctions {
 //				vte.type = tte;
 				vte.addPotentialType(instruction.getIndex(), tte);
 			} else if (left_ia instanceof IdentIA) {
-				final IdentTableEntry idte = gf.getIdentTableEntry(((IdentIA)left_ia).getIndex());
+				final IdentTableEntry idte = gf.getIdentTableEntry(DeduceTypes2.to_int(left_ia));
 //				idte.type = tte;
 				idte.addPotentialType(instruction.getIndex(), tte);
 			}
@@ -488,7 +488,11 @@ public class GenerateFunctions {
 		}
 	}
 
-	private void generate_item_dot_expression(@org.jetbrains.annotations.Nullable final InstructionArgument backlink, final IExpression left, @NotNull final IExpression right, @NotNull final GeneratedFunction gf, final Context cctx) {
+	private void generate_item_dot_expression(@org.jetbrains.annotations.Nullable final InstructionArgument backlink,
+											  final IExpression left,
+											  @NotNull final IExpression right,
+											  @NotNull final GeneratedFunction gf,
+											  final Context cctx) {
 		final int y=2;
 		final int x = gf.addIdentTableEntry((IdentExpression) left, cctx);
 		if (backlink != null) {

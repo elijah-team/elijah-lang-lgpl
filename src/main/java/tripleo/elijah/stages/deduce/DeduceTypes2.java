@@ -555,7 +555,7 @@ public class DeduceTypes2 {
 		if (cte.type.attached == null) {
 			System.out.println("Null type in CTE "+cte);
 		}
-//							vte.type = cte.type;
+//		vte.type = cte.type;
 		vte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
