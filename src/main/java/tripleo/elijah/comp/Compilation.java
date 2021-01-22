@@ -275,13 +275,14 @@ public class Compilation {
 	}
 
 	public OS_Module realParseElijjahFile(final String f, final File file, final boolean do_out) throws Exception {
-		if (fn2m.containsKey(file.getAbsolutePath())) { // don't parse twice
-			return fn2m.get(file.getAbsolutePath());
+		final String absolutePath = file.getCanonicalFile().toString();
+		if (fn2m.containsKey(absolutePath)) { // don't parse twice
+			return fn2m.get(absolutePath);
 		}
 		final InputStream s = io.readFile(file);
 		try {
 			final OS_Module R = parseFile_(f, s, do_out);
-			fn2m.put(file.getAbsolutePath(), R);
+			fn2m.put(absolutePath, R);
 			s.close();
 			return R;
 		} catch (final ANTLRException e) {
@@ -293,13 +294,14 @@ public class Compilation {
 	}
 
 	public CompilerInstructions realParseEzFile(final String f, final InputStream s, final File file) throws Exception {
-		if (fn2ci.containsKey(file.getAbsolutePath())) { // don't parse twice
-			return fn2ci.get(file.getAbsolutePath());
+		final String absolutePath = file.getCanonicalFile().toString();
+		if (fn2ci.containsKey(absolutePath)) { // don't parse twice
+			return fn2ci.get(absolutePath);
 		}
 		try {
 			final CompilerInstructions R = parseEzFile_(f, s);
 			R.setFilename(file.toString());
-			fn2ci.put(file.getAbsolutePath(), R);
+			fn2ci.put(absolutePath, R);
 			s.close();
 			return R;
 		} catch (final ANTLRException e) {
