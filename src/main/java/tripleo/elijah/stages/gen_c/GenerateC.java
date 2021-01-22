@@ -514,7 +514,7 @@ public class GenerateC {
 //								tos.put_string_ln(String.format("vsb = ZS<%d>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
 //								tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
 							} else
-								System.err.println("8886 " + y.getClass().getName());
+								System.err.println("8883 " + y.getClass().getName());
 						} else if (x.getType() == OS_Type.Type.USER_CLASS) {
 							final int z = getTypeNumber(new OS_Type(x.getClassOf()));
 							if (z == 0 || z == -1) {
