@@ -1149,8 +1149,20 @@ public class DeduceTypes2 {
 								break;
 							}
 							case USER:
-								ectx = attached.getTypeName().getContext(); // TODO is this right?
-
+								if (el instanceof MatchConditional.MatchArm_TypeMatch) {
+									// for example from match conditional
+									final TypeName tn = ((MatchConditional.MatchArm_TypeMatch) el).getTypeName();
+									try {
+										@NotNull final OS_Type ty = resolve_type(new OS_Type(tn), tn.getContext());
+										ectx = ty.getElement().getContext();
+									} catch (ResolveError resolveError) {
+										resolveError.printStackTrace();
+										System.err.println("1182 Can't resolve " + tn);
+										throw new IllegalStateException("ResolveError.");
+									}
+//									ectx = el.getContext();
+								} else
+									ectx = attached.getTypeName().getContext(); // TODO is this right?
 								break;
 							default:
 								System.err.println("1010 " + attached.getType());
