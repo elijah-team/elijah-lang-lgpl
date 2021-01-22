@@ -1113,7 +1113,7 @@ public class DeduceTypes2 {
 		Context ectx = context;
 		for (final InstructionArgument ia : s) {
 			if (ia instanceof IntegerIA) {
-				VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) ia).getIndex());
+				VariableTableEntry vte = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(ia));
 				final String text = vte.getName();
 				final LookupResultList lrl = ectx.lookup(text);
 				el = lrl.chooseBest(null);
