@@ -205,14 +205,18 @@ public class Compilation {
 		final File instruction_dir = new File(compilerInstructions.getFilename()).getParentFile();
 		for (final LibraryStatementPart lsp : compilerInstructions.lsps) {
 			final String dir_name = Helpers.remove_single_quotes_from_string(lsp.getDirName());
-			File dir = new File(dir_name);
+			File dir;// = new File(dir_name);
 			if (dir_name.equals(".."))
 				dir = instruction_dir/*.getAbsoluteFile()*/.getParentFile();
 			else
 				dir = new File(instruction_dir, dir_name);
 			use_internal(dir, do_out, lsp);
 		}
-		use_internal(instruction_dir, do_out, null); // TODO null lsp
+		final LibraryStatementPart lsp = new LibraryStatementPart();
+		lsp.setName(Helpers.makeToken("default"));
+		lsp.setDirName(Helpers.makeToken(String.format("\"%s\"", instruction_dir)));
+		lsp.setInstructions(compilerInstructions);
+		use_internal(instruction_dir, do_out, lsp);
 	}
 
 	private void use_internal(final File dir, final boolean do_out, LibraryStatementPart lsp) throws Exception {
