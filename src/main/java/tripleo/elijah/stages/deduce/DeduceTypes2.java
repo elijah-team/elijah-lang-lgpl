@@ -134,14 +134,18 @@ public class DeduceTypes2 {
 								final String tn = ((NormalTypeName) x).getName();
 								final LookupResultList lrl = x.getContext().lookup(tn);
 								OS_Element best = lrl.chooseBest(null);
-								while (best instanceof AliasStatement) {
-									best = _resolveAlias((AliasStatement) best);
-								}
-								if (!(OS_Type.isConcreteType(best))) {
-									errSink.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
+								if (best != null) {
+									while (best instanceof AliasStatement) {
+										best = _resolveAlias((AliasStatement) best);
+									}
+									if (!(OS_Type.isConcreteType(best))) {
+										errSink.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
+									} else {
+	//									System.out.println("705 " + best);
+										vte.type.attached = new OS_Type((ClassStatement) best);
+									}
 								} else {
-//									System.out.println("705 " + best);
-									vte.type.attached = new OS_Type((ClassStatement) best);
+									errSink.reportDignostic(new ResolveError(x, lrl));
 								}
 							}
 						}
