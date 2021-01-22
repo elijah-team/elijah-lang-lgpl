@@ -1,10 +1,10 @@
 /*
  * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
- * 
- * The contents of this library are released under the LGPL licence v3, 
+ *
+ * The contents of this library are released under the LGPL licence v3,
  * the GNU Lesser General Public License text was downloaded from
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
- * 
+ *
  */
 package tripleo.elijah.lang;
 
@@ -22,21 +22,27 @@ import java.util.List;
 
 /**
  * Represents a "class"
- * 
+ * <p>
  * items -> ClassItems
- * docstrings 
+ * docstrings
  * variables
- * 
  */
 public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, StatementItem, FunctionItem, OS_Element, OS_Element2, Documentable, OS_Container {
-	
+
+	private final List<ClassItem> items = new ArrayList<ClassItem>();
+	private final List<String> mDocs = new ArrayList<String>();
+	public IdentExpression clsName;
+	public /*final*/ OS_Element parent;
+	public Attached _a = new Attached();
+	ClassInheritance _inh = new ClassInheritance(); // remove final for ClassBuilder
+	List<AnnotationClause> annotations = null;
 	private OS_Package _packageName;
 	private ClassTypes _type;
 	private List<AccessNotation> accesses = new ArrayList<AccessNotation>();
 
 	public ClassStatement(final OS_Element parentElement, final Context parentContext) {
 		parent = parentElement; // setParent
-		if (parentElement instanceof  OS_Module) {
+		if (parentElement instanceof OS_Module) {
 			final OS_Module module = (OS_Module) parentElement;
 			//
 			this.setPackageName(module.pullPackageName());
@@ -57,52 +63,28 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		mDocs.add(aText.getText());
 	}
 
-	ClassInheritance _inh = new ClassInheritance(); // remove final for ClassBuilder
-
-	public ClassInheritance classInheritance() {
-		return _inh;
-	}
-
-	public FunctionDef funcDef() {
-		return new FunctionDef(this, getContext());
-	}
-	
 	public String getName() {
 //		if (clsName == null)
 //			return "";
 		return clsName.getText();
 	}
-	
-	public List<ClassItem> getItems() {
-		return items;
-	}
-	
-	public List<String> getDocstrings() {
-		return mDocs;
-	}
-	
-	@Override public OS_Element getParent() {
-		return parent;
-	}
-	
+
 	public void setName(final IdentExpression aText) {
 		clsName = aText;
 	}
 
-//	@Override
-	public StatementClosure statementClosure() {
-		return new AbstractStatementClosure(this);
+	public List<ClassItem> getItems() {
+		return items;
 	}
 
-	public IdentExpression clsName;
+	public List<String> getDocstrings() {
+		return mDocs;
+	}
 
-	private final List<ClassItem> items=new ArrayList<ClassItem>();
-	private final List<String> mDocs = new ArrayList<String>();
-//	private final List<IExpression> mExprs = new ArrayList<IExpression>();
-
-	public /*final*/ OS_Element parent;
-
-	public Attached _a = new Attached();
+	@Override
+	public OS_Element getParent() {
+		return parent;
+	}
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
@@ -132,13 +114,13 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	public void visitGen(final ICodeGen visit) {
 		visit.addClass(this);
 	}
-	
-	public void setPackageName(final OS_Package aPackageName) {
-		_packageName = aPackageName;
-	}
-	
+
 	public OS_Package getPackageName() {
 		return _packageName;
+	}
+
+	public void setPackageName(final OS_Package aPackageName) {
+		_packageName = aPackageName;
 	}
 
 	@Override
@@ -155,23 +137,9 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	public ConstructorDef addCtor(final IdentExpression aConstructorName) {
 		return new ConstructorDef(aConstructorName, this, getContext());
 	}
-	
+
 	public DestructorDef addDtor() {
 		return new DestructorDef(this, getContext());
-	}
-	
-	public TypeAliasStatement typeAlias() {
-		NotImplementedException.raise();
-		return null;
-	}
-	
-	public InvariantStatement invariantStatement() {
-		NotImplementedException.raise();
-		return null;
-	}
-	
-	public ProgramClosure XXX() {
-		return new ProgramClosure() {};
 	}
 
 	@Override // OS_Element
@@ -179,6 +147,9 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return _a._context;
 	}
 
+	public void setContext(final ClassContext ctx) {
+		_a.setContext(ctx);
+	}
 
 	@Override // OS_Element2
 	public String name() {
@@ -201,26 +172,15 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		_type = aType;
 	}
 
-	public void setContext(final ClassContext ctx) {
-		_a.setContext(ctx);
-	}
-
 	public void postConstruct() {
 		assert clsName != null;
 	}
 
-	List<AnnotationClause> annotations = null;
-
-	public void addAnnotation(final AnnotationClause a) {
-		if (annotations == null)
-			annotations = new ArrayList<AnnotationClause>();
-		annotations.add(a);
-	}
+	// region inheritance
 
 	public void addAccess(final AccessNotation acs) {
 		accesses.add(acs);
 	}
-
 
 	public IdentExpression getNameNode() {
 		return clsName;
@@ -228,6 +188,27 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	public void setInheritance(ClassInheritance inh) {
 		_inh = inh;
+	}
+
+	// endregion
+
+	// region annotations
+
+	public ClassInheritance classInheritance() {
+		return _inh;
+	}
+
+	public void addAnnotation(final AnnotationClause a) {
+		if (annotations == null)
+			annotations = new ArrayList<AnnotationClause>();
+		annotations.add(a);
+	}
+
+	public void addAnnotations(List<AnnotationClause> as) {
+		if (as == null) return;
+		for (AnnotationClause annotationClause : as) {
+			addAnnotation(annotationClause);
+		}
 	}
 
 	public void walkAnnotations(AnnotationWalker annotationWalker) {
@@ -243,11 +224,17 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
 		if (annotations == null) return aps;
 		for (AnnotationClause annotationClause : annotations) {
-			for (AnnotationPart annotationPart : annotationClause.aps) {
-				aps.add(annotationPart);
-			}
+			aps.addAll(annotationClause.aps);
 		}
 		return aps;
+	}
+
+	// endregion
+
+	// region called from parser
+
+	public FunctionDef funcDef() {
+		return new FunctionDef(this, getContext());
 	}
 
 	public PropertyStatement prop() {
@@ -256,16 +243,30 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		return propertyStatement;
 	}
 
+	public TypeAliasStatement typeAlias() {
+		NotImplementedException.raise();
+		return null;
+	}
+
+	public InvariantStatement invariantStatement() {
+		NotImplementedException.raise();
+		return null;
+	}
+
+	public ProgramClosure XXX() {
+		return new ProgramClosure() {
+		};
+	}
+
+	public StatementClosure statementClosure() {
+		return new AbstractStatementClosure(this);
+	}
+
+	// endregion
+
 	public boolean hasItem(OS_Element element) {
 		if (!(element instanceof ClassItem)) return false;
 		return items.contains((ClassItem) element);
-	}
-
-	public void addAnnotations(List<AnnotationClause> as) {
-		if (as == null) return;
-		for (AnnotationClause annotationClause : as) {
-			addAnnotation(annotationClause);
-		}
 	}
 }
 
