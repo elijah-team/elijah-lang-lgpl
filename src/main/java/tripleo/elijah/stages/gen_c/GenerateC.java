@@ -646,7 +646,7 @@ public class GenerateC {
 			final OS_Type attached = ty.attached;
 			assert attached != null;
 			final String z = getTypeName(attached);
-			tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+			tos.put_string_ln(String.format("/*8890*/Z<%s> %s;", z, target_name));
 		}
 		System.err.println("8886 y is null (No typename specified)");
 	}
