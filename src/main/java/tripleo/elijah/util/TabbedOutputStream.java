@@ -64,6 +64,15 @@ public class TabbedOutputStream {
 		do_tabs = true;
 	}
 
+	public void put_string_ln_no_tabs(final String s) throws IOException {
+		if (!is_connected())
+			throw new IllegalStateException("is_connected assertion failed");
+
+		myStream.write(s);
+		myStream.write('\n');
+//		do_tabs = true;
+	}
+
 	public void put_string(final String s) throws IOException {
 		if (!is_connected())
 			throw new IllegalStateException("is_connected assertion failed");

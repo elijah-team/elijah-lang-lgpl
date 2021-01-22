@@ -255,7 +255,7 @@ public class GenerateC {
 //			System.err.println("8999 "+instruction);
 			final Label label = gf.findLabel(instruction.getIndex());
 			if (label != null) {
-				tos.put_string_ln(label.getName() + ":");
+				tos.put_string_ln_no_tabs(label.getName() + ":");
 			}
 			switch (instruction.getName()) {
 			case E:
