@@ -157,48 +157,55 @@ public class DeduceTypes2 {
 						int y=2;
 						if (!ite.hasResolvedElement()) {
 							IdentIA ident_a = new IdentIA(ite.getIndex(), generatedFunction);
-							String path = generatedFunction.getIdentIAPathNormal(ident_a);
-							@Nullable OS_Element x = resolveIdentIA(context, ident_a, module, generatedFunction);
-							if (x != null) {
-								ite.setResolvedElement(x);
-								if (ite.type != null && ite.type.attached != null) {
-									if (ite.type.attached.getType() == OS_Type.Type.USER) {
-										try {
-											OS_Type xx = resolve_type(ite.type.attached, fd_ctx);
-											ite.type.attached = xx;
-										} catch (ResolveError resolveError) {
-											System.out.println("192 Can't attach type to "+path);
-//											resolveError.printStackTrace(); // TODO print diagnostic
-											continue;
+							resolveIdentIA_(context, ident_a, generatedFunction, new FoundElement(phase) {
+
+								final String path = generatedFunction.getIdentIAPathNormal(ident_a);
+
+								@Override
+								void foundElement(OS_Element x) {
+									ite.setResolvedElement(x);
+									if (ite.type != null && ite.type.attached != null) {
+										if (ite.type.attached.getType() == OS_Type.Type.USER) {
+											try {
+												OS_Type xx = resolve_type(ite.type.attached, fd_ctx);
+												ite.type.attached = xx;
+											} catch (ResolveError resolveError) {
+												System.out.println("192 Can't attach type to "+path);
+//												resolveError.printStackTrace(); // TODO print diagnostic
+//												continue;
+											}
 										}
-									}
-								} else {
-									int yy=2;
-									if (!ite.hasResolvedElement()) {
-										LookupResultList lrl = lookupExpression(ite.getIdent(), fd_ctx);
-										OS_Element best = lrl.chooseBest(null);
-										if (best != null) {
-											ite.setResolvedElement(x);
-											if (ite.type != null && ite.type.attached != null) {
-												if (ite.type.attached.getType() == OS_Type.Type.USER) {
-													try {
-														OS_Type xx = resolve_type(ite.type.attached, fd_ctx);
-														ite.type.attached = xx;
-													} catch (ResolveError resolveError) {
-														System.out.println("210 Can't attach type to "+ite.getIdent());
+									} else {
+										int yy=2;
+										if (!ite.hasResolvedElement()) {
+											LookupResultList lrl = lookupExpression(ite.getIdent(), fd_ctx);
+											OS_Element best = lrl.chooseBest(null);
+											if (best != null) {
+												ite.setResolvedElement(x);
+												if (ite.type != null && ite.type.attached != null) {
+													if (ite.type.attached.getType() == OS_Type.Type.USER) {
+														try {
+															OS_Type xx = resolve_type(ite.type.attached, fd_ctx);
+															ite.type.attached = xx;
+														} catch (ResolveError resolveError) {
+															System.out.println("210 Can't attach type to "+ite.getIdent());
 //														resolveError.printStackTrace(); // TODO print diagnostic
-														continue;
+//															continue;
+														}
 													}
 												}
+											} else {
+												System.err.println("184 Couldn't resolve "+ite.getIdent());
 											}
-										} else {
-											System.err.println("184 Couldn't resolve "+ite.getIdent());
 										}
 									}
 								}
-							} else {
-								errSink.reportError("165 Can't resolve "+path);
-							}
+
+								@Override
+								void noFoundElement() {
+									errSink.reportError("165 Can't resolve "+path);
+								}
+							});
 						}
 					}
 					//
@@ -317,9 +324,18 @@ public class DeduceTypes2 {
 				{
 					String x = generatedFunction.getIdentIAPathNormal((IdentIA) fn1.expression_num);
 					System.err.println("298 "+x);
-					@Nullable OS_Element el = resolveIdentIA(context, (IdentIA) fn1.expression_num, module, generatedFunction);
-					assert el != null;
-					fn1.resolved = el;
+					resolveIdentIA_(context, (IdentIA) fn1.expression_num, generatedFunction, new FoundElement(phase) {
+
+						@Override
+						void foundElement(OS_Element e) {
+							fn1.resolved = e;
+						}
+
+						@Override
+						void noFoundElement() {
+							assert false;
+						}
+					});
 				}
 			}
 			break;
@@ -552,12 +568,17 @@ public class DeduceTypes2 {
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		IdentIA identIA = (IdentIA) pte.expression_num;
 		if (identIA != null){
-			@Nullable OS_Element y = resolveIdentIA(ctx, identIA, module, generatedFunction);
-			if (y == null) {
-				System.out.println("1005 Can't find element for " + generatedFunction.getIdentIAPathNormal(identIA));
-			} else {
-//				generatedFunction.getIdentTableEntry(identIA.getIndex()).setResolvedElement(y);
-			}
+			resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
+				@Override
+				void foundElement(OS_Element e) {
+//					generatedFunction.getIdentTableEntry(identIA.getIndex()).setResolvedElement(y);
+				}
+
+				@Override
+				void noFoundElement() {
+					System.out.println("1005 Can't find element for " + generatedFunction.getIdentIAPathNormal(identIA));
+				}
+			});
 		}
 		for (final TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
 //			System.out.println("770 "+tte);
@@ -667,7 +688,10 @@ public class DeduceTypes2 {
 				}
 			} else {
 				final int y=2;
-				resolveIdentIA_(ctx, identIA, module, generatedFunction, new FoundElement(phase) {
+				resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
+
+					final String x = generatedFunction.getIdentIAPathNormal(identIA);
+
 					@Override
 					void foundElement(OS_Element el) {
 						pte.resolved = el;
@@ -694,7 +718,7 @@ public class DeduceTypes2 {
 
 					@Override
 					void noFoundElement() {
-						System.err.println("IdentIA path cannot be resolved "+generatedFunction.getIdentIAPathNormal(identIA));
+						System.err.println("IdentIA path cannot be resolved "+ x);
 					}
 				});
 			}
@@ -1081,7 +1105,7 @@ public class DeduceTypes2 {
 		return null;
 	}
 
-	public void resolveIdentIA_(Context context, IdentIA identIA, OS_Module module, GeneratedFunction generatedFunction, FoundElement foundElement) {
+	public void resolveIdentIA_(Context context, IdentIA identIA, GeneratedFunction generatedFunction, FoundElement foundElement) {
 		final List<InstructionArgument> s = generatedFunction._getIdentIAPathList(identIA);
 
 		OS_Element el = null;
@@ -1198,7 +1222,7 @@ public class DeduceTypes2 {
 				} else {
 //					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
 					String z = generatedFunction.getIdentIAPathNormal((IdentIA) ia);
-					resolveIdentIA2_(context, identIA, module, s, generatedFunction, new FoundElement(phase) {
+					resolveIdentIA2_(context, s, generatedFunction, new FoundElement(phase) {
 						@Override
 						void foundElement(OS_Element e) {
 							foundElement.doFoundElement(e);
@@ -1222,32 +1246,6 @@ public class DeduceTypes2 {
 		foundElement.doFoundElement(el);
 	}
 
-
-	/**
-	 * Called from {@link DeduceTypes2#do_assign_call(GeneratedFunction, Context, VariableTableEntry, FnCallArgs, Instruction)}
-	 * @param ctx to do lookups
-	 * @param ident_a pte.expression_num
-	 * @param module to report errors
-	 * @param generatedFunction
-	 * @return
-	 */
-	@Nullable
-	public OS_Element resolveIdentIA(final Context ctx, @NotNull final IdentIA ident_a, @NotNull final OS_Module module, GeneratedFunction generatedFunction) {
-		Holder<OS_Element> hel =new Holder<>();
-		resolveIdentIA_(ctx, ident_a, module, generatedFunction, new FoundElement(phase) {
-			@Override
-			void foundElement(OS_Element e) {
-				hel.set(e);
-			}
-
-			@Override
-			void noFoundElement() {
-
-			}
-		});
-		return hel.get();
-	}
-
 	static class Holder<T> {
 		private T el;
 
@@ -1261,8 +1259,6 @@ public class DeduceTypes2 {
 	}
 
 	public void resolveIdentIA2_(@NotNull final Context ctx,
-								 @NotNull final IdentIA ident_a,
-								 @NotNull final OS_Module module,
 								 @NotNull final List<InstructionArgument> s,
 								 @NotNull final GeneratedFunction generatedFunction,
 								 @NotNull final FoundElement foundElement) {
