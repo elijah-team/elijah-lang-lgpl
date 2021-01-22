@@ -625,7 +625,8 @@ public class GenerateC {
 			assert context != null;
 			final OS_Type type = x.resolve(context);
 			if (type.isUnitType()) {
-				tos.put_string_ln(String.format("void %s;", target_name));
+				// TODO still should not happen
+				tos.put_string_ln(String.format("/*%s is declared as the Unit type*/", target_name));
 			} else {
 				System.err.println("Bad potentialTypes size " + type);
 				final String z = getTypeName(type);
