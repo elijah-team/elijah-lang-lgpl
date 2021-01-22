@@ -69,7 +69,8 @@ public class VariableSequenceBuilder extends ElBuilder {
 			next(); // create singular entry
 		for (Triple triple : triples) {
 			VariableStatement vs = variableSequence.next();
-			vs.setTypeName(triple._tn);
+			if (triple._tn != null)
+				vs.setTypeName(triple._tn);
 			vs.initial(triple._initial);
 			vs.setName(triple._name);
 		}
