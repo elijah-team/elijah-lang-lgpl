@@ -11,7 +11,6 @@ package tripleo.elijah.stages.gen_c;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
@@ -41,9 +40,9 @@ public class GenerateC {
 
 	public void generateCode2(Collection<GeneratedFunction> generatedFunctions) {
 		generateCode(Collections2.transform(generatedFunctions, new Function<GeneratedFunction, GeneratedNode>() {
-			@Nullable
+			@org.checkerframework.checker.nullness.qual.Nullable
 			@Override
-			public GeneratedNode apply(@Nullable GeneratedFunction input) {
+			public GeneratedNode apply(@org.checkerframework.checker.nullness.qual.Nullable GeneratedFunction input) {
 				return input;
 			}
 		}));
@@ -206,9 +205,9 @@ public class GenerateC {
 		final String args;
 		if (false) {
 			args = Helpers.String_join(", ", Collections2.transform(gf.fd.fal().falis, new Function<FormalArgListItem, String>() {
-				@Nullable
+				@org.checkerframework.checker.nullness.qual.Nullable
 				@Override
-				public String apply(@Nullable final FormalArgListItem input) {
+				public String apply(@org.checkerframework.checker.nullness.qual.Nullable final FormalArgListItem input) {
 					assert input != null;
 					return String.format("%s va%s", getTypeName(input.typeName()), input.name());
 				}
@@ -216,15 +215,15 @@ public class GenerateC {
 		} else {
 			Collection<VariableTableEntry> x = Collections2.filter(gf.vte_list, new Predicate<VariableTableEntry>() {
 				@Override
-				public boolean apply(@Nullable VariableTableEntry input) {
+				public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable VariableTableEntry input) {
 					assert input != null;
 					return input.vtt == VariableTableType.ARG;
 				}
 			});
 			args = Helpers.String_join(", ", Collections2.transform(x, new Function<VariableTableEntry, String>() {
-				@Nullable
+				@org.checkerframework.checker.nullness.qual.Nullable
 				@Override
-				public String apply(@Nullable VariableTableEntry input) {
+				public String apply(@org.checkerframework.checker.nullness.qual.Nullable VariableTableEntry input) {
 					assert input != null;
 					return String.format("%s va%s", getTypeNameForVariableEntry(input), input.getName());
 				}
