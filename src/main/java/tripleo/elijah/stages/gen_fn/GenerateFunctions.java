@@ -178,7 +178,8 @@ public class GenerateFunctions {
 							if (argument_type.attached == null) {
 								// still dont know the argument types at this point, which creates a problem
 								// for resolving functions, so wait until later when more information is available
-								gf.deferred_calls.add(i);
+								if (!gf.deferred_calls.contains(i))
+									gf.deferred_calls.add(i);
 								break;
 							}
 						}
