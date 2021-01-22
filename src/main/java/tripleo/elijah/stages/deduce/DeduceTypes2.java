@@ -15,12 +15,29 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.lang2.SpecialVariables;
-import tripleo.elijah.stages.gen_fn.*;
-import tripleo.elijah.stages.instructions.*;
+import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.IdentTableEntry;
+import tripleo.elijah.stages.gen_fn.ProcTableEntry;
+import tripleo.elijah.stages.gen_fn.TypeTableEntry;
+import tripleo.elijah.stages.gen_fn.VariableTableEntry;
+import tripleo.elijah.stages.instructions.ConstTableIA;
+import tripleo.elijah.stages.instructions.FnCallArgs;
+import tripleo.elijah.stages.instructions.IdentIA;
+import tripleo.elijah.stages.instructions.Instruction;
+import tripleo.elijah.stages.instructions.InstructionArgument;
+import tripleo.elijah.stages.instructions.InstructionName;
+import tripleo.elijah.stages.instructions.IntegerIA;
+import tripleo.elijah.stages.instructions.ProcIA;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * Created 9/15/20 12:51 PM
@@ -1235,7 +1252,7 @@ public class DeduceTypes2 {
 				} else {
 //					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
 					String z = generatedFunction.getIdentIAPathNormal((IdentIA) ia);
-					resolveIdentIA2_(context, s, generatedFunction, new FoundElement(phase) {
+					resolveIdentIA2_(ectx/*context*/, s, generatedFunction, new FoundElement(phase) {
 						@Override
 						void foundElement(OS_Element e) {
 							foundElement.doFoundElement(e);
