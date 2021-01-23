@@ -1,9 +1,14 @@
 package std.collections
 
-type alias CollectionSize = Integer32
+/*type*/ alias CollectionSize = Integer32
 
 class interface Iterable[T] {
 	iterator() -> Iterator[T]
+}
+
+class interface Iterator[T] {
+	hasNext() -> Boolean
+	next() -> T
 }
 
 class interface Collection[T] < Iterable[T] {
