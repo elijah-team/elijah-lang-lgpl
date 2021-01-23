@@ -213,7 +213,7 @@ public class Compilation {
 			use_internal(dir, do_out, lsp);
 		}
 		final LibraryStatementPart lsp = new LibraryStatementPart();
-		lsp.setName(Helpers.makeToken("default"));
+		lsp.setName(Helpers.makeToken("default")); // TODO: make sure this doesn't conflict
 		lsp.setDirName(Helpers.makeToken(String.format("\"%s\"", instruction_dir)));
 		lsp.setInstructions(compilerInstructions);
 		use_internal(instruction_dir, do_out, lsp);
@@ -270,7 +270,7 @@ public class Compilation {
 			m.prelude = this.findPrelude("c"); // TODO we dont know which prelude to find yet
 		} else {
 			errSink.reportError(
-					"File doesn't exist " + f.getAbsolutePath());
+					"File doesn't exist " + f.getAbsolutePath()); // TODO getPath?? and use a Diagnostic
 		}
 	}
 
