@@ -39,6 +39,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	private OS_Package _packageName;
 	private ClassTypes _type;
 	private List<AccessNotation> accesses = new ArrayList<AccessNotation>();
+	private TypeNameList genericPart;
 
 	public ClassStatement(final OS_Element parentElement, final Context parentContext) {
 		parent = parentElement; // setParent
@@ -267,6 +268,17 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	public boolean hasItem(OS_Element element) {
 		if (!(element instanceof ClassItem)) return false;
 		return items.contains((ClassItem) element);
+	}
+
+	public void setGenericPart(TypeNameList genericPart) {
+		this.genericPart = genericPart;
+	}
+
+	public Iterable<? extends TypeName> getGenericPart() {
+		if (genericPart == null)
+			return new ArrayList<TypeName>();
+		else
+			return genericPart.p;
 	}
 }
 

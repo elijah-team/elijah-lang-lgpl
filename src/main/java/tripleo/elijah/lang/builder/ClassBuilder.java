@@ -24,6 +24,7 @@ public class ClassBuilder {
 	private IdentExpression _name;
 	private final ClassScope _scope = new ClassScope();
 	private final ClassInheritance _inh = new ClassInheritance();
+	private TypeNameList genericPart;
 
 	public void setType(ClassTypes classTypes) {
 		_type = classTypes;
@@ -37,6 +38,8 @@ public class ClassBuilder {
 		for (AnnotationClause annotation : annotations) {
 			cs.addAnnotation(annotation);
 		}
+		if (genericPart != null)
+			cs.setGenericPart(genericPart);
 		for (ElBuilder builder : _scope.items()) {
 //			if (builder instanceof AccessNotation) {
 //				cs.addAccess((AccessNotation) builder);
@@ -84,6 +87,10 @@ public class ClassBuilder {
 		for (AnnotationClause annotationClause : as) {
 			annotation_clause(annotationClause);
 		}
+	}
+
+	public void setGenericPart(TypeNameList tnl) {
+		genericPart = tnl;
 	}
 }
 

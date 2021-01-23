@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.contexts;
 
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.lang.*;
 
 import java.util.List;
@@ -75,6 +76,22 @@ public class ClassContext extends Context {
 			}
 //			System.out.println("1003 "+name+" "+Result.results());
 		}
+		for (TypeName tn1 : carrier.getGenericPart()) {
+			if (tn1 instanceof NormalTypeName) {
+				final NormalTypeName tn = (NormalTypeName) tn1;
+				final String name1 = tn.getName(); // TODO this may return a string with DOTs in it.
+				if (name1.equals(name)) {
+//					LookupResultList lrl = tn.getContext().lookup(name);
+//					OS_Element best = lrl.chooseBest(null);
+//					if (best == null) {
+//						throw new AssertionError();
+//					} else
+						Result.add(name, level, new OS_TypeNameElement(tn1), this);
+				}
+			} else {
+				// TODO probable error
+			}
+		}
 		if (getParent() != null) {
 			final Context context = getParent();
 			if (!alreadySearched.contains(context) || !one)
@@ -86,4 +103,35 @@ public class ClassContext extends Context {
 	@Override public Context getParent() {
 		return _parent;
 	}
+
+	public class OS_TypeNameElement implements OS_Element {
+		private TypeName typeName;
+
+		public TypeName getTypeName() {
+			return typeName;
+		}
+
+		public OS_TypeNameElement(TypeName tn1) {
+			typeName = tn1;
+		}
+
+		@Override
+		public void visitGen(ICodeGen visit) {
+
+		}
+
+		@Override
+		public OS_Element getParent() {
+			return carrier;
+		}
+
+		@Override
+		public Context getContext() {
+			return ClassContext.this;
+		}
+	}
 }
+
+//
+//
+//

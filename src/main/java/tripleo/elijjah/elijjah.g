@@ -67,13 +67,14 @@ qualident returns [Qualident q]
     ;
 
 classStatement3__ [OS_Element parent, Context cctx, List<AnnotationClause> as] returns [ClassStatement cls]
-		{AnnotationClause a=null;cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;}
+		{AnnotationClause a=null;cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;TypeNameList tnl=null;}
 	: 
     ("class"				{cls = new ClassStatement(parent, cctx);cls.addAnnotations(as);}
             ("struct"       {cls.setType(ClassTypes.STRUCTURE);}
             |"signature"    {cls.setType(ClassTypes.SIGNATURE);}
             |"abstract"     {cls.setType(ClassTypes.ABSTRACT);})?
       i1=ident              {cls.setName(i1);}
+	  ( LBRACK tnl=typeNameList2 RBRACK { cb.setGenericPart(tnl);})?
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
     LCURLY                  {cur=cls.getContext();ctx=(ClassContext)cur;}
@@ -101,9 +102,10 @@ classStatement2 [BaseScope sc]
 	)
 	;
 classDefinition_normal [ClassBuilder cb]
-		{ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;}
+		{ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;TypeNameList tnl=null;}
 	: "class" 			    	{cb.setType(ClassTypes.NORMAL);}
       i1=ident               	{cb.setName(i1);}
+	  ( LBRACK tnl=typeNameList2 RBRACK { cb.setGenericPart(tnl);})?
       ( classDefinition_inheritance[cb] )?
 	  							//{cb.setParent(parent); cb.setParentContext(cur);}
 	  							//{cls = cb.build();} // building before done. arrgh
@@ -154,9 +156,10 @@ classDefinition_abstract [ClassBuilder cb]
      RCURLY //{cls.postConstruct();cur=ctx.getParent();}
  	;
 classDefinition_interface [ClassBuilder cb]
-		{ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;}
+		{ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;TypeNameList tnl=null;}
 	: "class" "interface"    	{cb.setType(ClassTypes.INTERFACE);}
       i1=ident               	{cb.setName(i1);}
+	  ( LBRACK tnl=typeNameList2 RBRACK { cb.setGenericPart(tnl);})?
       ( classDefinition_inheritance[cb] )?
 	  							//{cb.setParent(parent); cb.setParentContext(cur);}
 	  							//{cls = cb.build();} // building before done. arrgh
