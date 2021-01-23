@@ -249,13 +249,13 @@ public class Compilation {
 			return null;
 		}
 
-		String prelude = null;
 		final CompilerInstructions m = realParseEzFile(file_name, io.readFile(f), f);
-		System.err.println("230 "+m.genLang());
-		if (m.genLang() == null) prelude = "c"; // TODO should be java for eljc
+		{
+			String prelude = m.genLang();
+			System.err.println("230 " + prelude);
+			if (prelude == null) prelude = "c"; // TODO should be java for eljc
+		}
 		return m;
-//		m.prelude = this.findPrelude("c");
-
 	}
 
 	private void parseElijjahFile(@NotNull final File f,
