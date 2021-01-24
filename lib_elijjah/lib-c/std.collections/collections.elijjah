@@ -12,8 +12,8 @@ class interface Iterator[T] {
 }
 
 class interface Collection[T] < Iterable[T] {
-	prop Count -> CollectionSize get
-	prop IsReadOnly -> Boolean get
+	prop Count -> CollectionSize { get; }
+	prop IsReadOnly -> Boolean { get; }
 
 	add(item: T)
 	clear()
@@ -28,5 +28,6 @@ class interface List[T] < Collection[T] {
 	//remove(item: T) 	
 	removeAt(index: CollectionSize) 
 
-	forEach(f: function(x: ?A)->?B) -> List[B]
+	forEach(f: proc(x: ?A)/*->?B*/) -> Unit //-> List[B]
+	map(f: function(x: ?A)->?B) -> List[B]
 }
