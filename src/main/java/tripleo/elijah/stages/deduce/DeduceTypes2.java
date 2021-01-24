@@ -758,15 +758,13 @@ public class DeduceTypes2 {
 					assert idte != null;
 					@Nullable OS_Type ty = idte.type.attached;
 					idte.onType(phase, new OnType() {
-						@Override public void typeDeduced(final OS_Type aType) {
-							final OS_Type ty = aType;
-
+						@Override public void typeDeduced(final OS_Type ty) {
 							assert ty != null;
 							OS_Type rtype = null;
 							try {
 								rtype = resolve_type(ty, ctx);
 							} catch (ResolveError resolveError) {
-								//									resolveError.printStackTrace();
+//								resolveError.printStackTrace();
 								errSink.reportError("Cant resolve " + ty); // TODO print better diagnostic
 								return;
 							}
@@ -806,7 +804,7 @@ public class DeduceTypes2 {
 					}
 				}
 
-				tte.attached = new OS_FuncType((FunctionDef) best);
+//				tte.attached = new OS_FuncType((FunctionDef) best); // TODO: what is this??
 				//vte.addPotentialType(instructionIndex, tte);
 			} else {
 				final int y=2;
