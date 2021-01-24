@@ -607,7 +607,7 @@ opfal returns [FormalArgList fal]
 	;
 formalArgList returns [FormalArgList fal]
 		{fal=new FormalArgList();}
-	: formalArgList[fal]
+	: formalArgList_[fal]
 	;
 statement[StatementClosure cr, OS_Element aParent]
 		{Qualident q=null;FormalArgList o=null;}
@@ -1243,7 +1243,7 @@ defFunctionDef[DefFunctionDef fd]
 	  BECOMES expr=expression
 	   									{fd.setType(FunctionDef.Type.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr); }
 	;
-formalArgList[FormalArgList fal]
+formalArgList_[FormalArgList fal]
 	: (formalArgListItem_priv[fal.next()]
 	  (COMMA formalArgListItem_priv[fal.next()])*)?
 	;
