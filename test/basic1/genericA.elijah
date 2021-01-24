@@ -23,7 +23,7 @@ iterate 20 {
 n(a: generic A) {
 	match a {
 		x: Foo  { println(x.m1) }
-		y: Foo1 { println(x.m2) }
+		y: Foo1 { println(y.m2) }
 }  }  }
 
 //
