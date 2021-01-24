@@ -204,9 +204,10 @@ classScope2_signature[ClassScope cr]
 classScope2_interface[ClassScope cr]
         {AccessNotation acs=null;}
     : docstrings[cr]
-    ( constructorDef2[cr]
-    | destructorDef2[cr]
-    | functionDef2[cr.funcDef()]
+    ( //constructorDef2[cr]
+    //| destructorDef2[cr]
+    //| 
+	functionDef2_interface[cr.funcDef()]
     | varStmt2[cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | typeAlias2[cr.typeAlias()]
