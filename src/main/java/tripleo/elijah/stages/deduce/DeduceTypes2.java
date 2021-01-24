@@ -757,37 +757,53 @@ public class DeduceTypes2 {
 					final IdentTableEntry idte = generatedFunction.getIdentTableEntryFor(vs.getNameToken());
 					assert idte != null;
 					@Nullable OS_Type ty = idte.type.attached;
+					idte.onType(phase, new OnType() {
+						@Override public void typeDeduced(final OS_Type aType) {
+							final OS_Type ty = aType;
+
+							assert ty != null;
+							OS_Type rtype = null;
+							try {
+								rtype = resolve_type(ty, ctx);
+							} catch (ResolveError resolveError) {
+								//									resolveError.printStackTrace();
+								errSink.reportError("Cant resolve " + ty); // TODO print better diagnostic
+								return;
+							}
+							LookupResultList lrl2 = rtype.getClassOf().getContext().lookup("__getitem__");
+							OS_Element best2 = lrl2.chooseBest(null);
+							if (best2 != null) {
+								if (best2 instanceof FunctionDef) {
+									FunctionDef fd = (FunctionDef) best2;
+									ProcTableEntry pte = null;
+									forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
+										@Override
+										public void typeDecided(final OS_Type aType) {
+											assert fd == generatedFunction.getFD();
+											//
+											@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType); // TODO expression?
+											idte.type = tte1;
+										}
+									});
+								} else {
+									throw new NotImplementedException();
+								}
+							} else {
+								throw new NotImplementedException();
+							}
+						}
+
+						@Override
+						public void noTypeFound() {
+							throw new NotImplementedException();
+						}
+					});
 					if (ty == null) {
 						@NotNull TypeTableEntry tte3 = generatedFunction.newTypeTableEntry(
 								TypeTableEntry.Type.SPECIFIED, new OS_Type(vs.typeName()), vs.getNameToken());
 						idte.type = tte3;
 						ty = idte.type.attached;
 					}
-					assert ty != null;
-					OS_Type rtype = null;
-					try {
-						rtype = resolve_type(ty, ctx);
-					} catch (ResolveError resolveError) {
-//									resolveError.printStackTrace();
-						errSink.reportError("Cant resolve " + ty); // TODO print better diagnostic
-						return;
-					}
-					LookupResultList lrl2 = rtype.getClassOf().getContext().lookup("__getitem__");
-					OS_Element best2 = lrl2.chooseBest(null);
-					if (best2 != null && best2 instanceof FunctionDef) {
-						FunctionDef fd = (FunctionDef) best2;
-						ProcTableEntry pte = null;
-						forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
-							@Override
-							public void typeDecided(final OS_Type aType) {
-								assert fd == generatedFunction.getFD();
-								//
-								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType); // TODO expression?
-								idte.type = tte1;
-							}
-						});
-					} else
-						throw new NotImplementedException();
 				}
 
 				tte.attached = new OS_FuncType((FunctionDef) best);
