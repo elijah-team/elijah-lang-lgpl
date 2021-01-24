@@ -24,7 +24,7 @@ import java.util.List;
 // TODO FunctionDef is not a Container is it?
 public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
 
-	protected Type _type;
+	protected Species _species;
 	private Scope3 scope3;
 
 	public Iterable<FormalArgListItem> getArgs() {
@@ -39,9 +39,9 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		scope3 = sco;
 	}
 
-	public enum Type {
+	public enum Species {
 		DEF_FUN,
-		PROP_SET, PROP_GET, REG_FUN
+		PROP_SET, PROP_GET, REG_FUN, CTOR, DTOR
 	}
 
 	public Attached _a = new Attached();
@@ -86,8 +86,8 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	// region items
 
-	public void setType(final Type aType) {
-		_type = aType;
+	public void setType(final Species aSpecies) {
+		_species = aSpecies;
 	}
 
 	public List<FunctionItem> getItems() {
@@ -244,8 +244,8 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	// endregion
 
-	public Type getType() {
-		return _type;
+	public Species getType() {
+		return _species;
 	}
 
 	@Override

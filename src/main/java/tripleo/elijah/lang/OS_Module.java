@@ -265,7 +265,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	}
 
 	private boolean is_main_function_with_no_args(FunctionDef fd) {
-		if (fd._type == FunctionDef.Type.REG_FUN || fd._type == FunctionDef.Type.DEF_FUN) {
+		if (fd.getType() == FunctionDef.Species.REG_FUN || fd.getType() == FunctionDef.Species.DEF_FUN) {
 			if (fd.name().equals("main")) {
 				return !fd.getArgs().iterator().hasNext();
 			}

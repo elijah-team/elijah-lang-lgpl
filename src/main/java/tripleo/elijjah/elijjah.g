@@ -517,7 +517,7 @@ functionDef[FunctionDef fd]
     (TOK_ARROW tn=typeName2 {fd.setReturnType(tn);})?
                                 {assert fd.getContext()!=null;ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
     sco=functionScope[fd] {fd.scope(sco);}
-    {fd.setType(FunctionDef.Type.REG_FUN);fd.postConstruct();}
+    {fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();}
     ;
 functionDef2[FunctionDefBuilder fb]
     	{AnnotationClause a=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}
@@ -1241,7 +1241,7 @@ defFunctionDef[DefFunctionDef fd]
 	: "def" i1=ident op=opfal
 	  ((TOK_COLON|TOK_ARROW) tn=typeName2 {fd.setReturnType(tn);})?
 	  BECOMES expr=expression
-	   									{fd.setType(FunctionDef.Type.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr); }
+	   									{fd.setType(FunctionDef.Species.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr); }
 	;
 formalArgList_[FormalArgList fal]
 	: (formalArgListItem_priv[fal.next()]

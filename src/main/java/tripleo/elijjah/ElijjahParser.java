@@ -2012,7 +2012,7 @@ inputState.guessing--;
 				fd.scope(sco);
 			}
 			if ( inputState.guessing==0 ) {
-				fd.setType(FunctionDef.Type.REG_FUN);fd.postConstruct();
+				fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();
 			}
 		}
 		catch (RecognitionException ex) {
@@ -8828,7 +8828,7 @@ inputState.guessing--;
 			match(BECOMES);
 			expr=expression();
 			if ( inputState.guessing==0 ) {
-				fd.setType(FunctionDef.Type.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr);
+				fd.setType(FunctionDef.Species.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr);
 			}
 		}
 		catch (RecognitionException ex) {

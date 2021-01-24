@@ -38,7 +38,7 @@ public class PropertyStatement implements OS_Element, OS_Element2, ClassItem {
 	private FunctionDef createSetFunction() {
 		FunctionDef functionDef = new FunctionDef(this, getContext());
 		functionDef.setName(Helpers.string_to_ident(String.format("<prop_set %s>", prop_name)));
-		functionDef.setType(FunctionDef.Type.PROP_SET);
+		functionDef.setType(FunctionDef.Species.PROP_SET);
 		FormalArgList fal = new FormalArgList();
 		FormalArgListItem fali = fal.next();
 		fali.setName(Helpers.string_to_ident("Value"));
@@ -54,7 +54,7 @@ public class PropertyStatement implements OS_Element, OS_Element2, ClassItem {
 	private FunctionDef createGetFunction() {
 		FunctionDef functionDef = new FunctionDef(this, getContext());
 		functionDef.setName(Helpers.string_to_ident(String.format("<prop_get %s>", prop_name)));
-		functionDef.setType(FunctionDef.Type.PROP_GET);
+		functionDef.setType(FunctionDef.Species.PROP_GET);
 		functionDef.setReturnType(typeName);
 		return functionDef;
 	}

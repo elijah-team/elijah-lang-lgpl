@@ -22,6 +22,7 @@ public class ConstructorDef extends FunctionDef {
 		if (aConstructorName != null)
 			setName(aConstructorName);
 		else setName(Helpers.string_to_ident("<>")); // hack for Context#lookup
+		setType(Species.CTOR);
 	}
 
 }
