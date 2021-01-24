@@ -16,13 +16,24 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
-import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
+import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.IdentTableEntry;
+import tripleo.elijah.stages.gen_fn.ProcTableEntry;
+import tripleo.elijah.stages.gen_fn.TypeTableEntry;
+import tripleo.elijah.stages.gen_fn.VariableTableEntry;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
+import tripleo.util.buffer.Buffer;
+import tripleo.util.buffer.DefaultBuffer;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -85,11 +96,12 @@ public class GenerateC {
 		}
 	}
 
-	public void generate_class(GeneratedClass x) throws IOException {
+	public Buffer generate_class(GeneratedClass x) throws IOException {
 		int y=2;
 		final CClassDecl decl = new CClassDecl(x);
 		decl.evaluatePrimitive();
-		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
+		final StringWriter stringWriter = new StringWriter();
+		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, false);
 		try {
 			tos.put_string_ln("typedef struct {");
 			tos.incr_tabs();
@@ -129,12 +141,16 @@ public class GenerateC {
 			tos.flush();
 		} finally {
 			tos.close();
+			Buffer buf = new DefaultBuffer(stringWriter.toString());
+			System.out.println(buf.getText());
+			return buf;
 		}
 	}
 
-	public void generate_namespace(GeneratedNamespace x) throws IOException {
+	public Buffer generate_namespace(GeneratedNamespace x) throws IOException {
 		int y=2;
-		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
+		final StringWriter stringWriter = new StringWriter();
+		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, true);
 		try {
 			tos.put_string_ln("typedef struct {");
 			tos.incr_tabs();
@@ -163,12 +179,16 @@ public class GenerateC {
 			tos.flush();
 		} finally {
 			tos.close();
+			Buffer buf = new DefaultBuffer(stringWriter.toString());
+			System.out.println(buf.getText());
+			return buf;
 		}
 	}
 
-	private void generateCodeForMethod(final GeneratedFunction gf) throws IOException {
-		if (gf.fd == null) return;
-		final TabbedOutputStream tos = new TabbedOutputStream(System.out);
+	private Buffer generateCodeForMethod(final GeneratedFunction gf) throws IOException {
+		if (gf.fd == null) return null;
+		final StringWriter stringWriter = new StringWriter();
+		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, true);
 		final String returnType;
 		final String name;
 		//
@@ -471,55 +491,13 @@ public class GenerateC {
 			case PC:
 				break;
 			case IS_A:
-				{
-					final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
-					final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
-					final Label     target_label  = ((LabelIA) instruction.getArg(2)).label;
-
-					final VariableTableEntry testing_var  = gf.getVarTableEntry(testing_var_.getIndex());
-					final TypeTableEntry     testing_type = gf.getTypeTableEntry(testing_type_.getIndex());
-
-//					System.err.println("8887 " + testing_var);
-//					System.err.println("8888 " + testing_type);
-
-					final OS_Type x = testing_type.attached;
-					if (x != null) {
-						if (x.getType() == OS_Type.Type.USER) {
-							final TypeName y = x.getTypeName();
-							if (y instanceof NormalTypeName) {
-								module.parent.eee.reportError("500 USER TypeName in GenerateC: "+y);
-								break;
-//								final int z = getTypeNumber((NormalTypeName) y);
-//								tos.put_string_ln(String.format("vsb = ZS<%d>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
-//								tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
-							} else
-								System.err.println("8883 " + y.getClass().getName());
-						} else if (x.getType() == OS_Type.Type.USER_CLASS) {
-							final int z = getTypeNumber(new OS_Type(x.getClassOf()));
-							if (z == 0 || z == -1) {
-								System.err.println("510 TypeName not assigned a code: "+x.getClassOf());
-							}
-							tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
-							tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
-						} else {
-							module.parent.eee.reportError("512 Bad TypeName in GenerateC: "+x);
-							break;
-						}
-					} else {
-						System.err.println("8885 testing_type.attached is null " + testing_type);
-					}
-					final int yyy = 2;
-				}
+				generate_method_is_a(instruction, tos, gf);
 				break;
 			case DECL:
-				{
-					generate_method_decl(instruction, tos, gf);
-				}
+				generate_method_decl(instruction, tos, gf);
 				break;
 			case CAST_TO:
-				{
-					generate_method_cast(instruction, tos, gf);
-				}
+				generate_method_cast(instruction, tos, gf);
 				break;
 			case NOP:
 				break;
@@ -531,6 +509,49 @@ public class GenerateC {
 		tos.put_string_ln("}");
 		tos.flush();
 		tos.close();
+		Buffer buf = new DefaultBuffer(stringWriter.toString());
+		System.out.println(buf.getText());
+		return buf;
+	}
+
+	private void generate_method_is_a(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
+		final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
+		final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
+		final Label target_label  = ((LabelIA) instruction.getArg(2)).label;
+
+		final VariableTableEntry testing_var  = gf.getVarTableEntry(testing_var_.getIndex());
+		final TypeTableEntry testing_type = gf.getTypeTableEntry(testing_type_.getIndex());
+
+//		System.err.println("8887 " + testing_var);
+//		System.err.println("8888 " + testing_type);
+
+		final OS_Type x = testing_type.attached;
+		if (x != null) {
+			if (x.getType() == OS_Type.Type.USER) {
+				final TypeName y = x.getTypeName();
+				if (y instanceof NormalTypeName) {
+					module.parent.eee.reportError("500 USER TypeName in GenerateC: "+y);
+					return;
+//					final int z = getTypeNumber((NormalTypeName) y);
+//					tos.put_string_ln(String.format("vsb = ZS<%d>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
+//					tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
+				} else
+					System.err.println("8883 " + y.getClass().getName());
+			} else if (x.getType() == OS_Type.Type.USER_CLASS) {
+				final int z = getTypeNumber(new OS_Type(x.getClassOf()));
+				if (z == 0 || z == -1) {
+					System.err.println("510 TypeName not assigned a code: "+x.getClassOf());
+				}
+				tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
+				tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
+			} else {
+				module.parent.eee.reportError("512 Bad TypeName in GenerateC: "+x);
+				return;
+			}
+		} else {
+			System.err.println("8885 testing_type.attached is null " + testing_type);
+		}
+		final int yyy = 2;
 	}
 
 	private String getTypeNameForVariableEntry(VariableTableEntry input) {
