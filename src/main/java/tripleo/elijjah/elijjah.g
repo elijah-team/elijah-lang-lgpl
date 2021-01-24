@@ -319,14 +319,14 @@ constructorDef[ClassStatement cr]
 		(x1=ident   {cd=cr.addCtor(x1);}
 		|           {cd=cr.addCtor(null);}
 		)
-		fal=opfal2 {cd.setFal(fal);}
+		fal=opfal {cd.setFal(fal);}
 		sco=scope3[cd] {cd.scope(sco);}
 					{cd.postConstruct();}
 	;
 destructorDef[ClassStatement cr]
         {DestructorDef dd=null;FormalArgList fal=null;}
 	: ("destructor"|"dtor") {dd=cr.addDtor();}
-		fal=opfal2 {dd.setFal(fal);}
+		fal=opfal {dd.setFal(fal);}
 		sco=scope3[dd] {dd.scope(sco);}
 					{dd.postConstruct();}
 	;
@@ -336,13 +336,13 @@ constructorDef2[ClassScope cr]
 		(x1=ident   {cd.setName(x1);}
 		|           {cd.setName(null);} // TODO style
 		)
-		fal=opfal2	{cd.fal(fal);}
+		fal=opfal	{cd.fal(fal);}
 		constructor_scope2[cd.scope()]
 	;
 destructorDef2[ClassScope cr]
         {DestructorDefBuilder dd=new DestructorDefBuilder();FormalArgList fal=null;}
 	: ("destructor"|"dtor") //{dd=cr.addDtor();}
-		fal=opfal2	{dd.fal(fal);}
+		fal=opfal	{dd.fal(fal);}
 		scope2[dd.scope()]
 	;
 namespaceScope[NamespaceStatement cr]
@@ -513,7 +513,7 @@ functionDef[FunctionDef fd]
     i1=ident                    {fd.setName(i1);}
     ( "const"                   {fd.set(FunctionModifiers.CONST);}
     | "immutable"               {fd.set(FunctionModifiers.IMMUTABLE);})?
-    fal=opfal2 {fd.setFal(fal);}
+    fal=opfal {fd.setFal(fal);}
     (TOK_ARROW tn=typeName2 {fd.setReturnType(tn);})?
                                 {assert fd.getContext()!=null;ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
     sco=functionScope[fd] {fd.scope(sco);}
@@ -525,7 +525,7 @@ functionDef2[FunctionDefBuilder fb]
     i1=ident                    {fb.setName(i1);}
     ( "const"                   {fb.set(FunctionModifiers.CONST);}
     | "immutable"               {fb.set(FunctionModifiers.IMMUTABLE);})?
-    fal=opfal2					{fb.fal(fal);}
+    fal=opfal					{fb.fal(fal);}
     (TOK_ARROW tn=typeName2 	{fb.setReturnType(tn);})?
     functionScope2[fb.scope()]
     ;
@@ -535,7 +535,7 @@ functionDef2_interface[FunctionDefBuilder fb]
     i1=ident                    {fb.setName(i1);}
     ( "const"                   {fb.set(FunctionModifiers.CONST);}
     | "immutable"               {fb.set(FunctionModifiers.IMMUTABLE);})?
-    fal=opfal2					{fb.fal(fal);}
+    fal=opfal					{fb.fal(fal);}
     (TOK_ARROW tn=typeName2 	{fb.setReturnType(tn);})?
     (functionScope2[fb.scope()]
 	|
@@ -602,7 +602,7 @@ typeAlias2[TypeAliasBuilder tab]
 		BECOMES q=qualident 		{tab.setBecomes(q);}
 									//{tab.build();}
 	;
-opfal2 returns [FormalArgList fal]
+opfal returns [FormalArgList fal]
 	: LPAREN fal=formalArgList2 RPAREN
 	;
 formalArgList2 returns [FormalArgList fal]
@@ -619,7 +619,7 @@ statement[StatementClosure cr, OS_Element aParent]
 	| varStmt[cr, aParent]
 	| whileLoop[cr]
 	| frobeIteration[cr]
-	| "construct" q=qualident o=opfal2 {cr.constructExpression(q,o);}
+	| "construct" q=qualident o=opfal {cr.constructExpression(q,o);}
 	| "yield" expr=expression {cr.yield(expr);}
 	) opt_semi
 	;
@@ -638,7 +638,7 @@ statement2[BaseScope cr] // was BaseFunctionDefScope
 	;
 constructExpression [BaseScope cr] // was BaseFunctionDefScope
 		{Qualident q=null;FormalArgList o=null;}
-	: "construct" q=qualident o=opfal2 			{cr.constructExpression(q,o);}
+	: "construct" q=qualident o=opfal 			{cr.constructExpression(q,o);}
 	;
 yieldExpression [BaseScope cr] // was BaseFunctionDefScope
 	: "yield" expr=expression 					{cr.yield(expr);}
@@ -996,17 +996,17 @@ funcExpr[FuncExpr pc] // remove scope to use in `typeName's
 		{Scope3 sc = null;TypeName tn=null;FuncExprContext ctx=null;FormalArgList fal=null;}
 	:
 	( "function"  {	pc.type(TypeModifiers.FUNCTION);	}
-	  (fal=opfal2 {pc.setArgList(fal);})
+	  (fal=opfal {pc.setArgList(fal);})
                               {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
 	  sco=scope3[pc] {pc.scope(sco);}
 	  	  ((TOK_ARROW|TOK_COLON) tn=typeName2 {pc.setReturnType(tn);} )?
 	| "procedure" {	pc.type(TypeModifiers.PROCEDURE);	}
-	  (fal=opfal2 {pc.setArgList(fal);})
+	  (fal=opfal {pc.setArgList(fal);})
 				              {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
 	  sco=scope3[pc] {pc.scope(sco);}
 	| 							{sc=new Scope3(pc);}
       LCURLY                  {ctx=new FuncExprContext(cur, pc);pc.setContext(ctx);cur=ctx;}
-	   BOR ( fal=opfal2 {pc.setArgList(fal);} )? BOR
+	   BOR ( fal=opfal {pc.setArgList(fal);} )? BOR
 	  (statement[sc.statementClosure(), sc.getParent()]
       | expr=expression {sc.statementWrapper(expr);}
       | classStatement3__[sc.getParent(), cur, null/*annotations*/]
@@ -1238,7 +1238,7 @@ typeNameList2 returns [TypeNameList cr]
 
 defFunctionDef[DefFunctionDef fd]
 		{FormalArgList op=null;TypeName tn=null;IdentExpression i1=null;}
-	: "def" i1=ident op=opfal2
+	: "def" i1=ident op=opfal
 	  ((TOK_COLON|TOK_ARROW) tn=typeName2 {fd.setReturnType(tn);})?
 	  BECOMES expr=expression
 	   									{fd.setType(FunctionDef.Type.DEF_FUN); fd.setName(i1); fd.setFal(op); fd.setExpr(expr); }
