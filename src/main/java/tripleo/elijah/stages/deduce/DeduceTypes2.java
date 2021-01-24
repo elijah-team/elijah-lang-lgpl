@@ -430,12 +430,14 @@ public class DeduceTypes2 {
 		if (y instanceof VariableStatement) {
 			final VariableStatement vs = (VariableStatement) y;
 			TypeName typeName = vs.typeName();
-			if (!(typeName.isNull())) {
-				if (ite.type == null)
-					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
-				ite.type.attached = new OS_Type(typeName);
-			} else {
-				System.err.println("394 typename is null "+ vs.getName());
+			if (ite.type == null || ite.type.attached == null) {
+				if (!(typeName.isNull())) {
+					if (ite.type == null)
+						ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+					ite.type.attached = new OS_Type(typeName);
+				} else {
+					System.err.println("394 typename is null "+ vs.getName());
+				}
 			}
 		} else if (y instanceof ClassStatement) {
 			ClassStatement classStatement = ((ClassStatement) y);
@@ -451,8 +453,6 @@ public class DeduceTypes2 {
 				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
 			} else
 				ite.type.attached = attached;
-//							} else if (y instanceof ClassStatement) {
-
 		} else if (y instanceof PropertyStatement) {
 			PropertyStatement ps = (PropertyStatement) y;
 			OS_Type attached;
