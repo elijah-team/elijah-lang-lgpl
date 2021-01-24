@@ -345,7 +345,7 @@ public class DeduceTypes2 {
 
 						@Override
 						void foundElement(OS_Element e) {
-							fn1.resolved = e;
+							fn1.resolved_element = e;
 						}
 
 						@Override
@@ -696,7 +696,7 @@ public class DeduceTypes2 {
 
 					final OS_Element best = lrl.chooseBest(null);
 					if (best != null)
-						pte.resolved = best; // TODO do we need to add a dependency for class?
+						pte.resolved_element = best; // TODO do we need to add a dependency for class?
 					else {
 						errSink.reportError("Cant resolve "+text);
 					}
@@ -711,7 +711,7 @@ public class DeduceTypes2 {
 
 					@Override
 					void foundElement(OS_Element el) {
-						pte.resolved = el;
+						pte.resolved_element = el;
 						if (el instanceof FunctionDef) {
 							FunctionDef fd = (FunctionDef) el;
 							forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
@@ -898,7 +898,7 @@ public class DeduceTypes2 {
 			final LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
 			final OS_Element best = lrl.chooseBest(null);
 			if (best != null)
-				pte.resolved = best; // TODO do we need to add a dependency for class?
+				pte.resolved_element = best; // TODO do we need to add a dependency for class?
 			else
 				throw new NotImplementedException();
 		}
@@ -993,7 +993,7 @@ public class DeduceTypes2 {
 		final LookupResultList lrl = ctx.lookup(pn);
 		final OS_Element best = lrl.chooseBest(null);
 		if (best != null) {
-			fn1.resolved = best; // TODO check arity and arg matching
+			fn1.resolved_element = best; // TODO check arity and arg matching
 			return true;
 		}
 		return false;
