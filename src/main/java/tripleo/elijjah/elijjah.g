@@ -603,9 +603,9 @@ typeAlias2[TypeAliasBuilder tab]
 									//{tab.build();}
 	;
 opfal returns [FormalArgList fal]
-	: LPAREN fal=formalArgList2 RPAREN
+	: LPAREN fal=formalArgList RPAREN
 	;
-formalArgList2 returns [FormalArgList fal]
+formalArgList returns [FormalArgList fal]
 		{fal=new FormalArgList();}
 	: formalArgList[fal]
 	;
@@ -1201,7 +1201,7 @@ functionTypeName2_function returns [FuncTypeName tn]
 	: ("function"|"func")                         { tn.type(TypeModifiers.FUNCTION); }
 	  (LPAREN 
 	  	((typeNameList2)=> tnl=typeNameList2 
-		  | op=formalArgList2
+		  | op=formalArgList
 		)
 	   RPAREN
 	  )            { if(tnl!=null)tn.argList(tnl); else tn.argList(op); }
@@ -1212,7 +1212,7 @@ functionTypeName2_procedure returns [FuncTypeName tn]
 	: ("procedure"|"proc")                          { tn.type(TypeModifiers.PROCEDURE);	}
 	  (LPAREN 
 	  	((typeNameList2)=> tnl=typeNameList2 
-		  | op=formalArgList2
+		  | op=formalArgList
 		)
 	   RPAREN
 	  )            { if(tnl!=null)tn.argList(tnl); else tn.argList(op); }
