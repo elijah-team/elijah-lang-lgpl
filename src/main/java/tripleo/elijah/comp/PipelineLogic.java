@@ -15,6 +15,7 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.instructions.IdentIA;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,6 +89,10 @@ public class PipelineLogic {
 						if (identTableEntry.isResolved()) {
 							GeneratedNode node = identTableEntry.resolved();
 							resolved_nodes.add(node);
+						} else {
+							final IdentIA ia2 = new IdentIA(identTableEntry.getIndex(), generatedFunction);
+							final String s = generatedFunction.getIdentIAPathNormal(ia2);
+							System.out.println("92 Unresolved IDENT "+ s);
 						}
 					}
 				}
