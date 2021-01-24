@@ -212,8 +212,8 @@ classScope2_interface[ClassScope cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | typeAlias2[cr.typeAlias()]
     | programStatement2[cr]
-	| propertyStatement2[cr]
 	| propertyStatement2_abstract[cr]
+	| propertyStatement2[cr]
     | acs=accessNotation {cr.addAccess(acs);}
     )*
     (invariantStatement2[cr])?
