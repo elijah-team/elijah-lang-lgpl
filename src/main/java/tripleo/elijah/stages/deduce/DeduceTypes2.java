@@ -1428,12 +1428,13 @@ public class DeduceTypes2 {
 							if (!vs.typeName().isNull()) {
 								TypeTableEntry tte;
 								OS_Type attached;
-								if (vs.typeName() == null && vs.initialValue() != IExpression.UNASSIGNED) {
+								if (/*vs.typeName() == null &&*/ vs.initialValue() != IExpression.UNASSIGNED) { // TODO was always false
 									attached = deduceExpression(vs.initialValue(), ectx);
-								} else if (vs.typeName() != null) {
+								} else { // if (vs.typeName() != null) {
 									attached = new OS_Type(vs.typeName());
-								} else
-									attached = null;
+								}
+//								else
+//									attached = null;
 								if (vs.initialValue() != IExpression.UNASSIGNED) {
 									tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 								} else {
