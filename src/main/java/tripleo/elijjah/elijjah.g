@@ -102,70 +102,57 @@ classStatement2 [BaseScope sc]
 	)
 	;
 classDefinition_normal [ClassBuilder cb]
-		{ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;TypeNameList tnl=null;}
+		{IdentExpression i1=null;ClassContext ctx=null;TypeNameList tnl=null;}
 	: "class" 			    	{cb.setType(ClassTypes.NORMAL);}
       i1=ident               	{cb.setName(i1);}
 	  ( LBRACK tnl=typeNameList2 RBRACK { cb.setGenericPart(tnl);})?
       ( classDefinition_inheritance[cb] )?
-	  							//{cb.setParent(parent); cb.setParentContext(cur);}
-	  							//{cls = cb.build();} // building before done. arrgh
-      LCURLY                  	//{ctx=(ClassContext)cls.getContext();cur=ctx;}
+      LCURLY
      (classScope2[cb.getScope()]
 //     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // interface cant be abstract
 //      (invariantStatement2[sc])?
      )
-     RCURLY //{cls.postConstruct();cur=ctx.getParent();}
+     RCURLY
  	;
 classDefinition_struct [ClassBuilder cb]
-		{ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;}
-	: "class" "struct"    	{cb.setType(ClassTypes.STRUCTURE);}
+		{IdentExpression i1=null;ClassContext ctx=null;}
+	: "class" "struct"    		{cb.setType(ClassTypes.STRUCTURE);}
       i1=ident               	{cb.setName(i1);}
       ( classDefinition_inheritance[cb] )?
-	  							//{cb.setParent(parent); cb.setParentContext(cur);}
-	  							//{cls = cb.build();} // building before done. arrgh
-      LCURLY                  	//{ctx=(ClassContext)cls.getContext();cur=ctx;}
-     (classScope2[cb.getScope()]
-//     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // interface cant be abstract
-//      (invariantStatement2[sc])?
-     )
-     RCURLY //{cls.postConstruct();cur=ctx.getParent();}
+      LCURLY                  	
+      classScope2[cb.getScope()]
+      RCURLY
  	;
 classDefinition_signature [ClassBuilder cb]
-		{ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;}
+		{IdentExpression i1=null;ClassContext ctx=null;}
 	: "class" "signature"    	{cb.setType(ClassTypes.SIGNATURE);}
       i1=ident               	{cb.setName(i1);}
       ( classDefinition_inheritance[cb] )?
-	  							//{cb.setParent(parent); cb.setParentContext(cur);}
-	  							//{cls = cb.build();} // building before done. arrgh
       LCURLY                  	
-     classScope2_signature[cb.getScope()]
-     RCURLY //{cls.postConstruct();cur=ctx.getParent();}
+      classScope2_signature[cb.getScope()]
+      RCURLY
  	;
 classDefinition_abstract [ClassBuilder cb]
 		{ClassStatement cls=null;IdentExpression i1=null;}
 	: "class" "abstract"    	{cb.setType(ClassTypes.ABSTRACT);}
       i1=ident               	{cb.setName(i1);}
       ( classDefinition_inheritance[cb] )?
-	  							//{cb.setParent(parent); cb.setParentContext(cur);}
-	  							//{cls = cb.build();} // building before done. arrgh
       LCURLY                  	
-     (classScope2[cb.getScope()]
-     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} 
-      (invariantStatement2[cb.getScope()])?
-     )
-     RCURLY //{cls.postConstruct();cur=ctx.getParent();}
+      (classScope2[cb.getScope()]
+      |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // TODO: NPE
+        (invariantStatement2[cb.getScope()])?
+      )
+      RCURLY
  	;
 classDefinition_interface [ClassBuilder cb]
-		{ClassStatement cls=null;IdentExpression i1=null;ClassContext ctx=null;TypeNameList tnl=null;}
+		{IdentExpression i1=null;ClassContext ctx=null;TypeNameList tnl=null;}
 	: "class" "interface"    	{cb.setType(ClassTypes.INTERFACE);}
       i1=ident               	{cb.setName(i1);}
 	  ( LBRACK tnl=typeNameList2 RBRACK { cb.setGenericPart(tnl);})?
       ( classDefinition_inheritance[cb] )?
-	  							//{cb.setParent(parent); cb.setParentContext(cur);}
-	  							//{cls = cb.build();} // building before done. arrgh
       LCURLY                  	
-     classScope2_interface[cb.getScope()]
-     RCURLY //{cls.postConstruct();cur=ctx.getParent();}
+      classScope2_interface[cb.getScope()]
+      RCURLY
  	;
 classDefinition_inheritance [ClassBuilder cb]
 	: (LPAREN classInheritance_ [cb.classInheritance()] RPAREN)
