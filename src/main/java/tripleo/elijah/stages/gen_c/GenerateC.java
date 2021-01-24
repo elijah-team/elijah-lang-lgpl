@@ -124,11 +124,13 @@ public class GenerateC {
 
 			tos.put_string_ln("");
 			tos.put_string_ln("");
+			// TODO what about named constructors and ctor$0 and "the debug stack"
 			tos.put_string_ln(String.format("%s* ZC%d() {", class_name, class_code));
 			tos.incr_tabs();
 			tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
 			tos.put_string_ln(String.format("R->_tag = %d;", class_code));
 			if (decl.prim) {
+				// TODO consider NULL, and floats and longs, etc
 				if (!decl.prim_decl.equals("bool"))
 					tos.put_string_ln("R->vsv = 0;");
 				else if (decl.prim_decl.equals("bool"))
