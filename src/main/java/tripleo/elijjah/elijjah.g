@@ -603,8 +603,11 @@ typeAlias2[TypeAliasBuilder tab]
 									//{tab.build();}
 	;
 opfal2 returns [FormalArgList fal]
+	: LPAREN fal=formalArgList2 RPAREN
+	;
+formalArgList2 returns [FormalArgList fal]
 		{fal=new FormalArgList();}
-	: LPAREN formalArgList[fal] RPAREN
+	: formalArgList[fal]
 	;
 statement[StatementClosure cr, OS_Element aParent]
 		{Qualident q=null;FormalArgList o=null;}
@@ -1189,13 +1192,30 @@ normalTypeName2 returns [NormalTypeName tn]
 	  (QUESTION {tn.setNullable();})?
 	;
 functionTypeName2 returns [FuncTypeName tn]
-		{tn=new FuncTypeName(cur); TypeName rtn=null; TypeNameList tnl=new TypeNameList();}
-	: ( ("function"|"func")                         { tn.type(TypeModifiers.FUNCTION); }
-	  (LPAREN tnl=typeNameList2 RPAREN)            { tn.argList(tnl); }
+		{tn=null;}//new FuncTypeName(cur);}
+	: tn=functionTypeName2_function
+	| tn=functionTypeName2_procedure
+	;
+functionTypeName2_function returns [FuncTypeName tn]
+		{tn=new FuncTypeName(cur); TypeName rtn=null; TypeNameList tnl=null;FormalArgList op=null;}
+	: ("function"|"func")                         { tn.type(TypeModifiers.FUNCTION); }
+	  (LPAREN 
+	  	((typeNameList2)=> tnl=typeNameList2 
+		  | op=formalArgList2
+		)
+	   RPAREN
+	  )            { if(tnl!=null)tn.argList(tnl); else tn.argList(op); }
 	  ((TOK_ARROW|TOK_COLON) rtn=typeName2          { tn.returnValue(rtn);} )?
-	| ("procedure"|"proc")                          { tn.type(TypeModifiers.PROCEDURE);	}
-	  (LPAREN tnl=typeNameList2 RPAREN)            { tn.argList(tnl); }
-	)
+	;
+functionTypeName2_procedure returns [FuncTypeName tn]
+		{tn=new FuncTypeName(cur); TypeNameList tnl=null;FormalArgList op=null;}
+	: ("procedure"|"proc")                          { tn.type(TypeModifiers.PROCEDURE);	}
+	  (LPAREN 
+	  	((typeNameList2)=> tnl=typeNameList2 
+		  | op=formalArgList2
+		)
+	   RPAREN
+	  )            { if(tnl!=null)tn.argList(tnl); else tn.argList(op); }
 	;
 regularQualifiers2[NormalTypeName fp]
 	:

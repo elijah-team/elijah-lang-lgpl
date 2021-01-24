@@ -21,7 +21,20 @@ public class FuncTypeName implements TypeName {
 		_arglist = tnl;
 	}
 
-//	@Override
+	public void argList(final FormalArgList op) {
+		TypeNameList tnl = new TypeNameList();
+		for (FormalArgListItem fali : op.falis) {
+			final TypeName tn = fali.typeName();
+			if (tn != null)
+				tnl.add(tn);
+			else {
+//				tnl.add(TypeName.Undeclared(fali)); // TODO implement me
+			}
+		}
+		argList(tnl);
+	}
+
+	//	@Override
 	public void type(final TypeModifiers typeModifiers) {
 		_modifiers = typeModifiers;
 	}
@@ -75,3 +88,7 @@ public class FuncTypeName implements TypeName {
 		return null;
 	}
 }
+
+//
+//
+//
