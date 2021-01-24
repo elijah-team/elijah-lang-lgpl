@@ -17,6 +17,7 @@ import tripleo.elijah.stages.gen_fn.GenerateFunctions;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import java.util.Map;
 public class DeducePhase {
 
 	private List<FoundElement> foundElements = new ArrayList<FoundElement>();
+	private Map<IdentTableEntry, OnType> idte_type_callbacks = new HashMap<IdentTableEntry, OnType>();
 
 	public void addFunction(GeneratedFunction generatedFunction, FunctionDef fd) {
 		functionMap.put(fd, generatedFunction);
@@ -36,6 +38,10 @@ public class DeducePhase {
 
 	public void registerFound(FoundElement foundElement) {
 		foundElements.add(foundElement);
+	}
+
+	public void onType(IdentTableEntry entry, OnType callback) {
+		idte_type_callbacks.put(entry, callback);
 	}
 
 	static class Triplet {
@@ -91,6 +97,13 @@ public class DeducePhase {
 	}
 
 	public void finish() {
+		for (Map.Entry<IdentTableEntry, OnType> entry : idte_type_callbacks.entrySet()) {
+			IdentTableEntry idte = entry.getKey();
+			if (idte.type.attached != null)
+				entry.getValue().typeDeduced(idte.type.attached);
+			else
+				entry.getValue().noTypeFound();
+		}
 		for (Map.Entry<GeneratedFunction, OS_Type> entry : typeDedcideds.entrySet()) {
 			for (Triplet triplet : forFunctions) {
 				if (triplet.gf.getGenerated() == entry.getKey()) {
