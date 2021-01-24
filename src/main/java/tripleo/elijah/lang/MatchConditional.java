@@ -59,19 +59,18 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 		this.parent = aParent;
 	}
 
-	/**
-	 * @category OS_Element
-	 * @return
-	 */
+	// region OS_Element
+
 	@Override
 	public Context getContext() {
-//		throw new NotImplementedException();
 		return __ctx;
 	}
 
 	public void setContext(final MatchContext ctx) {
 		__ctx = ctx;
 	}
+
+	// endregion
 
 	public void postConstruct() {
 	}
@@ -236,7 +235,8 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 	public class MatchArm_TypeMatch implements MC1 {
 
 //		private final List<FunctionItem> items = new ArrayList<FunctionItem>();
-		private final Context ___ctx = new MatchConditionalContext(MatchConditional.this.getContext(), this);
+		private final Context ___ctx = new MatchConditionalContext(//MatchConditional.this.getContext(), this);
+			getParent().getParent().getContext(), this);
 
 		TypeName tn /*= new RegularTypeName()*/;
 //		private List<Token> docstrings = new ArrayList<Token>();

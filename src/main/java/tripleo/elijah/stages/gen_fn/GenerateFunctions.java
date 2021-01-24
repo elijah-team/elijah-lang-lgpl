@@ -515,7 +515,7 @@ public class GenerateFunctions {
 
 	private void generate_match_conditional(@NotNull final MatchConditional mc, @NotNull final GeneratedFunction gf) {
 		final int y = 2;
-		final Context cctx = mc.getContext();
+		final Context cctx = mc.getParent().getContext(); // TODO MatchConditional.getContext returns NULL!!!
 		{
 			final IExpression expr = mc.getExpr();
 			final InstructionArgument i = simplify_expression(expr, gf, cctx);
