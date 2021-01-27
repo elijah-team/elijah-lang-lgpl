@@ -527,9 +527,10 @@ public class DeduceTypes2 {
 						final OS_Element best = lrl.chooseBest(null);
 						return new OS_Type((ClassStatement) best); // TODO might change to Type
 					}
+				default:
+					throw new IllegalStateException("531 Unexpected value: " + type.getBType());
 				}
 			}
-			break;
 		case USER:
 			{
 				final TypeName tn1 = type.getTypeName();
@@ -560,8 +561,10 @@ public class DeduceTypes2 {
 			return type;
 		case FUNCTION:
 			return type;
+		default:
+			throw new IllegalStateException("565 Unexpected value: " + type.getType());
 		}
-		throw new IllegalStateException("Cant be here.");
+//		throw new IllegalStateException("Cant be here.");
 	}
 
 	private void do_assign_constant(final GeneratedFunction generatedFunction, final Instruction instruction, final VariableTableEntry vte, final ConstTableIA i2) {
