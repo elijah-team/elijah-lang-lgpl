@@ -44,6 +44,7 @@ public class CompilerInstructions {
 	}
 
 	public void add(final LibraryStatementPart libraryStatementPart) {
+		libraryStatementPart.setInstructions(this);
 		lsps.add(libraryStatementPart);
 	}
 
