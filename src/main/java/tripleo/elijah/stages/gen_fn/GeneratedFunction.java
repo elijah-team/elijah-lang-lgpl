@@ -387,7 +387,8 @@ public class GeneratedFunction implements GeneratedNode {
 	 */
 	public IdentTableEntry getIdentTableEntryFor(IExpression expression) {
 		for (IdentTableEntry identTableEntry : idte_list) {
-			if (identTableEntry.getIdent().getText().equals(((IdentExpression) expression).getText())) {
+			// TODO make this work for Qualidents and DotExpressions
+			if (identTableEntry.getIdent().getText().equals(((IdentExpression) expression).getText()) && identTableEntry.backlink == null) {
 				return identTableEntry;
 			}
 		}
