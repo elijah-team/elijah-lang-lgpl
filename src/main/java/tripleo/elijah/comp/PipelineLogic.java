@@ -72,7 +72,7 @@ public class PipelineLogic {
 //			}
 //		}
 
-		List<GeneratedNode> resolved_nodes = new ArrayList<>();
+		List<GeneratedNode> resolved_nodes = new ArrayList<GeneratedNode>();
 
 		for (final GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedFunction) {
