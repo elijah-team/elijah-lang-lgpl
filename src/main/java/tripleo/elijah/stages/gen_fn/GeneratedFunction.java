@@ -165,7 +165,7 @@ public class GeneratedFunction implements GeneratedNode {
 
 	@Override
 	public String toString() {
-		return String.format("<GeneratedFunction %s>", name());
+		return String.format("<GeneratedFunction %s>", fd);
 	}
 
 	public String name() {
