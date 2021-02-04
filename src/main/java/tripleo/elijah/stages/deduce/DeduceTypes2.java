@@ -639,7 +639,7 @@ public class DeduceTypes2 {
 								final VariableStatement vs = (VariableStatement) best;
 								int y=2;
 								@Nullable InstructionArgument x = generatedFunction.vte_lookup(vs.getName());
-								VariableTableEntry xx = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(x));
+								VariableTableEntry xx = generatedFunction.getVarTableEntry(to_int(x));
 								vte.type = xx.type;
 								tte.attached = vte.type.attached;
 							} else {
@@ -754,7 +754,7 @@ public class DeduceTypes2 {
 				String s = vs.getName();
 				@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(s);
 				if (vte_ia != null) {
-					VariableTableEntry vte1 = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(vte_ia));
+					VariableTableEntry vte1 = generatedFunction.getVarTableEntry(to_int(vte_ia));
 					throw new NotImplementedException();
 				} else {
 					final IdentTableEntry idte = generatedFunction.getIdentTableEntryFor(vs.getNameToken());
@@ -1155,7 +1155,7 @@ public class DeduceTypes2 {
 		Context ectx = context;
 		for (final InstructionArgument ia : s) {
 			if (ia instanceof IntegerIA) {
-				VariableTableEntry vte = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(ia));
+				VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(ia));
 				final String text = vte.getName();
 				final LookupResultList lrl = ectx.lookup(text);
 				el = lrl.chooseBest(null);
@@ -1292,7 +1292,7 @@ public class DeduceTypes2 {
 					});
 				}
 			} else if (ia instanceof ProcIA) {
-				ProcTableEntry prte = generatedFunction.getProcTableEntry(DeduceTypes2.to_int(ia));
+				ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
 				int y=2;
 			} else
 				throw new IllegalStateException("Really cant be here");
@@ -1413,7 +1413,7 @@ public class DeduceTypes2 {
 						System.out.println("1006 Can't find type of " + text);
 				}
 			} else if (ia2 instanceof IdentIA) {
-				final IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(((IdentIA) ia2).getIndex());
+				final IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(ia2));
 				final String text = idte2.getIdent().getText();
 
 				final LookupResultList lrl = ectx.lookup(text);
