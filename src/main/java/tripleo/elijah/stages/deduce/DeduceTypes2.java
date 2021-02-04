@@ -399,7 +399,7 @@ public class DeduceTypes2 {
 			if (vte.type.attached == null) {
 				int potential_size = vte.potentialTypes().size();
 				if (potential_size == 1)
-					vte.type.attached = new ArrayList<TypeTableEntry>(vte.potentialTypes()).get(0).attached;
+					vte.type.attached = getPotentialTypesVte(vte).get(0).attached;
 				else if (potential_size > 1) {
 					// TODO Check type compatibility
 					System.err.println("703 "+vte.getName()+" "+vte.potentialTypes());
@@ -1173,7 +1173,7 @@ public class DeduceTypes2 {
 					//
 					// OTHERWISE TYPE INFORMATION MAY BE IN POTENTIAL_TYPES
 					//
-					@NotNull List<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
+					@NotNull List<TypeTableEntry> pot = getPotentialTypesVte(vte);
 					if (pot.size() == 1) {
 						OS_Type attached = pot.get(0).attached;
 						if (attached != null) {
@@ -1335,7 +1335,7 @@ public class DeduceTypes2 {
 				}
 */
 				{
-					List<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
+					List<TypeTableEntry> pot = getPotentialTypesVte(vte);
 					if (pot.size() == 1) {
 						final OS_Type attached = pot.get(0).attached;
 						if (attached == null) {
@@ -1407,7 +1407,7 @@ public class DeduceTypes2 {
 					}
 				} else {
 					if (vte.potentialTypes().size() == 1) {
-						final ArrayList<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(vte.potentialTypes());
+						final ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
 						vte.type.attached = pot.get(0).attached;
 					} else
 						System.out.println("1006 Can't find type of " + text);
@@ -1480,6 +1480,10 @@ public class DeduceTypes2 {
 				throw new NotImplementedException();
 		}
 		foundElement.doFoundElement(el);
+	}
+
+	@NotNull ArrayList<TypeTableEntry> getPotentialTypesVte(VariableTableEntry vte) {
+		return new ArrayList<TypeTableEntry>(vte.potentialTypes());
 	}
 
 	private OS_Element lookup(IExpression expression, Context ctx) {
