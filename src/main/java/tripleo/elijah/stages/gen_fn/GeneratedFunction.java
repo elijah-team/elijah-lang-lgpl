@@ -78,13 +78,6 @@ public class GeneratedFunction implements GeneratedNode {
 	// region Ident-IA
 	//
 
-	// TODO This should be removed by somebody
-	String getIdentIAPath(final IdentIA ia2) {
-		final CReference reference = new CReference();
-		reference.getIdentIAPath(ia2, this);
-		return reference.build();
-	}
-
 	public @NotNull List<InstructionArgument> _getIdentIAPathList(@NotNull InstructionArgument oo) {
 		List<InstructionArgument> s = new LinkedList<InstructionArgument>();
 		while (oo != null) {

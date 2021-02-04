@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.gen_c.CReference;
 import tripleo.elijah.stages.gen_c.Emit;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
@@ -48,7 +49,7 @@ public class GetIdentIAPathTest_ForC {
 		IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
 		ite.backlink = new IntegerIA(int_index);
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
-		String x = gf.getIdentIAPath(ident_ia);
+		String x = getIdentIAPath(ident_ia, gf);
 //		Assert.assertEquals("vvx->vmfoo", x);  // TODO real expectation
 		Assert.assertEquals("vvx->vmfoo", x);
 	}
@@ -74,7 +75,7 @@ public class GetIdentIAPathTest_ForC {
 */
 		//
 		IdentIA ident_ia = (IdentIA) xx;//new IdentIA(ite_index, gf);
-		String x = gf.getIdentIAPath(ident_ia);
+		String x = getIdentIAPath(ident_ia, gf);
 //		Assert.assertEquals("vvx->vmfoo", x);
 		// TODO actually compiler should comlain that it can't find x
 		Assert.assertEquals("->vmx->vmfoo", x);
@@ -101,7 +102,7 @@ public class GetIdentIAPathTest_ForC {
 		ite.backlink = new IntegerIA(int_index);
 */
 		IdentIA ident_ia = (IdentIA) xx;//new IdentIA(ite_index, gf);
-		String x = gf.getIdentIAPath(ident_ia);
+		String x = getIdentIAPath(ident_ia, gf);
 //		Assert.assertEquals("vvx->vmfoo", x); // TODO real expectation
 		Assert.assertEquals("vvx->vmfoo", x);
 	}
@@ -162,11 +163,17 @@ public class GetIdentIAPathTest_ForC {
 		IdentIA ident_ia = (IdentIA) xx;
 		IdentTableEntry ite = gf.getIdentTableEntry(ident_ia.getIndex());
 		ite.setResolvedElement(functionDef);
-		String x = gf.getIdentIAPath(ident_ia);
+		String x = getIdentIAPath(ident_ia, gf);
 		verify(mod);
 		verify(ctx);
 		verify(mockContext);
 		Assert.assertEquals("Z0foo(vvx)", x);
+	}
+
+	String getIdentIAPath(final IdentIA ia2, GeneratedFunction generatedFunction) {
+		final CReference reference = new CReference();
+		reference.getIdentIAPath(ia2, generatedFunction);
+		return reference.build();
 	}
 
 
