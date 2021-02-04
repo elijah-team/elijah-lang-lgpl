@@ -86,17 +86,17 @@ public class GeneratedFunction implements GeneratedNode {
 	//
 
 	public @NotNull List<InstructionArgument> _getIdentIAPathList(@NotNull InstructionArgument oo) {
-		List<InstructionArgument> s = new LinkedList<InstructionArgument>();
+		LinkedList<InstructionArgument> s = new LinkedList<InstructionArgument>();
 		while (oo != null) {
 			if (oo instanceof IntegerIA) {
-				s.add(0, oo);
+				s.addFirst(oo);
 				oo = null;
 			} else if (oo instanceof IdentIA) {
 				final IdentTableEntry ite1 = getIdentTableEntry(((IdentIA) oo).getIndex());
-				s.add(0, oo);
+				s.addFirst(oo);
 				oo = ite1.backlink;
 			} else if (oo instanceof ProcIA) {
-				s.add(0, oo);
+				s.addFirst(oo);
 				oo = null;
 			} else
 				throw new IllegalStateException("Invalid InstructionArgument");
