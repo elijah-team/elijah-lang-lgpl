@@ -41,12 +41,12 @@ public class GeneratedFunction implements GeneratedNode {
 	private int label_count = 0;
 	private int _nextTemp = 0;
 
-	public GeneratedFunction(final FunctionDef functionDef) {
+	public GeneratedFunction(final @Nullable FunctionDef functionDef) {
 		fd = functionDef;
 		dfd = null;
 	}
 
-	public GeneratedFunction(final DefFunctionDef dfd_) {
+	public GeneratedFunction(final @Nullable DefFunctionDef dfd_) {
 		dfd = dfd_;
 		fd = null;
 	}
