@@ -15,6 +15,7 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.lang2.SpecialVariables;
+import tripleo.elijah.stages.gen_fn.BaseTableEntry;
 import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
@@ -125,12 +126,13 @@ public class DeduceTypes2 {
 
 							@Override
 							void foundElement(OS_Element e) {
-								ite.setResolvedElement(e);
+								ite.setStatus(BaseTableEntry.Status.KNOWN, e);
 								found_element_for_ite(generatedFunction, ite, e, context);
 							}
 
 							@Override
 							void noFoundElement() {
+								ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 								errSink.reportError("1004 Can't find element for "+ x);
 							}
 						});
@@ -180,7 +182,7 @@ public class DeduceTypes2 {
 
 								@Override
 								void foundElement(OS_Element x) {
-									ite.setResolvedElement(x);
+									ite.setStatus(BaseTableEntry.Status.KNOWN, x);
 									if (ite.type != null && ite.type.attached != null) {
 										if (ite.type.attached.getType() == OS_Type.Type.USER) {
 											try {
@@ -198,7 +200,7 @@ public class DeduceTypes2 {
 											LookupResultList lrl = lookupExpression(ite.getIdent(), fd_ctx);
 											OS_Element best = lrl.chooseBest(null);
 											if (best != null) {
-												ite.setResolvedElement(x);
+												ite.setStatus(BaseTableEntry.Status.KNOWN, x);
 												if (ite.type != null && ite.type.attached != null) {
 													if (ite.type.attached.getType() == OS_Type.Type.USER) {
 														try {
@@ -220,6 +222,7 @@ public class DeduceTypes2 {
 
 								@Override
 								void noFoundElement() {
+									ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 									errSink.reportError("165 Can't resolve "+path);
 								}
 							});
@@ -294,9 +297,10 @@ public class DeduceTypes2 {
 							LookupResultList lrl1 = fd_ctx.lookup(idte2.getIdent().getText());
 							OS_Element best1 = lrl1.chooseBest(null);
 							if (best1 != null) {
-								idte2.setResolvedElement(best1);
+								idte2.setStatus(BaseTableEntry.Status.KNOWN, best1);
 								// TODO check for elements which may contain type information
 							} else {
+								idte2.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 								System.err.println("242 Bad lookup" + idte2.getIdent().getText());
 							}
 							idte.addPotentialType(instruction.getIndex(), idte2.type);
@@ -481,9 +485,10 @@ public class DeduceTypes2 {
 			System.err.println("396 AliasStatement");
 			OS_Element x = _resolveAlias((AliasStatement) y);
 			if (x == null) {
+				ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 				errSink.reportError("399 resolveAlias returned null");
 			} else {
-				ite.setResolvedElement(x);
+				ite.setStatus(BaseTableEntry.Status.KNOWN, x);
 				found_element_for_ite(generatedFunction, ite, x, ctx);
 			}
 		} else {
@@ -1262,7 +1267,7 @@ public class DeduceTypes2 {
 						el = idte.resolved_element;
 					}
 					if (el != null) {
-						idte.setResolvedElement(el);
+						idte.setStatus(BaseTableEntry.Status.KNOWN, el);
 						if (el.getContext() != null)
 							ectx = el.getContext();
 						else {
@@ -1271,6 +1276,7 @@ public class DeduceTypes2 {
 						}
 					} else {
 //						errSink.reportError("1179 Can't resolve " + text);
+						idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 						foundElement.doNoFoundElement();
 						return;
 					}
@@ -1281,13 +1287,14 @@ public class DeduceTypes2 {
 						@Override
 						void foundElement(OS_Element e) {
 							foundElement.doFoundElement(e);
-							idte.setResolvedElement(e);
+							idte.setStatus(BaseTableEntry.Status.KNOWN, e);
 						}
 
 						@Override
 						void noFoundElement() {
 							foundElement.noFoundElement();
 							System.out.println("2002 Cant resolve " + z);
+							idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 						}
 					});
 				}

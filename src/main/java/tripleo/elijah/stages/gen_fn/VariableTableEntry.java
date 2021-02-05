@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * Created 9/10/20 4:51 PM
  */
-public class VariableTableEntry {
+public class VariableTableEntry extends BaseTableEntry {
 	private final int index;
 	private final String name;
 	public TypeTableEntry type;
@@ -39,6 +39,7 @@ public class VariableTableEntry {
 		return "VariableTableEntry{" +
 				"index=" + index +
 				", name='" + name + '\'' +
+				", status=" + status +
 				", type=" + type.index +
 				", vtt=" + vtt +
 				", potentialTypes=" + potentialTypes +

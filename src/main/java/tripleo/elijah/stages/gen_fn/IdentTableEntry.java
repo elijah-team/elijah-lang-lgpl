@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Created 9/12/20 10:27 PM
  */
-public class IdentTableEntry {
+public class IdentTableEntry extends BaseTableEntry {
     private final int index;
     private final IdentExpression ident;
 	private final Context pc;
@@ -41,9 +41,17 @@ public class IdentTableEntry {
 	public OS_Element resolved_element;
 
 	public IdentTableEntry(final int index, final IdentExpression ident, Context pc) {
-        this.index = index;
-        this.ident = ident;
-        this.pc    = pc;
+        this.index  = index;
+        this.ident  = ident;
+        this.pc     = pc;
+        addStatusListener(new StatusListener() {
+			@Override
+			public void onChange(OS_Element el, Status newStatus) {
+				if (newStatus == Status.KNOWN) {
+					setResolvedElement(el);
+				}
+			}
+		});
     }
 
 	public void addPotentialType(final int instructionIndex, final TypeTableEntry tte) {
@@ -62,6 +70,7 @@ public class IdentTableEntry {
 				", ident=" + ident +
 				", backlink=" + backlink +
 				", potentialTypes=" + potentialTypes +
+				", status=" + status +
 				", type=" + type +
 				", resolved=" + resolved +
 				'}';
