@@ -23,6 +23,7 @@ import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -144,6 +145,7 @@ public class TestGenFunction {
 			new GenerateC(m).generateCode(lgf);
 		} else {
 			PipelineLogic pipelineLogic = new PipelineLogic();
+			ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 /*
 			pipelineLogic.addModule(m.prelude);
 			pipelineLogic.addModule(m);
@@ -151,8 +153,8 @@ public class TestGenFunction {
 			for (OS_Module module : c.modules) {
 				pipelineLogic.addModule(module);
 			}
-			pipelineLogic.everythingBeforeGenerate();
-			pipelineLogic.generate();
+			pipelineLogic.everythingBeforeGenerate(lgc);
+			pipelineLogic.generate(lgc);
 		}
 	}
 
