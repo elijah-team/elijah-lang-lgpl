@@ -270,7 +270,7 @@ public class GenerateC {
 		if (gf.fd.getParent() instanceof ClassStatement) {
 			ClassStatement st = (ClassStatement) gf.fd.getParent();
 			final String class_name = getTypeName(new OS_Type(st));
-			System.out.println("234 class_name >> " + class_name);
+//			System.out.println("234 class_name >> " + class_name);
 			final String if_args = args.length() == 0 ? "" : ", ";
 			tos.put_string_ln(String.format("%s %s%s(%s* vsc%s%s) {", returnType, class_name, name, class_name, if_args, args));
 		} else if (gf.fd.getParent() instanceof NamespaceStatement) {
