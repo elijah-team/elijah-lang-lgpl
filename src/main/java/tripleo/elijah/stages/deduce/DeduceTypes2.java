@@ -654,10 +654,10 @@ public class DeduceTypes2 {
 						}
 					} else {
 						int ia = generatedFunction.addIdentTableEntry((IdentExpression) e, ctx);
-						IdentIA ident_a = new IdentIA(ia, generatedFunction);
+//						IdentIA ident_a = new IdentIA(ia, generatedFunction);
 //						@Nullable OS_Element x = resolveIdentIA(ctx, ident_a, module, generatedFunction); // README generating 2 ite's for Value
 						IdentTableEntry idte = generatedFunction.getIdentTableEntry(ia);
-						@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, null, e);
+//						@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, null, e);
 						idte.type = tte;
 //						tte.attached = tte1.attached; // TODO is this right? please investigate
 						int y=2;
