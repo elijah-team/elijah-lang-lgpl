@@ -63,7 +63,7 @@ public class DeduceTypesTest {
 		System.out.println(this.x);
 	}
 	/** TODO This test fails beacause we are comparing a BUILT_IN vs a USER OS_Type.
-	 *  Eventually it should pass when we resolve the primitive types.
+	 *   It fails because Integer is an interface and not a BUILT_IN
 	 */
 //	@Test
 //	public void testDeduceIdentExpression1() {
@@ -95,8 +95,8 @@ public class DeduceTypesTest {
 		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
-//		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
-//		Assert.assertEquals(new OS_Type(tn), x);
+		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
+		Assert.assertEquals(new OS_Type(tn), x);
 		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());
 	}
 
