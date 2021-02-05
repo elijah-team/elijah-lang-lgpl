@@ -16,6 +16,7 @@ import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.IdentIA;
+import tripleo.util.buffer.Buffer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -129,9 +130,8 @@ public class PipelineLogic {
 			}
 		}
 
-		dp.deduceModule(mod, lgf);
-//		new DeduceTypes2(mod).deduceFunctions(lgf);
-//
+		dp.deduceModule(mod, lgc, true);
+
 //		for (final GeneratedNode gn : lgf) {
 //			if (gn instanceof GeneratedFunction) {
 //				GeneratedFunction gf = (GeneratedFunction) gn;

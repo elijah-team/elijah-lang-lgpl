@@ -80,6 +80,26 @@ public class DeducePhase {
 		return deduceModule(m, lgf);
 	}
 
+	/**
+	 * Use this when you have already called generateAllTopLevelClasses
+	 * @param m the module
+	 * @param lgc the result of generateAllTopLevelClasses
+	 * @param _unused is unused
+	 */
+	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgc, boolean _unused) {
+//		final GenerateFunctions gfm = new GenerateFunctions(m);
+//		List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+
+		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
+		for (GeneratedNode lgci : lgc) {
+			if (lgci instanceof GeneratedClass) {
+				lgf.addAll(((GeneratedClass) lgci).functionMap.values());
+			}
+		}
+
+		deduceModule(m, lgf);
+	}
+
 /*
 	public void forFunction(DeduceTypes2 deduceTypes2, GeneratedFunction gf, ForFunction forFunction) {
 		forFunctions.add(new Triplet(deduceTypes2, gf, forFunction));
