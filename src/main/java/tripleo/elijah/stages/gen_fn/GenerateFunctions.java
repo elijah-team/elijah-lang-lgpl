@@ -110,7 +110,7 @@ public class GenerateFunctions {
 	}
 
 	private @NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd, final OS_Element parent) {
-		System.err.println("601.1 fn "+fd.name() + " " + parent);
+//		System.err.println("601.1 fn "+fd.name() + " " + parent);
 		final GeneratedFunction gf = new GeneratedFunction(fd);
 		if (parent instanceof ClassStatement)
 			gf.addVariableTableEntry("self", VariableTableType.SELF, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent), IdentExpression.forString("self")));
@@ -284,7 +284,6 @@ public class GenerateFunctions {
 				@NotNull GeneratedFunction f = generateFunction((DefFunctionDef) item, klass);
 				gc.addFunction((DefFunctionDef) item, f);
 			} else if (item instanceof FunctionDef) {
-				//throw new NotImplementedException();
 				@NotNull GeneratedFunction f = generateFunction((FunctionDef) item, klass);
 				gc.addFunction((FunctionDef) item, f);
 			} else if (item instanceof NamespaceStatement) {
