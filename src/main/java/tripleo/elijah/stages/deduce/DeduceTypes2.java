@@ -262,7 +262,7 @@ public class DeduceTypes2 {
 						final VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
 						final InstructionArgument i2 = instruction.getArg(1);
 						if (i2 instanceof IntegerIA) {
-							final VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
+							final VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(i2));
 							vte.addPotentialType(instruction.getIndex(), vte2.type);
 						} else if (i2 instanceof FnCallArgs) {
 							final FnCallArgs fca = (FnCallArgs) i2;
@@ -270,8 +270,7 @@ public class DeduceTypes2 {
 						} else if (i2 instanceof ConstTableIA) {
 							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
 						} else if (i2 instanceof IdentIA) {
-//							throw new NotImplementedException();
-							IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) i2).getIndex());
+							IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(i2));
 							assert idte.type != null;
 							assert idte.resolved_element != null;
 							vte.addPotentialType(instruction.getIndex(), idte.type);
@@ -281,16 +280,16 @@ public class DeduceTypes2 {
 							throw new NotImplementedException();
 					} else if (agn_lhs instanceof IdentIA) {
 						final IdentIA arg = (IdentIA) agn_lhs;
-						final IdentTableEntry idte = generatedFunction.getIdentTableEntry(arg.getIndex());
+						final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(arg));
 						final InstructionArgument i2 = instruction.getArg(1);
 						if (i2 instanceof IntegerIA) {
-							final VariableTableEntry vte2 = generatedFunction.getVarTableEntry(((IntegerIA) i2).getIndex());
+							final VariableTableEntry vte2 = generatedFunction.getVarTableEntry((to_int(i2));
 							idte.addPotentialType(instruction.getIndex(), vte2.type);
 						} else if (i2 instanceof FnCallArgs) {
 							final FnCallArgs fca = (FnCallArgs) i2;
 							do_assign_call(generatedFunction, fd_ctx, idte, fca, instruction.getIndex());
 						} else if (i2 instanceof IdentIA) {
-							IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(((IdentIA) i2).getIndex());
+							IdentTableEntry idte2 = generatedFunction.getIdentTableEntry((to_int(i2));
 							if (idte2.type == null) {
 								idte2.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, idte2.getIdent());
 							}
