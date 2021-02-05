@@ -283,13 +283,13 @@ public class DeduceTypes2 {
 						final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(arg));
 						final InstructionArgument i2 = instruction.getArg(1);
 						if (i2 instanceof IntegerIA) {
-							final VariableTableEntry vte2 = generatedFunction.getVarTableEntry((to_int(i2));
+							final VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(i2));
 							idte.addPotentialType(instruction.getIndex(), vte2.type);
 						} else if (i2 instanceof FnCallArgs) {
 							final FnCallArgs fca = (FnCallArgs) i2;
 							do_assign_call(generatedFunction, fd_ctx, idte, fca, instruction.getIndex());
 						} else if (i2 instanceof IdentIA) {
-							IdentTableEntry idte2 = generatedFunction.getIdentTableEntry((to_int(i2));
+							IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(i2));
 							if (idte2.type == null) {
 								idte2.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, idte2.getIdent());
 							}
