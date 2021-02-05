@@ -23,6 +23,7 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
+import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
@@ -54,6 +55,7 @@ public class Compilation {
 	//
 	//
 	public List<GeneratedNode> __nodes = new ArrayList<GeneratedNode>();
+	public GenerateC.GenerateResult __nodes2;
 	//
 	//
 	//
@@ -139,6 +141,7 @@ public class Compilation {
 					// do nothing. job over
 				} else {
 					PipelineLogic pipeline = new PipelineLogic();
+					ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 					for (final OS_Module module : modules) {
 						if (false) {
 /*
@@ -157,10 +160,11 @@ public class Compilation {
 						} else {
 							pipeline.addModule(module);
 						}
-						pipeline.everythingBeforeGenerate();
-						__nodes.addAll(pipeline.__nodes());
 					}
-					pipeline.generate();
+					pipeline.everythingBeforeGenerate(lgc);
+					//__nodes.addAll(/*pipeline.__nodes()*/lgc);
+					pipeline.generate(lgc);
+					__nodes2 = pipeline.gr;
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");

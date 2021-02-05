@@ -45,12 +45,39 @@ import java.util.List;
 public class GenerateC {
 	private final OS_Module module;
 
+	public int bufferCounter = 0;
+
+	public static class AssociatedBuffer {
+		public final int counter;
+		public final Buffer buffer;
+		public final GeneratedNode node;
+		public String output;
+
+		public AssociatedBuffer(Buffer buffer, GeneratedNode node, int counter) {
+			this.buffer = buffer;
+			this.node = node;
+			this.counter = counter;
+		}
+	}
+
+	public static class GenerateResult {
+		List<AssociatedBuffer> res = new ArrayList<AssociatedBuffer>();
+
+		public void add(Buffer b, GeneratedNode n, int counter) {
+			res.add(new AssociatedBuffer(b, n, counter));
+		}
+
+		public List<AssociatedBuffer> results() {
+			return res;
+		}
+	}
+
 	public GenerateC(final OS_Module m) {
 		this.module = m;
 	}
 
-	public void generateCode2(Collection<GeneratedFunction> generatedFunctions) {
-		generateCode(Collections2.transform(generatedFunctions, new Function<GeneratedFunction, GeneratedNode>() {
+	public GenerateResult generateCode2(Collection<GeneratedFunction> generatedFunctions) {
+		return generateCode(Collections2.transform(generatedFunctions, new Function<GeneratedFunction, GeneratedNode>() {
 			@org.checkerframework.checker.nullness.qual.Nullable
 			@Override
 			public GeneratedNode apply(@org.checkerframework.checker.nullness.qual.Nullable GeneratedFunction input) {
@@ -59,18 +86,23 @@ public class GenerateC {
 		}));
 	}
 
-	public void generateCode(final Collection<GeneratedNode> lgf) {
+	public GenerateResult generateCode(final Collection<GeneratedNode> lgf) {
+		GenerateResult gr = new GenerateResult();
+		Buffer b;
+
 		for (final GeneratedNode generatedNode : lgf) {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				try {
-					generateCodeForMethod(generatedFunction);
+					b = generateCodeForMethod(generatedFunction);
+					gr.add(b, generatedFunction, ++bufferCounter);
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 						if (identTableEntry.isResolved()) {
 							GeneratedNode x = identTableEntry.resolved();
 
 							if (x instanceof GeneratedClass) {
-								generate_class((GeneratedClass) x);
+								b = generate_class((GeneratedClass) x);
+								gr.add(b, x, ++bufferCounter);
 							} else
 								throw new NotImplementedException();
 						}
@@ -81,19 +113,23 @@ public class GenerateC {
 			} else if (generatedNode instanceof GeneratedClass) {
 				try {
 					GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-					generate_class(generatedClass);
+					b = generate_class(generatedClass);
+					gr.add(b, generatedClass, ++bufferCounter);
 				} catch (final IOException e) {
 					module.parent.eee.exception(e);
 				}
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				try {
 					GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-					generate_namespace(generatedNamespace);
+					b = generate_namespace(generatedNamespace);
+					gr.add(b, generatedNamespace, ++bufferCounter);
 				} catch (final IOException e) {
 					module.parent.eee.exception(e);
 				}
 			}
 		}
+
+		return gr;
 	}
 
 	public Buffer generate_class(GeneratedClass x) throws IOException {
@@ -144,7 +180,7 @@ public class GenerateC {
 		} finally {
 			tos.close();
 			Buffer buf = new DefaultBuffer(stringWriter.toString());
-			System.out.println(buf.getText());
+//			System.out.println(buf.getText());
 			return buf;
 		}
 	}
@@ -182,7 +218,7 @@ public class GenerateC {
 		} finally {
 			tos.close();
 			Buffer buf = new DefaultBuffer(stringWriter.toString());
-			System.out.println(buf.getText());
+//			System.out.println(buf.getText());
 			return buf;
 		}
 	}
@@ -512,7 +548,7 @@ public class GenerateC {
 		tos.flush();
 		tos.close();
 		Buffer buf = new DefaultBuffer(stringWriter.toString());
-		System.out.println(buf.getText());
+//		System.out.println(buf.getText());
 		return buf;
 	}
 

@@ -383,6 +383,21 @@ public class GenerateFunctions {
 		return R;
 	}
 
+	public void generateAllTopLevelClasses(List<GeneratedNode> lgc) {
+		for (final ModuleItem item : module.getItems()) {
+			if (item instanceof NamespaceStatement) {
+				final NamespaceStatement namespaceStatement = (NamespaceStatement) item;
+				GeneratedNamespace ns = generateNamespace(namespaceStatement);
+				lgc.add(ns);
+			} else if (item instanceof ClassStatement) {
+				final ClassStatement classStatement = (ClassStatement) item;
+				@NotNull GeneratedClass kl = generateClass(classStatement);
+				lgc.add(kl);
+			}
+			// TODO enums, datatypes, (type)aliases
+		}
+	}
+
 	class Generate_item_assignment {
 
 		public void procedure_call(@NotNull GeneratedFunction gf, BasicBinaryExpression bbe, ProcedureCallExpression pce, Context cctx) {

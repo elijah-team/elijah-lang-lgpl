@@ -28,41 +28,30 @@ import java.util.List;
 public class PipelineLogic {
 	final DeducePhase dp = new DeducePhase();
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
+	GenerateC.GenerateResult gr;
 
-	List<GeneratedNode> lgc = null;
-
-	public List<GeneratedNode> __nodes() {
-		return lgc;
-	}
-
-	public void everythingBeforeGenerate() {
+	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
 		for (OS_Module mod : mods) {
-			run2(mod);
-			dp.finish();
+			run2(mod, lgc);
 		}
+		dp.finish();
 	}
 
-	public void generate() {
+	public void generate(List<GeneratedNode> lgc) {
 		for (OS_Module mod : mods) {
 			try {
-				run3(mod);
+				gr = run3(mod, lgc);
 			} catch (IOException e) {
 				mod.parent.eee.exception(e);
 			}
 		}
 	}
 
-	protected void run2(OS_Module mod) {
+	protected void run2(OS_Module mod, List<GeneratedNode> lgc) {
 		final GenerateFunctions gfm = new GenerateFunctions(mod);
 //		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
-		lgc = gfm.generateAllTopLevelClasses();
-
-		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
-		for (GeneratedNode lgci : lgc) {
-			if (lgci instanceof GeneratedClass) {
-				lgf.addAll(((GeneratedClass) lgci).functionMap.values());
-			}
-		}
+//		lgc = new ArrayList<GeneratedNode>();
+		gfm.generateAllTopLevelClasses(lgc);
 
 //		for (final GeneratedNode gn : lgc) {
 //			if (gn instanceof GeneratedFunction) {
@@ -145,23 +134,47 @@ public class PipelineLogic {
 
 	}
 
-	protected void run3(OS_Module mod) throws IOException {
+	protected GenerateC.GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc) throws IOException {
 		GenerateC ggc = new GenerateC(mod);
 //		ggc.generateCode(lgf);
 
+		GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
+
 		for (GeneratedNode generatedNode : lgc) {
+			Buffer b;
 			if (generatedNode instanceof GeneratedClass) {
 				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				ggc.generate_class(generatedClass);
-				ggc.generateCode2(generatedClass.functionMap.values());
+				b = ggc.generate_class(generatedClass);
+				gr.add(b, generatedClass, ggc.bufferCounter++);
+				GenerateC.GenerateResult gr2 = ggc.generateCode2(generatedClass.functionMap.values());
+				gr.results().addAll(gr2.results());
 			} else if (generatedNode instanceof GeneratedNamespace) {
-				GeneratedNamespace generatedClass = (GeneratedNamespace) generatedNode;
-				ggc.generate_namespace(generatedClass);
-				ggc.generateCode2(generatedClass.functionMap.values());
+				GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+				b = ggc.generate_namespace(generatedNamespace);
+				gr.add(b, generatedNamespace, ggc.bufferCounter++);
+				GenerateC.GenerateResult gr2 = ggc.generateCode2(generatedNamespace.functionMap.values());
+				gr.results().addAll(gr2.results());
 			} else {
 				System.out.println("2009 " + generatedNode.getClass().getName());
 			}
 		}
+
+//		System.out.println("167 "+gr);
+		for (GenerateC.AssociatedBuffer ab : gr.results()) {
+			System.out.println("---------------------------------------------------------------");
+			System.out.println(ab.counter);
+			if (ab.node instanceof GeneratedClass) {
+				System.out.println(((GeneratedClass)ab.node).getKlass());
+			} else if (ab.node instanceof GeneratedNamespace) {
+				System.out.println(((GeneratedNamespace)ab.node).getNamespaceStatement());
+			} else if (ab.node instanceof GeneratedFunction) {
+				System.out.println(((GeneratedFunction)ab.node).getFD());
+			}
+			System.out.println(ab.buffer.getText());
+			System.out.println("---------------------------------------------------------------");
+		}
+
+		return gr;
 	}
 
 	public void addModule(OS_Module m) {
