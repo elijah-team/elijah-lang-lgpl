@@ -602,7 +602,7 @@ public class GenerateC {
 			if (typeName instanceof NormalTypeName)
 				name = ((NormalTypeName) typeName).getName();
 			else
-				name = ((GenericTypeName) typeName).toString();
+				name = typeName.toString();
 			return String.format(Emit.emit("/*543*/")+"Z<%s>*", name);
 		} else
 			throw new NotImplementedException();
