@@ -162,7 +162,7 @@ public class GetIdentIAPathTest_ForC {
 		//
 		IdentIA ident_ia = (IdentIA) xx;
 		IdentTableEntry ite = gf.getIdentTableEntry(ident_ia.getIndex());
-		ite.setResolvedElement(functionDef);
+		ite.setStatus(BaseTableEntry.Status.KNOWN, functionDef);
 		String x = getIdentIAPath(ident_ia, gf);
 		verify(mod);
 		verify(ctx);
