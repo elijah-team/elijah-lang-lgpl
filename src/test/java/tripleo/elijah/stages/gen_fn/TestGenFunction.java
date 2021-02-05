@@ -234,12 +234,13 @@ public class TestGenFunction {
 		}
 
 		PipelineLogic pipelineLogic = new PipelineLogic();
+		ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 
 		pipelineLogic.addModule(m);
 		pipelineLogic.addModule(m.prelude);
 
-		pipelineLogic.everythingBeforeGenerate();
-		pipelineLogic.generate();
+		pipelineLogic.everythingBeforeGenerate(lgc);
+		pipelineLogic.generate(lgc);
 	}
 
 }
