@@ -136,96 +136,211 @@ public class GenerateFunctions {
 		return gf;
 	}
 
-	private void generate_item(final OS_Element item, @NotNull final GeneratedFunction gf, final Context cctx) {
-		if (item instanceof AliasStatement) {
+	class Generate_Item {
+		void generate_alias_statement(AliasStatement as) {
 			throw new NotImplementedException();
-		} else if (item instanceof CaseConditional) {
-			generate_case_conditional((CaseConditional) item);
-			return;
-		} else if (item instanceof ClassStatement) {
-			GeneratedClass gc = generateClass((ClassStatement) item);
-			int ite_index = gf.addIdentTableEntry(((ClassStatement) item).getNameNode(), cctx);
-			IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
-			ite.resolve(gc);
-		} else if (item instanceof StatementWrapper) {
-//				System.err.println("106");
-			final IExpression x = ((StatementWrapper) item).getExpr();
-			final ExpressionKind expressionKind = x.getKind();
-//			System.err.println("106-1 "+x.getKind()+" "+x);
-			if (x.is_simple()) {
-//				int i = addTempTableEntry(x.getType(), gf);
-				switch (expressionKind) {
-				case ASSIGNMENT:
-					System.err.println(String.format("703.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
-					generate_item_assignment(x, gf, cctx);
-					break;
-				case AUG_MULT:
-					{
-						System.out.println(String.format("801.1 %s %s %s", expressionKind, x.getLeft(), ((BasicBinaryExpression) x).getRight()));
-//						BasicBinaryExpression bbe = (BasicBinaryExpression) x;
-//						final IExpression right1 = bbe.getRight();
-						final InstructionArgument left = simplify_expression(x.getLeft(), gf, cctx);
-						final InstructionArgument right = simplify_expression(((BasicBinaryExpression) x).getRight(), gf, cctx);
-						final IdentExpression fn_aug_name = Helpers.string_to_ident(SpecialFunctions.of(expressionKind));
-						final List<TypeTableEntry> argument_types = List_of(gf.getVarTableEntry(to_int(left)).type, gf.getVarTableEntry(to_int(right)).type);
-//						System.out.println("801.2 "+argument_types);
-						final int fn_aug = addProcTableEntry(fn_aug_name, null, argument_types, gf);
-						final int i = add_i(gf, InstructionName.CALLS, List_of(new ProcIA(fn_aug, gf), left, right), cctx);
-						//
-						// SEE IF CALL SHOULD BE DEFERRED
-						//
-						for (final TypeTableEntry argument_type : argument_types) {
-							if (argument_type.attached == null) {
-								// still dont know the argument types at this point, which creates a problem
-								// for resolving functions, so wait until later when more information is available
-								if (!gf.deferred_calls.contains(i))
-									gf.deferred_calls.add(i);
-								break;
+		}
+
+		private void generate_case_conditional(CaseConditional cc) {
+			int y=2;
+			System.err.println("Skip CaseConditional for now");
+//			throw new NotImplementedException();
+		}
+
+		private void generate_match_conditional(@NotNull final MatchConditional mc, @NotNull final GeneratedFunction gf) {
+			final int y = 2;
+			final Context cctx = mc.getParent().getContext(); // TODO MatchConditional.getContext returns NULL!!!
+			{
+				final IExpression expr = mc.getExpr();
+				final InstructionArgument i = simplify_expression(expr, gf, cctx);
+//				System.out.println("710 " + i);
+
+				Label label_next = gf.addLabel();
+				final Label label_end  = gf.addLabel();
+
+				{
+					for (final MatchConditional.MC1 part : mc.getParts()) {
+						if (part instanceof MatchConditional.MatchArm_TypeMatch) {
+							final MatchConditional.MatchArm_TypeMatch mc1 = (MatchConditional.MatchArm_TypeMatch) part;
+							final TypeName tn = mc1.getTypeName();
+							final IdentExpression id = mc1.getIdent();
+
+							final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
+
+							final int tmp = addTempTableEntry(new OS_Type(tn), id, gf); // TODO no context!
+							VariableTableEntry vte_tmp = gf.getVarTableEntry(tmp);
+							final TypeTableEntry t = vte_tmp.type;
+							add_i(gf, InstructionName.IS_A, List_of(i, new IntegerIA(t.getIndex()), /*TODO not*/new LabelIA(label_next)), cctx);
+							final Context context = mc1.getContext();
+
+							add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), context);
+							final int cast_inst = add_i(gf, InstructionName.CAST_TO, List_of(new IntegerIA(tmp), new IntegerIA(t.getIndex()), (i)), context);
+							vte_tmp.addPotentialType(cast_inst, t); // TODO in the future instructionIndex may be unsigned
+
+							for (final FunctionItem item : mc1.getItems()) {
+								generate_item((OS_Element) item, gf, context);
 							}
+
+							add_i(gf, InstructionName.JMP, List_of(label_end), context);
+							add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
+							gf.place(label_next);
+							label_next = gf.addLabel();
+						} else if (part instanceof MatchConditional.MatchConditionalPart2) {
+							final MatchConditional.MatchConditionalPart2 mc2 = (MatchConditional.MatchConditionalPart2) part;
+							final IExpression id = mc2.getMatchingExpression();
+
+							final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
+
+							final InstructionArgument i2 = simplify_expression(id, gf, cctx);
+							add_i(gf, InstructionName.JNE, List_of(i, i2, label_next), cctx);
+							final Context context = mc2.getContext();
+
+							for (final FunctionItem item : mc2.getItems()) {
+								generate_item((OS_Element) item, gf, context);
+							}
+
+							add_i(gf, InstructionName.JMP, List_of(label_end), context);
+							add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
+							gf.place(label_next);
+//							label_next = gf.addLabel();
+						} else if (part instanceof MatchConditional.MatchConditionalPart3) {
+							System.err.println("Don't know what this is");
 						}
 					}
-					break;
-				default:
-					throw new NotImplementedException();
-				}
-			} else {
-				switch (expressionKind) {
-				case ASSIGNMENT:
-//					System.err.println(String.format("803.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
-					generate_item_assignment(x, gf, cctx);
-					break;
-//				case IS_A:
-//					break;
-				case PROCEDURE_CALL:
-					final ProcedureCallExpression pce = (ProcedureCallExpression) x;
-					simplify_procedure_call(pce, gf, cctx);
-					break;
-				case DOT_EXP:
-					{
-						final DotExpression de = (DotExpression) x;
-						generate_item_dot_expression(null, de.getLeft(), de.getRight(), gf, cctx);
-					}
-					break;
-				default:
-					break;
+					gf.place(label_next);
+					add_i(gf, InstructionName.NOP, List_of(), cctx);
+					gf.place(label_end);
 				}
 			}
-		} else if (item instanceof IfConditional) {
-			final IfConditional ifc = (IfConditional) item;
-			generate_if(ifc, gf);
-		} else if (item instanceof Loop) {
-			System.err.println("800 -- generateLoop");
-			final Loop loop = (Loop) item;
-			generate_loop(loop, gf);
-		} else if (item instanceof MatchConditional) {
-			final MatchConditional mc = (MatchConditional) item;
-			generate_match_conditional(mc, gf);
-		} else if (item instanceof NamespaceStatement) {
-//			System.out.println("Skip namespace for now "+((NamespaceStatement) item).name());
-			throw new NotImplementedException();
-		} else if (item instanceof VariableSequence) {
-			for (final VariableStatement vs : ((VariableSequence) item).items()) {
-//					System.out.println("8004 " + vs);
+		}
+
+		private void generate_if(@NotNull final IfConditional ifc, @NotNull final GeneratedFunction gf) {
+			final Context cctx = ifc.getContext();
+			final IdentExpression Boolean_true = Helpers.string_to_ident("true");
+			Label label_next = gf.addLabel();
+			final Label label_end  = gf.addLabel();
+			{
+				final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
+				final IExpression expr = ifc.getExpr();
+				final InstructionArgument i = simplify_expression(expr, gf, cctx);
+//				System.out.println("711 " + i);
+				final int const_true = addConstantTableEntry("true", Boolean_true, new OS_Type(BuiltInTypes.Boolean), gf);
+				add_i(gf, InstructionName.JNE, List_of(i, new ConstTableIA(const_true, gf), label_next), cctx);
+				final int begin_1st = add_i(gf, InstructionName.ES, null, cctx);
+				final int begin_2nd = add_i(gf, InstructionName.ES, null, cctx);
+				for (final OS_Element item : ifc.getItems()) {
+					generate_item(item, gf, cctx);
+				}
+				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_2nd)), cctx);
+				if (ifc.getParts().size() == 0) {
+					gf.place(label_next);
+					add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_1st)), cctx);
+//					gf.place(label_end);
+				} else {
+					add_i(gf, InstructionName.JMP, List_of(label_end), cctx);
+					final List<IfConditional> parts = ifc.getParts();
+					for (final IfConditional part : parts) {
+						gf.place(label_next);
+//						label_next = gf.addLabel();
+						if (part.getExpr() != null) {
+							final InstructionArgument ii = simplify_expression(part.getExpr(), gf, cctx);
+							System.out.println("712 " + ii);
+							add_i(gf, InstructionName.JNE, List_of(ii, new ConstTableIA(const_true, gf), label_next), cctx);
+						}
+						final int begin_next = add_i(gf, InstructionName.ES, null, cctx);
+						for (final OS_Element partItem : part.getItems()) {
+							System.out.println("709 " + part + " " + partItem);
+							generate_item(partItem, gf, cctx);
+						}
+						add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_next)), cctx);
+						gf.place(label_next);
+					}
+					gf.place(label_end);
+				}
+				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
+			}
+		}
+
+		private void generate_loop(@NotNull final Loop loop, @NotNull final GeneratedFunction gf) {
+			final Context cctx = loop.getContext();
+			final int e2 = add_i(gf, InstructionName.ES, null, cctx);
+//			System.out.println("702 "+loop.getType());
+			switch (loop.getType()) {
+			case FROM_TO_TYPE:
+				generate_loop_FROM_TO_TYPE(loop, gf, cctx);
+				break;
+			case TO_TYPE:
+				break;
+			case EXPR_TYPE:
+				generate_loop_EXPR_TYPE(loop, gf, cctx);
+				break;
+			case ITER_TYPE:
+				break;
+			case WHILE:
+				break;
+			case DO_WHILE:
+				break;
+			}
+			final int x2 = add_i(gf, InstructionName.XS, List_of(new IntegerIA(e2)), cctx);
+			final Range r = new Range(e2, x2);
+			gf.addContext(loop.getContext(), r);
+		}
+
+		private void generate_loop_FROM_TO_TYPE(@NotNull Loop loop, @NotNull GeneratedFunction gf, Context cctx) {
+			final IdentExpression iterNameToken = loop.getIterNameToken();
+			final String iterName = iterNameToken.getText();
+			final int iter_temp = addTempTableEntry(null, iterNameToken, gf); // TODO deduce later
+			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(iter_temp)), cctx);
+			final InstructionArgument ia1 = simplify_expression(loop.getFromPart(), gf, cctx);
+			if (ia1 instanceof ConstTableIA)
+				add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(iter_temp), ia1), cctx);
+			else
+				add_i(gf, InstructionName.AGN, List_of(new IntegerIA(iter_temp), ia1), cctx);
+			final Label label_top = gf.addLabel("top", true);
+			gf.place(label_top);
+			final Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
+			add_i(gf, InstructionName.JE, List_of(new IntegerIA(iter_temp), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
+			for (final StatementItem statementItem : loop.getItems()) {
+				System.out.println("705 "+statementItem);
+				generate_item((OS_Element)statementItem, gf, cctx);
+			}
+			final IdentExpression pre_inc_name = Helpers.string_to_ident("__preinc__");
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
+			final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
+			add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(iter_temp)), cctx);
+			add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
+			gf.place(label_bottom);
+		}
+
+		private void generate_loop_EXPR_TYPE(@NotNull Loop loop, @NotNull GeneratedFunction gf, Context cctx) {
+			final int loop_iterator = addTempTableEntry(null, gf); // TODO deduce later
+			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(loop_iterator)), cctx);
+			final int i2 = addConstantTableEntry("", new NumericExpression(0), new OS_Type(BuiltInTypes.SystemInteger), gf);
+			final InstructionArgument ia1 = new ConstTableIA(i2, gf);
+//			if (ia1 instanceof ConstTableIA)
+				add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(loop_iterator), ia1), cctx);
+//			else
+//				add_i(gf, InstructionName.AGN, List_of(new IntegerIA(loop_iterator), ia1), cctx);
+			final Label label_top = gf.addLabel("top", true);
+			gf.place(label_top);
+			final Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
+			add_i(gf, InstructionName.JE, List_of(new IntegerIA(loop_iterator), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
+			for (final StatementItem statementItem : loop.getItems()) {
+				System.out.println("707 "+statementItem);
+				generate_item((OS_Element)statementItem, gf, cctx);
+			}
+			final String txt = SpecialFunctions.of(ExpressionKind.INCREMENT);
+			final IdentExpression pre_inc_name = Helpers.string_to_ident(txt);
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
+			final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte), gf);
+			add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(loop_iterator)), cctx);
+			add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
+			gf.place(label_bottom);
+		}
+
+		private void generate_variable_sequence(VariableSequence item, @NotNull GeneratedFunction gf, Context cctx) {
+			for (final VariableStatement vs : item.items()) {
+//				System.out.println("8004 " + vs);
 				final String variable_name = vs.getName();
 				if (vs.getTypeModifiers() == TypeModifiers.CONST) {
 					if (vs.initialValue().is_simple()) {
@@ -257,6 +372,97 @@ public class GenerateFunctions {
 //				System.out.println("8004-1 " + type);
 //				System.out.println(String.format("8004-2 %s %s;", stype, vs.getName()));
 			}
+		}
+
+		private void generate_statement_wrapper(IExpression x, ExpressionKind expressionKind, @NotNull GeneratedFunction gf, Context cctx) {
+//			System.err.println("106-1 "+x.getKind()+" "+x);
+			if (x.is_simple()) {
+//				int i = addTempTableEntry(x.getType(), gf);
+				switch (expressionKind) {
+				case ASSIGNMENT:
+					System.err.println(String.format("703.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
+					generate_item_assignment(x, gf, cctx);
+					break;
+				case AUG_MULT:
+				{
+					System.out.println(String.format("801.1 %s %s %s", expressionKind, x.getLeft(), ((BasicBinaryExpression) x).getRight()));
+//						BasicBinaryExpression bbe = (BasicBinaryExpression) x;
+//						final IExpression right1 = bbe.getRight();
+					final InstructionArgument left = simplify_expression(x.getLeft(), gf, cctx);
+					final InstructionArgument right = simplify_expression(((BasicBinaryExpression) x).getRight(), gf, cctx);
+					final IdentExpression fn_aug_name = Helpers.string_to_ident(SpecialFunctions.of(expressionKind));
+					final List<TypeTableEntry> argument_types = List_of(gf.getVarTableEntry(to_int(left)).type, gf.getVarTableEntry(to_int(right)).type);
+//						System.out.println("801.2 "+argument_types);
+					final int fn_aug = addProcTableEntry(fn_aug_name, null, argument_types, gf);
+					final int i = add_i(gf, InstructionName.CALLS, List_of(new ProcIA(fn_aug, gf), left, right), cctx);
+					//
+					// SEE IF CALL SHOULD BE DEFERRED
+					//
+					for (final TypeTableEntry argument_type : argument_types) {
+						if (argument_type.attached == null) {
+							// still dont know the argument types at this point, which creates a problem
+							// for resolving functions, so wait until later when more information is available
+							if (!gf.deferred_calls.contains(i))
+								gf.deferred_calls.add(i);
+							break;
+						}
+					}
+				}
+				break;
+				default:
+					throw new NotImplementedException();
+				}
+			} else {
+				switch (expressionKind) {
+				case ASSIGNMENT:
+//					System.err.println(String.format("803.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
+					generate_item_assignment(x, gf, cctx);
+					break;
+//				case IS_A:
+//					break;
+				case PROCEDURE_CALL:
+					final ProcedureCallExpression pce = (ProcedureCallExpression) x;
+					simplify_procedure_call(pce, gf, cctx);
+					break;
+				case DOT_EXP:
+					final DotExpression de = (DotExpression) x;
+					generate_item_dot_expression(null, de.getLeft(), de.getRight(), gf, cctx);
+					break;
+				default:
+					throw new IllegalStateException("Unexpected value: " + expressionKind);
+				}
+			}
+		}
+
+	}
+
+	private void generate_item(final OS_Element item, @NotNull final GeneratedFunction gf, final Context cctx) {
+		Generate_Item gi = new Generate_Item();
+		if (item instanceof AliasStatement) {
+			gi.generate_alias_statement((AliasStatement) item);
+		} else if (item instanceof CaseConditional) {
+			gi.generate_case_conditional((CaseConditional) item);
+		} else if (item instanceof ClassStatement) {
+			GeneratedClass gc = generateClass((ClassStatement) item);
+			int ite_index = gf.addIdentTableEntry(((ClassStatement) item).getNameNode(), cctx);
+			IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
+			ite.resolve(gc);
+		} else if (item instanceof StatementWrapper) {
+			final IExpression x = ((StatementWrapper) item).getExpr();
+			final ExpressionKind expressionKind = x.getKind();
+			gi.generate_statement_wrapper(x, expressionKind, gf, cctx);
+		} else if (item instanceof IfConditional) {
+			gi.generate_if((IfConditional)item, gf);
+		} else if (item instanceof Loop) {
+			System.err.println("800 -- generateLoop");
+			gi.generate_loop((Loop) item, gf);
+		} else if (item instanceof MatchConditional) {
+			gi.generate_match_conditional((MatchConditional) item, gf);
+		} else if (item instanceof NamespaceStatement) {
+//			System.out.println("Skip namespace for now "+((NamespaceStatement) item).name());
+			throw new NotImplementedException();
+		} else if (item instanceof VariableSequence) {
+			gi.generate_variable_sequence((VariableSequence) item, gf, cctx);
 		} else if (item instanceof WithStatement) {
 			throw new NotImplementedException();
 		} else if (item instanceof SyntacticBlock) {
@@ -519,199 +725,6 @@ public class GenerateFunctions {
 			generate_item_dot_expression(new IdentIA(x, gf), right.getLeft(), ((IdentExpression)right), gf, cctx);
 		else
 			generate_item_dot_expression(new IdentIA(x, gf), right.getLeft(), ((BasicBinaryExpression)right).getRight(), gf, cctx);
-	}
-
-	private void generate_case_conditional(CaseConditional cc) {
-		int y=2;
-		System.err.println("Skip CaseConditional for now");
-//		throw new NotImplementedException();
-	}
-
-	private void generate_match_conditional(@NotNull final MatchConditional mc, @NotNull final GeneratedFunction gf) {
-		final int y = 2;
-		final Context cctx = mc.getParent().getContext(); // TODO MatchConditional.getContext returns NULL!!!
-		{
-			final IExpression expr = mc.getExpr();
-			final InstructionArgument i = simplify_expression(expr, gf, cctx);
-//			System.out.println("710 " + i);
-
-			Label label_next = gf.addLabel();
-			final Label label_end  = gf.addLabel();
-
-			{
-				for (final MatchConditional.MC1 part : mc.getParts()) {
-					if (part instanceof MatchConditional.MatchArm_TypeMatch) {
-						final MatchConditional.MatchArm_TypeMatch mc1 = (MatchConditional.MatchArm_TypeMatch) part;
-						final TypeName tn = mc1.getTypeName();
-						final IdentExpression id = mc1.getIdent();
-
-						final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
-
-						final int tmp = addTempTableEntry(new OS_Type(tn), id, gf); // TODO no context!
-						VariableTableEntry vte_tmp = gf.getVarTableEntry(tmp);
-						final TypeTableEntry t = vte_tmp.type;
-						add_i(gf, InstructionName.IS_A, List_of(i, new IntegerIA(t.getIndex()), /*TODO not*/new LabelIA(label_next)), cctx);
-						final Context context = mc1.getContext();
-
-						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), context);
-						final int cast_inst = add_i(gf, InstructionName.CAST_TO, List_of(new IntegerIA(tmp), new IntegerIA(t.getIndex()), (i)), context);
-						vte_tmp.addPotentialType(cast_inst, t); // TODO in the future instructionIndex may be unsigned
-
-						for (final FunctionItem item : mc1.getItems()) {
-							generate_item((OS_Element) item, gf, context);
-						}
-
-						add_i(gf, InstructionName.JMP, List_of(label_end), context);
-						add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
-						gf.place(label_next);
-						label_next = gf.addLabel();
-					} else if (part instanceof MatchConditional.MatchConditionalPart2) {
-						final MatchConditional.MatchConditionalPart2 mc2 = (MatchConditional.MatchConditionalPart2) part;
-						final IExpression id = mc2.getMatchingExpression();
-
-						final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
-
-						final InstructionArgument i2 = simplify_expression(id, gf, cctx);
-						add_i(gf, InstructionName.JNE, List_of(i, i2, label_next), cctx);
-						final Context context = mc2.getContext();
-
-						for (final FunctionItem item : mc2.getItems()) {
-							generate_item((OS_Element) item, gf, context);
-						}
-
-						add_i(gf, InstructionName.JMP, List_of(label_end), context);
-						add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
-						gf.place(label_next);
-//						label_next = gf.addLabel();
-					} else if (part instanceof MatchConditional.MatchConditionalPart3) {
-						System.err.println("Don't know what this is");
-					}
-				}
-				gf.place(label_next);
-				add_i(gf, InstructionName.NOP, List_of(), cctx);
-				gf.place(label_end);
-			}
-		}
-	}
-
-	private void generate_if(@NotNull final IfConditional ifc, @NotNull final GeneratedFunction gf) {
-		final Context cctx = ifc.getContext();
-		final IdentExpression Boolean_true = Helpers.string_to_ident("true");
-		Label label_next = gf.addLabel();
-		final Label label_end  = gf.addLabel();
-		{
-			final int begin0 = add_i(gf, InstructionName.ES, null, cctx);
-			final IExpression expr = ifc.getExpr();
-			final InstructionArgument i = simplify_expression(expr, gf, cctx);
-//			System.out.println("711 " + i);
-			final int const_true = addConstantTableEntry("true", Boolean_true, new OS_Type(BuiltInTypes.Boolean), gf);
-			add_i(gf, InstructionName.JNE, List_of(i, new ConstTableIA(const_true, gf), label_next), cctx);
-			final int begin_1st = add_i(gf, InstructionName.ES, null, cctx);
-			final int begin_2nd = add_i(gf, InstructionName.ES, null, cctx);
-			for (final OS_Element item : ifc.getItems()) {
-				generate_item(item, gf, cctx);
-			}
-			add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_2nd)), cctx);
-			if (ifc.getParts().size() == 0) {
-				gf.place(label_next);
-				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_1st)), cctx);
-//				gf.place(label_end);
-			} else {
-				add_i(gf, InstructionName.JMP, List_of(label_end), cctx);
-				final List<IfConditional> parts = ifc.getParts();
-				for (final IfConditional part : parts) {
-					gf.place(label_next);
-//					label_next = gf.addLabel();
-					if (part.getExpr() != null) {
-						final InstructionArgument ii = simplify_expression(part.getExpr(), gf, cctx);
-						System.out.println("712 " + ii);
-						add_i(gf, InstructionName.JNE, List_of(ii, new ConstTableIA(const_true, gf), label_next), cctx);
-					}
-					final int begin_next = add_i(gf, InstructionName.ES, null, cctx);
-					for (final OS_Element partItem : part.getItems()) {
-						System.out.println("709 " + part + " " + partItem);
-						generate_item(partItem, gf, cctx);
-					}
-					add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_next)), cctx);
-					gf.place(label_next);
-				}
-				gf.place(label_end);
-			}
-			add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
-		}
-	}
-
-	private void generate_loop(@NotNull final Loop loop, @NotNull final GeneratedFunction gf) {
-		final Context cctx = loop.getContext();
-		final int e2 = add_i(gf, InstructionName.ES, null, cctx);
-//		System.out.println("702 "+loop.getType());
-		switch (loop.getType()) {
-		case FROM_TO_TYPE:
-			{
-				final IdentExpression iterNameToken = loop.getIterNameToken();
-				final String iterName = iterNameToken.getText();
-				final int iter_temp = addTempTableEntry(null, iterNameToken, gf); // TODO deduce later
-				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(iter_temp)), cctx);
-				final InstructionArgument ia1 = simplify_expression(loop.getFromPart(), gf, cctx);
-				if (ia1 instanceof ConstTableIA)
-					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(iter_temp), ia1), cctx);
-				else
-					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(iter_temp), ia1), cctx);
-				final Label label_top = gf.addLabel("top", true);
-				gf.place(label_top);
-				final Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
-				add_i(gf, InstructionName.JE, List_of(new IntegerIA(iter_temp), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
-				for (final StatementItem statementItem : loop.getItems()) {
-					System.out.println("705 "+statementItem);
-					generate_item((OS_Element)statementItem, gf, cctx);
-				}
-				final IdentExpression pre_inc_name = Helpers.string_to_ident("__preinc__");
-				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
-				final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
-				add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(iter_temp)), cctx);
-				add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
-				gf.place(label_bottom);
-			}
-			break;
-		case TO_TYPE:
-			break;
-		case EXPR_TYPE:
-			{
-				final int loop_iterator = addTempTableEntry(null, gf); // TODO deduce later
-				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(loop_iterator)), cctx);
-				final int i2 = addConstantTableEntry("", new NumericExpression(0), new OS_Type(BuiltInTypes.SystemInteger), gf);
-				final InstructionArgument ia1 = new ConstTableIA(i2, gf);
-//				if (ia1 instanceof ConstTableIA)
-					add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(loop_iterator), ia1), cctx);
-//				else
-//					add_i(gf, InstructionName.AGN, List_of(new IntegerIA(loop_iterator), ia1), cctx);
-				final Label label_top = gf.addLabel("top", true);
-				gf.place(label_top);
-				final Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
-				add_i(gf, InstructionName.JE, List_of(new IntegerIA(loop_iterator), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
-				for (final StatementItem statementItem : loop.getItems()) {
-					System.out.println("707 "+statementItem);
-					generate_item((OS_Element)statementItem, gf, cctx);
-				}
-				final String txt = SpecialFunctions.of(ExpressionKind.INCREMENT);
-				final IdentExpression pre_inc_name = Helpers.string_to_ident(txt);
-				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
-				final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte), gf);
-				add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(loop_iterator)), cctx);
-				add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
-				gf.place(label_bottom);
-			}
-			break;
-		case ITER_TYPE:
-			break;
-		case WHILE:
-			break;
-		case DO_WHILE:
-			break;
-		}
-		final int x2 = add_i(gf, InstructionName.XS, List_of(new IntegerIA(e2)), cctx);
-		final Range r = new Range(e2, x2);
-		gf.addContext(loop.getContext(), r);
 	}
 
 	private void assign_variable(@NotNull final GeneratedFunction gf, final int vte, @NotNull final IExpression value, final Context cctx) {
@@ -1258,9 +1271,6 @@ public class GenerateFunctions {
 		}
 //		return type.toString();
 	}
-
-//	private int nextClassCode() { return module.parent.nextClassCode(); }
-//	private int nextFunctionCode() { return module.parent.nextFunctionCode(); }
 
 }
 
