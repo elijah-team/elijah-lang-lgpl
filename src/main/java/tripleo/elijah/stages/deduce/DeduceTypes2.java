@@ -1304,6 +1304,7 @@ public class DeduceTypes2 {
 				}
 				LookupResultList lrl = lookupExpression(exp, ectx);
 				el = lrl.chooseBest(null);
+				prte.resolved_element = el;
 			} else
 				throw new IllegalStateException("Really cant be here");
 		}
