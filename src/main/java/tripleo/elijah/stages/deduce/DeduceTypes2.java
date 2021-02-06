@@ -1295,10 +1295,18 @@ public class DeduceTypes2 {
 			} else if (ia instanceof ProcIA) {
 				ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
 				int y=2;
+				IExpression exp = prte.expression;
+				if (exp instanceof ProcedureCallExpression) {
+					final ProcedureCallExpression pce = (ProcedureCallExpression) exp;
+					exp = pce.getLeft(); // TODO might be another pce??!!
+					if (exp instanceof ProcedureCallExpression)
+						throw new IllegalArgumentException("double pce!");
+				}
+				LookupResultList lrl = lookupExpression(exp, ectx);
+				el = lrl.chooseBest(null);
 			} else
 				throw new IllegalStateException("Really cant be here");
 		}
-		//return el;
 		foundElement.doFoundElement(el);
 	}
 
