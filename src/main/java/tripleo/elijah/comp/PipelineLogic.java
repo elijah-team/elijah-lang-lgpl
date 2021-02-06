@@ -82,6 +82,8 @@ public class PipelineLogic {
 						} else {
 							final IdentIA ia2 = new IdentIA(identTableEntry.getIndex(), generatedFunction);
 							final String s = generatedFunction.getIdentIAPathNormal(ia2);
+//							assert identTableEntry.getStatus() == BaseTableEntry.Status.UNKNOWN;
+							identTableEntry.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 							System.out.println("92 Unresolved IDENT "+ s);
 						}
 					}
