@@ -1123,18 +1123,22 @@ public class GenerateFunctions {
 		return R;
 	}
 
-	private @NotNull Instruction expression_to_call(@NotNull final ProcedureCallExpression pce, @NotNull final GeneratedFunction gf, final Context cctx) {
-		switch (pce.getLeft().getKind()) {
+	private @NotNull Instruction expression_to_call(@NotNull final ProcedureCallExpression pce,
+													@NotNull final GeneratedFunction gf,
+													@NotNull final Context cctx) {
+		final IExpression left = pce.getLeft();
+		switch (left.getKind()) {
 		case IDENT: {
-			return expression_to_call_add_entry(gf, pce, pce.getLeft(), cctx);
+			return expression_to_call_add_entry(gf, pce, left, cctx);
 		}
 		case QIDENT: {
-			simplify_qident((Qualident) pce.getLeft(), gf); // TODO ??
-			return expression_to_call_add_entry(gf, pce, pce.getLeft(), cctx);
+			IExpression xx = Helpers.qualidentToDotExpression2((Qualident) left);
+//			simplify_qident((Qualident) pce.getLeft(), gf); // TODO ??
+			return expression_to_call_add_entry(gf, pce, xx/*pce.getLeft()*/, cctx);
 		}
 		case DOT_EXP: {
-			@NotNull InstructionArgument x = simplify_dot_expression((DotExpression) pce.getLeft(), gf, cctx); // TODO ??
-			return expression_to_call_add_entry(gf, pce, pce.getLeft(), x, cctx);
+			@NotNull InstructionArgument x = simplify_dot_expression((DotExpression) left, gf, cctx); // TODO ??
+			return expression_to_call_add_entry(gf, pce, left, x, cctx);
 		}
 		default:
 			throw new NotImplementedException();
