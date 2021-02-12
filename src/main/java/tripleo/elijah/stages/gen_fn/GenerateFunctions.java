@@ -1023,7 +1023,6 @@ public class GenerateFunctions {
 			}
 		} else {
 			final InstructionArgument x = simplify_expression(left, gf, cctx);
-			final int y=2;
 			left_ia = x;
 		}
 		final List<TypeTableEntry> args1 = new ArrayList<TypeTableEntry>();
@@ -1040,9 +1039,7 @@ public class GenerateFunctions {
 						iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
 					} else if (arg instanceof SubExpression) {
 						final SubExpression se = (SubExpression) arg;
-						final InstructionArgument ia2 = simplify_expression(se.getExpression(), gf, cctx);
-						//return ia;  // TODO is this correct?
-						ia = ia2;
+						ia = simplify_expression(se.getExpression(), gf, cctx);
 						iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, arg);
 					} else {
 						assert IExpression.isConstant(arg);
@@ -1051,9 +1048,7 @@ public class GenerateFunctions {
 						iat = gf.getConstTableEntry(x).type;
 					}
 				} else {
-					final InstructionArgument x = simplify_expression(left, gf, cctx);
-					final int y=2;
-					ia = x;
+					ia = simplify_expression(left, gf, cctx);
 					iat = null;
 				}
 				right_ia.add(ia);
@@ -1096,7 +1091,6 @@ public class GenerateFunctions {
 					//
 					// WHEN VTE_LOOKUP FAILS, IE WHEN A MEMBER VARIABLE
 					//
-					int y=2;
 					int idte_index = gf.addIdentTableEntry((IdentExpression) arg, instructionIndex);
 					tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, arg);
 					gf.getIdentTableEntry(idte_index).type = tte;
