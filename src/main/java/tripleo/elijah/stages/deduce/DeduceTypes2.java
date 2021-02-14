@@ -1480,17 +1480,23 @@ public class DeduceTypes2 {
 								TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 								idte2.type = tte;
 							}
+						} else if (el instanceof FunctionDef) {
+							OS_Type attached = new OS_UnknownType(el);
+							TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+							idte2.type = tte;
 						}
 					}
 					if (idte2.type != null) {
 						assert idte2.type.attached != null;
 						try {
-							OS_Type rtype = resolve_type(idte2.type.attached, ectx);
-							if (rtype.getType() == OS_Type.Type.USER_CLASS)
-								ectx = rtype.getClassOf().getContext();
-							else if (rtype.getType() == OS_Type.Type.FUNCTION)
-								ectx = ((OS_FuncType) rtype).getElement().getContext();
-							idte2.type.attached = rtype; // TODO may be losing alias information here
+							if (!(idte2.type.attached instanceof OS_UnknownType)) { // TODO
+								OS_Type rtype = resolve_type(idte2.type.attached, ectx);
+								if (rtype.getType() == OS_Type.Type.USER_CLASS)
+									ectx = rtype.getClassOf().getContext();
+								else if (rtype.getType() == OS_Type.Type.FUNCTION)
+									ectx = ((OS_FuncType) rtype).getElement().getContext();
+								idte2.type.attached = rtype; // TODO may be losing alias information here
+							}
 						} catch (ResolveError resolveError) {
 							if (resolveError.resultsList().size() > 1)
 								errSink.reportDignostic(resolveError);
