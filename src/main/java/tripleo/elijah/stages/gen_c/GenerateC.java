@@ -824,7 +824,7 @@ public class GenerateC {
 					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
 					reference.args(sll);
 					String path = reference.build();
-					sb.append(path);
+					sb.append(Emit.emit("/*827*/")+path);
 				}
 				return sb.toString();
 			}
