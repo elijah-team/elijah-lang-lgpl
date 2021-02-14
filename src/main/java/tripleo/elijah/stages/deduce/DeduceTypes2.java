@@ -1432,7 +1432,16 @@ public class DeduceTypes2 {
 				} else {
 					if (vte.potentialTypes().size() == 1) {
 						final ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
-						vte.type.attached = pot.get(0).attached;
+						final OS_Type attached1 = pot.get(0).attached;
+						vte.type.attached = attached1;
+						// TODO this will break
+						final TypeName attached1TypeName = attached1.getTypeName();
+						if (attached1TypeName instanceof RegularTypeName)
+							ectx = lookupExpression(((RegularTypeName) attached1TypeName).getRealName(), ectx).results().get(0).getElement().getContext();
+						else {
+							System.out.println("1442 Don't know");
+							throw new NotImplementedException();
+						}
 					} else
 						System.out.println("1006 Can't find type of " + text);
 				}
