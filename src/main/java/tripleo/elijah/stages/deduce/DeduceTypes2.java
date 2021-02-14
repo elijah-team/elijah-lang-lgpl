@@ -628,8 +628,7 @@ public class DeduceTypes2 {
 					final InstructionArgument vte_index = generatedFunction.vte_lookup(((IdentExpression) e).getText());
 //					System.out.println("10000 "+vte_index);
 					if (vte_index != null) {
-						final Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(vte_index)).potentialTypes();
-						final List<TypeTableEntry> ll = new ArrayList<TypeTableEntry>(c);
+						final List<TypeTableEntry> ll = getPotentialTypesVte(generatedFunction, vte_index);
 						if (ll.size() == 1) {
 							tte.attached = ll.get(0).attached;
 							vte.addPotentialType(instructionIndex, ll.get(0));
