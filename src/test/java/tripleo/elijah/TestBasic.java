@@ -55,7 +55,7 @@ public class TestBasic {
 		c.feedCmdLine(args);
 
 		System.err.println("Error count should be 0");
-		Assert.assertEquals(37, c.errorCount()); // TODO Error count obviously should be 0
+		Assert.assertEquals(25, c.errorCount()); // TODO Error count obviously should be 0
 	}
 
 }
