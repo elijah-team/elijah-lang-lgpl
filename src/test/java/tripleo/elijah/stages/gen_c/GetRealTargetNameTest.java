@@ -18,7 +18,6 @@ import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.TypeTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.IntegerIA;
@@ -53,9 +52,8 @@ public class GetRealTargetNameTest {
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
 		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte);
 		int ite_index = gf.addIdentTableEntry(foo_ident, null);
-		IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
-		ite.backlink = new IntegerIA(int_index);
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
+		ident_ia.setPrev(new IntegerIA(int_index));
 		//
 		GenerateC c = new GenerateC(mod);
 		//
