@@ -1031,7 +1031,7 @@ public class GenerateC {
 
 	String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
-		List<String> ls = new LinkedList<String>();
+		LinkedList<String> ls = new LinkedList<String>();
 		// TODO in Deduce set property lookupType to denote what type of lookup it is: MEMBER, LOCAL, or CLOSURE
 		InstructionArgument backlink = identTableEntry.backlink;
 		if (backlink == null)
@@ -1042,14 +1042,14 @@ public class GenerateC {
 			if (backlink instanceof IntegerIA) {
 				IntegerIA integerIA = (IntegerIA) backlink;
 				String realTargetName = getRealTargetName(gf, integerIA);
-				ls.add(0, Emit.emit("/*892*/")+realTargetName);
+				ls.addFirst(Emit.emit("/*892*/")+realTargetName);
 				backlink = null;
 			} else if (backlink instanceof IdentIA) {
 				IdentIA identIA = (IdentIA) backlink;
 				int identIAIndex = identIA.getIndex();
 				IdentTableEntry identTableEntry1 = gf.getIdentTableEntry(identIAIndex);
 				String identTableEntryName = identTableEntry1.getIdent().getText();
-				ls.add(0, Emit.emit("/*885*/")+"vm"+identTableEntryName); // TODO blindly adding "vm" might not always be right
+				ls.addFirst(Emit.emit("/*885*/")+"vm"+identTableEntryName); // TODO blindly adding "vm" might not always be right
 				backlink = identTableEntry1.backlink;
 			} else
 				throw new IllegalStateException("Invalid InstructionArgument for backlink");
