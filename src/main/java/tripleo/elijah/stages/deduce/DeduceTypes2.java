@@ -1251,48 +1251,59 @@ public class DeduceTypes2 {
 					return;
 				}
 			} else if (ia instanceof IdentIA) {
-				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) ia).getIndex());
+				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(ia));
+				if (idte.getStatus() == BaseTableEntry.Status.UNKNOWN) {
+					System.out.println("1257 Not found for "+generatedFunction.getIdentIAPathNormal((IdentIA) ia));
+					// No need checking more than once
+					foundElement.doNoFoundElement();
+					return;
+				}
 				//assert idte.backlink == null;
 
-				if (idte.backlink == null) {
-					final String text = idte.getIdent().getText();
-					if (idte.resolved_element == null) {
-						final LookupResultList lrl = ectx.lookup(text);
-						el = lrl.chooseBest(null);
-					} else {
-						el = idte.resolved_element;
-					}
-					if (el != null) {
-						idte.setStatus(BaseTableEntry.Status.KNOWN, el);
-						if (el.getContext() != null)
-							ectx = el.getContext();
-						else {
-							final int yy = 2;
-							throw new NotImplementedException();
+				if (idte.getStatus() == BaseTableEntry.Status.UNCHECKED) {
+					if (idte.backlink == null) {
+						final String text = idte.getIdent().getText();
+						if (idte.resolved_element == null) {
+							final LookupResultList lrl = ectx.lookup(text);
+							el = lrl.chooseBest(null);
+						} else {
+							el = idte.resolved_element;
 						}
-					} else {
-//						errSink.reportError("1179 Can't resolve " + text);
-						idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-						foundElement.doNoFoundElement();
-						return;
-					}
-				} else {
-//					@NotNull List<InstructionArgument> z = _getIdentIAPathList(ia);
-					String z = generatedFunction.getIdentIAPathNormal((IdentIA) ia);
-					resolveIdentIA2_(ectx/*context*/, s, generatedFunction, new FoundElement(phase) {
-						@Override
-						void foundElement(OS_Element e) {
-							foundElement.doFoundElement(e);
-							idte.setStatus(BaseTableEntry.Status.KNOWN, e);
-						}
-
-						@Override
-						void noFoundElement() {
-							foundElement.noFoundElement();
-							System.out.println("2002 Cant resolve " + z);
+						if (el != null) {
+							idte.setStatus(BaseTableEntry.Status.KNOWN, el);
+							if (el.getContext() != null)
+								ectx = el.getContext();
+							else {
+								final int yy = 2;
+								throw new NotImplementedException();
+							}
+						} else {
+//							errSink.reportError("1179 Can't resolve " + text);
 							idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+							foundElement.doNoFoundElement();
+							return;
 						}
-					});
+					} else {
+						resolveIdentIA2_(ectx/*context*/, s, generatedFunction, new FoundElement(phase) {
+							final String z = generatedFunction.getIdentIAPathNormal((IdentIA) ia);
+
+							@Override
+							void foundElement(OS_Element e) {
+								foundElement.doFoundElement(e);
+								idte.setStatus(BaseTableEntry.Status.KNOWN, e);
+							}
+
+							@Override
+							void noFoundElement() {
+								foundElement.noFoundElement();
+								System.out.println("2002 Cant resolve " + z);
+								idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+							}
+						});
+					}
+				} else if (idte.getStatus() == BaseTableEntry.Status.KNOWN) {
+					el = idte.resolved_element;
+					ectx = el.getContext();
 				}
 			} else if (ia instanceof ProcIA) {
 				ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
