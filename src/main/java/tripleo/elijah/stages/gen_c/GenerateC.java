@@ -459,8 +459,8 @@ public class GenerateC {
 							String text = ptex.getText();
 							@org.jetbrains.annotations.Nullable InstructionArgument xx = gf.vte_lookup(text);
 							assert xx != null;
-							String xxx = getRealTargetName(gf, (IntegerIA) xx);
-							sb.append(Emit.emit("/*424*/")+xxx);
+							String realTargetName = getRealTargetName(gf, (IntegerIA) xx);
+							sb.append(Emit.emit("/*424*/")+realTargetName);
 							sb.append('(');
 							final List<String> sl3 = getArgumentStrings(gf, instruction);
 							sb.append(Helpers.String_join(", ", sl3));
