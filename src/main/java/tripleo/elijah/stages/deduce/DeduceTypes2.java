@@ -1525,6 +1525,11 @@ public class DeduceTypes2 {
 		return new ArrayList<TypeTableEntry>(vte.potentialTypes());
 	}
 
+	@NotNull
+	private ArrayList<TypeTableEntry> getPotentialTypesVte(GeneratedFunction generatedFunction, InstructionArgument vte_index) {
+		return getPotentialTypesVte(generatedFunction.getVarTableEntry(to_int(vte_index)));
+	}
+
 	private OS_Element lookup(IExpression expression, Context ctx) {
 		switch (expression.getKind()) {
 		case IDENT:
