@@ -1438,8 +1438,10 @@ public class DeduceTypes2 {
 						final TypeName attached1TypeName = attached1.getTypeName();
 						if (attached1TypeName instanceof RegularTypeName)
 							ectx = lookupExpression(((RegularTypeName) attached1TypeName).getRealName(), ectx).results().get(0).getElement().getContext();
-						else {
-							System.out.println("1442 Don't know");
+						else if (attached1.getType() == OS_Type.Type.USER_CLASS) {
+							ectx = attached1.getClassOf().getContext();
+						} else {
+							System.out.println("1442 Don't know "+attached1TypeName.getClass().getName());
 							throw new NotImplementedException();
 						}
 					} else
