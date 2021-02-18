@@ -43,13 +43,20 @@ public class GenerateFunctions {
 
 		for (final ModuleItem item : module.getItems()) {
 			if (item instanceof NamespaceStatement) {
-				final List<GeneratedNode> r;
-				r = generateAllNamespaceFunctions(((NamespaceStatement) item));
+				final List<GeneratedNode> r = new ArrayList<GeneratedNode>();
+
+				NamespaceStatement namespaceStatement = (NamespaceStatement) item;
+				for (final ClassItem item2 : namespaceStatement.getItems()) {
+					generate_all_function_internal(namespaceStatement, R, item2);
+				}
+
 				R.addAll(r);
 			} else if (item instanceof ClassStatement) {
-				final List<GeneratedNode> r;
-				final ClassStatement classStatement = (ClassStatement) item;
-				r = generateAllClassFunctions(classStatement);
+				final List<GeneratedNode> r = new ArrayList<GeneratedNode>();
+				ClassStatement classStatement = (ClassStatement) item;
+				for (final ClassItem item2 : classStatement.getItems()) {
+					generate_all_function_internal(classStatement, R, item2);
+				}
 				R.addAll(r);
 			}
 		}
@@ -57,56 +64,13 @@ public class GenerateFunctions {
 		return R;
 	}
 
-	private List<GeneratedNode> generateAllClassFunctions(@NotNull final ClassStatement classStatement) {
-		final List<GeneratedNode> R = new ArrayList<GeneratedNode>();
-
-		for (final ClassItem item : classStatement.getItems()) {
-			if (item instanceof FunctionDef) {
-				final FunctionDef function_def = (FunctionDef) item;
-				GeneratedFunction generatedFunction = generateFunction(function_def, classStatement);
-//				function_def._a.setCode(nextFunctionCode());
-				R.add(generatedFunction);
-			} else if (item instanceof DefFunctionDef) {
-				final DefFunctionDef defFunctionDef = (DefFunctionDef) item;
-				R.add(generateDefFunction(defFunctionDef, classStatement));
-//				defFunctionDef._a.setCode(nextFunctionCode());
-			}
+	private void generate_all_function_internal(@NotNull OS_Element classStatement, List<GeneratedNode> R, ClassItem item) {
+		if (item instanceof FunctionDef) {
+			final FunctionDef function_def = (FunctionDef) item;
+			@NotNull GeneratedFunction gf = generateFunction(function_def, classStatement);
+//			function_def._a.setCode(nextFunctionCode());
+			R.add(gf);
 		}
-
-		return R;
-	}
-
-	private List<GeneratedNode> generateAllNamespaceFunctions(@NotNull final NamespaceStatement namespaceStatement) {
-		final List<GeneratedNode> R = new ArrayList<GeneratedNode>();
-
-		for (final ClassItem item : namespaceStatement.getItems()) {
-			if (item instanceof DefFunctionDef) {
-				final DefFunctionDef defFunctionDef = (DefFunctionDef) item;
-				generateFunction/*generateDefFunction*/(defFunctionDef, namespaceStatement);
-//				defFunctionDef._a.setCode(nextFunctionCode());
-			} else if (item instanceof FunctionDef) {
-				final FunctionDef function_def = (FunctionDef) item;
-				generateFunction(function_def, namespaceStatement);
-//				function_def._a.setCode(nextFunctionCode());
-			}
-		}
-
-		return R;
-	}
-
-	private @NotNull GeneratedFunction generateDefFunction(@NotNull final DefFunctionDef fd, final OS_Element parent) {
-		System.err.println("601 fn "+fd.name());
-		final GeneratedFunction gf = new GeneratedFunction(fd);
-		final Context cctx = fd.getContext();
-		final int e1 = add_i(gf, InstructionName.E, null, cctx);
-		add_i(gf, InstructionName.X, List_of(new IntegerIA(e1)), cctx);
-		System.out.println(String.format("602 %s %s", fd.name(), gf.instructionsList));
-		System.out.println(gf.vte_list);
-		System.out.println(gf.cte_list);
-		System.out.println(gf.prte_list);
-		System.out.println(gf.tte_list);
-//		System.out.println(gf.idte_list);
-		return gf;
 	}
 
 	private @NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd, final OS_Element parent) {
