@@ -231,23 +231,7 @@ public class DeduceTypes2 {
 					//
 					// RESOLVE FUNCTION RETURN TYPES
 					//
-					final InstructionArgument vte_index = generatedFunction.vte_lookup("Result");
-					final VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(vte_index));
-					if (vte.type.attached != null) {
-						phase.typeDecided(generatedFunction, vte.type.attached);
-					} else {
-						@NotNull Collection<TypeTableEntry> pot1 = vte.potentialTypes();
-						ArrayList<TypeTableEntry> pot = new ArrayList<>(pot1);
-						if (pot.size() == 1) {
-							phase.typeDecided(generatedFunction, pot.get(0).attached);
-						} else if (pot.size() == 0) {
-							phase.typeDecided(generatedFunction, new OS_Type(BuiltInTypes.Unit));
-						} else {
-							// TODO report some kind of error/diagnostic and/or let ForFunction know...
-						}
-
-					}
-					int y=2;
+					resolve_function_return_type(generatedFunction);
 				}
 				break;
 			case ES:
@@ -424,6 +408,32 @@ public class DeduceTypes2 {
 					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
 				}
 			}
+		}
+	}
+
+	void resolve_function_return_type(GeneratedFunction generatedFunction) {
+		@Nullable final InstructionArgument vte_index = generatedFunction.vte_lookup("Result");
+		if (vte_index != null) {
+			final VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(vte_index));
+
+			if (vte.type.attached != null) {
+				phase.typeDecided(generatedFunction, vte.type.attached);
+			} else {
+				@NotNull Collection<TypeTableEntry> pot1 = vte.potentialTypes();
+				ArrayList<TypeTableEntry> pot = new ArrayList<>(pot1);
+				if (pot.size() == 1) {
+					phase.typeDecided(generatedFunction, pot.get(0).attached);
+				} else if (pot.size() == 0) {
+					phase.typeDecided(generatedFunction, new OS_Type(BuiltInTypes.Unit));
+				} else {
+					// TODO report some kind of error/diagnostic and/or let ForFunction know...
+				}
+			}
+		} else {
+			// if Result is not present, then make function return Unit
+			// TODO May not be correct in all cases, such as when Value is present
+			// but works for current code structure, where Result is a always present
+			phase.typeDecided(generatedFunction, new OS_Type(BuiltInTypes.Unit));
 		}
 	}
 
