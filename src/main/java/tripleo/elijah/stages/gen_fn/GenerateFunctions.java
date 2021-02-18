@@ -41,36 +41,30 @@ public class GenerateFunctions {
 	public List<GeneratedNode> generateAllTopLevelFunctions() {
 		final List<GeneratedNode> R = new ArrayList<GeneratedNode>();
 
-		for (final ModuleItem item : module.getItems()) {
-			if (item instanceof NamespaceStatement) {
+		for (final ModuleItem parent : module.getItems()) {
+			List<ClassItem> items = null;
+			if (parent instanceof NamespaceStatement) {
+				NamespaceStatement namespaceStatement = (NamespaceStatement) parent;
+				items = namespaceStatement.getItems();
+			} else if (parent instanceof ClassStatement) {
 				final List<GeneratedNode> r = new ArrayList<GeneratedNode>();
+				ClassStatement classStatement = (ClassStatement) parent;
+				items = classStatement.getItems();
+			}
 
-				NamespaceStatement namespaceStatement = (NamespaceStatement) item;
-				for (final ClassItem item2 : namespaceStatement.getItems()) {
-					generate_all_function_internal(namespaceStatement, R, item2);
+			if (items != null) {
+				for (ClassItem item : items) {
+					if (item instanceof FunctionDef) {
+						final FunctionDef function_def = (FunctionDef) item;
+						@NotNull GeneratedFunction gf = generateFunction(function_def, parent);
+//						function_def._a.setCode(nextFunctionCode());
+						R.add(gf);
+					}
 				}
-
-				R.addAll(r);
-			} else if (item instanceof ClassStatement) {
-				final List<GeneratedNode> r = new ArrayList<GeneratedNode>();
-				ClassStatement classStatement = (ClassStatement) item;
-				for (final ClassItem item2 : classStatement.getItems()) {
-					generate_all_function_internal(classStatement, R, item2);
-				}
-				R.addAll(r);
 			}
 		}
 
 		return R;
-	}
-
-	private void generate_all_function_internal(@NotNull OS_Element classStatement, List<GeneratedNode> R, ClassItem item) {
-		if (item instanceof FunctionDef) {
-			final FunctionDef function_def = (FunctionDef) item;
-			@NotNull GeneratedFunction gf = generateFunction(function_def, classStatement);
-//			function_def._a.setCode(nextFunctionCode());
-			R.add(gf);
-		}
 	}
 
 	private @NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd, final OS_Element parent) {
