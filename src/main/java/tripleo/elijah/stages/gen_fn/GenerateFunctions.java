@@ -34,8 +34,8 @@ import static tripleo.elijah.util.Helpers.List_of;
 public class GenerateFunctions {
 	private final OS_Module module;
 
-	public GenerateFunctions(final OS_Module module_) {
-		module = module_;
+	public GenerateFunctions(final OS_Module aModule) {
+		module = aModule;
 	}
 
 	public List<GeneratedNode> generateAllTopLevelFunctions() {
