@@ -527,7 +527,7 @@ functionDef2[FunctionDefBuilder fb]
     | "immutable"               {fb.set(FunctionModifiers.IMMUTABLE);})?
     fal=opfal					{fb.fal(fal);}
     (TOK_ARROW tn=typeName2 	{fb.setReturnType(tn);})?
-    functionScope2[fb.scope()]
+    functionScope2[fb.scope()]	{fb.setSpecies(FunctionDef.Species.DEF_FUN);} // TODO might not always be DEF_FUN?
     ;
 functionDef2_interface[FunctionDefBuilder fb]
     	{AnnotationClause a=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}
