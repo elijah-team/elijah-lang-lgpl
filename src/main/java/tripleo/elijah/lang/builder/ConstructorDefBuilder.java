@@ -15,7 +15,6 @@ import tripleo.elijah.lang.*;
  */
 public class ConstructorDefBuilder extends BaseFunctionDefBuilder {
 	private ConstructorDefScope _scope = new ConstructorDefScope();
-//	private ClassStatement _parent;
 	private Context _context;
 
 	public ConstructorDefScope scope() {
@@ -32,11 +31,15 @@ public class ConstructorDefBuilder extends BaseFunctionDefBuilder {
 		for (AnnotationClause a : annotations) {
 			cd.addAnnotation(a);
 		}
+		Scope3 scope3 = new Scope3(cd);
+		cd.scope(scope3);
 		for (ElBuilder item : _scope.items()) {
 			item.setParent(cd);
 			item.setContext(_context);
 			cd.add(item.build());
 		}
+//		assert _species == FunctionDef.Species.CTOR;
+		cd.setType(FunctionDef.Species.CTOR);
 		cd.postConstruct();
 		return cd;
 	}

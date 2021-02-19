@@ -13,21 +13,25 @@ import tripleo.elijah.lang.*;
 /**
  * Created 12/23/20 12:13 AM
  */
-public class DestructorDefBuilder extends ElBuilder {
+public class DestructorDefBuilder extends BaseFunctionDefBuilder {
 	private Context _context;
-	private ClassStatement _parent;
-	private FormalArgList _fal;
 	private DestructorDefScope _scope = new DestructorDefScope();
 
 	@Override
 	protected DestructorDef build() {
-		DestructorDef destructorDef = new DestructorDef(_parent, _context);
-		destructorDef.setFal(_fal);
+		assert _parent instanceof ClassStatement;
+
+		DestructorDef destructorDef = new DestructorDef((ClassStatement) _parent, _context);
+		destructorDef.setFal(mFal);
+		Scope3 scope3 = new Scope3(destructorDef);
+		destructorDef.scope(scope3);
 		for (ElBuilder item : _scope.items()) {
 			item.setParent(destructorDef);
 			item.setContext(_context);
 			destructorDef.add(item.build());
 		}
+//		assert _species == FunctionDef.Species.DTOR;
+		destructorDef.setType(FunctionDef.Species.DTOR);
 		destructorDef.postConstruct();
 		return destructorDef;
 	}
@@ -35,10 +39,6 @@ public class DestructorDefBuilder extends ElBuilder {
 	@Override
 	protected void setContext(Context context) {
 		_context = context;
-	}
-
-	public void fal(FormalArgList fal) {
-		_fal = fal;
 	}
 
 	public DestructorDefScope scope() {
