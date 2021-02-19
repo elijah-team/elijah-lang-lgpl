@@ -18,7 +18,7 @@ public class DestructorDefBuilder extends BaseFunctionDefBuilder {
 	private DestructorDefScope _scope = new DestructorDefScope();
 
 	@Override
-	protected DestructorDef build() {
+	public DestructorDef build() {
 		assert _parent instanceof ClassStatement;
 
 		DestructorDef destructorDef = new DestructorDef((ClassStatement) _parent, _context);
