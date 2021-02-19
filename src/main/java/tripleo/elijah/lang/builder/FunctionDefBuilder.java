@@ -22,7 +22,6 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 	private List<FunctionModifiers> _mods = new ArrayList<FunctionModifiers>();
 	private TypeName _returnType;
 	private Context _context;
-	private FunctionDef.Species _species = null;
 
 	public FunctionDefScope scope() {
 		return _scope;
@@ -34,10 +33,6 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 
 	public void setReturnType(TypeName tn) {
 		_returnType = tn;
-	}
-
-	public void setSpecies(FunctionDef.Species aSpecies) {
-		_species = aSpecies;
 	}
 
 	@Override
