@@ -513,11 +513,11 @@ functionDef[FunctionDef fd]
     i1=ident                    {fd.setName(i1);}
     ( "const"                   {fd.set(FunctionModifiers.CONST);}
     | "immutable"               {fd.set(FunctionModifiers.IMMUTABLE);})?
-    fal=opfal {fd.setFal(fal);}
-    (TOK_ARROW tn=typeName2 {fd.setReturnType(tn);})?
-                                {assert fd.getContext()!=null;ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;}
-    sco=functionScope[fd] {fd.scope(sco);}
-    {fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();}
+    fal=opfal 					{fd.setFal(fal);}
+    (TOK_ARROW tn=typeName2 	{fd.setReturnType(tn);})?
+                                {ctx=fd.getContext();cur=ctx;}
+    sco=functionScope[fd] 		{fd.scope(sco);}
+    							{fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();}
     ;
 functionDef2[FunctionDefBuilder fb]
     	{AnnotationClause a=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}
