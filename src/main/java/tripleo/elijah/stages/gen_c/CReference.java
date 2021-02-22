@@ -9,8 +9,13 @@
 package tripleo.elijah.stages.gen_c;
 
 import org.jetbrains.annotations.NotNull;
-import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.deduce.DeduceTypes2;
+import tripleo.elijah.lang.AliasStatement;
+import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.NamespaceStatement;
+import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.lang.PropertyStatement;
+import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
@@ -25,6 +30,8 @@ import tripleo.elijah.util.NotImplementedException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 
 /**
  * Created 1/9/21 7:12 AM
@@ -63,12 +70,14 @@ public class CReference {
 		List<String> sl = new ArrayList<String>();
 		for (int i = 0, sSize = s.size(); i < sSize; i++) {
 			InstructionArgument ia = s.get(i);
-			if (ia instanceof IntegerIA) { // should only be the first element if at all
-				final VariableTableEntry vte = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(ia));
+			if (ia instanceof IntegerIA) {
+				// should only be the first element if at all
+				assert i == 0;
+				final VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(ia));
 				text = "vv" + vte.getName();
 				addRef(vte.getName(), Ref.LOCAL);
 			} else if (ia instanceof IdentIA) {
-				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(((IdentIA) ia).getIndex());
+				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(ia));
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
 					if (i + 1 >= sSize)
@@ -89,7 +98,7 @@ public class CReference {
 					addRef(text2, Ref.MEMBER);
 				}
 			} else if (ia instanceof ProcIA) {
-				final ProcTableEntry prte = generatedFunction.getProcTableEntry(DeduceTypes2.to_int(ia));
+				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
 				text = (prte.expression.getLeft()).toString();
 //				assert i == sSize-1;
 				addRef(text, Ref.FUNCTION); // TODO needs to use name of resolved function
@@ -221,7 +230,7 @@ public class CReference {
 				s.add(0, oo);
 				oo = ite1.backlink;
 			} else if (oo instanceof ProcIA) {
-				final ProcTableEntry prte = generatedFunction.getProcTableEntry(DeduceTypes2.to_int(oo));
+				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(oo));
 				s.add(0, oo);
 				oo = null;
 			} else
