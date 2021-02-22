@@ -44,7 +44,7 @@ public class GetIdentIAPathTest_ForC {
 		//
 		OS_Type type = null;
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
-		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte);
+		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte, mock(VariableStatement.class));
 		int ite_index = gf.addIdentTableEntry(foo_ident, null);
 		IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
 		ite.backlink = new IntegerIA(int_index);
@@ -91,7 +91,7 @@ public class GetIdentIAPathTest_ForC {
 		//
 		OS_Type type = null;
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
-		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte);
+		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte, mock(VariableStatement.class));
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
 		InstructionArgument xx = gen.simplify_expression(expr, gf, ctx);
@@ -155,7 +155,7 @@ public class GetIdentIAPathTest_ForC {
 		//
 		OS_Type type = null;
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(classStatement), x_ident);
-		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte);
+		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte, mock(VariableStatement.class));
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
 		InstructionArgument xx = gen.simplify_expression(expr, gf, ctx);

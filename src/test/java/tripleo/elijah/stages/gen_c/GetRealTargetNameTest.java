@@ -50,7 +50,7 @@ public class GetRealTargetNameTest {
 		//
 		OS_Type type = null;
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
-		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte);
+		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte, mock(VariableStatement.class));
 		int ite_index = gf.addIdentTableEntry(foo_ident, null);
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		ident_ia.setPrev(new IntegerIA(int_index));

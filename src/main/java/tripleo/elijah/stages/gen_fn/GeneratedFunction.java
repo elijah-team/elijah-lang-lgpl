@@ -410,8 +410,8 @@ public class GeneratedFunction implements GeneratedNode {
 		return idte.getIndex();
 	}
 
-	public int addVariableTableEntry(final String name, final VariableTableType vtt, final TypeTableEntry type) {
-		final VariableTableEntry vte = new VariableTableEntry(vte_list.size(), vtt, name, type);
+	public int addVariableTableEntry(final String name, final VariableTableType vtt, final TypeTableEntry type, OS_Element el) {
+		final VariableTableEntry vte = new VariableTableEntry(vte_list.size(), vtt, name, type, el);
 		vte_list.add(vte);
 		return vte.getIndex();
 	}
