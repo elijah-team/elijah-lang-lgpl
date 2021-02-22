@@ -140,23 +140,25 @@ public class DeduceTypes2 {
 						}
 						if (ite.resolved_element != null)
 							continue;
-						final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
-						resolveIdentIA_(ite.getPC(), identIA, generatedFunction, new FoundElement(phase) {
+						if (ite.backlink == null) {
+							final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
+							resolveIdentIA_(ite.getPC(), identIA, generatedFunction, new FoundElement(phase) {
 
-							final String x = generatedFunction.getIdentIAPathNormal(identIA);
+								final String x = generatedFunction.getIdentIAPathNormal(identIA);
 
-							@Override
-							void foundElement(OS_Element e) {
-								ite.setStatus(BaseTableEntry.Status.KNOWN, e);
-								found_element_for_ite(generatedFunction, ite, e, context);
-							}
+								@Override
+								void foundElement(OS_Element e) {
+									ite.setStatus(BaseTableEntry.Status.KNOWN, e);
+									found_element_for_ite(generatedFunction, ite, e, context);
+								}
 
-							@Override
-							void noFoundElement() {
-								ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-								errSink.reportError("1004 Can't find element for "+ x);
-							}
-						});
+								@Override
+								void noFoundElement() {
+									ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+									errSink.reportError("1004 Can't find element for "+ x);
+								}
+							});
+						}
 					}
 				}
 				break;
@@ -1318,7 +1320,7 @@ public class DeduceTypes2 {
 							foundElement.doNoFoundElement();
 							return;
 						}
-					} else {
+					} else if (false) {
 						resolveIdentIA2_(ectx/*context*/, s, generatedFunction, new FoundElement(phase) {
 							final String z = generatedFunction.getIdentIAPathNormal((IdentIA) ia);
 
@@ -1336,6 +1338,7 @@ public class DeduceTypes2 {
 							}
 						});
 					}
+//					assert idte.getStatus() != BaseTableEntry.Status.UNCHECKED;
 				} else if (idte.getStatus() == BaseTableEntry.Status.KNOWN) {
 					el = idte.resolved_element;
 					ectx = el.getContext();
