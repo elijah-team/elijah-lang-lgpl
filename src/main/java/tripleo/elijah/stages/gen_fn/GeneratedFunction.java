@@ -10,15 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.DefFunctionDef;
-import tripleo.elijah.lang.DotExpression;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.lang.IdentExpression;
-import tripleo.elijah.lang.OS_Type;
-import tripleo.elijah.lang.ProcedureCallExpression;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
@@ -28,6 +20,8 @@ import tripleo.util.range.Range;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 
 /**
  * Created 9/10/20 2:57 PM
@@ -124,13 +118,13 @@ public class GeneratedFunction implements GeneratedNode {
 		for (final InstructionArgument ia : s) {
 			final String text;
 			if (ia instanceof IntegerIA) {
-				final VariableTableEntry vte = getVarTableEntry(DeduceTypes2.to_int(ia));
+				final VariableTableEntry vte = getVarTableEntry(to_int(ia));
 				text = vte.getName();
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = getIdentTableEntry(((IdentIA) ia).getIndex());
 				text = idte.getIdent().getText();
 			} else if (ia instanceof ProcIA) {
-				final ProcTableEntry prte = getProcTableEntry(DeduceTypes2.to_int(ia));
+				final ProcTableEntry prte = getProcTableEntry(to_int(ia));
 				text = prte.expression.toString(); // TODO this is wrong but I don't see any other way without adding new fields
 			} else
 				throw new NotImplementedException();
