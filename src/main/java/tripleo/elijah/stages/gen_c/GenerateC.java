@@ -233,11 +233,16 @@ public class GenerateC {
 		// FIND RETURN TYPE
 		//
 		final OS_Type tte = gf.getTypeTableEntry(1).attached;
-		if (tte != null) {
+		System.out.println("228 "+tte);
+		if (tte != null && tte.getType() == OS_Type.Type.BUILT_IN && tte.getBType() == BuiltInTypes.Unit) {
+			returnType = "void";
+		} else if (tte != null) {
 			returnType = String.format("%s*", getTypeName(tte));
 		} else {
-			returnType = "void";
+//			throw new IllegalStateException();
+			returnType = "void/*2*/";
 		}
+
 		//
 		name = gf.fd.name();
 		final String args;
