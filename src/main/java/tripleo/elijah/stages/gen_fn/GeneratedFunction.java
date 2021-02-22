@@ -345,6 +345,7 @@ public class GeneratedFunction implements GeneratedNode {
 			final InstructionArgument left_part = get_assignment_path(de.getLeft(), generateFunctions, context);
 			if (left_part instanceof IdentIA) {
 				((IdentIA)left_part).setPrev(prev);
+//				getIdentTableEntry(to_int(left_part)).addStatusListener(new DeduceTypes2.FoundParent());
 			} else
 				throw new NotImplementedException();
 			return get_assignment_path(left_part, de.getRight(), generateFunctions, context);
@@ -361,6 +362,7 @@ public class GeneratedFunction implements GeneratedNode {
 			final int ite = addIdentTableEntry(ie, context);
 			final IdentIA identIA = new IdentIA(ite, this);
 			identIA.setPrev(prev);
+//			getIdentTableEntry(ite).addStatusListener(new DeduceTypes2.FoundParent());
 			return identIA;
 		}
 		default:

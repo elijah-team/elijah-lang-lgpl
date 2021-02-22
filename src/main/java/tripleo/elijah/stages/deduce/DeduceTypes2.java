@@ -117,6 +117,27 @@ public class DeduceTypes2 {
 					// resolve ident table
 					//
 					for (IdentTableEntry ite : generatedFunction.idte_list) {
+						InstructionArgument itex = new IdentIA(ite.getIndex(), generatedFunction);
+						while (itex != null) {
+							IdentTableEntry itee = generatedFunction.getIdentTableEntry(to_int(itex));
+							while (itex != null) {
+								BaseTableEntry x = null;
+								if (itee.backlink instanceof IntegerIA) {
+									x = generatedFunction.getVarTableEntry(to_int(itee.backlink));
+									itex = null;
+								} else if (itee.backlink instanceof IdentIA) {
+									x = generatedFunction.getIdentTableEntry(to_int(itee.backlink));
+									itex = ((IdentTableEntry) x).backlink;
+								} else if (itee.backlink == null || itee.backlink instanceof ProcIA) {
+									itex = null;
+									x = null;
+								}
+
+								if (x != null)
+									x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext())); // TODO context??
+//								itex = itex.backlink;
+							}
+						}
 						if (ite.resolved_element != null)
 							continue;
 						final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
@@ -1567,6 +1588,139 @@ public class DeduceTypes2 {
 	}
 
 
+	public class FoundParent implements BaseTableEntry.StatusListener {
+		private IdentTableEntry ite;
+		private BaseTableEntry bte;
+		private Context ctx;
+
+		public FoundParent(BaseTableEntry bte, IdentTableEntry ite, Context ctx) {
+			this.ite = ite;
+			this.bte = bte;
+			this.ctx = ctx;
+		}
+
+		void found_element_for_ite2(GeneratedFunction generatedFunction, IdentTableEntry ite, Context ctx) {
+			OS_Element y = ite.resolved_element;
+
+			if (y instanceof VariableStatement) {
+				final VariableStatement vs = (VariableStatement) y;
+				TypeName typeName = vs.typeName();
+				if (ite.type == null || ite.type.attached == null) {
+					if (!(typeName.isNull())) {
+						if (ite.type == null)
+							ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+						ite.type.attached = new OS_Type(typeName);
+					} else {
+						System.err.println("394 typename is null "+ vs.getName());
+					}
+				}
+			} else if (y instanceof ClassStatement) {
+				ClassStatement classStatement = ((ClassStatement) y);
+				OS_Type attached = new OS_Type(classStatement);
+				if (ite.type == null) {
+					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+				} else
+					ite.type.attached = attached;
+			} else if (y instanceof FunctionDef) {
+				FunctionDef functionDef = ((FunctionDef) y);
+				OS_Type attached = new OS_FuncType(functionDef);
+				if (ite.type == null) {
+					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+				} else
+					ite.type.attached = attached;
+			} else if (y instanceof PropertyStatement) {
+				PropertyStatement ps = (PropertyStatement) y;
+				OS_Type attached;
+				switch (ps.getTypeName().kindOfType()) {
+				case GENERIC:
+					attached = new OS_Type(ps.getTypeName());
+					break;
+				case NORMAL:
+					try {
+						attached = new OS_Type(resolve_type(new OS_Type(ps.getTypeName()), ctx).getClassOf());
+					} catch (ResolveError resolveError) {
+						System.err.println("378 resolveError");
+						resolveError.printStackTrace();
+						return;
+					}
+					break;
+				default:
+					throw new IllegalStateException("Unexpected value: " + ps.getTypeName().kindOfType());
+				}
+				if (ite.type == null) {
+					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+				} else
+					ite.type.attached = attached;
+				int yy = 2;
+			} else if (y instanceof AliasStatement) {
+				System.err.println("396 AliasStatement");
+				OS_Element x = _resolveAlias((AliasStatement) y);
+				if (x == null) {
+					ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+					errSink.reportError("399 resolveAlias returned null");
+				} else {
+					ite.setStatus(BaseTableEntry.Status.KNOWN, x);
+					found_element_for_ite(generatedFunction, ite, x, ctx);
+				}
+			} else {
+				//LookupResultList exp = lookupExpression();
+				System.out.println("2009 "+y);
+			}
+		}
+
+		@Override
+		public void onChange(OS_Element el, BaseTableEntry.Status newStatus) {
+			if (newStatus == BaseTableEntry.Status.KNOWN) {
+				int y = 2;
+/*
+				if (bte instanceof IdentTableEntry) {
+					LookupResultList lrl = lookupExpression(((IdentTableEntry) bte).getIdent(), ctx);
+					OS_Element best = lrl.chooseBest(null);
+					((IdentTableEntry) bte).setResolvedElement(best);
+					found_element_for_ite(null, (IdentTableEntry) bte, best, ctx);
+					bte.setStatus(BaseTableEntry.Status.KNOWN, best);
+				} else if (bte instanceof VariableTableEntry) {
+					LookupResultList lrl = lookupExpression(Helpers.string_to_ident(((VariableTableEntry) bte).getName()), ctx);
+					OS_Element best = lrl.chooseBest(null);
+//					((VariableTableEntry)ite).setResolvedElement(best);
+//					found_element_for_ite(null, ite, best, ctx);
+					bte.setStatus(BaseTableEntry.Status.KNOWN, best);
+				}
+			}
+*/
+				if (bte instanceof VariableTableEntry) {
+					final VariableTableEntry vte = (VariableTableEntry) bte;
+					@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
+					if (pot.size() == 1) {
+						TypeTableEntry tte = pot.get(0);
+						@Nullable OS_Type ty = tte.attached;
+						if (ty != null) {
+							if (ty.getType() == OS_Type.Type.USER) {
+								try {
+									@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
+									OS_Element ele = ty2.getElement();
+									LookupResultList lrl = lookupExpression(ite.getIdent(), ele.getContext());
+									OS_Element best = lrl.chooseBest(null);
+									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+								} catch (ResolveError resolveError) {
+									errSink.reportDignostic(resolveError);
+								}
+							}
+						} else {
+							System.err.println("1696");
+						}
+					}
+				} else {
+					System.out.println("1621");
+					LookupResultList lrl = lookupExpression(ite.getIdent(), ctx);
+					OS_Element best = lrl.chooseBest(null);
+					ite.setResolvedElement(best);
+					found_element_for_ite(null, ite, best, ctx);
+					ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+				}
+			}
+		}
+	}
 }
 
 //

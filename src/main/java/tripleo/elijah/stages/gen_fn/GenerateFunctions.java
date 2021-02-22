@@ -674,7 +674,10 @@ public class GenerateFunctions {
 		final int y=2;
 		final int x = gf.addIdentTableEntry((IdentExpression) left, cctx);
 		if (backlink != null) {
-			gf.getIdentTableEntry(x).backlink = backlink;
+			final IdentIA identIA = new IdentIA(x, gf);
+			identIA.setPrev(backlink);
+//			gf.getIdentTableEntry(x).addStatusListener(new DeduceTypes2.FoundParent());
+//			gf.getIdentTableEntry(x).backlink = backlink;
 		}
 		if (right.getLeft() == right)
 			return;

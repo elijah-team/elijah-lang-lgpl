@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.instructions.VariableTableType;
 
@@ -22,16 +23,18 @@ import java.util.Map;
 public class VariableTableEntry extends BaseTableEntry {
 	private final int index;
 	private final String name;
+	public final OS_Element el;
 	public TypeTableEntry type;
 	public final VariableTableType vtt;
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public int tempNum = -1;
 
-	public VariableTableEntry(final int index, final VariableTableType var1, final String name, final TypeTableEntry type) {
+	public VariableTableEntry(final int index, final VariableTableType var1, final String name, final TypeTableEntry type, final OS_Element el) {
 		this.index = index;
 		this.name = name;
 		this.vtt = var1;
 		this.type = type;
+		this.el = el;
 	}
 
 	@Override
