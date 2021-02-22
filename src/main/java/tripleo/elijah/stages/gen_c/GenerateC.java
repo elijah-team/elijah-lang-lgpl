@@ -816,13 +816,18 @@ public class GenerateC {
 
 					sb.append(")");
 				} else {
-					final CReference reference = new CReference();
 					final IdentIA ia2 = (IdentIA) pte.expression_num;
-					reference.getIdentIAPath(ia2, gf);
-					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
-					reference.args(sll);
-					String path = reference.build();
-					sb.append(Emit.emit("/*827*/")+path);
+					if (gf.getIdentTableEntry(to_int(ia2)).getStatus() != BaseTableEntry.Status.UNKNOWN) {
+						final CReference reference = new CReference();
+						reference.getIdentIAPath(ia2, gf);
+						final List<String> sll = getAssignmentValueArgs(inst, gf, module);
+						reference.args(sll);
+						String path = reference.build();
+						sb.append(Emit.emit("/*827*/")+path);
+					} else {
+						final String path = gf.getIdentIAPathNormal(ia2);
+						sb.append(Emit.emit("/*828*/")+String.format("%s is UNKNOWN", path));
+					}
 				}
 				return sb.toString();
 			}
@@ -901,19 +906,24 @@ public class GenerateC {
 					sll.add(Emit.emit("/*853*/")+""+getRealTargetName(gf, variableTableEntry));
 				} else if (ia instanceof IdentIA) {
 					String path = gf.getIdentIAPathNormal((IdentIA) ia);    // return x.y.z
-					final CReference reference = new CReference();
-					reference.getIdentIAPath((IdentIA) ia, gf);
-					String path2 = reference.build();						// return ZP105get_z(vvx.vmy)
-					if (path.equals(path2)) {
-						// should always fail
-						//throw new AssertionError();
-						System.err.println(String.format("864 should always fail but didn't %s %s", path, path2));
-					}
+					IdentTableEntry ite = gf.getIdentTableEntry(to_int(ia));
+					if (ite.getStatus() == BaseTableEntry.Status.UNKNOWN) {
+						sll.add(String.format("%s is UNKNOWN", path));
+					} else {
+						final CReference reference = new CReference();
+						reference.getIdentIAPath((IdentIA) ia, gf);
+						String path2 = reference.build();                        // return ZP105get_z(vvx.vmy)
+						if (path.equals(path2)) {
+							// should always fail
+							//throw new AssertionError();
+							System.err.println(String.format("864 should always fail but didn't %s %s", path, path2));
+						}
 //					assert ident != null;
 //					IdentTableEntry ite = gf.getIdentTableEntry(((IdentIA) ia).getIndex());
 //					sll.add(Emit.emit("/*748*/")+""+ite.getIdent().getText());
-					sll.add(Emit.emit("/*748*/")+""+path2);
-					System.out.println("743 "+path2+" "+path);
+						sll.add(Emit.emit("/*748*/") + "" + path2);
+						System.out.println("743 " + path2 + " " + path);
+					}
 				} else if (ia instanceof ProcIA) {
 					System.err.println("863 ProcIA");
 					throw new NotImplementedException();
