@@ -15,16 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialVariables;
-import tripleo.elijah.stages.deduce.DeduceTypes2;
-import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
-import tripleo.elijah.stages.gen_fn.GeneratedClass;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
-import tripleo.elijah.stages.gen_fn.IdentTableEntry;
-import tripleo.elijah.stages.gen_fn.ProcTableEntry;
-import tripleo.elijah.stages.gen_fn.TypeTableEntry;
-import tripleo.elijah.stages.gen_fn.VariableTableEntry;
+import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
@@ -38,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 
 /**
  * Created 10/8/20 7:13 AM
@@ -280,8 +273,8 @@ public class GenerateC {
 			tos.put_string_ln(String.format("%s %s%s(%s* vsc%s%s) {", returnType, class_name, name, class_name, if_args, args));
 		} else if (gf.fd.getParent() instanceof NamespaceStatement) {
 			NamespaceStatement st = (NamespaceStatement) gf.fd.getParent();
-			final String class_name = getTypeName(st/*new OS_Type(st)*/);
-			System.out.println("240 " + class_name);
+			final String class_name = getTypeName(st);
+			System.out.println(String.format("240 (namespace) %s -> %s", st.getName(), class_name));
 			final String if_args = args.length() == 0 ? "" : ", ";
 			// TODO vsi for namespace instance??
 //			tos.put_string_ln(String.format("%s %s%s(%s* vsi%s%s) {", returnType, class_name, name, class_name, if_args, args));
@@ -490,7 +483,7 @@ public class GenerateC {
 					final StringBuilder sb = new StringBuilder();
 					final InstructionArgument x = instruction.getArg(0);
 					assert x instanceof ProcIA;
-					final ProcTableEntry pte = gf.getProcTableEntry(DeduceTypes2.to_int(x));
+					final ProcTableEntry pte = gf.getProcTableEntry(to_int(x));
 					{
 						CReference reference = null;
 						if (pte.expression_num == null) {
@@ -807,7 +800,7 @@ public class GenerateC {
 //			System.err.println("9000 "+inst.getName());
 			final InstructionArgument x = inst.getArg(0);
 			assert x instanceof ProcIA;
-			final ProcTableEntry pte = gf.getProcTableEntry(DeduceTypes2.to_int(x));
+			final ProcTableEntry pte = gf.getProcTableEntry(to_int(x));
 //			System.err.println("9000-2 "+pte);
 			switch (inst.getName()) {
 			case CALL:
@@ -907,8 +900,6 @@ public class GenerateC {
 					final VariableTableEntry variableTableEntry = gf.getVarTableEntry(((IntegerIA) ia).getIndex());
 					sll.add(Emit.emit("/*853*/")+""+getRealTargetName(gf, variableTableEntry));
 				} else if (ia instanceof IdentIA) {
-//					@org.jetbrains.annotations.Nullable
-//					final OS_Element ident = gf.resolveIdentIA(gf.getFD().getContext(), (IdentIA) ia, module);
 					String path = gf.getIdentIAPathNormal((IdentIA) ia);    // return x.y.z
 					final CReference reference = new CReference();
 					reference.getIdentIAPath((IdentIA) ia, gf);
