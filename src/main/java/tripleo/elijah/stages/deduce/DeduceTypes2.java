@@ -163,6 +163,7 @@ public class DeduceTypes2 {
 	//									System.out.println("705 " + best);
 										vte.type.attached = new OS_Type((ClassStatement) best);
 									}
+									vte.setStatus(BaseTableEntry.Status.KNOWN, vte.el);
 								} else {
 									errSink.reportDignostic(new ResolveError(x, lrl));
 								}
@@ -651,6 +652,7 @@ public class DeduceTypes2 {
 										TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
 								vte.type = tte1;
 								tte.attached = tte1.attached;
+								vte.setStatus(BaseTableEntry.Status.KNOWN, best);
 							} else if (best instanceof VariableStatement) {
 								final VariableStatement vs = (VariableStatement) best;
 								int y=2;
@@ -658,6 +660,8 @@ public class DeduceTypes2 {
 								VariableTableEntry xx = generatedFunction.getVarTableEntry(to_int(x));
 								vte.type = xx.type;
 								tte.attached = vte.type.attached;
+								vte.setStatus(BaseTableEntry.Status.KNOWN, best);
+								xx.setStatus(BaseTableEntry.Status.KNOWN, best); // TODO ??
 							} else {
 								int y = 2;
 								System.err.println("543 "+best.getClass().getName());
