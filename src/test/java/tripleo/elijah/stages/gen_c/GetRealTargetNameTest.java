@@ -17,6 +17,7 @@ import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.TypeTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
