@@ -913,15 +913,8 @@ public class DeduceTypes2 {
 			break;
 			case IDENT:
 			{
-/*
-					LookupResultList lrl = ctx.lookup(((IdentExpression)e).getText());
-					OS_Element best = lrl.chooseBest(null);
-					int y=2;
-*/
 				final InstructionArgument vte_ia = generatedFunction.vte_lookup(((IdentExpression) e).getText());
-//					System.out.println("10000 "+vte_ia);
-				final Collection<TypeTableEntry> c = generatedFunction.getVarTableEntry(to_int(vte_ia)).potentialTypes();
-				final List<TypeTableEntry> ll = new ArrayList<TypeTableEntry>(c);
+				final List<TypeTableEntry> ll = getPotentialTypesVte(generatedFunction, vte_ia);
 				if (ll.size() == 1) {
 					tte.attached = ll.get(0).attached;
 					idte.addPotentialType(instructionIndex, ll.get(0));
