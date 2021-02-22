@@ -1079,6 +1079,8 @@ public class DeduceTypes2 {
 			NotImplementedException.raise();
 			return new LookupResultList(); // TODO throw ResolveError
 		} else {
+			if (t instanceof OS_UnknownType)
+				return new LookupResultList(); // TODO is this right??
 			final LookupResultList lrl = t.getElement().getParent().getContext().lookup(((IdentExpression) ss).getText());
 			return lrl;
 		}
