@@ -2,9 +2,9 @@
   <configuration default="false" name="TestBasic.testBasic" type="JUnit" factoryName="JUnit" singleton="false" nameIsGenerated="true">
     <module name="test" />
     <useClassPathOnly />
-    <extension name="coverage">
+    <extension name="coverage" sample_coverage="false">
       <pattern>
-        <option name="PATTERN" value="tripleo.util.io.*" />
+        <option name="PATTERN" value="tripleo.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
