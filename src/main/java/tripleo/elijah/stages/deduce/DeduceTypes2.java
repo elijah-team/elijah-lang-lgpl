@@ -164,6 +164,7 @@ public class DeduceTypes2 {
 				break;
 			case X:
 				{
+//					System.out.println("167 "+generatedFunction);
 					//
 					// ATTACH A TYPE TO VTE'S
 					// CONVERT USER TYPES TO USER_CLASS TYPES

@@ -90,14 +90,18 @@ public class DeducePhase {
 //		final GenerateFunctions gfm = new GenerateFunctions(m);
 //		List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
 
-		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
-		for (GeneratedNode lgci : lgc) {
-			if (lgci instanceof GeneratedClass) {
-				lgf.addAll(((GeneratedClass) lgci).functionMap.values());
-			}
-		}
 
-		deduceModule(m, lgf);
+		if (false) {
+			final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
+			for (GeneratedNode lgci : lgc) {
+				if (lgci instanceof GeneratedClass) {
+					lgf.addAll(((GeneratedClass) lgci).functionMap.values());
+				}
+			}
+
+			deduceModule(m, lgf);
+		} else
+			deduceModule(m); // TODO what a controversial change
 	}
 
 /*
