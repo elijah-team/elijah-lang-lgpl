@@ -39,8 +39,8 @@ public class GetIdentIAPathTest_ForC {
 
 	@Test
 	public void testManualXDotFoo() {
-		IdentExpression x_ident = Helpers.string_to_ident("x");
-		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
+		@NotNull IdentExpression x_ident = IdentExpression.forString("X");
+		@NotNull IdentExpression foo_ident = IdentExpression.forString("foo");
 		//
 		OS_Type type = null;
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
@@ -56,8 +56,8 @@ public class GetIdentIAPathTest_ForC {
 
 	@Test
 	public void testManualXDotFoo2() {
-		IdentExpression x_ident = Helpers.string_to_ident("x");
-		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
+		@NotNull IdentExpression x_ident = IdentExpression.forString("x");
+		@NotNull IdentExpression foo_ident = IdentExpression.forString("foo");
 		//
 		GenerateFunctions gen = new GenerateFunctions(mod);
 		Context ctx = mock(Context.class);
