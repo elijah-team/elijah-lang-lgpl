@@ -96,7 +96,7 @@ namespace {
 
 
 /*type*/ alias u64 = Unsigned64
-/*type*/ alias u32 = Unsigned64
+/*type*/ alias u32 = Unsigned32
 /*type*/ alias i64 = Integer64
 /*type*/ alias i32 = Integer32
 
