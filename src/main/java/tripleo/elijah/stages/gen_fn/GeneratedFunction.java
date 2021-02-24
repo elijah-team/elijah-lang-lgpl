@@ -415,6 +415,11 @@ public class GeneratedFunction implements GeneratedNode {
 		vte_list.add(vte);
 		return vte.getIndex();
 	}
+
+    @Override
+    public String identityString() {
+        return ""+fd;
+    }
 }
 
 //

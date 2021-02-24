@@ -13,6 +13,7 @@ package tripleo.elijah.stages.gen_fn;
  * Created 10/29/20 4:51 AM
  */
 public interface GeneratedNode {
+    String identityString();
 }
 
 //

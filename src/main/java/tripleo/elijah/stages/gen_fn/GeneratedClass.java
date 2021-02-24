@@ -90,6 +90,11 @@ public class GeneratedClass implements GeneratedNode {
 		return this.klass;
 	}
 
+    @Override
+    public String identityString() {
+        return ""+klass;
+    }
+
 	public class VarTableEntry {
 		public final IdentExpression nameToken;
 		public final IExpression initialValue;

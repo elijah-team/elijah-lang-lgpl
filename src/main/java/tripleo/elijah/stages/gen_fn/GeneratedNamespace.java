@@ -90,6 +90,11 @@ public class GeneratedNamespace implements GeneratedNode {
 		return this.namespaceStatement;
 	}
 
+    @Override
+    public String identityString() {
+        return ""+namespaceStatement;
+    }
+
 	public class VarTableEntry {
 		public final IdentExpression nameToken;
 		public final IExpression initialValue;

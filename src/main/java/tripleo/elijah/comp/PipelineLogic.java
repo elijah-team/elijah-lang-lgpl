@@ -204,13 +204,7 @@ public class PipelineLogic {
 		for (GenerateC.AssociatedBuffer ab : gr.results()) {
 			System.out.println("---------------------------------------------------------------");
 			System.out.println(ab.counter);
-			if (ab.node instanceof GeneratedClass) {
-				System.out.println(((GeneratedClass)ab.node).getKlass());
-			} else if (ab.node instanceof GeneratedNamespace) {
-				System.out.println(((GeneratedNamespace)ab.node).getNamespaceStatement());
-			} else if (ab.node instanceof GeneratedFunction) {
-				System.out.println(((GeneratedFunction)ab.node).getFD());
-			}
+			System.out.println(ab.node.identityString());
 			System.out.println(ab.buffer.getText());
 			System.out.println("---------------------------------------------------------------");
 		}
