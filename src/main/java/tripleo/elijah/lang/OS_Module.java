@@ -33,17 +33,17 @@ import java.util.Stack;
 public class OS_Module implements OS_Element, OS_Container {
 
 	private final Stack<Qualident> packageNames_q = new Stack<Qualident>();
-	public List<ModuleItem> items = new ArrayList<ModuleItem>();
-	public Attached _a = new Attached();
+	public @NotNull List<ModuleItem> items = new ArrayList<ModuleItem>();
+	public @NotNull Attached _a = new Attached();
 	public OS_Module prelude;
 
 	public Compilation parent;
 	public LibraryStatementPart lsp;
 	private String _fileName;
-	public List<ClassStatement> entryPoints = new ArrayList<ClassStatement>();
+	public @NotNull List<ClassStatement> entryPoints = new ArrayList<ClassStatement>();
 	private IndexingStatement indexingStatement;
 
-	public OS_Element findClass(final String className) {
+	public @org.jetbrains.annotations.Nullable OS_Element findClass(final String className) {
 		for (final ModuleItem item : items) {
 			if (item instanceof ClassStatement) {
 				if (((ClassStatement) item).getName().equals(className))
@@ -65,7 +65,7 @@ public class OS_Module implements OS_Element, OS_Container {
 		this._fileName = fileName;
 	}
 
-	public Collection<ModuleItem> getItems() {
+	public @NotNull Collection<ModuleItem> getItems() {
 		return items;
 	}
 
@@ -80,7 +80,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	}
 
 	@Override // OS_Container
-	public List<OS_Element2> items() {
+	public @NotNull List<OS_Element2> items() {
 		final Collection<ModuleItem> c = Collections2.filter(getItems(), new Predicate<ModuleItem>() {
 			@Override
 			public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable final ModuleItem input) {
@@ -125,7 +125,7 @@ public class OS_Module implements OS_Element, OS_Container {
 //	}
 
 	@Override
-	public void visitGen(final ICodeGen visit) {
+	public void visitGen(final @NotNull ICodeGen visit) {
 		visit.addModule(this);
 	}
 
@@ -139,7 +139,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	 * @ ensures \result == null
 	 */
 	@Override
-	public OS_Element getParent() {
+	public @org.jetbrains.annotations.Nullable OS_Element getParent() {
 		return null;
 	}
 
@@ -259,12 +259,12 @@ public class OS_Module implements OS_Element, OS_Container {
 		}
 	}
 
-	public static boolean isMainClass(ClassStatement classStatement) {
+	public static boolean isMainClass(@NotNull ClassStatement classStatement) {
 		// TODO what about Library (for windows dlls) etc?
 		return classStatement.getPackageName() == OS_Package.default_package && classStatement.name().equals("Main");
 	}
 
-	private boolean is_main_function_with_no_args(FunctionDef fd) {
+	private boolean is_main_function_with_no_args(@NotNull FunctionDef fd) {
 		if (fd.getType() == FunctionDef.Species.REG_FUN || fd.getType() == FunctionDef.Species.DEF_FUN) {
 			if (fd.name().equals("main")) {
 				return !fd.getArgs().iterator().hasNext();
