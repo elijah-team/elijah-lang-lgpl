@@ -519,7 +519,7 @@ functionDef[FunctionDef fd]
     | "immutable"               {fd.set(FunctionModifiers.IMMUTABLE);})?
     fal=opfal 					{fd.setFal(fal);}
     (TOK_ARROW tn=typeName2 	{fd.setReturnType(tn);})?
-                                {ctx=fd.getContext();cur=ctx;}
+                                {ctx=(FunctionContext)fd.getContext();cur=ctx;}
     sco=functionScope[fd] 		{fd.scope(sco);}
     							{fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();}
     ;
@@ -607,6 +607,7 @@ typeAlias2[TypeAliasBuilder tab]
 									//{tab.build();}
 	;
 opfal returns [FormalArgList fal]
+		{fal=null;}
 	: LPAREN fal=formalArgList RPAREN
 	;
 formalArgList returns [FormalArgList fal]

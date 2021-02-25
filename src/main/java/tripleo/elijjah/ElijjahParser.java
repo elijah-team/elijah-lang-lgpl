@@ -59,7 +59,11 @@ public ElijjahParser(ParserSharedInputState state) {
 
 	public final void program() throws RecognitionException, TokenStreamException {
 		
-		ParserClosure pc = out.closure();ModuleContext mctx=new ModuleContext(out.module());out.module().setContext(mctx);cur=mctx;IndexingStatement idx=null;
+		ParserClosure pc = out.closure();
+		ModuleContext mctx=new ModuleContext(out.module());
+		out.module().setContext(mctx);cur=mctx;
+		IndexingStatement idx=null;
+		OS_Package pkg;
 		
 		try {      // for error handling
 			{
@@ -102,7 +106,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					xy=qualident();
 					opt_semi();
 					if ( inputState.guessing==0 ) {
-						pc.packageName(xy);cur=new PackageContext(cur, pc.module.parent.makePackage(xy));
+						pc.packageName(xy);pkg=pc.module.parent.makePackage(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);
 					}
 					break;
 				}
@@ -294,7 +298,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				}
 				case LITERAL_class:
 				{
-					classStatement3__(cont, cur, as);
+					classStatement(cont, cur, as);
 					break;
 				}
 				default:
@@ -452,7 +456,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		return id;
 	}
 	
-	public final ClassStatement  classStatement3__(
+	public final ClassStatement  classStatement(
 		OS_Element parent, Context cctx, List<AnnotationClause> as
 	) throws RecognitionException, TokenStreamException {
 		ClassStatement cls;
@@ -1853,7 +1857,7 @@ inputState.guessing--;
 			}
 			}
 			}
-			fal=opfal2();
+			fal=opfal();
 			if ( inputState.guessing==0 ) {
 				cd.setFal(fal);
 			}
@@ -1903,7 +1907,7 @@ inputState.guessing--;
 			if ( inputState.guessing==0 ) {
 				dd=cr.addDtor();
 			}
-			fal=opfal2();
+			fal=opfal();
 			if ( inputState.guessing==0 ) {
 				dd.setFal(fal);
 			}
@@ -1979,7 +1983,7 @@ inputState.guessing--;
 			}
 			}
 			}
-			fal=opfal2();
+			fal=opfal();
 			if ( inputState.guessing==0 ) {
 				fd.setFal(fal);
 			}
@@ -2005,7 +2009,7 @@ inputState.guessing--;
 			}
 			}
 			if ( inputState.guessing==0 ) {
-				assert fd.getContext()!=null;ctx=new FunctionContext(cur, fd);fd.setContext(ctx);cur=ctx;
+				ctx=(FunctionContext)fd.getContext();cur=ctx;
 			}
 			sco=functionScope(fd);
 			if ( inputState.guessing==0 ) {
@@ -2391,7 +2395,7 @@ inputState.guessing--;
 			}
 			}
 			}
-			fal=opfal2();
+			fal=opfal();
 			if ( inputState.guessing==0 ) {
 				cd.fal(fal);
 			}
@@ -2432,7 +2436,7 @@ inputState.guessing--;
 			}
 			}
 			}
-			fal=opfal2();
+			fal=opfal();
 			if ( inputState.guessing==0 ) {
 				dd.fal(fal);
 			}
@@ -2502,7 +2506,7 @@ inputState.guessing--;
 			}
 			}
 			}
-			fal=opfal2();
+			fal=opfal();
 			if ( inputState.guessing==0 ) {
 				fb.fal(fal);
 			}
@@ -2528,6 +2532,9 @@ inputState.guessing--;
 			}
 			}
 			functionScope2(fb.scope());
+			if ( inputState.guessing==0 ) {
+				fb.setSpecies(FunctionDef.Species.DEF_FUN);
+			}
 		}
 		catch (RecognitionException ex) {
 			if (inputState.guessing==0) {
@@ -2731,7 +2738,7 @@ inputState.guessing--;
 			}
 			}
 			}
-			fal=opfal2();
+			fal=opfal();
 			if ( inputState.guessing==0 ) {
 				fb.fal(fal);
 			}
@@ -3894,14 +3901,14 @@ inputState.guessing--;
 		return tn;
 	}
 	
-	public final FormalArgList  opfal2() throws RecognitionException, TokenStreamException {
+	public final FormalArgList  opfal() throws RecognitionException, TokenStreamException {
 		FormalArgList fal;
 		
-		fal=new FormalArgList();
+		fal=null;
 		
 		try {      // for error handling
 			match(LPAREN);
-			formalArgList(fal);
+			fal=formalArgList();
 			match(RPAREN);
 		}
 		catch (RecognitionException ex) {
@@ -3933,7 +3940,7 @@ inputState.guessing--;
 					switch ( LA(1)) {
 					case LITERAL_class:
 					{
-						cls=classStatement3__(sc.getParent(), cur, null/*annotations*/);
+						cls=classStatement(sc.getParent(), cur, null/*annotations*/);
 						if ( inputState.guessing==0 ) {
 							sc.add(cls);
 						}
@@ -4338,7 +4345,7 @@ inputState.guessing--;
 			{
 				match(LITERAL_construct);
 				q=qualident();
-				o=opfal2();
+				o=opfal();
 				if ( inputState.guessing==0 ) {
 					cr.constructExpression(q,o);
 				}
@@ -4998,7 +5005,7 @@ inputState.guessing--;
 						switch ( LA(1)) {
 						case LITERAL_class:
 						{
-							cls=classStatement3__(sc.getParent(), cur, null/*annotations*/);
+							cls=classStatement(sc.getParent(), cur, null/*annotations*/);
 							if ( inputState.guessing==0 ) {
 								sc.add(cls);
 							}
@@ -5624,7 +5631,26 @@ inputState.guessing--;
 		}
 	}
 	
-	public final void formalArgList(
+	public final FormalArgList  formalArgList() throws RecognitionException, TokenStreamException {
+		FormalArgList fal;
+		
+		fal=new FormalArgList();
+		
+		try {      // for error handling
+			formalArgList_(fal);
+		}
+		catch (RecognitionException ex) {
+			if (inputState.guessing==0) {
+				reportError(ex);
+				recover(ex,_tokenSet_75);
+			} else {
+			  throw ex;
+			}
+		}
+		return fal;
+	}
+	
+	public final void formalArgList_(
 		FormalArgList fal
 	) throws RecognitionException, TokenStreamException {
 		
@@ -5673,25 +5699,6 @@ inputState.guessing--;
 			  throw ex;
 			}
 		}
-	}
-	
-	public final FormalArgList  formalArgList2() throws RecognitionException, TokenStreamException {
-		FormalArgList fal;
-		
-		fal=new FormalArgList();
-		
-		try {      // for error handling
-			formalArgList(fal);
-		}
-		catch (RecognitionException ex) {
-			if (inputState.guessing==0) {
-				reportError(ex);
-				recover(ex,_tokenSet_75);
-			} else {
-			  throw ex;
-			}
-		}
-		return fal;
 	}
 	
 	public final IExpression  assignmentExpression() throws RecognitionException, TokenStreamException {
@@ -6719,7 +6726,7 @@ inputState.guessing--;
 		try {      // for error handling
 			match(LITERAL_construct);
 			q=qualident();
-			o=opfal2();
+			o=opfal();
 			if ( inputState.guessing==0 ) {
 				cr.constructExpression(q,o);
 			}
@@ -7806,7 +7813,7 @@ inputState.guessing--;
 						pc.type(TypeModifiers.FUNCTION);	
 				}
 				{
-				fal=opfal2();
+				fal=opfal();
 				if ( inputState.guessing==0 ) {
 					pc.setArgList(fal);
 				}
@@ -7957,7 +7964,7 @@ inputState.guessing--;
 						pc.type(TypeModifiers.PROCEDURE);	
 				}
 				{
-				fal=opfal2();
+				fal=opfal();
 				if ( inputState.guessing==0 ) {
 					pc.setArgList(fal);
 				}
@@ -7985,7 +7992,7 @@ inputState.guessing--;
 				switch ( LA(1)) {
 				case LPAREN:
 				{
-					fal=opfal2();
+					fal=opfal();
 					if ( inputState.guessing==0 ) {
 						pc.setArgList(fal);
 					}
@@ -8015,7 +8022,7 @@ inputState.guessing--;
 						}
 					}
 					else if ((LA(1)==LITERAL_class)) {
-						classStatement3__(sc.getParent(), cur, null/*annotations*/);
+						classStatement(sc.getParent(), cur, null/*annotations*/);
 					}
 					else {
 						break _loop339;
@@ -8548,7 +8555,7 @@ inputState.guessing--;
 				tnl=typeNameList2();
 			}
 			else if ((_tokenSet_90.member(LA(1))) && (_tokenSet_91.member(LA(2)))) {
-				op=formalArgList2();
+				op=formalArgList();
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -8752,7 +8759,7 @@ inputState.guessing--;
 				tnl=typeNameList2();
 			}
 			else if ((_tokenSet_90.member(LA(1))) && (_tokenSet_92.member(LA(2)))) {
-				op=formalArgList2();
+				op=formalArgList();
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -8785,7 +8792,7 @@ inputState.guessing--;
 		try {      // for error handling
 			match(LITERAL_def);
 			i1=ident();
-			op=opfal2();
+			op=opfal();
 			{
 			switch ( LA(1)) {
 			case TOK_COLON:
