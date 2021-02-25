@@ -153,15 +153,14 @@ public class OS_Module implements OS_Element, OS_Container {
 	}
 
 	/**
-	 * The last package name declared in the source file
+	 * The last package declared in the source file
 	 *
-	 * @return null or a OS_Package instance
+	 * @return a new OS_Package instance or default_package
 	 */
-	// TODO make class OS_Package
-	public OS_Package pullPackageName() {
+	@NotNull public OS_Package pullPackageName() {
 		if (packageNames_q.empty())
 			return OS_Package.default_package;
-		return parent.makePackage(packageNames_q.peek());//new OS_Package(packageNames_q.peek(), packageNames_q.size()); // TODO
+		return parent.makePackage(packageNames_q.peek());
 	}
 
 	public void pushPackageName(final Qualident xyz) {
@@ -175,7 +174,8 @@ public class OS_Module implements OS_Element, OS_Container {
 	 * @param name the class we are looking for
 	 * @return either the class or null
 	 */
-	public @Nullable ClassStatement getClassByName(final String name) {
+	@Nullable
+	public ClassStatement getClassByName(final String name) {
 		for (final ModuleItem item : items) {
 			if (item instanceof ClassStatement)
 				if (((ClassStatement) item).getName().equals(name))
@@ -183,7 +183,6 @@ public class OS_Module implements OS_Element, OS_Container {
 		}
 		return null;
 	}
-
 
 	public void postConstruct() {
 		for (final ModuleItem anElement : items) {
