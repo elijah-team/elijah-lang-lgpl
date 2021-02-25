@@ -175,6 +175,12 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	public void postConstruct() {
 		assert clsName != null;
+		int destructor_count = 0;
+		for (ClassItem item : items) {
+			if (item instanceof DestructorDef)
+				destructor_count++;
+		}
+		assert destructor_count == 0 || destructor_count ==1;
 	}
 
 	// region inheritance
