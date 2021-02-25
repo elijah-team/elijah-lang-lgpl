@@ -8,8 +8,7 @@
  */
 package tripleo.elijah.lang;
 
-import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.contexts.PackageContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,18 +19,13 @@ import java.util.List;
  * $Id$
  *
  */
-public class OS_Package implements OS_Element {
+public class OS_Package {
 	public final static OS_Package default_package = new OS_Package(null, 0);
-	private OS_Module _module;
 	private final List<OS_Element> elements = new ArrayList<OS_Element>();
 
 	int _code;
 	Qualident _name;
-
-	@Override
-	public void visitGen(final ICodeGen visit) {
-		throw new NotImplementedException();
-	}
+	private PackageContext _ctx;
 
 	// TODO packages, elements
 
@@ -40,21 +34,8 @@ public class OS_Package implements OS_Element {
 		_name = aName;
 	}
 
-	public OS_Package(final Qualident aName, final int aCode, final OS_Module module) {
-		_code = aCode;
-		_name = aName;
-		_module = module;
-	}
-
-	@Override
-	public OS_Element getParent() {
-		return _module;
-	}
-
-	@Override
 	public Context getContext() {
-		// TODO Do something with PackageContext ??
-		return null; //_a._context;
+		return _ctx;
 	}
 
 	//
@@ -79,6 +60,10 @@ public class OS_Package implements OS_Element {
 			return "";
 		}
 		return _name.toString();
+	}
+
+	public void setContext(PackageContext cur) {
+		_ctx = cur;
 	}
 }
 

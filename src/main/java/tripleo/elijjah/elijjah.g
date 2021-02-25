@@ -35,12 +35,16 @@ Scope3 sco;
 }
 
 program
-        {ParserClosure pc = out.closure();ModuleContext mctx=new ModuleContext(out.module());out.module().setContext(mctx);cur=mctx;IndexingStatement idx=null;}
+        {ParserClosure pc = out.closure();
+         ModuleContext mctx=new ModuleContext(out.module());
+         out.module().setContext(mctx);cur=mctx;
+         IndexingStatement idx=null;
+         OS_Package pkg;}
     : ( 									{idx=pc.indexingStatement();}
 		indexingStatement[idx]				{pc.module.addIndexingStatement(idx);}
 	  )?
 	  (
-	    "package" xy=qualident opt_semi 	{pc.packageName(xy);cur=new PackageContext(cur, pc.module.parent.makePackage(xy));}
+	    "package" xy=qualident opt_semi 	{pc.packageName(xy);pkg=pc.module.parent.makePackage(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);}
 	  | programStatement[pc, out.module()] opt_semi
 	  )*
 	  EOF {out.module().postConstruct();out.FinishModule();}
