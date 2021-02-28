@@ -8,43 +8,25 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
-import tripleo.elijah.util.NotImplementedException;
-
 // TODO is ExpressionList an IExpression?
 // TODO Is ProcedureCallExpression a StatementItem?
 public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/ IExpression {
-	
-	private IExpression _left;
-	private ExpressionList args=new ExpressionList();
-	
-	public ProcedureCallExpression(final Token aToken, final ExpressionList aExpressionList, final Token aToken1) {
-		throw new NotImplementedException();
-		
-	}
-	
+
+//	public ProcedureCallExpression(final Token aToken, final ExpressionList aExpressionList, final Token aToken1) {
+//		throw new NotImplementedException();
+//	}
+
+	/**
+	 * Make sure you call {@link #identifier} or {@link #setLeft(IExpression)}
+	 * and {@link #setArgs(ExpressionList)}
+	 */
 	public ProcedureCallExpression() {
-//		NotImplementedException.raise();
 	}
-	
-	/**
-	 * Set  the left hand side of the procedure call expression, ie the method name
-	 * 
-	 * @param xyz a method name in Qualident form (might come as DotExpression in future)
-	 */
-	public void identifier(final Qualident xyz) {
-		setLeft(xyz);
-	}
-	
-	/**
-	 * Set  the left hand side of the procedure call expression, ie the method name
-	 * 
-	 * @param xyz a method name might come as DotExpression or IdentExpression
-	 */
-	public void identifier(final IExpression xyz) {
-		setLeft(xyz);
-	}
-	
+
+	// region right-side
+
+	private ExpressionList args=new ExpressionList();
+
 	/**
 	 * Get the argument list
 	 * 
@@ -54,11 +36,28 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 		return args;
 	}
 
+	public ExpressionList getArgs() {
+		return args;
+	}
+
+	/**
+	 * change then argument list all at once
+	 *
+	 * @param ael the new value
+	 */
+	public void setArgs(final ExpressionList ael) {
+		args = ael;
+	}
+
+	// endregion
+
 //	@Override
 //	public void visitGen(ICodeGen visit) {
 //		// TODO Auto-generated method stub
 //		NotImplementedException.raise();
 //	}
+
+	// region kind
 
 	@Override
 	public ExpressionKind getKind() {
@@ -67,13 +66,36 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 
 	@Override
 	public void setKind(final ExpressionKind aIncrement) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		throw new IllegalArgumentException();
 	}
+
+	// endregion
+
+	// region left-side
+
+	private IExpression _left;
 
 	@Override
 	public IExpression getLeft() {
 		return _left;
+	}
+
+	/**
+	 * Set  the left hand side of the procedure call expression, ie the method name
+	 *
+	 * @param xyz a method name in Qualident form (might come as DotExpression in future)
+	 */
+	public void identifier(final Qualident xyz) {
+		setLeft(xyz);
+	}
+
+	/**
+	 * Set  the left hand side of the procedure call expression, ie the method name
+	 *
+	 * @param xyz a method name might come as DotExpression or IdentExpression
+	 */
+	public void identifier(final IExpression xyz) {
+		setLeft(xyz);
 	}
 
 	/**
@@ -84,44 +106,38 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 		_left = iexpression;
 	}
 
-	@Override
-	public String repr_() {
-		return toString();
-	}
-	
-	/**
-	 * change then argument list all at once
-	 *
-	 * @param ael the new value
-	 */
-	public void setArgs(final ExpressionList ael) {
-		args = ael;
-	}
-	
+	// endregion
+
 	public String getReturnTypeString() {
 		return "int"; // TODO hardcoded
-	}
-	
-	public OS_Element getParent() {
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return String.format("ProcedureCallExpression{%s %s}", getLeft(), args != null ? args.toString() : "()");
 	}
 
 	@Override
 	public boolean is_simple() {
 		return false; // TODO is this correct?
 	}
-	
-	public ExpressionList getArgs() {
-		return args;
+
+/*
+	public OS_Element getParent() {
+		return null;
 	}
+*/
+
+	// region representation
+
+	@Override
+	public String repr_() {
+		return toString();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("ProcedureCallExpression{%s %s}", getLeft(), args != null ? args.toString() : "()");
+	}
+
+	// endregion
+
+	// region type (to remove)
 
 	OS_Type _type;
 
@@ -134,6 +150,8 @@ public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/
 	public OS_Type getType() {
     	return _type;
 	}
+
+	// endregion
 
 }
 

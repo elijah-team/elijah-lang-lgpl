@@ -45,8 +45,11 @@ public interface IExpression {
 	};
 
 //	default boolean is_simple() {
-//		switch(getType()) {
+//		switch(getKind()) {
 //		case STRING_LITERAL:
+//		case CHAR_LITERAL:
+//		case NUMERIC:
+//		case FLOAT:
 //			return true;
 //		default:
 //			return false;
