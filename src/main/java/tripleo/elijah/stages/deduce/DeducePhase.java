@@ -29,8 +29,8 @@ import java.util.Map;
  */
 public class DeducePhase {
 
-	private List<FoundElement> foundElements = new ArrayList<FoundElement>();
-	private Map<IdentTableEntry, OnType> idte_type_callbacks = new HashMap<IdentTableEntry, OnType>();
+	private final List<FoundElement> foundElements = new ArrayList<FoundElement>();
+	private final Map<IdentTableEntry, OnType> idte_type_callbacks = new HashMap<IdentTableEntry, OnType>();
 
 	public void addFunction(GeneratedFunction generatedFunction, FunctionDef fd) {
 		functionMap.put(fd, generatedFunction);
@@ -58,7 +58,7 @@ public class DeducePhase {
 	}
 
 	private final List<Triplet> forFunctions = new ArrayList<Triplet>();
-	private Multimap<FunctionDef, GeneratedFunction> functionMap = ArrayListMultimap.create();
+	private final Multimap<FunctionDef, GeneratedFunction> functionMap = ArrayListMultimap.create();
 
 	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf) {
 		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this);
