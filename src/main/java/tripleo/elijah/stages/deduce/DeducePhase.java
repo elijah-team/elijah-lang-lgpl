@@ -44,6 +44,24 @@ public class DeducePhase {
 		idte_type_callbacks.put(entry, callback);
 	}
 
+	Multimap<OS_Element, ResolvedVariables> resolved_variables = ArrayListMultimap.create();
+
+	public void registerResolvedVariable(IdentTableEntry identTableEntry, OS_Element parent, String varName) {
+		resolved_variables.put(parent, new ResolvedVariables(identTableEntry, parent, varName));
+	}
+
+	static class ResolvedVariables {
+		final IdentTableEntry identTableEntry;
+		final OS_Element parent;
+		final String varName;
+
+		public ResolvedVariables(IdentTableEntry aIdentTableEntry, OS_Element aParent, String aVarName) {
+			identTableEntry = aIdentTableEntry;
+			parent = aParent;
+			varName = aVarName;
+		}
+	}
+
 	static class Triplet {
 
 		private final DeduceTypes2 deduceTypes2;
@@ -148,6 +166,26 @@ public class DeducePhase {
 			//  will be improved, namely calling doFoundElement from here as well
 			if (foundElement.didntFind()) {
 				foundElement.doNoFoundElement();
+			}
+		}
+		for (GeneratedNode generatedNode : generatedClasses) {
+			if (generatedNode instanceof GeneratedContainer) {
+				final GeneratedContainer generatedContainer = (GeneratedContainer) generatedNode;
+				Collection<ResolvedVariables> x = resolved_variables.get(generatedContainer.getElement());
+				for (ResolvedVariables resolvedVariables : x) {
+					final GeneratedContainer.VarTableEntry variable = generatedContainer.getVariable(resolvedVariables.varName);
+					assert variable != null;
+					final TypeTableEntry type = resolvedVariables.identTableEntry.type;
+					if (type != null)
+						variable.addPotentialTypes(List_of(type));
+					variable.addPotentialTypes(resolvedVariables.identTableEntry.potentialTypes());
+				}
+			}
+		}
+		for (GeneratedNode generatedNode : generatedClasses) {
+			if (generatedNode instanceof GeneratedClass) {
+				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				generatedClass.resolve_var_table_entries();
 			}
 		}
 	}

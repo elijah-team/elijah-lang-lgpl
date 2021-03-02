@@ -59,6 +59,17 @@ public class DeduceTypes2 {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				deduce_generated_function(generatedFunction);
+				for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+					if (identTableEntry.resolved_element instanceof  VariableStatement) {
+						final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
+						OS_Element el = vs.getParent().getParent();
+						OS_Element el2 = generatedFunction.fd.getParent();
+						if (el != el2) {
+							if (el instanceof ClassStatement || el instanceof NamespaceStatement)
+								phase.registerResolvedVariable(identTableEntry, el, vs.getName());
+						}
+					}
+				}
 				phase.addFunction(generatedFunction, generatedFunction.getFD());
 			}
 		}
