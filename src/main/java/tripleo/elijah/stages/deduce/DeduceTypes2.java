@@ -39,6 +39,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 /**
  * Created 9/15/20 12:51 PM
@@ -958,81 +959,85 @@ public class DeduceTypes2 {
 		implement_calls_(gf, context, i2, fn1, pc);
 	}
 
-	private void implement_calls_(final GeneratedFunction gf, final Context context, final InstructionArgument i2, final ProcTableEntry fn1, final int pc) {
-		final IExpression pn1 = fn1.expression;
-		if (pn1 instanceof IdentExpression) {
-			final String pn = ((IdentExpression) pn1).getText();
-			boolean found = lookup_name_calls(context, pn, fn1);
-			LookupResultList lrl;
-			OS_Element best;
+	private void implement_calls_(final GeneratedFunction gf,
+								  final Context context,
+								  final InstructionArgument i2,
+								  final ProcTableEntry pte,
+								  final int pc) {
+		final IExpression pn1 = pte.expression;
+		if (!(pn1 instanceof IdentExpression)) {
+			throw new IllegalStateException("pn1 is not IdentExpression");
+		}
+
+		final String pn = ((IdentExpression) pn1).getText();
+		boolean found = lookup_name_calls(context, pn, pte);
+		if (found) return;
+
+		final String pn2 = SpecialFunctions.reverse_name(pn);
+		if (pn2 != null) {
+//			System.out.println("7002 "+pn2);
+			found = lookup_name_calls(context, pn2, pte);
 			if (found) return;
+		}
 
-			final String pn2 = SpecialFunctions.reverse_name(pn);
-			if (pn2 != null) {
-//				System.out.println("7002 "+pn2);
-				found = lookup_name_calls(context, pn2, fn1);
-				if (found) return;
-			}
-
-			if (i2 instanceof IntegerIA) {
-				final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
-				final Context ctx = gf.getContextFromPC(pc); // might be inside a loop or something
-				final String vteName = vte.getName();
-				if (vteName != null) {
-					if (SpecialVariables.contains(vteName)) {
-						System.err.println("Skipping special variable " + vteName + " " + pn);
-					} else {
-						final LookupResultList lrl2 = ctx.lookup(vteName);
-//						System.out.println("7003 "+vte.getName()+" "+ctx);
-						final OS_Element best2 = lrl2.chooseBest(null);
-						if (best2 != null) {
-							found = lookup_name_calls(best2.getContext(), pn, fn1);
-							if (found) return;
-
-							if (pn2 != null) {
-								found = lookup_name_calls(best2.getContext(), pn2, fn1);
-							}
-
-							if (!found) {
-								//throw new NotImplementedException(); // TODO
-								errSink.reportError("Special Function not found " + pn);
-							}
-						} else {
-							throw new NotImplementedException(); // Cant find vte, should never happen
-						}
-					}
+		if (i2 instanceof IntegerIA) {
+			final VariableTableEntry vte = gf.getVarTableEntry(to_int(i2));
+			final Context ctx = gf.getContextFromPC(pc); // might be inside a loop or something
+			final String vteName = vte.getName();
+			if (vteName != null) {
+				if (SpecialVariables.contains(vteName)) {
+					System.err.println("Skipping special variable " + vteName + " " + pn);
 				} else {
-					final Collection<TypeTableEntry> t = vte.potentialTypes();
-					final ArrayList<TypeTableEntry> tt = new ArrayList<TypeTableEntry>(t);
-					if (tt.size() == 1) {
-						final OS_Type x = tt.get(0).attached;
-						assert x != null;
-						assert x.getType() != null;
-						if (x.getType() == OS_Type.Type.USER_CLASS) {
-							final Context ctx1 = x.getClassOf().getContext();
+					final LookupResultList lrl2 = ctx.lookup(vteName);
+//					System.out.println("7003 "+vteName+" "+ctx);
+					final OS_Element best2 = lrl2.chooseBest(null);
+					if (best2 != null) {
+						found = lookup_name_calls(best2.getContext(), pn, pte);
+						if (found) return;
 
-							found = lookup_name_calls(ctx1, pn, fn1);
-							if (found) return;
+						if (pn2 != null) {
+							found = lookup_name_calls(best2.getContext(), pn2, pte);
+						}
 
-							if (pn2 != null) {
-								found = lookup_name_calls(ctx1, pn2, fn1);
-							}
-
-							if (!found) {
-								//throw new NotImplementedException(); // TODO
-								errSink.reportError("Special Function not found " + pn);
-							}
-						} else
-							assert false;
-					} else
-						assert false;
+						if (!found) {
+							//throw new NotImplementedException(); // TODO
+							errSink.reportError("Special Function not found " + pn);
+						}
+					} else {
+						throw new NotImplementedException(); // Cant find vte, should never happen
+					}
 				}
 			} else {
-				final int y=2;
-				System.err.println("i2 is not IntegerIA ("+i2.getClass().getName()+")");
+				final List<TypeTableEntry> tt = getPotentialTypesVte(vte);
+				if (tt.size() == 1) {
+					final OS_Type x = tt.get(0).attached;
+					assert x != null;
+					assert x.getType() != null;
+					if (x.getType() == OS_Type.Type.USER_CLASS) {
+						final Context ctx1 = x.getClassOf().getContext();
+
+						found = lookup_name_calls(ctx1, pn, pte);
+						if (found) return;
+
+						if (pn2 != null) {
+							found = lookup_name_calls(ctx1, pn2, pte);
+						}
+
+						if (!found) {
+							//throw new NotImplementedException(); // TODO
+							errSink.reportError("Special Function not found " + pn);
+						}
+					} else
+						assert false;
+				} else
+					assert false;
 			}
-		} else
-			throw new NotImplementedException(); // pn1 is not IdentExpression
+		} else {
+			final int y=2;
+			assert Pattern.matches("__.*__", ((IdentExpression) pn1).getText());
+			System.err.println("i2 is not IntegerIA ("+i2.getClass().getName()+")");
+		}
+
 	}
 
 	private boolean lookup_name_calls(final Context ctx, final String pn, final ProcTableEntry fn1) {
