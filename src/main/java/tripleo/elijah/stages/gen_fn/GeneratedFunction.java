@@ -420,6 +420,11 @@ public class GeneratedFunction implements GeneratedNode {
     public String identityString() {
         return ""+fd;
     }
+
+    @Override
+    public OS_Module module() {
+        return null/*module*/;
+    }
 }
 
 //

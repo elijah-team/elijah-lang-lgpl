@@ -8,7 +8,9 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -20,7 +22,7 @@ import java.util.Map;
 /**
  * Created 10/29/20 4:26 AM
  */
-public class GeneratedClass implements GeneratedNode {
+public class GeneratedClass implements GeneratedContainer {
 	private final OS_Module module;
 	private final ClassStatement klass;
 	public List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
@@ -33,7 +35,7 @@ public class GeneratedClass implements GeneratedNode {
 
 	public void addVarTableEntry(AccessNotation an, VariableStatement vs) {
 		// TODO dont ignore AccessNotation
-		varTable.add(new VarTableEntry(vs.getNameToken(), vs.initialValue()));
+		varTable.add(new VarTableEntry(vs.getNameToken(), vs.initialValue(), vs.typeName()));
 	}
 
 	public void addAccessNotation(AccessNotation an) {
@@ -95,15 +97,51 @@ public class GeneratedClass implements GeneratedNode {
         return ""+klass;
     }
 
-	public class VarTableEntry {
-		public final IdentExpression nameToken;
-		public final IExpression initialValue;
-		public OS_Type varType;
+    @Override
+    public OS_Module module() {
+        return module;
+    }
 
-		public VarTableEntry(IdentExpression nameToken, IExpression initialValue) {
-			this.nameToken = nameToken;
-			this.initialValue = initialValue;
+	public void resolve_var_table_entries() {
+		for (VarTableEntry varTableEntry : varTable) {
+			int y=2;
+			if (varTableEntry.potentialTypes.size() == 0 && varTableEntry.varType == null) {
+				final TypeName tn = varTableEntry.typeName;
+				if (tn != null) {
+					if (tn instanceof NormalTypeName) {
+						final NormalTypeName tn2 = (NormalTypeName) tn;
+						LookupResultList lrl = tn.getContext().lookup(tn2.getName());
+						OS_Element best = lrl.chooseBest(null);
+						if (best != null) {
+							if (best instanceof AliasStatement)
+								best = DeduceTypes2._resolveAlias((AliasStatement) best);
+							assert best instanceof ClassStatement;
+							varTableEntry.varType = new OS_Type((ClassStatement) best);
+						} else {
+							// TODO shouldn't this already be calculated?
+						}
+					}
+				} else {
+					// must be unknown
+				}
+			} else {
+
+			}
 		}
+	}
+
+	@Override
+	public OS_Element getElement() {
+		return getKlass();
+	}
+
+	@Override
+	@Nullable public VarTableEntry getVariable(String aVarName) {
+		for (VarTableEntry varTableEntry : varTable) {
+			if (varTableEntry.nameToken.getText().equals(aVarName))
+				return varTableEntry;
+		}
+		return null;
 	}
 }
 

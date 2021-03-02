@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
@@ -20,7 +21,7 @@ import java.util.Map;
 /**
  * Created 12/22/20 5:39 PM
  */
-public class GeneratedNamespace implements GeneratedNode {
+public class GeneratedNamespace implements GeneratedContainer {
 	public GeneratedNamespace(NamespaceStatement namespace1, OS_Module module) {
 		this.namespaceStatement = namespace1;
 		this.module = module;
@@ -33,7 +34,7 @@ public class GeneratedNamespace implements GeneratedNode {
 
 	public void addVarTableEntry(AccessNotation an, VariableStatement vs) {
 		// TODO dont ignore AccessNotation
-		varTable.add(new VarTableEntry(vs.getNameToken(), vs.initialValue()));
+		varTable.add(new VarTableEntry(vs.getNameToken(), vs.initialValue(), vs.typeName()));
 	}
 
 	public void addAccessNotation(AccessNotation an) {
@@ -95,15 +96,24 @@ public class GeneratedNamespace implements GeneratedNode {
         return ""+namespaceStatement;
     }
 
-	public class VarTableEntry {
-		public final IdentExpression nameToken;
-		public final IExpression initialValue;
-		public OS_Type varType;
+    @Override
+    public OS_Module module() {
+        return module;
+    }
 
-		public VarTableEntry(IdentExpression nameToken, IExpression initialValue) {
-			this.nameToken = nameToken;
-			this.initialValue = initialValue;
+	@Override
+	public OS_Element getElement() {
+		return getNamespaceStatement();
+	}
+
+	@Override
+	@Nullable
+	public VarTableEntry getVariable(String aVarName) {
+		for (VarTableEntry varTableEntry : varTable) {
+			if (varTableEntry.nameToken.getText().equals(aVarName))
+				return varTableEntry;
 		}
+		return null;
 	}
 
 }
