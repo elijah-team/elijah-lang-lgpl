@@ -11,18 +11,24 @@ package tripleo.elijah.stages.deduce;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.gen_fn.GenerateFunctions;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.GeneratedContainer;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
+import tripleo.elijah.stages.gen_fn.TypeTableEntry;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static tripleo.elijah.util.Helpers.List_of;
 
 /**
  * Created 12/24/20 3:59 AM
@@ -31,6 +37,7 @@ public class DeducePhase {
 
 	private final List<FoundElement> foundElements = new ArrayList<FoundElement>();
 	private final Map<IdentTableEntry, OnType> idte_type_callbacks = new HashMap<IdentTableEntry, OnType>();
+	private List<GeneratedNode> generatedClasses;
 
 	public void addFunction(GeneratedFunction generatedFunction, FunctionDef fd) {
 		functionMap.put(fd, generatedFunction);
@@ -94,6 +101,8 @@ public class DeducePhase {
 				lgf.addAll(((GeneratedClass) lgci).functionMap.values());
 			}
 		}
+
+		generatedClasses = lgc;
 
 		return deduceModule(m, lgf);
 	}
