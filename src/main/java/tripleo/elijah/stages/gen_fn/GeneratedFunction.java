@@ -274,7 +274,7 @@ public class GeneratedFunction implements GeneratedNode {
 		int index = 0;
 		for (final VariableTableEntry variableTableEntry : vte_list) {
 			final String variableTableEntryName = variableTableEntry.getName();
-			if (variableTableEntryName != null) // TODO how can this be null?
+			if (variableTableEntryName != null) // null when temp
 				if (variableTableEntryName.equals(text))
 					return new IntegerIA(index);
 			index++;
@@ -282,7 +282,7 @@ public class GeneratedFunction implements GeneratedNode {
 		index = 0;
 		for (final ConstantTableEntry constTableEntry : cte_list) {
 			final String constTableEntryName = constTableEntry.getName();
-			if (constTableEntryName != null) // TODO how can this be null?
+			if (constTableEntryName != null) // null when not assigned
 				if (constTableEntryName.equals(text))
 					return new ConstTableIA(index, this);
 			index++;
