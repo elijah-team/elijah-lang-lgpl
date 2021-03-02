@@ -207,23 +207,23 @@ public class GeneratedFunction implements GeneratedNode {
 	// region get-entries
 	//
 
-	public VariableTableEntry getVarTableEntry(final int index) {
+	@NotNull public VariableTableEntry getVarTableEntry(final int index) {
 		return vte_list.get(index);
 	}
 
-	public IdentTableEntry getIdentTableEntry(final int index) {
+	@NotNull public IdentTableEntry getIdentTableEntry(final int index) {
 		return idte_list.get(index);
 	}
 
-	public ConstantTableEntry getConstTableEntry(final int index) {
+	@NotNull public ConstantTableEntry getConstTableEntry(final int index) {
 		return cte_list.get(index);
 	}
 
-	public TypeTableEntry getTypeTableEntry(final int index) {
+	@NotNull public TypeTableEntry getTypeTableEntry(final int index) {
 		return tte_list.get(index);
 	}
 
-	public ProcTableEntry getProcTableEntry(final int index) {
+	@NotNull public ProcTableEntry getProcTableEntry(final int index) {
 		return prte_list.get(index);
 	}
 
