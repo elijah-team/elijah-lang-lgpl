@@ -28,7 +28,6 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
  */
 public class GeneratedFunction implements GeneratedNode {
 	public final @Nullable FunctionDef fd;
-	private final @Nullable DefFunctionDef dfd;
 	private final List<Label> labelList = new ArrayList<Label>();
 	public @NotNull List<Instruction> instructionsList = new ArrayList<Instruction>();
 	public @NotNull List<Integer> deferred_calls = new ArrayList<Integer>();
@@ -44,12 +43,6 @@ public class GeneratedFunction implements GeneratedNode {
 
 	public GeneratedFunction(final @Nullable FunctionDef functionDef) {
 		fd = functionDef;
-		dfd = null;
-	}
-
-	public GeneratedFunction(final @Nullable DefFunctionDef dfd_) {
-		dfd = dfd_;
-		fd = null;
 	}
 
 	public static void printTables(GeneratedFunction gf) {
@@ -170,7 +163,9 @@ public class GeneratedFunction implements GeneratedNode {
 	}
 
 	public String name() {
-		return fd != null ? fd.name() : dfd.name();
+		if (fd == null)
+			throw new IllegalArgumentException("null fd");
+		return fd.name();
 	}
 
 	// endregion
@@ -246,7 +241,6 @@ public class GeneratedFunction implements GeneratedNode {
 
 	public @NotNull FunctionDef getFD() {
 		if (fd != null) return fd;
-		if (dfd != null) return dfd;
 		throw new IllegalStateException("No function");
 	}
 
