@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.contexts.PropertyStatementContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.Helpers;
-import tripleo.elijah.util.NotImplementedException;
 
 /**
  * Created 8/6/20 4:00 PM
@@ -61,7 +60,7 @@ public class PropertyStatement implements OS_Element, OS_Element2, ClassItem {
 
 	@Override // OS_Element
 	public void visitGen(ICodeGen visit) {
-		throw new NotImplementedException();
+		visit.visitPropertyStatement(this);
 	}
 
 	@Override // OS_Element

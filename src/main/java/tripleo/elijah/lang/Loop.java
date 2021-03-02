@@ -10,7 +10,6 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.contexts.LoopContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +77,7 @@ private final Attached _a = new Attached();
 
 	@Override // OS_Element
 	public void visitGen(final ICodeGen visit) {
-		throw new NotImplementedException();
+		visit.visitLoop(this);
 	}
 
 	public String getIterName() {

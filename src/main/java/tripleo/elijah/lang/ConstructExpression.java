@@ -48,7 +48,7 @@ public class ConstructExpression extends AbstractExpression implements FunctionI
 
 	@Override
 	public void visitGen(ICodeGen visit) {
-
+		visit.visitConstructStatement(this);
 	}
 
 	@Override

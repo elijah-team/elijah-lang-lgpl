@@ -1,8 +1,7 @@
 package tripleo.elijah.gen;
 
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.FunctionItem;
-import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.contexts.ClassContext;
+import tripleo.elijah.lang.*;
 
 public interface ICodeGen {
 
@@ -18,6 +17,56 @@ public interface ICodeGen {
 //	private void addClassItem(ClassItem element) ;
 
 	void addFunctionItem(FunctionItem element) ;
+
+	void visitAliasStatement(AliasStatement aAliasStatement);
+
+	void visitAccessNotation(AccessNotation aAccessNotation);
+
+	void visitCaseConditional(CaseConditional aCaseConditional);
+
+	void visitCaseScope(CaseConditional.CaseScope aCaseScope);
+
+	void visitTypeNameElement(ClassContext.OS_TypeNameElement aOS_typeNameElement);
+
+	void visitConstructStatement(ConstructExpression aConstructExpression);
+
+	void visitFormalArgListItem(FormalArgListItem aFormalArgListItem);
+
+	void visitFuncExpr(FuncExpr aFuncExpr);
+
+	void visitFunctionDef(FunctionDef aFunctionDef);
+
+	void visitIdentExpression(IdentExpression aIdentExpression);
+
+	void visitIfConditional(IfConditional aIfConditional);
+
+	void visitLoop(Loop aLoop);
+
+	void visitImportStatment(ImportStatement aImportStatement);
+
+	void visitMatchConditional(MatchConditional aMatchConditional);
+
+	void visitMC1(MatchConditional.MC1 aMC1);
+
+	void visitNamespaceStatement(NamespaceStatement aNamespaceStatement);
+
+	void visitPropertyStatement(PropertyStatement aPropertyStatement);
+
+	void visitStatementWrapper(StatementWrapper aStatementWrapper);
+
+	void visitSyntacticBlock(SyntacticBlock aSyntacticBlock);
+
+	void visitTypeAlias(TypeAliasStatement aTypeAliasStatement);
+
+	void visitVariableSequence(VariableSequence aVariableSequence);
+
+	void visitWithStatement(WithStatement aWithStatement);
+
+	void visitVariableStatement(VariableStatement aVariableStatement);
+
+	void visitYield(YieldExpression aYieldExpression);
+
+	// return, continue, next
 }
 
 //

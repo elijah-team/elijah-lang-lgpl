@@ -117,7 +117,7 @@ public class ClassContext extends Context {
 
 		@Override
 		public void visitGen(ICodeGen visit) {
-
+			visit.visitTypeNameElement(this);
 		}
 
 		@Override

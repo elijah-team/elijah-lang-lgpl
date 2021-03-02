@@ -1,7 +1,6 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.NotImplementedException;
 
 public class StatementWrapper implements StatementItem, FunctionItem, OS_Element {
 
@@ -39,7 +38,7 @@ public class StatementWrapper implements StatementItem, FunctionItem, OS_Element
 
     @Override
     public void visitGen(final ICodeGen visit) {
-        throw new NotImplementedException();
+        visit.visitStatementWrapper(this);
     }
 
 }

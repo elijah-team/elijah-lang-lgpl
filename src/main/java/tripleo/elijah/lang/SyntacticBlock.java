@@ -37,7 +37,7 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-
+		visit.visitSyntacticBlock(this);
 	}
 
 	@Override

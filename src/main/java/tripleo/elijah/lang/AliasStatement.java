@@ -49,7 +49,7 @@ public class AliasStatement implements ModuleItem, ClassItem, FunctionItem, OS_E
 
 	@Override // OS_Element
 	public void visitGen(final ICodeGen visit) {
-		throw new NotImplementedException();
+		visit.visitAliasStatement(this);
 	}
 
 	@Override // OS_Element

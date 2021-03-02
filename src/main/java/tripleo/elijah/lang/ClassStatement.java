@@ -113,7 +113,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-		visit.addClass(this);
+		visit.addClass(this); // TODO visitClass
 	}
 
 	public OS_Package getPackageName() {

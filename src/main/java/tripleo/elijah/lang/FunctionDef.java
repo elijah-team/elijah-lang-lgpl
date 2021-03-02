@@ -16,7 +16,6 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,8 +142,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		visit.visitFunctionDef(this);
 	}
 
 	// region name

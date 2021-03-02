@@ -10,7 +10,6 @@ package tripleo.elijah.lang;
 
 import tripleo.elijah.contexts.ImportContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.List;
 
@@ -18,8 +17,7 @@ public interface ImportStatement extends ModuleItem, ClassItem, StatementItem {
 
 	@Override
 	default void visitGen(final ICodeGen visit) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		visit.visitImportStatment(this);
 	}
 
 	List<Qualident> parts();

@@ -123,8 +123,7 @@ public class FuncExpr implements IExpression, OS_Element {
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		visit.visitFuncExpr(this);
 	}
 
 	@Override

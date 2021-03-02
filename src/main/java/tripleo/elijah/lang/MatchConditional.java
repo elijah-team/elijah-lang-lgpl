@@ -12,7 +12,6 @@ import antlr.Token;
 import tripleo.elijah.contexts.MatchConditionalContext;
 import tripleo.elijah.contexts.MatchContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 	 */
 	@Override
 	public void visitGen(final ICodeGen visit) {
-		throw new NotImplementedException();
+		visit.visitMatchConditional(this);
 	}
 
 	/**
@@ -118,7 +117,7 @@ public class MatchConditional implements OS_Element, StatementItem, FunctionItem
 
 		@Override
 		default void visitGen(ICodeGen visit) {
-			throw new NotImplementedException();
+			visit.visitMC1(this);
 		}
 	}
 

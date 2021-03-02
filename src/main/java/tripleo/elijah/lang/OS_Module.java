@@ -126,7 +126,7 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	@Override
 	public void visitGen(final @NotNull ICodeGen visit) {
-		visit.addModule(this);
+		visit.addModule(this); // visitModule
 	}
 
 	/**

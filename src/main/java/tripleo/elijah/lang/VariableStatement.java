@@ -10,7 +10,6 @@ package tripleo.elijah.lang;
 
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,8 +68,7 @@ public class VariableStatement implements OS_Element {
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		visit.visitVariableStatement(this);
 	}
 
 	@Override

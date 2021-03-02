@@ -9,7 +9,6 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,8 +46,7 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		visit.visitVariableSequence(this);
 	}
 
 	@Override

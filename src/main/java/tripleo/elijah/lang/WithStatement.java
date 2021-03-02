@@ -11,7 +11,6 @@ package tripleo.elijah.lang;
 import antlr.Token;
 import tripleo.elijah.contexts.WithContext;
 import tripleo.elijah.gen.ICodeGen;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +38,7 @@ public class WithStatement implements OS_Element, OS_Container, FunctionItem, St
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-		throw new NotImplementedException();
+		visit.visitWithStatement(this);
 	}
 
 	@Override

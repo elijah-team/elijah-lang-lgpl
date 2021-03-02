@@ -46,7 +46,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-		throw new NotImplementedException();
+		visit.visitCaseConditional(this);
 	}
 
 	public HashMap<IExpression, CaseScope> getScopes() {
@@ -121,7 +121,7 @@ public class CaseConditional implements OS_Element, StatementItem, FunctionItem 
 
 		@Override
 		public void visitGen(final ICodeGen visit) {
-			throw new NotImplementedException();
+			visit.visitCaseScope(this);
 		}
 
 		@Override

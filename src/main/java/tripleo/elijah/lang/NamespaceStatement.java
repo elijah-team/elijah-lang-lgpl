@@ -124,8 +124,7 @@ public class NamespaceStatement implements Documentable, ModuleItem, ClassItem, 
 
 	@Override // OS_Element
 	public void visitGen(final ICodeGen visit) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		visit.visitNamespaceStatement(this);
 	}
 
 	@Override // OS_Element

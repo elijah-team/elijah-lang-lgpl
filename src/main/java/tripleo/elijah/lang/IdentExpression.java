@@ -93,8 +93,7 @@ public class IdentExpression implements IExpression, OS_Element, Resolvable, Loc
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
-		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+		visit.visitIdentExpression(this);
 	}
 
 	@Override

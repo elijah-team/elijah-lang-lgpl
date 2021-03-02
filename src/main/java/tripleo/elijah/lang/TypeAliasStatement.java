@@ -44,7 +44,7 @@ public class TypeAliasStatement implements OS_Element {
 
 	@Override
 	public void visitGen(ICodeGen visit) {
-		throw new NotImplementedException();
+		visit.visitTypeAlias(this);
 	}
 
 	@Override
