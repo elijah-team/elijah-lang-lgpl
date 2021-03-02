@@ -879,7 +879,7 @@ public class DeduceTypes2 {
 		phase.forFunction(this, gf, forFunction);
 	}
 
-	private LookupResultList lookupExpression(final IExpression left, final Context ctx) {
+	private static LookupResultList lookupExpression(final IExpression left, final Context ctx) {
 		switch (left.getKind()) {
 		case QIDENT:
 			final IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
@@ -1055,7 +1055,8 @@ public class DeduceTypes2 {
 		throw new NotImplementedException();
 	}
 
-	@Nullable private OS_Element _resolveAlias(final AliasStatement aliasStatement) {
+	@Nullable
+	public static OS_Element _resolveAlias(final AliasStatement aliasStatement) {
 		final LookupResultList lrl2;
 		if (aliasStatement.getExpression() instanceof Qualident) {
 			final IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
@@ -1075,7 +1076,7 @@ public class DeduceTypes2 {
 		return lrl2.chooseBest(null);
 	}
 
-	private LookupResultList lookup_dot_expression(Context ctx, final DotExpression de) {
+	private static LookupResultList lookup_dot_expression(Context ctx, final DotExpression de) {
 		final Stack<IExpression> s = dot_expression_to_stack(de);
 		OS_Type t = null;
 		IExpression ss = s.peek();
@@ -1117,7 +1118,7 @@ public class DeduceTypes2 {
 		return right_stack;
 	}
 
-	public OS_Type deduceExpression(@NotNull final IExpression n, final Context context) {
+	public static OS_Type deduceExpression(@NotNull final IExpression n, final Context context) {
 		switch (n.getKind()) {
 		case IDENT:
 			return deduceIdentExpression((IdentExpression) n, context);
@@ -1148,7 +1149,7 @@ public class DeduceTypes2 {
 	 * @return the deduced type or {@code null}. Do not {@code pce.setType}
 	 */
 	@Nullable
-	private OS_Type deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx) {
+	private static OS_Type deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx) {
 		System.err.println("979 Skipping deduceProcedureCall "+pce);
 		OS_Element best = lookup(pce.getLeft(), ctx);
 		if (best == null) return null;
@@ -1173,7 +1174,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) {
+	private static OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) {
 		// is this right?
 		LookupResultList lrl = ctx.lookup(ident.getText());
 		OS_Element best = lrl.chooseBest(null);
@@ -1577,7 +1578,7 @@ public class DeduceTypes2 {
 		return getPotentialTypesVte(generatedFunction.getVarTableEntry(to_int(vte_index)));
 	}
 
-	private OS_Element lookup(IExpression expression, Context ctx) {
+	private static OS_Element lookup(IExpression expression, Context ctx) {
 		switch (expression.getKind()) {
 		case IDENT:
 			LookupResultList lrl = ctx.lookup(((IdentExpression)expression).getText());
