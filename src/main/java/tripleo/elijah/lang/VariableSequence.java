@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//import java.util.stream.Collectors;
-
 public class VariableSequence implements StatementItem, FunctionItem, ClassItem {
 
 	private Context _ctx;
