@@ -14,6 +14,8 @@ package tripleo.elijah.lang2;
 public class SpecialVariables {
 	public static boolean contains(final String name) {
 		if (name.equals("self")) return true;
+		if (name.equals("this")) return true;
+		if (name.equals("Value")) return true; // TODO only special sometimes
 		if (name.equals("Result")) return true;
 //		System.err.println("SpecialVariables: test: "+name);
 		return false;
@@ -21,9 +23,11 @@ public class SpecialVariables {
 
 	public static String get(final String name) {
 		if (name.equals("self")) return "vsc"; // TODO this should be this in Java and C++
+		if (name.equals("this")) return "vsc"; // TODO this should be this in Java and C++
+		if (name.equals("Value")) return "vsv"; // TODO only special sometimes
 		if (name.equals("Result")) return "vsr";
 //		System.err.println("SpecialVariables: test: "+name);
-		return "<>";
+		return "<Illegal SpecialValue>";
 	}
 }
 
