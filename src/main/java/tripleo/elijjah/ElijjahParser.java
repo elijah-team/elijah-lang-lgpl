@@ -2016,7 +2016,7 @@ inputState.guessing--;
 				fd.scope(sco);
 			}
 			if ( inputState.guessing==0 ) {
-				fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();
+				fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();cur=ctx.getParent();
 			}
 		}
 		catch (RecognitionException ex) {
