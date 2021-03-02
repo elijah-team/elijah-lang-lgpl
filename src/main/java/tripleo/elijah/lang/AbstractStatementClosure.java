@@ -97,7 +97,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 	public VariableSequence varSeq(final Context ctx) {
 		vsq=new VariableSequence(ctx);
 		vsq.setParent(parent_scope.getParent()/*this.getParent()*/); // TODO look at this
-		vsq.setContext(ctx);
+//		vsq.setContext(ctx); //redundant
 		return (VariableSequence) add(vsq);
 	}
 
