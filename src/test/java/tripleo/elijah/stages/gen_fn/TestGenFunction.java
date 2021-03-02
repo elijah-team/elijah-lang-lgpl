@@ -10,10 +10,10 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.junit.Assert;
 import org.junit.Test;
-import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
@@ -25,6 +25,8 @@ import tripleo.elijah.stages.instructions.InstructionName;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static tripleo.elijah.util.Helpers.List_of;
 
 /**
  * Created 9/10/20 2:20 PM
@@ -51,14 +53,14 @@ public class TestGenFunction {
 //				System.err.println("7000 "+gf);
 
 				if (gf.name().equals("main")) {
-					int pc=0;
-					Assert.assertEquals(InstructionName.E,    gf.getInstruction(pc++).getName());
+					int pc = 0;
+					Assert.assertEquals(InstructionName.E, gf.getInstruction(pc++).getName());
 					Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
 					Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.DECL,  gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.AGN,  gf.getInstruction(pc++).getName());
+					Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
+					Assert.assertEquals(InstructionName.AGN, gf.getInstruction(pc++).getName());
 					Assert.assertEquals(InstructionName.CALL, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.X,    gf.getInstruction(pc++).getName());
+					Assert.assertEquals(InstructionName.X, gf.getInstruction(pc++).getName());
 				} else if (gf.name().equals("factorial")) {
 					int pc = 0;
 					Assert.assertEquals(InstructionName.E, gf.getInstruction(pc++).getName());
@@ -222,27 +224,32 @@ public class TestGenFunction {
 		final Compilation c = new Compilation(eee, new IO());
 
 		final String f = "test/basic1/backlink3/backlink3.elijah";
-		final File file = new File(f);
-		final OS_Module m = c.realParseElijjahFile(f, file, false);
-		Assert.assertEquals("Method parsed correctly", 0, c.errorCount());
-		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
+		if (false) {
+			final File file = new File(f);
+			final OS_Module m = c.realParseElijjahFile(f, file, false);
+			Assert.assertEquals("Method parsed correctly", 0, c.errorCount());
+			m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 
-		c.findStdLib("c");
+			c.findStdLib("c");
 
-		for (final CompilerInstructions ci : c.cis) {
-			c.use(ci, false);
+			for (final CompilerInstructions ci : c.cis) {
+				c.use(ci, false);
+			}
+
+			PipelineLogic pipelineLogic = new PipelineLogic();
+			ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
+
+			for (OS_Module module : c.modules) {
+				pipelineLogic.addModule(module);
+			}
+
+			pipelineLogic.everythingBeforeGenerate(lgc);
+			pipelineLogic.generate(lgc);
+		} else {
+			final String ff = "test/basic1/backlink3/";
+			c.feedCmdLine(List_of(ff));
 		}
-
-		PipelineLogic pipelineLogic = new PipelineLogic();
-		ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
-
-		pipelineLogic.addModule(m);
-		pipelineLogic.addModule(m.prelude);
-
-		pipelineLogic.everythingBeforeGenerate(lgc);
-		pipelineLogic.generate(lgc);
 	}
-
 }
 
 //
