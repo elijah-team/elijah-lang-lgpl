@@ -22,7 +22,6 @@ import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
-import tripleo.util.buffer.Buffer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -182,17 +181,14 @@ public class PipelineLogic {
 		GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
 
 		for (GeneratedNode generatedNode : lgc) {
-			Buffer b;
 			if (generatedNode instanceof GeneratedClass) {
 				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				b = ggc.generate_class(generatedClass);
-				gr.add(b, generatedClass, ggc.bufferCounter++);
+				ggc.generate_class(generatedClass, gr);
 				GenerateC.GenerateResult gr2 = ggc.generateCode2(generatedClass.functionMap.values());
 				gr.results().addAll(gr2.results());
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-				b = ggc.generate_namespace(generatedNamespace);
-				gr.add(b, generatedNamespace, ggc.bufferCounter++);
+				ggc.generate_namespace(generatedNamespace, gr);
 				GenerateC.GenerateResult gr2 = ggc.generateCode2(generatedNamespace.functionMap.values());
 				gr.results().addAll(gr2.results());
 			} else {

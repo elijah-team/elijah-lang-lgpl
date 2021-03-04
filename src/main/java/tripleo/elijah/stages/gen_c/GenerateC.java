@@ -38,30 +38,48 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 public class GenerateC {
 	private final OS_Module module;
 
-	public int bufferCounter = 0;
-
 	public static class AssociatedBuffer {
 		public final int counter;
+		public final GenerateResult.TY ty;
 		public final Buffer buffer;
 		public final GeneratedNode node;
 		public String output;
 
-		public AssociatedBuffer(Buffer buffer, GeneratedNode node, int counter) {
-			this.buffer = buffer;
-			this.node = node;
-			this.counter = counter;
+		public AssociatedBuffer(GenerateResult.TY aTy, Buffer aBuffer, GeneratedNode aNode, int aCounter) {
+			ty = aTy;
+			buffer = aBuffer;
+			node = aNode;
+			counter = aCounter;
 		}
 	}
 
 	public static class GenerateResult {
+		public int bufferCounter = 0;
+
 		List<AssociatedBuffer> res = new ArrayList<AssociatedBuffer>();
 
-		public void add(Buffer b, GeneratedNode n, int counter) {
-			res.add(new AssociatedBuffer(b, n, counter));
+		public void add(Buffer b, GeneratedNode n, int counter, TY ty) {
+			res.add(new AssociatedBuffer(ty, b, n, counter));
 		}
 
 		public List<AssociatedBuffer> results() {
 			return res;
+		}
+
+		public void addFunction(GeneratedFunction aGeneratedFunction, Buffer aBuffer) {
+			add(aBuffer, aGeneratedFunction, ++bufferCounter, TY.IMPL);
+		}
+
+		public enum TY {
+			HEADER, IMPL
+		}
+
+		public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf) {
+			add(aBuf, aClass, ++bufferCounter, ty);
+		}
+
+		public void addNamespace(TY ty, GeneratedNamespace aNamespace, Buffer aBuf) {
+			add(aBuf, aNamespace, ++bufferCounter, ty);
 		}
 	}
 
@@ -87,15 +105,13 @@ public class GenerateC {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				try {
-					b = generateCodeForMethod(generatedFunction);
-					gr.add(b, generatedFunction, ++bufferCounter);
+					generateCodeForMethod(generatedFunction, gr);
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 						if (identTableEntry.isResolved()) {
 							GeneratedNode x = identTableEntry.resolved();
 
 							if (x instanceof GeneratedClass) {
-								b = generate_class((GeneratedClass) x);
-								gr.add(b, x, ++bufferCounter);
+								generate_class((GeneratedClass) x, gr);
 							} else
 								throw new NotImplementedException();
 						}
@@ -106,16 +122,14 @@ public class GenerateC {
 			} else if (generatedNode instanceof GeneratedClass) {
 				try {
 					GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-					b = generate_class(generatedClass);
-					gr.add(b, generatedClass, ++bufferCounter);
+					generate_class(generatedClass, gr);
 				} catch (final IOException e) {
 					module.parent.eee.exception(e);
 				}
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				try {
 					GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-					b = generate_namespace(generatedNamespace);
-					gr.add(b, generatedNamespace, ++bufferCounter);
+					generate_namespace(generatedNamespace, gr);
 				} catch (final IOException e) {
 					module.parent.eee.exception(e);
 				}
@@ -125,34 +139,36 @@ public class GenerateC {
 		return gr;
 	}
 
-	public Buffer generate_class(GeneratedClass x) throws IOException {
+	public void generate_class(GeneratedClass x, GenerateResult gr) throws IOException {
 		int y=2;
 		final CClassDecl decl = new CClassDecl(x);
 		decl.evaluatePrimitive();
+		final StringWriter stringWriterHdr = new StringWriter();
+		final TabbedOutputStream tosHdr = new TabbedOutputStream(stringWriterHdr, false);
 		final StringWriter stringWriter = new StringWriter();
 		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, false);
 		try {
-			tos.put_string_ln("typedef struct {");
-			tos.incr_tabs();
-			tos.put_string_ln("int _tag;");
+			tosHdr.put_string_ln("typedef struct {");
+			tosHdr.incr_tabs();
+			tosHdr.put_string_ln("int _tag;");
 			if (!decl.prim) {
 				for (GeneratedClass.VarTableEntry o : x.varTable){
-					tos.put_string_ln(String.format("void*/*%s*/ vm%s;", o.varType, o.nameToken));
+					tosHdr.put_string_ln(String.format("void*/*%s*/ vm%s;", o.varType, o.nameToken));
 				}
 			} else {
-				tos.put_string_ln(String.format("%s vsv;", decl.prim_decl));
+				tosHdr.put_string_ln(String.format("%s vsv;", decl.prim_decl));
 			}
 
 			String class_name = getTypeName(new OS_Type(x.getKlass()));
 			int class_code = x.getKlass()._a.getCode();
 
-			tos.dec_tabs();
-			tos.put_string_ln("");
-//			tos.put_string_ln(String.format("} %s;", class_name));
-			tos.put_string_ln(String.format("} %s;  // class %s%s", class_name, decl.prim ? "box " : "", x.getName()));
+			tosHdr.dec_tabs();
+			tosHdr.put_string_ln("");
+//			tosHdr.put_string_ln(String.format("} %s;", class_name));
+			tosHdr.put_string_ln(String.format("} %s;  // class %s%s", class_name, decl.prim ? "box " : "", x.getName()));
 
-			tos.put_string_ln("");
-			tos.put_string_ln("");
+			tosHdr.put_string_ln("");
+			tosHdr.put_string_ln("");
 			// TODO what about named constructors and ctor$0 and "the debug stack"
 			tos.put_string_ln(String.format("%s* ZC%d() {", class_name, class_code));
 			tos.incr_tabs();
@@ -172,33 +188,39 @@ public class GenerateC {
 			tos.flush();
 		} finally {
 			tos.close();
+			tosHdr.close();
 			Buffer buf = new DefaultBuffer(stringWriter.toString());
 //			System.out.println(buf.getText());
-			return buf;
+			gr.addClass(GenerateResult.TY.IMPL, x, buf);
+			Buffer buf2 = new DefaultBuffer(stringWriterHdr.toString());
+//			System.out.println(buf2.getText());
+			gr.addClass(GenerateResult.TY.HEADER, x, buf2);
 		}
 	}
 
-	public Buffer generate_namespace(GeneratedNamespace x) throws IOException {
+	public void generate_namespace(GeneratedNamespace x, GenerateResult gr) throws IOException {
 		int y=2;
+		final StringWriter stringWriterHdr = new StringWriter();
+		final TabbedOutputStream tosHdr = new TabbedOutputStream(stringWriterHdr, false);
 		final StringWriter stringWriter = new StringWriter();
 		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, true);
 		try {
-			tos.put_string_ln("typedef struct {");
-			tos.incr_tabs();
-//			tos.put_string_ln("int _tag;");
+			tosHdr.put_string_ln("typedef struct {");
+			tosHdr.incr_tabs();
+//			tosHdr.put_string_ln("int _tag;");
 			for (GeneratedNamespace.VarTableEntry o : x.varTable){
-				tos.put_string_ln(String.format("%s* vm%s;", o.varType == null ? "void " : getTypeName(o.varType), o.nameToken));
+				tosHdr.put_string_ln(String.format("%s* vm%s;", o.varType == null ? "void " : getTypeName(o.varType), o.nameToken));
 			}
 
 			String class_name = getTypeName(x.getNamespaceStatement());
 			int class_code = x.getNamespaceStatement()._a.getCode();
 
-			tos.dec_tabs();
-			tos.put_string_ln("");
-			tos.put_string_ln(String.format("} %s; // namespace `%s'", class_name, x.getName()));
+			tosHdr.dec_tabs();
+			tosHdr.put_string_ln("");
+			tosHdr.put_string_ln(String.format("} %s; // namespace `%s'", class_name, x.getName()));
 
-			tos.put_string_ln("");
-			tos.put_string_ln("");
+			tosHdr.put_string_ln("");
+			tosHdr.put_string_ln("");
 			tos.put_string_ln(String.format("%s* ZC%d() {", class_name, class_code));
 			tos.incr_tabs();
 			tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
@@ -210,14 +232,20 @@ public class GenerateC {
 			tos.flush();
 		} finally {
 			tos.close();
+			tosHdr.close();
 			Buffer buf = new DefaultBuffer(stringWriter.toString());
 //			System.out.println(buf.getText());
-			return buf;
+			gr.addNamespace(GenerateResult.TY.IMPL, x, buf);
+			Buffer buf2 = new DefaultBuffer(stringWriterHdr.toString());
+//			System.out.println(buf2.getText());
+			gr.addNamespace(GenerateResult.TY.HEADER, x, buf2);
 		}
 	}
 
-	private Buffer generateCodeForMethod(final GeneratedFunction gf) throws IOException {
-		if (gf.fd == null) return null;
+	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr) throws IOException {
+		if (gf.fd == null) return;
+		final StringWriter stringWriterHdr = new StringWriter();
+		final TabbedOutputStream tosHdr = new TabbedOutputStream(stringWriterHdr, true);
 		final StringWriter stringWriter = new StringWriter();
 		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, true);
 		final String returnType;
@@ -296,6 +324,10 @@ public class GenerateC {
 			case E:
 				{
 					tos.put_string_ln("bool vsb;");
+					if (tte != null) {
+						String ty = getTypeName(tte);
+						tos.put_string_ln(String.format("%s vsr;", ty));
+					}
 					tos.put_string_ln("{");
 					tos.incr_tabs();
 				}
@@ -547,7 +579,7 @@ public class GenerateC {
 		tos.close();
 		Buffer buf = new DefaultBuffer(stringWriter.toString());
 //		System.out.println(buf.getText());
-		return buf;
+		gr.addFunction(gf, buf);
 	}
 
 	private void generate_method_is_a(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
