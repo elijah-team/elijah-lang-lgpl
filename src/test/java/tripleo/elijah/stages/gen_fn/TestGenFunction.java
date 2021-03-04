@@ -209,9 +209,11 @@ public class TestGenFunction {
 		GenerateC ggc = new GenerateC(m);
 		ggc.generateCode(lgf);
 
+		GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
+
 		for (GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedClass) {
-				ggc.generate_class((GeneratedClass) generatedNode);
+				ggc.generate_class((GeneratedClass) generatedNode, gr);
 			} else {
 				System.out.println(lgc.getClass().getName());
 			}
