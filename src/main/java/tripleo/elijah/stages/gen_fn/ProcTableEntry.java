@@ -11,6 +11,7 @@ package tripleo.elijah.stages.gen_fn;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 
 import java.util.List;
@@ -49,6 +50,10 @@ public class ProcTableEntry {
 
 	public List<TypeTableEntry> getArgs() {
 		return args;
+	}
+
+	public void setArgType(int aIndex, OS_Type aType) {
+		args.get(aIndex).attached = aType;
 	}
 }
 

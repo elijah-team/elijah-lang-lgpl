@@ -654,7 +654,9 @@ public class DeduceTypes2 {
 				}
 			});
 		}
-		for (final TypeTableEntry tte : pte.getArgs()) { // TODO this looks wrong
+		List<TypeTableEntry> args = pte.getArgs();
+		for (int i = 0; i < args.size(); i++) {
+			TypeTableEntry tte = args.get(i); // TODO this looks wrong
 //			System.out.println("770 "+tte);
 			final IExpression e = tte.expression;
 			if (e == null) continue;
@@ -680,7 +682,7 @@ public class DeduceTypes2 {
 							tte.attached = ll.get(0).attached;
 							vte.addPotentialType(instructionIndex, ll.get(0));
 						} else {
-							LookupResultList lrl = ctx.lookup(((IdentExpression)e).getText());
+							LookupResultList lrl = ctx.lookup(((IdentExpression) e).getText());
 							OS_Element best = lrl.chooseBest(null);
 							if (best instanceof FormalArgListItem) {
 								@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
@@ -707,7 +709,19 @@ public class DeduceTypes2 {
 					} else {
 						int ia = generatedFunction.addIdentTableEntry((IdentExpression) e, ctx);
 						IdentTableEntry idte = generatedFunction.getIdentTableEntry(ia);
-						idte.addPotentialType(instructionIndex, tte);
+						idte.addPotentialType(instructionIndex, tte); // TODO DotExpression??
+						final int ii = i;
+						idte.onType(phase, new OnType() {
+							@Override
+							public void typeDeduced(OS_Type aType) {
+								pte.setArgType(ii, aType); // TODO does this belong here or in FunctionInvocation?
+							}
+
+							@Override
+							public void noTypeFound() {
+								System.err.println("719 no type found "+generatedFunction.getIdentIAPathNormal(new IdentIA(ia, generatedFunction)));
+							}
+						});
 					}
 				}
 				break;
