@@ -24,11 +24,6 @@ public class ClassContext extends Context {
 	private final ClassStatement carrier;
 	private final Context _parent;
 
-//	public ClassContext(ClassStatement classStatement) {
-//		carrier = classStatement;
-////		super(classStatement);
-//	}
-
 	public ClassContext(final Context aParent, final ClassStatement cls) {
 		_parent = aParent;
 		carrier = cls;
@@ -111,8 +106,8 @@ public class ClassContext extends Context {
 			return typeName;
 		}
 
-		public OS_TypeNameElement(TypeName tn1) {
-			typeName = tn1;
+		public OS_TypeNameElement(TypeName aTypeName) {
+			typeName = aTypeName;
 		}
 
 		@Override
