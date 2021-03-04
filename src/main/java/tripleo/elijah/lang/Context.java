@@ -9,6 +9,8 @@
 package tripleo.elijah.lang;
 
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.contexts.ModuleContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +62,18 @@ public abstract class Context {
 //	public NameTable nameTable() {
 //		return this.nameTable ;
 //	}
+
+	public OS_Module module() {
+		Context ctx = this;//getParent();
+		while (!(ctx instanceof ModuleContext))
+			ctx = ctx.getParent();
+		return ((ModuleContext) ctx).getCarrier();
+	}
+
+	public Compilation compilation() {
+		OS_Module module = module();
+		return module.parent;
+	}
 }
 
 //

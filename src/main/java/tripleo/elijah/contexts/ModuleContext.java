@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ModuleContext extends Context {
 
-	OS_Module carrier;
+	private OS_Module carrier;
 
 	public ModuleContext(final OS_Module module) {
 		this.carrier = module;
@@ -83,6 +83,14 @@ public class ModuleContext extends Context {
 	@Override
 	public Context getParent() {
 		return null;
+	}
+
+	public OS_Module getCarrier() {
+		return carrier;
+	}
+
+	public void setCarrier(OS_Module aCarrier) {
+		carrier = aCarrier;
 	}
 
 	/*private void searchImports(String name, int level, LookupResultList Result, List<Context> alreadySearched, ImportStatement importStatement) {

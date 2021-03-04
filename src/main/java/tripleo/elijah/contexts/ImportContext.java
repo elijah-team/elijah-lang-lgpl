@@ -89,18 +89,6 @@ public class ImportContext extends Context {
 	public Context getParent() {
 		return _parent;
 	}
-
-	private OS_Module module() {
-		Context ctx = _parent;
-		while (!(ctx instanceof ModuleContext))
-			ctx = ctx.getParent();
-		return ((ModuleContext) ctx).carrier;
-	}
-
-	private Compilation compilation() {
-		OS_Module module = module();
-		return module.parent;
-	}
 }
 
 //
