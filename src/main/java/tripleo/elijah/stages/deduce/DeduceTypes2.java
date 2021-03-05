@@ -1620,9 +1620,11 @@ public class DeduceTypes2 {
 			LookupResultList lrl3 = lookupExpression(expression, ctx);
 			OS_Element best3 = lrl3.chooseBest(null);
 			return best3;
+//		default:
+//			System.err.println("1242 "+expression);
+//			throw new NotImplementedException();
 		default:
-			System.err.println("1242 "+expression);
-			throw new NotImplementedException();
+			throw new IllegalStateException("1242 Unexpected value: " + expression.getKind());
 		}
 	}
 
