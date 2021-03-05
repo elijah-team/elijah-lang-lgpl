@@ -1551,6 +1551,10 @@ public class DeduceTypes2 {
 								OS_Type attached = deduceExpression(vs.initialValue(), ectx);
 								TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 								idte2.type = tte;
+							} else {
+								System.err.println("Empty Variable Expression");
+								throw new IllegalStateException("Empty Variable Expression");
+//								return; // TODO call noFoundElement, raise exception
 							}
 						} else if (el instanceof FunctionDef) {
 							OS_Type attached = new OS_UnknownType(el);
