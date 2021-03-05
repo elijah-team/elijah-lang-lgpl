@@ -6721,12 +6721,12 @@ inputState.guessing--;
 		BaseScope cr
 	) throws RecognitionException, TokenStreamException {
 		
-		Qualident q=null;FormalArgList o=null;
+		Qualident q=null;ExpressionList o=null;
 		
 		try {      // for error handling
 			match(LITERAL_construct);
 			q=qualident();
-			o=opfal();
+			o=expressionList();
 			if ( inputState.guessing==0 ) {
 				cr.constructExpression(q,o);
 			}

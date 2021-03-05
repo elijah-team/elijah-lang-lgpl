@@ -10,7 +10,7 @@ package tripleo.elijah.lang.builder;
 
 import antlr.Token;
 import tripleo.elijah.lang.Documentable;
-import tripleo.elijah.lang.FormalArgList;
+import tripleo.elijah.lang.ExpressionList;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.util.NotImplementedException;
@@ -55,7 +55,7 @@ public class BaseScope implements Documentable {
 		return bs;
 	}
 
-	public void constructExpression(Qualident q, FormalArgList o) {
+	public void constructExpression(Qualident q, ExpressionList o) {
 		throw new NotImplementedException();
 	}
 

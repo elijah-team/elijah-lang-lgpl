@@ -53,7 +53,7 @@ public class FunctionDefScope extends BaseFunctionDefScope implements Documentab
 	}
 
 	@Override
-	public void constructExpression(Qualident q, FormalArgList o) {
+	public void constructExpression(Qualident q, ExpressionList o) {
 		add(new ConstructStatementBuilder(q, o));
 	}
 }
