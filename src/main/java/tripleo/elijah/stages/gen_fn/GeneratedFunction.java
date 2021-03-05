@@ -92,14 +92,14 @@ public class GeneratedFunction implements GeneratedNode {
 	}
 
 	/**
-	 * Returns a string that represents the path encoded in ia2.
+	 * Returns a string that represents the path encoded by ia2.
 	 * Does not transform the string into target language (ie C).
 	 * Called from {@link DeduceTypes2#do_assign_call(GeneratedFunction, Context, IdentTableEntry, FnCallArgs, int)}
 	 * or {@link DeduceTypes2#deduce_generated_function(GeneratedFunction)}
 	 * or {@link #resolveIdentIA(Context, IdentIA, GeneratedFunction)}
 	 *
 	 * @param ia2 the path
-	 * @return a string that represents the path encoded in ia2
+	 * @return a string that represents the path encoded by ia2
 	 */
 	public String getIdentIAPathNormal(final IdentIA ia2) {
 		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
