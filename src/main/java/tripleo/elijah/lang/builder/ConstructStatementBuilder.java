@@ -15,10 +15,10 @@ import tripleo.elijah.lang.*;
  */
 public class ConstructStatementBuilder extends ElBuilder {
 	private final Qualident q;
-	private final FormalArgList o;
+	private final ExpressionList o;
 	private Context _context;
 
-	public ConstructStatementBuilder(Qualident q, FormalArgList o) {
+	public ConstructStatementBuilder(Qualident q, ExpressionList o) {
 		super();
 		this.q = q;
 		this.o = o;

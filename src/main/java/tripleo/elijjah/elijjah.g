@@ -54,7 +54,7 @@ indexingStatement[IndexingStatement idx]
 	: "indexing" 
 		(i1:IDENT 			    {idx.setName(i1);}
 		 TOK_COLON 			    
-		 el=expressionList2		{idx.setExprs(el);})*
+		 el=expressionList		{idx.setExprs(el);})*
 	;
 constantValue returns [IExpression e]
 	 {e=null;}
@@ -227,7 +227,7 @@ annotation_clause returns [AnnotationClause a]
 	: ANNOT
 		(                                       {ap=new AnnotationPart();}
 		 q=qualident                            {ap.setClass(q);}
-			(LPAREN el=expressionList2 RPAREN   {ap.setExprs(el);}
+			(LPAREN el=expressionList RPAREN   {ap.setExprs(el);}
 			)?                                  {a.add(ap);}
 		)+ RBRACK
 	;
@@ -615,7 +615,7 @@ formalArgList returns [FormalArgList fal]
 	: formalArgList_[fal]
 	;
 statement[StatementClosure cr, OS_Element aParent]
-		{Qualident q=null;FormalArgList o=null;}
+		{Qualident q=null;ExpressionList o=null;}
 	:
 	( expr=assignmentExpression {cr.statementWrapper(expr);}
 	| ifConditional[cr.ifConditional(aParent, cur)]
@@ -624,7 +624,7 @@ statement[StatementClosure cr, OS_Element aParent]
 	| varStmt[cr, aParent]
 	| whileLoop[cr]
 	| frobeIteration[cr]
-	| "construct" q=qualident o=opfal {cr.constructExpression(q,o);}
+	| "construct" q=qualident o=expressionList {cr.constructExpression(q,o);}
 	| "yield" expr=expression {cr.yield(expr);}
 	) opt_semi
 	;
@@ -679,7 +679,7 @@ ident returns [IdentExpression id]
 		{id=null;}
 	: r1:IDENT {id=new IdentExpression(r1, cur);}
 	;
-expressionList2 returns [ExpressionList el]
+expressionList returns [ExpressionList el]
 		{el = new ExpressionList();}
 	: expr=expression {el.next(expr);} (COMMA expr=expression {el.next(expr);})*
 	;
@@ -916,7 +916,7 @@ postfixExpression returns [IExpression ee]
 //				| "this"
 //				| "class"
 //				| newExpression
-//				| "inherit" LPAREN ( expressionList2 )? RPAREN
+//				| "inherit" LPAREN ( expressionList )? RPAREN
 				)
 			// the above line needs a semantic check to make sure "class"
 			//   is the _last_ qualifier.
@@ -933,7 +933,7 @@ postfixExpression returns [IExpression ee]
 
 			// method invocation
 		|	lp:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
-				(el=expressionList2)? 
+				(el=expressionList)? 
 {ProcedureCallExpression pce=new ProcedureCallExpression();
 pce.identifier(ee);
 pce.setArgs(el);
@@ -968,7 +968,7 @@ dot_expression_or_procedure_call [IExpression e1] returns [IExpression ee]
 	: e=ident {ee=new DotExpression(e1, e);}
 
     ( lp2:LPAREN/*^*/ /*{#lp.setType(METHOD_CALL);}*/
-      (el=expressionList2)?
+      (el=expressionList)?
             {ProcedureCallExpression pce=new ProcedureCallExpression();
             pce.identifier(ee);
             pce.setArgs(el);
@@ -994,7 +994,7 @@ primaryExpression returns [IExpression ee]
 	|	LPAREN/*!*/ ee=assignmentExpression RPAREN/*!*/ {ee=new SubExpression(ee);}
 	|   {ppc=new FuncExpr();} funcExpr[ppc] {ee=ppc;}
 	| LBRACK        {ee=new ListExpression();el=new ExpressionList();}
-	    el=expressionList2  {((ListExpression)ee).setContents(el);}
+	    el=expressionList  {((ListExpression)ee).setContents(el);}
 	  RBRACK
 	;
 funcExpr[FuncExpr pc] // remove scope to use in `typeName's

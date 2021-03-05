@@ -20,14 +20,17 @@ public class ConstructStatement implements FunctionItem, StatementItem, OS_Eleme
 	private final OS_Element parent;
 	private final Context context;
 	private final IExpression _expr;
-	private final FormalArgList _args;
+	private final ExpressionList _args;
 	private OS_Type _type;
 
-	public ConstructStatement(final OS_Element aParent, final Context aContext, final IExpression aExpr, final FormalArgList aFormalArgList) {
+	public ConstructStatement(final OS_Element aParent,
+							  final Context aContext,
+							  final IExpression aExpr,
+							  final ExpressionList aExpressionList) {
 		parent = aParent;
 		context = aContext;
 		_expr = aExpr;
-		_args = aFormalArgList;
+		_args = aExpressionList;
 	}
 
 //	@Override
@@ -64,7 +67,7 @@ public class ConstructStatement implements FunctionItem, StatementItem, OS_Eleme
 		return _expr;
 	}
 
-	public FormalArgList getArgs() {
+	public ExpressionList getArgs() {
 		return _args;
 	}
 }

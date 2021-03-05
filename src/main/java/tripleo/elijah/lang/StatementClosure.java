@@ -18,7 +18,7 @@ public interface StatementClosure {
 
 //	StatementClosure procCallExpr();
 
-	void constructExpression(IExpression aExpr, FormalArgList aO);
+	void constructExpression(IExpression aExpr, ExpressionList aO);
 
 	void yield(IExpression aExpr);
 

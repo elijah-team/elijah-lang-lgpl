@@ -162,7 +162,7 @@ public ElijjahParser(ParserSharedInputState state) {
 						idx.setName(i1);
 					}
 					match(TOK_COLON);
-					el=expressionList2();
+					el=expressionList();
 					if ( inputState.guessing==0 ) {
 						idx.setExprs(el);
 					}
@@ -330,7 +330,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		}
 	}
 	
-	public final ExpressionList  expressionList2() throws RecognitionException, TokenStreamException {
+	public final ExpressionList  expressionList() throws RecognitionException, TokenStreamException {
 		ExpressionList el;
 		
 		el = new ExpressionList();
@@ -1063,7 +1063,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					case LPAREN:
 					{
 						match(LPAREN);
-						el=expressionList2();
+						el=expressionList();
 						match(RPAREN);
 						if ( inputState.guessing==0 ) {
 							ap.setExprs(el);
@@ -4276,7 +4276,7 @@ inputState.guessing--;
 		StatementClosure cr, OS_Element aParent
 	) throws RecognitionException, TokenStreamException {
 		
-		Qualident q=null;FormalArgList o=null;
+		Qualident q=null;ExpressionList o=null;
 		
 		try {      // for error handling
 			{
@@ -4345,7 +4345,7 @@ inputState.guessing--;
 			{
 				match(LITERAL_construct);
 				q=qualident();
-				o=opfal();
+				o=expressionList();
 				if ( inputState.guessing==0 ) {
 					cr.constructExpression(q,o);
 				}
@@ -7521,7 +7521,7 @@ inputState.guessing--;
 					case LITERAL_function:
 					case LITERAL_procedure:
 					{
-						el=expressionList2();
+						el=expressionList();
 						break;
 					}
 					case RPAREN:
@@ -7693,7 +7693,7 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					ee=new ListExpression();el=new ExpressionList();
 				}
-				el=expressionList2();
+				el=expressionList();
 				if ( inputState.guessing==0 ) {
 					((ListExpression)ee).setContents(el);
 				}
@@ -7757,7 +7757,7 @@ inputState.guessing--;
 				case LITERAL_function:
 				case LITERAL_procedure:
 				{
-					el=expressionList2();
+					el=expressionList();
 					break;
 				}
 				case RPAREN:
@@ -9065,7 +9065,7 @@ inputState.guessing--;
 	}
 	public static final BitSet _tokenSet_5 = new BitSet(mk_tokenSet_5());
 	private static final long[] mk_tokenSet_6() {
-		long[] data = { 1125907965182274L, 0L};
+		long[] data = { 17776362328210754L, 536869011456L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_6 = new BitSet(mk_tokenSet_6());

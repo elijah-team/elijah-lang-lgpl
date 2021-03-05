@@ -67,7 +67,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 //	}
 
 	@Override
-	public void constructExpression(final IExpression aExpr, final FormalArgList aO) {
+	public void constructExpression(final IExpression aExpr, final ExpressionList aO) {
 		add(new ConstructStatement(_parent, _parent.getContext(), aExpr, aO));
 	}
 
