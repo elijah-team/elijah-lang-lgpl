@@ -150,7 +150,8 @@ public class DeducePhase {
 	public void finish() {
 		for (Map.Entry<IdentTableEntry, OnType> entry : idte_type_callbacks.entrySet()) {
 			IdentTableEntry idte = entry.getKey();
-			if (idte.type.attached != null)
+			if (idte.type !=null && // TODO make a stage where this gets set (resolvePotentialTypes)
+					idte.type.attached != null)
 				entry.getValue().typeDeduced(idte.type.attached);
 			else
 				entry.getValue().noTypeFound();
