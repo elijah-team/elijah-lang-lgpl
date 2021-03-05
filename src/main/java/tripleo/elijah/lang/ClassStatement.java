@@ -280,7 +280,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		this.genericPart = genericPart;
 	}
 
-	public Iterable<? extends TypeName> getGenericPart() {
+	public List<TypeName> getGenericPart() {
 		if (genericPart == null)
 			return new ArrayList<TypeName>();
 		else
