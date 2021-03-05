@@ -37,8 +37,8 @@ public abstract class FoundElement {
 		noFoundElement();
 	}
 
-	abstract void foundElement(OS_Element e);
-	abstract void noFoundElement();
+	public abstract void foundElement(OS_Element e);
+	public abstract void noFoundElement();
 
 	public boolean didntFind() {
 		return _didntFind;

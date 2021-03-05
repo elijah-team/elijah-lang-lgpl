@@ -159,13 +159,13 @@ public class DeduceTypes2 {
 								final String x = generatedFunction.getIdentIAPathNormal(identIA);
 
 								@Override
-								void foundElement(OS_Element e) {
+								public void foundElement(OS_Element e) {
 									ite.setStatus(BaseTableEntry.Status.KNOWN, e);
 									found_element_for_ite(generatedFunction, ite, e, context);
 								}
 
 								@Override
-								void noFoundElement() {
+								public void noFoundElement() {
 									ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 									errSink.reportError("1004 Can't find element for "+ x);
 								}
@@ -218,7 +218,7 @@ public class DeduceTypes2 {
 								final String path = generatedFunction.getIdentIAPathNormal(ident_a);
 
 								@Override
-								void foundElement(OS_Element x) {
+								public void foundElement(OS_Element x) {
 									ite.setStatus(BaseTableEntry.Status.KNOWN, x);
 									if (ite.type != null && ite.type.attached != null) {
 										if (ite.type.attached.getType() == OS_Type.Type.USER) {
@@ -258,7 +258,7 @@ public class DeduceTypes2 {
 								}
 
 								@Override
-								void noFoundElement() {
+								public void noFoundElement() {
 									ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 									errSink.reportError("165 Can't resolve "+path);
 								}
@@ -368,12 +368,12 @@ public class DeduceTypes2 {
 					resolveIdentIA_(context, (IdentIA) fn1.expression_num, generatedFunction, new FoundElement(phase) {
 
 						@Override
-						void foundElement(OS_Element e) {
+						public void foundElement(OS_Element e) {
 							fn1.resolved_element = e;
 						}
 
 						@Override
-						void noFoundElement() {
+						public void noFoundElement() {
 							assert false;
 						}
 					});
@@ -643,13 +643,13 @@ public class DeduceTypes2 {
 
 			resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
 				@Override
-				void foundElement(OS_Element e) {
+				public void foundElement(OS_Element e) {
 //					generatedFunction.getIdentTableEntry(identIA.getIndex()).setResolvedElement(y);
 					System.out.println("601 "+generatedFunction.getIdentTableEntry(to_int(pte.expression_num)).getStatus());
 				}
 
 				@Override
-				void noFoundElement() {
+				public void noFoundElement() {
 					System.out.println("1005 Can't find element for " + generatedFunction.getIdentIAPathNormal(identIA));
 				}
 			});
@@ -778,7 +778,7 @@ public class DeduceTypes2 {
 					final String x = generatedFunction.getIdentIAPathNormal(identIA);
 
 					@Override
-					void foundElement(OS_Element el) {
+					public void foundElement(OS_Element el) {
 						pte.resolved_element = el;
 						if (el instanceof FunctionDef) {
 							FunctionDef fd = (FunctionDef) el;
@@ -802,7 +802,7 @@ public class DeduceTypes2 {
 					}
 
 					@Override
-					void noFoundElement() {
+					public void noFoundElement() {
 						System.err.println("IdentIA path cannot be resolved "+ x);
 					}
 				});
@@ -1352,13 +1352,13 @@ public class DeduceTypes2 {
 							final String z = generatedFunction.getIdentIAPathNormal((IdentIA) ia);
 
 							@Override
-							void foundElement(OS_Element e) {
+							public void foundElement(OS_Element e) {
 								foundElement.doFoundElement(e);
 								idte.setStatus(BaseTableEntry.Status.KNOWN, e);
 							}
 
 							@Override
-							void noFoundElement() {
+							public void noFoundElement() {
 								foundElement.noFoundElement();
 								System.out.println("2002 Cant resolve " + z);
 								idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
