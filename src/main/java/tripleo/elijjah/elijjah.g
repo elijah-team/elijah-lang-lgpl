@@ -78,7 +78,7 @@ classStatement [OS_Element parent, Context cctx, List<AnnotationClause> as] retu
             |"signature"    {cls.setType(ClassTypes.SIGNATURE);}
             |"abstract"     {cls.setType(ClassTypes.ABSTRACT);})?
       i1=ident              {cls.setName(i1);}
-	  ( LBRACK tnl=typeNameList2 RBRACK { cb.setGenericPart(tnl);})?
+	  ( LBRACK tnl=typeNameList2 RBRACK { cls.setGenericPart(tnl);})?
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
     LCURLY                  {cur=cls.getContext();ctx=(ClassContext)cur;}

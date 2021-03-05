@@ -518,7 +518,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					tnl=typeNameList2();
 					match(RBRACK);
 					if ( inputState.guessing==0 ) {
-						cb.setGenericPart(tnl);
+						cls.setGenericPart(tnl);
 					}
 					break;
 				}
