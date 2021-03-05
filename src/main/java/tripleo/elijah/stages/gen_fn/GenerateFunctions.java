@@ -837,7 +837,11 @@ public class GenerateFunctions {
 				return gf.get_assignment_path(de, this, cctx);
 			}
 		case QIDENT:
-			throw new NotImplementedException();
+		{
+			final Qualident q = (Qualident) expression;
+			IExpression de = Helpers.qualidentToDotExpression2(q);
+			return gf.get_assignment_path(de, this, cctx);
+		}
 		case IDENT:
 			String text = ((IdentExpression) expression).getText();
 			InstructionArgument i = gf.vte_lookup(text);
