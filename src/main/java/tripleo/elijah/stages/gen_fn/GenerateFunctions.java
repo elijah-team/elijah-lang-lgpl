@@ -398,6 +398,20 @@ public class GenerateFunctions {
 			}
 		}
 
+		public void generate_construct_statement(ConstructStatement aConstructStatement, @NotNull GeneratedFunction gf, Context cctx) {
+			final IExpression left = aConstructStatement.getExpr();
+			final ExpressionList args = aConstructStatement.getArgs();
+			//
+			InstructionArgument expression_num = simplify_expression(left, gf, cctx);
+			if (expression_num == null) {
+				expression_num = gf.get_assignment_path(left, GenerateFunctions.this, cctx);
+			}
+			final int i = addProcTableEntry(left, expression_num, get_args_types(args, gf, cctx), gf);
+			final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
+			l.add(new ProcIA(i, gf));
+			l.addAll(simplify_args(args, gf, cctx));
+			add_i(gf, InstructionName.CALL, l, cctx);
+		}
 	}
 
 	private void generate_item(final OS_Element item, @NotNull final GeneratedFunction gf, final Context cctx) {
@@ -431,6 +445,9 @@ public class GenerateFunctions {
 			throw new NotImplementedException();
 		} else if (item instanceof SyntacticBlock) {
 			throw new NotImplementedException();
+		} else if (item instanceof ConstructStatement) {
+			final ConstructStatement constructStatement = (ConstructStatement) item;
+			gi.generate_construct_statement(constructStatement, gf, cctx);
 		} else {
 			throw new IllegalStateException("cant be here");
 		}
