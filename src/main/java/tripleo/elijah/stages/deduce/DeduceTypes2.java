@@ -363,9 +363,10 @@ public class DeduceTypes2 {
 				final ProcTableEntry fn1 = generatedFunction.getProcTableEntry(pte_num);
 //				final InstructionArgument i2 = (instruction.getArg(1));
 				{
-					String x = generatedFunction.getIdentIAPathNormal((IdentIA) fn1.expression_num);
+					final IdentIA expression = (IdentIA) fn1.expression_num;
+					String x = generatedFunction.getIdentIAPathNormal(expression);
 					System.err.println("298 "+x);
-					resolveIdentIA_(context, (IdentIA) fn1.expression_num, generatedFunction, new FoundElement(phase) {
+					resolveIdentIA_(context, expression, generatedFunction, new FoundElement(phase) {
 
 						@Override
 						public void foundElement(OS_Element e) {
