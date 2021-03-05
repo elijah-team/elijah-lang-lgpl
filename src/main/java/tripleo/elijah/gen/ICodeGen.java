@@ -28,7 +28,7 @@ public interface ICodeGen {
 
 	void visitTypeNameElement(ClassContext.OS_TypeNameElement aOS_typeNameElement);
 
-	void visitConstructStatement(ConstructExpression aConstructExpression);
+	void visitConstructStatement(ConstructStatement aConstructExpression);
 
 	void visitFormalArgListItem(FormalArgListItem aFormalArgListItem);
 

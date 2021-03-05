@@ -59,7 +59,7 @@ public class Scope3 implements Documentable {
 	private class Scope3StatementClosure implements StatementClosure {
 		@Override
 		public void constructExpression(final IExpression aExpr, final FormalArgList aO) {
-			final ConstructExpression constructExpression = new ConstructExpression(parent, parent.getContext(), aExpr, aO);
+			final ConstructStatement constructExpression = new ConstructStatement(parent, parent.getContext(), aExpr, aO);
 			add(constructExpression);
 		}
 

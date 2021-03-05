@@ -57,7 +57,7 @@ public class GeneratedClass implements GeneratedContainer {
 				scope3.add(new StatementWrapper(e, fd.getContext(), fd));
 			} else {
 				if (getPragma("auto_construct")) {
-					scope3.add(new ConstructExpression(fd, fd.getContext(), varTableEntry.nameToken, null));
+					scope3.add(new ConstructStatement(fd, fd.getContext(), varTableEntry.nameToken, null));
 				}
 			}
 		}

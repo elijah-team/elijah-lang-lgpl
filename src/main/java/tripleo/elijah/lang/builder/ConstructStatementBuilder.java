@@ -13,20 +13,20 @@ import tripleo.elijah.lang.*;
 /**
  * Created 12/23/20 2:35 AM
  */
-public class ConstructExpressionBuilder extends ElBuilder {
+public class ConstructStatementBuilder extends ElBuilder {
 	private final Qualident q;
 	private final FormalArgList o;
 	private Context _context;
 
-	public ConstructExpressionBuilder(Qualident q, FormalArgList o) {
+	public ConstructStatementBuilder(Qualident q, FormalArgList o) {
 		super();
 		this.q = q;
 		this.o = o;
 	}
 
 	@Override
-	protected ConstructExpression build() {
-		return new ConstructExpression(_parent, _context, q, o);
+	protected ConstructStatement build() {
+		return new ConstructStatement(_parent, _context, q, o);
 	}
 
 	@Override
