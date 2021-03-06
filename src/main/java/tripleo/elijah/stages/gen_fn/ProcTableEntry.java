@@ -40,8 +40,8 @@ public class ProcTableEntry {
 		this.args = args;
 	}
 
-	@Override
-	public @NotNull String toString() {
+	@Override @NotNull
+	public String toString() {
 		return "ProcTableEntry{" +
 				"index=" + index +
 				", expression=" + expression +
