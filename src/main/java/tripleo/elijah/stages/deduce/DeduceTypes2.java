@@ -158,8 +158,10 @@ public class DeduceTypes2 {
 									x = null;
 								}
 
-								if (x != null)
-									x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext())); // TODO context??
+								if (x != null) {
+									System.err.println("162 Adding FoundParent for "+itee);
+									itee.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext())); // TODO context??
+								}
 //								itex = itex.backlink;
 							}
 						}
@@ -1744,23 +1746,6 @@ public class DeduceTypes2 {
 		@Override
 		public void onChange(OS_Element el, BaseTableEntry.Status newStatus) {
 			if (newStatus == BaseTableEntry.Status.KNOWN) {
-				int y = 2;
-/*
-				if (bte instanceof IdentTableEntry) {
-					LookupResultList lrl = lookupExpression(((IdentTableEntry) bte).getIdent(), ctx);
-					OS_Element best = lrl.chooseBest(null);
-					((IdentTableEntry) bte).setResolvedElement(best);
-					found_element_for_ite(null, (IdentTableEntry) bte, best, ctx);
-					bte.setStatus(BaseTableEntry.Status.KNOWN, best);
-				} else if (bte instanceof VariableTableEntry) {
-					LookupResultList lrl = lookupExpression(Helpers.string_to_ident(((VariableTableEntry) bte).getName()), ctx);
-					OS_Element best = lrl.chooseBest(null);
-//					((VariableTableEntry)ite).setResolvedElement(best);
-//					found_element_for_ite(null, ite, best, ctx);
-					bte.setStatus(BaseTableEntry.Status.KNOWN, best);
-				}
-			}
-*/
 				if (bte instanceof VariableTableEntry) {
 					final VariableTableEntry vte = (VariableTableEntry) bte;
 					@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
@@ -1774,7 +1759,8 @@ public class DeduceTypes2 {
 									OS_Element ele = ty2.getElement();
 									LookupResultList lrl = lookupExpression(ite.getIdent(), ele.getContext());
 									OS_Element best = lrl.chooseBest(null);
-									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+//									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+									ite.setResolvedElement(best);
 								} catch (ResolveError resolveError) {
 									errSink.reportDignostic(resolveError);
 								}
@@ -1789,7 +1775,8 @@ public class DeduceTypes2 {
 					OS_Element best = lrl.chooseBest(null);
 					ite.setResolvedElement(best);
 					found_element_for_ite(null, ite, best, ctx);
-					ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+//					ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+					ite.setResolvedElement(best);
 				}
 			}
 		}
