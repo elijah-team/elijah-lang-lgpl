@@ -27,6 +27,14 @@ public class ClassInstantiationTest {
 
 		c.feedCmdLine(List_of(f));
 	}
+
+	@Test
+	public void classInstantiation2() {
+		String f = "test/basic1/class_instantiation2/";
+		Compilation c = new Compilation(new StdErrSink(), new IO());
+
+		c.feedCmdLine(List_of(f));
+	}
 }
 
 //
