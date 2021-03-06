@@ -750,6 +750,7 @@ public class DeduceTypes2 {
 							@Override
 							public void typeDeduced(OS_Type aType) {
 								pte.setArgType(ii, aType); // TODO does this belong here or in FunctionInvocation?
+								tte.attached = aType; // since we know that tte.attached is always null here
 							}
 
 							@Override
