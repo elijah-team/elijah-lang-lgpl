@@ -24,6 +24,10 @@ public class TypeNameList {
 		p.add(tn);
 	}
 
+	public TypeName get(int index) {
+		return p.get(index);
+	}
+
 	@Override
 	public String toString() {
 		return Helpers.String_join(", ", Collections2.transform(p, new Function<TypeName, String>() {
