@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class ProcTableEntry {
 	public final IExpression expression;
 	public final InstructionArgument expression_num;
 	public OS_Element resolved_element;
+	private ClassInvocation classInvocation;
 
 	public ProcTableEntry(final int index, final IExpression iExpression, final InstructionArgument expression_num, final List<TypeTableEntry> args) {
 		this.index = index;
@@ -54,6 +56,18 @@ public class ProcTableEntry {
 
 	public void setArgType(int aIndex, OS_Type aType) {
 		args.get(aIndex).attached = aType;
+	}
+
+	public void setClassInvocation(ClassInvocation aClassInvocation) {
+		classInvocation = aClassInvocation;
+	}
+
+	public void setResolvedElement(OS_Element aResolvedElement) {
+		resolved_element = aResolvedElement;
+	}
+
+	public OS_Element getResolvedElement() {
+		return resolved_element;
 	}
 }
 
