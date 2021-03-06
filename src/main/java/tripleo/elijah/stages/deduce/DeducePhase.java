@@ -117,7 +117,6 @@ public class DeducePhase {
 //		final GenerateFunctions gfm = new GenerateFunctions(m);
 //		List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
 
-
 		if (false) {
 			final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 			for (GeneratedNode lgci : lgc) {
@@ -127,8 +126,31 @@ public class DeducePhase {
 			}
 
 			deduceModule(m, lgf);
-		} else
-			deduceModule(m); // TODO what a controversial change
+		} else {
+//			deduceModule(m); // TODO what a controversial change
+
+			final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
+
+			for (GeneratedNode lgci : lgc) {
+				if (lgci instanceof GeneratedClass) {
+					final Collection<GeneratedFunction> generatedFunctions = ((GeneratedClass) lgci).functionMap.values();
+					for (GeneratedFunction generatedFunction : generatedFunctions) {
+						generatedFunction.setClass(lgci);
+					}
+					lgf.addAll(generatedFunctions);
+				}
+			}
+
+			List<GeneratedNode> lgcc = new ArrayList<GeneratedNode>();
+
+			for (GeneratedNode generatedNode : lgc) {
+				lgcc.add(generatedNode);
+			}
+
+			generatedClasses = lgcc;
+
+			deduceModule(m, lgf);
+		}
 	}
 
 /*
