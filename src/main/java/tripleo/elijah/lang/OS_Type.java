@@ -106,6 +106,15 @@ public class OS_Type {
 					{
 						return new OS_UnitType();
 					}
+				case String_:
+					{
+						final LookupResultList r;
+						final OS_Element best;
+
+						r = ctx.lookup("String8"); // TODO not sure about this
+						best = r.chooseBest(null);
+						return new OS_Type((ClassStatement) best);
+					}
 				default:
 					throw new IllegalStateException("Unexpected value: " + getBType());
 				}

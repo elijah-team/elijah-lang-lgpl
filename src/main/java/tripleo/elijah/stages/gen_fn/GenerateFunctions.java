@@ -662,6 +662,14 @@ public class GenerateFunctions {
 				idte.addPotentialType(instruction.getIndex(), tte);
 			}
 		}
+
+		public void string_literal(GeneratedFunction gf, IExpression left, StringExpression right, Context aContext) {
+			@NotNull final InstructionArgument agn_path = gf.get_assignment_path(left, GenerateFunctions.this, aContext);
+			final int cte = addConstantTableEntry("", right, new OS_Type(BuiltInTypes.String_)/*right.getType()*/, gf);
+
+			final int agn_inst = add_i(gf, InstructionName.AGN, List_of(agn_path, new ConstTableIA(cte, gf)), aContext);
+			// TODO what now??
+		}
 	}
 
 	private void generate_item_assignment(@NotNull final IExpression x, @NotNull final GeneratedFunction gf, final Context cctx) {
@@ -678,6 +686,9 @@ public class GenerateFunctions {
 			break;
 		case NUMERIC:
 			gia.numeric(gf, bbe.getLeft(), (NumericExpression) right1, cctx);
+			break;
+		case STRING_LITERAL:
+			gia.string_literal(gf, bbe.getLeft(), (StringExpression) right1, cctx);
 			break;
 		case ADDITION:
 		case MULTIPLY:
@@ -859,6 +870,12 @@ public class GenerateFunctions {
 			{
 				final NumericExpression ne = (NumericExpression) expression;
 				final int ii = addConstantTableEntry2(null, ne, ne.getType(), gf);
+				return new ConstTableIA(ii, gf);
+			}
+		case STRING_LITERAL:
+			{
+				final StringExpression se = (StringExpression) expression;
+				final int ii = addConstantTableEntry2(null, se, se.getType(), gf);
 				return new ConstTableIA(ii, gf);
 			}
 		case CHAR_LITERAL:

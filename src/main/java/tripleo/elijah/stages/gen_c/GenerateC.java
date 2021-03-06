@@ -911,6 +911,8 @@ public class GenerateC {
 			switch (cte.initialValue.getKind()) {
 			case NUMERIC:
 				return ("" + ((NumericExpression) cte.initialValue).getValue());
+			case STRING_LITERAL:
+				return ("" + ((StringExpression) cte.initialValue).getText());
 			case IDENT:
 				final String text = ((IdentExpression) cte.initialValue).getText();
 				if (BuiltInTypes.isBooleanText(text))

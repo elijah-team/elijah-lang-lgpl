@@ -107,6 +107,19 @@ public class DeduceTypes2 {
 								}
 								break;
 							}
+						case STRING_LITERAL:
+							{
+								final OS_Type a = cte.getTypeTableEntry().attached;
+								if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
+									try {
+										cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.String_), context);
+									} catch (ResolveError resolveError) {
+										System.out.println("117 Can't be here");
+//										resolveError.printStackTrace(); // TODO print diagnostic
+									}
+								}
+								break;
+							}
 						case IDENT:
 							{
 								final OS_Type a = cte.getTypeTableEntry().attached;
@@ -559,6 +572,25 @@ public class DeduceTypes2 {
 						if (prelude == null) // README Assume `module' IS prelude
 							prelude = module;
 						final LookupResultList lrl = prelude.getContext().lookup(typeName);
+						OS_Element best = lrl.chooseBest(null);
+						while (!(best instanceof ClassStatement)) {
+							if (best instanceof AliasStatement) {
+								best = _resolveAlias((AliasStatement) best);
+							} else if (OS_Type.isConcreteType(best)) {
+								throw new NotImplementedException();
+							} else
+								throw new NotImplementedException();
+						}
+						return new OS_Type((ClassStatement) best);
+					}
+				case String_:
+					{
+						String typeName = type.getBType().name();
+						assert typeName.equals("String_");
+						OS_Module prelude = module.prelude;
+						if (prelude == null) // README Assume `module' IS prelude
+							prelude = module;
+						final LookupResultList lrl = prelude.getContext().lookup("ConstString"); // TODO not sure about String
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
