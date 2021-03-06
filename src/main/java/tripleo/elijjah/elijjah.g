@@ -624,7 +624,7 @@ statement[StatementClosure cr, OS_Element aParent]
 	| varStmt[cr, aParent]
 	| whileLoop[cr]
 	| frobeIteration[cr]
-	| "construct" q=qualident o=expressionList {cr.constructExpression(q,o);}
+	| constructExpression[cr]
 	| "yield" expr=expression {cr.yield(expr);}
 	) opt_semi
 	;
@@ -637,13 +637,21 @@ statement2[BaseScope cr] // was BaseFunctionDefScope
 	| varStmt2[cr]
 	| whileLoop2[cr]
 	| frobeIteration2[cr]
-	| constructExpression[cr]
+	| constructExpression2[cr]
 	| yieldExpression[cr]
 	) opt_semi
 	;
-constructExpression [BaseScope cr] // was BaseFunctionDefScope
-		{Qualident q=null;FormalArgList o=null;}
-	: "construct" q=qualident o=opfal 			{cr.constructExpression(q,o);}
+constructExpression2[BaseScope cr] // was BaseFunctionDefScope
+		{Qualident q=null;ExpressionList o=null;}
+	: "construct" q=qualident
+		(LPAREN (o=expressionList)? RPAREN)? // optional empty parens
+												{cr.constructExpression(q,o);}
+	;
+constructExpression[StatementClosure cr]
+		{Qualident q=null;ExpressionList o=null;}
+	: "construct" q=qualident
+		(LPAREN (o=expressionList)? RPAREN)? // optional empty parens
+												{cr.constructExpression(q,o);}
 	;
 yieldExpression [BaseScope cr] // was BaseFunctionDefScope
 	: "yield" expr=expression 					{cr.yield(expr);}

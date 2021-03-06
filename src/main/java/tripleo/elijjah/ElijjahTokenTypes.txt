@@ -47,8 +47,8 @@ TOK_ARROW=47
 LITERAL_var="var"=48
 LITERAL_val="val"=49
 LITERAL_alias="alias"=50
-LITERAL_construct="construct"=51
-LITERAL_yield="yield"=52
+LITERAL_yield="yield"=51
+LITERAL_construct="construct"=52
 SEMI=53
 LITERAL_invariant="invariant"=54
 LITERAL_access="access"=55

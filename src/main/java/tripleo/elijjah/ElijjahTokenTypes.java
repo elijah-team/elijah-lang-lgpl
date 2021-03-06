@@ -52,8 +52,8 @@ public interface ElijjahTokenTypes {
 	int LITERAL_var = 48;
 	int LITERAL_val = 49;
 	int LITERAL_alias = 50;
-	int LITERAL_construct = 51;
-	int LITERAL_yield = 52;
+	int LITERAL_yield = 51;
+	int LITERAL_construct = 52;
 	int SEMI = 53;
 	int LITERAL_invariant = 54;
 	int LITERAL_access = 55;
