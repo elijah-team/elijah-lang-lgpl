@@ -144,6 +144,7 @@ public class DeducePhase {
 			List<GeneratedNode> lgcc = new ArrayList<GeneratedNode>();
 
 			for (GeneratedNode generatedNode : lgc) {
+				if (!(generatedNode instanceof GeneratedClass || generatedNode instanceof GeneratedNamespace)) continue;
 				lgcc.add(generatedNode);
 			}
 
