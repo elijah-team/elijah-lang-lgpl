@@ -26,6 +26,8 @@ public abstract class BaseTableEntry {
 
 	public void setStatus(Status newStatus, OS_Element el) {
 		status = newStatus;
+		if (newStatus == Status.KNOWN && el == null)
+			assert false;
 		for (StatusListener statusListener : statusListenerList) {
 			statusListener.onChange(el, newStatus);
 		}

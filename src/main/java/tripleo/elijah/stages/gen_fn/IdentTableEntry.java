@@ -93,6 +93,7 @@ public class IdentTableEntry extends BaseTableEntry {
 	}
 
 	public void setResolvedElement(OS_Element el) {
+		assert el != null;
 		resolved_element = el;
 	}
 
