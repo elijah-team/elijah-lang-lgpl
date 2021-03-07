@@ -214,7 +214,8 @@ public class DeduceTypes2 {
 	//									System.out.println("705 " + best);
 										vte.type.attached = new OS_Type((ClassStatement) best);
 									}
-									vte.setStatus(BaseTableEntry.Status.KNOWN, vte.el);
+									//vte.el = best;
+									vte.setStatus(BaseTableEntry.Status.KNOWN, best/*vte.el*/);
 								} else {
 									errSink.reportDignostic(new ResolveError(x, lrl));
 								}
