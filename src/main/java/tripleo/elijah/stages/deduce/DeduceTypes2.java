@@ -36,9 +36,7 @@ import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Stack;
 import java.util.regex.Pattern;
 
 /**
@@ -206,7 +204,7 @@ public class DeduceTypes2 {
 								OS_Element best = lrl.chooseBest(null);
 								if (best != null) {
 									while (best instanceof AliasStatement) {
-										best = _resolveAlias((AliasStatement) best);
+										best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
 									}
 									if (!(OS_Type.isConcreteType(best))) {
 										errSink.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
@@ -250,7 +248,7 @@ public class DeduceTypes2 {
 									} else {
 										int yy=2;
 										if (!ite.hasResolvedElement()) {
-											LookupResultList lrl = lookupExpression(ite.getIdent(), fd_ctx);
+											LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), fd_ctx);
 											OS_Element best = lrl.chooseBest(null);
 											if (best != null) {
 												ite.setStatus(BaseTableEntry.Status.KNOWN, x);
@@ -546,7 +544,7 @@ public class DeduceTypes2 {
 			int yy = 2;
 		} else if (y instanceof AliasStatement) {
 			System.err.println("396 AliasStatement");
-			OS_Element x = _resolveAlias((AliasStatement) y);
+			OS_Element x = DeduceLookupUtils._resolveAlias((AliasStatement) y);
 			if (x == null) {
 				ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 				errSink.reportError("399 resolveAlias returned null");
@@ -578,7 +576,7 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
-								best = _resolveAlias((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
 							} else if (OS_Type.isConcreteType(best)) {
 								throw new NotImplementedException();
 							} else
@@ -597,7 +595,7 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
-								best = _resolveAlias((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
 							} else if (OS_Type.isConcreteType(best)) {
 								throw new NotImplementedException();
 							} else
@@ -626,10 +624,10 @@ public class DeduceTypes2 {
 					{
 						final Qualident tn = ((NormalTypeName) tn1).getRealName();
 						System.out.println("799 [resolving USER type named] " + tn);
-						final LookupResultList lrl = lookupExpression(tn, tn1.getContext());
+						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(tn, tn1.getContext());
 						OS_Element best = lrl.chooseBest(null);
 						while (best instanceof AliasStatement) {
-							best = _resolveAlias((AliasStatement) best);
+							best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
 						}
 						if (best == null)
 							throw new ResolveError(tn1, lrl);
@@ -765,7 +763,7 @@ public class DeduceTypes2 {
 			case PROCEDURE_CALL:
 				{
 					final ProcedureCallExpression pce = (ProcedureCallExpression) e;
-					final LookupResultList lrl = lookupExpression(pce.getLeft(), ctx);
+					final LookupResultList lrl = DeduceLookupUtils.lookupExpression(pce.getLeft(), ctx);
 					final OS_Element best = lrl.chooseBest(null);
 					if (best != null) {
 						if (best instanceof FunctionDef) { // TODO what about alias?
@@ -848,7 +846,7 @@ public class DeduceTypes2 {
 	}
 
 	private void do_assign_call_GET_ITEM(GetItemExpression gie, TypeTableEntry tte, GeneratedFunction generatedFunction, Context ctx) {
-		final LookupResultList lrl = lookupExpression(gie.getLeft(), ctx);
+		final LookupResultList lrl = DeduceLookupUtils.lookupExpression(gie.getLeft(), ctx);
 		final OS_Element best = lrl.chooseBest(null);
 		if (best != null) {
 			if (best instanceof VariableStatement) { // TODO what about alias?
@@ -929,21 +927,6 @@ public class DeduceTypes2 {
 
 	private void forFunction(FunctionInvocation gf, ForFunction forFunction) {
 		phase.forFunction(this, gf, forFunction);
-	}
-
-	private static LookupResultList lookupExpression(final IExpression left, final Context ctx) {
-		switch (left.getKind()) {
-		case QIDENT:
-			final IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
-			return lookupExpression(de, ctx)/*lookup_dot_expression(ctx, de)*/;
-		case DOT_EXP:
-			return lookup_dot_expression(ctx, (DotExpression) left);
-		case IDENT:
-			return ctx.lookup(((IdentExpression) left).getText());
-		default:
-			throw new IllegalArgumentException();
-		}
-
 	}
 
 	private void do_assign_constant(final GeneratedFunction generatedFunction, final Instruction instruction, final IdentTableEntry idte, final ConstTableIA i2) {
@@ -1111,149 +1094,6 @@ public class DeduceTypes2 {
 		throw new NotImplementedException();
 	}
 
-	@Nullable
-	public static OS_Element _resolveAlias(final AliasStatement aliasStatement) {
-		final LookupResultList lrl2;
-		if (aliasStatement.getExpression() instanceof Qualident) {
-			final IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
-			if (de instanceof DotExpression)
-				lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
-			else
-				lrl2 = aliasStatement.getContext().lookup(((IdentExpression) de).getText());
-			return lrl2.chooseBest(null);
-		}
-		// TODO what about when DotExpression is not just simple x.y.z? then alias equivalent to val
-		if (aliasStatement.getExpression() instanceof DotExpression) {
-			final IExpression de = aliasStatement.getExpression();
-			lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
-			return lrl2.chooseBest(null);
-		}
-		lrl2 = aliasStatement.getContext().lookup(((IdentExpression) aliasStatement.getExpression()).getText());
-		return lrl2.chooseBest(null);
-	}
-
-	private static LookupResultList lookup_dot_expression(Context ctx, final DotExpression de) {
-		final Stack<IExpression> s = dot_expression_to_stack(de);
-		OS_Type t = null;
-		IExpression ss = s.peek();
-		while (!s.isEmpty()) {
-			ss = s.peek();
-			if (t != null && (t.getType() == OS_Type.Type.USER_CLASS || t.getType() == OS_Type.Type.FUNCTION))
-				ctx = t.getClassOf().getContext();
-			t = deduceExpression(ss, ctx);
-			if (t == null) break;
-			s.pop();
-		}
-		if (t == null) {
-			NotImplementedException.raise();
-			return new LookupResultList(); // TODO throw ResolveError
-		} else {
-			if (t instanceof OS_UnknownType)
-				return new LookupResultList(); // TODO is this right??
-			final LookupResultList lrl = t.getElement().getParent().getContext().lookup(((IdentExpression) ss).getText());
-			return lrl;
-		}
-	}
-
-	/**
-	 * @see {@link tripleo.elijah.stages.deduce.DotExpressionToStackTest}
-	 * @param de The {@link DotExpression} to turn into a {@link Stack}
-	 * @return a "flat" {@link Stack<IExpression>} of expressions
-	 */
-	@NotNull
-	static Stack<IExpression> dot_expression_to_stack(final DotExpression de) {
-		final Stack<IExpression> right_stack = new Stack<IExpression>();
-		IExpression right = de.getRight();
-		right_stack.push(de.getLeft());
-		while (right instanceof DotExpression) {
-			right_stack.push(right.getLeft());
-			right = ((DotExpression) right).getRight();
-		}
-		right_stack.push(right);
-		Collections.reverse(right_stack);
-		return right_stack;
-	}
-
-	public static OS_Type deduceExpression(@NotNull final IExpression n, final Context context) {
-		switch (n.getKind()) {
-		case IDENT:
-			return deduceIdentExpression((IdentExpression) n, context);
-		case NUMERIC:
-			return new OS_Type(BuiltInTypes.SystemInteger);
-		case DOT_EXP:
-			final DotExpression de = (DotExpression) n;
-			final LookupResultList lrl = lookup_dot_expression(context, de);
-			final OS_Type left_type = deduceExpression(de.getLeft(), context);
-			final OS_Type right_type = deduceExpression(de.getRight(), left_type.getClassOf().getContext());
-			NotImplementedException.raise();
-			break;
-		case PROCEDURE_CALL:
-			OS_Type ty = deduceProcedureCall((ProcedureCallExpression) n, context);
-			return ty/*n.getType()*/;
-		case QIDENT:
-			final IExpression expression = Helpers.qualidentToDotExpression2(((Qualident) n));
-			return deduceExpression(expression, context);
-		}
-		return null;
-	}
-
-	/**
-	 * Try to find the type of a ProcedureCall. Will either be a constructor or function call, most likely
-	 *
-	 * @param pce the procedure call
-	 * @param ctx the context to use for lookup
-	 * @return the deduced type or {@code null}. Do not {@code pce.setType}
-	 */
-	@Nullable
-	private static OS_Type deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx) {
-		System.err.println("979 Skipping deduceProcedureCall "+pce);
-		OS_Element best = lookup(pce.getLeft(), ctx);
-		if (best == null) return null;
-		int y=2;
-		if (best instanceof ClassStatement) {
-			return new OS_Type((ClassStatement) best);
-		} else if (best instanceof FunctionDef) {
-			final FunctionDef fd = (FunctionDef) best;
-			if (fd.returnType() != null && !fd.returnType().isNull()) {
-				return new OS_Type(fd.returnType());
-			}
-			return new OS_UnknownType(fd);			// TODO still must register somewhere
-		} else if (best instanceof FuncExpr) {
-			final FuncExpr funcExpr = (FuncExpr) best;
-			if (funcExpr.returnType() != null && !funcExpr.returnType().isNull()) {
-				return new OS_Type(funcExpr.returnType());
-			}
-			return new OS_UnknownType(funcExpr);	// TODO still must register somewhere
-		} else {
-			System.err.println("992 "+best.getClass().getName());
-			throw new NotImplementedException();
-		}
-	}
-
-	private static OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) {
-		// is this right?
-		LookupResultList lrl = ctx.lookup(ident.getText());
-		OS_Element best = lrl.chooseBest(null);
-		while (best instanceof AliasStatement) {
-			best = _resolveAlias((AliasStatement) best);
-		}
-		if (best instanceof ClassStatement) {
-			return new OS_Type((ClassStatement) best);
-		} else if (best instanceof VariableStatement) {
-			final VariableStatement vs = (VariableStatement) best;
-			if (!vs.typeName().isNull())
-				return new OS_Type(vs.typeName());
-			else if (vs.initialValue() != IExpression.UNASSIGNED) {
-				return new OS_UnknownType(vs);
-//				return deduceExpression(vs.initialValue(), ctx); // infinite recursion
-			}
-		} else if (best instanceof FunctionDef) {
-			final FunctionDef functionDef = (FunctionDef) best;
-			return new OS_FuncType(functionDef);
-		}
-		return null;
-	}
-
 	public void resolveIdentIA_(Context context, IdentIA identIA, GeneratedFunction generatedFunction, FoundElement foundElement) {
 		final List<InstructionArgument> s = generatedFunction._getIdentIAPathList(identIA);
 
@@ -1318,7 +1158,7 @@ public class DeduceTypes2 {
 							}
 						} else {
 							TypeTableEntry tte = pot.get(0);
-							OS_Element el2 = lookup(tte.expression.getLeft(), ectx);
+							OS_Element el2 = DeduceLookupUtils.lookup(tte.expression.getLeft(), ectx);
 							if (el2 == null) {
 								System.err.println("1062 "+tte.expression.getLeft());
 								throw new IllegalStateException("foo bar");
@@ -1421,7 +1261,7 @@ public class DeduceTypes2 {
 					if (exp instanceof ProcedureCallExpression)
 						throw new IllegalArgumentException("double pce!");
 				}
-				LookupResultList lrl = lookupExpression(exp, ectx);
+				LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx);
 				el = lrl.chooseBest(null);
 				prte.resolved_element = el;
 			} else
@@ -1469,7 +1309,7 @@ public class DeduceTypes2 {
 					if (pot.size() == 1) {
 						final OS_Type attached = pot.get(0).attached;
 						if (attached == null) {
-							LookupResultList lrl = lookupExpression(pot.get(0).expression.getLeft(), ctx);
+							LookupResultList lrl = DeduceLookupUtils.lookupExpression(pot.get(0).expression.getLeft(), ctx);
 							OS_Element best = lrl.chooseBest(Helpers.List_of(
 									new DeduceUtils.MatchFunctionArgs(
 											(ProcedureCallExpression) pot.get(0).expression)));
@@ -1543,7 +1383,7 @@ public class DeduceTypes2 {
 						// TODO this will break
 						final TypeName attached1TypeName = attached1.getTypeName();
 						if (attached1TypeName instanceof RegularTypeName)
-							ectx = lookupExpression(((RegularTypeName) attached1TypeName).getRealName(), ectx).results().get(0).getElement().getContext();
+							ectx = DeduceLookupUtils.lookupExpression(((RegularTypeName) attached1TypeName).getRealName(), ectx).results().get(0).getElement().getContext();
 						else if (attached1.getType() == OS_Type.Type.USER_CLASS) {
 							ectx = attached1.getClassOf().getContext();
 						} else {
@@ -1571,7 +1411,7 @@ public class DeduceTypes2 {
 								TypeTableEntry tte;
 								OS_Type attached;
 								if (/*vs.typeName() == null &&*/ vs.initialValue() != IExpression.UNASSIGNED) { // TODO was always false
-									attached = deduceExpression(vs.initialValue(), ectx);
+									attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
 								} else { // if (vs.typeName() != null) {
 									attached = new OS_Type(vs.typeName());
 								}
@@ -1584,7 +1424,7 @@ public class DeduceTypes2 {
 								}
 								idte2.type = tte;
 							} else if (vs.initialValue() != IExpression.UNASSIGNED) {
-								OS_Type attached = deduceExpression(vs.initialValue(), ectx);
+								OS_Type attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
 								TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 								idte2.type = tte;
 							} else {
@@ -1641,29 +1481,6 @@ public class DeduceTypes2 {
 	private ArrayList<TypeTableEntry> getPotentialTypesVte(GeneratedFunction generatedFunction, InstructionArgument vte_index) {
 		return getPotentialTypesVte(generatedFunction.getVarTableEntry(to_int(vte_index)));
 	}
-
-	private static OS_Element lookup(IExpression expression, Context ctx) {
-		switch (expression.getKind()) {
-		case IDENT:
-			LookupResultList lrl = ctx.lookup(((IdentExpression)expression).getText());
-			OS_Element best = lrl.chooseBest(null);
-			return best;
-		case PROCEDURE_CALL:
-			LookupResultList lrl2 = lookupExpression(expression.getLeft(), ctx);
-			OS_Element best2 = lrl2.chooseBest(null);
-			return best2;
-		case DOT_EXP:
-			LookupResultList lrl3 = lookupExpression(expression, ctx);
-			OS_Element best3 = lrl3.chooseBest(null);
-			return best3;
-//		default:
-//			System.err.println("1242 "+expression);
-//			throw new NotImplementedException();
-		default:
-			throw new IllegalStateException("1242 Unexpected value: " + expression.getKind());
-		}
-	}
-
 
 	public class FoundParent implements BaseTableEntry.StatusListener {
 		private IdentTableEntry ite;
@@ -1731,7 +1548,7 @@ public class DeduceTypes2 {
 				int yy = 2;
 			} else if (y instanceof AliasStatement) {
 				System.err.println("396 AliasStatement");
-				OS_Element x = _resolveAlias((AliasStatement) y);
+				OS_Element x = DeduceLookupUtils._resolveAlias((AliasStatement) y);
 				if (x == null) {
 					ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 					errSink.reportError("399 resolveAlias returned null");
@@ -1759,7 +1576,7 @@ public class DeduceTypes2 {
 								try {
 									@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
 									OS_Element ele = ty2.getElement();
-									LookupResultList lrl = lookupExpression(ite.getIdent(), ele.getContext());
+									LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
 									OS_Element best = lrl.chooseBest(null);
 //									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 									ite.setResolvedElement(best);
@@ -1773,7 +1590,7 @@ public class DeduceTypes2 {
 					}
 				} else {
 					System.out.println("1621");
-					LookupResultList lrl = lookupExpression(ite.getIdent(), ctx);
+					LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ctx);
 					OS_Element best = lrl.chooseBest(null);
 					ite.setResolvedElement(best);
 					found_element_for_ite(null, ite, best, ctx);
