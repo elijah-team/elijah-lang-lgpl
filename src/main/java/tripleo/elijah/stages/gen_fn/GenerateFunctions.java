@@ -38,33 +38,13 @@ public class GenerateFunctions {
 		module = aModule;
 	}
 
-	public List<GeneratedNode> generateAllTopLevelFunctions() {
-		final List<GeneratedNode> R = new ArrayList<GeneratedNode>();
-
-		for (final ModuleItem parent : module.getItems()) {
-			List<ClassItem> items = null;
-			if (parent instanceof NamespaceStatement) {
-				NamespaceStatement namespaceStatement = (NamespaceStatement) parent;
-				items = namespaceStatement.getItems();
-			} else if (parent instanceof ClassStatement) {
-				final List<GeneratedNode> r = new ArrayList<GeneratedNode>();
-				ClassStatement classStatement = (ClassStatement) parent;
-				items = classStatement.getItems();
-			}
-
-			if (items != null) {
-				for (ClassItem item : items) {
-					if (item instanceof FunctionDef) {
-						final FunctionDef function_def = (FunctionDef) item;
-						@NotNull GeneratedFunction gf = generateFunction(function_def, parent);
-//						function_def._a.setCode(nextFunctionCode());
-						R.add(gf);
-					}
-				}
-			}
-		}
-
-		return R;
+	private ClassInvocation generateClassInvocation(ModuleItem aParent) {
+		// meant to cache. requires pte.
+		if (aParent instanceof NamespaceStatement)
+			return new ClassInvocation((NamespaceStatement) aParent);
+		else if (aParent instanceof ClassStatement)
+			return new ClassInvocation((ClassStatement) aParent);
+		return null;
 	}
 
 	private @NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd, final OS_Element parent) {

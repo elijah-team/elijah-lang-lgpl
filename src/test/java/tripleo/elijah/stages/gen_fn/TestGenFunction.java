@@ -45,7 +45,16 @@ public class TestGenFunction {
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 
 		final GenerateFunctions gfm = new GenerateFunctions(m);
-		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
+		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+
+		List<GeneratedNode> lgf = new ArrayList<>();
+		for (GeneratedNode generatedNode : lgc) {
+			if (generatedNode instanceof GeneratedClass)
+				lgf.addAll(((GeneratedClass) generatedNode).functionMap.values());
+			if (generatedNode instanceof GeneratedNamespace)
+				lgf.addAll(((GeneratedNamespace) generatedNode).functionMap.values());
+			// TODO enum
+		}
 
 		for (final GeneratedNode gn : lgf) {
 			if (gn instanceof GeneratedFunction) {
@@ -81,7 +90,7 @@ public class TestGenFunction {
 		}
 
 		DeducePhase dp = new DeducePhase();
-		dp.deduceModule(m, lgf);
+		dp.deduceModule(m, lgc, false);
 		dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);
 
@@ -132,7 +141,16 @@ public class TestGenFunction {
 
 		if (false) {
 			final GenerateFunctions gfm = new GenerateFunctions(m);
-			final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
+			final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+
+			List<GeneratedNode> lgf = new ArrayList<>();
+			for (GeneratedNode generatedNode : lgc) {
+				if (generatedNode instanceof GeneratedClass)
+					lgf.addAll(((GeneratedClass) generatedNode).functionMap.values());
+				if (generatedNode instanceof GeneratedNamespace)
+					lgf.addAll(((GeneratedNamespace) generatedNode).functionMap.values());
+				// TODO enum
+			}
 
 //			for (GeneratedFunction gf : lgf) {
 //				for (Instruction instruction : gf.instructions()) {
@@ -141,7 +159,7 @@ public class TestGenFunction {
 //			}
 
 			DeducePhase dp = new DeducePhase();
-			dp.deduceModule(m, lgf);
+			dp.deduceModule(m, lgc, false);
 			dp.finish();
 
 			new GenerateC(m).generateCode(lgf);
@@ -178,8 +196,16 @@ public class TestGenFunction {
 		}
 
 		final GenerateFunctions gfm = new GenerateFunctions(m);
-		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
 		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+
+		List<GeneratedNode> lgf = new ArrayList<>();
+		for (GeneratedNode generatedNode : lgc) {
+			if (generatedNode instanceof GeneratedClass)
+				lgf.addAll(((GeneratedClass) generatedNode).functionMap.values());
+			if (generatedNode instanceof GeneratedNamespace)
+				lgf.addAll(((GeneratedNamespace) generatedNode).functionMap.values());
+			// TODO enum
+		}
 
 		for (final GeneratedNode gn : lgf) {
 			if (gn instanceof GeneratedFunction) {
@@ -191,7 +217,7 @@ public class TestGenFunction {
 		}
 
 		DeducePhase dp = new DeducePhase();
-		dp.deduceModule(m, lgf);
+		dp.deduceModule(m, lgc, false);
 		dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);
 
