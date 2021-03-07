@@ -68,7 +68,7 @@ public class DeduceUtils {
 			return false;
 		}
 	}
-	static class MatchFunctionArgs implements com.google.common.base.Predicate<ClassItem> {
+	static class MatchFunctionArgs implements com.google.common.base.Predicate<OS_Element> {
 		private final ProcedureCallExpression pce;
 
 		public MatchFunctionArgs(final ProcedureCallExpression pce) {
@@ -76,7 +76,8 @@ public class DeduceUtils {
 		}
 
 		@Override
-		public boolean apply(final ClassItem o) {
+		public boolean apply(final OS_Element o) {
+			assert o instanceof ClassItem;
 			//  TODO what about __call__ and __ctor__ for ClassStatement?
 //			System.out.println("2000 "+o);
 			if (!(o instanceof FunctionDef)) return false;
