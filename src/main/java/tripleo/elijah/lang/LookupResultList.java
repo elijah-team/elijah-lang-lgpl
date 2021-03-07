@@ -11,6 +11,8 @@
  */
 package tripleo.elijah.lang;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +36,8 @@ public class LookupResultList {
 		_results.add(new LookupResult(name, element, level, aContext));
 	}
 
-	public OS_Element chooseBest(final List<Predicate> l) {
+	@Nullable
+	public OS_Element chooseBest(final List<Predicate<OS_Element>> l) {
 		final List<LookupResult> r;
 		if (l != null) {
 			r = getMaxScoredResults(l);
@@ -62,17 +65,17 @@ public class LookupResultList {
 		return null; //throw new NotImplementedException();
 	}
 
-	private List<LookupResult> getMaxScoredResults(final List<Predicate> l) {
+	private List<LookupResult> getMaxScoredResults(final List<Predicate<OS_Element>> l) {
 		final Map<LookupResult, Integer> new_results = new HashMap<LookupResult, Integer>();
 		int maxScore = 0;
 
 		for (final LookupResult lookupResult : _results) {
 			int score = 0;
-			for (final Predicate predicate : l) {
+			for (final Predicate<OS_Element> predicate : l) {
 				if (predicate.test(lookupResult.getElement()))
 					score++;
 			}
-			if (score >= maxScore && maxScore != 0) {
+			if (score >= maxScore /*&& maxScore != 0*/) {
 				maxScore = score;
 				new_results.clear();
 				new_results.put(lookupResult, score);
