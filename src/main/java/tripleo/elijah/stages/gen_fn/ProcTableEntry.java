@@ -62,6 +62,10 @@ public class ProcTableEntry {
 		classInvocation = aClassInvocation;
 	}
 
+	public ClassInvocation getClassInvocation() {
+		return classInvocation;
+	}
+
 	public void setResolvedElement(OS_Element aResolvedElement) {
 		resolved_element = aResolvedElement;
 	}
