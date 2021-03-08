@@ -264,7 +264,7 @@ public class GenerateC {
 		if (tte != null && tte.getType() == OS_Type.Type.BUILT_IN && tte.getBType() == BuiltInTypes.Unit) {
 			returnType = "void";
 		} else if (tte != null) {
-			returnType = String.format("%s*", getTypeName(tte));
+			returnType = String.format("/*267*/%s*", getTypeName(tte));
 		} else {
 //			throw new IllegalStateException();
 			returnType = "void/*2*/";
