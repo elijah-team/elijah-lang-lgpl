@@ -47,6 +47,25 @@ public class GenerateFunctions {
 		return null;
 	}
 
+	@NotNull private GeneratedFunction generateConstructor(ConstructorDef aConstructorDef, ClassStatement aKlass) {
+		final GeneratedFunction gf = new GeneratedFunction(aConstructorDef);
+		final Context cctx = aConstructorDef.getContext();
+		final int e1 = add_i(gf, InstructionName.E, null, cctx);
+		for (final FunctionItem item : aConstructorDef.getItems()) {
+//			System.err.println("7056 aConstructorDef.getItem = "+item);
+			generate_item((OS_Element) item, gf, cctx);
+		}
+		final int x1 = add_i(gf, InstructionName.X, List_of(new IntegerIA(e1)), cctx);
+		gf.addContext(aConstructorDef.getContext(), new Range(e1, x1)); // TODO remove interior contexts
+//		System.out.println(String.format("602.1 %s", aConstructorDef.name()));
+//		for (Instruction instruction : gf.instructionsList) {
+//			System.out.println(instruction);
+//		}
+//		GeneratedFunction.printTables(gf);
+		return gf;
+	}
+
+
 	private @NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd, final OS_Element parent) {
 //		System.err.println("601.1 fn "+fd.name() + " " + parent);
 		final GeneratedFunction gf = new GeneratedFunction(fd);
@@ -444,7 +463,9 @@ public class GenerateFunctions {
 			} else if (item instanceof ClassStatement) {
 				throw new NotImplementedException();
 			} else if (item instanceof ConstructorDef) {
-				throw new NotImplementedException();
+				final ConstructorDef constructorDef = (ConstructorDef) item;
+				@NotNull GeneratedFunction f = generateConstructor(constructorDef, klass);
+				gc.addConstructor(constructorDef, f);
 			} else if (item instanceof DestructorDef) {
 				throw new NotImplementedException();
 			} else if (item instanceof DefFunctionDef) {

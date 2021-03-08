@@ -27,6 +27,7 @@ public class GeneratedClass implements GeneratedContainer {
 	private final ClassStatement klass;
 	public List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
 	public Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
+	public Map<ConstructorDef, GeneratedFunction> constructors = new HashMap<ConstructorDef, GeneratedFunction>();
 
 	public GeneratedClass(ClassStatement klass, OS_Module module) {
 		this.klass = klass;
@@ -69,6 +70,10 @@ public class GeneratedClass implements GeneratedContainer {
 
 	public String getName() {
 		return klass.getName();
+	}
+
+	public void addConstructor(ConstructorDef aConstructorDef, GeneratedFunction aGeneratedFunction) {
+		constructors.put(aConstructorDef, aGeneratedFunction);
 	}
 
 	public void addFunction(FunctionDef functionDef, GeneratedFunction generatedFunction) {
