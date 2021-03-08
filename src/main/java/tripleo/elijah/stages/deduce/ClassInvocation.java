@@ -49,6 +49,10 @@ public class ClassInvocation {
 	public void set(int aIndex, TypeName aTypeName, OS_Type aType) {
 		genericPart.put(aTypeName, aType);
 	}
+
+	public ClassStatement getKlass() {
+		return cls;
+	}
 }
 
 //

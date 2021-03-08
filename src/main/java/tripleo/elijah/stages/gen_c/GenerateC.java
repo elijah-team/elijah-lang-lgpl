@@ -476,6 +476,40 @@ public class GenerateC {
 					final int y=2;
 				}
 				break;
+			case CONSTRUCT:
+				{
+					final InstructionArgument _arg0 = instruction.getArg(0);
+					assert _arg0 instanceof ProcIA;
+					final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) _arg0).getIndex());
+					List<TypeTableEntry> x = pte.getArgs();
+					int y = instruction.getArgsSize();
+//					InstructionArgument z = instruction.getArg(1);
+					ClassInvocation clsinv = pte.getClassInvocation();
+					if (clsinv != null) {
+
+						final InstructionArgument target = pte.expression_num;
+//						final InstructionArgument value  = instruction;
+
+						if (target instanceof IdentIA) {
+							// how to tell between named ctors and just a path?
+						}
+
+						final String realTarget;
+						if (target instanceof IntegerIA) {
+							realTarget = getRealTargetName(gf, (IntegerIA) target);
+						} else if (target instanceof IdentIA) {
+							realTarget = getRealTargetName(gf, (IdentIA) target);
+						} else {
+							throw new NotImplementedException();
+						}
+//						String s = String.format(Emit.emit("/*500*/")+"%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), instruction, clsinv, gf));
+						String s = String.format(Emit.emit("/*500*/")+"/*%s = */%s;", realTarget, getAssignmentValue(gf.getSelf(), instruction, clsinv, gf));
+						tos.put_string_ln(s);
+
+
+					}
+				}
+				break;
 			case CALL:
 				{
 					final StringBuilder sb = new StringBuilder();
@@ -990,6 +1024,22 @@ public class GenerateC {
 			reference.getIdentIAPath(identIA, gf);
 			return reference.build();
 		}
+
+		public String forClassInvocation(Instruction aInstruction, ClassInvocation aClsinv, GeneratedFunction gf, OS_Module module) {
+			int y=2;
+			InstructionArgument _arg0 = aInstruction.getArg(0);
+			@NotNull ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) _arg0).getIndex());
+			final CtorReference reference = new CtorReference();
+			reference.getConstructorPath(pte.expression_num, gf);
+			@NotNull List<String> x = getAssignmentValueArgs(aInstruction, gf, module);
+			reference.args(x);
+			return reference.build(aClsinv);
+		}
+	}
+
+	private String getAssignmentValue(VariableTableEntry aSelf, Instruction aInstruction, ClassInvocation aClsinv, GeneratedFunction gf) {
+		GetAssignmentValue gav = new GetAssignmentValue();
+		return gav.forClassInvocation(aInstruction, aClsinv, gf, module);
 	}
 
 	@NotNull
