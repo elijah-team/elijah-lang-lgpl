@@ -94,7 +94,8 @@ public class CReference {
 					} else {
 						text = Emit.emit("/*152*/") + "vm" + idte.getIdent().getText();
 					}
-					String text2 = idte.getIdent().getText();
+					System.err.println("119 "+idte.getIdent()+" "+idte.getStatus());
+					String text2 = Emit.emit("/*119*/") + idte.getIdent().getText();
 					addRef(text2, Ref.MEMBER);
 				}
 			} else if (ia instanceof ProcIA) {
