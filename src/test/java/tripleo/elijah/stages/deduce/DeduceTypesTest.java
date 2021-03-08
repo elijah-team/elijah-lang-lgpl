@@ -59,7 +59,7 @@ public class DeduceTypesTest {
 		DeducePhase dp = new DeducePhase();
 		DeduceTypes2 d = dp.deduceModule(mod);
 //		final DeduceTypes d = new DeduceTypes(mod);
-		this.x = d.deduceExpression(x1, fc);
+		this.x = DeduceLookupUtils.deduceExpression(x1, fc);
 		System.out.println(this.x);
 	}
 	/** TODO This test fails beacause we are comparing a BUILT_IN vs a USER OS_Type.

@@ -52,7 +52,7 @@ public class DeduceTypesTest2 {
 		DeducePhase dp = new DeducePhase();
 		DeduceTypes2 d = dp.deduceModule(mod);
 //		final DeduceTypes d = new DeduceTypes(mod);
-		final OS_Type x = d.deduceExpression(x1, fc);
+		final OS_Type x = DeduceLookupUtils.deduceExpression(x1, fc);
 		System.out.println(x);
 //		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());
 //		final RegularTypeName tn = new RegularTypeName();

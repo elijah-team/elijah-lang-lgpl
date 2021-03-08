@@ -37,7 +37,7 @@ public class DotExpressionToStackTest {
 		DotExpression de2 = new DotExpression(b, c);
 		DotExpression de = new DotExpression(a, de2);
 		//
-		@NotNull Stack<IExpression> s = DeduceTypes2.dot_expression_to_stack(de);
+		@NotNull Stack<IExpression> s = DeduceLookupUtils.dot_expression_to_stack(de);
 //		IExpression[] sa = (IExpression[]) s.toArray();
 		Assert.assertEquals(a, s.pop());
 		Assert.assertEquals(b, s.pop());
@@ -59,7 +59,7 @@ public class DotExpressionToStackTest {
 		DotExpression de2 = new DotExpression(b, de3);
 		DotExpression de = new DotExpression(a, de2);
 		//
-		@NotNull Stack<IExpression> s = DeduceTypes2.dot_expression_to_stack(de);
+		@NotNull Stack<IExpression> s = DeduceLookupUtils.dot_expression_to_stack(de);
 //		IExpression[] sa = (IExpression[]) s.toArray();
 		Assert.assertEquals(a, s.pop());
 		Assert.assertEquals(b, s.pop());
