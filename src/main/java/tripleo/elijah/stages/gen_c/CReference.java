@@ -219,8 +219,7 @@ public class CReference {
 		return b;
 	}
 
-	@NotNull
-	private List<InstructionArgument> _getIdentIAPathList(@NotNull InstructionArgument oo, GeneratedFunction generatedFunction) {
+	@NotNull static List<InstructionArgument> _getIdentIAPathList(@NotNull InstructionArgument oo, GeneratedFunction generatedFunction) {
 		List<InstructionArgument> s = new LinkedList<InstructionArgument>();
 		while (oo != null) {
 			if (oo instanceof IntegerIA) {
