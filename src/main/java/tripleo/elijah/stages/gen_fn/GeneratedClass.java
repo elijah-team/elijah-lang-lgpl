@@ -10,7 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.deduce.DeduceTypes2;
+import tripleo.elijah.stages.deduce.DeduceLookupUtils;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -114,7 +114,7 @@ public class GeneratedClass implements GeneratedContainer {
 						OS_Element best = lrl.chooseBest(null);
 						if (best != null) {
 							if (best instanceof AliasStatement)
-								best = DeduceTypes2._resolveAlias((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
 							assert best instanceof ClassStatement;
 							varTableEntry.varType = new OS_Type((ClassStatement) best);
 						} else {
