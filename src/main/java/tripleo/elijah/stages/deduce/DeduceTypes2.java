@@ -430,6 +430,51 @@ public class DeduceTypes2 {
 				break;
 			case NOP:
 				break;
+			case CONSTRUCT:
+				{
+					int y=2;
+					final int pte_num = ((ProcIA)instruction.getArg(0)).getIndex();
+					final ProcTableEntry pte = generatedFunction.getProcTableEntry(pte_num);
+					{
+						InstructionArgument expression = pte.expression_num;
+						if (expression instanceof IntegerIA) {
+							VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
+							assert vte.type.attached != null; // TODO will fail when empty variable expression
+							@Nullable OS_Type ty = vte.type.attached;
+							if (ty.getType() == OS_Type.Type.USER) {
+								TypeName tyn = ty.getTypeName();
+								if (tyn instanceof NormalTypeName) {
+									final NormalTypeName tyn1 = (NormalTypeName) tyn;
+									String s = tyn1.getName();
+									LookupResultList lrl = tyn1.getContext().lookup(s);
+									OS_Element best = lrl.chooseBest(null);
+									assert best instanceof ClassStatement;
+									List<TypeName> gp = ((ClassStatement) best).getGenericPart();
+									ClassInvocation clsinv = new ClassInvocation((ClassStatement) best);
+									if (gp.size() == 0) {
+
+									} else {
+										TypeNameList gp2 = ((NormalTypeName) tyn).getGenericPart();
+										for (int i = 0; i < gp.size(); i++) {
+											final TypeName typeName = gp2.get(i);
+											@NotNull OS_Type typeName2;
+											try {
+												typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
+												clsinv.set(i, gp.get(i), typeName2);
+											} catch (ResolveError aResolveError) {
+												aResolveError.printStackTrace();
+											}
+										}
+									}
+									pte.setClassInvocation(clsinv);
+									pte.setResolvedElement(best);
+								}
+							}
+						} else
+							throw new NotImplementedException();
+						}
+					}
+					break;
 			default:
 				throw new IllegalStateException("Unexpected value: " + instruction.getName());
 			}
@@ -1568,7 +1613,13 @@ public class DeduceTypes2 {
 				if (bte instanceof VariableTableEntry) {
 					final VariableTableEntry vte = (VariableTableEntry) bte;
 					@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
-					if (pot.size() == 1) {
+					if (vte.getStatus() == BaseTableEntry.Status.KNOWN && vte.type.attached != null && vte.el != null) {
+						OS_Element ele = vte.type.attached.getClassOf(); // TODO might fail later (use getElement?)
+						LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+						OS_Element best = lrl.chooseBest(null);
+//						ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+						ite.setResolvedElement(best);
+					} else if (pot.size() == 1) {
 						TypeTableEntry tte = pot.get(0);
 						@Nullable OS_Type ty = tte.attached;
 						if (ty != null) {
@@ -1583,6 +1634,13 @@ public class DeduceTypes2 {
 								} catch (ResolveError resolveError) {
 									errSink.reportDignostic(resolveError);
 								}
+							} else if (ty.getType() == OS_Type.Type.USER_CLASS) {
+								OS_Element ele = ty.getClassOf();
+								LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+								OS_Element best = lrl.chooseBest(null);
+//								ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+								assert best != null;
+								ite.setResolvedElement(best);
 							}
 						} else {
 							System.err.println("1696");

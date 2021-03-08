@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
+import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
@@ -398,7 +399,7 @@ public class GenerateFunctions {
 		}
 
 		public void generate_construct_statement(ConstructStatement aConstructStatement, @NotNull GeneratedFunction gf, Context cctx) {
-			final IExpression left = aConstructStatement.getExpr();
+			final IExpression left = aConstructStatement.getExpr(); // TODO need type of this expr, not expr!!
 			final ExpressionList args = aConstructStatement.getArgs();
 			//
 			InstructionArgument expression_num = simplify_expression(left, gf, cctx);
@@ -409,7 +410,7 @@ public class GenerateFunctions {
 			final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
 			l.add(new ProcIA(i, gf));
 			l.addAll(simplify_args(args, gf, cctx));
-			add_i(gf, InstructionName.CALL, l, cctx);
+			add_i(gf, InstructionName.CONSTRUCT, l, cctx);
 		}
 	}
 
@@ -989,6 +990,13 @@ public class GenerateFunctions {
 					return new IntegerIA(tmp); // TODO  is this right?? we want to return the variable, not proc calls, right?
 				}
 //				throw new NotImplementedException();
+			}
+		case ASSIGNMENT:
+			{
+				InstructionArgument s1 = simplify_expression(expression.getLeft(), gf, cctx);
+				InstructionArgument s2 = simplify_expression(((BasicBinaryExpression)expression).getRight(), gf, cctx);
+				final int x = add_i(gf, InstructionName.AGN, List_of(s1, s2), cctx);
+				return s1; // TODO is this right?
 			}
 		default:
 			throw new IllegalStateException("Unexpected value: " + expressionKind);
