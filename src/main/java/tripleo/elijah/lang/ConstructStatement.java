@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.lang;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.gen.ICodeGen;
 
 /*
@@ -21,15 +23,18 @@ public class ConstructStatement implements FunctionItem, StatementItem, OS_Eleme
 	private final Context context;
 	private final IExpression _expr;
 	private final ExpressionList _args;
-	private OS_Type _type;
+	private final String constructorName;
+//	private OS_Type _type;
 
-	public ConstructStatement(final OS_Element aParent,
-							  final Context aContext,
-							  final IExpression aExpr,
-							  final ExpressionList aExpressionList) {
+	public ConstructStatement(@NotNull final OS_Element aParent,
+							  @NotNull final Context aContext,
+							  @NotNull final IExpression aExpr,
+							  @Nullable final String aConstructorName,
+							  @Nullable final ExpressionList aExpressionList) {
 		parent = aParent;
 		context = aContext;
 		_expr = aExpr;
+		constructorName = aConstructorName;
 		_args = aExpressionList;
 	}
 
