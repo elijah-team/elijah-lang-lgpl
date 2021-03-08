@@ -1154,8 +1154,10 @@ public class GenerateFunctions {
 			@NotNull InstructionArgument x = simplify_dot_expression((DotExpression) left, gf, cctx); // TODO ??
 			return expression_to_call_add_entry(gf, pce, left, x, cctx);
 		}
+//		default:
+//			throw new NotImplementedException();
 		default:
-			throw new NotImplementedException();
+			throw new IllegalStateException("Unexpected value: " + left.getKind());
 		}
 	}
 
