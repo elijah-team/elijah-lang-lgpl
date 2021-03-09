@@ -8,12 +8,12 @@ class Bar[T] {
 }
 
 class Foo {
-	var f: Integer
+	var f: SystemInteger
 }
 
 class Main {
 	main() {
-		var bar : Bar[Integer]
+		var bar : Bar[SystemInteger]
 		construct bar.x
 		bar.t = 13
 
