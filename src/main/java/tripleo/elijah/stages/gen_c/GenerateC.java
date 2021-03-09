@@ -1156,7 +1156,10 @@ public class GenerateC {
 		System.out.println("932 "+path);
 		String s = Helpers.String_join("->", ls);
 		System.out.println("933 "+s);
-		return s;
+		if (identTableEntry.resolved_element instanceof ConstructorDef)
+			return path;
+		else
+			return s;
 	}
 }
 
