@@ -81,9 +81,10 @@ public class CReference {
 				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(ia));
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
-					if (i + 1 >= sSize)
+					if (i + 1 >= sSize) {
 						_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction);
-					else {
+						text = null;
+					} else {
 						boolean b = _getIdentIAPath_IdentIAHelper(s.get(i + 1), sl, i, sSize, resolved_element, generatedFunction);
 						if (b) i++;
 					}
@@ -107,7 +108,8 @@ public class CReference {
 			} else {
 				throw new NotImplementedException();
 			}
-			sl.add(text);
+			if (text != null)
+				sl.add(text);
 		}
 		rtext = Helpers.String_join(".", sl);
 		return rtext;
