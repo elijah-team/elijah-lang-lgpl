@@ -11,6 +11,7 @@ package tripleo.elijah.stages.gen_c;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.AliasStatement;
 import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Element;
@@ -59,7 +60,7 @@ public class CReference {
 		refs.add(new Reference(text, type));
 	}
 
-	public String getIdentIAPath(final IdentIA ia2, GeneratedFunction generatedFunction) {
+	public String getIdentIAPath(final @NotNull IdentIA ia2, GeneratedFunction generatedFunction) {
 		assert ia2.gf == generatedFunction;
 		final List<InstructionArgument> s = _getIdentIAPathList(ia2, generatedFunction);
 
@@ -153,6 +154,16 @@ public class CReference {
 				String text2 = String.format("ZC%d", code);
 				addRef(text2, Ref.CONSTRUCTOR);
 			}
+		} else if (resolved_element instanceof ConstructorDef) {
+			assert i == sSize - 1; // Make sure we are ending with a constructor call
+			int code = ((ClassStatement) resolved_element.getParent())._a.getCode();
+			if (code == 0) {
+				System.err.println("** 31161 ClassStatement with 0 code " + resolved_element.getParent());
+			}
+			// README Assuming this is for named constructors
+			String text = ((ConstructorDef) resolved_element).name();
+			String text2 = String.format("ZC%d%s", code, text);
+			addRef(text2, Ref.CONSTRUCTOR);
 		} else if (resolved_element instanceof FunctionDef) {
 			OS_Element parent = resolved_element.getParent();
 			int code;

@@ -25,6 +25,7 @@ public class ClassInvocation {
 	private final NamespaceStatement ns;
 	private final ClassStatement cls;
 	Map<TypeName, OS_Type> genericPart;
+	private String constructorName;
 
 	public ClassInvocation(NamespaceStatement aNamespaceStatement) {
 		ns = aNamespaceStatement;
@@ -32,7 +33,7 @@ public class ClassInvocation {
 		cls = null;
 	}
 
-	public ClassInvocation(ClassStatement aClassStatement) {
+	public ClassInvocation(ClassStatement aClassStatement, String aConstructorName) {
 		ns = null;
 		cls = aClassStatement;
 		final List<TypeName> genericPart1 = aClassStatement.getGenericPart();
@@ -44,6 +45,7 @@ public class ClassInvocation {
 		} else {
 			genericPart = null;
 		}
+		constructorName = aConstructorName;
 	}
 
 	public void set(int aIndex, TypeName aTypeName, OS_Type aType) {
