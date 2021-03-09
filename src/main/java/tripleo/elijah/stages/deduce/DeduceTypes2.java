@@ -1691,8 +1691,25 @@ public class DeduceTypes2 {
 					final VariableTableEntry vte = (VariableTableEntry) bte;
 					@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
 					if (vte.getStatus() == BaseTableEntry.Status.KNOWN && vte.type.attached != null && vte.el != null) {
-						OS_Element ele = vte.type.attached.getClassOf(); // TODO might fail later (use getElement?)
-						LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+
+						final OS_Type ty = vte.type.attached;
+
+						OS_Element ele2 = null;
+
+						if (ty.getType() == OS_Type.Type.USER) {
+							@NotNull OS_Type ty2 = null;
+							try {
+								ty2 = resolve_type(ty, ty.getTypeName().getContext());
+								OS_Element ele = ty2.getElement();
+								LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+								ele2 = lrl.chooseBest(null);
+							} catch (ResolveError aResolveError) {
+								errSink.reportDignostic(aResolveError);
+							}
+						} else
+							ele2 = ty.getClassOf(); // TODO might fail later (use getElement?)
+
+						LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
 						OS_Element best = lrl.chooseBest(null);
 //						ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 						ite.setResolvedElement(best);
