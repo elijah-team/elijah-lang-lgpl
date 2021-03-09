@@ -160,7 +160,6 @@ public class DeduceTypes2 {
 									System.err.println("162 Adding FoundParent for "+itee);
 									x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext())); // TODO context??
 								}
-//								itex = itex.backlink;
 							}
 						}
 						if (ite.resolved_element != null)
