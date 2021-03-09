@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
-import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
@@ -39,6 +38,7 @@ public class GenerateFunctions {
 		module = aModule;
 	}
 
+/*
 	private ClassInvocation generateClassInvocation(ModuleItem aParent) {
 		// meant to cache. requires pte.
 		if (aParent instanceof NamespaceStatement)
@@ -47,6 +47,7 @@ public class GenerateFunctions {
 			return new ClassInvocation((ClassStatement) aParent);
 		return null;
 	}
+*/
 
 	@NotNull private GeneratedFunction generateConstructor(ConstructorDef aConstructorDef, ClassStatement aKlass) {
 		final GeneratedFunction gf = new GeneratedFunction(aConstructorDef);
