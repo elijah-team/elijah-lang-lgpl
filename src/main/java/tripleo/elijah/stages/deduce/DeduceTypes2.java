@@ -431,50 +431,8 @@ public class DeduceTypes2 {
 			case NOP:
 				break;
 			case CONSTRUCT:
-				{
-					int y=2;
-					final int pte_num = ((ProcIA)instruction.getArg(0)).getIndex();
-					final ProcTableEntry pte = generatedFunction.getProcTableEntry(pte_num);
-					{
-						InstructionArgument expression = pte.expression_num;
-						if (expression instanceof IntegerIA) {
-							VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
-							assert vte.type.attached != null; // TODO will fail when empty variable expression
-							@Nullable OS_Type ty = vte.type.attached;
-							if (ty.getType() == OS_Type.Type.USER) {
-								TypeName tyn = ty.getTypeName();
-								if (tyn instanceof NormalTypeName) {
-									final NormalTypeName tyn1 = (NormalTypeName) tyn;
-									String s = tyn1.getName();
-									LookupResultList lrl = tyn1.getContext().lookup(s);
-									OS_Element best = lrl.chooseBest(null);
-									assert best instanceof ClassStatement;
-									List<TypeName> gp = ((ClassStatement) best).getGenericPart();
-									ClassInvocation clsinv = new ClassInvocation((ClassStatement) best);
-									if (gp.size() == 0) {
-
-									} else {
-										TypeNameList gp2 = ((NormalTypeName) tyn).getGenericPart();
-										for (int i = 0; i < gp.size(); i++) {
-											final TypeName typeName = gp2.get(i);
-											@NotNull OS_Type typeName2;
-											try {
-												typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
-												clsinv.set(i, gp.get(i), typeName2);
-											} catch (ResolveError aResolveError) {
-												aResolveError.printStackTrace();
-											}
-										}
-									}
-									pte.setClassInvocation(clsinv);
-									pte.setResolvedElement(best);
-								}
-							}
-						} else
-							throw new NotImplementedException();
-						}
-					}
-					break;
+				implement_construct(generatedFunction, instruction);
+				break;
 			default:
 				throw new IllegalStateException("Unexpected value: " + instruction.getName());
 			}
@@ -504,6 +462,89 @@ public class DeduceTypes2 {
 //					generatedFunction.deferred_calls.remove(deferred_call);
 					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
 				}
+			}
+		}
+	}
+
+	void implement_construct(GeneratedFunction generatedFunction, Instruction instruction) {
+		final int pte_num = ((ProcIA) instruction.getArg(0)).getIndex();
+		final ProcTableEntry pte = generatedFunction.getProcTableEntry(pte_num);
+		{
+			InstructionArgument expression = pte.expression_num;
+			if (expression instanceof IntegerIA) {
+				VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
+				assert vte.type.attached != null; // TODO will fail when empty variable expression
+				@Nullable OS_Type ty = vte.type.attached;
+				implement_construct_type(pte, ty, null);
+			} else if (expression instanceof IdentIA) {
+				IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(expression));
+				@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(expression);
+				{
+					OS_Element el = null;
+					Context ectx = generatedFunction.getFD().getContext();
+					for (InstructionArgument ia2 : x) {
+						if (ia2 instanceof IntegerIA) {
+							@NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(ia2));
+//							LookupResultList lrl = ectx.lookup(vte.getName());
+							el = vte.el;//lrl.chooseBest(null);
+							assert el != null; // TODO will fail if we try to construct a tmp var, but we never try to do that
+							ectx = el.getContext();
+						} else if (ia2 instanceof IdentIA) {
+							@NotNull IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(ia2));
+							final String s = idte2.getIdent().toString();
+							LookupResultList lrl = ectx.lookup(s);
+							OS_Element el2 = lrl.chooseBest(null);
+							if (el2 == null) {
+								int yy=2;
+								assert el instanceof VariableStatement;
+								VariableStatement vs = (VariableStatement) el;
+								@NotNull TypeName tn = vs.typeName();
+								OS_Type ty = new OS_Type(tn);
+								// s is constructor name
+								implement_construct_type(pte, ty, s);
+							} else {
+								el = el2;
+								ectx = el2.getContext();
+							}
+						} else {
+							throw new NotImplementedException();
+						}
+					}
+				}
+			} else {
+				throw new NotImplementedException();
+			}
+		}
+	}
+
+	private void implement_construct_type(ProcTableEntry aPte, @Nullable OS_Type aTy, String constructorName) {
+		if (aTy.getType() == OS_Type.Type.USER) {
+			TypeName tyn = aTy.getTypeName();
+			if (tyn instanceof NormalTypeName) {
+				final NormalTypeName tyn1 = (NormalTypeName) tyn;
+				String s = tyn1.getName();
+				LookupResultList lrl = tyn1.getContext().lookup(s);
+				OS_Element best = lrl.chooseBest(null);
+				assert best instanceof ClassStatement;
+				List<TypeName> gp = ((ClassStatement) best).getGenericPart();
+				ClassInvocation clsinv = new ClassInvocation((ClassStatement) best, constructorName);
+				if (gp.size() == 0) {
+
+				} else {
+					TypeNameList gp2 = ((NormalTypeName) tyn).getGenericPart();
+					for (int i = 0; i < gp.size(); i++) {
+						final TypeName typeName = gp2.get(i);
+						@NotNull OS_Type typeName2;
+						try {
+							typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
+							clsinv.set(i, gp.get(i), typeName2);
+						} catch (ResolveError aResolveError) {
+							aResolveError.printStackTrace();
+						}
+					}
+				}
+				aPte.setClassInvocation(clsinv);
+				aPte.setResolvedElement(best);
 			}
 		}
 	}
