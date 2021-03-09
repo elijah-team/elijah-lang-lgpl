@@ -1353,8 +1353,45 @@ public class DeduceTypes2 {
 			} else
 				throw new IllegalStateException("Really cant be here");
 		}
-		System.out.println("1320 Found for "+generatedFunction.getIdentIAPathNormal(identIA));
-		foundElement.doFoundElement(el);
+		final String s1 = generatedFunction.getIdentIAPathNormal(identIA);
+		if (s.size() > 1) {
+			final OS_Element el2 = el;
+			InstructionArgument x = s.get(s.size() - 1);
+			if (x instanceof IntegerIA) {
+				assert false;
+				@NotNull VariableTableEntry y = generatedFunction.getVarTableEntry(to_int(x));
+				y.setStatus(BaseTableEntry.Status.KNOWN, el);
+			} else if (x instanceof IdentIA) {
+				@NotNull IdentTableEntry y = generatedFunction.getIdentTableEntry(to_int(x));
+				y.addStatusListener(new BaseTableEntry.StatusListener() {
+					@Override
+					public void onChange(OS_Element el3, BaseTableEntry.Status newStatus) {
+						if (newStatus == BaseTableEntry.Status.KNOWN) {
+//							assert el2 != el3;
+							System.out.println("1320 Found for " + s1);
+							foundElement.doFoundElement(el3);
+						}
+					}
+				});
+			}
+		} else {
+			System.out.println("1320 Found for " + s1);
+			foundElement.doFoundElement(el);
+		}
+		{
+			InstructionArgument x = s.get(0);
+			if (x instanceof IntegerIA) {
+				@NotNull VariableTableEntry y = generatedFunction.getVarTableEntry(to_int(x));
+				y.setStatus(BaseTableEntry.Status.KNOWN, el);
+			} else if (x instanceof IdentIA) {
+				@NotNull IdentTableEntry y = generatedFunction.getIdentTableEntry(to_int(x));
+				y.setStatus(BaseTableEntry.Status.KNOWN, el);
+			} else if (x instanceof ProcIA) {
+				@NotNull ProcTableEntry y = generatedFunction.getProcTableEntry(to_int(x));
+//				y.setStatus(BaseTableEntry.Status.KNOWN, el); // TODO
+			} else
+				throw new NotImplementedException();
+		}
 	}
 
 	static class Holder<T> {
