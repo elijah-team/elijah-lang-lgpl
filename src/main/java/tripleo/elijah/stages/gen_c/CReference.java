@@ -113,12 +113,12 @@ public class CReference {
 		return rtext;
 	}
 
-	public boolean _getIdentIAPath_IdentIAHelper(InstructionArgument ia_next,
-												 List<String> sl,
-												 int i,
-												 int sSize,
-												 OS_Element resolved_element,
-												 GeneratedFunction generatedFunction) {
+	boolean _getIdentIAPath_IdentIAHelper(InstructionArgument ia_next,
+										  List<String> sl,
+										  int i,
+										  int sSize,
+										  OS_Element resolved_element,
+										  GeneratedFunction generatedFunction) {
 		boolean b = false;
 		if (resolved_element instanceof ClassStatement) {
 			// Assuming constructor call
