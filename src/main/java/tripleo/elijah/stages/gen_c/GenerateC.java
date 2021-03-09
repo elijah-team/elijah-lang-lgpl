@@ -500,19 +500,17 @@ public class GenerateC {
 							// how to tell between named ctors and just a path?
 						}
 
-						final String realTarget;
-						if (target instanceof IntegerIA) {
-							realTarget = getRealTargetName(gf, (IntegerIA) target);
-						} else if (target instanceof IdentIA) {
-							realTarget = getRealTargetName(gf, (IdentIA) target);
-						} else {
-							throw new NotImplementedException();
-						}
+//						final String realTarget;
+//						if (target instanceof IntegerIA) {
+//							realTarget = getRealTargetName(gf, (IntegerIA) target);
+//						} else if (target instanceof IdentIA) {
+//							realTarget = getRealTargetName(gf, (IdentIA) target);
+//						} else {
+//							throw new NotImplementedException();
+//						}
 //						String s = String.format(Emit.emit("/*500*/")+"%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), instruction, clsinv, gf));
-						String s = String.format(Emit.emit("/*500*/")+"/*%s = */%s;", realTarget, getAssignmentValue(gf.getSelf(), instruction, clsinv, gf));
+						String s = String.format(Emit.emit("/*500*/")+"%s;", getAssignmentValue(gf.getSelf(), instruction, clsinv, gf));
 						tos.put_string_ln(s);
-
-
 					}
 				}
 				break;
