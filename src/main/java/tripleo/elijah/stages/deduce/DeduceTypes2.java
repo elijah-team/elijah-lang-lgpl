@@ -1723,8 +1723,8 @@ public class DeduceTypes2 {
 									OS_Element ele = ty2.getElement();
 									LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
 									OS_Element best = lrl.chooseBest(null);
-//									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
-									ite.setResolvedElement(best);
+									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+//									ite.setResolvedElement(best);
 								} catch (ResolveError resolveError) {
 									errSink.reportDignostic(resolveError);
 								}
