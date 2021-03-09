@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.stages.gen_c;
 
+import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.deduce.ClassInvocation;
@@ -31,6 +33,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
  */
 public class CtorReference {
 
+	private String ctorName = "";
 	private List<String> args;
 	List<CReference.Reference> refs = new ArrayList<CReference.Reference>();
 
@@ -40,9 +43,7 @@ public class CtorReference {
 
 	public void getConstructorPath(InstructionArgument ia2, GeneratedFunction gf) {
 		final List<InstructionArgument> s = CReference._getIdentIAPathList(ia2, gf);
-		int y=2;
-//		String text = "";
-//		List<String> sl = new ArrayList<String>();
+
 		for (int i = 0, sSize = s.size(); i < sSize; i++) {
 			InstructionArgument ia = s.get(i);
 			if (ia instanceof IntegerIA) {
@@ -54,9 +55,23 @@ public class CtorReference {
 				final IdentTableEntry idte = gf.getIdentTableEntry(to_int(ia));
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
-					int yy=2;
 					if (resolved_element instanceof VariableStatement) {
+						addRef(((VariableStatement) resolved_element).getName(), CReference.Ref.MEMBER);
+					} else if (resolved_element instanceof ConstructorDef) {
+						assert i == sSize - 1; // Make sure we are ending with a constructor call
+						int code = ((ClassStatement) resolved_element.getParent())._a.getCode();
+						if (code == 0) {
+							System.err.println("** 31161 ClassStatement with 0 code " + resolved_element.getParent());
+						}
+						// README Assuming this is for named constructors
+						String text = ((ConstructorDef) resolved_element).name();
+						String text2 = String.format("ZC%d%s", code, text);
 
+						ctorName = text;
+
+//						addRef(text2, CReference.Ref.CONSTRUCTOR);
+
+//						addRef(((ConstructorDef) resolved_element).name(), CReference.Ref.CONSTRUCTOR);
 					}
 				}
 			} else if (ia instanceof ProcIA) {
@@ -133,7 +148,7 @@ public class CtorReference {
 			if (code == 0) {
 				System.err.println("** 32135 ClassStatement with 0 code " + aClsinv.getKlass());
 			}
-			String text2 = String.format("ZC%d", code); // TODO what about named constructors
+			String text2 = String.format("ZC%d%s", code, ctorName); // TODO what about named constructors
 			sb.append(" = ");
 			sb.append(text2);
 			sb.append("(");
