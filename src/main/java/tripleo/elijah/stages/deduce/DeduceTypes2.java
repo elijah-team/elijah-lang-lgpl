@@ -645,6 +645,11 @@ public class DeduceTypes2 {
 
 	@NotNull
 	private OS_Type resolve_type(final OS_Type type, final Context ctx) throws ResolveError {
+		return resolve_type(module, type, ctx);
+	}
+
+	@NotNull
+	static OS_Type resolve_type(final OS_Module module, final OS_Type type, final Context ctx) throws ResolveError {
 		switch (type.getType()) {
 
 		case BUILT_IN:
