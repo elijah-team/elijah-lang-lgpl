@@ -22,7 +22,7 @@ import java.util.Stack;
  * Created 3/7/21 1:13 AM
  */
 public class DeduceLookupUtils {
-	static LookupResultList lookupExpression(final IExpression left, final Context ctx) {
+	public static LookupResultList lookupExpression(final IExpression left, final Context ctx) {
 		switch (left.getKind()) {
 		case QIDENT:
 			final IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
