@@ -1,5 +1,6 @@
 package tripleo.elijah.lang;
 
+import tripleo.elijah.stages.deduce.DeduceLookupUtils;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.io.File;
@@ -48,7 +49,8 @@ public class TypeOfTypeName implements TypeName {
 	public TypeName resolve(Context ctx) {
 //		TypeName tn = null;
 //		System.out.println(_typeOf.toString());
-		LookupResultList lrl = ctx.lookup(_typeOf.toString()); // TODO what about multi-level qualidents
+//		LookupResultList lrl = ctx.lookup(_typeOf.toString()); // TODO what about multi-level qualidents
+		LookupResultList lrl = DeduceLookupUtils.lookupExpression(_typeOf, ctx);
 		OS_Element best = lrl.chooseBest(null);
 		if (best instanceof VariableStatement)
 			return ((VariableStatement) best).typeName();
