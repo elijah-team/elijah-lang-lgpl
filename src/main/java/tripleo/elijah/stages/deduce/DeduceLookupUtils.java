@@ -167,7 +167,16 @@ public class DeduceLookupUtils {
 			return new OS_Type((ClassStatement) best);
 		} else if (best instanceof VariableStatement) {
 			final VariableStatement vs = (VariableStatement) best;
-			if (!vs.typeName().isNull())
+			if (!vs.typeName().isNull()) {
+				try {
+					OS_Module lets_hope_we_dont_need_this = null;
+					@NotNull OS_Type ty = DeduceTypes2.resolve_type(lets_hope_we_dont_need_this, new OS_Type(vs.typeName()), ctx);
+					return ty;
+				} catch (ResolveError aResolveError) {
+					// TODO This is the cheap way to do it
+					//  Ideally, we would propagate this up the call chain all the way to lookupExpression
+					aResolveError.printStackTrace();
+				}
 				return new OS_Type(vs.typeName());
 			else if (vs.initialValue() != IExpression.UNASSIGNED) {
 				return new OS_UnknownType(vs);
