@@ -15,8 +15,8 @@ public class OS_UnknownType extends OS_Type {
 	private OS_Element element;
 
 	public OS_UnknownType(OS_Element aElement) {
-		element      = aElement;
-		type_of_type = Type.UNKNOWN;
+		super(Type.UNKNOWN);
+		element = aElement;
 	}
 }
 

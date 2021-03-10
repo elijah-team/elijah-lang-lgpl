@@ -23,7 +23,8 @@ import java.util.Objects;
  */
 public class OS_Type {
 
-	public OS_Type() {
+	public OS_Type(Type t) {
+		type_of_type = t;
 	}
 
 	public static boolean isConcreteType(final OS_Element element) {
@@ -146,7 +147,7 @@ public class OS_Type {
 	}
 
 	private BuiltInTypes type;
-	protected Type type_of_type;
+	protected final Type type_of_type;
 	private OS_Element etype;
 	private TypeName ttype;
 
@@ -190,8 +191,7 @@ public class OS_Type {
 	private class OS_UnitType extends OS_Type {
 
 		public OS_UnitType() {
-			super();
-			type_of_type = Type.UNIT_TYPE;
+			super(Type.UNIT_TYPE);
 		}
 
 		@Override
