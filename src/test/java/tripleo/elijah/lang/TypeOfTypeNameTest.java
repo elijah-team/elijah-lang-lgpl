@@ -100,6 +100,140 @@ public class TypeOfTypeNameTest {
 		Assert.assertEquals(typeNameString, tn.toString());
 	}
 
+//	@Test
+//	public void typeOfComplexQualident3() {
+//		//
+//		// CREATE MOCK
+//		//
+//		Context ctx = mock(Context.class);
+//
+//		//
+//		// CREATE VARIABLES
+//		//
+//		String typeNameString1 = "package1.AbstractFactory";
+//		final String typeNameString = "SystemInteger";
+//
+//		OS_Module mod = new OS_Module();
+//		Context mod_ctx = mod.getContext();
+//
+//		ClassStatement st_af = new ClassStatement(mod, mod_ctx);
+//		st_af.setName(IdentExpression.forString("AbstractFactory"));
+//		final OS_Package package1 = new OS_Package(Helpers.string_to_qualident("package1"), 1);
+//		st_af.setPackageName(package1);
+//
+//		VariableSequence vs = new VariableSequence(st_af.getContext());
+//		VariableStatement var_y = new VariableStatement(vs);
+//		var_y.setName(IdentExpression.forString("y"));
+//		RegularTypeName rtn_y = new RegularTypeName(ctx);
+//		rtn_y.setName(Helpers.string_to_qualident(typeNameString));
+//		var_y.setTypeName(rtn_y);
+//
+//		st_af.add(vs);
+//
+//		VariableStatement var_x = new VariableStatement(null);
+//		var_x.setName(Helpers.string_to_ident("x")); // not necessary
+//		RegularTypeName rtn_x = new RegularTypeName(ctx);
+//		rtn_x.setName(Helpers.string_to_qualident(typeNameString1));
+//		var_x.setTypeName(rtn_x);
+//
+//		LookupResultList lrl = new LookupResultList();
+//		lrl.add("x", 1, var_x, ctx);
+//		LookupResultList lrl2 = new LookupResultList();
+//		lrl2.add("package1", 1, null, ctx);
+//
+//		//
+//		// CREATE VARIABLE UNDER TEST
+//		//
+//		TypeOfTypeName t = new TypeOfTypeName(ctx);
+//		t.typeOf(Helpers.string_to_qualident("x.y"));
+//
+//		//
+//		// SET UP EXPECTATIONS
+//		//
+//		expect(ctx.lookup("x")).andReturn(lrl);
+//		expect(ctx.lookup("package1")).andReturn(lrl2);
+//		replay(ctx);
+//
+//		//
+//		// VERIFY EXPECTATIONS
+//		//
+//		TypeName tn = t.resolve(ctx);
+////		System.out.println(tn);
+//		verify(ctx);
+//		Assert.assertEquals(typeNameString, tn.toString());
+//	}
+
+	@Test
+	public void typeOfComplexQualident2() {
+		//
+		// CREATE MOCK
+		//
+		Context ctx = mock(Context.class);
+		Context ctx4 = mock(Context.class);
+
+		//
+		// CREATE VARIABLES
+		//
+		String typeNameString1 = "AbstractFactory";
+		final String typeNameString = "SystemInteger";
+
+		OS_Module mod = new OS_Module();
+		Context mod_ctx = mod.getContext();
+
+		ClassStatement st_af = new ClassStatement(mod, mod_ctx);
+		st_af.setName(IdentExpression.forString("AbstractFactory"));
+		ClassStatement sysint = new ClassStatement(mod, mod_ctx);
+		sysint.setName(IdentExpression.forString("SystemInteger"));
+
+		VariableSequence vs = new VariableSequence(st_af.getContext());
+		VariableStatement var_y = new VariableStatement(vs);
+		var_y.setName(IdentExpression.forString("y"));
+		RegularTypeName rtn_y = new RegularTypeName(ctx);
+		rtn_y.setName(Helpers.string_to_qualident(typeNameString));
+		var_y.setTypeName(rtn_y);
+		vs.items().add(var_y); // TODO not intended usage
+
+		st_af.add(vs);
+
+		VariableStatement var_x = new VariableStatement(null);
+		var_x.setName(Helpers.string_to_ident("x")); // not necessary
+		RegularTypeName rtn_x = new RegularTypeName(ctx);
+		rtn_x.setName(Helpers.string_to_qualident(typeNameString1));
+		var_x.setTypeName(rtn_x);
+
+		LookupResultList lrl = new LookupResultList();
+		lrl.add("x", 1, var_x, ctx);
+		LookupResultList lrl2 = new LookupResultList();
+		lrl2.add(typeNameString1, 1, st_af, ctx);
+		LookupResultList lrl3 = new LookupResultList();
+		lrl3.add("SystemInteger", 1, sysint, ctx);
+		LookupResultList lrl4 = new LookupResultList();
+		lrl4.add("y", 1, var_y, ctx4);
+
+		//
+		// CREATE VARIABLE UNDER TEST
+		//
+		TypeOfTypeName t = new TypeOfTypeName(ctx);
+		t.typeOf(Helpers.string_to_qualident("x.y"));
+
+		//
+		// SET UP EXPECTATIONS
+		//
+		expect(ctx.lookup("x")).andReturn(lrl);
+//		expect(ctx.lookup("y")).andReturn(lrl4);
+		expect(ctx.lookup(typeNameString1)).andReturn(lrl2);
+//		expect(ctx.lookup("SystemInteger")).andReturn(lrl3);
+		replay(ctx);
+
+		//
+		// VERIFY EXPECTATIONS
+		//
+		TypeName tn = t.resolve(ctx);
+//		System.out.println(tn);
+		verify(ctx);
+		Assert.assertEquals(typeNameString, tn.toString());
+	}
+
 }
 
 //
