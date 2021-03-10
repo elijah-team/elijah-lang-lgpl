@@ -62,7 +62,7 @@ public class DeduceLookupUtils {
 		final Stack<IExpression> s = dot_expression_to_stack(de);
 		OS_Type t = null;
 		IExpression ss = s.peek();
-		while (!s.isEmpty()) {
+		while (/*!*/s.size() > 1/*isEmpty()*/) {
 			ss = s.peek();
 			if (t != null && (t.getType() == OS_Type.Type.USER_CLASS || t.getType() == OS_Type.Type.FUNCTION))
 				ctx = t.getClassOf().getContext();
@@ -70,13 +70,17 @@ public class DeduceLookupUtils {
 			if (t == null) break;
 			s.pop();
 		}
+		{
+//			s.pop();
+			ss = s.peek();
+		}
 		if (t == null) {
 			NotImplementedException.raise();
 			return new LookupResultList(); // TODO throw ResolveError
 		} else {
 			if (t instanceof OS_UnknownType)
 				return new LookupResultList(); // TODO is this right??
-			final LookupResultList lrl = t.getElement().getParent().getContext().lookup(((IdentExpression) ss).getText());
+			final LookupResultList lrl = t.getElement()/*.getParent()*/.getContext().lookup(((IdentExpression) ss).getText());
 			return lrl;
 		}
 	}
