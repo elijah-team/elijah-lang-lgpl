@@ -1752,7 +1752,6 @@ public class DeduceTypes2 {
 					ite.setResolvedElement(best);
 					found_element_for_ite(null, ite, best, ctx);
 //					ite.setStatus(BaseTableEntry.Status.KNOWN, best);
-					ite.setResolvedElement(best);
 				}
 			}
 		}
