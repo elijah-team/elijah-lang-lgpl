@@ -14,8 +14,8 @@ package tripleo.elijah.lang;
 public class OS_UnknownType extends OS_Type {
 	private OS_Element element;
 
-	public OS_UnknownType(OS_Element element) {
-		this.element = element;
+	public OS_UnknownType(OS_Element aElement) {
+		element      = aElement;
 		type_of_type = Type.UNKNOWN;
 	}
 }
