@@ -342,6 +342,9 @@ public class GenerateC {
 				{
 					tos.dec_tabs();
 					tos.put_string_ln("}");
+					if (tte != null) {
+						tos.put_string_ln("return vsr;");
+					}
 				}
 				break;
 			case ES:
