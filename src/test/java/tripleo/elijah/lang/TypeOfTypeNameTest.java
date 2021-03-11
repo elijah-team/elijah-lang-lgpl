@@ -186,12 +186,11 @@ public class TypeOfTypeNameTest {
 		sysint.setName(IdentExpression.forString("SystemInteger"));
 
 		VariableSequence vs = new VariableSequence(st_af.getContext());
-		VariableStatement var_y = new VariableStatement(vs);
+		VariableStatement var_y = vs.next();
 		var_y.setName(IdentExpression.forString("y"));
 		RegularTypeName rtn_y = new RegularTypeName(ctx);
 		rtn_y.setName(Helpers.string_to_qualident(typeNameString));
 		var_y.setTypeName(rtn_y);
-		vs.items().add(var_y); // TODO not intended usage
 
 		st_af.add(vs);
 

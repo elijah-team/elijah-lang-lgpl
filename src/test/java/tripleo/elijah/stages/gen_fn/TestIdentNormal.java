@@ -100,7 +100,7 @@ public class TestIdentNormal {
 		GenerateFunctions generateFunctions = new GenerateFunctions(mod);
 		GeneratedFunction generatedFunction = new GeneratedFunction(fd);
 		VariableSequence seq = new VariableSequence(ctx1);
-		VariableStatement vs = new VariableStatement(seq);
+		VariableStatement vs = seq.next();
 		final IdentExpression x = IdentExpression.forString("x");
 		vs.setName(x);
 		final IdentExpression foo = IdentExpression.forString("foo");
@@ -174,8 +174,8 @@ public class TestIdentNormal {
 			}
 		});
 
-		replay(fd2);
-		replay(ctx2);
+		replay(fd, fd2);
+		replay(ctx1, ctx2);
 
 		//
 		//
@@ -198,6 +198,8 @@ public class TestIdentNormal {
 				assert false;
 			}
 		});
+
+		verify(fd, fd2, ctx1, ctx2);
 	}
 
 }
