@@ -10,6 +10,7 @@ package tripleo.elijah.stages.deduce;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
@@ -222,7 +223,50 @@ public class DeducePhase {
 				generatedClass.resolve_var_table_entries();
 			}
 		}
+		sanityChecks();
 	}
+
+	private void sanityChecks() {
+		for (GeneratedNode generatedNode : generatedClasses) {
+			if (generatedNode instanceof GeneratedClass) {
+				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				sanityChecks(generatedClass.functionMap.values());
+				sanityChecks(generatedClass.constructors.values());
+			} else if (generatedNode instanceof GeneratedNamespace) {
+				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+				sanityChecks(generatedNamespace.functionMap.values());
+//				sanityChecks(generatedNamespace.constructors.values());
+			}
+		}
+	}
+
+	private void sanityChecks(@NotNull Collection<GeneratedFunction> aGeneratedFunctions) {
+		for (GeneratedFunction generatedFunction : aGeneratedFunctions) {
+			for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+				switch (identTableEntry.getStatus()) {
+					case UNKNOWN:
+						assert identTableEntry.resolved_element == null;
+						System.err.println(String.format("250 UNKNOWN idte %s in %s", identTableEntry, generatedFunction));
+						break;
+					case KNOWN:
+						assert identTableEntry.resolved_element != null;
+						if (identTableEntry.type == null) {
+							System.err.println(String.format("258 null type in KNOWN idte %s in %s", identTableEntry, generatedFunction));
+						}
+						break;
+					case UNCHECKED:
+						System.err.println(String.format("255 UNCHECKED idte %s in %s", identTableEntry, generatedFunction));
+						break;
+				}
+				for (TypeTableEntry pot_tte : identTableEntry.potentialTypes()) {
+					if (pot_tte.attached == null) {
+						System.err.println(String.format("267 null potential attached in %s in %s in %s", pot_tte, identTableEntry, generatedFunction));
+					}
+				}
+			}
+		}
+	}
+
 }
 
 //
