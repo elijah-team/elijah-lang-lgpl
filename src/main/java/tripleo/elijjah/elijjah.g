@@ -71,7 +71,7 @@ qualident returns [Qualident q]
     ;
 
 classStatement [OS_Element parent, Context cctx, List<AnnotationClause> as] returns [ClassStatement cls]
-		{AnnotationClause a=null;cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;TypeNameList tnl=null;}
+		{cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;TypeNameList tnl=null;}
 	: 
     ("class"				{cls = new ClassStatement(parent, cctx);cls.addAnnotations(as);}
             ("struct"       {cls.setType(ClassTypes.STRUCTURE);}
@@ -548,10 +548,10 @@ functionDef2_interface[FunctionDefBuilder fb]
 programStatement[ProgramClosure pc, OS_Element cont]
 		{ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();AliasStatement als=null;}
     : imp=importStatement[cont]
-	| ( (a=annotation_clause      {as.add(a);})+
-    | namespaceStatement__[new NamespaceStatement(cont, cur), as]
+	| (a=annotation_clause      {as.add(a);})*
+    (  namespaceStatement__[new NamespaceStatement(cont, cur), as]
     | classStatement[cont, cur, as] // TODO check if class in class works
-	)
+    )
     | als=aliasStatement[cont] 			//{cont.add(als);} //[pc.aliasStatement(cont)]
     ;
 programStatement2[ClassOrNamespaceScope cont]
