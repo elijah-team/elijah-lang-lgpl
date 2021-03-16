@@ -158,7 +158,7 @@ public class GenerateC {
 					if (o.varType != null)
 						s = getTypeName(o.varType);
 					else
-						s = "void*/*%null*/";
+						s = "void*/*null*/";
 					tosHdr.put_string_ln(String.format("%s vm%s;", s, o.nameToken));
 				}
 			} else {
