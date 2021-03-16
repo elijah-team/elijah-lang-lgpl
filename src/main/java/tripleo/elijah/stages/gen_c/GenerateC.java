@@ -67,8 +67,8 @@ public class GenerateC {
 			return res;
 		}
 
-		public void addFunction(GeneratedFunction aGeneratedFunction, Buffer aBuffer) {
-			add(aBuffer, aGeneratedFunction, ++bufferCounter, TY.IMPL);
+		public void addFunction(GeneratedFunction aGeneratedFunction, Buffer aBuffer, TY aTY) {
+			add(aBuffer, aGeneratedFunction, ++bufferCounter, aTY);
 		}
 
 		public enum TY {
@@ -305,6 +305,7 @@ public class GenerateC {
 //			System.out.println("234 class_name >> " + class_name);
 			final String if_args = args.length() == 0 ? "" : ", ";
 			tos.put_string_ln(String.format("%s %s%s(%s* vsc%s%s) {", returnType, class_name, name, class_name, if_args, args));
+			tosHdr.put_string_ln(String.format("%s %s%s(%s* vsc%s%s);", returnType, class_name, name, class_name, if_args, args));
 		} else if (gf.fd.getParent() instanceof NamespaceStatement) {
 			NamespaceStatement st = (NamespaceStatement) gf.fd.getParent();
 			final String class_name = getTypeName(st);
@@ -313,8 +314,10 @@ public class GenerateC {
 			// TODO vsi for namespace instance??
 //			tos.put_string_ln(String.format("%s %s%s(%s* vsi%s%s) {", returnType, class_name, name, class_name, if_args, args));
 			tos.put_string_ln(String.format("%s %s%s(%s) {", returnType, class_name, name, args));
+			tosHdr.put_string_ln(String.format("%s %s%s(%s);", returnType, class_name, name, args));
 		} else {
 			tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
+			tosHdr.put_string_ln(String.format("%s %s(%s);", returnType, name, args));
 		}
 		tos.incr_tabs();
 		//
@@ -620,7 +623,10 @@ public class GenerateC {
 		tos.close();
 		Buffer buf = new DefaultBuffer(stringWriter.toString());
 //		System.out.println(buf.getText());
-		gr.addFunction(gf, buf);
+		gr.addFunction(gf, buf, GenerateResult.TY.IMPL);
+		Buffer bufHdr = new DefaultBuffer(stringWriterHdr.toString());
+//		System.out.println(bufHdr.getText());
+		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER);
 	}
 
 	private void generate_method_is_a(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
