@@ -556,18 +556,7 @@ public class GenerateFunctions {
 	public List<GeneratedNode> generateAllTopLevelClasses() {
 		List<GeneratedNode> R = new ArrayList<GeneratedNode>();
 
-		for (final ModuleItem item : module.getItems()) {
-			if (item instanceof NamespaceStatement) {
-				final NamespaceStatement namespaceStatement = (NamespaceStatement) item;
-				GeneratedNamespace kl = generateNamespace(namespaceStatement);
-				R.add(kl);
-			} else if (item instanceof ClassStatement) {
-				final ClassStatement classStatement = (ClassStatement) item;
-				@NotNull GeneratedClass kl = generateClass(classStatement);
-				R.add(kl);
-			}
-			// TODO enums, datatypes, (type)aliases
-		}
+		generateAllTopLevelClasses(R);
 
 		return R;
 	}
