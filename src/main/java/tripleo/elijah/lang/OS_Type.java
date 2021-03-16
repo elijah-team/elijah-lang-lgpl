@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.lang;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang2.BuiltInTypes;
 
 import java.util.Objects;
@@ -147,7 +148,7 @@ public class OS_Type {
 	}
 
 	private BuiltInTypes type;
-	protected final Type type_of_type;
+	protected @NotNull final Type type_of_type;
 	private OS_Element etype;
 	private TypeName ttype;
 
