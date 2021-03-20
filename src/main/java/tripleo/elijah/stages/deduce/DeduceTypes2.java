@@ -54,7 +54,7 @@ public class DeduceTypes2 {
 		this.errSink = module.parent.eee;
 	}
 
-	public void deduceFunctions(final Iterable<GeneratedNode> lgf) {
+	public void deduceFunctions(final @NotNull Iterable<GeneratedNode> lgf) {
 		for (final GeneratedNode generatedNode : lgf) {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
