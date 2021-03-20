@@ -270,77 +270,101 @@ public class GenerateC {
 		}
 	}
 
+	class Generate_Method_Header {
+
+		private final String return_type;
+		private final String args_string;
+		private final String header_string;
+		private final String name;
+		OS_Type tte;
+
+		public Generate_Method_Header(GeneratedFunction gf) {
+			name          = gf.fd.name();
+			return_type   = find_return_type(gf);
+			args_string   = find_args_string(gf);
+			header_string = find_header_string(gf);
+		}
+
+		String find_header_string(GeneratedFunction gf) {
+			final GeneratedContainerNC parent = gf.getParent();
+			if (parent instanceof GeneratedClass) {
+				GeneratedClass st = (GeneratedClass) parent;
+				final String class_name = getTypeName(st);
+//				System.out.println("234 class_name >> " + class_name);
+				final String if_args = args_string.length() == 0 ? "" : ", ";
+				return String.format("%s %s%s(%s* vsc%s%s)", return_type, class_name, name, class_name, if_args, args_string);
+			} else if (parent instanceof GeneratedNamespace) {
+				GeneratedNamespace st = (GeneratedNamespace) parent;
+				final String class_name = getTypeName(st);
+				System.out.println(String.format("240 (namespace) %s -> %s", st.getName(), class_name));
+				final String if_args = args_string.length() == 0 ? "" : ", ";
+				// TODO vsi for namespace instance??
+//				tos.put_string_ln(String.format("%s %s%s(%s* vsi%s%s) {", returnType, class_name, name, class_name, if_args, args));
+				return String.format("%s %s%s(%s)", return_type, class_name, name, args_string);
+			} else {
+				return String.format("%s %s(%s)", return_type, name, args_string);
+			}
+		}
+
+		String find_args_string(GeneratedFunction gf) {
+			final String args;
+			if (false) {
+				args = Helpers.String_join(", ", Collections2.transform(gf.fd.fal().falis, new Function<FormalArgListItem, String>() {
+					@org.checkerframework.checker.nullness.qual.Nullable
+					@Override
+					public String apply(@org.checkerframework.checker.nullness.qual.Nullable final FormalArgListItem input) {
+						assert input != null;
+						return String.format("%s va%s", getTypeName(input.typeName()), input.name());
+					}
+				}));
+			} else {
+				Collection<VariableTableEntry> x = Collections2.filter(gf.vte_list, new Predicate<VariableTableEntry>() {
+					@Override
+					public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable VariableTableEntry input) {
+						assert input != null;
+						return input.vtt == VariableTableType.ARG;
+					}
+				});
+				args = Helpers.String_join(", ", Collections2.transform(x, new Function<VariableTableEntry, String>() {
+					@org.checkerframework.checker.nullness.qual.Nullable
+					@Override
+					public String apply(@org.checkerframework.checker.nullness.qual.Nullable VariableTableEntry input) {
+						assert input != null;
+						return String.format("%s va%s", getTypeNameForVariableEntry(input), input.getName());
+					}
+				}));
+			}
+			return args;
+		}
+
+		String find_return_type(GeneratedFunction gf) {
+			final String returnType;
+			tte = gf.getTypeTableEntry(1).attached;
+			System.out.println("228 "+tte);
+			if (tte != null && tte.getType() == OS_Type.Type.BUILT_IN && tte.getBType() == BuiltInTypes.Unit) {
+				returnType = "void";
+			} else if (tte != null) {
+				returnType = String.format("/*267*/%s*", getTypeName(tte));
+			} else {
+//			throw new IllegalStateException();
+				returnType = "void/*2*/";
+			}
+			return returnType;
+		}
+	}
+
 	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr) throws IOException {
 		if (gf.fd == null) return;
 		final StringWriter stringWriterHdr = new StringWriter();
 		final TabbedOutputStream tosHdr = new TabbedOutputStream(stringWriterHdr, true);
 		final StringWriter stringWriter = new StringWriter();
 		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, true);
-		final String returnType;
-		final String name;
-		//
-		// FIND RETURN TYPE
-		//
-		final OS_Type tte = gf.getTypeTableEntry(1).attached;
-		System.out.println("228 "+tte);
-		if (tte != null && tte.getType() == OS_Type.Type.BUILT_IN && tte.getBType() == BuiltInTypes.Unit) {
-			returnType = "void";
-		} else if (tte != null) {
-			returnType = String.format("/*267*/%s*", getTypeName(tte));
-		} else {
-//			throw new IllegalStateException();
-			returnType = "void/*2*/";
-		}
 
-		//
-		name = gf.fd.name();
-		final String args;
-		if (false) {
-			args = Helpers.String_join(", ", Collections2.transform(gf.fd.fal().falis, new Function<FormalArgListItem, String>() {
-				@org.checkerframework.checker.nullness.qual.Nullable
-				@Override
-				public String apply(@org.checkerframework.checker.nullness.qual.Nullable final FormalArgListItem input) {
-					assert input != null;
-					return String.format("%s va%s", getTypeName(input.typeName()), input.name());
-				}
-			}));
-		} else {
-			Collection<VariableTableEntry> x = Collections2.filter(gf.vte_list, new Predicate<VariableTableEntry>() {
-				@Override
-				public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable VariableTableEntry input) {
-					assert input != null;
-					return input.vtt == VariableTableType.ARG;
-				}
-			});
-			args = Helpers.String_join(", ", Collections2.transform(x, new Function<VariableTableEntry, String>() {
-				@org.checkerframework.checker.nullness.qual.Nullable
-				@Override
-				public String apply(@org.checkerframework.checker.nullness.qual.Nullable VariableTableEntry input) {
-					assert input != null;
-					return String.format("%s va%s", getTypeNameForVariableEntry(input), input.getName());
-				}
-			}));
-		}
-		if (gf.fd.getParent() instanceof ClassStatement) {
-			ClassStatement st = (ClassStatement) gf.fd.getParent();
-			final String class_name = getTypeName(new OS_Type(st));
-//			System.out.println("234 class_name >> " + class_name);
-			final String if_args = args.length() == 0 ? "" : ", ";
-			tos.put_string_ln(String.format("%s %s%s(%s* vsc%s%s) {", returnType, class_name, name, class_name, if_args, args));
-			tosHdr.put_string_ln(String.format("%s %s%s(%s* vsc%s%s);", returnType, class_name, name, class_name, if_args, args));
-		} else if (gf.fd.getParent() instanceof NamespaceStatement) {
-			NamespaceStatement st = (NamespaceStatement) gf.fd.getParent();
-			final String class_name = getTypeName(st);
-			System.out.println(String.format("240 (namespace) %s -> %s", st.getName(), class_name));
-			final String if_args = args.length() == 0 ? "" : ", ";
-			// TODO vsi for namespace instance??
-//			tos.put_string_ln(String.format("%s %s%s(%s* vsi%s%s) {", returnType, class_name, name, class_name, if_args, args));
-			tos.put_string_ln(String.format("%s %s%s(%s) {", returnType, class_name, name, args));
-			tosHdr.put_string_ln(String.format("%s %s%s(%s);", returnType, class_name, name, args));
-		} else {
-			tos.put_string_ln(String.format("%s %s(%s) {", returnType, name, args));
-			tosHdr.put_string_ln(String.format("%s %s(%s);", returnType, name, args));
-		}
+		Generate_Method_Header gmh = new Generate_Method_Header(gf);
+
+		tos.put_string_ln(String.format("%s {", gmh.header_string));
+		tosHdr.put_string_ln(String.format("%s;", gmh.header_string));
+
 		tos.incr_tabs();
 		//
 		@NotNull List<Instruction> instructions = gf.instructions();
@@ -355,8 +379,8 @@ public class GenerateC {
 			case E:
 				{
 					tos.put_string_ln("bool vsb;");
-					if (tte != null) {
-						String ty = getTypeName(tte);
+					if (gmh.tte != null) {
+						String ty = getTypeName(gmh.tte);
 						tos.put_string_ln(String.format("%s vsr;", ty));
 					}
 					tos.put_string_ln("{");
@@ -367,7 +391,7 @@ public class GenerateC {
 				{
 					tos.dec_tabs();
 					tos.put_string_ln("}");
-					if (tte != null) {
+					if (gmh.tte != null) {
 						tos.put_string_ln("return vsr;");
 					}
 				}
