@@ -81,7 +81,7 @@ public class CReference {
 				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(ia));
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
-					if (i + 1 >= sSize) {
+					if (sSize >= i + 1) {
 						_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction);
 						text = null;
 					} else {
