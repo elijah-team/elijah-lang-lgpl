@@ -240,8 +240,8 @@ public class GenerateC {
 				tosHdr.put_string_ln(String.format("%s* vm%s;", o.varType == null ? "void " : getTypeName(o.varType), o.nameToken));
 			}
 
-			String class_name = getTypeName(x.getNamespaceStatement());
-			int class_code = x.getNamespaceStatement()._a.getCode();
+			String class_name = getTypeName(x);
+			final int class_code = x.getCode();
 
 			tosHdr.dec_tabs();
 			tosHdr.put_string_ln("");
@@ -813,9 +813,15 @@ public class GenerateC {
 		System.err.println("8886 y is null (No typename specified)");
 	}
 
-	private String getTypeName(NamespaceStatement namespaceStatement) {
+	private String getTypeName(GeneratedNamespace aGeneratedNamespace) {
 		String z;
-		z = String.format("Z%d", namespaceStatement._a.getCode());
+		z = String.format("Z%d", aGeneratedNamespace.getCode());
+		return z;
+	}
+
+	private String getTypeName(GeneratedClass aGeneratedClass) {
+		String z;
+		z = String.format("Z%d", aGeneratedClass.getCode());
 		return z;
 	}
 

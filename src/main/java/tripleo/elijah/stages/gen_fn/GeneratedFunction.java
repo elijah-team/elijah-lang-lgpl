@@ -28,6 +28,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
  */
 public class GeneratedFunction implements GeneratedNode {
 	public final @Nullable FunctionDef fd;
+	private int code = 0;
 	private final List<Label> labelList = new ArrayList<Label>();
 	public @NotNull List<Instruction> instructionsList = new ArrayList<Instruction>();
 	public @NotNull List<Integer> deferred_calls = new ArrayList<Integer>();
@@ -425,6 +426,15 @@ public class GeneratedFunction implements GeneratedNode {
 		assert aNode instanceof GeneratedClass;
 		genClass = (GeneratedClass) aNode;
 	}
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int aCode) {
+		code = aCode;
+	}
+
 }
 
 //

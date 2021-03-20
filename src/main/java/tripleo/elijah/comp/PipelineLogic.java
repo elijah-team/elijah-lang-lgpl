@@ -71,14 +71,16 @@ public class PipelineLogic {
 
 		for (final GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedFunction) {
-				final FunctionDef fd = ((GeneratedFunction) generatedNode).getFD();
-				if (fd._a.getCode() == 0)
-					fd._a.setCode(mod.parent.nextFunctionCode());
+				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
+				if (generatedFunction.getCode() == 0)
+					generatedFunction.setCode(mod.parent.nextFunctionCode());
 			} else if (generatedNode instanceof GeneratedClass) {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				ClassStatement classStatement = generatedClass.getKlass();
-				if (classStatement._a.getCode() == 0)
-					classStatement._a.setCode(mod.parent.nextClassCode());
+				if (generatedClass.getCode() == 0)
+					generatedClass.setCode(mod.parent.nextClassCode());
+				for (GeneratedClass generatedClass2 : generatedClass.classMap.values()) {
+					generatedClass2.setCode(mod.parent.nextClassCode());
+				}
 				for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 						if (identTableEntry.isResolved()) {
@@ -89,9 +91,11 @@ public class PipelineLogic {
 				}
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-				NamespaceStatement namespaceStatement = generatedNamespace.getNamespaceStatement();
-				if (namespaceStatement._a.getCode() == 0)
-					namespaceStatement._a.setCode(mod.parent.nextClassCode());
+				if (generatedNamespace.getCode() == 0)
+					generatedNamespace.setCode(mod.parent.nextClassCode());
+				for (GeneratedClass generatedClass : generatedNamespace.classMap.values()) {
+					generatedClass.setCode(mod.parent.nextClassCode());
+				}
 				for (GeneratedFunction generatedFunction : generatedNamespace.functionMap.values()) {
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 						if (identTableEntry.isResolved()) {
@@ -105,18 +109,17 @@ public class PipelineLogic {
 
 		for (final GeneratedNode generatedNode : resolved_nodes) {
 			if (generatedNode instanceof GeneratedFunction) {
-				final FunctionDef fd = ((GeneratedFunction) generatedNode).getFD();
-				if (fd._a.getCode() == 0)
-					fd._a.setCode(mod.parent.nextFunctionCode());
+				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
+				if (generatedFunction.getCode() == 0)
+					generatedFunction.setCode(mod.parent.nextFunctionCode());
 			} else if (generatedNode instanceof GeneratedClass) {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				ClassStatement classStatement = generatedClass.getKlass();
-				if (classStatement._a.getCode() == 0)
-					classStatement._a.setCode(mod.parent.nextClassCode());
+				if (generatedClass.getCode() == 0)
+					generatedClass.setCode(mod.parent.nextClassCode());
 			} else if (generatedNode instanceof GeneratedNamespace) {
-				NamespaceStatement namespaceStatement = ((GeneratedNamespace) generatedNode).getNamespaceStatement();
-				if (namespaceStatement._a.getCode() == 0)
-					namespaceStatement._a.setCode(mod.parent.nextClassCode());
+				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+				if (generatedNamespace.getCode() == 0)
+					generatedNamespace.setCode(mod.parent.nextClassCode());
 			}
 		}
 
