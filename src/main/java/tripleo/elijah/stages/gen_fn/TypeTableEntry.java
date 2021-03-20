@@ -21,6 +21,7 @@ public class TypeTableEntry {
     public final Type lifetime;
     public @Nullable OS_Type attached;
     public final IExpression expression;
+    private GeneratedContainerNC _resolved;
 
     public TypeTableEntry(final int index, final Type lifetime, @Nullable final OS_Type attached, final IExpression expression) {
         this.index = index;
@@ -32,8 +33,8 @@ public class TypeTableEntry {
         this.expression = expression;
     }
 
-    @Override
-    public @NotNull String toString() {
+    @Override @NotNull
+    public String toString() {
         return "TypeTableEntry{" +
                 "index=" + index +
                 ", lifetime=" + lifetime +
@@ -44,6 +45,14 @@ public class TypeTableEntry {
 
     public int getIndex() {
         return index;
+    }
+
+    public void resolve(GeneratedContainerNC aResolved) {
+        _resolved = aResolved;
+    }
+
+    public GeneratedContainerNC resolved() {
+        return _resolved;
     }
 
 	public enum Type {
