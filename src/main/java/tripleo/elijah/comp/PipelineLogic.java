@@ -127,14 +127,9 @@ public class PipelineLogic {
 
 		for (final GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedFunction) {
-//				final FunctionDef fd = ((GeneratedFunction) generatedNode).getFD();
-//				if (fd._a.getCode() == 0)
-//					fd._a.setCode(mod.parent.nextFunctionCode());
+
 			} else if (generatedNode instanceof GeneratedClass) {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-//				ClassStatement classStatement = generatedClass.getKlass();
-//				if (classStatement._a.getCode() == 0)
-//					classStatement._a.setCode(mod.parent.nextClassCode());
 				for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 						final IdentIA ia2 = new IdentIA(identTableEntry.getIndex(), generatedFunction);
