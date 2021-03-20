@@ -13,15 +13,10 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created 12/22/20 5:39 PM
  */
-public class GeneratedNamespace implements GeneratedContainer {
+public class GeneratedNamespace extends GeneratedContainerNC {
 	public GeneratedNamespace(NamespaceStatement namespace1, OS_Module module) {
 		this.namespaceStatement = namespace1;
 		this.module = module;
@@ -29,13 +24,6 @@ public class GeneratedNamespace implements GeneratedContainer {
 
 	private final OS_Module module;
 	private final NamespaceStatement namespaceStatement;
-	public List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
-	public Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
-
-	public void addVarTableEntry(AccessNotation an, VariableStatement vs) {
-		// TODO dont ignore AccessNotation
-		varTable.add(new VarTableEntry(vs.getNameToken(), vs.initialValue(), vs.typeName()));
-	}
 
 	public void addAccessNotation(AccessNotation an) {
 		throw new NotImplementedException();
@@ -68,23 +56,6 @@ public class GeneratedNamespace implements GeneratedContainer {
 
 	public String getName() {
 		return namespaceStatement.getName();
-	}
-
-	public void addFunction(FunctionDef functionDef, GeneratedFunction generatedFunction) {
-		if (functionMap.containsKey(functionDef))
-			throw new IllegalStateException("Function already generated"); // TODO do better than this
-		functionMap.put(functionDef, generatedFunction);
-	}
-
-	/**
-	 * Get a {@link GeneratedFunction}
-	 *
-	 * @param fd the function searching for
-	 *
-	 * @return null if no such key exists
-	 */
-	public GeneratedFunction getFunction(FunctionDef fd) {
-		return functionMap.get(fd);
 	}
 
 	public NamespaceStatement getNamespaceStatement() {

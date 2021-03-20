@@ -8,35 +8,25 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
-import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceLookupUtils;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created 10/29/20 4:26 AM
  */
-public class GeneratedClass implements GeneratedContainer {
+public class GeneratedClass extends GeneratedContainerNC {
 	private final OS_Module module;
 	private final ClassStatement klass;
-	public List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
-	public Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
 	public Map<ConstructorDef, GeneratedFunction> constructors = new HashMap<ConstructorDef, GeneratedFunction>();
 
 	public GeneratedClass(ClassStatement klass, OS_Module module) {
 		this.klass = klass;
 		this.module = module;
-	}
-
-	public void addVarTableEntry(AccessNotation an, VariableStatement vs) {
-		// TODO dont ignore AccessNotation
-		varTable.add(new VarTableEntry(vs.getNameToken(), vs.initialValue(), vs.typeName()));
 	}
 
 	public void addAccessNotation(AccessNotation an) {
@@ -74,23 +64,6 @@ public class GeneratedClass implements GeneratedContainer {
 
 	public void addConstructor(ConstructorDef aConstructorDef, GeneratedFunction aGeneratedFunction) {
 		constructors.put(aConstructorDef, aGeneratedFunction);
-	}
-
-	public void addFunction(FunctionDef functionDef, GeneratedFunction generatedFunction) {
-		if (functionMap.containsKey(functionDef))
-			throw new IllegalStateException("Function already generated"); // TODO do better than this
-		functionMap.put(functionDef, generatedFunction);
-	}
-
-	/**
-	 * Get a {@link GeneratedFunction}
-	 *
-	 * @param fd the function searching for
-	 *
-	 * @return null if no such key exists
-	 */
-	public GeneratedFunction getFunction(FunctionDef fd) {
-		return functionMap.get(fd);
 	}
 
 	public ClassStatement getKlass() {
@@ -140,14 +113,6 @@ public class GeneratedClass implements GeneratedContainer {
 		return getKlass();
 	}
 
-	@Override
-	@Nullable public VarTableEntry getVariable(String aVarName) {
-		for (VarTableEntry varTableEntry : varTable) {
-			if (varTableEntry.nameToken.getText().equals(aVarName))
-				return varTableEntry;
-		}
-		return null;
-	}
 }
 
 //
