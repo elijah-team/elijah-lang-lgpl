@@ -180,6 +180,21 @@ public class DeducePhase {
 	}
 
 	public void finish() {
+		for (GeneratedNode generatedNode : generatedClasses) {
+			if (generatedNode instanceof GeneratedClass) {
+				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				Collection<GeneratedFunction> functions = generatedClass.functionMap.values();
+				for (GeneratedFunction generatedFunction : functions) {
+					generatedFunction.setParent(generatedClass);
+				}
+			} else if (generatedNode instanceof GeneratedNamespace) {
+				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+				Collection<GeneratedFunction> functions = generatedNamespace.functionMap.values();
+				for (GeneratedFunction generatedFunction : functions) {
+					generatedFunction.setParent(generatedNamespace);
+				}
+			}
+		}
 		for (ClassStatement classStatement : onclasses.keySet()) {
 			for (GeneratedNode generatedNode : generatedClasses) {
 				if (generatedNode instanceof GeneratedClass) {

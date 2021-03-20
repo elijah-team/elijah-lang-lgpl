@@ -43,6 +43,7 @@ public class GeneratedFunction implements GeneratedNode {
 	private int label_count = 0;
 	private int _nextTemp = 0;
 	private GeneratedClass genClass;
+	private GeneratedContainerNC parent;
 
 	public GeneratedFunction(final @Nullable FunctionDef functionDef) {
 		fd = functionDef;
@@ -436,6 +437,13 @@ public class GeneratedFunction implements GeneratedNode {
 		code = aCode;
 	}
 
+	public void setParent(GeneratedContainerNC aGeneratedContainerNC) {
+		parent = aGeneratedContainerNC;
+	}
+
+	public GeneratedContainerNC getParent() {
+		return parent;
+	}
 }
 
 //
