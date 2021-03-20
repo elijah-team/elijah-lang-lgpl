@@ -463,7 +463,9 @@ public class GenerateFunctions {
 				System.out.println("Skip alias statement for now");
 //				throw new NotImplementedException();
 			} else if (item instanceof ClassStatement) {
-				throw new NotImplementedException();
+				final ClassStatement classStatement = (ClassStatement) item;
+				@NotNull GeneratedClass gen_c = generateClass(classStatement);
+				gc.addClass(classStatement, gen_c);
 			} else if (item instanceof ConstructorDef) {
 				final ConstructorDef constructorDef = (ConstructorDef) item;
 				@NotNull GeneratedFunction f = generateConstructor(constructorDef, klass);
