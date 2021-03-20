@@ -88,14 +88,36 @@ public class GenerateC {
 		this.module = m;
 	}
 
-	public GenerateResult generateCode2(Collection<GeneratedFunction> generatedFunctions) {
-		return generateCode(Collections2.transform(generatedFunctions, new Function<GeneratedFunction, GeneratedNode>() {
+	@Deprecated public GenerateResult generateCode2(Collection<GeneratedFunction> generatedFunctions) {
+		final Collection<GeneratedNode> generatedNodes = functions_to_list_of_generated_nodes(generatedFunctions);
+		return generateCode(generatedNodes);
+	}
+
+	@NotNull
+	public static Collection<GeneratedNode> functions_to_list_of_generated_nodes(Collection<GeneratedFunction> generatedFunctions) {
+		return Collections2.transform(generatedFunctions, new Function<GeneratedFunction, GeneratedNode>() {
 			@org.checkerframework.checker.nullness.qual.Nullable
 			@Override
 			public GeneratedNode apply(@org.checkerframework.checker.nullness.qual.Nullable GeneratedFunction input) {
 				return input;
 			}
-		}));
+		});
+	}
+
+	@Deprecated public GenerateResult generateCode3(Collection<GeneratedClass> aGeneratedClasses) {
+		final Collection<GeneratedNode> generatedNodes = classes_to_list_of_generated_nodes(aGeneratedClasses);
+		return generateCode(generatedNodes);
+	}
+
+	@NotNull
+	public static Collection<GeneratedNode> classes_to_list_of_generated_nodes(Collection<GeneratedClass> aGeneratedClasses) {
+		return Collections2.transform(aGeneratedClasses, new Function<GeneratedClass, GeneratedNode>() {
+			@org.checkerframework.checker.nullness.qual.Nullable
+			@Override
+			public GeneratedNode apply(@org.checkerframework.checker.nullness.qual.Nullable GeneratedClass input) {
+				return input;
+			}
+		});
 	}
 
 	public GenerateResult generateCode(final Collection<GeneratedNode> lgf) {

@@ -184,13 +184,21 @@ public class PipelineLogic {
 			if (generatedNode instanceof GeneratedClass) {
 				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 				ggc.generate_class(generatedClass, gr);
-				GenerateC.GenerateResult gr2 = ggc.generateCode2(generatedClass.functionMap.values());
+				final @NotNull Collection<GeneratedNode> gn1 = ggc.functions_to_list_of_generated_nodes(generatedClass.functionMap.values());
+				GenerateC.GenerateResult gr2 = ggc.generateCode(gn1);
 				gr.results().addAll(gr2.results());
+				final @NotNull Collection<GeneratedNode> gn2 = ggc.classes_to_list_of_generated_nodes(generatedClass.classMap.values());
+				GenerateC.GenerateResult gr3 = ggc.generateCode(gn2);
+				gr.results().addAll(gr3.results());
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
 				ggc.generate_namespace(generatedNamespace, gr);
-				GenerateC.GenerateResult gr2 = ggc.generateCode2(generatedNamespace.functionMap.values());
-				gr.results().addAll(gr2.results());
+				final @NotNull Collection<GeneratedNode> gn3 = ggc.functions_to_list_of_generated_nodes(generatedNamespace.functionMap.values());
+				GenerateC.GenerateResult gr3 = ggc.generateCode(gn3);
+				gr.results().addAll(gr3.results());
+				final @NotNull Collection<GeneratedNode> gn4 = ggc.classes_to_list_of_generated_nodes(generatedNamespace.classMap.values());
+				GenerateC.GenerateResult gr4 = ggc.generateCode(gn4);
+				gr.results().addAll(gr4.results());
 			} else {
 				System.out.println("2009 " + generatedNode.getClass().getName());
 			}
