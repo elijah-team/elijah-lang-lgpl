@@ -678,10 +678,17 @@ public class GenerateC {
 	private void generate_method_is_a(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
 		final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
 		final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
-		final Label target_label  = ((LabelIA) instruction.getArg(2)).label;
+		final Label target_label      = ((LabelIA) instruction.getArg(2)).label;
 
-		final VariableTableEntry testing_var  = gf.getVarTableEntry(testing_var_.getIndex());
-		final TypeTableEntry testing_type = gf.getTypeTableEntry(testing_type_.getIndex());
+		final VariableTableEntry testing_var    = gf.getVarTableEntry(testing_var_.getIndex());
+		final TypeTableEntry     testing_type__ = gf.getTypeTableEntry(testing_type_.getIndex());
+
+		GeneratedContainerNC testing_type = testing_type__.resolved();
+		final int z = testing_type.getCode();
+
+		tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
+		tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
+/*
 
 //		System.err.println("8887 " + testing_var);
 //		System.err.println("8888 " + testing_type);
@@ -712,7 +719,7 @@ public class GenerateC {
 		} else {
 			System.err.println("8885 testing_type.attached is null " + testing_type);
 		}
-		final int yyy = 2;
+*/
 	}
 
 	private String getTypeNameForVariableEntry(VariableTableEntry input) {
