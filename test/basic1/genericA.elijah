@@ -3,10 +3,12 @@ indexing
 
 import std.math
 
-class Main { main() {
+class Main { 
 
 class Foo  { val m1 = randInt(1, 100) }
 class Foo1 { val m2 = randInt(101, 200) }
+
+main() {
 
 iterate 20 { 
 	val a : Any
