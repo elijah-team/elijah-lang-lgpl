@@ -17,6 +17,7 @@ import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.gen_fn.BaseTableEntry;
 import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
+import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
@@ -276,6 +277,43 @@ public class DeduceTypes2 {
 									errSink.reportError("165 Can't resolve "+path);
 								}
 							});
+						}
+					}
+					for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
+						@Nullable OS_Type attached = typeTableEntry.attached;
+						if (attached == null) continue;
+						if (attached.getType() == OS_Type.Type.USER) {
+							TypeName tn = attached.getTypeName();
+							switch (tn.kindOfType()) {
+								case FUNCTION:
+								case GENERIC:
+								case TYPE_OF:
+									continue; // TODO Skip these for now.
+							}
+							try {
+								typeTableEntry.attached = resolve_type(attached, attached.getTypeName().getContext());
+								ClassStatement c = typeTableEntry.attached.getClassOf();
+								phase.onClass(c, new OnClass() {
+									// TODO what about ClassInvocation's?
+									@Override
+									public void classFound(GeneratedClass cc) {
+										typeTableEntry.resolve(cc);
+									}
+								});
+							} catch (ResolveError aResolveError) {
+								System.err.println("288 Failed to resolve type "+attached);
+								errSink.reportDignostic(aResolveError);
+							}
+						} else if (attached.getType() == OS_Type.Type.USER_CLASS) {
+							ClassStatement c = attached.getClassOf();
+							phase.onClass(c, new OnClass() {
+								// TODO what about ClassInvocation's?
+								@Override
+								public void classFound(GeneratedClass cc) {
+									typeTableEntry.resolve(cc);
+								}
+							});
+
 						}
 					}
 					//

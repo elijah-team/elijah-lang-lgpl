@@ -11,6 +11,7 @@ package tripleo.elijah.stages.deduce;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
@@ -57,6 +58,12 @@ public class DeducePhase {
 
 	public void registerResolvedVariable(IdentTableEntry identTableEntry, OS_Element parent, String varName) {
 		resolved_variables.put(parent, new ResolvedVariables(identTableEntry, parent, varName));
+	}
+
+	Multimap<ClassStatement, OnClass> onclasses = ArrayListMultimap.create();
+
+	public void onClass(ClassStatement aClassStatement, OnClass callback) {
+		onclasses.put(aClassStatement, callback);
 	}
 
 	static class ResolvedVariables {
@@ -173,6 +180,29 @@ public class DeducePhase {
 	}
 
 	public void finish() {
+		for (ClassStatement classStatement : onclasses.keySet()) {
+			for (GeneratedNode generatedNode : generatedClasses) {
+				if (generatedNode instanceof GeneratedClass) {
+					final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+					if (generatedClass.getKlass() == classStatement) {
+						Collection<OnClass> ks = onclasses.get(classStatement);
+						for (OnClass k : ks) {
+							k.classFound(generatedClass);
+						}
+					} else {
+						Collection<GeneratedClass> cmv = generatedClass.classMap.values();
+						for (GeneratedClass aClass : cmv) {
+							if (aClass.getKlass() == classStatement) {
+								Collection<OnClass> ks = onclasses.get(classStatement);
+								for (OnClass k : ks) {
+									k.classFound(generatedClass);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		for (Map.Entry<IdentTableEntry, OnType> entry : idte_type_callbacks.entrySet()) {
 			IdentTableEntry idte = entry.getKey();
 			if (idte.type !=null && // TODO make a stage where this gets set (resolvePotentialTypes)
