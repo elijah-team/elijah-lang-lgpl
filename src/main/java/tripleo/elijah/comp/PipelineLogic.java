@@ -8,9 +8,7 @@
  */
 package tripleo.elijah.comp;
 
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.NamespaceStatement;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
@@ -25,6 +23,7 @@ import tripleo.elijah.stages.instructions.IdentIA;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
