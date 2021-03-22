@@ -1438,7 +1438,8 @@ public class DeduceTypes2 {
 				y.setStatus(BaseTableEntry.Status.KNOWN, el);
 			} else if (x instanceof IdentIA) {
 				@NotNull IdentTableEntry y = generatedFunction.getIdentTableEntry(to_int(x));
-				y.setStatus(BaseTableEntry.Status.KNOWN, el);
+				assert y.getStatus() == BaseTableEntry.Status.KNOWN;
+//				y.setStatus(BaseTableEntry.Status.KNOWN, el);
 			} else if (x instanceof ProcIA) {
 				@NotNull ProcTableEntry y = generatedFunction.getProcTableEntry(to_int(x));
 //				y.setStatus(BaseTableEntry.Status.KNOWN, el); // TODO
