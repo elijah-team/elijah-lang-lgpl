@@ -317,17 +317,17 @@ public class DeduceTypes2 {
 				break;
 			case CALL: {
 				final int pte_num = ((ProcIA)instruction.getArg(0)).getIndex();
-				final ProcTableEntry fn1 = generatedFunction.getProcTableEntry(pte_num);
+				final ProcTableEntry pte = generatedFunction.getProcTableEntry(pte_num);
 //				final InstructionArgument i2 = (instruction.getArg(1));
 				{
-					final IdentIA expression = (IdentIA) fn1.expression_num;
+					final IdentIA expression = (IdentIA) pte.expression_num;
 					String x = generatedFunction.getIdentIAPathNormal(expression);
 					System.err.println("298 "+x);
 					resolveIdentIA_(context, expression, generatedFunction, new FoundElement(phase) {
 
 						@Override
 						public void foundElement(OS_Element e) {
-							fn1.resolved_element = e;
+							pte.resolved_element = e;
 						}
 
 						@Override
