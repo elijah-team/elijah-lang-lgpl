@@ -141,49 +141,7 @@ public class DeduceTypes2 {
 					// resolve ident table
 					//
 					for (IdentTableEntry ite : generatedFunction.idte_list) {
-						InstructionArgument itex = new IdentIA(ite.getIndex(), generatedFunction);
-						while (itex != null) {
-							IdentTableEntry itee = generatedFunction.getIdentTableEntry(to_int(itex));
-							while (itex != null) {
-								BaseTableEntry x = null;
-								if (itee.backlink instanceof IntegerIA) {
-									x = generatedFunction.getVarTableEntry(to_int(itee.backlink));
-									itex = null;
-								} else if (itee.backlink instanceof IdentIA) {
-									x = generatedFunction.getIdentTableEntry(to_int(itee.backlink));
-									itex = ((IdentTableEntry) x).backlink;
-								} else if (itee.backlink == null || itee.backlink instanceof ProcIA) {
-									itex = null;
-									x = null;
-								}
-
-								if (x != null) {
-									System.err.println("162 Adding FoundParent for "+itee);
-									x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext())); // TODO context??
-								}
-							}
-						}
-						if (ite.resolved_element != null)
-							continue;
-						if (ite.backlink == null) {
-							final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
-							resolveIdentIA_(ite.getPC(), identIA, generatedFunction, new FoundElement(phase) {
-
-								final String x = generatedFunction.getIdentIAPathNormal(identIA);
-
-								@Override
-								public void foundElement(OS_Element e) {
-									ite.setStatus(BaseTableEntry.Status.KNOWN, e);
-									found_element_for_ite(generatedFunction, ite, e, context);
-								}
-
-								@Override
-								public void noFoundElement() {
-									ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-									errSink.reportError("1004 Can't find element for "+ x);
-								}
-							});
-						}
+						resolve_ident_table_entry(ite, generatedFunction, context);
 					}
 				}
 				break;
@@ -225,59 +183,7 @@ public class DeduceTypes2 {
 					//
 					for (IdentTableEntry ite : generatedFunction.idte_list) {
 						int y=2;
-						if (!ite.hasResolvedElement()) {
-							IdentIA ident_a = new IdentIA(ite.getIndex(), generatedFunction);
-							resolveIdentIA_(context, ident_a, generatedFunction, new FoundElement(phase) {
-
-								final String path = generatedFunction.getIdentIAPathNormal(ident_a);
-
-								@Override
-								public void foundElement(OS_Element x) {
-									ite.setStatus(BaseTableEntry.Status.KNOWN, x);
-									if (ite.type != null && ite.type.attached != null) {
-										if (ite.type.attached.getType() == OS_Type.Type.USER) {
-											try {
-												OS_Type xx = resolve_type(ite.type.attached, fd_ctx);
-												ite.type.attached = xx;
-											} catch (ResolveError resolveError) {
-												System.out.println("192 Can't attach type to "+path);
-//												resolveError.printStackTrace(); // TODO print diagnostic
-//												continue;
-											}
-										}
-									} else {
-										int yy=2;
-										if (!ite.hasResolvedElement()) {
-											LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), fd_ctx);
-											OS_Element best = lrl.chooseBest(null);
-											if (best != null) {
-												ite.setStatus(BaseTableEntry.Status.KNOWN, x);
-												if (ite.type != null && ite.type.attached != null) {
-													if (ite.type.attached.getType() == OS_Type.Type.USER) {
-														try {
-															OS_Type xx = resolve_type(ite.type.attached, fd_ctx);
-															ite.type.attached = xx;
-														} catch (ResolveError resolveError) {
-															System.out.println("210 Can't attach type to "+ite.getIdent());
-//														resolveError.printStackTrace(); // TODO print diagnostic
-//															continue;
-														}
-													}
-												}
-											} else {
-												System.err.println("184 Couldn't resolve "+ite.getIdent());
-											}
-										}
-									}
-								}
-
-								@Override
-								public void noFoundElement() {
-									ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-									errSink.reportError("165 Can't resolve "+path);
-								}
-							});
-						}
+						assign_type_to_idte(ite, generatedFunction, fd_ctx, context);
 					}
 					for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
 						@Nullable OS_Type attached = typeTableEntry.attached;
@@ -500,6 +406,111 @@ public class DeduceTypes2 {
 					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
 				}
 			}
+		}
+	}
+
+	public void assign_type_to_idte(IdentTableEntry ite,
+									GeneratedFunction generatedFunction,
+									Context aFunctionContext,
+									Context aContext) {
+		if (!ite.hasResolvedElement()) {
+			IdentIA ident_a = new IdentIA(ite.getIndex(), generatedFunction);
+			resolveIdentIA_(aContext, ident_a, generatedFunction, new FoundElement(phase) {
+
+				final String path = generatedFunction.getIdentIAPathNormal(ident_a);
+
+				@Override
+				public void foundElement(OS_Element x) {
+					ite.setStatus(BaseTableEntry.Status.KNOWN, x);
+					if (ite.type != null && ite.type.attached != null) {
+						if (ite.type.attached.getType() == OS_Type.Type.USER) {
+							try {
+								OS_Type xx = resolve_type(ite.type.attached, aFunctionContext);
+								ite.type.attached = xx;
+							} catch (ResolveError resolveError) {
+								System.out.println("192 Can't attach type to "+path);
+//								resolveError.printStackTrace(); // TODO print diagnostic
+//								continue;
+							}
+						}
+					} else {
+						int yy=2;
+						if (!ite.hasResolvedElement()) {
+							LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), aFunctionContext);
+							OS_Element best = lrl.chooseBest(null);
+							if (best != null) {
+								ite.setStatus(BaseTableEntry.Status.KNOWN, x);
+								if (ite.type != null && ite.type.attached != null) {
+									if (ite.type.attached.getType() == OS_Type.Type.USER) {
+										try {
+											OS_Type xx = resolve_type(ite.type.attached, aFunctionContext);
+											ite.type.attached = xx;
+										} catch (ResolveError resolveError) {
+											System.out.println("210 Can't attach type to "+ite.getIdent());
+//											resolveError.printStackTrace(); // TODO print diagnostic
+//											continue;
+										}
+									}
+								}
+							} else {
+								System.err.println("184 Couldn't resolve "+ite.getIdent());
+							}
+						}
+					}
+				}
+
+				@Override
+				public void noFoundElement() {
+					ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+					errSink.reportError("165 Can't resolve "+path);
+				}
+			});
+		}
+	}
+
+	public void resolve_ident_table_entry(IdentTableEntry ite, GeneratedFunction generatedFunction, Context ctx) {
+		InstructionArgument itex = new IdentIA(ite.getIndex(), generatedFunction);
+		while (itex != null) {
+			IdentTableEntry itee = generatedFunction.getIdentTableEntry(to_int(itex));
+			while (itex != null) {
+				BaseTableEntry x = null;
+				if (itee.backlink instanceof IntegerIA) {
+					x = generatedFunction.getVarTableEntry(to_int(itee.backlink));
+					itex = null;
+				} else if (itee.backlink instanceof IdentIA) {
+					x = generatedFunction.getIdentTableEntry(to_int(itee.backlink));
+					itex = ((IdentTableEntry) x).backlink;
+				} else if (itee.backlink == null || itee.backlink instanceof ProcIA) {
+					itex = null;
+					x = null;
+				}
+
+				if (x != null) {
+					System.err.println("162 Adding FoundParent for "+itee);
+					x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext())); // TODO context??
+				}
+			}
+		}
+		if (ite.resolved_element != null)
+			return;
+		if (ite.backlink == null) {
+			final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
+			resolveIdentIA_(ite.getPC(), identIA, generatedFunction, new FoundElement(phase) {
+
+				final String x = generatedFunction.getIdentIAPathNormal(identIA);
+
+				@Override
+				public void foundElement(OS_Element e) {
+					ite.setStatus(BaseTableEntry.Status.KNOWN, e);
+					found_element_for_ite(generatedFunction, ite, e, ctx);
+				}
+
+				@Override
+				public void noFoundElement() {
+					ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+					errSink.reportError("1004 Can't find element for "+ x);
+				}
+			});
 		}
 	}
 
