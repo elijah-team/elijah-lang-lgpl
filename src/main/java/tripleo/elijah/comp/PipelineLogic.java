@@ -134,39 +134,7 @@ public class PipelineLogic {
 
 		dp.deduceModule(mod, lgc, true);
 
-		for (final GeneratedNode generatedNode : lgc) {
-			if (generatedNode instanceof GeneratedFunction) {
-
-			} else if (generatedNode instanceof GeneratedClass) {
-				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
-					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
-						final IdentIA ia2 = new IdentIA(identTableEntry.getIndex(), generatedFunction);
-						final String s = generatedFunction.getIdentIAPathNormal(ia2);
-						if (identTableEntry/*.isResolved()*/.getStatus() == BaseTableEntry.Status.KNOWN) {
-//							GeneratedNode node = identTableEntry.resolved();
-//							resolved_nodes.add(node);
-							System.out.println("91 Resolved IDENT "+ s);
-						} else {
-//							assert identTableEntry.getStatus() == BaseTableEntry.Status.UNKNOWN;
-//							identTableEntry.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-							System.out.println("92 Unresolved IDENT "+ s);
-						}
-					}
-				}
-			} else if (generatedNode instanceof GeneratedNamespace) {
-//				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-//				NamespaceStatement namespaceStatement = generatedNamespace.getNamespaceStatement();
-//				for (GeneratedFunction generatedFunction : generatedNamespace.functionMap.values()) {
-//					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
-//						if (identTableEntry.isResolved()) {
-//							GeneratedNode node = identTableEntry.resolved();
-//							resolved_nodes.add(node);
-//						}
-//					}
-//				}
-			}
-		}
+		resolveCheck(lgc);
 
 //		for (final GeneratedNode gn : lgf) {
 //			if (gn instanceof GeneratedFunction) {
@@ -216,6 +184,42 @@ public class PipelineLogic {
 
 	public void addModule(OS_Module m) {
 		mods.add(m);
+	}
+
+	private void resolveCheck(List<GeneratedNode> lgc) {
+		for (final GeneratedNode generatedNode : lgc) {
+			if (generatedNode instanceof GeneratedFunction) {
+
+			} else if (generatedNode instanceof GeneratedClass) {
+				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
+					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+						final IdentIA ia2 = new IdentIA(identTableEntry.getIndex(), generatedFunction);
+						final String s = generatedFunction.getIdentIAPathNormal(ia2);
+						if (identTableEntry/*.isResolved()*/.getStatus() == BaseTableEntry.Status.KNOWN) {
+//							GeneratedNode node = identTableEntry.resolved();
+//							resolved_nodes.add(node);
+							System.out.println("91 Resolved IDENT "+ s);
+						} else {
+//							assert identTableEntry.getStatus() == BaseTableEntry.Status.UNKNOWN;
+//							identTableEntry.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+							System.out.println("92 Unresolved IDENT "+ s);
+						}
+					}
+				}
+			} else if (generatedNode instanceof GeneratedNamespace) {
+//				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+//				NamespaceStatement namespaceStatement = generatedNamespace.getNamespaceStatement();
+//				for (GeneratedFunction generatedFunction : generatedNamespace.functionMap.values()) {
+//					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+//						if (identTableEntry.isResolved()) {
+//							GeneratedNode node = identTableEntry.resolved();
+//							resolved_nodes.add(node);
+//						}
+//					}
+//				}
+			}
+		}
 	}
 
 }
