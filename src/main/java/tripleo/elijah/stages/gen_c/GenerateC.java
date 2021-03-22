@@ -667,6 +667,8 @@ public class GenerateC {
 		tos.put_string_ln("}");
 		tos.flush();
 		tos.close();
+		tosHdr.flush();
+		tosHdr.close();
 		Buffer buf = new DefaultBuffer(stringWriter.toString());
 //		System.out.println(buf.getText());
 		gr.addFunction(gf, buf, GenerateResult.TY.IMPL);
