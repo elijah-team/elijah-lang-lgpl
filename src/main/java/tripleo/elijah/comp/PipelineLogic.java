@@ -32,7 +32,7 @@ import java.util.List;
 public class PipelineLogic {
 	final DeducePhase dp = new DeducePhase();
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
-	GenerateC.GenerateResult gr;
+	GenerateC.GenerateResult gr = null;
 
 	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
 		for (OS_Module mod : mods) {
@@ -47,6 +47,16 @@ public class PipelineLogic {
 				gr = run3(mod, lgc);
 			} catch (IOException e) {
 				mod.parent.eee.exception(e);
+			}
+			if (gr != null) {
+				// TODO this is where you put system writeouts
+				for (GenerateC.AssociatedBuffer ab : gr.results()) {
+					System.out.println("---------------------------------------------------------------");
+					System.out.println(ab.counter);
+					System.out.println(ab.node.identityString());
+					System.out.println(ab.buffer.getText());
+					System.out.println("---------------------------------------------------------------");
+				}
 			}
 		}
 	}
@@ -199,15 +209,6 @@ public class PipelineLogic {
 			} else {
 				System.out.println("2009 " + generatedNode.getClass().getName());
 			}
-		}
-
-//		System.out.println("167 "+gr);
-		for (GenerateC.AssociatedBuffer ab : gr.results()) {
-			System.out.println("---------------------------------------------------------------");
-			System.out.println(ab.counter);
-			System.out.println(ab.node.identityString());
-			System.out.println(ab.buffer.getText());
-			System.out.println("---------------------------------------------------------------");
 		}
 
 		return gr;
