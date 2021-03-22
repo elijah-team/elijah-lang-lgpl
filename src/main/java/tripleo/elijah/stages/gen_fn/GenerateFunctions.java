@@ -1077,7 +1077,7 @@ public class GenerateFunctions {
 
 	@NotNull List<TypeTableEntry> get_args_types(@org.jetbrains.annotations.Nullable final ExpressionList args,
 												 @NotNull final GeneratedFunction gf,
-												 Context instructionIndex) {
+												 @NotNull final Context aContext) {
 		final List<TypeTableEntry> R = new ArrayList<TypeTableEntry>();
 		if (args == null) return R;
 		//
@@ -1097,7 +1097,7 @@ public class GenerateFunctions {
 					//
 					// WHEN VTE_LOOKUP FAILS, IE WHEN A MEMBER VARIABLE
 					//
-					int idte_index = gf.addIdentTableEntry((IdentExpression) arg, instructionIndex);
+					int idte_index = gf.addIdentTableEntry((IdentExpression) arg, aContext);
 					tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, arg);
 					gf.getIdentTableEntry(idte_index).type = tte;
 				}
