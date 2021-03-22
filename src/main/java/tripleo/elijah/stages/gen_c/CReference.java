@@ -90,14 +90,16 @@ public class CReference {
 					}
 //					addRef(text, Ref.MEMBER);
 				} else {
+					final String text1 = idte.getIdent().getText();
+//					assert false;
 					// TODO make tests pass but I dont like this (should throw an exception: not enough information)
 					if (sl.size() == 0) {
-						text = Emit.emit("/*149*/") + idte.getIdent().getText(); // TODO check if it belongs somewhere else
+						text = Emit.emit("/*149*/") + text1; // TODO check if it belongs somewhere else
 					} else {
-						text = Emit.emit("/*152*/") + "vm" + idte.getIdent().getText();
+						text = Emit.emit("/*152*/") + "vm" + text1;
 					}
 					System.err.println("119 "+idte.getIdent()+" "+idte.getStatus());
-					String text2 = Emit.emit("/*119*/") + idte.getIdent().getText();
+					String text2 = Emit.emit("/*119*/") + text1;
 					addRef(text2, Ref.MEMBER);
 				}
 			} else if (ia instanceof ProcIA) {
