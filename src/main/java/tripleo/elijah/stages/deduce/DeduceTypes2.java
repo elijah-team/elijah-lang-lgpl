@@ -1421,14 +1421,14 @@ public class DeduceTypes2 {
 					public void onChange(OS_Element el3, BaseTableEntry.Status newStatus) {
 						if (newStatus == BaseTableEntry.Status.KNOWN) {
 //							assert el2 != el3;
-							System.out.println("1320 Found for " + s1);
+							System.out.println("1424 Found for " + s1);
 							foundElement.doFoundElement(el3);
 						}
 					}
 				});
 			}
 		} else {
-			System.out.println("1320 Found for " + s1);
+			System.out.println("1431 Found for " + s1);
 			foundElement.doFoundElement(el);
 		}
 		{
