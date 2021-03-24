@@ -203,8 +203,8 @@ public class GenerateC {
 				tosHdr.put_string_ln(String.format("%s vsv;", decl.prim_decl));
 			}
 
-			String class_name = getTypeName(new OS_Type(x.getKlass()));
-			int class_code = x.getKlass()._a.getCode();
+			String class_name = getTypeName(x);
+			int class_code = x.getCode();
 
 			tosHdr.dec_tabs();
 			tosHdr.put_string_ln("");
