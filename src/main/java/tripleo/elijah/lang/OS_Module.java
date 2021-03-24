@@ -288,6 +288,10 @@ public class OS_Module implements OS_Element, OS_Container {
 	public void addIndexingStatement(IndexingStatement indexingStatement) {
 		this.indexingStatement = indexingStatement;
 	}
+
+	public boolean isPrelude() {
+		return prelude == this;
+	}
 }
 
 //
