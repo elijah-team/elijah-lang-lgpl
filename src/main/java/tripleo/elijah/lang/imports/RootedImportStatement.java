@@ -61,6 +61,7 @@ public class RootedImportStatement extends _BaseImportStatement {
 		final List<Qualident> r = new ArrayList<Qualident>();
 		for (final Qualident qualident : importList.parts) {
 			final Qualident q = new Qualident();
+			// TODO what the hell does this do? Should it be `root'
 			for (final IdentExpression part : q.parts()) {
 				q.append(part);
 			}
