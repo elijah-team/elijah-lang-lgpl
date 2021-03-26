@@ -973,7 +973,7 @@ public class GenerateC {
 					sb.append(")");
 				} else {
 					final IdentIA ia2 = (IdentIA) pte.expression_num;
-					if (gf.getIdentTableEntry(to_int(ia2)).getStatus() != BaseTableEntry.Status.UNKNOWN) {
+					if (ia2.getEntry().getStatus() == BaseTableEntry.Status.KNOWN) {
 						final CReference reference = new CReference();
 						reference.getIdentIAPath(ia2, gf);
 						final List<String> sll = getAssignmentValueArgs(inst, gf, module);
