@@ -254,6 +254,34 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	public boolean hasItem(OS_Element element) {
 		return scope3.items().contains(element);
 	}
+
+	// region ClassItem
+
+	private AccessNotation access_note;
+	private El_Category category;
+
+	@Override
+	public void setCategory(El_Category aCategory) {
+		category = aCategory;
+	}
+
+	@Override
+	public void setAccess(AccessNotation aNotation) {
+		access_note = aNotation;
+	}
+
+	@Override
+	public El_Category getCategory() {
+		return category;
+	}
+
+	@Override
+	public AccessNotation getAccess() {
+		return access_note;
+	}
+
+	// endregion
+
 }
 
 //

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created 8/7/20 2:09 AM
  */
-public class RootedImportStatement implements ImportStatement {
+public class RootedImportStatement extends _BaseImportStatement {
 	final OS_Element parent;
 	private QualidentList importList = new QualidentList(); // remove final for ImportStatementBuilder
 	/** Used in from syntax

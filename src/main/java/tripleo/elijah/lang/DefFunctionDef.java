@@ -16,7 +16,7 @@ package tripleo.elijah.lang;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefFunctionDef extends FunctionDef implements ClassItem {
+public class DefFunctionDef extends FunctionDef {
 
 	public DefFunctionDef(OS_Element element, Context context) {
 		super(element, context);

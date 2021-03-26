@@ -35,6 +35,25 @@ public class AccessNotation {
 	public void setTypeNames(final TypeNameList tnl) {
 		this.tnl = tnl;
 	}
+
+	@Override
+	public void visitGen(ICodeGen visit) {
+		visit.visitAccessNotation(this);
+	}
+
+	@Override
+	public OS_Element getParent() {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public Context getContext() {
+		throw new NotImplementedException();
+	}
+
+	public Token getCategory() {
+		return category;
+	}
 }
 
 //

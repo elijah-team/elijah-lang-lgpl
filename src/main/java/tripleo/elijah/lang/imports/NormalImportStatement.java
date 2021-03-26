@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created 8/7/20 2:10 AM
  */
-public class NormalImportStatement implements ImportStatement {
+public class NormalImportStatement extends _BaseImportStatement {
 	final OS_Element parent;
 	private final QualidentList importList = new QualidentList();
 	private Context _ctx;

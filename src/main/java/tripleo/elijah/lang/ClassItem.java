@@ -10,10 +10,19 @@ package tripleo.elijah.lang;
 
 /**
  * Marker interface to represent elements that can be added to a class
+ * or a namespace or an enum
  *
  * @see {@link ClassStatement#add(OS_Element) }
+ * @see {@link NamespaceStatement#add(OS_Element) }
+ * @see {@link EnumStatement#add(OS_Element) }
  */
 public interface ClassItem extends OS_Element {
+
+	void setCategory(El_Category aCategory);
+	void setAccess(AccessNotation aNotation);
+
+	El_Category getCategory();
+	AccessNotation getAccess();
 
 }
 

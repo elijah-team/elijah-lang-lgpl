@@ -83,6 +83,34 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 			annotations = new ArrayList<AnnotationClause>();
 		annotations.add(a);
 	}
+
+	// region ClassItem
+
+	private AccessNotation access_note;
+	private El_Category category;
+
+	@Override
+	public void setCategory(El_Category aCategory) {
+		category = aCategory;
+	}
+
+	@Override
+	public void setAccess(AccessNotation aNotation) {
+		access_note = aNotation;
+	}
+
+	@Override
+	public El_Category getCategory() {
+		return category;
+	}
+
+	@Override
+	public AccessNotation getAccess() {
+		return access_note;
+	}
+
+	// endregion
+
 }
 
 //
