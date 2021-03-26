@@ -8,7 +8,9 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 
 /**
  * Created 10/2/20 2:36 PM
@@ -44,6 +46,10 @@ public class IdentIA implements InstructionArgument {
 
 	public int getIndex() {
 		return id;
+	}
+
+	public @NotNull IdentTableEntry getEntry() {
+		return gf.getIdentTableEntry(getIndex());
 	}
 }
 
