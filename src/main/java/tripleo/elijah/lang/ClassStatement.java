@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -310,6 +311,22 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	@Override
 	public AccessNotation getAccess() {
 		return access_note;
+	}
+
+	public Collection<ConstructorDef> getConstructors() {
+		Collection<ClassItem> x = Collections2.filter(items, new Predicate<ClassItem>() {
+			@Override
+			public boolean apply(@Nullable ClassItem input) {
+				return input instanceof ConstructorDef;
+			}
+		});
+		return Collections2.transform(x, new Function<ClassItem, ConstructorDef>() {
+			@Nullable
+			@Override
+			public ConstructorDef apply(@Nullable ClassItem input) {
+				return (ConstructorDef) input;
+			}
+		});
 	}
 
 	// endregion
