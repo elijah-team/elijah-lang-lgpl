@@ -1341,7 +1341,7 @@ public class DeduceTypes2 {
 					return;
 				}
 			} else if (ia instanceof IdentIA) {
-				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(ia));
+				final IdentTableEntry idte = ((IdentIA) ia).getEntry();
 				if (idte.getStatus() == BaseTableEntry.Status.UNKNOWN) {
 					System.out.println("1257 Not found for "+generatedFunction.getIdentIAPathNormal((IdentIA) ia));
 					// No need checking more than once
