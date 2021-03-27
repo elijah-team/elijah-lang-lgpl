@@ -812,13 +812,14 @@ public class DeduceTypes2 {
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		IdentIA identIA = (IdentIA) pte.expression_num;
 		if (identIA != null){
-			System.out.println("594 "+generatedFunction.getIdentTableEntry(to_int(pte.expression_num)).getStatus());
+			System.out.println("594 "+identIA.getEntry().getStatus());
 
 			resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
 				@Override
 				public void foundElement(OS_Element e) {
 //					generatedFunction.getIdentTableEntry(identIA.getIndex()).setResolvedElement(y);
-					System.out.println("601 "+generatedFunction.getIdentTableEntry(to_int(pte.expression_num)).getStatus());
+					System.out.println("600 "+generatedFunction.getIdentIAPathNormal(identIA)+" "+e);
+					System.out.println("601 "+identIA.getEntry().getStatus());
 				}
 
 				@Override
