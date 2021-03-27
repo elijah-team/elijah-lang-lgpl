@@ -1234,6 +1234,11 @@ public class DeduceTypes2 {
 		throw new NotImplementedException();
 	}
 
+	public void resolveIdentIA2_(Context context, IdentIA identIA, GeneratedFunction generatedFunction, FoundElement foundElement) {
+		final List<InstructionArgument> s = generatedFunction._getIdentIAPathList(identIA);
+		resolveIdentIA2_(context, s, generatedFunction, foundElement);
+	}
+
 	public void resolveIdentIA_(Context context, IdentIA identIA, GeneratedFunction generatedFunction, FoundElement foundElement) {
 		final List<InstructionArgument> s = generatedFunction._getIdentIAPathList(identIA);
 
