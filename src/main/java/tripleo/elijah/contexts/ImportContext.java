@@ -63,7 +63,10 @@ public class ImportContext extends Context {
 //		                		LogEvent.logEvent(4103, "");
 								final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
 								alreadySearched.add(namespaceContext);
-								namespaceContext.lookup(name, level, Result, alreadySearched, true);
+								LookupResultList xxx = namespaceContext.lookup(name, level, Result, alreadySearched, true);
+								for (LookupResult result : xxx.results()) {
+									Result.add(result.getName(), result.getLevel(), result.getElement(), result.getContext());
+								}
 							} else {
 								if (element instanceof OS_Element2) {
 									final String element_name = ((OS_Element2) element).name();
