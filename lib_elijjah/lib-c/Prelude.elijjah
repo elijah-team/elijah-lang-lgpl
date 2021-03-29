@@ -75,7 +75,7 @@ class Arguments {
     alias argument_count = arguments
     argument(n: SystemInteger) -> ConstString {
 //		pre {
-//			valid_index: n <= argument_count
+//			valid_index: n >= 0 && n < argument_count_
 //		}
 		Result = String8(argument_array[n])
     }
