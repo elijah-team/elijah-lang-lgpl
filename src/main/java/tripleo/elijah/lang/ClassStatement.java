@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -28,18 +27,11 @@ import java.util.List;
  * docstrings
  * variables
  */
-public class ClassStatement extends ProgramClosure implements ClassItem, ModuleItem, StatementItem, FunctionItem, OS_Element, OS_Element2, Documentable, OS_Container {
+public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements ClassItem, ModuleItem, StatementItem, FunctionItem, OS_Element, OS_Element2, Documentable, OS_Container {
 
-	private final List<ClassItem> items = new ArrayList<ClassItem>();
-	private final List<String> mDocs = new ArrayList<String>();
-	public IdentExpression clsName;
 	public /*final*/ OS_Element parent;
-	public Attached _a = new Attached();
 	ClassInheritance _inh = new ClassInheritance(); // remove final for ClassBuilder
-	List<AnnotationClause> annotations = null;
-	private OS_Package _packageName;
 	private ClassTypes _type;
-	private List<AccessNotation> accesses = new ArrayList<AccessNotation>();
 	private TypeNameList genericPart;
 
 	public ClassStatement(final OS_Element parentElement, final Context parentContext) {
@@ -61,41 +53,8 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 	@Override
-	public void addDocString(final Token aText) {
-		mDocs.add(aText.getText());
-	}
-
-	public String getName() {
-//		if (clsName == null)
-//			return "";
-		return clsName.getText();
-	}
-
-	public void setName(final IdentExpression aText) {
-		clsName = aText;
-	}
-
-	public List<ClassItem> getItems() {
-		return items;
-	}
-
-	public List<String> getDocstrings() {
-		return mDocs;
-	}
-
-	@Override
 	public OS_Element getParent() {
 		return parent;
-	}
-
-	@Override // OS_Container
-	public List<OS_Element2> items() {
-		final ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
-		for (final ClassItem classItem : getItems()) {
-			final boolean b = classItem instanceof OS_Element2;
-			if (b) a.add((OS_Element2) classItem);
-		}
-		return a;
 	}
 
 	@Override // OS_Container
@@ -108,14 +67,6 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	@Override
 	public void visitGen(final ICodeGen visit) {
 		visit.addClass(this); // TODO visitClass
-	}
-
-	public OS_Package getPackageName() {
-		return _packageName;
-	}
-
-	public void setPackageName(final OS_Package aPackageName) {
-		_packageName = aPackageName;
 	}
 
 	@Override
@@ -146,16 +97,11 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 		_a.setContext(ctx);
 	}
 
-	@Override // OS_Element2
-	public String name() {
-		return getName();
-	}
-
 	public Collection<ClassItem> findFunction(final String name) {
 		return Collections2.filter(items, new Predicate<ClassItem>() {
 			@Override
 			public boolean apply(@Nullable final ClassItem item) {
-				if (item instanceof FunctionDef)
+				if (item instanceof FunctionDef && !(item instanceof ConstructorDef))
 					if (((FunctionDef) item).name().equals(name))
 						return true;
 				return false;
@@ -168,7 +114,7 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 	}
 
 	public void postConstruct() {
-		assert clsName != null;
+		assert nameToken != null;
 		int destructor_count = 0;
 		for (ClassItem item : items) {
 			if (item instanceof DestructorDef)
@@ -179,47 +125,21 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	// region inheritance
 
-	public void addAccess(final AccessNotation acs) {
-		accesses.add(acs);
-	}
-
 	public IdentExpression getNameNode() {
-		return clsName;
+		return nameToken;
 	}
 
 	public void setInheritance(ClassInheritance inh) {
 		_inh = inh;
 	}
 
-	// endregion
-
-	// region annotations
-
 	public ClassInheritance classInheritance() {
 		return _inh;
 	}
 
-	public void addAnnotation(final AnnotationClause a) {
-		if (annotations == null)
-			annotations = new ArrayList<AnnotationClause>();
-		annotations.add(a);
-	}
+	// endregion
 
-	public void addAnnotations(List<AnnotationClause> as) {
-		if (as == null) return;
-		for (AnnotationClause annotationClause : as) {
-			addAnnotation(annotationClause);
-		}
-	}
-
-	public void walkAnnotations(AnnotationWalker annotationWalker) {
-		if (annotations == null) return;
-		for (AnnotationClause annotationClause : annotations) {
-			for (AnnotationPart annotationPart : annotationClause.aps) {
-				annotationWalker.annotation(annotationPart);
-			}
-		}
-	}
+	// region annotations
 
 	public Iterable<AnnotationPart> annotationIterable() {
 		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
@@ -265,11 +185,6 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	// endregion
 
-	public boolean hasItem(OS_Element element) {
-		if (!(element instanceof ClassItem)) return false;
-		return items.contains((ClassItem) element);
-	}
-
 	public void setGenericPart(TypeNameList genericPart) {
 		this.genericPart = genericPart;
 	}
@@ -279,31 +194,6 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 			return new ArrayList<TypeName>();
 		else
 			return genericPart.p;
-	}
-
-	// region ClassItem
-
-	private AccessNotation access_note;
-	private El_Category category;
-
-	@Override
-	public void setCategory(El_Category aCategory) {
-		category = aCategory;
-	}
-
-	@Override
-	public void setAccess(AccessNotation aNotation) {
-		access_note = aNotation;
-	}
-
-	@Override
-	public El_Category getCategory() {
-		return category;
-	}
-
-	@Override
-	public AccessNotation getAccess() {
-		return access_note;
 	}
 
 	public Collection<ConstructorDef> getConstructors() {
@@ -321,9 +211,6 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 			}
 		});
 	}
-
-	// endregion
-
 }
 
 //
