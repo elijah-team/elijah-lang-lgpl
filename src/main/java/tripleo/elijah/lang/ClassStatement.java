@@ -90,17 +90,10 @@ public class ClassStatement extends ProgramClosure implements ClassItem, ModuleI
 
 	@Override // OS_Container
 	public List<OS_Element2> items() {
-		final Collection<ClassItem> c = Collections2.filter(getItems(), new Predicate<ClassItem>() {
-			@Override
-			public boolean apply(@Nullable final ClassItem input) {
-				final boolean b = input instanceof OS_Element2;
-//				System.out.println(String.format("%s %b", input, b));
-				return b;
-			}
-		});
 		final ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
-		for (final ClassItem functionItem : c) {
-			a.add((OS_Element2) functionItem);
+		for (final ClassItem classItem : getItems()) {
+			final boolean b = classItem instanceof OS_Element2;
+			if (b) a.add((OS_Element2) classItem);
 		}
 		return a;
 	}
