@@ -933,9 +933,8 @@ public class GenerateC {
 			} else if (ia instanceof ConstTableIA) {
 				ConstTableIA c = (ConstTableIA) ia;
 				ConstantTableEntry cte = gf.getConstTableEntry(c.getIndex());
-				if (cte.initialValue instanceof CharLitExpression) {
-					sl3.add(String.format("'%s'", cte.initialValue.toString()));
-				}
+				String s = GetAssignmentValue.const_to_string(cte.initialValue);
+				sl3.add(s);
 				int y = 2;
 			} else if (ia instanceof ProcIA) {
 				System.err.println("740 ProcIA");
@@ -1034,9 +1033,9 @@ public class GenerateC {
 //			System.err.println(("9001-3 "+cte.initialValue));
 			switch (cte.initialValue.getKind()) {
 			case NUMERIC:
-				return ("" + ((NumericExpression) cte.initialValue).getValue());
+				return const_to_string(cte.initialValue);
 			case STRING_LITERAL:
-				return (String.format("\"%s\"", ((StringExpression) cte.initialValue).getText()));
+				return const_to_string(cte.initialValue);
 			case IDENT:
 				final String text = ((IdentExpression) cte.initialValue).getText();
 				if (BuiltInTypes.isBooleanText(text))
