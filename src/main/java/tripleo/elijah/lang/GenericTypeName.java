@@ -74,12 +74,12 @@ public class GenericTypeName implements TypeName {
 
 	@Override
 	public int getLineEnd() {
-		return _typeName.parts().get(_typeName.parts().size()).getLineEnd();
+		return _typeName.parts().get(_typeName.parts().size()-1).getLineEnd();
 	}
 
 	@Override
 	public int getColumnEnd() {
-		return _typeName.parts().get(_typeName.parts().size()).getColumnEnd();
+		return _typeName.parts().get(_typeName.parts().size()-1).getColumnEnd();
 	}
 
 	@Override
