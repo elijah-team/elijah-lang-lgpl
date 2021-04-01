@@ -17,7 +17,6 @@ public class DestructorDef extends FunctionDef {
 
 	public DestructorDef(final ClassStatement classStatement, final Context cur) {
 		super(classStatement, cur);
-//		parent = classStatement;
 		setType(Species.DTOR);
 	}
 
