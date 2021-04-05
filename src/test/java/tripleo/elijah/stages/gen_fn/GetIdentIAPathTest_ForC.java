@@ -50,7 +50,6 @@ public class GetIdentIAPathTest_ForC {
 		ite.backlink = new IntegerIA(int_index);
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		String x = getIdentIAPath(ident_ia, gf);
-//		Assert.assertEquals("vvx->vmfoo", x);  // TODO real expectation
 		Assert.assertEquals("vvx->vmfoo", x);
 	}
 
@@ -65,18 +64,9 @@ public class GetIdentIAPathTest_ForC {
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
 		InstructionArgument xx = gen.simplify_expression(expr, gf, ctx);
 		//
-/*
-		OS_Type type = null;
-		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
-		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte);
-		int ite_index = gf.addIdentTableEntry(foo_ident);
-		IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
-		ite.backlink = new IntegerIA(int_index);
-*/
-		//
-		IdentIA ident_ia = (IdentIA) xx;//new IdentIA(ite_index, gf);
+		IdentIA ident_ia = (IdentIA) xx;
 		String x = getIdentIAPath(ident_ia, gf);
-//		Assert.assertEquals("vvx->vmfoo", x);
+//		Assert.assertEquals("vvx->vmfoo", x);  // TODO real expectation, IOW output below is wrong
 		// TODO actually compiler should comlain that it can't find x
 		Assert.assertEquals("->vmx->vmfoo", x);
 	}
