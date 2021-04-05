@@ -1062,7 +1062,7 @@ public class GenerateFunctions {
 		final int pte = addProcTableEntry(expression, left_ia, args1, gf);
 		right_ia.add(0, new ProcIA(pte, gf));
 		{
-			final int tmp_var = addTempTableEntry(null, gf, null); // line 686 is here
+			final int tmp_var = addTempTableEntry(null, gf); // line 686 is here
 			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp_var)), cctx);
 			final Instruction i = new Instruction();
 			i.setName(InstructionName.CALL);
@@ -1204,16 +1204,30 @@ public class GenerateFunctions {
 		return gf.addVariableTableEntry(name, VariableTableType.VAR, type, el);
 	}
 
-	private int addTempTableEntry(final OS_Type type, @NotNull final GeneratedFunction gf, OS_Element el) {
-		final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type);
-		final VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, null, tte, el);
-		gf.vte_list.add(vte);
-		return vte.getIndex();
+	private int addTempTableEntry(final OS_Type type, @NotNull final GeneratedFunction gf) {
+		return addTempTableEntry(type, null, gf, null);
 	}
 
-	private int addTempTableEntry(final OS_Type type, @NotNull final IdentExpression name, @NotNull final GeneratedFunction gf, OS_Element el) {
-		final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, name);
-		final VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, name.getText(), tte, el);
+	private int addTempTableEntry(final OS_Type type,
+								  @Nullable final IdentExpression name,
+								  @NotNull final GeneratedFunction gf,
+								  @Nullable OS_Element el) {
+		final String theName;
+		final int num;
+		final TypeTableEntry tte;
+
+		if (name != null) {
+			tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, name);
+			theName = name.getText();
+			// README Don't set tempNum because we have a name
+			num = -1;
+		} else {
+			tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type);
+			theName = null;
+			num = gf.nextTemp();
+		}
+		final VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, theName, tte, el);
+		vte.tempNum = num;
 		gf.vte_list.add(vte);
 		return vte.getIndex();
 	}
