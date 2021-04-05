@@ -58,7 +58,9 @@ public class DeduceTypes2 {
 		for (final GeneratedNode generatedNode : lgf) {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
+				if (generatedFunction.deducedAlready) continue;
 				deduce_generated_function(generatedFunction);
+				generatedFunction.deducedAlready = true;
 				for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 					if (identTableEntry.resolved_element instanceof  VariableStatement) {
 						final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
