@@ -35,9 +35,9 @@ public class ProcTableEntry {
 	private ClassInvocation classInvocation;
 	private FunctionInvocation functionInvocation;
 
-	public ProcTableEntry(final int index, final IExpression iExpression, final InstructionArgument expression_num, final List<TypeTableEntry> args) {
+	public ProcTableEntry(final int index, final IExpression aExpression, final InstructionArgument expression_num, final List<TypeTableEntry> args) {
 		this.index = index;
-		this.expression = iExpression;
+		this.expression = aExpression;
 		this.expression_num = expression_num;
 		this.args = args;
 	}
