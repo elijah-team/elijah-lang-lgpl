@@ -139,18 +139,26 @@ public class GetIdentIAPathTest_ForC {
 		//
 
 		//
-		OS_Type type = null;
-		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(classStatement), x_ident);
+		final OS_Type type = new OS_Type(classStatement);
+		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
 		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte, mock(VariableStatement.class));
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
 		//
 		GenerateFunctions gen = new GenerateFunctions(mod);
 		InstructionArgument xx = gen.simplify_expression(expr, gf, ctx);
+
+		//
+		// This is the Deduce portion.
+		// Not very extensive is it?
 		//
 		IdentIA ident_ia = (IdentIA) xx;
-		IdentTableEntry ite = gf.getIdentTableEntry(ident_ia.getIndex());
+		IdentTableEntry ite = ident_ia.getEntry();
 		ite.setStatus(BaseTableEntry.Status.KNOWN, functionDef);
+
+		// This assumes we want a function call
+		// but what if we want a function pointer or a curry or function reference?
+		// IOW, a ProcedureCall is not specified
 		String x = getIdentIAPath(ident_ia, gf);
 
 		verify(mod, ctx, mockContext);
@@ -166,3 +174,7 @@ public class GetIdentIAPathTest_ForC {
 
 
 }
+
+//
+//
+//
