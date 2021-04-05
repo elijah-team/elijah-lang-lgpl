@@ -1054,7 +1054,7 @@ public class GenerateFunctions {
 						iat = gf.getConstTableEntry(x).type;
 					}
 				} else {
-					ia = simplify_expression(left, gf, cctx);
+					ia = simplify_expression(arg, gf, cctx);
 					iat = null;
 				}
 				right_ia.add(ia);
