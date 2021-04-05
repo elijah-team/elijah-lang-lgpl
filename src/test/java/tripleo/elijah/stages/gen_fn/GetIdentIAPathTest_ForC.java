@@ -114,17 +114,15 @@ public class GetIdentIAPathTest_ForC {
 		replay(mod);
 
 		ClassStatement classStatement = new ClassStatement(mod, ctx);
-
+		classStatement.setName(Helpers.string_to_ident("X")); // README not explicitly necessary
 
 //		expect(mockContext.lookup(foo_ident.getText())).andReturn(lrl2);
 
-
 //		expect(classStatement.getContext().lookup(foo_ident.getText())).andReturn(lrl2);
-//		expect(classStatement.getContext().lookup(foo_ident.getText(), anyInt(), anyObject(LookupResultList.class), anyObject(List.class), anyBoolean()));//.andReturn(lrl2);
-//		expect(classStatement.getContext().getParent().lookup(eq(foo_ident.getText()), anyInt(), anyObject(LookupResultList.class), anyObject(List.class), anyBoolean())).andReturn(new LookupResultList());
 
 		lrl.add(x_ident.getText(), 1, classStatement, ctx);
 		expect(ctx.lookup(x_ident.getText())).andReturn(lrl);
+
 		FunctionDef functionDef = new FunctionDef(classStatement, classStatement.getContext());
 		functionDef.setName(foo_ident);
 		lrl2.add(foo_ident.getText(), 1, functionDef, mockContext);
@@ -132,8 +130,7 @@ public class GetIdentIAPathTest_ForC {
 		//
 		// SET UP EXPECTATIONS
 		//
-		replay(ctx);
-		replay(mockContext);
+		replay(ctx, mockContext);
 
 		LookupResultList lrl_expected = ctx.lookup(x_ident.getText());
 
@@ -155,9 +152,9 @@ public class GetIdentIAPathTest_ForC {
 		IdentTableEntry ite = gf.getIdentTableEntry(ident_ia.getIndex());
 		ite.setStatus(BaseTableEntry.Status.KNOWN, functionDef);
 		String x = getIdentIAPath(ident_ia, gf);
-		verify(mod);
-		verify(ctx);
-		verify(mockContext);
+
+		verify(mod, ctx, mockContext);
+
 		Assert.assertEquals("Z0foo(vvx)", x);
 	}
 
