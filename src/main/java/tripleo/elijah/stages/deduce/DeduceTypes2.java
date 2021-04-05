@@ -1421,16 +1421,33 @@ public class DeduceTypes2 {
 			} else if (ia instanceof ProcIA) {
 				ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
 				int y=2;
-				IExpression exp = prte.expression;
-				if (exp instanceof ProcedureCallExpression) {
-					final ProcedureCallExpression pce = (ProcedureCallExpression) exp;
-					exp = pce.getLeft(); // TODO might be another pce??!!
-					if (exp instanceof ProcedureCallExpression)
-						throw new IllegalArgumentException("double pce!");
+				if (prte.resolved_element == null) {
+					IExpression exp = prte.expression;
+					if (exp instanceof ProcedureCallExpression) {
+						final ProcedureCallExpression pce = (ProcedureCallExpression) exp;
+						exp = pce.getLeft(); // TODO might be another pce??!!
+						if (exp instanceof ProcedureCallExpression)
+							throw new IllegalArgumentException("double pce!");
+					}
+					LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx);
+					el = lrl.chooseBest(null);
+					ectx = el.getContext();
+					prte.resolved_element = el;
+					// handle constructor calls
+					if (el instanceof ClassStatement) {
+						assert prte.getClassInvocation() == null;
+						ClassInvocation ci = new ClassInvocation((ClassStatement) el, null);
+//						prte.setClassInvocation(ci);
+						Collection<ConstructorDef> cs = (((ClassStatement) el).getConstructors());
+						FunctionDef selected_constructor = null;
+						FunctionInvocation fi = new FunctionInvocation(selected_constructor, prte);
+	//					fi.setClassInvocation(ci);
+						prte.setFunctionInvocation(fi);
+					}
+				} else {
+					el = prte.resolved_element;
+					ectx = el.getContext();
 				}
-				LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx);
-				el = lrl.chooseBest(null);
-				prte.resolved_element = el;
 			} else
 				throw new IllegalStateException("Really cant be here");
 		}
