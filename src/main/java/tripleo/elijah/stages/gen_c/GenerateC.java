@@ -1167,11 +1167,7 @@ public class GenerateC {
 		final String vte_name = varTableEntry.getName();
 		if (varTableEntry.vtt == VariableTableType.TEMP) {
 			if (varTableEntry.getName() == null) {
-				int tempNum = varTableEntry.tempNum;
-				if (tempNum == -1) {
-					tempNum = varTableEntry.tempNum;
-				}
-				return "vt" + tempNum;
+				return "vt" + varTableEntry.tempNum;
 			} else {
 				return "vt" + varTableEntry.getName();
 			}
@@ -1181,8 +1177,9 @@ public class GenerateC {
 			return SpecialVariables.get(vte_name);
 		} else if (isValue(gf, vte_name)) {
 			return "vsc->vsv";
+		} else {
+			return Emit.emit("/*879*/")+"vv" + vte_name;
 		}
-		return Emit.emit("/*879*/")+"vv" + vte_name;
 	}
 
 	private static boolean isValue(GeneratedFunction gf, String name) {
