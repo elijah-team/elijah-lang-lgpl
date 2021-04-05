@@ -1169,7 +1169,6 @@ public class GenerateC {
 			if (varTableEntry.getName() == null) {
 				int tempNum = varTableEntry.tempNum;
 				if (tempNum == -1) {
-					varTableEntry.tempNum = gf.nextTemp();
 					tempNum = varTableEntry.tempNum;
 				}
 				return "vt" + tempNum;
