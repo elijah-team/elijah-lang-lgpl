@@ -102,7 +102,6 @@ public class GetIdentIAPathTest_ForC {
 		@NotNull IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
-		GenerateFunctions gen = new GenerateFunctions(mod);
 		Context ctx = mock(Context.class);
 		Context mockContext = mock(Context.class);
 
@@ -148,6 +147,8 @@ public class GetIdentIAPathTest_ForC {
 		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte, mock(VariableStatement.class));
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
+		//
+		GenerateFunctions gen = new GenerateFunctions(mod);
 		InstructionArgument xx = gen.simplify_expression(expr, gf, ctx);
 		//
 		IdentIA ident_ia = (IdentIA) xx;
