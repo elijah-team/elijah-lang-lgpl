@@ -13,6 +13,7 @@ import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class ProcTableEntry {
 	public final InstructionArgument expression_num;
 	public OS_Element resolved_element;
 	private ClassInvocation classInvocation;
+	private FunctionInvocation functionInvocation;
 
 	public ProcTableEntry(final int index, final IExpression iExpression, final InstructionArgument expression_num, final List<TypeTableEntry> args) {
 		this.index = index;
@@ -72,6 +74,14 @@ public class ProcTableEntry {
 
 	public OS_Element getResolvedElement() {
 		return resolved_element;
+	}
+
+	public void setFunctionInvocation(FunctionInvocation aFunctionInvocation) {
+		functionInvocation = aFunctionInvocation;
+	}
+
+	public FunctionInvocation getFunctionInvocation() {
+		return functionInvocation;
 	}
 }
 
