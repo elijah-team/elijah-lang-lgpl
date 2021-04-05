@@ -104,6 +104,8 @@ public class CReference {
 				}
 			} else if (ia instanceof ProcIA) {
 				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
+//				GeneratedFunction y = prte.resolved();
+//				text = functionName(y);
 				text = (prte.expression.getLeft()).toString();
 //				assert i == sSize-1;
 				addRef(text, Ref.FUNCTION); // TODO needs to use name of resolved function
