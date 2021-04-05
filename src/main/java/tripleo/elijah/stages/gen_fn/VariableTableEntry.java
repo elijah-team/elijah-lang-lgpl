@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jdeferred2.*;
+import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Type;
@@ -54,6 +56,8 @@ public class VariableTableEntry extends BaseTableEntry {
 	}
 
 	public void addPotentialType(final int instructionIndex, final TypeTableEntry tte) {
+		assert typeDeferred.isPending();
+		//
 		if (!potentialTypes.containsKey(instructionIndex))
 			potentialTypes.put(instructionIndex, tte);
 		else {
@@ -91,6 +95,12 @@ public class VariableTableEntry extends BaseTableEntry {
 
 	public int getIndex() {
 		return index;
+	}
+
+	public DeferredObject<TypeTableEntry, Void, Void> typeDeferred = new DeferredObject<TypeTableEntry, Void, Void>();
+
+	public Promise<TypeTableEntry, Void, Void> promise() {
+		return typeDeferred.promise();
 	}
 }
 

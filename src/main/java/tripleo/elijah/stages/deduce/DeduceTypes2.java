@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jdeferred2.DoneCallback;
+import org.jdeferred2.Promise;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
@@ -149,6 +151,9 @@ public class DeduceTypes2 {
 				break;
 			case X:
 				{
+					for (Runnable runnable : onRunnables) {
+						runnable.run();
+					}
 //					System.out.println("167 "+generatedFunction);
 					//
 					// ATTACH A TYPE TO VTE'S
@@ -832,7 +837,7 @@ public class DeduceTypes2 {
 		}
 		List<TypeTableEntry> args = pte.getArgs();
 		for (int i = 0; i < args.size(); i++) {
-			TypeTableEntry tte = args.get(i); // TODO this looks wrong
+			final TypeTableEntry tte = args.get(i); // TODO this looks wrong
 //			System.out.println("770 "+tte);
 			final IExpression e = tte.expression;
 			if (e == null) continue;
@@ -845,43 +850,58 @@ public class DeduceTypes2 {
 				break;
 			case IDENT:
 				{
-/*
-					LookupResultList lrl = ctx.lookup(((IdentExpression)e).getText());
-					OS_Element best = lrl.chooseBest(null);
-					int y=2;
-*/
-					final InstructionArgument vte_index = generatedFunction.vte_lookup(((IdentExpression) e).getText());
-//					System.out.println("10000 "+vte_index);
-					if (vte_index != null) {
-						final List<TypeTableEntry> ll = getPotentialTypesVte(generatedFunction, vte_index);
-						if (ll.size() == 1) {
-							tte.attached = ll.get(0).attached;
-							vte.addPotentialType(instructionIndex, ll.get(0));
-						} else {
-							LookupResultList lrl = ctx.lookup(((IdentExpression) e).getText());
-							OS_Element best = lrl.chooseBest(null);
-							if (best instanceof FormalArgListItem) {
-								@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
-								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
-										TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
-								vte.type = tte1;
-								tte.attached = tte1.attached;
-								vte.setStatus(BaseTableEntry.Status.KNOWN, best);
-							} else if (best instanceof VariableStatement) {
-								final VariableStatement vs = (VariableStatement) best;
-								int y=2;
-								@Nullable InstructionArgument x = generatedFunction.vte_lookup(vs.getName());
-								VariableTableEntry xx = generatedFunction.getVarTableEntry(to_int(x));
-								vte.type = xx.type;
-								tte.attached = vte.type.attached;
-								vte.setStatus(BaseTableEntry.Status.KNOWN, best);
-								xx.setStatus(BaseTableEntry.Status.KNOWN, best); // TODO ??
-							} else {
-								int y = 2;
-								System.err.println("543 "+best.getClass().getName());
-								throw new NotImplementedException();
+					final InstructionArgument vte_ia = generatedFunction.vte_lookup(((IdentExpression) e).getText());
+//					System.out.println("10000 "+vte_ia);
+					if (vte_ia != null) {
+						final VariableTableEntry vte1 = generatedFunction.getVarTableEntry(to_int(vte_ia));
+						final Promise<TypeTableEntry, Void, Void> p = vte1.promise();
+						p.done(new DoneCallback<TypeTableEntry>() {
+							@Override
+							public void onDone(TypeTableEntry result) {
+								assert vte != vte1;
+								tte.attached = result.attached;
+								vte.addPotentialType(instructionIndex, result);
 							}
-						}
+						});
+						Runnable runnable = new Runnable() {
+							@Override
+							public void run() {
+								final List<TypeTableEntry> ll = getPotentialTypesVte(generatedFunction, vte_ia);
+								if (ll.size() == 1) {
+		//							tte.attached = ll.get(0).attached;
+		//							vte.addPotentialType(instructionIndex, ll.get(0));
+									if (!p.isResolved())
+										vte1.typeDeferred.resolve(ll.get(0));
+								} else {
+									LookupResultList lrl = ctx.lookup(((IdentExpression) e).getText());
+									OS_Element best = lrl.chooseBest(null);
+									if (best instanceof FormalArgListItem) {
+										@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
+										@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
+												TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
+										vte.type = tte1;
+										tte.attached = tte1.attached;
+										vte.setStatus(BaseTableEntry.Status.KNOWN, best);
+									} else if (best instanceof VariableStatement) {
+										final VariableStatement vs = (VariableStatement) best;
+										//
+										assert vs.getName().equals(((IdentExpression) e).getText());
+										//
+										@Nullable InstructionArgument vte2_ia = generatedFunction.vte_lookup(vs.getName());
+										VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(vte2_ia));
+										vte.type = vte2.type;
+										tte.attached = vte.type.attached;
+										vte.setStatus(BaseTableEntry.Status.KNOWN, best);
+										vte2.setStatus(BaseTableEntry.Status.KNOWN, best); // TODO ??
+									} else {
+										int y = 2;
+										System.err.println("543 "+best.getClass().getName());
+										throw new NotImplementedException();
+									}
+								}
+							}
+						};
+						onFinish(runnable);
 					} else {
 						int ia = generatedFunction.addIdentTableEntry((IdentExpression) e, ctx);
 						IdentTableEntry idte = generatedFunction.getIdentTableEntry(ia);
