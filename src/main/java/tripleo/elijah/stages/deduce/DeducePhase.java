@@ -123,9 +123,6 @@ public class DeducePhase {
 	 * @param _unused is unused
 	 */
 	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgc, boolean _unused) {
-//		final GenerateFunctions gfm = new GenerateFunctions(m);
-//		List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
-
 		if (false) {
 			final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 			for (GeneratedNode lgci : lgc) {
