@@ -278,7 +278,7 @@ public class GenerateFunctions {
 		}
 
 		private void generate_loop_EXPR_TYPE(@NotNull Loop loop, @NotNull GeneratedFunction gf, Context cctx) {
-			final int loop_iterator = addTempTableEntry(null, gf, null); // TODO deduce later
+			final int loop_iterator = addTempTableEntry(null, gf); // TODO deduce later
 			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(loop_iterator)), cctx);
 			final int i2 = addConstantTableEntry("", new NumericExpression(0), new OS_Type(BuiltInTypes.SystemInteger), gf);
 			final InstructionArgument ia1 = new ConstTableIA(i2, gf);
@@ -918,8 +918,7 @@ public class GenerateFunctions {
 					final TypeTableEntry tte_left = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, left);
 					final TypeTableEntry tte_right = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, right);
 					final int pte = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
-					final int tmp = addTempTableEntry(expression.getType(), // README should be Boolean
-							gf, null);
+					final int tmp = addTempTableEntry(new OS_Type(BuiltInTypes.Boolean), gf); // README should be Boolean
 					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), cctx);
 					final Instruction inst = new Instruction();
 					inst.setName(InstructionName.CALLS);
@@ -970,8 +969,7 @@ public class GenerateFunctions {
 					final TypeTableEntry tte_left  = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, left);
 					final TypeTableEntry tte_right = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, right);
 					final int pte = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
-					final int tmp = addTempTableEntry(expression.getType(), // README should be Boolean
-							gf, null);
+					final int tmp = addTempTableEntry(new OS_Type(BuiltInTypes.Boolean), gf);
 					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), cctx);
 					final Instruction inst = new Instruction();
 					inst.setName(InstructionName.CALLS);
