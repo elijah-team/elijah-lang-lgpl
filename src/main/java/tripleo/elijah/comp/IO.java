@@ -11,11 +11,14 @@ package tripleo.elijah.comp;
 import org.jetbrains.annotations.NotNull;
 import tripleo.util.io.CharSink;
 import tripleo.util.io.CharSource;
+import tripleo.util.io.FileCharSink;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +43,9 @@ public class IO {
 		return null;
 	}
 
-	public CharSink openWrite(final Path p) {
+	public CharSink openWrite(final Path p) throws IOException {
 		record(FileOption.WRITE, p);				
-		return null;
+		return new FileCharSink(Files.newOutputStream(p));
 	}
 
 	private void record(final FileOption read, @NotNull final Path p) {

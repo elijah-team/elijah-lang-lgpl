@@ -11,6 +11,8 @@ package tripleo.elijah.comp;
 import antlr.ANTLRException;
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -24,17 +26,27 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.stages.gen_c.GenerateC;
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.generate.ElSystem;
+import tripleo.elijah.stages.generate.OutputStrategy;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
 import tripleo.elijjah.EzLexer;
 import tripleo.elijjah.EzParser;
+import tripleo.util.buffer.Buffer;
+import tripleo.util.io.CharSink;
+import tripleo.util.io.FileCharSink;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,6 +153,7 @@ public class Compilation {
 					// do nothing. job over
 				} else {
 					PipelineLogic pipeline = new PipelineLogic();
+					pipeline.verbose = false;
 					ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 					for (final OS_Module module : modules) {
 						if (false) {
@@ -165,12 +178,47 @@ public class Compilation {
 					//__nodes.addAll(/*pipeline.__nodes()*/lgc);
 					pipeline.generate(lgc);
 					__nodes2 = pipeline.gr;
+
+					write_files();
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
 			}
 		} catch (final Exception e) {
 			errSink.exception(e);
+		}
+	}
+
+	public void write_files() throws IOException {
+		ElSystem sys = new ElSystem();
+		sys.verbose = false;
+		sys.setCompilation(this);
+
+		OutputStrategy os = new OutputStrategy();
+		os.per(OutputStrategy.Per.PER_CLASS);
+		sys.setOutputStrategy(os);
+		sys.generateOutputs(__nodes2);
+
+		Multimap<String, Buffer> mb = ArrayListMultimap.create();
+
+		for (GenerateC.AssociatedBuffer ab : __nodes2.results()) {
+			if (ab.node instanceof GeneratedFunction) continue;
+
+			mb.put(ab.output, ab.buffer);
+		}
+
+		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
+			Path path = FileSystems.getDefault().getPath(entry.getKey());
+//			BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
+
+			path.getParent().toFile().mkdirs();
+
+			System.out.println("201 Writing path: "+path);
+			CharSink x = io.openWrite(path);
+			for (Buffer buffer : entry.getValue()) {
+				x.accept(buffer.getText());
+			}
+			((FileCharSink)x).close();
 		}
 	}
 
