@@ -1091,13 +1091,19 @@ public class GenerateC {
 			return sll;
 		}
 
-		private String const_to_string(final IExpression expression) {
+		private static String const_to_string(final IExpression expression) {
 			if (expression instanceof NumericExpression) {
 				return ""+((NumericExpression) expression).getValue();
 			}
-			// StringExpression
+			if (expression instanceof CharLitExpression) {
+				return String.format("'%s'", expression.toString());
+			}
+			if (expression instanceof StringExpression) {
+				// TODO triple quoted strings and other escaping concerns
+				return String.format("\"%s\"", ((StringExpression) expression).getText());
+			}
+
 			// FloatLitExpression
-			// CharListExpression
 			// BooleanExpression
 			throw new NotImplementedException();
 		}
@@ -1109,6 +1115,7 @@ public class GenerateC {
 		}
 
 		public String IdentIA(IdentIA identIA, GeneratedFunction gf) {
+			assert gf == identIA.gf;
 			final CReference reference = new CReference();
 			reference.getIdentIAPath(identIA, gf);
 			return reference.build();
