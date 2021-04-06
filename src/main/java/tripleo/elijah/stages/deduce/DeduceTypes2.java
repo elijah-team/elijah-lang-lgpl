@@ -81,6 +81,12 @@ public class DeduceTypes2 {
 		}
 	}
 
+	List<Runnable> onRunnables = new ArrayList<Runnable>();
+
+	void onFinish(Runnable r) {
+		onRunnables.add(r);
+	}
+
 	public void deduce_generated_function(final GeneratedFunction generatedFunction) {
 		final FunctionDef fd = generatedFunction.getFD();
 		final Context fd_ctx = fd.getContext();
