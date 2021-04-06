@@ -9,13 +9,15 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijjah.ElijjahTokenTypes;
 
 /**
  * Created 9/22/20 1:39 AM
  */
 // TODO Does this need to be Element?
-public class AccessNotation {
+public class AccessNotation implements OS_Element {
 	private Token category;
 	private Token shorthand;
 	private TypeNameList tnl;
