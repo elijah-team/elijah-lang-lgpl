@@ -495,7 +495,7 @@ public class DeduceTypes2 {
 				}
 
 				if (x != null) {
-					System.err.println("162 Adding FoundParent for "+itee);
+//					System.err.println("162 Adding FoundParent for "+itee);
 					x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext())); // TODO context??
 				}
 			}
