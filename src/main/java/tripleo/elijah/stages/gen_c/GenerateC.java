@@ -88,7 +88,7 @@ public class GenerateC {
 		}
 
 		public enum TY {
-			HEADER, IMPL
+			HEADER, IMPL, PRIVATE_HEADER
 		}
 
 		public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf) {
