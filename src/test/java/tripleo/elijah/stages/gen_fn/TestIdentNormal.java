@@ -13,7 +13,6 @@ import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
-import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
@@ -99,6 +98,22 @@ public class TestIdentNormal {
 
 		GenerateFunctions generateFunctions = new GenerateFunctions(mod);
 		GeneratedFunction generatedFunction = new GeneratedFunction(fd);
+
+		//
+		//
+		//
+
+		ClassStatement cs = new ClassStatement(mod, mod.getContext());
+		FunctionDef fd2 = new FunctionDef(cs, cs.getContext());
+		fd2.setName(IdentExpression.forString("foo"));
+
+		TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(cs));
+		generatedFunction.addVariableTableEntry("x", VariableTableType.VAR, tte, cs);
+
+		//
+		//
+		//
+
 		VariableSequence seq = new VariableSequence(ctx1);
 		VariableStatement vs = seq.next();
 		final IdentExpression x = IdentExpression.forString("x");
@@ -108,14 +123,15 @@ public class TestIdentNormal {
 		pce.setLeft(new DotExpression(x, foo));
 
 		InstructionArgument s = generateFunctions.simplify_expression(pce, generatedFunction, ctx2);
+/*
 		@NotNull List<InstructionArgument> l = generatedFunction._getIdentIAPathList(s);
 		System.out.println(l);
+*/
 //      System.out.println(generatedFunction.getIdentIAPathNormal());
 
 		//
 		//
 		//
-		FunctionDef fd2 = mock(FunctionDef.class);
 
 		vs.initial(pce);
 
@@ -128,66 +144,19 @@ public class TestIdentNormal {
 		//
 		//
 
-		LookupResultList lrl = new LookupResultList();
-		lrl.add("x", 1, vs, ctx2);
-		expect(ctx2.lookup("x")).andReturn(lrl);
-		expect(ctx2.lookup("x")).andReturn(lrl);
-
-		LookupResultList lrl2 = new LookupResultList();
-		lrl2.add("foo", 1, fd2, ctx2);
-		expect(ctx2.lookup("foo")).andReturn(lrl2);
-		expect(ctx2.lookup("foo")).andReturn(lrl2);
-
-		expect(fd2.returnType()).andReturn(null);
-		expect(fd2.getParent()).andReturn(new OS_Element() {
-			@Override
-			public void visitGen(ICodeGen visit) {
-
-			}
-
-			@Override
-			public Context getContext() {
-				return new Context() {
-					@Override
-					public LookupResultList lookup(@NotNull String name) {
-						return lrl2;
-					}
-
-					@Override
-					public LookupResultList lookup(String name, int level, LookupResultList Result, List<Context> alreadySearched, boolean one) {
-//						LookupResultList lrl3 = new LookupResultList();
-//						lrl3.add("foo", )
-						assert name.equals("foo");
-						return lrl2;
-					}
-
-					@Override
-					public Context getParent() {
-						return null;
-					}
-				};
-			}
-
-			@Override
-			public OS_Element getParent() {
-				return null;
-			}
-		});
-
-		replay(fd, fd2);
-		replay(ctx1, ctx2);
+		replay(fd, ctx1, ctx2);
 
 		//
 		//
 		//
 
-		IdentIA identIA = new IdentIA(1, generatedFunction);
+		IdentIA identIA = new IdentIA(0, generatedFunction);
 
 		DeducePhase phase = new DeducePhase();
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
-		final List<InstructionArgument> ss = generatedFunction._getIdentIAPathList(identIA);
-		d2.resolveIdentIA2_(ctx2, ss/*identIA*/, generatedFunction, new FoundElement(phase) {
+//		final List<InstructionArgument> ss = generatedFunction._getIdentIAPathList(identIA);
+		d2.resolveIdentIA2_(ctx2, /*ss*/identIA, generatedFunction, new FoundElement(phase) {
 			@Override
 			public void foundElement(OS_Element e) {
 				assert e == fd2;
@@ -199,7 +168,7 @@ public class TestIdentNormal {
 			}
 		});
 
-		verify(fd, fd2, ctx1, ctx2);
+		verify(fd, ctx1, ctx2);
 	}
 
 }
