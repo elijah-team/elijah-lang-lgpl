@@ -179,7 +179,7 @@ public class Compilation {
 					pipeline.generate(lgc);
 					__nodes2 = pipeline.gr;
 
-					write_files();
+					write_files(__nodes2);
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
@@ -189,19 +189,19 @@ public class Compilation {
 		}
 	}
 
-	public void write_files() throws IOException {
+	public void write_files(GenerateC.GenerateResult input) throws IOException {
+		OutputStrategy os = new OutputStrategy();
+		os.per(OutputStrategy.Per.PER_CLASS);
+
 		ElSystem sys = new ElSystem();
 		sys.verbose = false;
 		sys.setCompilation(this);
-
-		OutputStrategy os = new OutputStrategy();
-		os.per(OutputStrategy.Per.PER_CLASS);
 		sys.setOutputStrategy(os);
-		sys.generateOutputs(__nodes2);
+		sys.generateOutputs(input);
 
 		Multimap<String, Buffer> mb = ArrayListMultimap.create();
 
-		for (GenerateC.AssociatedBuffer ab : __nodes2.results()) {
+		for (GenerateC.AssociatedBuffer ab : input.results()) {
 			if (ab.node instanceof GeneratedFunction) continue;
 
 			mb.put(ab.output, ab.buffer);
