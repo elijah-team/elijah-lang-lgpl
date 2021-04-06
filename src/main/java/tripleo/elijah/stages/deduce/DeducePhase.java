@@ -107,7 +107,11 @@ public class DeducePhase {
 		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 		for (GeneratedNode lgci : lgc) {
 			if (lgci instanceof GeneratedClass) {
-				lgf.addAll(((GeneratedClass) lgci).functionMap.values());
+				final Collection<GeneratedFunction> generatedFunctions = ((GeneratedClass) lgci).functionMap.values();
+				for (GeneratedFunction generatedFunction : generatedFunctions) {
+					generatedFunction.setClass(lgci);
+				}
+				lgf.addAll(generatedFunctions);
 			}
 		}
 
