@@ -36,15 +36,22 @@ import tripleo.elijjah.ElijjahParser;
 import tripleo.elijjah.EzLexer;
 import tripleo.elijjah.EzParser;
 import tripleo.util.buffer.Buffer;
+import tripleo.util.buffer.FileBackedBuffer;
 import tripleo.util.io.CharSink;
 import tripleo.util.io.FileCharSink;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -207,6 +214,36 @@ public class Compilation {
 			mb.put(ab.output, ab.buffer);
 		}
 
+		final File file1 = new File("COMP", getCompilationNumberString());
+		file1.mkdirs();
+		String prefix = file1.toString();
+
+		{
+			final String fn1 = new File(prefix, "inputs.txt").toString();
+
+			FileBackedBuffer buf = new FileBackedBuffer(fn1);
+//			for (OS_Module module : modules) {
+//				final String fn = module.getFileName();
+//
+//				append_hash(buf, fn);
+//			}
+//
+//			for (CompilerInstructions ci : cis) {
+//				final String fn = ci.getFilename();
+//
+//				append_hash(buf, fn);
+//			}
+			for (File file : io.recordedreads) {
+				final String fn = file.toString();
+
+				append_hash(buf, fn);
+			}
+			String s = buf.getText();
+			Writer w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fn1, true)));
+			w.write(s);
+			w.close();
+		}
+
 		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
 			Path path = FileSystems.getDefault().getPath(entry.getKey());
 //			BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
@@ -219,6 +256,24 @@ public class Compilation {
 				x.accept(buffer.getText());
 			}
 			((FileCharSink)x).close();
+		}
+	}
+
+	public void append_hash(FileBackedBuffer aBuf, String aFn) throws IOException {
+		final File file = new File(aFn);
+		long size = file.length();
+		byte[] ba = new byte[(int)size];
+		FileInputStream bb = new FileInputStream(file);
+		bb.read(ba);
+
+		try {
+			String hh = Helpers.getHash(ba);
+			aBuf.append(hh);
+			aBuf.append(" ");
+			aBuf.append_ln(aFn);
+		} catch (NoSuchAlgorithmException aE) {
+			eee.exception(aE);
+//			aE.printStackTrace();
 		}
 	}
 

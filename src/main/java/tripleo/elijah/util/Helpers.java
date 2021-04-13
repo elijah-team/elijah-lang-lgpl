@@ -18,6 +18,8 @@ import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijjah.ElijjahTokenTypes;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,6 +103,23 @@ public class Helpers {
 			q.append(string_to_ident(xx));
 		}
 		return q;
+	}
+
+	public static String getHash(byte[] aBytes) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+//		String input;
+//		md.update(input.getBytes(StandardCharsets.UTF_8));
+		md.update(aBytes);
+
+		byte[] hashBytes = md.digest();
+
+		StringBuilder sb = new StringBuilder();
+		for (byte b : hashBytes) {
+			sb.append(String.format("%02x", b));
+		}
+
+		return sb.toString();
 	}
 }
 
