@@ -630,6 +630,24 @@ public class DeduceTypes2 {
 				}
 				aPte.setClassInvocation(clsinv);
 				aPte.setResolvedElement(best);
+				// set FunctionInvocation with pte args
+				{
+					ConstructorDef cc = null;
+					if (constructorName != null) {
+						Collection<ConstructorDef> cs = ((ClassStatement) best).getConstructors();
+						for (ConstructorDef c : cs) {
+							if (c.name().equals(constructorName)) {
+								cc = c;
+								break;
+							}
+						}
+					}
+					// TODO also check arguments
+					/*if (cc != null)*/ {
+						FunctionInvocation fi = new FunctionInvocation(cc, aPte);
+						aPte.setFunctionInvocation(fi);
+					}
+				}
 			}
 		}
 		if (co != null) {
