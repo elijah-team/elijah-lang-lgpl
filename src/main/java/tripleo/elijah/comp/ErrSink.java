@@ -23,7 +23,7 @@ public interface ErrSink {
 
     void info(String format);
 
-	void reportDignostic(Diagnostic diagnostic);
+	void reportDiagnostic(Diagnostic diagnostic);
 
 	enum Errors {
         ERROR, WARNING, INFO
