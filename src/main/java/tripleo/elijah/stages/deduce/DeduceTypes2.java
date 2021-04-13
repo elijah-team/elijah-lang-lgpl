@@ -835,10 +835,13 @@ public class DeduceTypes2 {
 				public void foundElement(OS_Element e) {
 					System.out.println("600 "+generatedFunction.getIdentIAPathNormal(identIA)+" "+e);
 					System.out.println("601 "+identIA.getEntry().getStatus());
+					assert e == identIA.getEntry().resolved_element;
+					set_resolved_element_pte(e, pte);
 				}
 
 				@Override
 				public void noFoundElement() {
+					// TODO create Diagnostic and quit
 					System.out.println("1005 Can't find element for " + generatedFunction.getIdentIAPathNormal(identIA));
 				}
 			});
@@ -1012,7 +1015,8 @@ public class DeduceTypes2 {
 
 					@Override
 					public void foundElement(OS_Element el) {
-						pte.resolved_element = el;
+						if (pte.resolved_element == null)
+							pte.resolved_element = el;
 						if (el instanceof FunctionDef) {
 							FunctionDef fd = (FunctionDef) el;
 							forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
@@ -1042,6 +1046,23 @@ public class DeduceTypes2 {
 			}
 		}
 	}
+
+	public static void set_resolved_element_pte(OS_Element e, ProcTableEntry pte) {
+		pte.setResolvedElement(e);
+		if (e instanceof ClassStatement) {
+			ClassInvocation ci = new ClassInvocation((ClassStatement) e, null);
+			FunctionInvocation fi = new FunctionInvocation(null, pte);
+//						fi.setClassInvocation(ci);
+			pte.setClassInvocation(ci);
+			pte.setFunctionInvocation(fi);
+		} else if (e instanceof FunctionDef) {
+			FunctionInvocation fi = new FunctionInvocation((FunctionDef) e, pte);
+			pte.setFunctionInvocation(fi);
+		} else {
+			System.err.println("845 Unknown element for ProcTableEntry "+e);
+		}
+	}
+
 
 	private void do_assign_call_GET_ITEM(GetItemExpression gie, TypeTableEntry tte, GeneratedFunction generatedFunction, Context ctx) {
 		final LookupResultList lrl = DeduceLookupUtils.lookupExpression(gie.getLeft(), ctx);
@@ -1272,11 +1293,11 @@ public class DeduceTypes2 {
 
 	}
 
-	private boolean lookup_name_calls(final Context ctx, final String pn, final ProcTableEntry fn1) {
+	private boolean lookup_name_calls(final Context ctx, final String pn, final ProcTableEntry pte) {
 		final LookupResultList lrl = ctx.lookup(pn);
 		final OS_Element best = lrl.chooseBest(null);
 		if (best != null) {
-			fn1.resolved_element = best; // TODO check arity and arg matching
+			set_resolved_element_pte(best, pte); // TODO check arity and arg matching
 			return true;
 		}
 		return false;
