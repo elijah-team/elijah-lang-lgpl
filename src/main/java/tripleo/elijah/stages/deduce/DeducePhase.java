@@ -236,10 +236,15 @@ public class DeducePhase {
 				}
 			}
 		}
-		for (Triplet triplet : forFunctions) {
-//			Collection<GeneratedFunction> x = functionMap.get(triplet.gf);
-//			triplet.forFunction.finish();
+/*
+		for (Map.Entry<FunctionDef, GeneratedFunction> entry : functionMap.entries()) {
+			FunctionInvocation fi = new FunctionInvocation(entry.getKey(), null);
+			for (Triplet triplet : forFunctions) {
+//				Collection<GeneratedFunction> x = functionMap.get(fi);
+				triplet.forFunction.finish();
+			}
 		}
+*/
 		for (FoundElement foundElement : foundElements) {
 			// TODO As we are using this, didntFind will never fail because
 			//  we call doFoundElement manually in resolveIdentIA
