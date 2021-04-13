@@ -1926,7 +1926,8 @@ public class DeduceTypes2 {
 
 						LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
 						OS_Element best = lrl.chooseBest(null);
-//						ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+//						ite.setStatus(BaseTableEntry.Status.KNOWN, best); // README infinite loop
+//						tte = new tte
 						ite.setResolvedElement(best);
 					} else if (pot.size() == 1) {
 						TypeTableEntry tte = pot.get(0);
