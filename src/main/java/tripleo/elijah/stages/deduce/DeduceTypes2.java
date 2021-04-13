@@ -1168,7 +1168,7 @@ public class DeduceTypes2 {
 		if (cte.type.attached == null) {
 			System.out.println("*** ERROR: Null type in CTE "+cte);
 		}
-//		vte.type = cte.type;
+		// idte.type may be null, but we still addPotentialType here
 		idte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
