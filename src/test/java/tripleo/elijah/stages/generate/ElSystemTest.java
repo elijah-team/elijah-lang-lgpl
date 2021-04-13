@@ -32,7 +32,6 @@ public class ElSystemTest {
 		sys.setCompilation(c);
 
 		c.feedCmdLine(Helpers.List_of(f));
-//		sys.addNodes(c.__nodes);
 	}
 
 	@Test
@@ -40,7 +39,7 @@ public class ElSystemTest {
 		OutputStrategy os = new OutputStrategy();
 		os.per(OutputStrategy.Per.PER_CLASS);
 		sys.setOutputStrategy(os);
-		sys.generateOutputs(c.__nodes2);
+		sys.generateOutputs(c.pipeline.gr);
 	}
 }
 

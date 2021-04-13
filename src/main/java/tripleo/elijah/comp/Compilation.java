@@ -75,8 +75,7 @@ public class Compilation {
 	//
 	//
 	//
-	public List<GeneratedNode> __nodes = new ArrayList<GeneratedNode>();
-	public GenerateC.GenerateResult __nodes2;
+	public PipelineLogic pipeline;
 	//
 	//
 	//
@@ -162,7 +161,7 @@ public class Compilation {
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
-					PipelineLogic pipeline = new PipelineLogic();
+					/*PipelineLogic*/ pipeline = new PipelineLogic();
 					pipeline.verbose = false;
 					ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 					for (final OS_Module module : modules) {
@@ -185,11 +184,9 @@ public class Compilation {
 						}
 					}
 					pipeline.everythingBeforeGenerate(lgc);
-					//__nodes.addAll(/*pipeline.__nodes()*/lgc);
 					pipeline.generate(lgc);
-					__nodes2 = pipeline.gr;
 
-					write_files(__nodes2);
+					write_files(pipeline.gr);
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
