@@ -860,107 +860,7 @@ public class DeduceTypes2 {
 				}
 				break;
 			case IDENT:
-				{
-					final String e_text = ((IdentExpression) e).getText();
-					final InstructionArgument vte_ia = generatedFunction.vte_lookup(e_text);
-//					System.out.println("10000 "+vte_ia);
-					if (vte_ia != null) {
-						final VariableTableEntry vte1 = generatedFunction.getVarTableEntry(to_int(vte_ia));
-						final Promise<TypeTableEntry, Void, Void> p = vte1.promise();
-						p.done(new DoneCallback<TypeTableEntry>() {
-							@Override
-							public void onDone(TypeTableEntry result) {
-								assert vte != vte1;
-								tte.attached = result.attached;
-								vte.addPotentialType(instructionIndex, result);
-							}
-						});
-						Runnable runnable = new Runnable() {
-							@Override
-							public void run() {
-								final List<TypeTableEntry> ll = getPotentialTypesVte(generatedFunction, vte_ia);
-								doLogic(ll);
-							}
-
-							public void doLogic(List<TypeTableEntry> potentialTypes) {
-								assert potentialTypes.size() >= 0;
-								switch (potentialTypes.size()) {
-									case 1:
-										//							tte.attached = ll.get(0).attached;
-										//							vte.addPotentialType(instructionIndex, ll.get(0));
-										assert (!p.isResolved());
-										vte1.typeDeferred.resolve(potentialTypes.get(0));
-										break;
-									case 0:
-										LookupResultList lrl = ctx.lookup(e_text);
-										OS_Element best = lrl.chooseBest(null);
-										if (best instanceof FormalArgListItem) {
-											@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
-											@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
-													TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
-											if (p.isResolved())
-												System.out.printf("890 vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
-											else
-												vte1.typeDeferred.resolve(tte1);
-//										vte.type = tte1;
-//										tte.attached = tte1.attached;
-//										vte.setStatus(BaseTableEntry.Status.KNOWN, best);
-										} else if (best instanceof VariableStatement) {
-											final VariableStatement vs = (VariableStatement) best;
-											//
-											assert vs.getName().equals(e_text);
-											//
-											@Nullable InstructionArgument vte2_ia = generatedFunction.vte_lookup(vs.getName());
-											VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(vte2_ia));
-											vte.type = vte2.type;
-											tte.attached = vte.type.attached;
-											vte.setStatus(BaseTableEntry.Status.KNOWN, best);
-											vte2.setStatus(BaseTableEntry.Status.KNOWN, best); // TODO ??
-										} else {
-											int y = 2;
-											System.err.println("543 " + best.getClass().getName());
-											throw new NotImplementedException();
-										}
-										break;
-									default:
-										// TODO hopefully this works
-										final ArrayList<TypeTableEntry> potentialTypes1 = new ArrayList<TypeTableEntry>(
-												Collections2.filter(potentialTypes, new Predicate<TypeTableEntry>() {
-											@Override
-											public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable TypeTableEntry input) {
-												assert input != null;
-												return input.attached != null;
-											}
-										}));
-										// prevent infinite recursion
-										if (potentialTypes1.size() < potentialTypes.size())
-											doLogic(potentialTypes1);
-										else
-											System.out.println("913 Don't know");
-										break;
-								}
-							}
-						};
-						onFinish(runnable);
-					} else {
-						int ia = generatedFunction.addIdentTableEntry((IdentExpression) e, ctx);
-						IdentTableEntry idte = generatedFunction.getIdentTableEntry(ia);
-						idte.addPotentialType(instructionIndex, tte); // TODO DotExpression??
-						final int ii = i;
-						idte.onType(phase, new OnType() {
-							@Override
-							public void typeDeduced(OS_Type aType) {
-								pte.setArgType(ii, aType); // TODO does this belong here or in FunctionInvocation?
-								tte.attached = aType; // since we know that tte.attached is always null here
-							}
-
-							@Override
-							public void noTypeFound() {
-								System.err.println("719 no type found "+generatedFunction.getIdentIAPathNormal(new IdentIA(ia, generatedFunction)));
-							}
-						});
-					}
-				}
+				do_assign_call_args_ident(generatedFunction, ctx, vte, instructionIndex, pte, i, tte, (IdentExpression) e);
 				break;
 			case PROCEDURE_CALL:
 				{
@@ -1063,6 +963,118 @@ public class DeduceTypes2 {
 		}
 	}
 
+	private void do_assign_call_args_ident(GeneratedFunction generatedFunction,
+										   Context ctx,
+										   VariableTableEntry vte,
+										   int aInstructionIndex,
+										   ProcTableEntry aPte,
+										   int aI,
+										   TypeTableEntry aTte,
+										   IdentExpression aE) {
+		final String e_text = aE.getText();
+		final InstructionArgument vte_ia = generatedFunction.vte_lookup(e_text);
+//		System.out.println("10000 "+vte_ia);
+		if (vte_ia != null) {
+			final VariableTableEntry vte1 = generatedFunction.getVarTableEntry(to_int(vte_ia));
+			final Promise<TypeTableEntry, Void, Void> p = vte1.promise();
+			p.done(new DoneCallback<TypeTableEntry>() {
+				@Override
+				public void onDone(TypeTableEntry result) {
+					assert vte != vte1;
+					aTte.attached = result.attached;
+					vte.addPotentialType(aInstructionIndex, result);
+				}
+			});
+			Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					final List<TypeTableEntry> ll = getPotentialTypesVte(generatedFunction, vte_ia);
+					doLogic(ll);
+				}
+
+				public void doLogic(List<TypeTableEntry> potentialTypes) {
+					assert potentialTypes.size() >= 0;
+					switch (potentialTypes.size()) {
+						case 1:
+//							tte.attached = ll.get(0).attached;
+//							vte.addPotentialType(instructionIndex, ll.get(0));
+							assert (!p.isResolved());
+							vte1.typeDeferred.resolve(potentialTypes.get(0));
+							break;
+						case 0:
+							LookupResultList lrl = ctx.lookup(e_text);
+							OS_Element best = lrl.chooseBest(null);
+							if (best instanceof FormalArgListItem) {
+								@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
+								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
+										TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
+								if (p.isResolved())
+									System.out.printf("890 vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
+								else
+									vte1.typeDeferred.resolve(tte1);
+//								vte.type = tte1;
+//								tte.attached = tte1.attached;
+//								vte.setStatus(BaseTableEntry.Status.KNOWN, best);
+							} else if (best instanceof VariableStatement) {
+								final VariableStatement vs = (VariableStatement) best;
+								//
+								assert vs.getName().equals(e_text);
+								//
+								@Nullable InstructionArgument vte2_ia = generatedFunction.vte_lookup(vs.getName());
+								VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(vte2_ia));
+								if (p.isResolved())
+									System.out.printf("915 vte2.type = %s, gf = %s %n", vte1.type, generatedFunction);
+								else
+									vte1.typeDeferred.resolve(vte2.type);
+//								vte.type = vte2.type;
+//								tte.attached = vte.type.attached;
+								vte.setStatus(BaseTableEntry.Status.KNOWN, best);
+								vte2.setStatus(BaseTableEntry.Status.KNOWN, best); // TODO ??
+							} else {
+								int y = 2;
+								System.err.println("543 " + best.getClass().getName());
+								throw new NotImplementedException();
+							}
+							break;
+						default:
+							// TODO hopefully this works
+							final ArrayList<TypeTableEntry> potentialTypes1 = new ArrayList<TypeTableEntry>(
+									Collections2.filter(potentialTypes, new Predicate<TypeTableEntry>() {
+										@Override
+										public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable TypeTableEntry input) {
+											assert input != null;
+											return input.attached != null;
+										}
+									}));
+							// prevent infinite recursion
+							if (potentialTypes1.size() < potentialTypes.size())
+								doLogic(potentialTypes1);
+							else
+								System.out.println("913 Don't know");
+							break;
+					}
+				}
+			};
+			onFinish(runnable);
+		} else {
+			int ia = generatedFunction.addIdentTableEntry(aE, ctx);
+			IdentTableEntry idte = generatedFunction.getIdentTableEntry(ia);
+			idte.addPotentialType(aInstructionIndex, aTte); // TODO DotExpression??
+			final int ii = aI;
+			idte.onType(phase, new OnType() {
+				@Override
+				public void typeDeduced(OS_Type aType) {
+					aPte.setArgType(ii, aType); // TODO does this belong here or in FunctionInvocation?
+					aTte.attached = aType; // since we know that tte.attached is always null here
+				}
+
+				@Override
+				public void noTypeFound() {
+					System.err.println("719 no type found "+generatedFunction.getIdentIAPathNormal(new IdentIA(ia, generatedFunction)));
+				}
+			});
+		}
+	}
 
 	private void do_assign_call_GET_ITEM(GetItemExpression gie, TypeTableEntry tte, GeneratedFunction generatedFunction, Context ctx) {
 		final LookupResultList lrl = DeduceLookupUtils.lookupExpression(gie.getLeft(), ctx);
