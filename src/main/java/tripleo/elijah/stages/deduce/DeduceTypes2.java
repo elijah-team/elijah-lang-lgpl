@@ -1508,6 +1508,10 @@ public class DeduceTypes2 {
 						ClassInvocation ci = new ClassInvocation((ClassStatement) el, null);
 //						prte.setClassInvocation(ci);
 						Collection<ConstructorDef> cs = (((ClassStatement) el).getConstructors());
+						// TODO find a ctor that matches prte.getArgs()
+						if (prte.getArgs().size() == 0 && cs.size() == 0) {
+							// TODO use a virtual default ctor
+						}
 						FunctionDef selected_constructor = null;
 						FunctionInvocation fi = new FunctionInvocation(selected_constructor, prte);
 	//					fi.setClassInvocation(ci);
