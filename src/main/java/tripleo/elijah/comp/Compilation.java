@@ -282,14 +282,14 @@ public class Compilation {
 
 	private List<CompilerInstructions> searchEzFiles(final File directory) {
 		final List<CompilerInstructions> R = new ArrayList<CompilerInstructions>();
-		final FilenameFilter f = new FilenameFilter() {
+		final FilenameFilter filter = new FilenameFilter() {
 			@Override
 			public boolean accept(final File file, final String s) {
 				final boolean matches2 = Pattern.matches(".+\\.ez$", s);
 				return matches2;
 			}
 		};
-		final String[] list = directory.list(f);
+		final String[] list = directory.list(filter);
 		if (list != null) {
 			for (final String file_name : list) {
 				try {
