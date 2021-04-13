@@ -275,7 +275,7 @@ public class GeneratedFunction implements GeneratedNode {
 			final String variableTableEntryName = variableTableEntry.getName();
 			if (variableTableEntryName != null) // null when temp
 				if (variableTableEntryName.equals(text))
-					return new IntegerIA(index);
+					return new IntegerIA(index, this);
 			index++;
 		}
 		index = 0;

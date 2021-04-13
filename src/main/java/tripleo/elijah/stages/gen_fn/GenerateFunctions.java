@@ -57,7 +57,7 @@ public class GenerateFunctions {
 //			System.err.println("7056 aConstructorDef.getItem = "+item);
 			generate_item((OS_Element) item, gf, cctx);
 		}
-		final int x1 = add_i(gf, InstructionName.X, List_of(new IntegerIA(e1)), cctx);
+		final int x1 = add_i(gf, InstructionName.X, List_of(new IntegerIA(e1, gf)), cctx);
 		gf.addContext(aConstructorDef.getContext(), new Range(e1, x1)); // TODO remove interior contexts
 //		System.out.println(String.format("602.1 %s", aConstructorDef.name()));
 //		for (Instruction instruction : gf.instructionsList) {
@@ -91,7 +91,7 @@ public class GenerateFunctions {
 //			System.err.println("7001 fd.getItem = "+item);
 			generate_item((OS_Element) item, gf, cctx);
 		}
-		final int x1 = add_i(gf, InstructionName.X, List_of(new IntegerIA(e1)), cctx);
+		final int x1 = add_i(gf, InstructionName.X, List_of(new IntegerIA(e1, gf)), cctx);
 		gf.addContext(fd.getContext(), new Range(e1, x1)); // TODO remove interior contexts
 //		System.out.println(String.format("602.1 %s", fd.name()));
 //		for (Instruction instruction : gf.instructionsList) {
@@ -135,11 +135,11 @@ public class GenerateFunctions {
 							final int tmp = addTempTableEntry(new OS_Type(tn), id, gf, id); // TODO no context!
 							VariableTableEntry vte_tmp = gf.getVarTableEntry(tmp);
 							final TypeTableEntry t = vte_tmp.type;
-							add_i(gf, InstructionName.IS_A, List_of(i, new IntegerIA(t.getIndex()), /*TODO not*/new LabelIA(label_next)), cctx);
+							add_i(gf, InstructionName.IS_A, List_of(i, new IntegerIA(t.getIndex(), gf), /*TODO not*/new LabelIA(label_next)), cctx);
 							final Context context = mc1.getContext();
 
-							add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), context);
-							final int cast_inst = add_i(gf, InstructionName.CAST_TO, List_of(new IntegerIA(tmp), new IntegerIA(t.getIndex()), (i)), context);
+							add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp, gf)), context);
+							final int cast_inst = add_i(gf, InstructionName.CAST_TO, List_of(new IntegerIA(tmp, gf), new IntegerIA(t.getIndex(), gf), (i)), context);
 							vte_tmp.addPotentialType(cast_inst, t); // TODO in the future instructionIndex may be unsigned
 
 							for (final FunctionItem item : mc1.getItems()) {
@@ -147,7 +147,7 @@ public class GenerateFunctions {
 							}
 
 							add_i(gf, InstructionName.JMP, List_of(label_end), context);
-							add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
+							add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0, gf)), cctx);
 							gf.place(label_next);
 							label_next = gf.addLabel();
 						} else if (part instanceof MatchConditional.MatchConditionalPart2) {
@@ -165,7 +165,7 @@ public class GenerateFunctions {
 							}
 
 							add_i(gf, InstructionName.JMP, List_of(label_end), context);
-							add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
+							add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0, gf)), cctx);
 							gf.place(label_next);
 //							label_next = gf.addLabel();
 						} else if (part instanceof MatchConditional.MatchConditionalPart3) {
@@ -196,10 +196,10 @@ public class GenerateFunctions {
 				for (final OS_Element item : ifc.getItems()) {
 					generate_item(item, gf, cctx);
 				}
-				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_2nd)), cctx);
+				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_2nd, gf)), cctx);
 				if (ifc.getParts().size() == 0) {
 					gf.place(label_next);
-					add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_1st)), cctx);
+					add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_1st, gf)), cctx);
 //					gf.place(label_end);
 				} else {
 					add_i(gf, InstructionName.JMP, List_of(label_end), cctx);
@@ -217,12 +217,12 @@ public class GenerateFunctions {
 							System.out.println("709 " + part + " " + partItem);
 							generate_item(partItem, gf, cctx);
 						}
-						add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_next)), cctx);
+						add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin_next, gf)), cctx);
 						gf.place(label_next);
 					}
 					gf.place(label_end);
 				}
-				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0)), cctx);
+				add_i(gf, InstructionName.XS, List_of(new IntegerIA(begin0, gf)), cctx);
 			}
 		}
 
@@ -246,7 +246,7 @@ public class GenerateFunctions {
 			case DO_WHILE:
 				break;
 			}
-			final int x2 = add_i(gf, InstructionName.XS, List_of(new IntegerIA(e2)), cctx);
+			final int x2 = add_i(gf, InstructionName.XS, List_of(new IntegerIA(e2, gf)), cctx);
 			final Range r = new Range(e2, x2);
 			gf.addContext(loop.getContext(), r);
 		}
@@ -255,16 +255,16 @@ public class GenerateFunctions {
 			final IdentExpression iterNameToken = loop.getIterNameToken();
 			final String iterName = iterNameToken.getText();
 			final int iter_temp = addTempTableEntry(null, iterNameToken, gf, iterNameToken); // TODO deduce later
-			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(iter_temp)), cctx);
+			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(iter_temp, gf)), cctx);
 			final InstructionArgument ia1 = simplify_expression(loop.getFromPart(), gf, cctx);
 			if (ia1 instanceof ConstTableIA)
-				add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(iter_temp), ia1), cctx);
+				add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(iter_temp, gf), ia1), cctx);
 			else
-				add_i(gf, InstructionName.AGN, List_of(new IntegerIA(iter_temp), ia1), cctx);
+				add_i(gf, InstructionName.AGN, List_of(new IntegerIA(iter_temp, gf), ia1), cctx);
 			final Label label_top = gf.addLabel("top", true);
 			gf.place(label_top);
 			final Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
-			add_i(gf, InstructionName.JE, List_of(new IntegerIA(iter_temp), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
+			add_i(gf, InstructionName.JE, List_of(new IntegerIA(iter_temp, gf), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
 			for (final StatementItem statementItem : loop.getItems()) {
 				System.out.println("705 "+statementItem);
 				generate_item((OS_Element)statementItem, gf, cctx);
@@ -272,24 +272,24 @@ public class GenerateFunctions {
 			final IdentExpression pre_inc_name = Helpers.string_to_ident("__preinc__");
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 			final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte/*getType(left), getType(right)*/), gf);
-			add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(iter_temp)), cctx);
+			add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(iter_temp, gf)), cctx);
 			add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
 			gf.place(label_bottom);
 		}
 
 		private void generate_loop_EXPR_TYPE(@NotNull Loop loop, @NotNull GeneratedFunction gf, Context cctx) {
 			final int loop_iterator = addTempTableEntry(null, gf); // TODO deduce later
-			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(loop_iterator)), cctx);
+			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(loop_iterator, gf)), cctx);
 			final int i2 = addConstantTableEntry("", new NumericExpression(0), new OS_Type(BuiltInTypes.SystemInteger), gf);
 			final InstructionArgument ia1 = new ConstTableIA(i2, gf);
 //			if (ia1 instanceof ConstTableIA)
-				add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(loop_iterator), ia1), cctx);
+				add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(loop_iterator, gf), ia1), cctx);
 //			else
 //				add_i(gf, InstructionName.AGN, List_of(new IntegerIA(loop_iterator), ia1), cctx);
 			final Label label_top = gf.addLabel("top", true);
 			gf.place(label_top);
 			final Label label_bottom = gf.addLabel("bottom"+label_top.getIndex(), false);
-			add_i(gf, InstructionName.JE, List_of(new IntegerIA(loop_iterator), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
+			add_i(gf, InstructionName.JE, List_of(new IntegerIA(loop_iterator, gf), simplify_expression(loop.getToPart(), gf, cctx), label_bottom), cctx);
 			for (final StatementItem statementItem : loop.getItems()) {
 				System.out.println("707 "+statementItem);
 				generate_item((OS_Element)statementItem, gf, cctx);
@@ -298,7 +298,7 @@ public class GenerateFunctions {
 			final IdentExpression pre_inc_name = Helpers.string_to_ident(txt);
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, pre_inc_name);
 			final int pre_inc = addProcTableEntry(pre_inc_name, null, List_of(tte), gf);
-			add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(loop_iterator)), cctx);
+			add_i(gf, InstructionName.CALLS, List_of(new ProcIA(pre_inc, gf), new IntegerIA(loop_iterator, gf)), cctx);
 			add_i(gf, InstructionName.JMP, List_of(label_top), cctx);
 			gf.place(label_bottom);
 		}
@@ -312,11 +312,11 @@ public class GenerateFunctions {
 						final int ci = addConstantTableEntry(variable_name, vs.initialValue(), vs.initialValue().getType(), gf);
 						final int vte_num = addVariableTableEntry(variable_name, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf, vs.getNameToken());
 						final IExpression iv = vs.initialValue();
-						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("const"), new IntegerIA(vte_num)), cctx);
-						add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(vte_num), new ConstTableIA(ci, gf)), cctx);
+						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("const"), new IntegerIA(vte_num, gf)), cctx);
+						add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(vte_num, gf), new ConstTableIA(ci, gf)), cctx);
 					} else {
 						final int vte_num = addVariableTableEntry(variable_name, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf, vs.getNameToken());
-						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("val"), new IntegerIA(vte_num)), cctx);
+						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("val"), new IntegerIA(vte_num, gf)), cctx);
 						final IExpression iv = vs.initialValue();
 						assign_variable(gf, vte_num, iv, cctx);
 					}
@@ -328,7 +328,7 @@ public class GenerateFunctions {
 						tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, vs.initialValue().getType(), vs.getNameToken());
 					}
 					final int vte_num = addVariableTableEntry(variable_name, tte, gf, vs); // TODO why not vs.initialValue ??
-					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("var"), new IntegerIA(vte_num)), cctx);
+					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("var"), new IntegerIA(vte_num, gf)), cctx);
 					final IExpression iv = vs.initialValue();
 					assign_variable(gf, vte_num, iv, cctx);
 				}
@@ -593,9 +593,9 @@ public class GenerateFunctions {
 				vte.addPotentialType(instruction.getIndex(), tte);
 			} else {
 				final int vte_num = addVariableTableEntry(text, tte, gf, (IdentExpression) bbe.getLeft());
-				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(vte_num)), cctx);
+				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(vte_num, gf)), cctx);
 				// TODO should be AGNC
-				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num),
+				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num, gf),
 						new FnCallArgs(expression_to_call(pce, gf, cctx), gf)), cctx);
 				final Instruction instruction = gf.getInstruction(instruction_number);
 				final VariableTableEntry vte = gf.getVarTableEntry(vte_num);
@@ -722,7 +722,7 @@ public class GenerateFunctions {
 		case PROCEDURE_CALL:
 			final ProcedureCallExpression pce = (ProcedureCallExpression) value;
 			final FnCallArgs fnCallArgs = new FnCallArgs(expression_to_call(pce, gf, cctx), gf);
-			final int ii2 = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), fnCallArgs), cctx);
+			final int ii2 = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte, gf), fnCallArgs), cctx);
 			final VariableTableEntry vte_proccall = gf.getVarTableEntry(vte);
 			final TypeTableEntry tte_proccall = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
 			fnCallArgs.setType(tte_proccall);
@@ -730,13 +730,13 @@ public class GenerateFunctions {
 			break;
 		case NUMERIC:
 			final int ci = addConstantTableEntry(null, value, value.getType(), gf);
-			final int ii = add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(vte), new ConstTableIA(ci, gf)), cctx);
+			final int ii = add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(vte, gf), new ConstTableIA(ci, gf)), cctx);
 			final VariableTableEntry vte_numeric = gf.getVarTableEntry(vte);
 			vte_numeric.addPotentialType(ii, gf.getConstTableEntry(ci).type);
 			break;
 		case IDENT:
 			InstructionArgument ia1 = simplify_expression(value, gf, cctx);
-			final int ii3 = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte), ia1), cctx);
+			final int ii3 = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte, gf), ia1), cctx);
 			final VariableTableEntry vte3_ident = gf.getVarTableEntry(vte);
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
 			vte3_ident.addPotentialType(ii3, tte);
@@ -744,7 +744,7 @@ public class GenerateFunctions {
 		case FUNC_EXPR:
 			FuncExpr fe = (FuncExpr) value;
 			int pte_index = addProcTableEntry(fe, null, get_args_types(fe.getArgs(), gf), gf);
-			final int ii4 = add_i(gf, InstructionName.AGNF, List_of(new IntegerIA(vte), new IntegerIA(pte_index)), cctx);
+			final int ii4 = add_i(gf, InstructionName.AGNF, List_of(new IntegerIA(vte, gf), new IntegerIA(pte_index, gf)), cctx);
 			final VariableTableEntry vte3_func = gf.getVarTableEntry(vte);
 			final TypeTableEntry tte_func = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
 			vte3_func.addPotentialType(ii4, tte_func);
@@ -827,14 +827,14 @@ public class GenerateFunctions {
 				TypeCastExpression tce = (TypeCastExpression) expression;
 				InstructionArgument simp = simplify_expression(tce.getLeft(), gf, cctx);
 				@NotNull TypeTableEntry tte_index = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(tce.getTypeName()));
-				final int x = add_i(gf, InstructionName.CAST_TO, List_of(simp, new IntegerIA(tte_index.getIndex())), cctx);
+				final int x = add_i(gf, InstructionName.CAST_TO, List_of(simp, new IntegerIA(tte_index.getIndex(), gf)), cctx);
 			}
 		case AS_CAST:
 			{
 				TypeCastExpression tce = (TypeCastExpression) expression;
 				InstructionArgument simp = simplify_expression(tce.getLeft(), gf, cctx);
 				@NotNull TypeTableEntry tte_index = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(tce.getTypeName()));
-				final int x = add_i(gf, InstructionName.AS_CAST, List_of(simp, new IntegerIA(tte_index.getIndex())), cctx);
+				final int x = add_i(gf, InstructionName.AS_CAST, List_of(simp, new IntegerIA(tte_index.getIndex(), gf)), cctx);
 			}
 		case DOT_EXP:
 			{
@@ -919,13 +919,13 @@ public class GenerateFunctions {
 					final TypeTableEntry tte_right = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, right);
 					final int pte = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
 					final int tmp = addTempTableEntry(new OS_Type(BuiltInTypes.Boolean), gf); // README should be Boolean
-					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), cctx);
+					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp, gf)), cctx);
 					final Instruction inst = new Instruction();
 					inst.setName(InstructionName.CALLS);
 					inst.setArgs(List_of(new ProcIA(pte, gf), left_instruction, right_instruction));
 					final FnCallArgs fca = new FnCallArgs(inst, gf);
-					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp), fca), cctx);
-					return new IntegerIA(tmp);
+					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp, gf), fca), cctx);
+					return new IntegerIA(tmp, gf);
 				}
 			}
 		case LT_: case GT: case ADDITION: case MULTIPLY: // TODO all BinaryExpressions go here
@@ -970,14 +970,14 @@ public class GenerateFunctions {
 					final TypeTableEntry tte_right = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, right);
 					final int pte = addProcTableEntry(expr_kind_name, null, List_of(tte_left, tte_right), gf);
 					final int tmp = addTempTableEntry(new OS_Type(BuiltInTypes.Boolean), gf);
-					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp)), cctx);
+					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp, gf)), cctx);
 					final Instruction inst = new Instruction();
 					inst.setName(InstructionName.CALLS);
 					inst.setArgs(List_of(new ProcIA(pte, gf), left_instruction, right_instruction));
 					final FnCallArgs fca = new FnCallArgs(inst, gf);
 					// TODO should be AGNC
-					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp), fca), cctx);
-					return new IntegerIA(tmp); // TODO  is this right?? we want to return the variable, not proc calls, right?
+					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp, gf), fca), cctx);
+					return new IntegerIA(tmp, gf); // TODO  is this right?? we want to return the variable, not proc calls, right?
 				}
 //				throw new NotImplementedException();
 			}
@@ -1063,13 +1063,13 @@ public class GenerateFunctions {
 		right_ia.add(0, new ProcIA(pte, gf));
 		{
 			final int tmp_var = addTempTableEntry(null, gf); // line 686 is here
-			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp_var)), cctx);
+			add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp_var, gf)), cctx);
 			final Instruction i = new Instruction();
 			i.setName(InstructionName.CALL);
 			i.setArgs(right_ia);
 			// TODO should be AGNC
-			final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp_var), new FnCallArgs(i, gf)), cctx);
-			return new IntegerIA(tmp_var); // return tmp_var instead of expression assigning it
+			final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp_var, gf), new FnCallArgs(i, gf)), cctx);
+			return new IntegerIA(tmp_var, gf); // return tmp_var instead of expression assigning it
 		}
 	}
 

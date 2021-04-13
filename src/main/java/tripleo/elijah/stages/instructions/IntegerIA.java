@@ -19,14 +19,26 @@ public class IntegerIA implements InstructionArgument {
 				'}';
 	}
 
+	private final GeneratedFunction gf;
+
 	private final int index;
 
-	public IntegerIA(final int e1) {
-		index = e1;
+	public IntegerIA(final int anIndex, GeneratedFunction aGeneratedFunction) {
+		index = anIndex;
+		gf = aGeneratedFunction;
 	}
 
 	public int getIndex() {
 		return index;
+	}
+
+	public VariableTableEntry getEntry() {
+		return gf.getVarTableEntry(index);
+	}
+
+	@Override
+	public void setConstructable(ProcTableEntry aPte) {
+		getEntry().setConstructable(aPte);
 	}
 }
 
