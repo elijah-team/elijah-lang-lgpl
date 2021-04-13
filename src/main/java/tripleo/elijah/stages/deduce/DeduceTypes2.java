@@ -403,6 +403,7 @@ public class DeduceTypes2 {
 				else if (potential_size > 1) {
 					// TODO Check type compatibility
 					System.err.println("703 "+vte.getName()+" "+vte.potentialTypes());
+					errSink.reportDiagnostic(new CantDecideType(vte, vte.potentialTypes()));
 				}
 			}
 		}
