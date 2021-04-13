@@ -54,7 +54,7 @@ public class GetRealTargetNameTest {
 		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte, mock(VariableStatement.class));
 		int ite_index = gf.addIdentTableEntry(foo_ident, null);
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
-		ident_ia.setPrev(new IntegerIA(int_index));
+		ident_ia.setPrev(new IntegerIA(int_index, gf));
 		//
 		GenerateC c = new GenerateC(mod);
 		//
