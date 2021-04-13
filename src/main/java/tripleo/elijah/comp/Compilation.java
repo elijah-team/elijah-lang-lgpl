@@ -36,7 +36,8 @@ import tripleo.elijjah.ElijjahParser;
 import tripleo.elijjah.EzLexer;
 import tripleo.elijjah.EzParser;
 import tripleo.util.buffer.Buffer;
-import tripleo.util.buffer.FileBackedBuffer;
+import tripleo.util.buffer.DefaultBuffer;
+import tripleo.util.buffer.TextBuffer;
 import tripleo.util.io.CharSink;
 import tripleo.util.io.FileCharSink;
 
@@ -221,7 +222,8 @@ public class Compilation {
 		{
 			final String fn1 = new File(prefix, "inputs.txt").toString();
 
-			FileBackedBuffer buf = new FileBackedBuffer(fn1);
+			DefaultBuffer buf = new DefaultBuffer("");
+//			FileBackedBuffer buf = new FileBackedBuffer(fn1);
 //			for (OS_Module module : modules) {
 //				final String fn = module.getFileName();
 //
@@ -259,10 +261,10 @@ public class Compilation {
 		}
 	}
 
-	public void append_hash(FileBackedBuffer aBuf, String aFn) throws IOException {
-		final File file = new File(aFn);
+	public void append_hash(TextBuffer aBuf, String aFilename) throws IOException {
+		final File file = new File(aFilename);
 		long size = file.length();
-		byte[] ba = new byte[(int)size];
+		byte[] ba = new byte[(int)size];  // README Counting on reasonable sizes here
 		FileInputStream bb = new FileInputStream(file);
 		bb.read(ba);
 
@@ -270,7 +272,7 @@ public class Compilation {
 			String hh = Helpers.getHash(ba);
 			aBuf.append(hh);
 			aBuf.append(" ");
-			aBuf.append_ln(aFn);
+			aBuf.append_ln(aFilename);
 		} catch (NoSuchAlgorithmException aE) {
 			eee.exception(aE);
 //			aE.printStackTrace();
