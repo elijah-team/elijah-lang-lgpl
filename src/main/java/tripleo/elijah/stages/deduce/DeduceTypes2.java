@@ -350,7 +350,7 @@ public class DeduceTypes2 {
 						@Override
 						public void foundElement(OS_Element e) {
 //							pte.resolved_element = e;
-							set_resolved_element_pte(e, pte);
+							set_resolved_element_pte(expression, e, pte);
 						}
 
 						@Override
@@ -878,7 +878,7 @@ public class DeduceTypes2 {
 					System.out.println("600 "+generatedFunction.getIdentIAPathNormal(identIA)+" "+e);
 					System.out.println("601 "+identIA.getEntry().getStatus());
 					assert e == identIA.getEntry().resolved_element;
-					set_resolved_element_pte(e, pte);
+					set_resolved_element_pte(identIA, e, pte);
 				}
 
 				@Override
@@ -989,7 +989,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	public static void set_resolved_element_pte(OS_Element e, ProcTableEntry pte) {
+	public static void set_resolved_element_pte(Constructable co, OS_Element e, ProcTableEntry pte) {
 		pte.setResolvedElement(e);
 		if (e instanceof ClassStatement) {
 			ClassInvocation ci = new ClassInvocation((ClassStatement) e, null);
@@ -1002,7 +1002,11 @@ public class DeduceTypes2 {
 			pte.setFunctionInvocation(fi);
 		} else {
 			System.err.println("845 Unknown element for ProcTableEntry "+e);
+			return;
 		}
+
+		if (co != null)
+			co.setConstructable(pte);
 	}
 
 	private void do_assign_call_args_ident(GeneratedFunction generatedFunction,
@@ -1351,7 +1355,7 @@ public class DeduceTypes2 {
 		final LookupResultList lrl = ctx.lookup(pn);
 		final OS_Element best = lrl.chooseBest(null);
 		if (best != null) {
-			set_resolved_element_pte(best, pte); // TODO check arity and arg matching
+			set_resolved_element_pte(null, best, pte); // TODO check arity and arg matching
 			return true;
 		}
 		return false;
