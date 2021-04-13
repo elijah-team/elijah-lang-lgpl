@@ -24,20 +24,16 @@ import java.io.File;
  * Created 1/13/21 5:54 AM
  */
 public class OutputStrategyC {
-	private final String compilationNumber;
 	private final OutputStrategy outputStrategy;
 
-	public OutputStrategyC(OutputStrategy outputStrategy, int compilationNumber) {
+	public OutputStrategyC(OutputStrategy outputStrategy) {
 		this.outputStrategy = outputStrategy;
-		this.compilationNumber = getCompilationNumber(compilationNumber);
 	}
 
 	public String nameForNamespace(GeneratedNamespace generatedNamespace, GenerateC.GenerateResult.TY aTy) {
 		if (generatedNamespace.module().isPrelude()) {
 			// We are dealing with the Prelude
 			StringBuilder sb = new StringBuilder();
-			sb.append("COMP/");
-			sb.append((compilationNumber));
 			sb.append("/Prelude/");
 			sb.append("Prelude");
 			sb.append(".c");
@@ -52,8 +48,6 @@ public class OutputStrategyC {
 		} else
 			filename = generatedNamespace.getName();
 		StringBuilder sb = new StringBuilder();
-		sb.append("COMP/");
-		sb.append((compilationNumber));
 		sb.append("/");
 		if (generatedNamespace.module().lsp == null)
 			sb.append("___________________");
@@ -82,10 +76,6 @@ public class OutputStrategyC {
 		return aFilename;
 	}
 
-	private String getCompilationNumber(int compilationNumber) {
-		return String.format("%08x", compilationNumber);
-	}
-
 	public String nameForFunction(GeneratedFunction generatedFunction) {
 		return null;
 	}
@@ -94,16 +84,12 @@ public class OutputStrategyC {
 		if (generatedClass.module().isPrelude()) {
 			// We are dealing with the Prelude
 			StringBuilder sb = new StringBuilder();
-			sb.append("COMP/");
-			sb.append((compilationNumber));
 			sb.append("/Prelude/");
 			sb.append("Prelude");
 			sb.append(".c");
 			return sb.toString();
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append("COMP/");
-		sb.append((compilationNumber));
 		sb.append("/");
 		if (generatedClass.module().lsp == null)
 			sb.append("______________");

@@ -17,20 +17,18 @@ import tripleo.elijah.stages.gen_fn.GeneratedNode;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created 1/8/21 11:02 PM
  */
 public class ElSystem {
 	private OutputStrategy outputStrategy;
-	private int compilationNumber;
 	private Compilation compilation;
-	private Map<GeneratedFunction, String> gfm_map = new HashMap<GeneratedFunction, String>();
+	private final Map<GeneratedFunction, String> gfm_map = new HashMap<GeneratedFunction, String>();
 	public boolean verbose = true;
 
 	public void generateOutputs(GenerateC.GenerateResult gr) {
-		final OutputStrategyC outputStrategyC = new OutputStrategyC(this.outputStrategy, compilationNumber);
+		final OutputStrategyC outputStrategyC = new OutputStrategyC(this.outputStrategy);
 
 		for (GenerateC.AssociatedBuffer ab : gr.results()) {
 			String s = generateOutputs_Internal(ab.node, ab.ty, outputStrategyC);
@@ -80,25 +78,12 @@ public class ElSystem {
 		return s;
 	}
 
-//	public void addNodes(Collection<GeneratedNode> cgn) {
-//		nodes.addAll(cgn);
-//	}
-
 	public void setOutputStrategy(OutputStrategy outputStrategy) {
 		this.outputStrategy = outputStrategy;
 	}
 
-	public void setCompilationNumber(int compilationNumber) {
-		this.compilationNumber = compilationNumber;
-	}
-
-	public int getCompilationNumber() {
-		return compilationNumber;
-	}
-
 	public void setCompilation(Compilation compilation) {
 		this.compilation = compilation;
-		this.compilationNumber = new Random().nextInt(Integer.MAX_VALUE);
 	}
 }
 
