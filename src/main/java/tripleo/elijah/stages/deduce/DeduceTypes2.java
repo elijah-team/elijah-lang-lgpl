@@ -622,7 +622,7 @@ public class DeduceTypes2 {
 				phase.typeDecided(generatedFunction, vte.type.attached);
 			} else {
 				@NotNull Collection<TypeTableEntry> pot1 = vte.potentialTypes();
-				ArrayList<TypeTableEntry> pot = new ArrayList<>(pot1);
+				ArrayList<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(pot1);
 				if (pot.size() == 1) {
 					phase.typeDecided(generatedFunction, pot.get(0).attached);
 				} else if (pot.size() == 0) {
@@ -833,7 +833,6 @@ public class DeduceTypes2 {
 			resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
 				@Override
 				public void foundElement(OS_Element e) {
-//					generatedFunction.getIdentTableEntry(identIA.getIndex()).setResolvedElement(y);
 					System.out.println("600 "+generatedFunction.getIdentIAPathNormal(identIA)+" "+e);
 					System.out.println("601 "+identIA.getEntry().getStatus());
 				}
@@ -986,7 +985,6 @@ public class DeduceTypes2 {
 					continue;
 				}
 //				break;
-
 			default:
 				throw new IllegalStateException("Unexpected value: " + e.getKind());
 			}
