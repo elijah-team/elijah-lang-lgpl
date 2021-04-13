@@ -9,15 +9,17 @@
 package tripleo.elijah.lang;
 
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.diagnostic.Locatable;
 import tripleo.elijah.gen.ICodeGen;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 // Referenced classes of package pak:
 //			TypeRef, IExpression
 
-public class VariableStatement implements OS_Element {
+public class VariableStatement implements OS_Element, @NotNull Locatable {
 
 	private final VariableSequence _parent;
 
@@ -105,6 +107,39 @@ public class VariableStatement implements OS_Element {
 				annotationWalker.annotation(annotationPart);
 			}
 		}
+	}
+
+	// endregion
+
+	// region Locatable
+
+	@Override
+	public int getLine() {
+		// TODO what about annotations
+		return name.getLine();
+	}
+
+	@Override
+	public int getColumn() {
+		// TODO what about annotations
+		return name.getColumn();
+	}
+
+	@Override
+	public int getLineEnd() {
+		// TODO what about initialValue
+		return name.getLineEnd();
+	}
+
+	@Override
+	public int getColumnEnd() {
+		// TODO what about initialValue
+		return name.getColumnEnd();
+	}
+
+	@Override
+	public File getFile() {
+		return name.getFile();
 	}
 
 	// endregion
