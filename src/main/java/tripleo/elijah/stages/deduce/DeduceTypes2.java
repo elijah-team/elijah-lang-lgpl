@@ -964,6 +964,7 @@ public class DeduceTypes2 {
 							forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
 								@Override
 								public void typeDecided(OS_Type aType) {
+									assert false;
 									assert fd == generatedFunction.getFD();
 									//
 									@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, pte.expression);
