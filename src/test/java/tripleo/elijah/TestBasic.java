@@ -20,7 +20,11 @@ import tripleo.elijah.comp.StdErrSink;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static tripleo.elijah.util.Helpers.List_of;
 
 /**
  * @author Tripleo(envy)
@@ -45,17 +49,24 @@ public class TestBasic {
 	@Test
 	public final void testBasic() throws IOException {
 		final List<String> ez_files = Files.readLines(new File("test/basic/ez_files.txt"), Charsets.UTF_8);
-		final List<String> args = new ArrayList<String>();
-		args.addAll(ez_files);
-		args.add("-sO");
-//		List<String> args = List_of("test/basic", "-sO"/*, "-out"*/);
-		final ErrSink eee = new StdErrSink();
-		final Compilation c = new Compilation(eee, new IO());
+		final Map<Integer, Integer> errorCount = new HashMap<Integer, Integer>();
+		int index = 0;
 
-		c.feedCmdLine(args);
+		for (String s : ez_files) {
+//			List<String> args = List_of("test/basic", "-sO"/*, "-out"*/);
+			final ErrSink eee = new StdErrSink();
+			final Compilation c = new Compilation(eee, new IO());
 
-		System.err.println("Error count should be 0");
-		Assert.assertEquals(5, c.errorCount()); // TODO Error count obviously should be 0
+			c.feedCmdLine(List_of(s, "-sO"));
+
+			System.err.println("Error count should be 0");
+			errorCount.put(index, c.errorCount());
+			index++;
+		}
+
+		// README this needs changing when running make
+		Assert.assertEquals(24, (int)errorCount.get(0)); // TODO Error count obviously should be 0
+		Assert.assertEquals(28, (int)errorCount.get(1)); // TODO Error count obviously should be 0
 	}
 
 }
