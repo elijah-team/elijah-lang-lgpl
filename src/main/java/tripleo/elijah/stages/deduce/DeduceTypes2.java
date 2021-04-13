@@ -160,6 +160,12 @@ public class DeduceTypes2 {
 				break;
 			case X:
 				{
+					//
+					// resolve var table. moved from `E'
+					//
+					for (VariableTableEntry vte : generatedFunction.vte_list) {
+						resolve_var_table_entry(vte, generatedFunction, context);
+					}
 					for (Runnable runnable : onRunnables) {
 						runnable.run();
 					}
@@ -533,6 +539,14 @@ public class DeduceTypes2 {
 					errSink.reportError("1004 Can't find element for "+ x);
 				}
 			});
+		}
+	}
+
+	public void resolve_var_table_entry(VariableTableEntry vte, GeneratedFunction generatedFunction, Context ctx) {
+		if (vte.el == null)
+			return;
+		{
+			vte.setStatus(BaseTableEntry.Status.KNOWN, vte.el);
 		}
 	}
 
