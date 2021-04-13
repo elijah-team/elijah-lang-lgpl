@@ -1934,6 +1934,17 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 //						ite.setStatus(BaseTableEntry.Status.KNOWN, best); // README infinite loop
 //						tte = new tte
+						//
+						// We set the constructable so we don't  have to worry about the loss of generic
+						// information in setResolvedElement(OS_Element), which doesn't hold `unfolded' generics
+						//
+						if (ite.backlink instanceof IntegerIA) {
+							final IntegerIA backlink = (IntegerIA) ite.backlink;
+							ite.setConstructable(backlink.getEntry().constructable_pte);
+						} else if (ite.backlink instanceof IdentIA) {
+							final IdentIA backlink = (IdentIA) ite.backlink;
+							ite.setConstructable(backlink.getEntry().constructable_pte);
+						}
 						ite.setResolvedElement(best);
 					} else if (pot.size() == 1) {
 						TypeTableEntry tte = pot.get(0);
