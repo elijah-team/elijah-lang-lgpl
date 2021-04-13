@@ -976,6 +976,7 @@ public class DeduceTypes2 {
 							OS_Type type = new OS_Type(kl);
 							@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression);
 							vte.addPotentialType(instructionIndex, tte);
+							vte.setConstructable(pte);
 						} else {
 							System.err.println("7890 "+el.getClass().getName());
 						}
