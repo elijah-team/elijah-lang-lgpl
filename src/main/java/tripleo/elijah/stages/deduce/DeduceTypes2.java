@@ -1742,7 +1742,7 @@ public class DeduceTypes2 {
 							}
 						} catch (ResolveError resolveError) {
 							if (resolveError.resultsList().size() > 1)
-								errSink.reportDignostic(resolveError);
+								errSink.reportDiagnostic(resolveError);
 							else
 								System.out.println("1089 Can't attach type to "+idte2.type.attached);
 //							resolveError.printStackTrace(); // TODO print diagnostic
@@ -1873,7 +1873,7 @@ public class DeduceTypes2 {
 								LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
 								ele2 = lrl.chooseBest(null);
 							} catch (ResolveError aResolveError) {
-								errSink.reportDignostic(aResolveError);
+								errSink.reportDiagnostic(aResolveError);
 							}
 						} else
 							ele2 = ty.getClassOf(); // TODO might fail later (use getElement?)
@@ -1895,7 +1895,7 @@ public class DeduceTypes2 {
 									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 //									ite.setResolvedElement(best);
 								} catch (ResolveError resolveError) {
-									errSink.reportDignostic(resolveError);
+									errSink.reportDiagnostic(resolveError);
 								}
 							} else if (ty.getType() == OS_Type.Type.USER_CLASS) {
 								OS_Element ele = ty.getClassOf();
