@@ -139,8 +139,9 @@ public class Compilation {
 						if (f.isDirectory()) {
 							final List<CompilerInstructions> ezs = searchEzFiles(f);
 							if (ezs.size() > 1) {
-								eee.reportError("9998 Too many .ez files, using first.");
-								add_ci(ezs.get(0));
+//								eee.reportError("9998 Too many .ez files, using first.");
+								eee.reportError("9997 Too many .ez files, be specific.");
+//								add_ci(ezs.get(0));
 							} else if (ezs.size() == 0) {
 								eee.reportError("9999 No .ez files found.");
 							} else {
