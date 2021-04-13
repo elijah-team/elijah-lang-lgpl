@@ -9,13 +9,15 @@
 package tripleo.elijah.stages.instructions;
 
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.stages.gen_fn.Constructable;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
+import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 
 /**
  * Created 10/2/20 2:36 PM
  */
-public class IdentIA implements InstructionArgument {
+public class IdentIA implements InstructionArgument, Constructable {
 	private final int id;
 	public final GeneratedFunction gf;
 //	private InstructionArgument prev;
@@ -50,6 +52,11 @@ public class IdentIA implements InstructionArgument {
 
 	public @NotNull IdentTableEntry getEntry() {
 		return gf.getIdentTableEntry(getIndex());
+	}
+
+	@Override
+	public void setConstructable(ProcTableEntry aPte) {
+		getEntry().setConstructable(aPte);
 	}
 }
 

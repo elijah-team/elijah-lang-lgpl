@@ -8,10 +8,16 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import tripleo.elijah.stages.gen_fn.Constructable;
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.ProcTableEntry;
+import tripleo.elijah.stages.gen_fn.VariableTableEntry;
+
 /**
  * Created 9/10/20 3:35 PM
  */
-public class IntegerIA implements InstructionArgument {
+public class IntegerIA implements InstructionArgument, Constructable {
+
 	@Override
 	public String toString() {
 		return "IntegerIA{" +

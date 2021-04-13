@@ -21,6 +21,7 @@ import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.gen_fn.BaseTableEntry;
 import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
+import tripleo.elijah.stages.gen_fn.Constructable;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
@@ -544,7 +545,7 @@ public class DeduceTypes2 {
 				VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
 				assert vte.type.attached != null; // TODO will fail when empty variable expression
 				@Nullable OS_Type ty = vte.type.attached;
-				implement_construct_type(pte, ty, null);
+				implement_construct_type((Constructable) expression, pte, ty, null);
 			} else if (expression instanceof IdentIA) {
 				IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(expression));
 				@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(expression);
@@ -570,7 +571,7 @@ public class DeduceTypes2 {
 								@NotNull TypeName tn = vs.typeName();
 								OS_Type ty = new OS_Type(tn);
 								// s is constructor name
-								implement_construct_type(pte, ty, s);
+								implement_construct_type(idte2, pte, ty, s);
 							} else {
 								el = el2;
 								ectx = el2.getContext();
@@ -586,7 +587,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private void implement_construct_type(ProcTableEntry aPte, @Nullable OS_Type aTy, String constructorName) {
+	private void implement_construct_type(Constructable co, ProcTableEntry aPte, @Nullable OS_Type aTy, String constructorName) {
 		if (aTy.getType() == OS_Type.Type.USER) {
 			TypeName tyn = aTy.getTypeName();
 			if (tyn instanceof NormalTypeName) {
@@ -615,6 +616,9 @@ public class DeduceTypes2 {
 				aPte.setClassInvocation(clsinv);
 				aPte.setResolvedElement(best);
 			}
+		}
+		if (co != null) {
+			co.setConstructable(aPte);
 		}
 	}
 

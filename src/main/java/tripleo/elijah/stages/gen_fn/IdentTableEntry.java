@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Created 9/12/20 10:27 PM
  */
-public class IdentTableEntry extends BaseTableEntry {
+public class IdentTableEntry extends BaseTableEntry implements Constructable {
     private final int index;
     private final IdentExpression ident;
 	private final Context pc;
@@ -39,6 +39,7 @@ public class IdentTableEntry extends BaseTableEntry {
 	public TypeTableEntry type;
 	private GeneratedNode resolved;
 	public OS_Element resolved_element;
+	public ProcTableEntry constructable_pte;
 
 	public IdentTableEntry(final int index, final IdentExpression ident, Context pc) {
         this.index  = index;
@@ -111,6 +112,11 @@ public class IdentTableEntry extends BaseTableEntry {
 
 	public void onType(DeducePhase phase, OnType callback) {
 		phase.onType(this, callback);
+	}
+
+	@Override
+	public void setConstructable(ProcTableEntry aPte) {
+		constructable_pte = aPte;
 	}
 }
 

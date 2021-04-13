@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created 9/10/20 4:51 PM
  */
-public class VariableTableEntry extends BaseTableEntry {
+public class VariableTableEntry extends BaseTableEntry implements Constructable {
 	private final int index;
 	private final String name;
 	public final OS_Element el;
@@ -30,6 +30,7 @@ public class VariableTableEntry extends BaseTableEntry {
 	public final VariableTableType vtt;
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public int tempNum = -1;
+	public ProcTableEntry constructable_pte;
 
 	public VariableTableEntry(final int index, final VariableTableType var1, final String name, final TypeTableEntry type, final OS_Element el) {
 		this.index = index;
@@ -101,6 +102,11 @@ public class VariableTableEntry extends BaseTableEntry {
 
 	public Promise<TypeTableEntry, Void, Void> promise() {
 		return typeDeferred.promise();
+	}
+
+	@Override
+	public void setConstructable(ProcTableEntry aPte) {
+		constructable_pte = aPte;
 	}
 }
 
