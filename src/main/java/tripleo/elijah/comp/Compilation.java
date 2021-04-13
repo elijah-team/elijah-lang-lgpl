@@ -57,10 +57,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class Compilation {
 
+	private final int _compilationNumber;
 	private IO io;
 	public ErrSink eee;
 	public final List<OS_Module> modules = new ArrayList<OS_Module>();
@@ -82,6 +84,7 @@ public class Compilation {
 	public Compilation(final ErrSink eee, final IO io) {
 		this.eee = eee;
 		this.io  = io;
+		this._compilationNumber = new Random().nextInt(Integer.MAX_VALUE);
 	}
 
 	public void feedCmdLine(final List<String> args) {
@@ -245,7 +248,7 @@ public class Compilation {
 		}
 
 		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
-			Path path = FileSystems.getDefault().getPath(entry.getKey());
+			Path path = FileSystems.getDefault().getPath(prefix, entry.getKey());
 //			BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
 
 			path.getParent().toFile().mkdirs();
@@ -545,6 +548,15 @@ public class Compilation {
 	}
 
 	// endregion
+
+	public int compilationNumber() {
+		return _compilationNumber;
+	}
+
+	public String getCompilationNumberString() {
+		return String.format("%08x", _compilationNumber);
+	}
+
 }
 
 //
