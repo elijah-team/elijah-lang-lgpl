@@ -349,7 +349,8 @@ public class DeduceTypes2 {
 
 						@Override
 						public void foundElement(OS_Element e) {
-							pte.resolved_element = e;
+//							pte.resolved_element = e;
+							set_resolved_element_pte(e, pte);
 						}
 
 						@Override
