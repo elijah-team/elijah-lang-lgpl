@@ -404,6 +404,11 @@ public class DeduceTypes2 {
 					// TODO Check type compatibility
 					System.err.println("703 "+vte.getName()+" "+vte.potentialTypes());
 					errSink.reportDiagnostic(new CantDecideType(vte, vte.potentialTypes()));
+				} else {
+					// potential_size == 0
+					// Result is handled by phase.typeDecideds, self is always valid
+					if (!(vte.getName().equals("Result") || vte.getName().equals("self")))
+						errSink.reportDiagnostic(new CantDecideType(vte, vte.potentialTypes()));
 				}
 			}
 		}
