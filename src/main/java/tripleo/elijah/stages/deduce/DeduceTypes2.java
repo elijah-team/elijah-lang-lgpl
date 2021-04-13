@@ -188,7 +188,7 @@ public class DeduceTypes2 {
 									//vte.el = best;
 									vte.setStatus(BaseTableEntry.Status.KNOWN, best/*vte.el*/);
 								} else {
-									errSink.reportDignostic(new ResolveError(x, lrl));
+									errSink.reportDiagnostic(new ResolveError(x, lrl));
 								}
 							}
 						}
@@ -223,7 +223,7 @@ public class DeduceTypes2 {
 								});
 							} catch (ResolveError aResolveError) {
 								System.err.println("288 Failed to resolve type "+attached);
-								errSink.reportDignostic(aResolveError);
+								errSink.reportDiagnostic(aResolveError);
 							}
 						} else if (attached.getType() == OS_Type.Type.USER_CLASS) {
 							ClassStatement c = attached.getClassOf();
