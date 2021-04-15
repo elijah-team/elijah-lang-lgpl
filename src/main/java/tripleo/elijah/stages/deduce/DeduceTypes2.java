@@ -73,6 +73,7 @@ public class DeduceTypes2 {
 						OS_Element el2 = generatedFunction.fd.getParent();
 						if (el != el2) {
 							if (el instanceof ClassStatement || el instanceof NamespaceStatement)
+								// NOTE there is no concept of gf here
 								phase.registerResolvedVariable(identTableEntry, el, vs.getName());
 						}
 					}
@@ -190,6 +191,8 @@ public class DeduceTypes2 {
 										errSink.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
 									} else {
 	//									System.out.println("705 " + best);
+										// NOTE that when we set USER_CLASS from USER generic information is
+										// still contained in constructable_pte
 										vte.type.attached = new OS_Type((ClassStatement) best);
 									}
 									//vte.el = best;
