@@ -196,7 +196,11 @@ public class DeduceTypes2 {
 										vte.type.attached = new OS_Type((ClassStatement) best);
 									}
 									//vte.el = best;
-									vte.setStatus(BaseTableEntry.Status.KNOWN, best/*vte.el*/);
+									// NOTE we called resolve_var_table_entry above
+									System.err.println("200 "+best);
+									if (vte.el != null)
+										assert vte.getStatus() == BaseTableEntry.Status.KNOWN;
+//									vte.setStatus(BaseTableEntry.Status.KNOWN, best/*vte.el*/);
 								} else {
 									errSink.reportDiagnostic(new ResolveError(x, lrl));
 								}
