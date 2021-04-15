@@ -71,12 +71,12 @@ public class GenerateC {
 	}
 
 	public static class GenerateResult {
-		public int bufferCounter = 0;
+		private int bufferCounter = 0;
 
-		List<AssociatedBuffer> res = new ArrayList<AssociatedBuffer>();
+		final List<AssociatedBuffer> res = new ArrayList<AssociatedBuffer>();
 
-		public void add(Buffer b, GeneratedNode n, int counter, TY ty) {
-			res.add(new AssociatedBuffer(ty, b, n, counter));
+		public void add(Buffer b, GeneratedNode n, TY ty) {
+			res.add(new AssociatedBuffer(ty, b, n, ++bufferCounter));
 		}
 
 		public List<AssociatedBuffer> results() {
@@ -84,7 +84,7 @@ public class GenerateC {
 		}
 
 		public void addFunction(GeneratedFunction aGeneratedFunction, Buffer aBuffer, TY aTY) {
-			add(aBuffer, aGeneratedFunction, ++bufferCounter, aTY);
+			add(aBuffer, aGeneratedFunction, aTY);
 		}
 
 		public enum TY {
@@ -92,21 +92,16 @@ public class GenerateC {
 		}
 
 		public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf) {
-			add(aBuf, aClass, ++bufferCounter, ty);
+			add(aBuf, aClass, ty);
 		}
 
 		public void addNamespace(TY ty, GeneratedNamespace aNamespace, Buffer aBuf) {
-			add(aBuf, aNamespace, ++bufferCounter, ty);
+			add(aBuf, aNamespace, ty);
 		}
 	}
 
 	public GenerateC(final OS_Module m) {
 		this.module = m;
-	}
-
-	@Deprecated public GenerateResult generateCode2(Collection<GeneratedFunction> generatedFunctions) {
-		final Collection<GeneratedNode> generatedNodes = functions_to_list_of_generated_nodes(generatedFunctions);
-		return generateCode(generatedNodes);
 	}
 
 	@NotNull
@@ -118,11 +113,6 @@ public class GenerateC {
 				return input;
 			}
 		});
-	}
-
-	@Deprecated public GenerateResult generateCode3(Collection<GeneratedClass> aGeneratedClasses) {
-		final Collection<GeneratedNode> generatedNodes = classes_to_list_of_generated_nodes(aGeneratedClasses);
-		return generateCode(generatedNodes);
 	}
 
 	@NotNull
