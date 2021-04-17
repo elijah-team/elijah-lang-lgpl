@@ -168,6 +168,7 @@ classScope[ClassStatement cr]
     ( constructorDef[cr]
     | destructorDef[cr]
     | functionDef[cr.funcDef()]
+    | defFunctionDef[cr.defFuncDef()]
     | varStmt[cr.statementClosure(), cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | tal=typeAlias[cr]     {cr.add(tal);} //[cr.typeAlias()]

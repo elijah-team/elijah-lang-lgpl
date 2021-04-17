@@ -158,6 +158,10 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 		return new FunctionDef(this, getContext());
 	}
 
+	public DefFunctionDef defFuncDef() {
+		return new DefFunctionDef(this, getContext());
+	}
+
 	public PropertyStatement prop() {
 		PropertyStatement propertyStatement = new PropertyStatement(this, getContext());
 		add(propertyStatement);
@@ -211,6 +215,7 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 			}
 		});
 	}
+
 }
 
 //
