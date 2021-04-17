@@ -28,7 +28,7 @@ public class DefFunctionDef extends FunctionDef {
 	// wont use parent scope.items.add so this is ok
 	public void setExpr(final IExpression aExpr) {
 		_expr = aExpr;
-		_items.add((FunctionItem) _expr);
+		_items.add(new StatementWrapper(_expr, getContext(), this));
 	}
 
 	List<FunctionItem> _items = new ArrayList<FunctionItem>();
