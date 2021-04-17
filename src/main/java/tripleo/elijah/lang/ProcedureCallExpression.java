@@ -9,8 +9,7 @@
 package tripleo.elijah.lang;
 
 // TODO is ExpressionList an IExpression?
-// TODO Is ProcedureCallExpression a StatementItem?
-public class ProcedureCallExpression implements StatementItem, /*FunctionItem,*/ IExpression {
+public class ProcedureCallExpression implements IExpression {
 
 //	public ProcedureCallExpression(final Token aToken, final ExpressionList aExpressionList, final Token aToken1) {
 //		throw new NotImplementedException();
