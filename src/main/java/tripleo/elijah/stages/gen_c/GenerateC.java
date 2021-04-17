@@ -12,6 +12,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.AnnotationPart;
 import tripleo.elijah.lang.CharLitExpression;
 import tripleo.elijah.lang.ClassStatement;
@@ -54,6 +55,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
  */
 public class GenerateC {
 	private final OS_Module module;
+	private final ErrSink errSink;
 
 	public static class AssociatedBuffer {
 		public final int counter;
@@ -102,6 +104,7 @@ public class GenerateC {
 
 	public GenerateC(final OS_Module m) {
 		this.module = m;
+		errSink = module.parent.eee;
 	}
 
 	@NotNull
@@ -128,7 +131,6 @@ public class GenerateC {
 
 	public GenerateResult generateCode(final Collection<GeneratedNode> lgf) {
 		GenerateResult gr = new GenerateResult();
-		Buffer b;
 
 		for (final GeneratedNode generatedNode : lgf) {
 			if (generatedNode instanceof GeneratedFunction) {
@@ -146,21 +148,21 @@ public class GenerateC {
 						}
 					}
 				} catch (final IOException e) {
-					module.parent.eee.exception(e);
+					errSink.exception(e);
 				}
 			} else if (generatedNode instanceof GeneratedClass) {
 				try {
 					GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 					generate_class(generatedClass, gr);
 				} catch (final IOException e) {
-					module.parent.eee.exception(e);
+					errSink.exception(e);
 				}
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				try {
 					GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
 					generate_namespace(generatedNamespace, gr);
 				} catch (final IOException e) {
-					module.parent.eee.exception(e);
+					errSink.exception(e);
 				}
 			}
 		}
