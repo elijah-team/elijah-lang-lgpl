@@ -18,8 +18,8 @@ import java.util.List;
 
 public class DefFunctionDef extends FunctionDef {
 
-	public DefFunctionDef(OS_Element element, Context context) {
-		super(element, context);
+	public DefFunctionDef(OS_Element aElement, Context aContext) {
+		super(aElement, aContext);
 	}
 
 	private IExpression _expr;
