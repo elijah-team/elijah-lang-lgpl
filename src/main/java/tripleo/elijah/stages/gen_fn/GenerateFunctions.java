@@ -1001,11 +1001,10 @@ public class GenerateFunctions {
 		final ExpressionList args = pce.getArgs();
 		final InstructionArgument left_ia;
 		final List<InstructionArgument> right_ia;
-		if (args != null)
-			right_ia = new ArrayList<InstructionArgument>(args.size()+1);
-		else {
-			right_ia = new ArrayList<InstructionArgument>(1);
-		}
+		//
+		final int initialCapacity = args != null ? args.size() + 1 : 1;
+		right_ia = new ArrayList<InstructionArgument>(initialCapacity);
+		//
 		if (left.is_simple()) {
 			if (left instanceof IdentExpression) {
 				// for ident(xyz...)
