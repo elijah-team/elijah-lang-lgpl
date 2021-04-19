@@ -113,6 +113,13 @@ public class DeducePhase {
 				}
 				lgf.addAll(generatedFunctions);
 			}
+			if (lgci instanceof GeneratedNamespace) {
+				final Collection<GeneratedFunction> generatedFunctions = ((GeneratedNamespace) lgci).functionMap.values();
+				for (GeneratedFunction generatedFunction : generatedFunctions) {
+					generatedFunction.setClass(lgci);
+				}
+				lgf.addAll(generatedFunctions);
+			}
 		}
 
 		generatedClasses = lgc;
@@ -144,6 +151,13 @@ public class DeducePhase {
 			for (GeneratedNode lgci : lgc) {
 				if (lgci instanceof GeneratedClass) {
 					final Collection<GeneratedFunction> generatedFunctions = ((GeneratedClass) lgci).functionMap.values();
+					for (GeneratedFunction generatedFunction : generatedFunctions) {
+						generatedFunction.setClass(lgci);
+					}
+					lgf.addAll(generatedFunctions);
+				}
+				if (lgci instanceof GeneratedNamespace) {
+					final Collection<GeneratedFunction> generatedFunctions = ((GeneratedNamespace) lgci).functionMap.values();
 					for (GeneratedFunction generatedFunction : generatedFunctions) {
 						generatedFunction.setClass(lgci);
 					}

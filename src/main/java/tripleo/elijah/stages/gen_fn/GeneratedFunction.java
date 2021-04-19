@@ -43,7 +43,7 @@ public class GeneratedFunction implements GeneratedNode {
 	public List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
 	private int label_count = 0;
 	private int _nextTemp = 0;
-	private GeneratedClass genClass;
+	private GeneratedNode genClass;
 	private GeneratedContainerNC parent;
 
 	public GeneratedFunction(final @Nullable FunctionDef functionDef) {
@@ -426,8 +426,8 @@ public class GeneratedFunction implements GeneratedNode {
     }
 
 	public void setClass(GeneratedNode aNode) {
-		assert aNode instanceof GeneratedClass;
-		genClass = (GeneratedClass) aNode;
+//		assert aNode instanceof GeneratedClass;
+		genClass = aNode;
 	}
 
 	public int getCode() {
@@ -444,6 +444,10 @@ public class GeneratedFunction implements GeneratedNode {
 
 	public GeneratedContainerNC getParent() {
 		return parent;
+	}
+
+	public GeneratedNode getGenClass() {
+		return genClass;
 	}
 }
 
