@@ -17,6 +17,7 @@ import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
 
 import java.io.File;
 
@@ -80,6 +81,11 @@ public class OutputStrategyC {
 	}
 
 	public String nameForFunction(GeneratedFunction generatedFunction) {
+		GeneratedNode c = generatedFunction.getGenClass();
+		if (c instanceof GeneratedClass)
+			return nameForClass((GeneratedClass) c, GenerateC.GenerateResult.TY.IMPL);
+		else if (c instanceof GeneratedNamespace)
+			return nameForNamespace((GeneratedNamespace) c, GenerateC.GenerateResult.TY.IMPL);
 		return null;
 	}
 
