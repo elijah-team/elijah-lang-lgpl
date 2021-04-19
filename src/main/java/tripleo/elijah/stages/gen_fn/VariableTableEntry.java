@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created 9/10/20 4:51 PM
  */
-public class VariableTableEntry extends BaseTableEntry implements Constructable {
+public class VariableTableEntry extends BaseTableEntry implements Constructable, TableEntryIV {
 	private final int index;
 	private final String name;
 	public final OS_Element el;

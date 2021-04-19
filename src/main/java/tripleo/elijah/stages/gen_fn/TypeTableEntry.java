@@ -19,11 +19,12 @@ import tripleo.elijah.lang.OS_Type;
 public class TypeTableEntry {
     final int index;
     public final Type lifetime;
+    public final TableEntryIV tableEntry;
     public @Nullable OS_Type attached;
     public final IExpression expression;
     private GeneratedContainerNC _resolved;
 
-    public TypeTableEntry(final int index, final Type lifetime, @Nullable final OS_Type attached, final IExpression expression) {
+    public TypeTableEntry(final int index, final Type lifetime, @Nullable final OS_Type attached, final IExpression expression, TableEntryIV aTableEntryIV) {
         this.index = index;
         this.lifetime = lifetime;
         if (attached == null || (attached.getType() == OS_Type.Type.USER && attached.getTypeName() == null))
@@ -31,6 +32,7 @@ public class TypeTableEntry {
         else
             this.attached = attached;
         this.expression = expression;
+        this.tableEntry = aTableEntryIV;
     }
 
     @Override @NotNull

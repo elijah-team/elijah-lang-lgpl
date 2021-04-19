@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created 9/12/20 10:07 PM
  */
-public class ProcTableEntry {
+public class ProcTableEntry implements TableEntryIV {
 	public final int index;
 	public final List<TypeTableEntry> args;
 	/**
