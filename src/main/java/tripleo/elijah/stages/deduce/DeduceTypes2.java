@@ -1549,6 +1549,23 @@ public class DeduceTypes2 {
 							}
 						} else {
 							TypeTableEntry tte = pot.get(0);
+							if (tte.expression instanceof ProcedureCallExpression) {
+								if (tte.tableEntry != null) {
+									assert tte.tableEntry instanceof ProcTableEntry;
+									ProcTableEntry pte = (ProcTableEntry) tte.tableEntry;
+									IdentIA x = (IdentIA) pte.expression_num;
+									@NotNull IdentTableEntry y = x.getEntry();
+									assert y.resolved_element != null;
+									FunctionInvocation fi = new FunctionInvocation((FunctionDef) y.resolved_element, pte);
+									int yyy=2;
+									if (pte.getFunctionInvocation() == null) {
+										pte.setFunctionInvocation(fi);
+									}
+									el = y.resolved_element;
+									ectx = el.getContext();
+								}
+							}
+/*
 							OS_Element el2 = DeduceLookupUtils.lookup(tte.expression.getLeft(), ectx);
 							if (el2 == null) {
 								System.err.println("1062 "+tte.expression.getLeft());
@@ -1578,6 +1595,7 @@ public class DeduceTypes2 {
 									throw new NotImplementedException();
 								}
 							}
+*/
 						}
 					}
 				} else {
