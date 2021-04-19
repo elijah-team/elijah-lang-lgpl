@@ -26,7 +26,6 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.stages.gen_c.GenerateC;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.generate.ElSystem;
 import tripleo.elijah.stages.generate.OutputStrategy;
@@ -41,15 +40,7 @@ import tripleo.util.buffer.TextBuffer;
 import tripleo.util.io.CharSink;
 import tripleo.util.io.FileCharSink;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
@@ -211,7 +202,7 @@ public class Compilation {
 		Multimap<String, Buffer> mb = ArrayListMultimap.create();
 
 		for (GenerateC.AssociatedBuffer ab : input.results()) {
-			if (ab.node instanceof GeneratedFunction) continue;
+//			if (ab.node instanceof GeneratedFunction) continue;
 
 			mb.put(ab.output, ab.buffer);
 		}
