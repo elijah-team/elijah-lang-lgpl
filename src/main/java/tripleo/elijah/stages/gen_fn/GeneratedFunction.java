@@ -235,11 +235,19 @@ public class GeneratedFunction implements GeneratedNode {
 	// endregion
 
 	public @NotNull TypeTableEntry newTypeTableEntry(final TypeTableEntry.Type type1, final OS_Type type) {
-		return newTypeTableEntry(type1, type, null);
+		return newTypeTableEntry(type1, type, null, null);
+	}
+
+	public @NotNull TypeTableEntry newTypeTableEntry(final TypeTableEntry.Type type1, final OS_Type type, TableEntryIV aTableEntryIV) {
+		return newTypeTableEntry(type1, type, null, aTableEntryIV);
 	}
 
 	public @NotNull TypeTableEntry newTypeTableEntry(final TypeTableEntry.Type type1, final OS_Type type, final IExpression expression) {
-		final TypeTableEntry typeTableEntry = new TypeTableEntry(tte_list.size(), type1, type, expression);
+		return newTypeTableEntry(type1, type, expression, null);
+	}
+
+	public @NotNull TypeTableEntry newTypeTableEntry(final TypeTableEntry.Type type1, final OS_Type type, final IExpression expression, TableEntryIV aTableEntryIV) {
+		final TypeTableEntry typeTableEntry = new TypeTableEntry(tte_list.size(), type1, type, expression, aTableEntryIV);
 		tte_list.add(typeTableEntry);
 		return typeTableEntry;
 	}
