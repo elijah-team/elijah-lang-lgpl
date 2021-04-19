@@ -22,6 +22,7 @@ import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,7 +34,6 @@ public class PipelineLogic {
 	final DeducePhase dp = new DeducePhase();
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
 	public GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
-	public boolean verbose = true;
 
 	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
 		for (OS_Module mod : mods) {
@@ -50,20 +50,20 @@ public class PipelineLogic {
 			} catch (IOException e) {
 				mod.parent.eee.exception(e);
 			}
-			if (ggr != null) {
-				if (verbose) {
-					for (GenerateC.AssociatedBuffer ab : gr.results()) {
-						System.out.println("---------------------------------------------------------------");
-						System.out.println(ab.counter);
-						System.out.println(ab.node.identityString());
-						System.out.println(ab.buffer.getText());
-						System.out.println("---------------------------------------------------------------");
-					}
-				}
-//				gr.results().addAll(ggr.results());
-			}
 		}
 		gr = ggr;
+	}
+
+	public static void debug_buffers(GenerateC.GenerateResult gr, PrintStream stream) {
+		for (GenerateC.AssociatedBuffer ab : gr.results()) {
+			stream.println("---------------------------------------------------------------");
+			stream.println(ab.counter);
+			stream.println(ab.ty);
+			stream.println(ab.output);
+			stream.println(ab.node.identityString());
+			stream.println(ab.buffer.getText());
+			stream.println("---------------------------------------------------------------");
+		}
 	}
 
 	protected void run2(OS_Module mod, List<GeneratedNode> lgc) {

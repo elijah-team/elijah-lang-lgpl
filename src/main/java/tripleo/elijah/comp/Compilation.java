@@ -154,8 +154,7 @@ public class Compilation {
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
-					/*PipelineLogic*/ pipeline = new PipelineLogic();
-					pipeline.verbose = false;
+					pipeline = new PipelineLogic();
 					ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 					for (final OS_Module module : modules) {
 						if (false) {
@@ -180,6 +179,13 @@ public class Compilation {
 					pipeline.generate(lgc);
 
 					write_files(pipeline.gr);
+					{
+						final File file1 = new File("COMP", getCompilationNumberString());
+						file1.mkdirs();
+
+						PrintStream db_stream = new PrintStream(new File(file1, "buffers.txt"));
+						PipelineLogic.debug_buffers(pipeline.gr, db_stream);
+					}
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
