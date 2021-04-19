@@ -19,16 +19,7 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.lang2.SpecialVariables;
-import tripleo.elijah.stages.gen_fn.BaseTableEntry;
-import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
-import tripleo.elijah.stages.gen_fn.Constructable;
-import tripleo.elijah.stages.gen_fn.GeneratedClass;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
-import tripleo.elijah.stages.gen_fn.IdentTableEntry;
-import tripleo.elijah.stages.gen_fn.ProcTableEntry;
-import tripleo.elijah.stages.gen_fn.TypeTableEntry;
-import tripleo.elijah.stages.gen_fn.VariableTableEntry;
+import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.ConstTableIA;
 import tripleo.elijah.stages.instructions.FnCallArgs;
 import tripleo.elijah.stages.instructions.IdentIA;
@@ -37,6 +28,7 @@ import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.InstructionName;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.ProcIA;
+import tripleo.elijah.stages.instructions.VariableTableType;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -558,108 +550,151 @@ public class DeduceTypes2 {
 		}
 	}
 
-	void implement_construct(GeneratedFunction generatedFunction, Instruction instruction) {
-		final int pte_num = ((ProcIA) instruction.getArg(0)).getIndex();
-		final ProcTableEntry pte = generatedFunction.getProcTableEntry(pte_num);
-		{
-			InstructionArgument expression = pte.expression_num;
+	class Implement_construct {
+
+		private final GeneratedFunction generatedFunction;
+		private final Instruction instruction;
+
+		final ProcTableEntry pte;
+		private final InstructionArgument expression;
+
+		public Implement_construct(GeneratedFunction aGeneratedFunction, Instruction aInstruction) {
+			// README all these asserts are redundant, I know
+			generatedFunction = aGeneratedFunction;
+			instruction = aInstruction;
+
+			assert instruction.getName() == InstructionName.CONSTRUCT;
+			assert instruction.getArg(0) instanceof ProcIA;
+
+			final int pte_num = ((ProcIA) instruction.getArg(0)).getIndex();
+			pte = generatedFunction.getProcTableEntry(pte_num);
+
+			expression = pte.expression_num;
+
+			assert expression instanceof IntegerIA || expression instanceof IdentIA;
+		}
+
+		public void action() {
 			if (expression instanceof IntegerIA) {
-				VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
-				assert vte.type.attached != null; // TODO will fail when empty variable expression
-				@Nullable OS_Type ty = vte.type.attached;
-				implement_construct_type((Constructable) expression, pte, ty, null);
+				action_IntegerIA();
 			} else if (expression instanceof IdentIA) {
-				IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(expression));
-				@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(expression);
-				{
-					OS_Element el = null;
-					Context ectx = generatedFunction.getFD().getContext();
-					for (InstructionArgument ia2 : x) {
-						if (ia2 instanceof IntegerIA) {
-							@NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(ia2));
-//							LookupResultList lrl = ectx.lookup(vte.getName());
-							el = vte.el;//lrl.chooseBest(null);
-							assert el != null; // TODO will fail if we try to construct a tmp var, but we never try to do that
-							ectx = el.getContext();
-						} else if (ia2 instanceof IdentIA) {
-							@NotNull IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(ia2));
-							final String s = idte2.getIdent().toString();
-							LookupResultList lrl = ectx.lookup(s);
-							OS_Element el2 = lrl.chooseBest(null);
-							if (el2 == null) {
-								int yy=2;
-								assert el instanceof VariableStatement;
-								VariableStatement vs = (VariableStatement) el;
-								@NotNull TypeName tn = vs.typeName();
-								OS_Type ty = new OS_Type(tn);
-								// s is constructor name
-								implement_construct_type(idte2, pte, ty, s);
-							} else {
-								el = el2;
-								ectx = el2.getContext();
-							}
-						} else {
-							throw new NotImplementedException();
-						}
-					}
-				}
+				action_IdentIA();
 			} else {
 				throw new NotImplementedException();
 			}
 		}
-	}
 
-	private void implement_construct_type(Constructable co, ProcTableEntry aPte, @Nullable OS_Type aTy, String constructorName) {
-		if (aTy.getType() == OS_Type.Type.USER) {
-			TypeName tyn = aTy.getTypeName();
-			if (tyn instanceof NormalTypeName) {
-				final NormalTypeName tyn1 = (NormalTypeName) tyn;
-				String s = tyn1.getName();
-				LookupResultList lrl = tyn1.getContext().lookup(s);
-				OS_Element best = lrl.chooseBest(null);
-				assert best instanceof ClassStatement;
-				List<TypeName> gp = ((ClassStatement) best).getGenericPart();
-				ClassInvocation clsinv = new ClassInvocation((ClassStatement) best, constructorName);
-				if (gp.size() == 0) {
-
-				} else {
-					TypeNameList gp2 = ((NormalTypeName) tyn).getGenericPart();
-					for (int i = 0; i < gp.size(); i++) {
-						final TypeName typeName = gp2.get(i);
-						@NotNull OS_Type typeName2;
-						try {
-							typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
-							clsinv.set(i, gp.get(i), typeName2);
-						} catch (ResolveError aResolveError) {
-							aResolveError.printStackTrace();
+		public void action_IdentIA() {
+			IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(expression));
+			@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(expression);
+			{
+				OS_Element el = null;
+				Context ectx = generatedFunction.getFD().getContext();
+				for (InstructionArgument ia2 : x) {
+					if (ia2 instanceof IntegerIA) {
+						@NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(ia2));
+						// TODO will fail if we try to construct a tmp var, but we never try to do that
+						assert vte.vtt != VariableTableType.TEMP;
+						assert vte.el  != null;
+						el    = vte.el;
+						ectx  = el.getContext();
+					} else if (ia2 instanceof IdentIA) {
+						@NotNull IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(ia2));
+						final String s = idte2.getIdent().toString();
+						LookupResultList lrl = ectx.lookup(s);
+						OS_Element el2 = lrl.chooseBest(null);
+						if (el2 == null) {
+							int yy=2;
+							assert el instanceof VariableStatement;
+							VariableStatement vs = (VariableStatement) el;
+							@NotNull TypeName tn = vs.typeName();
+							OS_Type ty = new OS_Type(tn);
+							// s is constructor name
+							implement_construct_type(idte2, ty, s);
+							return;
+						} else {
+							el = el2;
+							ectx = el2.getContext();
 						}
-					}
-				}
-				aPte.setClassInvocation(clsinv);
-				aPte.setResolvedElement(best);
-				// set FunctionInvocation with pte args
-				{
-					ConstructorDef cc = null;
-					if (constructorName != null) {
-						Collection<ConstructorDef> cs = ((ClassStatement) best).getConstructors();
-						for (ConstructorDef c : cs) {
-							if (c.name().equals(constructorName)) {
-								cc = c;
-								break;
-							}
-						}
-					}
-					// TODO also check arguments
-					/*if (cc != null)*/ {
-						FunctionInvocation fi = new FunctionInvocation(cc, aPte);
-						aPte.setFunctionInvocation(fi);
+//						implement_construct_type(idte/*??*/, ty, null); // TODO how bout when there is no ctor name
+					} else {
+						throw new NotImplementedException();
 					}
 				}
 			}
 		}
-		if (co != null) {
-			co.setConstructable(aPte);
+
+		public void action_IntegerIA() {
+			VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
+			assert vte.type.attached != null; // TODO will fail when empty variable expression
+			@Nullable OS_Type ty = vte.type.attached;
+			implement_construct_type(vte, ty, null);
 		}
+
+		private void implement_construct_type(Constructable co, @Nullable OS_Type aTy, String constructorName) {
+			assert aTy != null;
+			if (aTy.getType() == OS_Type.Type.USER) {
+				TypeName tyn = aTy.getTypeName();
+				if (tyn instanceof NormalTypeName) {
+					final NormalTypeName tyn1 = (NormalTypeName) tyn;
+					String s = tyn1.getName();
+					LookupResultList lrl = tyn1.getContext().lookup(s);
+					OS_Element best = lrl.chooseBest(null);
+					assert best instanceof ClassStatement;
+					List<TypeName> gp = ((ClassStatement) best).getGenericPart();
+					ClassInvocation clsinv = new ClassInvocation((ClassStatement) best, constructorName);
+					if (gp.size() == 0) {
+
+					} else {
+						TypeNameList gp2 = ((NormalTypeName) tyn).getGenericPart();
+						for (int i = 0; i < gp.size(); i++) {
+							final TypeName typeName = gp2.get(i);
+							@NotNull OS_Type typeName2;
+							try {
+								typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
+								clsinv.set(i, gp.get(i), typeName2);
+							} catch (ResolveError aResolveError) {
+								aResolveError.printStackTrace();
+							}
+						}
+					}
+					pte.setClassInvocation(clsinv);
+					pte.setResolvedElement(best);
+					// set FunctionInvocation with pte args
+					{
+						ConstructorDef cc = null;
+						if (constructorName != null) {
+							Collection<ConstructorDef> cs = ((ClassStatement) best).getConstructors();
+							for (ConstructorDef c : cs) {
+								if (c.name().equals(constructorName)) {
+									cc = c;
+									break;
+								}
+							}
+						}
+						// TODO also check arguments
+						{
+							FunctionInvocation fi = new FunctionInvocation(cc, pte);
+							pte.setFunctionInvocation(fi);
+						}
+					}
+				}
+			}
+			if (co != null) {
+				co.setConstructable(pte);
+			}
+		}
+
+	}
+
+	void implement_construct(GeneratedFunction generatedFunction, Instruction instruction) {
+		final Implement_construct ic = newImplement_construct(generatedFunction, instruction);
+		ic.action();
+	}
+
+	@NotNull
+	public DeduceTypes2.Implement_construct newImplement_construct(GeneratedFunction generatedFunction, Instruction instruction) {
+		return new Implement_construct(generatedFunction, instruction);
 	}
 
 	void resolve_function_return_type(GeneratedFunction generatedFunction) {
