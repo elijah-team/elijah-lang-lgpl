@@ -1232,6 +1232,69 @@ public class DeduceTypes2 {
 
 //				tte.attached = new OS_FuncType((FunctionDef) best); // TODO: what is this??
 				//vte.addPotentialType(instructionIndex, tte);
+			} else if (best instanceof FormalArgListItem) {
+				final FormalArgListItem fali = (FormalArgListItem) best;
+				String s = fali.name();
+				@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(s);
+				if (vte_ia != null) {
+					VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(vte_ia));
+
+//					final @Nullable OS_Type ty2 = vte2.type.attached;
+					vte2.typeDeferred.promise().done(new DoneCallback<TypeTableEntry>() {
+						@Override
+						public void onDone(TypeTableEntry result) {
+//							assert false; // TODO this code is never reached
+							final @Nullable OS_Type ty2 = result.attached;
+							assert ty2 != null;
+							OS_Type rtype = null;
+							try {
+								rtype = resolve_type(ty2, ctx);
+							} catch (ResolveError resolveError) {
+//								resolveError.printStackTrace();
+								errSink.reportError("Cant resolve " + ty2); // TODO print better diagnostic
+								return;
+							}
+							LookupResultList lrl2 = rtype.getClassOf().getContext().lookup("__getitem__");
+							OS_Element best2 = lrl2.chooseBest(null);
+							if (best2 != null) {
+								if (best2 instanceof FunctionDef) {
+									FunctionDef fd = (FunctionDef) best2;
+									ProcTableEntry pte = null;
+									forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
+										@Override
+										public void typeDecided(final OS_Type aType) {
+											assert fd == generatedFunction.getFD();
+											//
+											@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, vte2); // TODO expression?
+											vte2.type = tte1;
+										}
+									});
+								} else {
+									throw new NotImplementedException();
+								}
+							} else {
+								throw new NotImplementedException();
+							}
+						}
+					});
+//					vte2.onType(phase, new OnType() {
+//						@Override public void typeDeduced(final OS_Type ty2) {
+//						}
+//
+//						@Override
+//						public void noTypeFound() {
+//							throw new NotImplementedException();
+//						}
+//					});
+/*
+					if (ty2 == null) {
+						@NotNull TypeTableEntry tte3 = generatedFunction.newTypeTableEntry(
+								TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
+						vte2.type = tte3;
+//						ty2 = vte2.type.attached; // TODO this is final, but why assign anyway?
+					}
+*/
+				}
 			} else {
 				final int y=2;
 				throw new NotImplementedException();
