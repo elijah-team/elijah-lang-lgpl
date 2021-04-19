@@ -36,7 +36,10 @@ public class OutputStrategyC {
 			StringBuilder sb = new StringBuilder();
 			sb.append("/Prelude/");
 			sb.append("Prelude");
-			sb.append(".c");
+			if (aTy == GenerateC.GenerateResult.TY.IMPL)
+				sb.append(".c");
+			else
+				sb.append(".h");
 			return sb.toString();
 		}
 		String filename;
