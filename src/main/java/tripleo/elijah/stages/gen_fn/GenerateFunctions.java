@@ -756,7 +756,7 @@ public class GenerateFunctions {
 			int pte_index = addProcTableEntry(fe, null, get_args_types(fe.getArgs(), gf), gf);
 			final int ii4 = add_i(gf, InstructionName.AGNF, List_of(new IntegerIA(vte, gf), new IntegerIA(pte_index, gf)), cctx);
 			final VariableTableEntry vte3_func = gf.getVarTableEntry(vte);
-			final TypeTableEntry tte_func = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, value);
+			final TypeTableEntry tte_func = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_FuncExprType(fe), value);
 			vte3_func.addPotentialType(ii4, tte_func);
 			break;
 		default:
