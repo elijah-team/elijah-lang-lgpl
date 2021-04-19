@@ -298,7 +298,7 @@ public class DeduceTypes2 {
 						} else if (i2 instanceof IdentIA) {
 							IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(i2));
 							if (idte2.type == null) {
-								idte2.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, idte2.getIdent());
+								idte2.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, idte2.getIdent(), idte2);
 							}
 							LookupResultList lrl1 = fd_ctx.lookup(idte2.getIdent().getText());
 							OS_Element best1 = lrl1.chooseBest(null);
@@ -707,14 +707,14 @@ public class DeduceTypes2 {
 			ClassStatement classStatement = ((ClassStatement) y);
 			OS_Type attached = new OS_Type(classStatement);
 			if (ite.type == null) {
-				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 			} else
 				ite.type.attached = attached;
 		} else if (y instanceof FunctionDef) {
 			FunctionDef functionDef = ((FunctionDef) y);
 			OS_Type attached = new OS_FuncType(functionDef);
 			if (ite.type == null) {
-				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 			} else
 				ite.type.attached = attached;
 		} else if (y instanceof PropertyStatement) {
@@ -737,7 +737,7 @@ public class DeduceTypes2 {
 				throw new IllegalStateException("Unexpected value: " + ps.getTypeName().kindOfType());
 			}
 			if (ite.type == null) {
-				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 			} else
 				ite.type.attached = attached;
 			int yy = 2;
@@ -974,14 +974,14 @@ public class DeduceTypes2 {
 									assert false;
 									assert fd == generatedFunction.getFD();
 									//
-									@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, pte.expression);
+									@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, pte.expression, pte);
 									vte.addPotentialType(instructionIndex, tte);
 								}
 							});
 						} else if (el instanceof ClassStatement) {
 							ClassStatement kl = (ClassStatement) el;
 							OS_Type type = new OS_Type(kl);
-							@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression);
+							@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression, pte);
 							vte.addPotentialType(instructionIndex, tte);
 							vte.setConstructable(pte);
 						} else {
@@ -1062,7 +1062,7 @@ public class DeduceTypes2 {
 							if (best instanceof FormalArgListItem) {
 								@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
 								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
-										TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
+										TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken(), vte1);
 								if (p.isResolved())
 									System.out.printf("890 vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
 								else
@@ -1168,7 +1168,7 @@ public class DeduceTypes2 {
 										public void typeDecided(final OS_Type aType) {
 											assert fd == generatedFunction.getFD();
 											//
-											@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType); // TODO expression?
+											@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, idte); // TODO expression?
 											idte.type = tte1;
 										}
 									});
@@ -1784,7 +1784,7 @@ public class DeduceTypes2 {
 							}
 						} else if (el instanceof FunctionDef) {
 							OS_Type attached = new OS_UnknownType(el);
-							TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+							TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, idte2);
 							idte2.type = tte;
 						}
 					}
@@ -1862,14 +1862,14 @@ public class DeduceTypes2 {
 				ClassStatement classStatement = ((ClassStatement) y);
 				OS_Type attached = new OS_Type(classStatement);
 				if (ite.type == null) {
-					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 				} else
 					ite.type.attached = attached;
 			} else if (y instanceof FunctionDef) {
 				FunctionDef functionDef = ((FunctionDef) y);
 				OS_Type attached = new OS_FuncType(functionDef);
 				if (ite.type == null) {
-					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 				} else
 					ite.type.attached = attached;
 			} else if (y instanceof PropertyStatement) {
@@ -1892,7 +1892,7 @@ public class DeduceTypes2 {
 					throw new IllegalStateException("Unexpected value: " + ps.getTypeName().kindOfType());
 				}
 				if (ite.type == null) {
-					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null);
+					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 				} else
 					ite.type.attached = attached;
 				int yy = 2;
