@@ -1088,8 +1088,10 @@ public class DeduceTypes2 {
 						case 1:
 //							tte.attached = ll.get(0).attached;
 //							vte.addPotentialType(instructionIndex, ll.get(0));
-							assert (!p.isResolved());
-							vte1.typeDeferred.resolve(potentialTypes.get(0));
+							if (p.isResolved())
+								System.out.printf("1047 (vte already resolved) vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, potentialTypes.get(0));
+							else
+								vte1.typeDeferred.resolve(potentialTypes.get(0));
 							break;
 						case 0:
 							LookupResultList lrl = ctx.lookup(e_text);
