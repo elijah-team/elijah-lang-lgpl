@@ -189,6 +189,22 @@ public class DeduceLookupUtils {
 		} else if (best instanceof FunctionDef) {
 			final FunctionDef functionDef = (FunctionDef) best;
 			return new OS_FuncType(functionDef);
+		} else if (best instanceof FormalArgListItem) {
+			final FormalArgListItem fali = (FormalArgListItem) best;
+			if (!fali.typeName().isNull()) {
+				try {
+					OS_Module lets_hope_we_dont_need_this = null;
+					@NotNull OS_Type ty = DeduceTypes2.resolve_type(lets_hope_we_dont_need_this, new OS_Type(fali.typeName()), ctx);
+					return ty;
+				} catch (ResolveError aResolveError) {
+					// TODO This is the cheap way to do it
+					//  Ideally, we would propagate this up the call chain all the way to lookupExpression
+					aResolveError.printStackTrace();
+				}
+				return new OS_Type(fali.typeName());
+			} else {
+				return new OS_UnknownType(fali);
+			}
 		}
 		return null;
 	}
