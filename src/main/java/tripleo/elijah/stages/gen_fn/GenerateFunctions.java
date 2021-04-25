@@ -1062,7 +1062,7 @@ public class GenerateFunctions {
 					}
 				} else {
 					ia = simplify_expression(arg, gf, cctx);
-					iat = null;
+					iat = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null/*README wait to be deduced*/, arg);
 				}
 				right_ia.add(ia);
 				args1.add(iat);
