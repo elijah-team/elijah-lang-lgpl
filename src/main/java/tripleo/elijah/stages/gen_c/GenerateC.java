@@ -107,6 +107,11 @@ public class GenerateC {
 		errSink = module.parent.eee;
 	}
 
+	public GenerateC(final OS_Module m, ErrSink aErrSink) {
+		this.module = m;
+		errSink = aErrSink;
+	}
+
 	@NotNull
 	public static Collection<GeneratedNode> functions_to_list_of_generated_nodes(Collection<GeneratedFunction> generatedFunctions) {
 		return Collections2.transform(generatedFunctions, new Function<GeneratedFunction, GeneratedNode>() {

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.OS_Module;
@@ -56,7 +57,7 @@ public class GetRealTargetNameTest {
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		ident_ia.setPrev(new IntegerIA(int_index, gf));
 		//
-		GenerateC c = new GenerateC(mod);
+		GenerateC c = new GenerateC(mod, new StdErrSink());
 		//
 		Emit.emitting = false;
 		String x = c.getRealTargetName(gf, ident_ia);
