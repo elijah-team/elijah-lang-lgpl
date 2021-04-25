@@ -859,6 +859,9 @@ public class GenerateC {
 		case FUNCTION:
 			z = "<function>";
 			break;
+		case FUNC_EXPR:
+			z = "<function>";
+			break;
 		case USER:
 			System.err.println("Warning: USER TypeName in GenerateC "+ty.getTypeName());
 			z = String.format("Z<%s>", ty.getTypeName().toString());

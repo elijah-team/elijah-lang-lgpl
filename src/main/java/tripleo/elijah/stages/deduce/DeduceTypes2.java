@@ -1599,9 +1599,14 @@ public class DeduceTypes2 {
 								} else
 									ectx = attached.getTypeName().getContext(); // TODO is this right?
 								break;
+							case FUNC_EXPR: {
+								FuncExpr x = (FuncExpr) attached.getElement();
+								ectx = x.getContext();
+								break;
+							}
 							default:
 								System.err.println("1010 " + attached.getType());
-								throw new IllegalStateException("Dont know what youre doing here.");
+								throw new IllegalStateException("Don't know what you're doing here.");
 							}
 						} else {
 							TypeTableEntry tte = pot.get(0);
