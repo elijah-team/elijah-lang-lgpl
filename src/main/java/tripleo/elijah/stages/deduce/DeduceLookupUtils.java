@@ -22,19 +22,14 @@ import java.util.Stack;
  * Created 3/7/21 1:13 AM
  */
 public class DeduceLookupUtils {
-	public static LookupResultList lookupExpression(final IExpression left, final Context ctx) {
+	public static LookupResultList lookupExpression(final IExpression left, final Context ctx) throws ResolveError {
 		switch (left.getKind()) {
 		case QIDENT:
 			final IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
 			return lookupExpression(de, ctx)/*lookup_dot_expression(ctx, de)*/;
 		case DOT_EXP:
-			try {
-				return lookup_dot_expression(ctx, (DotExpression) left);
-			} catch (ResolveError aResolveError) {
-				aResolveError.printStackTrace();
-				return null; // TODO
-			}
-			case IDENT:
+			return lookup_dot_expression(ctx, (DotExpression) left);
+		case IDENT:
 			return ctx.lookup(((IdentExpression) left).getText());
 		default:
 			throw new IllegalArgumentException();
@@ -152,7 +147,12 @@ public class DeduceLookupUtils {
 	@Nullable
 	private static OS_Type deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx) {
 		System.err.println("979 Skipping deduceProcedureCall "+pce);
-		OS_Element best = lookup(pce.getLeft(), ctx);
+		OS_Element best = null;
+		try {
+			best = lookup(pce.getLeft(), ctx);
+		} catch (ResolveError aResolveError) {
+			return null; // TODO should we log this?
+		}
 		if (best == null) return null;
 		int y=2;
 		if (best instanceof ClassStatement) {
@@ -224,7 +224,7 @@ public class DeduceLookupUtils {
 		throw new ResolveError(ident, lrl);
 	}
 
-	static OS_Element lookup(IExpression expression, Context ctx) {
+	static OS_Element lookup(IExpression expression, Context ctx) throws ResolveError {
 		switch (expression.getKind()) {
 		case IDENT:
 			LookupResultList lrl = ctx.lookup(((IdentExpression)expression).getText());

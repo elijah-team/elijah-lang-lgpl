@@ -1,6 +1,7 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.stages.deduce.DeduceLookupUtils;
+import tripleo.elijah.stages.deduce.ResolveError;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.io.File;
@@ -45,7 +46,7 @@ public class TypeOfTypeName implements TypeName {
 		return _ctx;
 	}
 
-	public TypeName resolve(Context ctx) {
+	public TypeName resolve(Context ctx) throws ResolveError {
 //		System.out.println(_typeOf.toString());
 		LookupResultList lrl = DeduceLookupUtils.lookupExpression(_typeOf, ctx);
 		OS_Element best = lrl.chooseBest(null);

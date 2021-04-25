@@ -10,6 +10,7 @@ package tripleo.elijah.lang;
 
 import org.junit.Assert;
 import org.junit.Test;
+import tripleo.elijah.stages.deduce.ResolveError;
 import tripleo.elijah.util.Helpers;
 
 import static org.easymock.EasyMock.*;
@@ -17,7 +18,7 @@ import static org.easymock.EasyMock.*;
 public class TypeOfTypeNameTest {
 
 	@Test
-	public void typeOfSimpleQualident() {
+	public void typeOfSimpleQualident() throws ResolveError {
 		//
 		// CREATE MOCK
 		//
@@ -59,7 +60,7 @@ public class TypeOfTypeNameTest {
 	}
 
 	@Test
-	public void typeOfComplexQualident() {
+	public void typeOfComplexQualident() throws ResolveError {
 		//
 		// CREATE MOCK
 		//
@@ -164,7 +165,7 @@ public class TypeOfTypeNameTest {
 //	}
 
 	@Test
-	public void typeOfComplexQualident2() {
+	public void typeOfComplexQualident2() throws ResolveError {
 		//
 		// CREATE MOCK
 		//
