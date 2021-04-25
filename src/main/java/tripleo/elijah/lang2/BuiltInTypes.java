@@ -17,7 +17,8 @@ public enum BuiltInTypes {
 	SystemInteger(80),
 	Boolean(79),
 	Unit(0),
-	String_(8);
+	String_(8),
+	SystemCharacter(9);
 
 	final int _code;
 	
