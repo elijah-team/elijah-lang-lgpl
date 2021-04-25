@@ -355,7 +355,7 @@ public class DeduceTypes2 {
 //				final InstructionArgument i2 = (instruction.getArg(1));
 				{
 					final IdentIA expression = (IdentIA) pte.expression_num;
-					String x = generatedFunction.getIdentIAPathNormal(expression);
+					final String x = generatedFunction.getIdentIAPathNormal(expression);
 					System.err.println("298 "+x);
 					resolveIdentIA_(context, expression, generatedFunction, new FoundElement(phase) {
 
@@ -367,7 +367,7 @@ public class DeduceTypes2 {
 
 						@Override
 						public void noFoundElement() {
-							assert false;
+							errSink.reportError("370 Can't find callsite "+x);
 						}
 					});
 				}
