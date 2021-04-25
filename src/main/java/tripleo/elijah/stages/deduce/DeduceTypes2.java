@@ -1907,30 +1907,35 @@ public class DeduceTypes2 {
 					if (idte2.type == null) {
 						if (el instanceof VariableStatement) {
 							VariableStatement vs = (VariableStatement) el;
-							if (!vs.typeName().isNull()) {
-								TypeTableEntry tte;
-								OS_Type attached;
-								if (/*vs.typeName() == null &&*/ vs.initialValue() != IExpression.UNASSIGNED) { // TODO was always false
-									attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
-								} else { // if (vs.typeName() != null) {
-									attached = new OS_Type(vs.typeName());
-								}
-//								else
-//									attached = null;
-								if (vs.initialValue() != IExpression.UNASSIGNED) {
-									tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
+							try {
+								if (!vs.typeName().isNull()) {
+									TypeTableEntry tte;
+									OS_Type attached;
+									if (/*vs.typeName() == null &&*/ vs.initialValue() != IExpression.UNASSIGNED) { // TODO was always false
+										attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
+									} else { // if (vs.typeName() != null) {
+										attached = new OS_Type(vs.typeName());
+									}
+	//								else
+	//									attached = null;
+									if (vs.initialValue() != IExpression.UNASSIGNED) {
+										tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
+									} else {
+										tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(vs.typeName())); // TODO where is expression? ie foo.x
+									}
+									idte2.type = tte;
+								} else if (vs.initialValue() != IExpression.UNASSIGNED) {
+									OS_Type attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
+									TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
+									idte2.type = tte;
 								} else {
-									tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(vs.typeName())); // TODO where is expression? ie foo.x
+									System.err.println("Empty Variable Expression");
+									throw new IllegalStateException("Empty Variable Expression");
+	//								return; // TODO call noFoundElement, raise exception
 								}
-								idte2.type = tte;
-							} else if (vs.initialValue() != IExpression.UNASSIGNED) {
-								OS_Type attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
-								TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
-								idte2.type = tte;
-							} else {
-								System.err.println("Empty Variable Expression");
-								throw new IllegalStateException("Empty Variable Expression");
-//								return; // TODO call noFoundElement, raise exception
+							} catch (ResolveError aResolveError) {
+								System.err.println("1937 resolve error "+vs.getName());
+								aResolveError.printStackTrace();
 							}
 						} else if (el instanceof FunctionDef) {
 							OS_Type attached = new OS_UnknownType(el);

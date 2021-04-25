@@ -27,7 +27,7 @@ public class DeduceTypesTest {
 	private OS_Type x;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws ResolveError {
 		final OS_Module mod = new OS_Module();
 		mod.parent = new Compilation(new StdErrSink(), new IO());
 		final ModuleContext mctx = new ModuleContext(mod);

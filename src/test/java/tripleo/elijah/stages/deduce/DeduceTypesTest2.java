@@ -18,10 +18,20 @@ import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.Helpers;
 
+/**
+ * Apr 25, 2021 03:29<br><br>
+ *
+ * <p>
+ * This test should fail. In it's output you see multiple ResolveError's.
+ * These are because the Prelude is not loaded.  The fact that it passes
+ * is due to compromises in the compiler logic that will eventually be
+ * taken out.
+ * </p>
+ */
 public class DeduceTypesTest2 {
 
 	@Test
-	public void testDeduceIdentExpression() {
+	public void testDeduceIdentExpression() throws ResolveError {
 		final OS_Module mod = new OS_Module();
 		mod.parent = new Compilation(new StdErrSink(), new IO());
 		final ModuleContext mctx = new ModuleContext(mod);
@@ -37,8 +47,8 @@ public class DeduceTypesTest2 {
 		final Qualident qu = new Qualident();
 		qu.append(Helpers.string_to_ident("Integer"));
 		((NormalTypeName)vs.typeName()).setName(qu);
-		((NormalTypeName)vs.typeName()).setContext(fd.getContext());
-		final FunctionContext fc = (FunctionContext) fd.getContext(); // TODO needs to be mocked
+		final FunctionContext fc = (FunctionContext) fd.getContext();
+		vs.typeName().setContext(fc);
 		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
 		fd.scope(scope3);

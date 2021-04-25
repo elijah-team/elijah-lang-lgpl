@@ -28,8 +28,13 @@ public class DeduceLookupUtils {
 			final IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
 			return lookupExpression(de, ctx)/*lookup_dot_expression(ctx, de)*/;
 		case DOT_EXP:
-			return lookup_dot_expression(ctx, (DotExpression) left);
-		case IDENT:
+			try {
+				return lookup_dot_expression(ctx, (DotExpression) left);
+			} catch (ResolveError aResolveError) {
+				aResolveError.printStackTrace();
+				return null; // TODO
+			}
+			case IDENT:
 			return ctx.lookup(((IdentExpression) left).getText());
 		default:
 			throw new IllegalArgumentException();
@@ -39,26 +44,36 @@ public class DeduceLookupUtils {
 
 	@Nullable
 	public static OS_Element _resolveAlias(final AliasStatement aliasStatement) {
-		final LookupResultList lrl2;
+		LookupResultList lrl2;
 		if (aliasStatement.getExpression() instanceof Qualident) {
 			final IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
-			if (de instanceof DotExpression)
-				lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
-			else
+			if (de instanceof DotExpression) {
+				try {
+					lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
+				} catch (ResolveError aResolveError) {
+					aResolveError.printStackTrace();
+					lrl2 = new LookupResultList();
+				}
+			} else
 				lrl2 = aliasStatement.getContext().lookup(((IdentExpression) de).getText());
 			return lrl2.chooseBest(null);
 		}
 		// TODO what about when DotExpression is not just simple x.y.z? then alias equivalent to val
 		if (aliasStatement.getExpression() instanceof DotExpression) {
 			final IExpression de = aliasStatement.getExpression();
-			lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
+			try {
+				lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
+			} catch (ResolveError aResolveError) {
+				aResolveError.printStackTrace();
+				lrl2 = new LookupResultList();
+			}
 			return lrl2.chooseBest(null);
 		}
 		lrl2 = aliasStatement.getContext().lookup(((IdentExpression) aliasStatement.getExpression()).getText());
 		return lrl2.chooseBest(null);
 	}
 
-	private static LookupResultList lookup_dot_expression(Context ctx, final DotExpression de) {
+	private static LookupResultList lookup_dot_expression(Context ctx, final DotExpression de) throws ResolveError {
 		final Stack<IExpression> s = dot_expression_to_stack(de);
 		OS_Type t = null;
 		IExpression ss = s.peek();
@@ -104,7 +119,7 @@ public class DeduceLookupUtils {
 		return right_stack;
 	}
 
-	public static OS_Type deduceExpression(@NotNull final IExpression n, final Context context) {
+	public static OS_Type deduceExpression(@NotNull final IExpression n, final Context context) throws ResolveError {
 		switch (n.getKind()) {
 		case IDENT:
 			return deduceIdentExpression((IdentExpression) n, context);
@@ -160,7 +175,7 @@ public class DeduceLookupUtils {
 		}
 	}
 
-	private static OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) {
+	private static OS_Type deduceIdentExpression(final IdentExpression ident, final Context ctx) throws ResolveError {
 		// is this right?
 		LookupResultList lrl = ctx.lookup(ident.getText());
 		OS_Element best = lrl.chooseBest(null);
@@ -206,8 +221,7 @@ public class DeduceLookupUtils {
 				return new OS_UnknownType(fali);
 			}
 		}
-		throw new NotImplementedException();
-//		return null;
+		throw new ResolveError(ident, lrl);
 	}
 
 	static OS_Element lookup(IExpression expression, Context ctx) {
