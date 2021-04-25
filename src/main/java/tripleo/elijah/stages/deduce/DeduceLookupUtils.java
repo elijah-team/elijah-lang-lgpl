@@ -206,7 +206,8 @@ public class DeduceLookupUtils {
 				return new OS_UnknownType(fali);
 			}
 		}
-		return null;
+		throw new NotImplementedException();
+//		return null;
 	}
 
 	static OS_Element lookup(IExpression expression, Context ctx) {
