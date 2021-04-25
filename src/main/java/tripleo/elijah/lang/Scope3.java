@@ -56,6 +56,10 @@ public class Scope3 implements Documentable {
 		add(new StatementWrapper(expr, parent.getContext(), parent)); // TODO is this right?
 	}
 
+	public VariableSequence varSeq() {
+		return asc.varSeq(asc.getParent().getContext());
+	}
+
 	private class Scope3StatementClosure implements StatementClosure {
 		@Override
 		public void constructExpression(final IExpression aExpr, final ExpressionList aO) {

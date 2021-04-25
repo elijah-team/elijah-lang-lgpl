@@ -31,7 +31,7 @@ public class DeduceTypesTest2 {
 		final FunctionDef fd = cs.funcDef();
 		fd.setName((Helpers.string_to_ident("test")));
 		Scope3 scope3 = new Scope3(fd);
-		final VariableSequence vss = scope3.statementClosure().varSeq(fd.getContext());
+		final VariableSequence vss = scope3.varSeq();
 		final VariableStatement vs = vss.next();
 		vs.setName((Helpers.string_to_ident("x")));
 		final Qualident qu = new Qualident();
