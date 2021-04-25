@@ -900,8 +900,11 @@ public class DeduceTypes2 {
 						while (best instanceof AliasStatement) {
 							best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
 						}
-						if (best == null)
+						if (best == null) {
+							if (tn.asSimpleString().equals("Any"))
+								return new OS_AnyType();
 							throw new ResolveError(tn1, lrl);
+						}
 
 						return new OS_Type((ClassStatement) best);
 					}
