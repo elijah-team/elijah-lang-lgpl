@@ -94,7 +94,7 @@ namespace {
 	var ExitCode = ExitSuccess
 }
 
-abstract class Character {
+class abstract Character {
 
 }
 
