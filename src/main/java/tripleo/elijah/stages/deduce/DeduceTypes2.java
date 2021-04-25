@@ -862,7 +862,7 @@ public class DeduceTypes2 {
 						OS_Module prelude = module.prelude;
 						if (prelude == null) // README Assume `module' IS prelude
 							prelude = module;
-						final LookupResultList lrl = prelude.getContext().lookup("SystemCharacter"); // TODO what about widths
+						final LookupResultList lrl = prelude.getContext().lookup("SystemCharacter");
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
