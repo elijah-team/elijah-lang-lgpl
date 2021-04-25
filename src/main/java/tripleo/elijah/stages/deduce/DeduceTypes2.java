@@ -1092,16 +1092,15 @@ public class DeduceTypes2 {
 //						fi.setClassInvocation(ci);
 			pte.setClassInvocation(ci);
 			pte.setFunctionInvocation(fi);
+
+			if (co != null)
+				co.setConstructable(pte);
 		} else if (e instanceof FunctionDef) {
 			FunctionInvocation fi = new FunctionInvocation((FunctionDef) e, pte);
 			pte.setFunctionInvocation(fi);
 		} else {
 			System.err.println("845 Unknown element for ProcTableEntry "+e);
-			return;
 		}
-
-		if (co != null)
-			co.setConstructable(pte);
 	}
 
 	private void do_assign_call_args_ident(GeneratedFunction generatedFunction,
