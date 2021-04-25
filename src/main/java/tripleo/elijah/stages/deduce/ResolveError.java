@@ -14,6 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.diagnostic.Diagnostic;
 import tripleo.elijah.diagnostic.Locatable;
+import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.LookupResult;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.TypeName;
@@ -29,10 +30,18 @@ import java.util.List;
 public class ResolveError extends Exception implements Diagnostic {
 	private final TypeName typeName;
 	private final LookupResultList lrl;
+	private final IdentExpression ident;
 
 	public ResolveError(TypeName typeName, LookupResultList lrl) {
 		this.typeName = typeName;
 		this.lrl = lrl;
+		this.ident = null;
+	}
+
+	public ResolveError(IdentExpression aIdent, LookupResultList aLrl) {
+		ident = aIdent;
+		lrl = aLrl;
+		typeName = null;
 	}
 
 	@Override
@@ -47,7 +56,10 @@ public class ResolveError extends Exception implements Diagnostic {
 
 	@Override
 	public @NotNull Locatable primary() {
-		return typeName;
+		if (typeName == null) {
+			return ident;
+		} else
+			return typeName;
 	}
 
 	@Override
