@@ -1616,7 +1616,23 @@ public class DeduceTypes2 {
 									ProcTableEntry pte = (ProcTableEntry) tte.tableEntry;
 									IdentIA x = (IdentIA) pte.expression_num;
 									@NotNull IdentTableEntry y = x.getEntry();
-									assert y.resolved_element != null;
+									if (y.resolved_element == null) {
+										if (y.backlink instanceof ProcIA) {
+											final ProcIA backlink_ = (ProcIA) y.backlink;
+											@NotNull ProcTableEntry backlink = generatedFunction.getProcTableEntry(backlink_.getIndex());
+											assert backlink.resolved_element != null;
+											try {
+												LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), backlink.resolved_element.getContext());
+												@Nullable OS_Element best = lrl2.chooseBest(null);
+												assert best != null;
+												y.setStatus(BaseTableEntry.Status.KNOWN, best);
+											} catch (ResolveError aResolveError) {
+												aResolveError.printStackTrace();
+												assert false;
+											}
+										} else
+											assert false;
+									}
 									FunctionInvocation fi = new FunctionInvocation((FunctionDef) y.resolved_element, pte);
 									int yyy=2;
 									if (pte.getFunctionInvocation() == null) {
