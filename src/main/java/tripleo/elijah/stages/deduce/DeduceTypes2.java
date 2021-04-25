@@ -1133,7 +1133,7 @@ public class DeduceTypes2 {
 								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
 										TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken(), vte1);
 								if (p.isResolved())
-									System.out.printf("890 vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
+									System.out.printf("890 Already resolved type: vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
 								else
 									vte1.typeDeferred.resolve(tte1);
 //								vte.type = tte1;
@@ -1147,7 +1147,7 @@ public class DeduceTypes2 {
 								@Nullable InstructionArgument vte2_ia = generatedFunction.vte_lookup(vs.getName());
 								VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(vte2_ia));
 								if (p.isResolved())
-									System.out.printf("915 vte2.type = %s, gf = %s %n", vte1.type, generatedFunction);
+									System.out.printf("915 Already resolved type: vte2.type = %s, gf = %s %n", vte1.type, generatedFunction);
 								else
 									vte1.typeDeferred.resolve(vte2.type);
 //								vte.type = vte2.type;
