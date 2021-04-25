@@ -65,9 +65,9 @@ public class TestBasic {
 		}
 
 		// README this needs changing when running make
-		Assert.assertEquals(10, (int)errorCount.get(0)); // TODO Error count obviously should be 0
-		Assert.assertEquals(24, (int)errorCount.get(1)); // TODO Error count obviously should be 0
-		Assert.assertEquals(28, (int)errorCount.get(2)); // TODO Error count obviously should be 0
+		Assert.assertEquals(37, (int)errorCount.get(0)); // TODO Error count obviously should be 0
+		Assert.assertEquals(32, (int)errorCount.get(1)); // TODO Error count obviously should be 0
+		Assert.assertEquals(34, (int)errorCount.get(2)); // TODO Error count obviously should be 0
 	}
 
 }
