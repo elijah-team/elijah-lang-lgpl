@@ -161,6 +161,8 @@ public class PipelineLogic {
 		GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
 
 		for (GeneratedNode generatedNode : lgc) {
+			if (generatedNode.module() != mod) continue; // README curious
+			//
 			if (generatedNode instanceof GeneratedClass) {
 				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 				ggc.generate_class(generatedClass, gr);
