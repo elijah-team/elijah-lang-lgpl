@@ -15,6 +15,7 @@ import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.BaseTableEntry;
 import tripleo.elijah.stages.gen_fn.GenerateFunctions;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
@@ -168,24 +169,16 @@ public class PipelineLogic {
 		for (GeneratedNode generatedNode : lgc) {
 			if (generatedNode.module() != mod) continue; // README curious
 			//
-			if (generatedNode instanceof GeneratedClass) {
-				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				generatedClass.generateCode(ggc, gr);
-				final @NotNull Collection<GeneratedNode> gn1 = ggc.functions_to_list_of_generated_nodes(generatedClass.functionMap.values());
+			if (generatedNode instanceof GeneratedContainerNC) {
+				final GeneratedContainerNC nc = (GeneratedContainerNC) generatedNode;
+
+				nc.generateCode(ggc, gr);
+				final @NotNull Collection<GeneratedNode> gn1 = ggc.functions_to_list_of_generated_nodes(nc.functionMap.values());
 				GenerateResult gr2 = ggc.generateCode(gn1, wm);
 				gr.results().addAll(gr2.results());
-				final @NotNull Collection<GeneratedNode> gn2 = ggc.classes_to_list_of_generated_nodes(generatedClass.classMap.values());
+				final @NotNull Collection<GeneratedNode> gn2 = ggc.classes_to_list_of_generated_nodes(nc.classMap.values());
 				GenerateResult gr3 = ggc.generateCode(gn2, wm);
 				gr.results().addAll(gr3.results());
-			} else if (generatedNode instanceof GeneratedNamespace) {
-				GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-				generatedNamespace.generateCode(ggc, gr);
-				final @NotNull Collection<GeneratedNode> gn3 = ggc.functions_to_list_of_generated_nodes(generatedNamespace.functionMap.values());
-				GenerateResult gr3 = ggc.generateCode(gn3, wm);
-				gr.results().addAll(gr3.results());
-				final @NotNull Collection<GeneratedNode> gn4 = ggc.classes_to_list_of_generated_nodes(generatedNamespace.classMap.values());
-				GenerateResult gr4 = ggc.generateCode(gn4, wm);
-				gr.results().addAll(gr4.results());
 			} else {
 				System.out.println("2009 " + generatedNode.getClass().getName());
 			}
