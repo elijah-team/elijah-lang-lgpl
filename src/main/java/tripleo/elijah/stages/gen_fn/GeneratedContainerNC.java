@@ -8,7 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
-import tripleo.elijah.stages.generate.CodeGenerator;
+import tripleo.elijah.stages.gen_generic.CodeGenerator;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.AccessNotation;
 import tripleo.elijah.lang.ClassStatement;
