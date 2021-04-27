@@ -84,6 +84,9 @@ public class CReference {
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
 					GeneratedNode resolved = idte.type != null ? idte.type.resolved() : null;
+					if (resolved == null) {
+						System.err.println("***88*** resolved is null for "+idte);
+					}
 					if (sSize >= i + 1) {
 						_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction, resolved);
 						text = null;
