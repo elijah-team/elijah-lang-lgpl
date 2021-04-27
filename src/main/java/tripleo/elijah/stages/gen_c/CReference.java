@@ -17,7 +17,9 @@ import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.PropertyStatement;
 import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 import tripleo.elijah.stages.gen_fn.VariableTableEntry;
@@ -81,11 +83,12 @@ public class CReference {
 				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(ia));
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
+					GeneratedContainerNC resolved = idte.type != null ? idte.type.resolved() : null;
 					if (sSize >= i + 1) {
-						_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction);
+						_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction, resolved);
 						text = null;
 					} else {
-						boolean b = _getIdentIAPath_IdentIAHelper(s.get(i + 1), sl, i, sSize, resolved_element, generatedFunction);
+						boolean b = _getIdentIAPath_IdentIAHelper(s.get(i + 1), sl, i, sSize, resolved_element, generatedFunction, resolved);
 						if (b) i++;
 					}
 //					addRef(text, Ref.MEMBER);
@@ -124,11 +127,17 @@ public class CReference {
 										  int i,
 										  int sSize,
 										  OS_Element resolved_element,
-										  GeneratedFunction generatedFunction) {
+										  GeneratedFunction generatedFunction,
+										  GeneratedNode aResolved) {
 		boolean b = false;
 		if (resolved_element instanceof ClassStatement) {
 			// Assuming constructor call
-			int code = ((ClassStatement) resolved_element)._a.getCode();
+			int code;
+			if (aResolved != null) {
+				code = ((GeneratedContainerNC)aResolved).getCode();
+			} else {
+				code = ((ClassStatement) resolved_element)._a.getCode();
+			}
 			if (code == 0) {
 				System.err.println("** 31116 ClassStatement with 0 code "+resolved_element);
 			}
@@ -173,13 +182,23 @@ public class CReference {
 		} else if (resolved_element instanceof FunctionDef) {
 			OS_Element parent = resolved_element.getParent();
 			int code;
-			if (parent instanceof ClassStatement) {
-				code = ((ClassStatement) parent)._a.getCode();
-			} else if (parent instanceof NamespaceStatement) {
-				code = ((NamespaceStatement) parent)._a.getCode();
+			if (aResolved != null) {
+				assert aResolved instanceof GeneratedFunction;
+				final GeneratedFunction rf = (GeneratedFunction) aResolved;
+				GeneratedNode gc = rf.getGenClass();
+				if (gc instanceof GeneratedContainerNC) // and not another function
+					code = ((GeneratedContainerNC) gc).getCode();
+				else
+					code = -2;
 			} else {
-				// TODO what about FunctionDef, etc
-				code = -1;
+				if (parent instanceof ClassStatement) {
+					code = ((ClassStatement) parent)._a.getCode();
+				} else if (parent instanceof NamespaceStatement) {
+					code = ((NamespaceStatement) parent)._a.getCode();
+				} else {
+					// TODO what about FunctionDef, etc
+					code = -1;
+				}
 			}
 			// TODO what about overloaded functions
 			assert i == sSize-1; // Make sure we are ending with a ProcedureCall
