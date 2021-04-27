@@ -640,8 +640,8 @@ public class GenerateC implements CodeGenerator {
 		final VariableTableEntry testing_var    = gf.getVarTableEntry(testing_var_.getIndex());
 		final TypeTableEntry     testing_type__ = gf.getTypeTableEntry(testing_type_.getIndex());
 
-		GeneratedContainerNC testing_type = testing_type__.resolved();
-		final int z = testing_type.getCode();
+		GeneratedNode testing_type = testing_type__.resolved();
+		final int z = ((GeneratedContainerNC) testing_type).getCode();
 
 		tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
 		tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
