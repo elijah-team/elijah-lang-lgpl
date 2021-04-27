@@ -22,7 +22,7 @@ public class TypeTableEntry {
     public final TableEntryIV tableEntry;
     public @Nullable OS_Type attached;
     public final IExpression expression;
-    private GeneratedContainerNC _resolved;
+    private GeneratedNode _resolved;
 
     public TypeTableEntry(final int index, final Type lifetime, @Nullable final OS_Type attached, final IExpression expression, TableEntryIV aTableEntryIV) {
         this.index = index;
@@ -49,11 +49,11 @@ public class TypeTableEntry {
         return index;
     }
 
-    public void resolve(GeneratedContainerNC aResolved) {
+    public void resolve(GeneratedNode aResolved) {
         _resolved = aResolved;
     }
 
-    public GeneratedContainerNC resolved() {
+    public GeneratedNode resolved() {
         return _resolved;
     }
 
