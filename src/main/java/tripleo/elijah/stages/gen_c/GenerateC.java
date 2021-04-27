@@ -34,6 +34,7 @@ import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.generate.CodeGenerator;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
@@ -53,7 +54,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 /**
  * Created 10/8/20 7:13 AM
  */
-public class GenerateC {
+public class GenerateC implements CodeGenerator {
 	private final OS_Module module;
 	private final ErrSink errSink;
 

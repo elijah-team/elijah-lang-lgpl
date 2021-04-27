@@ -165,7 +165,7 @@ public class PipelineLogic {
 			//
 			if (generatedNode instanceof GeneratedClass) {
 				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				ggc.generate_class(generatedClass, gr);
+				generatedClass.generateCode(ggc, gr);
 				final @NotNull Collection<GeneratedNode> gn1 = ggc.functions_to_list_of_generated_nodes(generatedClass.functionMap.values());
 				GenerateC.GenerateResult gr2 = ggc.generateCode(gn1);
 				gr.results().addAll(gr2.results());
@@ -174,7 +174,7 @@ public class PipelineLogic {
 				gr.results().addAll(gr3.results());
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-				ggc.generate_namespace(generatedNamespace, gr);
+				generatedNamespace.generateCode(ggc, gr);
 				final @NotNull Collection<GeneratedNode> gn3 = ggc.functions_to_list_of_generated_nodes(generatedNamespace.functionMap.values());
 				GenerateC.GenerateResult gr3 = ggc.generateCode(gn3);
 				gr.results().addAll(gr3.results());

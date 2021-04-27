@@ -8,11 +8,13 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import tripleo.elijah.stages.generate.CodeGenerator;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.AccessNotation;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.stages.gen_c.GenerateC;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +75,8 @@ public abstract class GeneratedContainerNC implements GeneratedContainer {
 	public void setCode(int aCode) {
 		code = aCode;
 	}
+
+	public abstract void generateCode(CodeGenerator aGgc, GenerateC.GenerateResult aGr);
 }
 
 //

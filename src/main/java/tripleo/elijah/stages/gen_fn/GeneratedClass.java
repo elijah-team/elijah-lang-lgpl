@@ -10,6 +10,8 @@ package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceLookupUtils;
+import tripleo.elijah.stages.gen_c.GenerateC;
+import tripleo.elijah.stages.generate.CodeGenerator;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -113,6 +115,10 @@ public class GeneratedClass extends GeneratedContainerNC {
 		return getKlass();
 	}
 
+	@Override
+	public void generateCode(CodeGenerator aCodeGenerator, GenerateC.GenerateResult aGr) {
+		aCodeGenerator.generate_class(this, aGr);
+	}
 }
 
 //
