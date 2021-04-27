@@ -44,7 +44,6 @@ import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
 import tripleo.util.buffer.Buffer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -97,22 +96,18 @@ public class GenerateC implements CodeGenerator {
 		for (final GeneratedNode generatedNode : lgf) {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
-				try {
-					WorkList wl = new WorkList();
-					generateCodeForMethod(generatedFunction, gr, wl);
-					wm.addJobs(wl);
-					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
-						if (identTableEntry.isResolved()) {
-							GeneratedNode x = identTableEntry.resolved();
+				WorkList wl = new WorkList();
+				generateCodeForMethod(generatedFunction, gr, wl);
+				wm.addJobs(wl);
+				for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+					if (identTableEntry.isResolved()) {
+						GeneratedNode x = identTableEntry.resolved();
 
-							if (x instanceof GeneratedClass) {
-								generate_class((GeneratedClass) x, gr);
-							} else
-								throw new NotImplementedException();
-						}
+						if (x instanceof GeneratedClass) {
+							generate_class((GeneratedClass) x, gr);
+						} else
+							throw new NotImplementedException();
 					}
-				} catch (final IOException e) {
-					errSink.exception(e);
 				}
 			} else if (generatedNode instanceof GeneratedClass) {
 				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
@@ -314,7 +309,7 @@ public class GenerateC implements CodeGenerator {
 		}
 	}
 
-	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) throws IOException {
+	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
 		if (gf.fd == null) return;
 		final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
 		final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
