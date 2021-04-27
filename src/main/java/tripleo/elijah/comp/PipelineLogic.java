@@ -55,7 +55,7 @@ public class PipelineLogic {
 	}
 
 	public static void debug_buffers(GenerateC.GenerateResult gr, PrintStream stream) {
-		for (GenerateC.AssociatedBuffer ab : gr.results()) {
+		for (GenerateC.GenerateResultItem ab : gr.results()) {
 			stream.println("---------------------------------------------------------------");
 			stream.println(ab.counter);
 			stream.println(ab.ty);

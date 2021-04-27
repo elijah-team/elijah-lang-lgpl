@@ -57,14 +57,14 @@ public class GenerateC {
 	private final OS_Module module;
 	private final ErrSink errSink;
 
-	public static class AssociatedBuffer {
+	public static class GenerateResultItem {
 		public final int counter;
 		public final GenerateResult.TY ty;
 		public final Buffer buffer;
 		public final GeneratedNode node;
 		public String output;
 
-		public AssociatedBuffer(GenerateResult.TY aTy, Buffer aBuffer, GeneratedNode aNode, int aCounter) {
+		public GenerateResultItem(GenerateResult.TY aTy, Buffer aBuffer, GeneratedNode aNode, int aCounter) {
 			ty = aTy;
 			buffer = aBuffer;
 			node = aNode;
@@ -75,13 +75,13 @@ public class GenerateC {
 	public static class GenerateResult {
 		private int bufferCounter = 0;
 
-		final List<AssociatedBuffer> res = new ArrayList<AssociatedBuffer>();
+		final List<GenerateResultItem> res = new ArrayList<GenerateResultItem>();
 
 		public void add(Buffer b, GeneratedNode n, TY ty) {
-			res.add(new AssociatedBuffer(ty, b, n, ++bufferCounter));
+			res.add(new GenerateResultItem(ty, b, n, ++bufferCounter));
 		}
 
-		public List<AssociatedBuffer> results() {
+		public List<GenerateResultItem> results() {
 			return res;
 		}
 

@@ -30,13 +30,13 @@ public class ElSystem {
 	public void generateOutputs(GenerateC.GenerateResult gr) {
 		final OutputStrategyC outputStrategyC = new OutputStrategyC(this.outputStrategy);
 
-		for (GenerateC.AssociatedBuffer ab : gr.results()) {
+		for (GenerateC.GenerateResultItem ab : gr.results()) {
 			String s = generateOutputs_Internal(ab.node, ab.ty, outputStrategyC);
 			ab.output = s;
 		}
 
 		for (Map.Entry<GeneratedFunction, String> entry : gfm_map.entrySet()) {
-			for (GenerateC.AssociatedBuffer result : gr.results()) {
+			for (GenerateC.GenerateResultItem result : gr.results()) {
 				if (entry.getKey() == result.node) {
 					result.output = entry.getValue();
 				}
@@ -44,7 +44,7 @@ public class ElSystem {
 		}
 
 		if (verbose) {
-			for (GenerateC.AssociatedBuffer ab : gr.results()) {
+			for (GenerateC.GenerateResultItem ab : gr.results()) {
 				if (ab.node instanceof GeneratedFunction) continue;
 				System.out.println("** "+ab.node+" "+ab.output);
 			}
