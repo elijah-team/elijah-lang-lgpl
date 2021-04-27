@@ -39,6 +39,8 @@ import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.util.TabbedOutputStream;
+import tripleo.elijah.work.WorkList;
+import tripleo.elijah.work.WorkManager;
 import tripleo.util.buffer.Buffer;
 import tripleo.util.buffer.DefaultBuffer;
 
@@ -135,14 +137,16 @@ public class GenerateC implements CodeGenerator {
 		});
 	}
 
-	public GenerateResult generateCode(final Collection<GeneratedNode> lgf) {
+	public GenerateResult generateCode(final Collection<GeneratedNode> lgf, final WorkManager wm) {
 		GenerateResult gr = new GenerateResult();
 
 		for (final GeneratedNode generatedNode : lgf) {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				try {
-					generateCodeForMethod(generatedFunction, gr);
+					WorkList wl = new WorkList();
+					generateCodeForMethod(generatedFunction, gr, wl);
+					wm.addJobs(wl);
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 						if (identTableEntry.isResolved()) {
 							GeneratedNode x = identTableEntry.resolved();
@@ -367,7 +371,7 @@ public class GenerateC implements CodeGenerator {
 		}
 	}
 
-	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr) throws IOException {
+	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) throws IOException {
 		if (gf.fd == null) return;
 		final StringWriter stringWriterHdr = new StringWriter();
 		final TabbedOutputStream tosHdr = new TabbedOutputStream(stringWriterHdr, true);

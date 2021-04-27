@@ -20,6 +20,7 @@ import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
+import tripleo.elijah.work.WorkManager;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -159,6 +160,7 @@ public class PipelineLogic {
 //		ggc.generateCode(lgf);
 
 		GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
+		WorkManager wm = new WorkManager();
 
 		for (GeneratedNode generatedNode : lgc) {
 			if (generatedNode.module() != mod) continue; // README curious
@@ -167,19 +169,19 @@ public class PipelineLogic {
 				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 				generatedClass.generateCode(ggc, gr);
 				final @NotNull Collection<GeneratedNode> gn1 = ggc.functions_to_list_of_generated_nodes(generatedClass.functionMap.values());
-				GenerateC.GenerateResult gr2 = ggc.generateCode(gn1);
+				GenerateC.GenerateResult gr2 = ggc.generateCode(gn1, wm);
 				gr.results().addAll(gr2.results());
 				final @NotNull Collection<GeneratedNode> gn2 = ggc.classes_to_list_of_generated_nodes(generatedClass.classMap.values());
-				GenerateC.GenerateResult gr3 = ggc.generateCode(gn2);
+				GenerateC.GenerateResult gr3 = ggc.generateCode(gn2, wm);
 				gr.results().addAll(gr3.results());
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
 				generatedNamespace.generateCode(ggc, gr);
 				final @NotNull Collection<GeneratedNode> gn3 = ggc.functions_to_list_of_generated_nodes(generatedNamespace.functionMap.values());
-				GenerateC.GenerateResult gr3 = ggc.generateCode(gn3);
+				GenerateC.GenerateResult gr3 = ggc.generateCode(gn3, wm);
 				gr.results().addAll(gr3.results());
 				final @NotNull Collection<GeneratedNode> gn4 = ggc.classes_to_list_of_generated_nodes(generatedNamespace.classMap.values());
-				GenerateC.GenerateResult gr4 = ggc.generateCode(gn4);
+				GenerateC.GenerateResult gr4 = ggc.generateCode(gn4, wm);
 				gr.results().addAll(gr4.results());
 			} else {
 				System.out.println("2009 " + generatedNode.getClass().getName());
