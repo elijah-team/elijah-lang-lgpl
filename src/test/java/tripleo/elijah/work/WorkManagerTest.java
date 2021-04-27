@@ -32,7 +32,7 @@ public class WorkManagerTest {
 		@Override
 		public void run(WorkManager aWorkManager) {
 			if (level < 4) {
-				WorkList<AppendChar> wl = new WorkList<AppendChar>();
+				WorkList wl = new WorkList();
 				wl.addJob(new AppendChar(state, level + 1, sink));
 				aWorkManager.addJobs(wl);
 			}
@@ -52,7 +52,7 @@ public class WorkManagerTest {
 
 		WorkManager workManager = new WorkManager();
 
-		WorkList<AppendChar> wl = new WorkList<AppendChar>();
+		WorkList wl = new WorkList();
 		wl.addJob(new AppendChar("A", 0, sink));
 		wl.addJob(new AppendChar("B", 0, sink));
 		wl.addJob(new AppendChar("C", 0, sink));

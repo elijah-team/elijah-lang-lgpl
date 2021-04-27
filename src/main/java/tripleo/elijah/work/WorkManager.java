@@ -27,9 +27,10 @@ public class WorkManager {
 
 	@Nullable public WorkJob next() {
 		Iterator<WorkList> workListIterator = jobs.iterator();
-		{
+		while (true) {
 			if (workListIterator.hasNext()) {
 				WorkList workList = workListIterator.next();
+//			for (WorkList workList :jobs) {
 				if (!workList.isDone()) {
 					for (WorkJob w : workList.jobs) {
 						if (!w.isDone())
@@ -37,12 +38,14 @@ public class WorkManager {
 					}
 					workList.setDone();
 				} else {
-					doneWork.add(workList);
 					workListIterator.remove();
+					doneWork.add(workList);
+					return next();
 				}
-			}
+			} else
+				return null;
 		}
-		return null;
+//		return null;
 	}
 }
 
