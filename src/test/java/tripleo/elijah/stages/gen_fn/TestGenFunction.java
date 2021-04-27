@@ -19,6 +19,7 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
+import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
 import tripleo.elijah.work.WorkManager;
@@ -238,7 +239,7 @@ public class TestGenFunction {
 		GenerateC ggc = new GenerateC(m);
 		ggc.generateCode(lgf, wm);
 
-		GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
+		GenerateResult gr = new GenerateResult();
 
 		for (GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedClass) {

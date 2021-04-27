@@ -13,11 +13,11 @@ import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.lang.NamespaceTypes;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
-import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_generic.GenerateResult;
 
 import java.io.File;
 
@@ -31,13 +31,13 @@ public class OutputStrategyC {
 		this.outputStrategy = outputStrategy;
 	}
 
-	public String nameForNamespace(GeneratedNamespace generatedNamespace, GenerateC.GenerateResult.TY aTy) {
+	public String nameForNamespace(GeneratedNamespace generatedNamespace, GenerateResult.TY aTy) {
 		if (generatedNamespace.module().isPrelude()) {
 			// We are dealing with the Prelude
 			StringBuilder sb = new StringBuilder();
 			sb.append("/Prelude/");
 			sb.append("Prelude");
-			if (aTy == GenerateC.GenerateResult.TY.IMPL)
+			if (aTy == GenerateResult.TY.IMPL)
 				sb.append(".c");
 			else
 				sb.append(".h");
@@ -64,7 +64,7 @@ public class OutputStrategyC {
 			sb.append("/");
 		}
 		sb.append(filename);
-		if (aTy == GenerateC.GenerateResult.TY.IMPL)
+		if (aTy == GenerateResult.TY.IMPL)
 			sb.append(".c");
 		else
 			sb.append(".h");
@@ -83,13 +83,13 @@ public class OutputStrategyC {
 	public String nameForFunction(GeneratedFunction generatedFunction) {
 		GeneratedNode c = generatedFunction.getGenClass();
 		if (c instanceof GeneratedClass)
-			return nameForClass((GeneratedClass) c, GenerateC.GenerateResult.TY.IMPL);
+			return nameForClass((GeneratedClass) c, GenerateResult.TY.IMPL);
 		else if (c instanceof GeneratedNamespace)
-			return nameForNamespace((GeneratedNamespace) c, GenerateC.GenerateResult.TY.IMPL);
+			return nameForNamespace((GeneratedNamespace) c, GenerateResult.TY.IMPL);
 		return null;
 	}
 
-	public String nameForClass(GeneratedClass generatedClass, GenerateC.GenerateResult.TY aTy) {
+	public String nameForClass(GeneratedClass generatedClass, GenerateResult.TY aTy) {
 		if (generatedClass.module().isPrelude()) {
 			// We are dealing with the Prelude
 			StringBuilder sb = new StringBuilder();

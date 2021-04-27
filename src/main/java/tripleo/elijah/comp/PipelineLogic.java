@@ -19,6 +19,8 @@ import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
+import tripleo.elijah.stages.gen_generic.GenerateResult;
+import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.work.WorkManager;
 
@@ -34,7 +36,7 @@ import java.util.List;
 public class PipelineLogic {
 	final DeducePhase dp = new DeducePhase();
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
-	public GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
+	public GenerateResult gr = new GenerateResult();
 
 	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
 		for (OS_Module mod : mods) {
@@ -44,7 +46,7 @@ public class PipelineLogic {
 	}
 
 	public void generate(List<GeneratedNode> lgc) {
-		GenerateC.GenerateResult ggr = null;
+		GenerateResult ggr = null;
 		for (OS_Module mod : mods) {
 			try {
 				ggr = run3(mod, lgc);
@@ -55,8 +57,8 @@ public class PipelineLogic {
 		gr = ggr;
 	}
 
-	public static void debug_buffers(GenerateC.GenerateResult gr, PrintStream stream) {
-		for (GenerateC.GenerateResultItem ab : gr.results()) {
+	public static void debug_buffers(GenerateResult gr, PrintStream stream) {
+		for (GenerateResultItem ab : gr.results()) {
 			stream.println("---------------------------------------------------------------");
 			stream.println(ab.counter);
 			stream.println(ab.ty);
@@ -155,11 +157,11 @@ public class PipelineLogic {
 
 	}
 
-	protected GenerateC.GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc) throws IOException {
+	protected GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc) throws IOException {
 		GenerateC ggc = new GenerateC(mod);
 //		ggc.generateCode(lgf);
 
-		GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
+		GenerateResult gr = new GenerateResult();
 		WorkManager wm = new WorkManager();
 
 		for (GeneratedNode generatedNode : lgc) {
@@ -169,19 +171,19 @@ public class PipelineLogic {
 				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 				generatedClass.generateCode(ggc, gr);
 				final @NotNull Collection<GeneratedNode> gn1 = ggc.functions_to_list_of_generated_nodes(generatedClass.functionMap.values());
-				GenerateC.GenerateResult gr2 = ggc.generateCode(gn1, wm);
+				GenerateResult gr2 = ggc.generateCode(gn1, wm);
 				gr.results().addAll(gr2.results());
 				final @NotNull Collection<GeneratedNode> gn2 = ggc.classes_to_list_of_generated_nodes(generatedClass.classMap.values());
-				GenerateC.GenerateResult gr3 = ggc.generateCode(gn2, wm);
+				GenerateResult gr3 = ggc.generateCode(gn2, wm);
 				gr.results().addAll(gr3.results());
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
 				generatedNamespace.generateCode(ggc, gr);
 				final @NotNull Collection<GeneratedNode> gn3 = ggc.functions_to_list_of_generated_nodes(generatedNamespace.functionMap.values());
-				GenerateC.GenerateResult gr3 = ggc.generateCode(gn3, wm);
+				GenerateResult gr3 = ggc.generateCode(gn3, wm);
 				gr.results().addAll(gr3.results());
 				final @NotNull Collection<GeneratedNode> gn4 = ggc.classes_to_list_of_generated_nodes(generatedNamespace.classMap.values());
-				GenerateC.GenerateResult gr4 = ggc.generateCode(gn4, wm);
+				GenerateResult gr4 = ggc.generateCode(gn4, wm);
 				gr.results().addAll(gr4.results());
 			} else {
 				System.out.println("2009 " + generatedNode.getClass().getName());

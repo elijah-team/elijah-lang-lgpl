@@ -14,6 +14,8 @@ import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_generic.GenerateResult;
+import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,16 +29,16 @@ public class ElSystem {
 	private final Map<GeneratedFunction, String> gfm_map = new HashMap<GeneratedFunction, String>();
 	public boolean verbose = true;
 
-	public void generateOutputs(GenerateC.GenerateResult gr) {
+	public void generateOutputs(GenerateResult gr) {
 		final OutputStrategyC outputStrategyC = new OutputStrategyC(this.outputStrategy);
 
-		for (GenerateC.GenerateResultItem ab : gr.results()) {
+		for (GenerateResultItem ab : gr.results()) {
 			String s = generateOutputs_Internal(ab.node, ab.ty, outputStrategyC);
 			ab.output = s;
 		}
 
 		for (Map.Entry<GeneratedFunction, String> entry : gfm_map.entrySet()) {
-			for (GenerateC.GenerateResultItem result : gr.results()) {
+			for (GenerateResultItem result : gr.results()) {
 				if (entry.getKey() == result.node) {
 					result.output = entry.getValue();
 				}
@@ -44,14 +46,14 @@ public class ElSystem {
 		}
 
 		if (verbose) {
-			for (GenerateC.GenerateResultItem ab : gr.results()) {
+			for (GenerateResultItem ab : gr.results()) {
 				if (ab.node instanceof GeneratedFunction) continue;
 				System.out.println("** "+ab.node+" "+ab.output);
 			}
 		}
 	}
 
-	String generateOutputs_Internal(GeneratedNode node, GenerateC.GenerateResult.TY ty, OutputStrategyC outputStrategyC) {
+	String generateOutputs_Internal(GeneratedNode node, GenerateResult.TY ty, OutputStrategyC outputStrategyC) {
 		String s, ss;
 		if (node instanceof GeneratedNamespace) {
 			final GeneratedNamespace generatedNamespace = (GeneratedNamespace) node;

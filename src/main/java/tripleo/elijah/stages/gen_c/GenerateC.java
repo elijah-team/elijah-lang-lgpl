@@ -35,6 +35,7 @@ import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.gen_generic.CodeGenerator;
+import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.BufferTabbedOutputStream;
 import tripleo.elijah.util.Helpers;
@@ -57,51 +58,6 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 public class GenerateC implements CodeGenerator {
 	private final OS_Module module;
 	private final ErrSink errSink;
-
-	public static class GenerateResultItem {
-		public final int counter;
-		public final GenerateResult.TY ty;
-		public final Buffer buffer;
-		public final GeneratedNode node;
-		public String output;
-
-		public GenerateResultItem(GenerateResult.TY aTy, Buffer aBuffer, GeneratedNode aNode, int aCounter) {
-			ty = aTy;
-			buffer = aBuffer;
-			node = aNode;
-			counter = aCounter;
-		}
-	}
-
-	public static class GenerateResult {
-		private int bufferCounter = 0;
-
-		final List<GenerateResultItem> res = new ArrayList<GenerateResultItem>();
-
-		public void add(Buffer b, GeneratedNode n, TY ty) {
-			res.add(new GenerateResultItem(ty, b, n, ++bufferCounter));
-		}
-
-		public List<GenerateResultItem> results() {
-			return res;
-		}
-
-		public void addFunction(GeneratedFunction aGeneratedFunction, Buffer aBuffer, TY aTY) {
-			add(aBuffer, aGeneratedFunction, aTY);
-		}
-
-		public enum TY {
-			HEADER, IMPL, PRIVATE_HEADER
-		}
-
-		public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf) {
-			add(aBuf, aClass, ty);
-		}
-
-		public void addNamespace(TY ty, GeneratedNamespace aNamespace, Buffer aBuf) {
-			add(aBuf, aNamespace, ty);
-		}
-	}
 
 	public GenerateC(final OS_Module m) {
 		this.module = m;

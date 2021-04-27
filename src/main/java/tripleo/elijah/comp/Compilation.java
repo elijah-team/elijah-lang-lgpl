@@ -25,8 +25,9 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
-import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_generic.GenerateResult;
+import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.generate.ElSystem;
 import tripleo.elijah.stages.generate.OutputStrategy;
 import tripleo.elijah.util.Helpers;
@@ -195,7 +196,7 @@ public class Compilation {
 		}
 	}
 
-	public void write_files(GenerateC.GenerateResult input) throws IOException {
+	public void write_files(GenerateResult input) throws IOException {
 		OutputStrategy os = new OutputStrategy();
 		os.per(OutputStrategy.Per.PER_CLASS);
 
@@ -207,7 +208,7 @@ public class Compilation {
 
 		Multimap<String, Buffer> mb = ArrayListMultimap.create();
 
-		for (GenerateC.GenerateResultItem ab : input.results()) {
+		for (GenerateResultItem ab : input.results()) {
 //			if (ab.node instanceof GeneratedFunction) continue;
 
 			mb.put(ab.output, ab.buffer);

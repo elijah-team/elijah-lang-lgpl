@@ -10,8 +10,8 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_generic.CodeGenerator;
+import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -90,7 +90,7 @@ public class GeneratedNamespace extends GeneratedContainerNC {
 	}
 
 	@Override
-	public void generateCode(CodeGenerator aCodeGenerator, GenerateC.GenerateResult aGr) {
+	public void generateCode(CodeGenerator aCodeGenerator, GenerateResult aGr) {
 		aCodeGenerator.generate_namespace(this, aGr);
 	}
 
