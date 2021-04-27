@@ -36,16 +36,14 @@ import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.generate.CodeGenerator;
 import tripleo.elijah.stages.instructions.*;
+import tripleo.elijah.util.BufferTabbedOutputStream;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
-import tripleo.elijah.util.TabbedOutputStream;
 import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
 import tripleo.util.buffer.Buffer;
-import tripleo.util.buffer.DefaultBuffer;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -161,33 +159,24 @@ public class GenerateC implements CodeGenerator {
 					errSink.exception(e);
 				}
 			} else if (generatedNode instanceof GeneratedClass) {
-				try {
-					GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-					generate_class(generatedClass, gr);
-				} catch (final IOException e) {
-					errSink.exception(e);
-				}
+				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				generate_class(generatedClass, gr);
 			} else if (generatedNode instanceof GeneratedNamespace) {
-				try {
-					GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-					generate_namespace(generatedNamespace, gr);
-				} catch (final IOException e) {
-					errSink.exception(e);
-				}
+				GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+				generate_namespace(generatedNamespace, gr);
 			}
 		}
 
 		return gr;
 	}
 
-	public void generate_class(GeneratedClass x, GenerateResult gr) throws IOException {
+	@Override
+	public void generate_class(GeneratedClass x, GenerateResult gr) {
 		int y=2;
 		final CClassDecl decl = new CClassDecl(x);
 		decl.evaluatePrimitive();
-		final StringWriter stringWriterHdr = new StringWriter();
-		final TabbedOutputStream tosHdr = new TabbedOutputStream(stringWriterHdr, false);
-		final StringWriter stringWriter = new StringWriter();
-		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, false);
+		final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
+		final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
 		try {
 			tosHdr.put_string_ln("typedef struct {");
 			tosHdr.incr_tabs();
@@ -235,21 +224,19 @@ public class GenerateC implements CodeGenerator {
 		} finally {
 			tos.close();
 			tosHdr.close();
-			Buffer buf = new DefaultBuffer(stringWriter.toString());
+			Buffer buf = tos.getBuffer();
 //			System.out.println(buf.getText());
 			gr.addClass(GenerateResult.TY.IMPL, x, buf);
-			Buffer buf2 = new DefaultBuffer(stringWriterHdr.toString());
+			Buffer buf2 = tosHdr.getBuffer();
 //			System.out.println(buf2.getText());
 			gr.addClass(GenerateResult.TY.HEADER, x, buf2);
 		}
 	}
 
-	public void generate_namespace(GeneratedNamespace x, GenerateResult gr) throws IOException {
-		int y=2;
-		final StringWriter stringWriterHdr = new StringWriter();
-		final TabbedOutputStream tosHdr = new TabbedOutputStream(stringWriterHdr, false);
-		final StringWriter stringWriter = new StringWriter();
-		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, true);
+	@Override
+	public void generate_namespace(GeneratedNamespace x, GenerateResult gr) {
+		final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
+		final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
 		try {
 			tosHdr.put_string_ln("typedef struct {");
 			tosHdr.incr_tabs();
@@ -279,10 +266,10 @@ public class GenerateC implements CodeGenerator {
 		} finally {
 			tos.close();
 			tosHdr.close();
-			Buffer buf = new DefaultBuffer(stringWriter.toString());
+			Buffer buf = tos.getBuffer();
 //			System.out.println(buf.getText());
 			gr.addNamespace(GenerateResult.TY.IMPL, x, buf);
-			Buffer buf2 = new DefaultBuffer(stringWriterHdr.toString());
+			Buffer buf2 = tosHdr.getBuffer();
 //			System.out.println(buf2.getText());
 			gr.addNamespace(GenerateResult.TY.HEADER, x, buf2);
 		}
@@ -373,10 +360,8 @@ public class GenerateC implements CodeGenerator {
 
 	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) throws IOException {
 		if (gf.fd == null) return;
-		final StringWriter stringWriterHdr = new StringWriter();
-		final TabbedOutputStream tosHdr = new TabbedOutputStream(stringWriterHdr, true);
-		final StringWriter stringWriter = new StringWriter();
-		final TabbedOutputStream tos = new TabbedOutputStream(stringWriter, true);
+		final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
+		final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
 
 		Generate_Method_Header gmh = new Generate_Method_Header(gf);
 
@@ -687,15 +672,15 @@ public class GenerateC implements CodeGenerator {
 		tos.close();
 		tosHdr.flush();
 		tosHdr.close();
-		Buffer buf = new DefaultBuffer(stringWriter.toString());
+		Buffer buf = tos.getBuffer();
 //		System.out.println(buf.getText());
 		gr.addFunction(gf, buf, GenerateResult.TY.IMPL);
-		Buffer bufHdr = new DefaultBuffer(stringWriterHdr.toString());
+		Buffer bufHdr = tosHdr.getBuffer();
 //		System.out.println(bufHdr.getText());
 		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER);
 	}
 
-	private void generate_method_is_a(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
+	private void generate_method_is_a(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
 		final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
 		final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
 		final Label target_label      = ((LabelIA) instruction.getArg(2)).label;
@@ -758,7 +743,7 @@ public class GenerateC implements CodeGenerator {
 			throw new NotImplementedException();
 	}
 
-	private void generate_method_cast(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
+	private void generate_method_cast(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
 		final IntegerIA  vte_num_ = (IntegerIA) instruction.getArg(0);
 		final IntegerIA vte_type_ = (IntegerIA) instruction.getArg(1);
 		final IntegerIA vte_targ_ = (IntegerIA) instruction.getArg(2);
@@ -770,7 +755,7 @@ public class GenerateC implements CodeGenerator {
 		tos.put_string_ln(String.format("%s = (%s)%s;", target_name, target_type, source_target));
 	}
 
-	private void generate_method_decl(Instruction instruction, TabbedOutputStream tos, GeneratedFunction gf) throws IOException {
+	private void generate_method_decl(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
 		final SymbolIA decl_type = (SymbolIA)  instruction.getArg(0);
 		final IntegerIA  vte_num = (IntegerIA) instruction.getArg(1);
 		final String target_name = getRealTargetName(gf, vte_num);

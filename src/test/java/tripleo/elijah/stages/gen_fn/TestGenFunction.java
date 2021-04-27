@@ -21,6 +21,7 @@ import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
+import tripleo.elijah.work.WorkManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -162,7 +163,8 @@ public class TestGenFunction {
 			dp.deduceModule(m, lgc, false);
 			dp.finish();
 
-			new GenerateC(m).generateCode(lgf);
+			WorkManager wm = new WorkManager();
+			new GenerateC(m).generateCode(lgf, wm);
 		} else {
 			PipelineLogic pipelineLogic = new PipelineLogic();
 			ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
@@ -232,8 +234,9 @@ public class TestGenFunction {
 			}
 		}
 
+		WorkManager wm = new WorkManager();
 		GenerateC ggc = new GenerateC(m);
-		ggc.generateCode(lgf);
+		ggc.generateCode(lgf, wm);
 
 		GenerateC.GenerateResult gr = new GenerateC.GenerateResult();
 
