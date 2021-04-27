@@ -214,12 +214,12 @@ public class Compilation {
 			mb.put(ab.output, ab.buffer);
 		}
 
-		final File file1 = new File("COMP", getCompilationNumberString());
-		file1.mkdirs();
-		String prefix = file1.toString();
+		final File file_prefix = new File("COMP", getCompilationNumberString());
+		file_prefix.mkdirs();
+		String prefix = file_prefix.toString();
 
 		{
-			final String fn1 = new File(prefix, "inputs.txt").toString();
+			final String fn1 = new File(file_prefix, "inputs.txt").toString();
 
 			DefaultBuffer buf = new DefaultBuffer("");
 //			FileBackedBuffer buf = new FileBackedBuffer(fn1);
