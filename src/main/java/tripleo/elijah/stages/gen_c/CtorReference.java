@@ -15,6 +15,7 @@ import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.VariableTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
@@ -37,7 +38,7 @@ public class CtorReference {
 	private String ctorName = "";
 	private List<String> args;
 	List<CReference.Reference> refs = new ArrayList<CReference.Reference>();
-	private GeneratedContainerNC _resolved;
+	private GeneratedNode _resolved;
 
 	void addRef(String text, CReference.Ref type) {
 		refs.add(new CReference.Reference(text, type));
@@ -53,7 +54,7 @@ public class CtorReference {
 				assert i == 0;
 				final VariableTableEntry vte = gf.getVarTableEntry(to_int(ia));
 				if (sSize == 1) {
-					final GeneratedContainerNC resolved = vte.type.resolved();
+					final GeneratedNode resolved = vte.type.resolved();
 					if (resolved != null) {
 						_resolved = resolved;
 					}
@@ -154,7 +155,7 @@ public class CtorReference {
 			// Assuming constructor call
 			int code;
 			if (_resolved != null) {
-				code = _resolved.getCode();
+				code = ((GeneratedContainerNC) _resolved).getCode();
 			} else {
 				code = aClsinv.getKlass()._a.getCode(); // TODO this will either always be 0 or irrelevant
 			}
