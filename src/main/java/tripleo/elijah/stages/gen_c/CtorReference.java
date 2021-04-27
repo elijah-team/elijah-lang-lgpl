@@ -13,6 +13,7 @@ import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.VariableTableEntry;
@@ -36,6 +37,7 @@ public class CtorReference {
 	private String ctorName = "";
 	private List<String> args;
 	List<CReference.Reference> refs = new ArrayList<CReference.Reference>();
+	private GeneratedContainerNC _resolved;
 
 	void addRef(String text, CReference.Ref type) {
 		refs.add(new CReference.Reference(text, type));
@@ -50,6 +52,12 @@ public class CtorReference {
 				// should only be the first element if at all
 				assert i == 0;
 				final VariableTableEntry vte = gf.getVarTableEntry(to_int(ia));
+				if (sSize == 1) {
+					final GeneratedContainerNC resolved = vte.type.resolved();
+					if (resolved != null) {
+						_resolved = resolved;
+					}
+				}
 				addRef(vte.getName(), CReference.Ref.LOCAL);
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = gf.getIdentTableEntry(to_int(ia));
@@ -144,7 +152,12 @@ public class CtorReference {
 		}
 		{
 			// Assuming constructor call
-			int code = aClsinv.getKlass()._a.getCode();
+			int code;
+			if (_resolved != null) {
+				code = _resolved.getCode();
+			} else {
+				code = aClsinv.getKlass()._a.getCode(); // TODO this will either always be 0 or irrelevant
+			}
 			if (code == 0) {
 				System.err.println("** 32135 ClassStatement with 0 code " + aClsinv.getKlass());
 			}
