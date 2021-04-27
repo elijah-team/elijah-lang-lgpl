@@ -29,6 +29,10 @@ public class WorkList {
 	public void setDone() {
 		_done = true;
 	}
+
+	public boolean isEmpty() {
+		return jobs.size() == 0;
+	}
 }
 
 //

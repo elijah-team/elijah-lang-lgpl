@@ -98,7 +98,8 @@ public class GenerateC implements CodeGenerator {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				WorkList wl = new WorkList();
 				generateCodeForMethod(generatedFunction, gr, wl);
-				wm.addJobs(wl);
+				if (!wl.isEmpty())
+					wm.addJobs(wl);
 				for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 					if (identTableEntry.isResolved()) {
 						GeneratedNode x = identTableEntry.resolved();
