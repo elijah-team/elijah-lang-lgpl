@@ -50,11 +50,12 @@ public class PipelineLogic {
 		for (OS_Module mod : mods) {
 			try {
 				ggr = run3(mod, lgc);
+				gr.results().addAll(ggr.results());
 			} catch (IOException e) {
 				mod.parent.eee.exception(e);
 			}
 		}
-		gr = ggr;
+//		gr = ggr;
 	}
 
 	public static void debug_buffers(GenerateResult gr, PrintStream stream) {
