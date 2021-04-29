@@ -37,16 +37,7 @@ public class OutputStrategyC {
 			StringBuilder sb = new StringBuilder();
 			sb.append("/Prelude/");
 			sb.append("Prelude");
-			switch (aTy) {
-				case IMPL:
-					sb.append(".c");
-					break;
-				case PRIVATE_HEADER:
-					sb.append("_Priv.h");
-				case HEADER:
-					sb.append(".h");
-					break;
-			}
+			appendExtension(aTy, sb);
 			return sb.toString();
 		}
 		String filename;
@@ -71,16 +62,7 @@ public class OutputStrategyC {
 			sb.append("/");
 		}
 		sb.append(filename);
-		switch (aTy) {
-			case IMPL:
-				sb.append(".c");
-				break;
-			case PRIVATE_HEADER:
-				sb.append("_Priv.h");
-			case HEADER:
-				sb.append(".h");
-				break;
-		}
+		appendExtension(aTy, sb);
 		return sb.toString();
 	}
 
@@ -108,16 +90,7 @@ public class OutputStrategyC {
 			StringBuilder sb = new StringBuilder();
 			sb.append("/Prelude/");
 			sb.append("Prelude");
-			switch (aTy) {
-				case IMPL:
-					sb.append(".c");
-					break;
-				case PRIVATE_HEADER:
-					sb.append("_Priv.h");
-				case HEADER:
-					sb.append(".h");
-					break;
-			}
+			appendExtension(aTy, sb);
 			return sb.toString();
 		}
 		StringBuilder sb = new StringBuilder();
@@ -173,17 +146,21 @@ public class OutputStrategyC {
 			default:
 				throw new IllegalStateException("Unexpected value: " + outputStrategy.per());
 		}
-		switch (aTy) {
-			case IMPL:
-				sb.append(".c");
-				break;
-			case PRIVATE_HEADER:
-				sb.append("_Priv.h");
-			case HEADER:
-				sb.append(".h");
-				break;
-		}
+		appendExtension(aTy, sb);
 		return sb.toString();
+	}
+
+	public void appendExtension(GenerateResult.TY aTy, StringBuilder aSb) {
+		switch (aTy) {
+		case IMPL:
+			aSb.append(".c");
+			break;
+		case PRIVATE_HEADER:
+			aSb.append("_Priv.h");
+		case HEADER:
+			aSb.append(".h");
+			break;
+		}
 	}
 
 }
