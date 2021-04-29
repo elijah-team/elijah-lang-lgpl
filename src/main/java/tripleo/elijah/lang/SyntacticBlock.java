@@ -9,10 +9,15 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import tripleo.elijah.contexts.SyntacticBlockContext;
 import tripleo.elijah.gen.ICodeGen;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,12 +28,6 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 	private final List<FunctionItem> _items = new ArrayList<FunctionItem>();
 	private final OS_Element _parent;
 	private SyntacticBlockContext ctx;
-	//	private Scope _scope = new /*SyntacticBlockScope*/AbstractBlockScope(this) {
-//		@Override
-//		public Context getContext() {
-//			return SyntacticBlock.this.getContext();
-//		}
-//	};
 	private Scope3 scope3;
 
 	public SyntacticBlock(final OS_Element aParent) {
@@ -69,21 +68,32 @@ public class SyntacticBlock implements OS_Element, OS_Container, FunctionItem, S
 
 	@Override
 	public List<OS_Element2> items() {
-		return null;
+		final Collection<OS_Element> items = Collections2.filter(scope3.items(), new Predicate<OS_Element>() {
+				@Override
+				public boolean apply(@Nullable OS_Element input) {
+					return input instanceof OS_Element2;
+				}
+		});
+		Collection<OS_Element2> c = Collections2.transform(items, new Function<OS_Element, OS_Element2>() {
+			@Nullable
+			@Override
+			public OS_Element2 apply(@Nullable OS_Element input) {
+				return (OS_Element2) input;
+			}
+		});
+		return new ArrayList<OS_Element2>(c);
 	}
 
 	@Override
 	public void add(final OS_Element anElement) {
 		if (!(anElement instanceof FunctionItem))
-			return;
-		_items.add((FunctionItem) anElement);
+			return; // TODO throw?
+		scope3.add(anElement);
 	}
-
-	private final List<Token> _docstrings = new ArrayList<Token>();
 
 	@Override
 	public void addDocString(Token s1) {
-		_docstrings.add(s1);
+		scope3.addDocString(s1);
 	}
 
 	public void scope(Scope3 sco) {
