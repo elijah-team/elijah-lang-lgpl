@@ -9,7 +9,6 @@
 package tripleo.elijah.stages.generate;
 
 import tripleo.elijah.comp.Compilation;
-import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
@@ -35,14 +34,6 @@ public class ElSystem {
 		for (GenerateResultItem ab : gr.results()) {
 			String s = generateOutputs_Internal(ab.node, ab.ty, outputStrategyC);
 			ab.output = s;
-		}
-
-		for (Map.Entry<GeneratedFunction, String> entry : gfm_map.entrySet()) {
-			for (GenerateResultItem result : gr.results()) {
-				if (entry.getKey() == result.node) {
-					result.output = entry.getValue();
-				}
-			}
 		}
 
 		if (verbose) {
@@ -73,7 +64,7 @@ public class ElSystem {
 			}
 		} else if (node instanceof GeneratedFunction) {
 			final GeneratedFunction generatedFunction = (GeneratedFunction) node;
-			s = outputStrategyC.nameForFunction(generatedFunction);
+			s = outputStrategyC.nameForFunction(generatedFunction, ty);
 //			System.out.println("55 "+generatedFunction+" "+s);
 		} else
 			throw new IllegalStateException("Can't be here.");

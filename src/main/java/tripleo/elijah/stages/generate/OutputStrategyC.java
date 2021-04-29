@@ -75,12 +75,12 @@ public class OutputStrategyC {
 		return aFilename;
 	}
 
-	public String nameForFunction(GeneratedFunction generatedFunction) {
+	public String nameForFunction(GeneratedFunction generatedFunction, GenerateResult.TY aTy) {
 		GeneratedNode c = generatedFunction.getGenClass();
 		if (c instanceof GeneratedClass)
-			return nameForClass((GeneratedClass) c, GenerateResult.TY.IMPL);
+			return nameForClass((GeneratedClass) c, aTy);
 		else if (c instanceof GeneratedNamespace)
-			return nameForNamespace((GeneratedNamespace) c, GenerateResult.TY.IMPL);
+			return nameForNamespace((GeneratedNamespace) c, aTy);
 		return null;
 	}
 
