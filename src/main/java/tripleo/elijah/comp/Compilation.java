@@ -374,7 +374,7 @@ public class Compilation {
 		System.out.println((String.format("   %s", f.getAbsolutePath())));
 		if (f.exists()) {
 			final OS_Module m = realParseElijjahFile(file_name, f, do_out);
-			m.lsp = lsp;
+			m.setLsp(lsp);
 			m.prelude = this.findPrelude("c"); // TODO we dont know which prelude to find yet
 		} else {
 			errSink.reportError(

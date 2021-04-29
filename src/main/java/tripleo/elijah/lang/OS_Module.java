@@ -38,7 +38,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	public OS_Module prelude;
 
 	public Compilation parent;
-	public LibraryStatementPart lsp;
+	private LibraryStatementPart lsp;
 	private String _fileName;
 	public @NotNull List<ClassStatement> entryPoints = new ArrayList<ClassStatement>();
 	private IndexingStatement indexingStatement;
@@ -291,6 +291,14 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	public boolean isPrelude() {
 		return prelude == this;
+	}
+
+	public LibraryStatementPart getLsp() {
+		return lsp;
+	}
+
+	public void setLsp(LibraryStatementPart aLsp) {
+		lsp = aLsp;
 	}
 }
 

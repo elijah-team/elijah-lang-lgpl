@@ -53,10 +53,11 @@ public class OutputStrategyC {
 			filename = generatedNamespace.getName();
 		StringBuilder sb = new StringBuilder();
 		sb.append("/");
-		if (generatedNamespace.module().lsp == null)
+		final LibraryStatementPart lsp = generatedNamespace.module().getLsp();
+		if (lsp == null)
 			sb.append("___________________");
 		else
-			sb.append(generatedNamespace.module().lsp.getInstructions().getName());
+			sb.append(lsp.getInstructions().getName());
 		sb.append("/");
 		OS_Package pkg = generatedNamespace.getNamespaceStatement().getPackageName();
 		if (pkg != OS_Package.default_package) {
@@ -100,11 +101,12 @@ public class OutputStrategyC {
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("/");
-		if (generatedClass.module().lsp == null)
+		final LibraryStatementPart lsp = generatedClass.module().getLsp();
+		if (lsp == null)
 			sb.append("______________");
 		else
 //			sb.append(generatedClass.module.lsp.getName());
-			sb.append(generatedClass.module().lsp.getInstructions().getName());
+			sb.append(lsp.getInstructions().getName());
 		sb.append("/");
 		OS_Package pkg = generatedClass.getKlass().getPackageName();
 		if (pkg != OS_Package.default_package) {
@@ -141,8 +143,7 @@ public class OutputStrategyC {
 				break;
 			case PER_PROGRAM:
 				{
-					LibraryStatementPart x = generatedClass.module().lsp;
-					CompilerInstructions xx = x.getInstructions();
+					CompilerInstructions xx = lsp.getInstructions();
 					String n = xx.getName();
 					sb.append(n);
 //					sb.append('/');
