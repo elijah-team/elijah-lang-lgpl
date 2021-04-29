@@ -37,10 +37,16 @@ public class OutputStrategyC {
 			StringBuilder sb = new StringBuilder();
 			sb.append("/Prelude/");
 			sb.append("Prelude");
-			if (aTy == GenerateResult.TY.IMPL)
-				sb.append(".c");
-			else
-				sb.append(".h");
+			switch (aTy) {
+				case IMPL:
+					sb.append(".c");
+					break;
+				case PRIVATE_HEADER:
+					sb.append("_Priv.h");
+				case HEADER:
+					sb.append(".h");
+					break;
+			}
 			return sb.toString();
 		}
 		String filename;
@@ -65,10 +71,16 @@ public class OutputStrategyC {
 			sb.append("/");
 		}
 		sb.append(filename);
-		if (aTy == GenerateResult.TY.IMPL)
-			sb.append(".c");
-		else
-			sb.append(".h");
+		switch (aTy) {
+			case IMPL:
+				sb.append(".c");
+				break;
+			case PRIVATE_HEADER:
+				sb.append("_Priv.h");
+			case HEADER:
+				sb.append(".h");
+				break;
+		}
 		return sb.toString();
 	}
 
@@ -96,7 +108,16 @@ public class OutputStrategyC {
 			StringBuilder sb = new StringBuilder();
 			sb.append("/Prelude/");
 			sb.append("Prelude");
-			sb.append(".c");
+			switch (aTy) {
+				case IMPL:
+					sb.append(".c");
+					break;
+				case PRIVATE_HEADER:
+					sb.append("_Priv.h");
+				case HEADER:
+					sb.append(".h");
+					break;
+			}
 			return sb.toString();
 		}
 		StringBuilder sb = new StringBuilder();
