@@ -209,8 +209,6 @@ public class Compilation {
 		Multimap<String, Buffer> mb = ArrayListMultimap.create();
 
 		for (GenerateResultItem ab : input.results()) {
-//			if (ab.node instanceof GeneratedFunction) continue;
-
 			mb.put(ab.output, ab.buffer);
 		}
 
