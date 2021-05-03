@@ -367,6 +367,16 @@ public class DeduceTypes2 {
 						public void foundElement(OS_Element e) {
 //							pte.resolved_element = e;
 							set_resolved_element_pte(expression, e, pte);
+							if (fd instanceof DefFunctionDef) {
+								forFunction(new FunctionInvocation((FunctionDef) e, pte), new ForFunction() {
+									@Override
+									public void typeDecided(OS_Type aType) {
+										@Nullable InstructionArgument x = generatedFunction.vte_lookup("Result");
+										assert x != null;
+										((IntegerIA)x).getEntry().type.attached = aType;
+									}
+								});
+							}
 						}
 
 						@Override
