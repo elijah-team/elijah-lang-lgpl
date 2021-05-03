@@ -382,6 +382,10 @@ public class DeduceTypes2 {
 						@Override
 						public void noFoundElement() {
 							errSink.reportError("370 Can't find callsite "+x);
+							// TODO don't know if this is right
+							@NotNull IdentTableEntry entry = expression.getEntry();
+							if (entry.getStatus() != BaseTableEntry.Status.UNKNOWN)
+								entry.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 						}
 					});
 				}
