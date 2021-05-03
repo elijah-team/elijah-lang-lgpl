@@ -45,7 +45,7 @@ public class CtorReference {
 	}
 
 	public void getConstructorPath(InstructionArgument ia2, GeneratedFunction gf) {
-		final List<InstructionArgument> s = CReference._getIdentIAPathList(ia2, gf);
+		final List<InstructionArgument> s = CReference._getIdentIAPathList(ia2);
 
 		for (int i = 0, sSize = s.size(); i < sSize; i++) {
 			InstructionArgument ia = s.get(i);

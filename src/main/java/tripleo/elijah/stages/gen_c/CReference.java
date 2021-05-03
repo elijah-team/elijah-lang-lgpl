@@ -65,7 +65,7 @@ public class CReference {
 
 	public String getIdentIAPath(final @NotNull IdentIA ia2, GeneratedFunction generatedFunction) {
 		assert ia2.gf == generatedFunction;
-		final List<InstructionArgument> s = _getIdentIAPathList(ia2, generatedFunction);
+		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
 
 		//
 		// TODO NOT LOOKING UP THINGS, IE PROPERTIES, MEMBERS
@@ -81,7 +81,7 @@ public class CReference {
 				text = "vv" + vte.getName();
 				addRef(vte.getName(), Ref.LOCAL);
 			} else if (ia instanceof IdentIA) {
-				final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(ia));
+				final IdentTableEntry idte = ((IdentIA)ia).getEntry();
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
 					GeneratedNode resolved = idte.type != null ? idte.type.resolved() : null;
@@ -154,7 +154,7 @@ public class CReference {
 			// README might be calling reflect or Type or Name
 			// TODO what about named constructors -- should be called with construct keyword
 			if (ia_next instanceof IdentIA) {
-				IdentTableEntry ite = generatedFunction.getIdentTableEntry(((IdentIA) ia_next).getIndex());
+				IdentTableEntry ite = ((IdentIA) ia_next).getEntry();
 				final String text = ite.getIdent().getText();
 				if (text.equals("reflect")) {
 					b = true;
@@ -265,18 +265,18 @@ public class CReference {
 		return b;
 	}
 
-	@NotNull static List<InstructionArgument> _getIdentIAPathList(@NotNull InstructionArgument oo, GeneratedFunction generatedFunction) {
+	@NotNull static List<InstructionArgument> _getIdentIAPathList(@NotNull InstructionArgument oo) {
 		List<InstructionArgument> s = new LinkedList<InstructionArgument>();
 		while (oo != null) {
 			if (oo instanceof IntegerIA) {
 				s.add(0, oo);
 				oo = null;
 			} else if (oo instanceof IdentIA) {
-				final IdentTableEntry ite1 = generatedFunction.getIdentTableEntry(((IdentIA) oo).getIndex());
+				final IdentTableEntry ite1 = ((IdentIA) oo).getEntry();
 				s.add(0, oo);
 				oo = ite1.backlink;
 			} else if (oo instanceof ProcIA) {
-				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(oo));
+//				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(oo));
 				s.add(0, oo);
 				oo = null;
 			} else
