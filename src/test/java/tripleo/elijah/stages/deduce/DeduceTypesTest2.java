@@ -18,22 +18,13 @@ import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.Helpers;
 
-/**
- * Apr 25, 2021 03:29<br><br>
- *
- * <p>
- * This test should fail. In it's output you see multiple ResolveError's.
- * These are because the Prelude is not loaded.  The fact that it passes
- * is due to compromises in the compiler logic that will eventually be
- * taken out.
- * </p>
- */
 public class DeduceTypesTest2 {
 
 	@Test
 	public void testDeduceIdentExpression() throws ResolveError {
 		final OS_Module mod = new OS_Module();
 		mod.parent = new Compilation(new StdErrSink(), new IO());
+		mod.prelude = mod.parent.findPrelude("c");
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		final ClassStatement cs = new ClassStatement(mod, mctx);
@@ -45,7 +36,7 @@ public class DeduceTypesTest2 {
 		final VariableStatement vs = vss.next();
 		vs.setName((Helpers.string_to_ident("x")));
 		final Qualident qu = new Qualident();
-		qu.append(Helpers.string_to_ident("Integer"));
+		qu.append(Helpers.string_to_ident("SystemInteger"));
 		((NormalTypeName)vs.typeName()).setName(qu);
 		final FunctionContext fc = (FunctionContext) fd.getContext();
 		vs.typeName().setContext(fc);
@@ -68,11 +59,12 @@ public class DeduceTypesTest2 {
 //		final RegularTypeName tn = new RegularTypeName();
 		final VariableTypeName tn = new VariableTypeName();
 		final Qualident tnq = new Qualident();
-		tnq.append(Helpers.string_to_ident("Integer"));
+		tnq.append(Helpers.string_to_ident("SystemInteger"));
 		tn.setName(tnq);
+		tn.setContext(fd.getContext());
 
 //		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
-		Assert.assertEquals(new OS_Type(tn), x);
+		Assert.assertEquals(d.resolve_type(new OS_Type(tn), tn.getContext()), x);
 //		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());
 	}
 

@@ -829,8 +829,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	@NotNull
-	private OS_Type resolve_type(final OS_Type type, final Context ctx) throws ResolveError {
+	@NotNull OS_Type resolve_type(final OS_Type type, final Context ctx) throws ResolveError {
 		return resolve_type(module, type, ctx);
 	}
 
