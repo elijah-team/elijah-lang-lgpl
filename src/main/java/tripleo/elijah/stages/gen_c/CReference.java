@@ -276,7 +276,7 @@ public class CReference {
 				s.add(0, oo);
 				oo = ite1.backlink;
 			} else if (oo instanceof ProcIA) {
-//				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(oo));
+//				final ProcTableEntry prte = ((ProcIA)oo).getEntry();
 				s.add(0, oo);
 				oo = null;
 			} else
