@@ -105,7 +105,14 @@ public class GeneratedClass extends GeneratedContainerNC {
 					// must be unknown
 				}
 			} else {
-
+				System.err.println(String.format("108 %s %s", this, varTableEntry.potentialTypes));
+				if (varTableEntry.potentialTypes.size() == 1) {
+					TypeTableEntry varType1 = varTableEntry.potentialTypes.get(0);
+					if (varType1.resolved() != null)
+						varTableEntry.resolve(varType1.resolved());
+					else
+						System.err.println("114 Can't resolve "+varTableEntry);
+				}
 			}
 		}
 	}

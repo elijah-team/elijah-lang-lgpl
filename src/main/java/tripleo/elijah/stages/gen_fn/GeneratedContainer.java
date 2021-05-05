@@ -34,6 +34,7 @@ public interface GeneratedContainer extends GeneratedNode {
         TypeName typeName;
         public OS_Type varType;
         List<TypeTableEntry> potentialTypes = new ArrayList<TypeTableEntry>();
+        private GeneratedNode _resolved;
 
         public VarTableEntry(IdentExpression aNameToken, IExpression aInitialValue, @NotNull TypeName aTypeName) {
             this.nameToken = aNameToken;
@@ -43,6 +44,14 @@ public interface GeneratedContainer extends GeneratedNode {
 
         public void addPotentialTypes(Collection<TypeTableEntry> aPotentialTypes) {
             potentialTypes.addAll(aPotentialTypes);
+        }
+
+        public void resolve(GeneratedNode aResolved) {
+            _resolved = aResolved;
+        }
+
+        public GeneratedNode resolved() {
+            return _resolved;
         }
     }
 }

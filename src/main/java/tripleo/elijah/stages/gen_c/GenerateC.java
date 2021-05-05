@@ -135,12 +135,8 @@ public class GenerateC implements CodeGenerator {
 			tosHdr.put_string_ln("int _tag;");
 			if (!decl.prim) {
 				for (GeneratedClass.VarTableEntry o : x.varTable){
-					String s;
-					if (o.varType != null)
-						s = getTypeName(o.varType);
-					else
-						s = "void*/*null*/";
-					tosHdr.put_string_ln(String.format("%s vm%s;", s, o.nameToken));
+					final String typeName = getTypeNameForVarTableEntry(o);
+					tosHdr.put_string_ln(String.format("%s vm%s;", typeName, o.nameToken));
 				}
 			} else {
 				tosHdr.put_string_ln(String.format("%s vsv;", decl.prim_decl));
@@ -185,6 +181,25 @@ public class GenerateC implements CodeGenerator {
 		}
 	}
 
+	@NotNull public String getTypeNameForVarTableEntry(GeneratedContainer.VarTableEntry o) {
+		final String typeName;
+		if (o.resolved() != null) {
+			GeneratedNode xx = o.resolved();
+			if (xx instanceof GeneratedClass) {
+				typeName = getTypeName((GeneratedClass) xx);
+			} else if (xx instanceof GeneratedNamespace) {
+				typeName = getTypeName((GeneratedNamespace) xx);
+			} else
+				throw new NotImplementedException();
+		} else {
+			if (o.varType != null)
+				typeName = getTypeName(o.varType);
+			else
+				typeName = "void*/*null*/";
+		}
+		return typeName;
+	}
+
 	@Override
 	public void generate_namespace(GeneratedNamespace x, GenerateResult gr) {
 		final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
@@ -194,7 +209,9 @@ public class GenerateC implements CodeGenerator {
 			tosHdr.incr_tabs();
 //			tosHdr.put_string_ln("int _tag;");
 			for (GeneratedNamespace.VarTableEntry o : x.varTable){
-				tosHdr.put_string_ln(String.format("%s* vm%s;", o.varType == null ? "void " : getTypeName(o.varType), o.nameToken));
+				final String typeName = getTypeNameForVarTableEntry(o);
+
+				tosHdr.put_string_ln(String.format("%s* vm%s;", o.varType == null ? "void " : typeName, o.nameToken));
 			}
 
 			String class_name = getTypeName(x);
@@ -233,7 +250,8 @@ public class GenerateC implements CodeGenerator {
 		private final String args_string;
 		private final String header_string;
 		private final String name;
-		OS_Type tte;
+		OS_Type type;
+		TypeTableEntry tte;
 
 		public Generate_Method_Header(GeneratedFunction gf) {
 			name          = gf.fd.name();
@@ -296,12 +314,20 @@ public class GenerateC implements CodeGenerator {
 
 		String find_return_type(GeneratedFunction gf) {
 			final String returnType;
-			tte = gf.getTypeTableEntry(1).attached;
-			System.out.println("228 "+tte);
-			if (tte != null && tte.getType() == OS_Type.Type.BUILT_IN && tte.getBType() == BuiltInTypes.Unit) {
+			tte = gf.getTypeTableEntry(1);
+			GeneratedNode res = tte.resolved();
+			if (res instanceof GeneratedContainerNC) {
+				final GeneratedContainerNC nc = (GeneratedContainerNC) res;
+				int code = nc.getCode();
+				return "Z"+code;
+			}
+			type = tte.attached;
+
+			System.out.println("228 "+ type);
+			if (type != null && type.getType() == OS_Type.Type.BUILT_IN && type.getBType() == BuiltInTypes.Unit) {
 				returnType = "void";
-			} else if (tte != null) {
-				returnType = String.format("/*267*/%s*", getTypeName(tte));
+			} else if (type != null) {
+				returnType = String.format("/*267*/%s*", getTypeName(type));
 			} else {
 //			throw new IllegalStateException();
 				returnType = "void/*2*/";
@@ -787,6 +813,16 @@ public class GenerateC implements CodeGenerator {
 		String z;
 		z = String.format("Z%d", aGeneratedClass.getCode());
 		return z;
+	}
+
+	private String getTypeName(TypeTableEntry tte) {
+		GeneratedNode res = tte.resolved();
+		if (res instanceof GeneratedContainerNC) {
+			final GeneratedContainerNC nc = (GeneratedContainerNC) res;
+			int code = nc.getCode();
+			return "Z"+code;
+		} else
+			return "Z<-1>";
 	}
 
 	private String getTypeName(final OS_Type ty) {
