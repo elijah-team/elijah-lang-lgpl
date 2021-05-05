@@ -1161,12 +1161,15 @@ public class DeduceTypes2 {
 							OS_Element best = lrl.chooseBest(null);
 							if (best instanceof FormalArgListItem) {
 								@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
-								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
-										TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken(), vte1);
-								if (p.isResolved())
-									System.out.printf("890 Already resolved type: vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
-								else
-									vte1.typeDeferred.resolve(tte1);
+								final OS_Type osType = new OS_Type(fali.typeName());
+								if (!osType.equals(vte.type.attached)) {
+									@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
+											TypeTableEntry.Type.SPECIFIED, osType, fali.getNameToken(), vte1);
+									if (p.isResolved())
+										System.out.printf("890 Already resolved type: vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
+									else
+										vte1.typeDeferred.resolve(tte1);
+								}
 //								vte.type = tte1;
 //								tte.attached = tte1.attached;
 //								vte.setStatus(BaseTableEntry.Status.KNOWN, best);
