@@ -854,33 +854,6 @@ public class GenerateC implements CodeGenerator {
 		return z;
 	}
 
-	private int getTypeNumber(final OS_Type ty) {
-		if (ty == null) throw new IllegalArgumentException("ty is null");
-		//
-		int z;
-		switch (ty.getType()) {
-		case USER_CLASS:
-			final ClassStatement el = ty.getClassOf();
-			z = el._a.getCode();
-			break;
-//		case FUNCTION:
-//			z = "<function>";
-//			break;
-//		case USER:
-//			System.err.println("Warning: USER TypeName in GenerateC "+ty.getTypeName());
-//			z = String.format("Z<%s>", ty.getTypeName().toString());
-//			break;
-		case BUILT_IN:
-			System.err.println("Warning: BUILT_IN TypeName in GenerateC");
-			z = ty.getBType().getCode();  // README should not even be here, but look at .name() for other code gen schemes
-			break;
-		default:
-			z = -1; // bad input
-			//throw new IllegalStateException("Unexpected value: " + ty.getType());
-		}
-		return z;
-	}
-
 	private String getTypeName(final TypeName typeName) {
 		if (typeName instanceof RegularTypeName) {
 			final String name = ((RegularTypeName) typeName).getName(); // TODO convert to Z-name
@@ -903,7 +876,6 @@ public class GenerateC implements CodeGenerator {
 				final String realTargetName = getRealTargetName(gf, (IntegerIA) ia);
 				sl3.add(Emit.emit("/*669*/")+""+realTargetName);
 			} else if (ia instanceof IdentIA) {
-				final int y = 2;
 				final CReference reference = new CReference();
 				reference.getIdentIAPath((IdentIA) ia, gf);
 				String text = reference.build();

@@ -26,7 +26,7 @@ import java.util.List;
 public interface GeneratedContainer extends GeneratedNode {
     OS_Element getElement();
 
-    GeneratedClass.VarTableEntry getVariable(String aVarName);
+    VarTableEntry getVariable(String aVarName);
 
     public class VarTableEntry {
         public final IdentExpression nameToken;
