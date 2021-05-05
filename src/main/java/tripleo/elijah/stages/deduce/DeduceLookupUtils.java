@@ -68,6 +68,27 @@ public class DeduceLookupUtils {
 		return lrl2.chooseBest(null);
 	}
 
+	@NotNull
+	public static OS_Element _resolveAlias2(final AliasStatement aliasStatement) throws ResolveError {
+		LookupResultList lrl2;
+		if (aliasStatement.getExpression() instanceof Qualident) {
+			final IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
+			if (de instanceof DotExpression) {
+				lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
+			} else
+				lrl2 = aliasStatement.getContext().lookup(((IdentExpression) de).getText());
+			return lrl2.chooseBest(null);
+		}
+		// TODO what about when DotExpression is not just simple x.y.z? then alias equivalent to val
+		if (aliasStatement.getExpression() instanceof DotExpression) {
+			final IExpression de = aliasStatement.getExpression();
+			lrl2 = lookup_dot_expression(aliasStatement.getContext(), (DotExpression) de);
+			return lrl2.chooseBest(null);
+		}
+		lrl2 = aliasStatement.getContext().lookup(((IdentExpression) aliasStatement.getExpression()).getText());
+		return lrl2.chooseBest(null);
+	}
+
 	private static LookupResultList lookup_dot_expression(Context ctx, final DotExpression de) throws ResolveError {
 		final Stack<IExpression> s = dot_expression_to_stack(de);
 		OS_Type t = null;

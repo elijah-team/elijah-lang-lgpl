@@ -851,7 +851,7 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
 							} else if (OS_Type.isConcreteType(best)) {
 								throw new NotImplementedException();
 							} else
@@ -870,7 +870,7 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
 							} else if (OS_Type.isConcreteType(best)) {
 								throw new NotImplementedException();
 							} else
@@ -889,7 +889,7 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
 							} else if (OS_Type.isConcreteType(best)) {
 								throw new NotImplementedException();
 							} else
@@ -921,7 +921,7 @@ public class DeduceTypes2 {
 						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(tn, tn1.getContext());
 						OS_Element best = lrl.chooseBest(null);
 						while (best instanceof AliasStatement) {
-							best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
+							best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
 						}
 						if (best == null) {
 							if (tn.asSimpleString().equals("Any"))
@@ -2129,13 +2129,14 @@ public class DeduceTypes2 {
 				int yy = 2;
 			} else if (y instanceof AliasStatement) {
 				System.err.println("396 AliasStatement");
-				OS_Element x = DeduceLookupUtils._resolveAlias((AliasStatement) y);
-				if (x == null) {
-					ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-					errSink.reportError("399 resolveAlias returned null");
-				} else {
+				OS_Element x = null;
+				try {
+					x = DeduceLookupUtils._resolveAlias2((AliasStatement) y);
 					ite.setStatus(BaseTableEntry.Status.KNOWN, x);
 					found_element_for_ite(generatedFunction, ite, x, ctx);
+				} catch (ResolveError aResolveError) {
+					ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+					errSink.reportError("399 resolveAlias returned null");
 				}
 			} else {
 				//LookupResultList exp = lookupExpression();
