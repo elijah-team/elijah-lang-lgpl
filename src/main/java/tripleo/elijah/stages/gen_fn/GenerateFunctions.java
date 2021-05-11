@@ -19,6 +19,7 @@ import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijjah.lang.UnaryExpression;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
@@ -664,6 +665,27 @@ public class GenerateFunctions {
 			final int agn_inst = add_i(gf, InstructionName.AGN, List_of(agn_path, new ConstTableIA(cte, gf)), aContext);
 			// TODO what now??
 		}
+
+		public void neg(GeneratedFunction gf, IExpression left, ExpressionKind aKind, IExpression right1, Context cctx) {
+			// TODO doesn't use kind
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, right1.getType(), right1);
+
+			InstructionArgument left_ia = simplify_expression(left, gf, cctx);
+			InstructionArgument right_ia = simplify_expression(right1, gf, cctx);
+
+			final int instruction_number = add_i(gf, InstructionName.AGN, List_of(left_ia, right_ia), cctx);
+			final Instruction instruction = gf.getInstruction(instruction_number);
+			if (left_ia instanceof IntegerIA) {
+				// Assuming this points to a variable and not ie a function
+				final VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(left_ia));
+//				vte.type = tte;
+				vte.addPotentialType(instruction.getIndex(), tte);
+			} else if (left_ia instanceof IdentIA) {
+				final IdentTableEntry idte = gf.getIdentTableEntry(DeduceTypes2.to_int(left_ia));
+//				idte.type = tte;
+				idte.addPotentialType(instruction.getIndex(), tte);
+			}
+		}
 	}
 
 	private void generate_item_assignment(@NotNull final IExpression x, @NotNull final GeneratedFunction gf, final Context cctx) {
@@ -687,6 +709,9 @@ public class GenerateFunctions {
 		case ADDITION:
 		case MULTIPLY:
 			gia.mathematical(gf, bbe.getLeft(), right1.getKind(), right1, cctx);
+			break;
+		case NEG:
+			gia.neg(gf, bbe.getLeft(), right1.getKind(), right1, cctx);
 			break;
 		default:
 			System.err.println("right1.getKind(): "+right1.getKind());
@@ -991,6 +1016,41 @@ public class GenerateFunctions {
 				}
 //				throw new NotImplementedException();
 			}
+		case NEG:
+			{
+				final UnaryExpression bbe = (UnaryExpression) expression;
+				final IExpression left = bbe.getLeft();
+				final InstructionArgument left_instruction;
+				if (left.is_simple()) {
+					if (left instanceof IdentExpression) {
+						left_instruction = simplify_expression(left, gf, cctx);
+					} else {
+						// a constant
+						final int left_constant_num = addConstantTableEntry2(null, left, left.getType(), gf);
+						left_instruction = new ConstTableIA(left_constant_num, gf);
+					}
+				} else {
+					// create a tmp var
+					left_instruction = simplify_expression(left, gf, cctx);
+				}
+				{
+					// create a call
+					final IdentExpression expr_kind_name = Helpers.string_to_ident(SpecialFunctions.of(expressionKind));
+//					TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, expr_kind_name);
+					final TypeTableEntry tte_left  = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, left);
+					final int pte = addProcTableEntry(expr_kind_name, null, List_of(tte_left), gf);
+					final int tmp = addTempTableEntry(new OS_Type(BuiltInTypes.Boolean), gf);
+					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(tmp, gf)), cctx);
+					final Instruction inst = new Instruction();
+					inst.setName(InstructionName.CALLS);
+					inst.setArgs(List_of(new ProcIA(pte, gf), left_instruction));
+					final FnCallArgs fca = new FnCallArgs(inst, gf);
+					// TODO should be AGNC
+					final int x = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(tmp, gf), fca), cctx);
+					return new IntegerIA(tmp, gf);
+				}
+			}
+//			break;
 		case ASSIGNMENT:
 			{
 				InstructionArgument s1 = simplify_expression(expression.getLeft(), gf, cctx);
