@@ -264,20 +264,10 @@ public class BasicBinaryExpression implements IBinaryExpression {
 			sb.append(abe.getLeft().toString());
 //				sb.append(abe.getRight().toString());
 			break;
-//		case NEG://ATION:
-//			sb.append("-");
-//			sb.append(abe.getLeft().toString());
-////				sb.append(abe.getRight().toString());
-//			break;
-//		case POS://ITIVITY:
-//			sb.append("+");
-//			sb.append(abe.getLeft().toString());
-////				sb.append(abe.getRight().toString());
-//			break;
 		case NEG:
 			sb.append("-");
 			sb.append(abe.getLeft().toString());
-			sb.append(abe.getRight().toString());
+			sb.append(abe.getRight().toString()); // TODO ??
 			break;
 		case POS:
 			sb.append("+");
