@@ -787,7 +787,7 @@ public class GenerateC implements CodeGenerator {
 				// TODO still should not happen
 				tos.put_string_ln(String.format("/*%s is declared as the Unit type*/", target_name));
 			} else {
-				System.err.println("Bad potentialTypes size " + type);
+//				System.err.println("Bad potentialTypes size " + type);
 				final String z = getTypeName(type);
 				tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
 			}
