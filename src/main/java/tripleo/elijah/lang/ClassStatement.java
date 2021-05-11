@@ -113,6 +113,10 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 		_type = aType;
 	}
 
+	public ClassTypes getType() {
+		return _type;
+	}
+
 	public void postConstruct() {
 		assert nameToken != null;
 		int destructor_count = 0;
@@ -215,7 +219,6 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 			}
 		});
 	}
-
 }
 
 //

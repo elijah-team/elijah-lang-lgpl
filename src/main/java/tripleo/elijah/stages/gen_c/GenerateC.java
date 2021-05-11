@@ -125,6 +125,13 @@ public class GenerateC implements CodeGenerator {
 	@Override
 	public void generate_class(GeneratedClass x, GenerateResult gr) {
 		int y=2;
+		switch (x.getKlass().getType()) {
+			// Don't generate class definition for these three
+			case INTERFACE:
+			case SIGNATURE:
+			case ABSTRACT:
+				return;
+		}
 		final CClassDecl decl = new CClassDecl(x);
 		decl.evaluatePrimitive();
 		final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
