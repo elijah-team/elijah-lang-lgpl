@@ -672,6 +672,7 @@ public class GenerateFunctions {
 		}
 
 		public void mathematical(GeneratedFunction gf, IExpression left, ExpressionKind kind, IExpression right1, Context cctx) {
+			// TODO doesn't use kind
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, right1.getType(), right1);
 
 			InstructionArgument left_ia = simplify_expression(left, gf, cctx);
