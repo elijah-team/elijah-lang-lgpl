@@ -18,6 +18,7 @@ public class SpecialFunctions {
 		switch (kind) {
 		case LT_: 				return "__lt__";
 		case GT: 				return "__gt__";
+		case GE: 				return "__ge__";
 		case INCREMENT: 		return "__preinc__";
 		case AUG_MULT:			return "__imult__";
 		case ASSIGNMENT:		return "__assign__";
@@ -26,6 +27,8 @@ public class SpecialFunctions {
 		case MULTIPLY:			return "__mult__";
 		case NOT_EQUAL:			return "__neq__";
 		case EQUAL:				return "__eq__";
+		// unary
+		case NEG:				return "__negate__";
 		default:
 			throw new IllegalStateException("Unexpected value: " + kind);
 		}
