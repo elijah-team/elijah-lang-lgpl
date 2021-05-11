@@ -306,37 +306,70 @@ public class GenerateFunctions {
 
 		private void generate_variable_sequence(VariableSequence item, @NotNull GeneratedFunction gf, Context cctx) {
 			for (final VariableStatement vs : item.items()) {
+				int state = 0;
 //				System.out.println("8004 " + vs);
 				final String variable_name = vs.getName();
+				final IExpression initialValue = vs.initialValue();
+				//
 				if (vs.getTypeModifiers() == TypeModifiers.CONST) {
-					if (vs.initialValue().is_simple()) {
-						final int ci = addConstantTableEntry(variable_name, vs.initialValue(), vs.initialValue().getType(), gf);
-						final int vte_num = addVariableTableEntry(variable_name, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf, vs.getNameToken());
-						final IExpression iv = vs.initialValue();
-						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("const"), new IntegerIA(vte_num, gf)), cctx);
-						add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(vte_num, gf), new ConstTableIA(ci, gf)), cctx);
+					if (initialValue.is_simple()) {
+						if (initialValue instanceof IdentExpression) {
+							state = 4;
+						} else {
+							state = 1;
+						}
 					} else {
-						final int vte_num = addVariableTableEntry(variable_name, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (vs.initialValue().getType()), vs.getNameToken()), gf, vs.getNameToken());
-						add_i(gf, InstructionName.DECL, List_of(new SymbolIA("val"), new IntegerIA(vte_num, gf)), cctx);
-						final IExpression iv = vs.initialValue();
-						assign_variable(gf, vte_num, iv, cctx);
+						state = 2;
 					}
 				} else {
-					final TypeTableEntry tte;
-					if (vs.initialValue() == IExpression.UNASSIGNED && vs.typeName() != null) {
-						tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(vs.typeName()), vs.getNameToken());
-					} else {
-						tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, vs.initialValue().getType(), vs.getNameToken());
-					}
-					final int vte_num = addVariableTableEntry(variable_name, tte, gf, vs); // TODO why not vs.initialValue ??
-					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("var"), new IntegerIA(vte_num, gf)), cctx);
-					final IExpression iv = vs.initialValue();
-					assign_variable(gf, vte_num, iv, cctx);
+					state = 3;
 				}
 //				final OS_Type type = vs.initialValue().getType();
 //				final String stype = type == null ? "Unknown" : getTypeString(type);
 //				System.out.println("8004-1 " + type);
 //				System.out.println(String.format("8004-2 %s %s;", stype, vs.getName()));
+				switch (state) {
+					case 1:
+						{
+							final int ci = addConstantTableEntry(variable_name, initialValue, initialValue.getType(), gf);
+							final int vte_num = addVariableTableEntry(variable_name, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (initialValue.getType()), vs.getNameToken()), gf, vs.getNameToken());
+							final IExpression iv = initialValue;
+							add_i(gf, InstructionName.DECL, List_of(new SymbolIA("const"), new IntegerIA(vte_num, gf)), cctx);
+							add_i(gf, InstructionName.AGNK, List_of(new IntegerIA(vte_num, gf), new ConstTableIA(ci, gf)), cctx);
+						}
+						break;
+					case 2:
+						{
+							final int vte_num = addVariableTableEntry(variable_name, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (initialValue.getType()), vs.getNameToken()), gf, vs.getNameToken());
+							add_i(gf, InstructionName.DECL, List_of(new SymbolIA("val"), new IntegerIA(vte_num, gf)), cctx);
+							final IExpression iv = initialValue;
+							assign_variable(gf, vte_num, iv, cctx);
+						}
+						break;
+					case 3:
+						{
+							final TypeTableEntry tte;
+							if (initialValue == IExpression.UNASSIGNED && vs.typeName() != null) {
+								tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(vs.typeName()), vs.getNameToken());
+							} else {
+								tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, initialValue.getType(), vs.getNameToken());
+							}
+							final int vte_num = addVariableTableEntry(variable_name, tte, gf, vs); // TODO why not vs.initialValue ??
+							add_i(gf, InstructionName.DECL, List_of(new SymbolIA("var"), new IntegerIA(vte_num, gf)), cctx);
+							final IExpression iv = initialValue;
+							assign_variable(gf, vte_num, iv, cctx);
+						}
+						break;
+					case 4:
+						{
+							final int vte_num = addVariableTableEntry(variable_name, gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, (initialValue.getType()), vs.getNameToken()), gf, vs.getNameToken());
+							add_i(gf, InstructionName.DECL, List_of(new SymbolIA("const"), new IntegerIA(vte_num, gf)), cctx);
+							assign_variable(gf, vte_num, initialValue, cctx);
+						}
+						break;
+					default:
+						throw new IllegalStateException();
+				}
 			}
 		}
 
