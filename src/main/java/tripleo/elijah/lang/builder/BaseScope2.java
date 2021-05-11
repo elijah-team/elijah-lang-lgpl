@@ -8,10 +8,17 @@
  */
 package tripleo.elijah.lang.builder;
 
+import tripleo.elijah.lang.IExpression;
+
 /**
- * Created 12/23/20 12:03 AM
+ * Created 5/8/21 6:13 AM
  */
-public class LoopScope extends BaseScope2 {
+public class BaseScope2 extends BaseScope {
+	@Override
+	public void statementWrapper(IExpression expr) {
+		StatementWrapperBuilder swb = new StatementWrapperBuilder(expr);
+		bs.add(swb);
+	}
 }
 
 //

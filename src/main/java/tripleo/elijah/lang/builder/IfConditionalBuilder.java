@@ -26,7 +26,7 @@ public class IfConditionalBuilder extends ElBuilder {
 
 	private Context _context;
 
-	public static class IfConditionalScope extends BaseScope {
+	public static class IfConditionalScope extends BaseScope2 {
 
 	}
 
