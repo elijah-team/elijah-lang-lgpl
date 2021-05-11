@@ -28,6 +28,10 @@ public interface TypeName extends Locatable {
 
 	@Override
 	boolean equals(Object o);
+
+	enum Nullability {
+		NOT_SPECIFIED, NEVER_NULL, NULLABLE
+	}
 }
 
 //
