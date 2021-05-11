@@ -742,6 +742,8 @@ public class GenerateFunctions {
 			break;
 		case ADDITION:
 		case MULTIPLY:
+		case GE:
+		case GT:
 			gia.mathematical(gf, bbe.getLeft(), right1.getKind(), right1, cctx);
 			break;
 		case NEG:
@@ -997,7 +999,8 @@ public class GenerateFunctions {
 					return new IntegerIA(tmp, gf);
 				}
 			}
-		case LT_: case GT: case ADDITION: case MULTIPLY: // TODO all BinaryExpressions go here
+		case LT_: case GT: case GE:
+		case ADDITION: case MULTIPLY: // TODO all BinaryExpressions go here
 		case NOT_EQUAL: case EQUAL:
 			{
 				final BasicBinaryExpression bbe = (BasicBinaryExpression) expression;
