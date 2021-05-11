@@ -76,7 +76,8 @@ classStatement [OS_Element parent, Context cctx, List<AnnotationClause> as] retu
     ("class"				{cls = new ClassStatement(parent, cctx);cls.addAnnotations(as);}
             ("struct"       {cls.setType(ClassTypes.STRUCTURE);}
             |"signature"    {cls.setType(ClassTypes.SIGNATURE);}
-            |"abstract"     {cls.setType(ClassTypes.ABSTRACT);})?
+            |"abstract"     {cls.setType(ClassTypes.ABSTRACT);}
+            |			    {cls.setType(ClassTypes.NORMAL);})?
       i1=ident              {cls.setName(i1);}
 	  ( LBRACK tnl=typeNameList2 RBRACK { cls.setGenericPart(tnl);})?
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
