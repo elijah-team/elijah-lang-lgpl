@@ -44,7 +44,7 @@ public class VariableStatement implements OS_Element, @NotNull Locatable {
 		name = s;
 	}
 
-	public void initial(final IExpression aExpr) {
+	public void initial(@NotNull final IExpression aExpr) {
 		initialValue=aExpr;
 	}
 
