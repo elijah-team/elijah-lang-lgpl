@@ -14,6 +14,8 @@
  */
 package tripleo.elijah.lang;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,7 +65,7 @@ public class VariableTypeName extends AbstractTypeName implements NormalTypeName
 		_ctx = ctx;
 	}
 
-	@Override
+	@Override @NotNull
 	public Collection<TypeModifiers> getModifiers() {
 		return (tm != null ? List_of(tm)  : new ArrayList<TypeModifiers>());
 	}
