@@ -907,18 +907,18 @@ multiplicativeExpression returns [IExpression ee]
 unaryExpression returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
-	:	INC/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.INCREMENT);}
-	|	DEC/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.DECREMENT);}
-	|	MINUS/*^*/ /*{#MINUS.setType(UNARY_MINUS);}*/ ee=unaryExpression {ee.setKind(ExpressionKind.NEG);}
-	|	PLUS/*^*/  /*{#PLUS.setType(UNARY_PLUS);}*/ ee=unaryExpression {ee.setKind(ExpressionKind.POS);}
+	:	INC/*^*/ ee=unaryExpression {ee=new UnaryExpression(ExpressionKind.INCREMENT, ee);}
+	|	DEC/*^*/ ee=unaryExpression {ee=new UnaryExpression(ExpressionKind.DECREMENT, ee);}
+	|	MINUS/*^*/ /*{#MINUS.setType(UNARY_MINUS);}*/ ee=unaryExpression {ee=new UnaryExpression(ExpressionKind.NEG, ee);}
+	|	PLUS/*^*/  /*{#PLUS.setType(UNARY_PLUS);}*/ ee=unaryExpression {ee=new UnaryExpression(ExpressionKind.POS, ee);}
 	|	ee=unaryExpressionNotPlusMinus
 	;
 
 unaryExpressionNotPlusMinus returns [IExpression ee]
 		{ee=null;
 		IExpression e3=null;}
-	:	BNOT/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.BNOT);}
-	|	LNOT/*^*/ ee=unaryExpression {ee.setKind(ExpressionKind.LNOT);}
+	:	BNOT/*^*/ ee=unaryExpression {ee=new UnaryExpression(ExpressionKind.BNOT, ee);}
+	|	LNOT/*^*/ ee=unaryExpression {ee=new UnaryExpression(ExpressionKind.LNOT, ee);}
 	|	ee=postfixExpression
 	;
 
