@@ -545,7 +545,7 @@ functionDef2_interface[FunctionDefBuilder fb]
     (TOK_ARROW tn=typeName2 	{fb.setReturnType(tn);})?
     (functionScope2[fb.scope()]
 	|
-	)
+	)							{fb.setSpecies(FunctionDef.Species.REG_FUN);}
     ;
 programStatement[ProgramClosure pc, OS_Element cont]
 		{ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();AliasStatement als=null;}
