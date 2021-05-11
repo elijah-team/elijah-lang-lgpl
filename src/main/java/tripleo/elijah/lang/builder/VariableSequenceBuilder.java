@@ -20,8 +20,10 @@ public class VariableSequenceBuilder extends ElBuilder {
 	private IExpression _initial;
 	private IdentExpression _name;
 	private TypeName _tn;
-	List<Triple> triples = new ArrayList<Triple>();
 	private TypeModifiers def = null;
+
+	private Context _context;
+	List<Triple> triples = new ArrayList<Triple>();
 
 	public void defaultModifiers(TypeModifiers modifiers) {
 		def = modifiers;
@@ -32,7 +34,7 @@ public class VariableSequenceBuilder extends ElBuilder {
 		triples.add(new Triple(_initial, _name, _tn));
 		_initial = null;
 		_name = null;
-		_tn = null;
+//		_tn = null;
 	}
 
 	static class Triple {
@@ -46,8 +48,6 @@ public class VariableSequenceBuilder extends ElBuilder {
 			this._tn = _tn;
 		}
 	}
-
-	private Context _context;
 
 	public void setName(IdentExpression i) {
 		_name = i;
@@ -74,6 +74,8 @@ public class VariableSequenceBuilder extends ElBuilder {
 			vs.initial(triple._initial);
 			vs.setName(triple._name);
 		}
+		if (_tn != null)
+			variableSequence.setTypeName(_tn);
 		return variableSequence;
 	}
 

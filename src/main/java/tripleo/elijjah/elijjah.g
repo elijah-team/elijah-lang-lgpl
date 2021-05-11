@@ -586,20 +586,21 @@ varStmt_i3[VariableStatement vs]
 	( BECOMES expr=expression   {vs.initial(expr);})?
 	;
 varStmt2[BaseScope cs]
-        {VariableSequenceBuilder vsqb=new VariableSequenceBuilder();}
+        {VariableSequenceBuilder vsqb=new VariableSequenceBuilder();TypeName tn=null;}
     :					
 	( "var"
     | "const"           {vsqb.defaultModifiers(TypeModifiers.CONST);}
     | "val"             {vsqb.defaultModifiers(TypeModifiers.VAL);}
     )
     ( varStmt_i2[vsqb] ({vsqb.next();} COMMA varStmt_i2[vsqb])*
+		( TOK_COLON tn=typeName2    {vsqb.setTypeName(tn);})?
     )
 						{cs.add(vsqb);}
     ;
 varStmt_i2[VariableSequenceBuilder vsb]
 		{TypeName tn=null;IdentExpression i=null;}
 	: i=ident                   {vsb.setName(i);}
-	( TOK_COLON tn=typeName2    {vsb.setTypeName(tn);})?
+//	( TOK_COLON tn=typeName2    {vsb.setTypeName(tn);})?
 	( BECOMES expr=expression   {vsb.setInitial(expr);})?
 	;
 typeAlias[OS_Element cont] returns [TypeAliasStatement cr]
