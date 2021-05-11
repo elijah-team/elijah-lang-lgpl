@@ -111,6 +111,12 @@ public class VariableSequence implements StatementItem, FunctionItem, ClassItem 
 
 	// endregion
 
+	public void setTypeName(TypeName aTypeName) {
+		for (VariableStatement vs : stmts) {
+			vs.setTypeName(aTypeName);
+		}
+	}
+
 }
 
 //

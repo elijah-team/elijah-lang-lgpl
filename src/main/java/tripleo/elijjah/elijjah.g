@@ -563,19 +563,26 @@ programStatement2[ClassOrNamespaceScope cont]
 	| aliasStatement2[cont]
     ;
 varStmt[StatementClosure cr, OS_Element aParent]
-        {VariableSequence vsq=null;}
+        {VariableSequence vsq=null;TypeName tn=null;}
     :                   {vsq=cr.varSeq(cur);}
     ( "var"
     | "const"           {vsq.defaultModifiers(TypeModifiers.CONST);}
     | "val"             {vsq.defaultModifiers(TypeModifiers.VAL);}
     )
-    ( varStmt_i[vsq.next()] (COMMA varStmt_i[vsq.next()])*
+    ( varStmt_i3[vsq.next()] 
+		(COMMA varStmt_i3[vsq.next()])* 
+		( TOK_COLON tn=typeName2    {vsq.setTypeName(tn);})?
     )
     ;
 varStmt_i[VariableStatement vs]
 		{TypeName tn=null;IdentExpression i=null;}
 	: i=ident                   {vs.setName(i);}
 	( TOK_COLON tn=typeName2    {vs.setTypeName(tn);})?
+	( BECOMES expr=expression   {vs.initial(expr);})?
+	;
+varStmt_i3[VariableStatement vs]
+		{IdentExpression i=null;}
+	: i=ident                   {vs.setName(i);}
 	( BECOMES expr=expression   {vs.initial(expr);})?
 	;
 varStmt2[BaseScope cs]
