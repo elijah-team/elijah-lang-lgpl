@@ -1112,7 +1112,7 @@ ifConditional2[BaseScope sc]
         {IfConditionalBuilder ifb = new IfConditionalBuilder();}
 	: "if" expr=expression 		{ifb.base_expr.expr(expr);}
 	scope2[ifb.base_expr.scope()]
-	( elseif_part2[ifb.new_expr()] )*
+	( ("else" "if")=> elseif_part2[ifb.new_expr()] )*
 	( "else" scope2[ifb.else_part.scope()])?
 								{sc.add(ifb);}
 	;
