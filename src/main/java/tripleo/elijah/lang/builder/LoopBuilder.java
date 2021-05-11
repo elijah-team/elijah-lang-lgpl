@@ -16,7 +16,6 @@ import tripleo.elijah.lang.*;
 public class LoopBuilder extends ElBuilder {
 	private LoopTypes _type;
 	private IExpression _frompart;
-	private OS_Element _parent;
 	private IExpression _topart;
 	private IdentExpression _iterName;
 	private LoopScope _scope = new LoopScope();
