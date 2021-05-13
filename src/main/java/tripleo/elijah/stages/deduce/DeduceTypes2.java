@@ -1010,9 +1010,12 @@ public class DeduceTypes2 {
 					final ProcedureCallExpression pce = (ProcedureCallExpression) e;
 					try {
 						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(pce.getLeft(), ctx);
-						final OS_Element best = lrl.chooseBest(null);
+						OS_Element best = lrl.chooseBest(null);
 						if (best != null) {
-							if (best instanceof FunctionDef) { // TODO what about alias?
+							while (best instanceof AliasStatement) {
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
+							}
+							if (best instanceof FunctionDef) {
 								tte.attached = new OS_FuncType((FunctionDef) best);
 								//vte.addPotentialType(instructionIndex, tte);
 							} else {
