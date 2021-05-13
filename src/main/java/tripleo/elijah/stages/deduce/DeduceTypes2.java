@@ -2159,21 +2159,17 @@ public class DeduceTypes2 {
 
 						OS_Element ele2 = null;
 
-						if (ty.getType() == OS_Type.Type.USER) {
-							@NotNull OS_Type ty2 = null;
-							try {
-								ty2 = resolve_type(ty, ty.getTypeName().getContext());
+						try {
+							if (ty.getType() == OS_Type.Type.USER) {
+								@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
 								OS_Element ele = ty2.getElement();
 								LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
 								ele2 = lrl.chooseBest(null);
-							} catch (ResolveError aResolveError) {
-								errSink.reportDiagnostic(aResolveError);
-							}
-						} else
-							ele2 = ty.getClassOf(); // TODO might fail later (use getElement?)
+							} else
+								ele2 = ty.getClassOf(); // TODO might fail later (use getElement?)
 
-						LookupResultList lrl = null;
-						try {
+							LookupResultList lrl = null;
+
 							lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
 							OS_Element best = lrl.chooseBest(null);
 //							ite.setStatus(BaseTableEntry.Status.KNOWN, best); // README infinite loop
@@ -2181,6 +2177,7 @@ public class DeduceTypes2 {
 							ite.setResolvedElement(best);
 						} catch (ResolveError aResolveError) {
 							aResolveError.printStackTrace();
+							errSink.reportDiagnostic(aResolveError);
 						}
 					} else if (pot.size() == 1) {
 						TypeTableEntry tte = pot.get(0);

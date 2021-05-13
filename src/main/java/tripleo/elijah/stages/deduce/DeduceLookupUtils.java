@@ -30,7 +30,14 @@ public class DeduceLookupUtils {
 		case DOT_EXP:
 			return lookup_dot_expression(ctx, (DotExpression) left);
 		case IDENT:
-			return ctx.lookup(((IdentExpression) left).getText());
+			{
+				final IdentExpression ident = (IdentExpression) left;
+				final LookupResultList lrl = ctx.lookup(ident.getText());
+				if (lrl.results().size() == 0) {
+					throw new ResolveError(ident,  lrl);
+				}
+				return lrl;
+			}
 		default:
 			throw new IllegalArgumentException();
 		}
