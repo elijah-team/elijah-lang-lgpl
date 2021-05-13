@@ -696,38 +696,6 @@ public class GenerateC implements CodeGenerator {
 
 		tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
 		tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
-/*
-
-//		System.err.println("8887 " + testing_var);
-//		System.err.println("8888 " + testing_type);
-
-		final OS_Type x = testing_type.attached;
-		if (x != null) {
-			if (x.getType() == OS_Type.Type.USER) {
-				final TypeName y = x.getTypeName();
-				if (y instanceof NormalTypeName) {
-					module.parent.eee.reportError("500 USER TypeName in GenerateC: "+y);
-					return;
-//					final int z = getTypeNumber((NormalTypeName) y);
-//					tos.put_string_ln(String.format("vsb = ZS<%d>_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
-//					tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
-				} else
-					System.err.println("8883 " + y.getClass().getName());
-			} else if (x.getType() == OS_Type.Type.USER_CLASS) {
-				final int z = getTypeNumber(new OS_Type(x.getClassOf()));
-				if (z == 0 || z == -1) {
-					System.err.println("510 TypeName not assigned a code: "+x.getClassOf());
-				}
-				tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, getRealTargetName(gf, testing_var_)));
-				tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
-			} else {
-				module.parent.eee.reportError("512 Bad TypeName in GenerateC: "+x);
-				return;
-			}
-		} else {
-			System.err.println("8885 testing_type.attached is null " + testing_type);
-		}
-*/
 	}
 
 	private void generate_method_cast(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
