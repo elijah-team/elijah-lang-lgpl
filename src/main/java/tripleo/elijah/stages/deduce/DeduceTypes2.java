@@ -996,10 +996,11 @@ public class DeduceTypes2 {
 			if (e == null) continue;
 			switch (e.getKind()) {
 			case NUMERIC:
-				{
-					tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
-					//vte.type = tte;
-				}
+				tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
+				//vte.type = tte;
+				break;
+			case CHAR_LITERAL:
+				tte.attached = new OS_Type(BuiltInTypes.SystemCharacter);
 				break;
 			case IDENT:
 				do_assign_call_args_ident(generatedFunction, ctx, vte, instructionIndex, pte, i, tte, (IdentExpression) e);
