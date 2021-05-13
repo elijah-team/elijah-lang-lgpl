@@ -665,6 +665,24 @@ public class GenerateC implements CodeGenerator {
 		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER);
 	}
 
+	private String getTypeNameForVariableEntry(VariableTableEntry input) {
+		OS_Type attached = input.type.attached;
+		if (attached.getType() == OS_Type.Type.USER_CLASS) {
+			return attached.getClassOf().name();
+		} else if (attached.getType() == OS_Type.Type.USER) {
+			TypeName typeName = attached.getTypeName();
+			String name;
+			if (typeName instanceof NormalTypeName)
+				name = ((NormalTypeName) typeName).getName();
+			else
+				name = typeName.toString();
+			return String.format(Emit.emit("/*543*/")+"Z<%s>*", name);
+		} else
+			throw new NotImplementedException();
+	}
+
+	// region generateCodeForMethod-helpers
+
 	private void generate_method_is_a(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
 		final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
 		final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
@@ -710,22 +728,6 @@ public class GenerateC implements CodeGenerator {
 			System.err.println("8885 testing_type.attached is null " + testing_type);
 		}
 */
-	}
-
-	private String getTypeNameForVariableEntry(VariableTableEntry input) {
-		OS_Type attached = input.type.attached;
-		if (attached.getType() == OS_Type.Type.USER_CLASS) {
-			return attached.getClassOf().name();
-		} else if (attached.getType() == OS_Type.Type.USER) {
-			TypeName typeName = attached.getTypeName();
-			String name;
-			if (typeName instanceof NormalTypeName)
-				name = ((NormalTypeName) typeName).getName();
-			else
-				name = typeName.toString();
-			return String.format(Emit.emit("/*543*/")+"Z<%s>*", name);
-		} else
-			throw new NotImplementedException();
 	}
 
 	private void generate_method_cast(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
@@ -809,6 +811,8 @@ public class GenerateC implements CodeGenerator {
 		}
 		System.err.println("8886 y is null (No typename specified)");
 	}
+
+	// endregion
 
 	private String getTypeName(GeneratedNamespace aGeneratedNamespace) {
 		String z;
