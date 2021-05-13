@@ -1033,7 +1033,44 @@ public class DeduceTypes2 {
 					}
 				}
 				break;
-			case GET_ITEM:
+			case DOT_EXP:
+				{
+					final DotExpression de = (DotExpression) e;
+					try {
+						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(de.getLeft(), ctx);
+						OS_Element best = lrl.chooseBest(null);
+						if (best != null) {
+							while (best instanceof AliasStatement) {
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
+							}
+							if (best instanceof FunctionDef) {
+								tte.attached = new OS_FuncType((FunctionDef) best);
+								//vte.addPotentialType(instructionIndex, tte);
+							} else if (best instanceof ClassStatement) {
+								tte.attached = new OS_Type((ClassStatement) best);
+							} else if (best instanceof VariableStatement) {
+								final VariableStatement vs = (VariableStatement) best;
+								@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(vs.getName());
+								TypeTableEntry tte1 = ((IntegerIA) vte_ia).getEntry().type;
+								tte.attached = tte1.attached;
+							} else {
+								final int y=2;
+								System.err.println(best.getClass().getName());
+								throw new NotImplementedException();
+							}
+						} else {
+							final int y=2;
+							throw new NotImplementedException();
+						}
+					} catch (ResolveError aResolveError) {
+						aResolveError.printStackTrace();
+						int y=2;
+						throw new NotImplementedException();
+					}
+				}
+				break;
+
+				case GET_ITEM:
 				{
 					final GetItemExpression gie = (GetItemExpression) e;
 					do_assign_call_GET_ITEM(gie, tte, generatedFunction, ctx);
