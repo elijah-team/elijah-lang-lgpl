@@ -74,8 +74,10 @@ public class VariableSequenceBuilder extends ElBuilder {
 			vs.initial(triple._initial);
 			vs.setName(triple._name);
 		}
-		if (_tn != null)
+		if (_tn != null) {
+			_tn.setContext(_context);
 			variableSequence.setTypeName(_tn);
+		}
 		return variableSequence;
 	}
 
