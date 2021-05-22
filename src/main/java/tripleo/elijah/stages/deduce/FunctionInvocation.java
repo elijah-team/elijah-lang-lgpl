@@ -18,14 +18,27 @@ import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 public class FunctionInvocation {
 	private final FunctionDef fd;
 	private final ProcTableEntry pte;
+	private ClassInvocation classInvocation;
 
-	public FunctionInvocation(FunctionDef fd, ProcTableEntry p1) {
-		this.fd = fd;
-		this.pte = p1;
+	public FunctionInvocation(FunctionDef aFunctionDef, ProcTableEntry aProcTableEntry) {
+		this.fd = aFunctionDef;
+		this.pte = aProcTableEntry;
 	}
 
 	public GeneratedFunction getGenerated() {
 		return null;
+	}
+
+	public FunctionDef getFunction() {
+		return fd;
+	}
+
+	public void setClassInvocation(ClassInvocation aClassInvocation) {
+		classInvocation = aClassInvocation;
+	}
+
+	public ClassInvocation getClassInvocation() {
+		return classInvocation;
 	}
 }
 
