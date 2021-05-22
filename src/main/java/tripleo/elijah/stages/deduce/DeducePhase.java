@@ -220,9 +220,9 @@ public class DeducePhase {
 
 				if (lgci instanceof GeneratedClass) {
 					final Collection<GeneratedFunction> generatedFunctions = ((GeneratedClass) lgci).functionMap.values();
-					for (GeneratedFunction generatedFunction : generatedFunctions) {
-						generatedFunction.setClass(lgci);
-					}
+//					for (GeneratedFunction generatedFunction : generatedFunctions) {
+//						generatedFunction.setClass(lgci); // TODO delete when done
+//					}
 					lgf.addAll(generatedFunctions);
 				}
 				if (lgci instanceof GeneratedNamespace) {

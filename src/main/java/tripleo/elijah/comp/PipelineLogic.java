@@ -96,8 +96,8 @@ public class PipelineLogic {
 					generatedFunction.setCode(mod.parent.nextFunctionCode());
 			} else if (generatedNode instanceof GeneratedClass) {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				if (generatedClass.getCode() == 0)
-					generatedClass.setCode(mod.parent.nextClassCode());
+//				if (generatedClass.getCode() == 0)
+//					generatedClass.setCode(mod.parent.nextClassCode());
 				for (GeneratedClass generatedClass2 : generatedClass.classMap.values()) {
 					generatedClass2.setCode(mod.parent.nextClassCode());
 				}
