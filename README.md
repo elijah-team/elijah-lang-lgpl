@@ -1,3 +1,7 @@
+[![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/master/graph/badge.svg?token=WATHC960NB)](https://codecov.io/gl/elijah-team/elijah-lang)
+
+[![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/genericA/graph/badge.svg?token=WATHC960NB)](https://app.codecov.io/gl/elijah-team/elijah-lang/branch/genericA)
+
 Elijjah is a high-level language suitable for replacement Java and C++. It is meant to
 integrate into current C and Java projects. It will feature a REPL and a graphical environment as well, 
 along the lines Smalltalk/Tunes Slate.
@@ -16,18 +20,21 @@ done automatically in maven but not IDEA.
 
 Much work is needed.
 
-See [Language Overview](docs/language-overview.md) for more details on the language.
+See [Language Overview](elijjah.md) for more details on the language.
 
 All of this is a work in progress and your support would be appreciated.
 
-oluoluolu+elijah (at) gmail.com
+oluoluolu+elijah \(at\) gmail.com
+[@tripleo33177393 Twitter](https://twitter.com/tripleo33177393)
 
 [google group](https://groups.google.com/forum/#!forum/elijjah)
 
-[Technical Wiki](https://gitlab.com/elijah-team/elijah-lang/-/wikis/home)
+[wiki](https://gitlab.com/elijah-team/elijah-lang/-/wikis/home)
 
 [GitBook: The Elijjah Book](https://oluoluolu-gh.gitbook.io/elijjah-book/)
 
-[Elijjah by Example](https://elijjah-by-example.github.io)
+[The Elijjah Book: mdbook](https://tripleo1.github.io/elijjah-book/) \(this one is better\)
 
 [GitBook: Elijjah by Example](https://oluoluolu-gh.gitbook.io/elijjah-by-example/)
+
+[Documentation on GitLab](https://elijah-team.gitlab.io/elijah-lang/) (look here first)
