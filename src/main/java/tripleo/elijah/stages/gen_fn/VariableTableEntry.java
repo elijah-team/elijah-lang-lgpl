@@ -31,6 +31,7 @@ public class VariableTableEntry extends BaseTableEntry implements Constructable,
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public int tempNum = -1;
 	public ProcTableEntry constructable_pte;
+	private GeneratedNode _resolvedType;
 
 	public VariableTableEntry(final int index, final VariableTableType var1, final String name, final TypeTableEntry type, final OS_Element el) {
 		this.index = index;
@@ -107,6 +108,15 @@ public class VariableTableEntry extends BaseTableEntry implements Constructable,
 	@Override
 	public void setConstructable(ProcTableEntry aPte) {
 		constructable_pte = aPte;
+	}
+
+	@Override
+	public void resolveType(GeneratedNode aNode) {
+		_resolvedType = aNode;
+	}
+
+	public GeneratedNode resolvedType() {
+		return _resolvedType;
 	}
 }
 
