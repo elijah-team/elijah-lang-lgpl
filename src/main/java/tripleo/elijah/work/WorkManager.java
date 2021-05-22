@@ -47,6 +47,14 @@ public class WorkManager {
 		}
 //		return null;
 	}
+
+	public void drain() {
+		while (true) {
+			@Nullable WorkJob w = next();
+			if (w == null) break;
+			w.run(this);
+		}
+	}
 }
 
 //

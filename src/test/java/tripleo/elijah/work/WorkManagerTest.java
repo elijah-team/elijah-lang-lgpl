@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.work;
 
-import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -59,11 +58,7 @@ public class WorkManagerTest {
 
 		workManager.addJobs(wl);
 
-		while (true) {
-			@Nullable WorkJob w = workManager.next();
-			if (w == null) break;
-			w.run(workManager);
-		}
+		workManager.drain();
 
 		System.err.println(sink);
 	}
