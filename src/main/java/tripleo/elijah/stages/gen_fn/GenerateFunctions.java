@@ -45,17 +45,6 @@ public class GenerateFunctions {
 		module = aModule;
 	}
 
-/*
-	private ClassInvocation generateClassInvocation(ModuleItem aParent) {
-		// meant to cache. requires pte.
-		if (aParent instanceof NamespaceStatement)
-			return new ClassInvocation((NamespaceStatement) aParent);
-		else if (aParent instanceof ClassStatement)
-			return new ClassInvocation((ClassStatement) aParent);
-		return null;
-	}
-*/
-
 	@NotNull private GeneratedFunction generateConstructor(ConstructorDef aConstructorDef, ClassStatement aKlass) {
 		final GeneratedFunction gf = new GeneratedFunction(aConstructorDef);
 		final Context cctx = aConstructorDef.getContext();
@@ -588,8 +577,6 @@ public class GenerateFunctions {
 		}
 
 		gn.createCtor0();
-
-//		namespace1._a.setCode(nextClassCode());
 
 		return gn;
 	}
