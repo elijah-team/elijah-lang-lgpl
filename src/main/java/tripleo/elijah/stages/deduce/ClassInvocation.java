@@ -8,11 +8,14 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jdeferred2.Promise;
+import org.jdeferred2.impl.DeferredObject;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.OS_UnknownType;
 import tripleo.elijah.lang.TypeName;
+import tripleo.elijah.stages.gen_fn.GeneratedClass;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,12 +29,7 @@ public class ClassInvocation {
 	private final ClassStatement cls;
 	Map<TypeName, OS_Type> genericPart;
 	private String constructorName;
-
-	public ClassInvocation(NamespaceStatement aNamespaceStatement) {
-		ns = aNamespaceStatement;
-		genericPart = null;
-		cls = null;
-	}
+	private final DeferredObject<GeneratedClass, Void, Void> resolvePromise = new DeferredObject<GeneratedClass, Void, Void>();
 
 	public ClassInvocation(ClassStatement aClassStatement, String aConstructorName) {
 		ns = null;
@@ -54,6 +52,14 @@ public class ClassInvocation {
 
 	public ClassStatement getKlass() {
 		return cls;
+	}
+
+	public Promise<GeneratedClass, Void, Void> promise() {
+		return resolvePromise;
+	}
+
+	public Promise<GeneratedClass, Void, Void> resolvePromise() {
+		return resolvePromise.promise();
 	}
 }
 
