@@ -773,8 +773,11 @@ public class GenerateC implements CodeGenerator {
 			final TypeTableEntry ty = pt.get(0);
 //			System.err.println("8885 " +ty.attached);
 			final OS_Type attached = ty.attached;
-			assert attached != null;
-			final String z = getTypeName(attached);
+			final String z;
+			if (attached != null)
+				z = getTypeName(attached);
+			else
+				z = Emit.emit("/*763*/")+"Unknown";
 			tos.put_string_ln(String.format("/*8890*/Z<%s> %s;", z, target_name));
 		}
 		System.err.println("8886 y is null (No typename specified)");
