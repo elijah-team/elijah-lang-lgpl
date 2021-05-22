@@ -44,6 +44,7 @@ public class ClassInvocation {
 	}
 
 	public void set(int aIndex, TypeName aTypeName, OS_Type aType) {
+		assert aType.getType() == OS_Type.Type.USER_CLASS;
 		genericPart.put(aTypeName, aType);
 	}
 
