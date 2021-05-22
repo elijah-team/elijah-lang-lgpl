@@ -10,20 +10,16 @@ package tripleo.elijah.stages.deduce;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
-import tripleo.elijah.stages.gen_fn.GenerateFunctions;
-import tripleo.elijah.stages.gen_fn.GeneratedClass;
-import tripleo.elijah.stages.gen_fn.GeneratedContainer;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
-import tripleo.elijah.stages.gen_fn.IdentTableEntry;
-import tripleo.elijah.stages.gen_fn.TypeTableEntry;
+import tripleo.elijah.lang.TypeName;
+import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.work.WorkList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,6 +60,72 @@ public class DeducePhase {
 
 	public void onClass(ClassStatement aClassStatement, OnClass callback) {
 		onclasses.put(aClassStatement, callback);
+	}
+
+//	Multimap<GeneratedClass, ClassInvocation> generatedClasses1 = ArrayListMultimap.create();
+	Multimap<ClassStatement, ClassInvocation> classInvocationMultimap = ArrayListMultimap.create();
+
+	public ClassInvocation registerClassInvocation(ClassInvocation aClassInvocation) {
+		boolean put = false;
+		ClassInvocation Result = null;
+
+		// 1. select which to return
+		ClassStatement c = aClassInvocation.getKlass();
+		Collection<ClassInvocation> cis = classInvocationMultimap.get(c);
+		for (ClassInvocation ci : cis) {
+			// don't lose information
+			if (ci.getConstructorName() != null)
+				if (!(ci.getConstructorName().equals(aClassInvocation.getConstructorName())))
+					continue;
+
+			boolean i = equivalentGenericPart(aClassInvocation, ci);
+			if (i) {
+				Result = ci;
+				break;
+			}
+		}
+
+		if (Result == null) {
+			put = true;
+			Result = aClassInvocation;
+		}
+
+		// 2. Check and see if already done
+		Collection<ClassInvocation> cls = classInvocationMultimap.get(Result.getKlass());
+		for (ClassInvocation ci : cls) {
+			if (equivalentGenericPart(ci, Result)) {
+				return ci;
+			}
+		}
+
+		if (put) {
+			classInvocationMultimap.put(aClassInvocation.getKlass(), aClassInvocation);
+		}
+
+		// 3. Generate new GeneratedClass
+		final WorkList wl = new WorkList();
+		final OS_Module mod = Result.getKlass().getContext().module();
+		wl.addJob(new WlGenerateClass(generatePhase.getGenerateFunctions(mod), Result, generatedClasses)); // TODO why add now?
+		generatePhase.wm.addJobs(wl);
+		generatePhase.wm.drain(); // TODO find a better place to put this
+
+		// 4. Return it
+		return Result;
+	}
+
+	public boolean equivalentGenericPart(ClassInvocation ci0, ClassInvocation ci) {
+		Map<TypeName, OS_Type> map = ci0.genericPart;
+		Map<TypeName, OS_Type> gp = ci.genericPart;
+		if (gp == null && (map == null || map.size() == 0)) return true;
+		//
+		int i = gp.entrySet().size();
+		for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
+			if (map.get(entry.getKey()).equals(entry.getValue()))
+				i--;
+//				else
+//					return aClassInvocation;
+		}
+		return i == 0;
 	}
 
 	static class ResolvedVariables {

@@ -56,6 +56,10 @@ public class ClassInvocation {
 		return resolvePromise;
 	}
 
+	public String getConstructorName() {
+		return constructorName;
+	}
+
 	public Promise<GeneratedClass, Void, Void> resolvePromise() {
 		return resolvePromise.promise();
 	}
