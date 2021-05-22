@@ -280,6 +280,18 @@ public class DeducePhase {
 				}
 			}
 		}
+		for (GeneratedNode generatedNode : generatedClasses) {
+			if (generatedNode instanceof GeneratedClass) {
+				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				final ClassStatement cs = generatedClass.getKlass();
+				Collection<ClassInvocation> cis = classInvocationMultimap.get(cs);
+				for (ClassInvocation ci : cis) {
+					if (equivalentGenericPart(generatedClass.ci, ci))
+						((DeferredObject<GeneratedClass, Void, Void>) ci.promise()).resolve(generatedClass);
+				}
+			}
+		}
+		// TODO rewrite with classInvocationMultimap
 		for (ClassStatement classStatement : onclasses.keySet()) {
 			for (GeneratedNode generatedNode : generatedClasses) {
 				if (generatedNode instanceof GeneratedClass) {
