@@ -15,16 +15,20 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
+import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
+import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.work.WorkList;
 import tripleo.elijjah.lang.UnaryExpression;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 import static tripleo.elijah.util.Helpers.List_of;
@@ -70,8 +74,7 @@ public class GenerateFunctions {
 		return gf;
 	}
 
-
-	private @NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd, final OS_Element parent) {
+	@NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd, final OS_Element parent) {
 //		System.err.println("601.1 fn "+fd.name() + " " + parent);
 		final GeneratedFunction gf = new GeneratedFunction(fd);
 		if (parent instanceof ClassStatement)
@@ -600,17 +603,39 @@ public class GenerateFunctions {
 	}
 
 	public void generateAllTopLevelClasses(List<GeneratedNode> lgc) {
-		for (final ModuleItem item : module.getItems()) {
-			if (item instanceof NamespaceStatement) {
-				final NamespaceStatement namespaceStatement = (NamespaceStatement) item;
-				GeneratedNamespace ns = generateNamespace(namespaceStatement);
-				lgc.add(ns);
-			} else if (item instanceof ClassStatement) {
-				final ClassStatement classStatement = (ClassStatement) item;
-				@NotNull GeneratedClass kl = generateClass(classStatement);
-				lgc.add(kl);
+		final WorkList wl = new WorkList();
+		for (ClassStatement classStatement : module.entryPoints) {
+			assert classStatement.name().equals("Main");
+			Optional<ClassItem> fs = classStatement.getItems().
+					stream().
+					filter(x -> x instanceof FunctionDef && ((FunctionDef) x).name().equals("main")).
+					findFirst();
+//					collect(Collectors.toList());
+//			assert fs.size() == 1;
+			if (fs.isPresent()) {
+				FunctionDef f = (FunctionDef) fs.get();
+				final ClassInvocation ci = new ClassInvocation(classStatement, null);
+				wl.addJob(new WlGenerateClass(this, ci, lgc));
+				final FunctionInvocation fi = new FunctionInvocation(f, null);
+				fi.setClassInvocation(ci);
+				wl.addJob(new WlGenerateFunction(this, fi));
 			}
-			// TODO enums, datatypes, (type)aliases
+		}
+		phase.wm.addJobs(wl);
+		phase.wm.drain();
+		if (false) {
+			for (final ModuleItem item : module.getItems()) {
+				if (item instanceof NamespaceStatement) {
+					final NamespaceStatement namespaceStatement = (NamespaceStatement) item;
+					GeneratedNamespace ns = generateNamespace(namespaceStatement);
+					lgc.add(ns);
+				} else if (item instanceof ClassStatement) {
+					final ClassStatement classStatement = (ClassStatement) item;
+					@NotNull GeneratedClass kl = generateClass(classStatement);
+					lgc.add(kl);
+				}
+				// TODO enums, datatypes, (type)aliases
+			}
 		}
 	}
 
