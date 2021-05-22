@@ -367,7 +367,7 @@ public class GenerateC implements CodeGenerator {
 			case E:
 				{
 					tos.put_string_ln("bool vsb;");
-					if (gmh.tte != null) {
+					if (gmh.tte.isResolved()) {
 						String ty = getTypeName(gmh.tte);
 						tos.put_string_ln(String.format("%s vsr;", ty));
 					}
@@ -379,7 +379,7 @@ public class GenerateC implements CodeGenerator {
 				{
 					tos.dec_tabs();
 					tos.put_string_ln("}");
-					if (gmh.tte != null) {
+					if (gmh.tte.isResolved()) {
 						tos.put_string_ln("return vsr;");
 					}
 				}

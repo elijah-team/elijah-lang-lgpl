@@ -57,7 +57,11 @@ public class TypeTableEntry {
         return _resolved;
     }
 
-	public enum Type {
+    public boolean isResolved() {
+        return _resolved != null;
+    }
+
+    public enum Type {
         SPECIFIED, TRANSIENT
     }
 
