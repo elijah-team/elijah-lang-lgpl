@@ -26,7 +26,7 @@ import java.util.Map;
 public class ClassInvocation {
 	private final ClassStatement cls;
 	Map<TypeName, OS_Type> genericPart;
-	private String constructorName;
+	private final String constructorName;
 	private final DeferredObject<GeneratedClass, Void, Void> resolvePromise = new DeferredObject<GeneratedClass, Void, Void>();
 
 	public ClassInvocation(ClassStatement aClassStatement, String aConstructorName) {
