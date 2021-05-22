@@ -1161,8 +1161,15 @@ public class DeduceTypes2 {
 			pte.setClassInvocation(ci);
 			pte.setFunctionInvocation(fi);
 
-			if (co != null)
+			if (co != null) {
 				co.setConstructable(pte);
+				ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(GeneratedClass result) {
+						co.resolveType(result);
+					}
+				});
+			}
 		} else if (e instanceof FunctionDef) {
 			FunctionInvocation fi = new FunctionInvocation((FunctionDef) e, pte);
 			pte.setFunctionInvocation(fi);
