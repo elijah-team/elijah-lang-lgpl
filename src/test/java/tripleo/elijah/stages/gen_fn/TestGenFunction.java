@@ -46,7 +46,7 @@ public class TestGenFunction {
 		Assert.assertTrue("Method parsed correctly", m != null);
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
 
-		final GenerateFunctions gfm = new GenerateFunctions(m);
+		final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
 		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
 
 		List<GeneratedNode> lgf = new ArrayList<>();
@@ -91,7 +91,8 @@ public class TestGenFunction {
 			}
 		}
 
-		DeducePhase dp = new DeducePhase();
+		final GeneratePhase generatePhase = new GeneratePhase();
+		DeducePhase dp = new DeducePhase(generatePhase);
 		dp.deduceModule(m, lgc, false);
 		dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);
@@ -142,7 +143,7 @@ public class TestGenFunction {
 		}
 
 		if (false) {
-			final GenerateFunctions gfm = new GenerateFunctions(m);
+			final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
 			final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
 
 			List<GeneratedNode> lgf = new ArrayList<>();
@@ -160,7 +161,8 @@ public class TestGenFunction {
 //				}
 //			}
 
-			DeducePhase dp = new DeducePhase();
+			final GeneratePhase generatePhase = new GeneratePhase();
+			DeducePhase dp = new DeducePhase(generatePhase);
 			dp.deduceModule(m, lgc, false);
 			dp.finish();
 
@@ -198,7 +200,7 @@ public class TestGenFunction {
 			c.use(ci, false);
 		}
 
-		final GenerateFunctions gfm = new GenerateFunctions(m);
+		final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
 		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
 
 		List<GeneratedNode> lgf = new ArrayList<>();
@@ -219,7 +221,8 @@ public class TestGenFunction {
 			}
 		}
 
-		DeducePhase dp = new DeducePhase();
+		final GeneratePhase generatePhase = new GeneratePhase();
+		DeducePhase dp = new DeducePhase(generatePhase);
 		dp.deduceModule(m, lgc, false);
 		dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);

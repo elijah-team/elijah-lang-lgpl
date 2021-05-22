@@ -58,7 +58,7 @@ public class GetIdentIAPathTest_ForC {
 		@NotNull IdentExpression x_ident = IdentExpression.forString("x");
 		@NotNull IdentExpression foo_ident = IdentExpression.forString("foo");
 		//
-		GenerateFunctions gen = new GenerateFunctions(mod);
+		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(), mod);
 		Context ctx = mock(Context.class);
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
@@ -76,7 +76,7 @@ public class GetIdentIAPathTest_ForC {
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
-		GenerateFunctions gen = new GenerateFunctions(mod);
+		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(), mod);
 		Context ctx = mock(Context.class);
 		//
 		OS_Type type = null;
@@ -145,7 +145,7 @@ public class GetIdentIAPathTest_ForC {
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
 		//
-		GenerateFunctions gen = new GenerateFunctions(mod);
+		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(), mod);
 		InstructionArgument xx = gen.simplify_expression(expr, gf, ctx);
 
 		//

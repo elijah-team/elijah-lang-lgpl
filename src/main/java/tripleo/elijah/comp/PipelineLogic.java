@@ -14,6 +14,7 @@ import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.BaseTableEntry;
 import tripleo.elijah.stages.gen_fn.GenerateFunctions;
+import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
@@ -35,7 +36,9 @@ import java.util.List;
  * Created 12/30/20 2:14 AM
  */
 public class PipelineLogic {
-	final DeducePhase dp = new DeducePhase();
+	final GeneratePhase generatePhase = new GeneratePhase();
+	final DeducePhase dp = new DeducePhase(generatePhase);
+
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
 	public GenerateResult gr = new GenerateResult();
 

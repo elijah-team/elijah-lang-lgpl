@@ -39,7 +39,7 @@ public class TestIdentNormal {
 		Context ctx1 = mock(Context.class);
 		Context ctx2 = mock(Context.class);
 
-		GenerateFunctions generateFunctions = new GenerateFunctions(mod);
+		GenerateFunctions generateFunctions = new GenerateFunctions(new GeneratePhase(), mod);
 		GeneratedFunction generatedFunction = new GeneratedFunction(fd);
 		VariableSequence seq = new VariableSequence(ctx1);
 		VariableStatement vs = new VariableStatement(seq);
@@ -70,7 +70,8 @@ public class TestIdentNormal {
 
 		IdentIA identIA = new IdentIA(1, generatedFunction);
 
-		DeducePhase phase = new DeducePhase();
+		final GeneratePhase generatePhase = new GeneratePhase();
+		DeducePhase phase = new DeducePhase(generatePhase);
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
 		final List<InstructionArgument> ss = generatedFunction._getIdentIAPathList(identIA);
@@ -96,7 +97,7 @@ public class TestIdentNormal {
 		Context ctx1 = mock(Context.class);
 		Context ctx2 = mock(Context.class);
 
-		GenerateFunctions generateFunctions = new GenerateFunctions(mod);
+		GenerateFunctions generateFunctions = new GenerateFunctions(new GeneratePhase(), mod);
 		GeneratedFunction generatedFunction = new GeneratedFunction(fd);
 
 		//
@@ -152,7 +153,8 @@ public class TestIdentNormal {
 
 		IdentIA identIA = new IdentIA(0, generatedFunction);
 
-		DeducePhase phase = new DeducePhase();
+		final GeneratePhase generatePhase = new GeneratePhase();
+		DeducePhase phase = new DeducePhase(generatePhase);
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
 //		final List<InstructionArgument> ss = generatedFunction._getIdentIAPathList(identIA);
