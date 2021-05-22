@@ -33,9 +33,11 @@ import static tripleo.elijah.util.Helpers.List_of;
  * Created 9/10/20 2:28 PM
  */
 public class GenerateFunctions {
-	private final OS_Module module;
+	private final GeneratePhase phase;
+	final OS_Module module;
 
-	public GenerateFunctions(final OS_Module aModule) {
+	public GenerateFunctions(final GeneratePhase aPhase, final OS_Module aModule) {
+		phase = aPhase;
 		module = aModule;
 	}
 
