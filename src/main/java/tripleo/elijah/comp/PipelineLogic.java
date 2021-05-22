@@ -75,9 +75,7 @@ public class PipelineLogic {
 	}
 
 	protected void run2(OS_Module mod, List<GeneratedNode> lgc) {
-		final GenerateFunctions gfm = new GenerateFunctions(mod);
-//		final List<GeneratedNode> lgf = gfm.generateAllTopLevelFunctions();
-//		lgc = new ArrayList<GeneratedNode>();
+		final GenerateFunctions gfm = getGenerateFunctions(mod);
 		gfm.generateAllTopLevelClasses(lgc);
 
 //		for (final GeneratedNode gn : lgc) {
@@ -160,6 +158,11 @@ public class PipelineLogic {
 //			}
 //		}
 
+	}
+
+	@NotNull
+	private GenerateFunctions getGenerateFunctions(OS_Module mod) {
+		return generatePhase.getGenerateFunctions(mod);
 	}
 
 	protected GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc) throws IOException {

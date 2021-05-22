@@ -168,7 +168,7 @@ public class DeducePhase {
 	}
 
 	public DeduceTypes2 deduceModule(OS_Module m) {
-		final GenerateFunctions gfm = new GenerateFunctions(m);
+		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
 		List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
 
 		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
