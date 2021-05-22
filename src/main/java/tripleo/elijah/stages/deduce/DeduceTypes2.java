@@ -1151,7 +1151,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	public static void set_resolved_element_pte(Constructable co, OS_Element e, ProcTableEntry pte) {
+	public void set_resolved_element_pte(Constructable co, OS_Element e, ProcTableEntry pte) {
 		pte.setResolvedElement(e);
 		if (e instanceof ClassStatement) {
 			ClassInvocation ci = new ClassInvocation((ClassStatement) e, null);
