@@ -726,6 +726,13 @@ public class GenerateC implements CodeGenerator {
 			return;
 		}
 
+		final GeneratedNode res = vte.resolvedType();
+		if (res instanceof GeneratedClass) {
+			final String z = getTypeName((GeneratedClass) res);
+			tos.put_string_ln(String.format("%s* %s;", z, target_name));
+			return;
+		}
+
 		if (x.getType() == OS_Type.Type.USER_CLASS) {
 			final String z = getTypeName(x);
 			tos.put_string_ln(String.format("%s* %s;", z, target_name));
