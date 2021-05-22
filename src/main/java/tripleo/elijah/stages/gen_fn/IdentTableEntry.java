@@ -81,7 +81,8 @@ public class IdentTableEntry extends BaseTableEntry implements Constructable, Ta
 		return ident;
 	}
 
-	public void resolve(GeneratedNode gn) {
+	@Override
+	public void resolveType(GeneratedNode gn) {
 		resolved = gn;
 	}
 
