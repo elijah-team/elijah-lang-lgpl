@@ -2247,6 +2247,18 @@ public class DeduceTypes2 {
 								} catch (ResolveError aResolveError) {
 									aResolveError.printStackTrace();
 								}
+								{
+									// TODO make sure this works always
+									assert ele instanceof ClassStatement;
+									ClassInvocation ci = new ClassInvocation((ClassStatement) ele, null);
+									ci = phase.registerClassInvocation(ci);
+									ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+										@Override
+										public void onDone(GeneratedClass result) {
+											vte.resolveType(result);
+										}
+									});
+								}
 							}
 						} else {
 							System.err.println("1696");
