@@ -55,24 +55,28 @@ public class DeduceTypes2 {
 		for (final GeneratedNode generatedNode : lgf) {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
-				if (generatedFunction.deducedAlready) continue;
-				deduce_generated_function(generatedFunction);
-				generatedFunction.deducedAlready = true;
-				for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
-					if (identTableEntry.resolved_element instanceof  VariableStatement) {
-						final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
-						OS_Element el = vs.getParent().getParent();
-						OS_Element el2 = generatedFunction.fd.getParent();
-						if (el != el2) {
-							if (el instanceof ClassStatement || el instanceof NamespaceStatement)
-								// NOTE there is no concept of gf here
-								phase.registerResolvedVariable(identTableEntry, el, vs.getName());
-						}
-					}
-				}
-				phase.addFunction(generatedFunction, generatedFunction.getFD());
+				deduceOneFunction(generatedFunction, phase);
 			}
 		}
+	}
+
+	public void deduceOneFunction(GeneratedFunction aGeneratedFunction, DeducePhase aDeducePhase) {
+		if (aGeneratedFunction.deducedAlready) return;
+		deduce_generated_function(aGeneratedFunction);
+		aGeneratedFunction.deducedAlready = true;
+		for (IdentTableEntry identTableEntry : aGeneratedFunction.idte_list) {
+			if (identTableEntry.resolved_element instanceof VariableStatement) {
+				final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
+				OS_Element el = vs.getParent().getParent();
+				OS_Element el2 = aGeneratedFunction.fd.getParent();
+				if (el != el2) {
+					if (el instanceof ClassStatement || el instanceof NamespaceStatement)
+						// NOTE there is no concept of gf here
+						aDeducePhase.registerResolvedVariable(identTableEntry, el, vs.getName());
+				}
+			}
+		}
+		aDeducePhase.addFunction(aGeneratedFunction, aGeneratedFunction.getFD());
 	}
 
 	List<Runnable> onRunnables = new ArrayList<Runnable>();
