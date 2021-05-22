@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeduceLookupUtils;
 import tripleo.elijah.stages.gen_generic.CodeGenerator;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
@@ -25,6 +26,7 @@ public class GeneratedClass extends GeneratedContainerNC {
 	private final OS_Module module;
 	private final ClassStatement klass;
 	public Map<ConstructorDef, GeneratedFunction> constructors = new HashMap<ConstructorDef, GeneratedFunction>();
+	public ClassInvocation ci;
 
 	public GeneratedClass(ClassStatement klass, OS_Module module) {
 		this.klass = klass;
