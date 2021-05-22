@@ -699,6 +699,7 @@ public class DeduceTypes2 {
 							}
 						}
 					}
+					clsinv = phase.registerClassInvocation(clsinv);
 					pte.setClassInvocation(clsinv);
 					pte.setResolvedElement(best);
 					// set FunctionInvocation with pte args
@@ -1148,6 +1149,7 @@ public class DeduceTypes2 {
 			ClassInvocation ci = new ClassInvocation((ClassStatement) e, null);
 			FunctionInvocation fi = new FunctionInvocation(null, pte);
 //						fi.setClassInvocation(ci);
+			ci = phase.registerClassInvocation(ci);
 			pte.setClassInvocation(ci);
 			pte.setFunctionInvocation(fi);
 
