@@ -264,6 +264,7 @@ public class DeducePhase {
 	}
 
 	public void finish() {
+		// TODO all GeneratedFunction nodes have a genClass member
 		for (GeneratedNode generatedNode : generatedClasses) {
 			if (generatedNode instanceof GeneratedClass) {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
