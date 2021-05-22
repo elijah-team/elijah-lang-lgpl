@@ -57,6 +57,8 @@ public class CtorReference {
 					final GeneratedNode resolved = vte.type.resolved();
 					if (resolved != null) {
 						_resolved = resolved;
+					} else {
+						_resolved = vte.resolvedType();
 					}
 				}
 				addRef(vte.getName(), CReference.Ref.LOCAL);
