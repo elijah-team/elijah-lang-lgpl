@@ -100,7 +100,7 @@ public class PipelineLogic {
 				for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 						if (identTableEntry.isResolved()) {
-							GeneratedNode node = identTableEntry.resolved();
+							GeneratedNode node = identTableEntry.resolvedType();
 							resolved_nodes.add(node);
 						}
 					}
@@ -115,7 +115,7 @@ public class PipelineLogic {
 				for (GeneratedFunction generatedFunction : generatedNamespace.functionMap.values()) {
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 						if (identTableEntry.isResolved()) {
-							GeneratedNode node = identTableEntry.resolved();
+							GeneratedNode node = identTableEntry.resolvedType();
 							resolved_nodes.add(node);
 						}
 					}
