@@ -36,6 +36,10 @@ public class GeneratedClass extends GeneratedContainerNC {
 		this.module = module;
 	}
 
+	public boolean isGeneric() {
+		return klass.getGenericPart().size() > 0;
+	}
+
 	public void addAccessNotation(AccessNotation an) {
 		throw new NotImplementedException();
 	}

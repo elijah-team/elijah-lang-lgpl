@@ -110,7 +110,12 @@ public class OutputStrategyC {
 		}
 		switch (outputStrategy.per()) {
 			case PER_CLASS:
-				sb.append(generatedClass.getName());
+				{
+					if (generatedClass.isGeneric())
+						sb.append(generatedClass.getNumberedName());
+					else
+						sb.append(generatedClass.getName());
+				}
 				break;
 			case PER_MODULE:
 				{
