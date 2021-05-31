@@ -190,6 +190,7 @@ public class PipelineLogic {
 			}
 		}
 
+		wm.drain();
 		return gr;
 	}
 
