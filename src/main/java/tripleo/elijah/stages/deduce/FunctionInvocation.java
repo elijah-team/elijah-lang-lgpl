@@ -19,6 +19,7 @@ public class FunctionInvocation {
 	private final FunctionDef fd;
 	final ProcTableEntry pte;
 	private ClassInvocation classInvocation;
+	private NamespaceInvocation namespaceInvocation;
 
 	public FunctionInvocation(FunctionDef aFunctionDef, ProcTableEntry aProcTableEntry) {
 		this.fd = aFunctionDef;
@@ -39,6 +40,14 @@ public class FunctionInvocation {
 
 	public ClassInvocation getClassInvocation() {
 		return classInvocation;
+	}
+
+	public NamespaceInvocation getNamespaceInvocation() {
+		return namespaceInvocation;
+	}
+
+	public void setNamespaceInvocation(NamespaceInvocation aNamespaceInvocation) {
+		namespaceInvocation = aNamespaceInvocation;
 	}
 }
 
