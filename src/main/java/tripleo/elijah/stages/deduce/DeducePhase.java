@@ -10,7 +10,6 @@ package tripleo.elijah.stages.deduce;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
@@ -37,7 +36,7 @@ public class DeducePhase {
 
 	private final List<FoundElement> foundElements = new ArrayList<FoundElement>();
 	private final Map<IdentTableEntry, OnType> idte_type_callbacks = new HashMap<IdentTableEntry, OnType>();
-	private List<GeneratedNode> generatedClasses;
+	public List<GeneratedNode> generatedClasses = new ArrayList<GeneratedNode>();
 	private final GeneratePhase generatePhase;
 
 	public DeducePhase(GeneratePhase aGeneratePhase) {
@@ -201,7 +200,7 @@ public class DeducePhase {
 			}
 		}
 
-		generatedClasses = lgc;
+//		generatedClasses = lgc;
 
 		return deduceModule(m, lgf);
 	}
@@ -253,7 +252,7 @@ public class DeducePhase {
 				lgcc.add(generatedNode);
 			}
 
-			generatedClasses = lgcc;
+//			generatedClasses = lgcc;
 
 			deduceModule(m, lgf);
 		}
