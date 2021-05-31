@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeduceLookupUtils;
@@ -16,7 +17,9 @@ import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,8 +65,28 @@ public class GeneratedClass extends GeneratedContainerNC {
 		return false;
 	}
 
+	@NotNull
 	public String getName() {
-		return klass.getName();
+		StringBuilder sb = new StringBuilder();
+		sb.append(klass.getName());
+		if (ci.genericPart != null) {
+			sb.append("[");
+			final String joined = getNameHelper(ci.genericPart);
+			sb.append(joined);
+			sb.append("]");
+		}
+		return sb.toString();
+	}
+
+	@NotNull
+	private String getNameHelper(Map<TypeName, OS_Type> aGenericPart) {
+		List<String> ls = new ArrayList<String>();
+		for (Map.Entry<TypeName, OS_Type> entry : aGenericPart.entrySet()) {
+			final OS_Type value = entry.getValue(); // This can be another ClassInvocation using GenType
+			final String name = value.getClassOf().getName();
+			ls.add(name); // TODO Could be nested generics
+		}
+		return Helpers.String_join(", ", ls);
 	}
 
 	public void addConstructor(ConstructorDef aConstructorDef, GeneratedFunction aGeneratedFunction) {
