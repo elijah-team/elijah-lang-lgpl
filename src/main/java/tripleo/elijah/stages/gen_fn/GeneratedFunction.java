@@ -432,7 +432,8 @@ public class GeneratedFunction implements GeneratedNode {
 
     @Override
     public OS_Module module() {
-        return null/*module*/;
+		throw new NotImplementedException();
+//        return fd.getContext().module();
     }
 
 	public void setClass(GeneratedNode aNode) {
