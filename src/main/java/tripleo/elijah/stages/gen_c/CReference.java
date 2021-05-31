@@ -86,6 +86,9 @@ public class CReference {
 				if (resolved_element != null) {
 					GeneratedNode resolved = idte.type != null ? idte.type.resolved() : null;
 					if (resolved == null) {
+						resolved = idte.resolved();
+					}
+					if (resolved == null) {
 						System.err.println("***88*** resolved is null for "+idte);
 					}
 					if (sSize >= i + 1) {
