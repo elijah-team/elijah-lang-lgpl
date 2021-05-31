@@ -13,6 +13,7 @@ import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.work.WorkJob;
 import tripleo.elijah.work.WorkManager;
 
@@ -40,22 +41,26 @@ public class WlGenerateClass implements WorkJob {
 
 	@Override
 	public void run(WorkManager aWorkManager) {
-		@NotNull GeneratedClass kl = generateFunctions.generateClass(classStatement, classInvocation);
-		kl.setCode(generateFunctions.module.parent.nextClassCode());
-		if (coll != null)
-			coll.add(kl);
 		final DeferredObject<GeneratedClass, Void, Void> resolvePromise = classInvocation.resolveDeferred();
-		if (resolvePromise.isPending())
+		if (resolvePromise.isPending()) {
+			@NotNull GeneratedClass kl = generateFunctions.generateClass(classStatement, classInvocation);
+			kl.setCode(generateFunctions.module.parent.nextClassCode());
+			if (coll != null)
+				coll.add(kl);
+
 			resolvePromise.resolve(kl);
-		else
-			// debugging. can remove
+			Result = kl;
+		} else {
+			DeduceTypes2.Holder<GeneratedClass> hgc = new DeduceTypes2.Holder<GeneratedClass>();
 			resolvePromise.then(new DoneCallback<GeneratedClass>() {
 				@Override
 				public void onDone(GeneratedClass result) {
-					assert result == kl;
+//					assert result == kl;
+					hgc.set(result);
 				}
 			});
-		Result = kl;
+			Result = hgc.get();
+		}
 		_isDone = true;
 	}
 
