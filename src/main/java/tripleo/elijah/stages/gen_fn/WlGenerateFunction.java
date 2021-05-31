@@ -47,9 +47,9 @@ public class WlGenerateFunction implements WorkJob {
 				public void onDone(GeneratedNamespace result) {
 					if (result.getFunction(functionDef) == null) {
 						gf.setCode(generateFunctions.module.parent.nextFunctionCode());
-						gf.setClass(result);
 						result.addFunction(functionDef, gf);
 					}
+					gf.setClass(result);
 				}
 			});
 		} else {
@@ -59,9 +59,9 @@ public class WlGenerateFunction implements WorkJob {
 				public void onDone(GeneratedClass result) {
 					if (result.getFunction(functionDef) == null) {
 						gf.setCode(generateFunctions.module.parent.nextFunctionCode());
-						gf.setClass(result);
 						result.addFunction(functionDef, gf);
 					}
+					gf.setClass(result);
 				}
 			});
 		}
