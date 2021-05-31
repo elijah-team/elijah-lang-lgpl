@@ -46,6 +46,7 @@ public class PipelineLogic {
 			run2(mod, lgc);
 		}
 		dp.finish();
+		lgc.addAll(dp.generatedClasses);
 	}
 
 	public void generate(List<GeneratedNode> lgc) {
