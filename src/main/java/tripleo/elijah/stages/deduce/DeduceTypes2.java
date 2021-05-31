@@ -2253,6 +2253,10 @@ public class DeduceTypes2 {
 									OS_Element best = lrl.chooseBest(null);
 									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 //									ite.setResolvedElement(best);
+
+									final ClassStatement klass = (ClassStatement) ele;
+
+									resolve_vte_for_class(vte, klass);
 								} catch (ResolveError resolveError) {
 									errSink.reportDiagnostic(resolveError);
 								}
@@ -2265,20 +2269,10 @@ public class DeduceTypes2 {
 //									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 									assert best != null;
 									ite.setResolvedElement(best);
+
+									resolve_vte_for_class(vte, klass);
 								} catch (ResolveError aResolveError) {
 									aResolveError.printStackTrace();
-								}
-								{
-									// TODO make sure this works always
-									assert ele instanceof ClassStatement;
-									ClassInvocation ci = new ClassInvocation((ClassStatement) ele, null);
-									ci = phase.registerClassInvocation(ci);
-									ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-										@Override
-										public void onDone(GeneratedClass result) {
-											vte.resolveType(result);
-										}
-									});
 								}
 							}
 						} else {
@@ -2300,6 +2294,17 @@ public class DeduceTypes2 {
 					}
 				}
 			}
+		}
+
+		public void resolve_vte_for_class(VariableTableEntry aVte, ClassStatement aKlass) {
+			ClassInvocation ci = new ClassInvocation(aKlass, null);
+			ci = phase.registerClassInvocation(ci);
+			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(GeneratedClass result) {
+					aVte.resolveType(result);
+				}
+			});
 		}
 	}
 }
