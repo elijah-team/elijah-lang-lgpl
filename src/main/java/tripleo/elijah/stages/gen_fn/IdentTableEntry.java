@@ -84,6 +84,7 @@ public class IdentTableEntry extends BaseTableEntry implements Constructable, Ta
 	@Override
 	public void resolveType(GeneratedNode gn) {
 		resolvedType = gn;
+		type.resolve(gn); // TODO maybe this obviates the above?
 	}
 
 	public boolean isResolved() {
