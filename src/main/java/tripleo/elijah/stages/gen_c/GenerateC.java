@@ -448,9 +448,9 @@ public class GenerateC implements CodeGenerator {
 					} else {
 						realTarget = getRealTargetName(gf, (IdentIA) target);
 					}
-					String s = String.format(Emit.emit("/*267*/")+"%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
+					final String assignmentValue = getAssignmentValue(gf.getSelf(), value, gf);
+					String s = String.format(Emit.emit("/*267*/")+"%s = %s;", realTarget, assignmentValue);
 					tos.put_string_ln(s);
-					final int y = 2;
 				}
 				break;
 			case AGNK:
@@ -459,9 +459,9 @@ public class GenerateC implements CodeGenerator {
 					final InstructionArgument value  = instruction.getArg(1);
 
 					final String realTarget = getRealTargetName(gf, (IntegerIA) target);
-					String s = String.format(Emit.emit("/*278*/")+"%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), value, gf));
+					final String assignmentValue = getAssignmentValue(gf.getSelf(), value, gf);
+					String s = String.format(Emit.emit("/*278*/")+"%s = %s;", realTarget, assignmentValue);
 					tos.put_string_ln(s);
-					final int y = 2;
 				}
 				break;
 			case AGNT:
