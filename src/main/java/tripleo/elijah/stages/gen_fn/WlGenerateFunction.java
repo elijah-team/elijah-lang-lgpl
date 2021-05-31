@@ -35,7 +35,7 @@ public class WlGenerateFunction implements WorkJob {
 	@Override
 	public void run(WorkManager aWorkManager) {
 		OS_Element classStatement = functionDef.getParent();
-		@NotNull GeneratedFunction gf = generateFunctions.generateFunction(functionDef, classStatement);
+		@NotNull GeneratedFunction gf = generateFunctions.generateFunction(functionDef, classStatement, functionInvocation);
 //		lgf.add(gf);
 
 		final ClassInvocation ci = functionInvocation.getClassInvocation();

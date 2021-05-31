@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
+import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
@@ -29,6 +30,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 public class GeneratedFunction implements GeneratedNode {
 	public final @Nullable FunctionDef fd;
 	public boolean deducedAlready;
+	public FunctionInvocation fi;
 	private int code = 0;
 	private final List<Label> labelList = new ArrayList<Label>();
 	public @NotNull List<Instruction> instructionsList = new ArrayList<Instruction>();

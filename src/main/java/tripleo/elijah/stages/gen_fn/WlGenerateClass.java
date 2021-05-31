@@ -40,11 +40,11 @@ public class WlGenerateClass implements WorkJob {
 
 	@Override
 	public void run(WorkManager aWorkManager) {
-		@NotNull GeneratedClass kl = generateFunctions.generateClass(classStatement);
+		@NotNull GeneratedClass kl = generateFunctions.generateClass(classStatement, classInvocation);
 		kl.setCode(generateFunctions.module.parent.nextClassCode());
 		if (coll != null)
 			coll.add(kl);
-		final DeferredObject<GeneratedClass, Void, Void> resolvePromise = (DeferredObject<GeneratedClass, Void, Void>) classInvocation.resolvePromise();
+		final DeferredObject<GeneratedClass, Void, Void> resolvePromise = classInvocation.resolveDeferred();
 		if (resolvePromise.isPending())
 			resolvePromise.resolve(kl);
 		else

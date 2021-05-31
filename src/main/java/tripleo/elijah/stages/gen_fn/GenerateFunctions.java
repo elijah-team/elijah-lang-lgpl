@@ -96,6 +96,18 @@ public class GenerateFunctions {
 		return gf;
 	}
 
+	public GeneratedClass generateClass(ClassStatement aClassStatement, ClassInvocation aClassInvocation) {
+		@NotNull GeneratedClass Result = generateClass(aClassStatement);
+		Result.ci = aClassInvocation;
+		return Result;
+	}
+
+	public GeneratedFunction generateFunction(FunctionDef aFunctionDef, OS_Element aClassStatement, FunctionInvocation aFunctionInvocation) {
+		@NotNull GeneratedFunction Result = generateFunction(aFunctionDef, aClassStatement);
+		Result.fi = aFunctionInvocation;
+		return Result;
+	}
+
 	class Generate_Item {
 		void generate_alias_statement(AliasStatement as) {
 			throw new NotImplementedException();
