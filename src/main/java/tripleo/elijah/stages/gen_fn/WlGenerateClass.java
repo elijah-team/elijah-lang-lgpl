@@ -28,7 +28,7 @@ public class WlGenerateClass implements WorkJob {
 	private final ClassInvocation classInvocation;
 	private final List<GeneratedNode> coll;
 	private boolean _isDone = false;
-	private GeneratedClass Result;
+	GeneratedClass Result;
 
 	public WlGenerateClass(GenerateFunctions aGenerateFunctions,
 						   ClassInvocation aClassInvocation,

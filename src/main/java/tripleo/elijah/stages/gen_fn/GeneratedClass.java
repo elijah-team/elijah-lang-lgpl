@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeduceLookupUtils;
+import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_generic.CodeGenerator;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.util.Helpers;
@@ -111,7 +112,7 @@ public class GeneratedClass extends GeneratedContainerNC {
         return module;
     }
 
-	public void resolve_var_table_entries() {
+	public void resolve_var_table_entries(DeducePhase aDeducePhase) {
 		for (VarTableEntry varTableEntry : varTable) {
 			int y=2;
 			if (varTableEntry.potentialTypes.size() == 0 && varTableEntry.varType == null) {
@@ -137,6 +138,14 @@ public class GeneratedClass extends GeneratedContainerNC {
 				System.err.println(String.format("108 %s %s", this, varTableEntry.potentialTypes));
 				if (varTableEntry.potentialTypes.size() == 1) {
 					TypeTableEntry varType1 = varTableEntry.potentialTypes.get(0);
+					if (varType1.resolved() == null) {
+						ClassInvocation xci = new ClassInvocation(varType1.attached.getClassOf(), null);
+						xci = aDeducePhase.registerClassInvocation(xci);
+						@NotNull GenerateFunctions gf = aDeducePhase.generatePhase.getGenerateFunctions(xci.getKlass().getContext().module());
+						WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses);
+						wgc.run(null); // !
+						varType1.resolve(wgc.Result);
+					}
 					if (varType1.resolved() != null)
 						varTableEntry.resolve(varType1.resolved());
 					else

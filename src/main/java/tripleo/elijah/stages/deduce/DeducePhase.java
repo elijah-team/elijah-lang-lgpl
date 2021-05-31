@@ -37,7 +37,7 @@ public class DeducePhase {
 	private final List<FoundElement> foundElements = new ArrayList<FoundElement>();
 	private final Map<IdentTableEntry, OnType> idte_type_callbacks = new HashMap<IdentTableEntry, OnType>();
 	public List<GeneratedNode> generatedClasses = new ArrayList<GeneratedNode>();
-	final GeneratePhase generatePhase;
+	public final GeneratePhase generatePhase;
 
 	public DeducePhase(GeneratePhase aGeneratePhase) {
 		generatePhase = aGeneratePhase;
@@ -388,7 +388,7 @@ public class DeducePhase {
 		for (GeneratedNode generatedNode : generatedClasses) {
 			if (generatedNode instanceof GeneratedClass) {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				generatedClass.resolve_var_table_entries();
+				generatedClass.resolve_var_table_entries(this);
 			}
 		}
 		sanityChecks();
