@@ -85,7 +85,7 @@ public class GeneratedClass extends GeneratedContainerNC {
 	@NotNull
 	private String getNameHelper(Map<TypeName, OS_Type> aGenericPart) {
 		List<String> ls = new ArrayList<String>();
-		for (Map.Entry<TypeName, OS_Type> entry : aGenericPart.entrySet()) {
+		for (Map.Entry<TypeName, OS_Type> entry : aGenericPart.entrySet()) { // TODO Is this guaranteed to be in order?
 			final OS_Type value = entry.getValue(); // This can be another ClassInvocation using GenType
 			final String name = value.getClassOf().getName();
 			ls.add(name); // TODO Could be nested generics
