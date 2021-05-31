@@ -26,7 +26,6 @@ import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.work.WorkManager;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,12 +51,8 @@ public class PipelineLogic {
 	public void generate(List<GeneratedNode> lgc) {
 		GenerateResult ggr = null;
 		for (OS_Module mod : mods) {
-			try {
-				ggr = run3(mod, lgc);
-				gr.results().addAll(ggr.results());
-			} catch (IOException e) {
-				mod.parent.eee.exception(e);
-			}
+			ggr = run3(mod, lgc);
+			gr.results().addAll(ggr.results());
 		}
 //		gr = ggr;
 	}
@@ -165,7 +160,7 @@ public class PipelineLogic {
 		return generatePhase.getGenerateFunctions(mod);
 	}
 
-	protected GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc) throws IOException {
+	protected GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc) {
 		GenerateC ggc = new GenerateC(mod);
 //		ggc.generateCode(lgf);
 
