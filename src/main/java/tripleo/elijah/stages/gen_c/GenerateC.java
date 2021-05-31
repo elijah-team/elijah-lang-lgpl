@@ -156,9 +156,13 @@ public class GenerateC implements CodeGenerator {
 		for (ProcTableEntry pte : aGeneratedFunction.prte_list) {
 //			ClassInvocation ci = pte.getClassInvocation();
 			FunctionInvocation fi = pte.getFunctionInvocation();
-			GeneratedFunction gf = fi.getGenerated();
-			if (gf != null) {
-				wl.addJob(new WlGenerateFunctionC(gf, gr, wl, this));
+			if (fi == null) {
+				// TODO constructor
+			} else {
+				GeneratedFunction gf = fi.getGenerated();
+				if (gf != null) {
+					wl.addJob(new WlGenerateFunctionC(gf, gr, wl, this));
+				}
 			}
 		}
 	}
