@@ -145,7 +145,7 @@ public class GenerateC implements CodeGenerator {
 		generateCodeForMethod(aGeneratedFunction, gr, wl);
 		for (IdentTableEntry identTableEntry : aGeneratedFunction.idte_list) {
 			if (identTableEntry.isResolved()) {
-				GeneratedNode x = identTableEntry.resolved();
+				GeneratedNode x = identTableEntry.resolvedType();
 
 				if (x instanceof GeneratedClass) {
 					generate_class((GeneratedClass) x, gr);
