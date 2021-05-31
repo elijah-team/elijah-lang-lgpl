@@ -17,7 +17,7 @@ import tripleo.elijah.stages.gen_fn.ProcTableEntry;
  */
 public class FunctionInvocation {
 	private final FunctionDef fd;
-	private final ProcTableEntry pte;
+	final ProcTableEntry pte;
 	private ClassInvocation classInvocation;
 
 	public FunctionInvocation(FunctionDef aFunctionDef, ProcTableEntry aProcTableEntry) {
