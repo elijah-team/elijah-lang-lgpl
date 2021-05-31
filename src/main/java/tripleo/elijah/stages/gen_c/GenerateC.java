@@ -313,7 +313,10 @@ public class GenerateC implements CodeGenerator {
 		}
 
 		String find_header_string(GeneratedFunction gf) {
-			final GeneratedContainerNC parent = gf.getParent();
+			GeneratedContainerNC parent = gf.getParent();
+			if (parent == null)
+				parent = (GeneratedContainerNC) gf.getGenClass(); // TODO might not type check, but why not?
+
 			if (parent instanceof GeneratedClass) {
 				GeneratedClass st = (GeneratedClass) parent;
 				final String class_name = getTypeName(st);
