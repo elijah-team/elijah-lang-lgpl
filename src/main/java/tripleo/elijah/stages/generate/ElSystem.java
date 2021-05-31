@@ -33,6 +33,7 @@ public class ElSystem {
 
 		for (GenerateResultItem ab : gr.results()) {
 			String s = generateOutputs_Internal(ab.node, ab.ty, outputStrategyC);
+			assert s != null;
 			ab.output = s;
 		}
 

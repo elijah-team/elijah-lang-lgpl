@@ -244,7 +244,9 @@ public class Compilation {
 		}
 
 		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
-			Path path = FileSystems.getDefault().getPath(prefix, entry.getKey());
+			final String key = entry.getKey();
+			assert key != null;
+			Path path = FileSystems.getDefault().getPath(prefix, key);
 //			BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
 
 			path.getParent().toFile().mkdirs();

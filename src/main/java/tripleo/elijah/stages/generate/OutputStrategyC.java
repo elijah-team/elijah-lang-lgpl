@@ -77,6 +77,7 @@ public class OutputStrategyC {
 
 	public String nameForFunction(GeneratedFunction generatedFunction, GenerateResult.TY aTy) {
 		GeneratedNode c = generatedFunction.getGenClass();
+		if (c == null) c = generatedFunction.getParent(); // TODO fixme
 		if (c instanceof GeneratedClass)
 			return nameForClass((GeneratedClass) c, aTy);
 		else if (c instanceof GeneratedNamespace)
