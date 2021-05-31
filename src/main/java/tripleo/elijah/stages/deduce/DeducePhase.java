@@ -14,6 +14,7 @@ import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
@@ -131,6 +132,17 @@ public class DeducePhase {
 //					return aClassInvocation;
 		}
 		return i == 0;
+	}
+
+	final Map<NamespaceStatement, NamespaceInvocation> namespaceInvocationMap = new HashMap<NamespaceStatement, NamespaceInvocation>();
+
+	public NamespaceInvocation registerNamespaceInvocation(NamespaceStatement aNamespaceStatement) {
+		if (namespaceInvocationMap.containsKey(aNamespaceStatement))
+			return namespaceInvocationMap.get(aNamespaceStatement);
+
+		NamespaceInvocation nsi = new NamespaceInvocation(aNamespaceStatement);
+		namespaceInvocationMap.put(aNamespaceStatement, nsi);
+		return nsi;
 	}
 
 	static class ResolvedVariables {
