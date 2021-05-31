@@ -436,11 +436,6 @@ public class GeneratedFunction implements GeneratedNode {
 //        return fd.getContext().module();
     }
 
-	public void setClass(GeneratedNode aNode) {
-//		assert aNode instanceof GeneratedClass;
-		genClass = aNode;
-	}
-
 	public int getCode() {
 		return code;
 	}
@@ -455,6 +450,11 @@ public class GeneratedFunction implements GeneratedNode {
 
 	public GeneratedContainerNC getParent() {
 		return parent;
+	}
+
+	public void setClass(@NotNull GeneratedNode aNode) {
+		assert aNode instanceof GeneratedClass || aNode instanceof GeneratedNamespace;
+		genClass = aNode;
 	}
 
 	public GeneratedNode getGenClass() {
