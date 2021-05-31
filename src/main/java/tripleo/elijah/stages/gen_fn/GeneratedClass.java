@@ -155,6 +155,11 @@ public class GeneratedClass extends GeneratedContainerNC {
 	public void generateCode(CodeGenerator aCodeGenerator, GenerateResult aGr) {
 		aCodeGenerator.generate_class(this, aGr);
 	}
+
+	@NotNull
+	public String getNumberedName() {
+		return getKlass().getName()+"_"+ getCode();
+	}
 }
 
 //
