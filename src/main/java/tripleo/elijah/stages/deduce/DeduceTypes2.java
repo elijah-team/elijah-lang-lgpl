@@ -1280,7 +1280,19 @@ public class DeduceTypes2 {
 				});
 			}
 		} else if (e instanceof FunctionDef) {
-			FunctionInvocation fi = new FunctionInvocation((FunctionDef) e, pte);
+			FunctionDef fd = (FunctionDef) e;
+			FunctionInvocation fi = new FunctionInvocation(fd, pte);
+			final OS_Element parent = fd.getParent();
+			if (parent instanceof NamespaceStatement) {
+				final NamespaceInvocation nsi = phase.registerNamespaceInvocation((NamespaceStatement) parent);
+//				pte.setNamespaceInvocation(nsi);
+				fi.setNamespaceInvocation(nsi);
+			} else if (parent instanceof ClassStatement) {
+				ClassInvocation ci = new ClassInvocation((ClassStatement) parent, null);
+//						fi.setClassInvocation(ci);
+				ci = phase.registerClassInvocation(ci);
+				pte.setClassInvocation(ci);
+			}
 			pte.setFunctionInvocation(fi);
 		} else {
 			System.err.println("845 Unknown element for ProcTableEntry "+e);
