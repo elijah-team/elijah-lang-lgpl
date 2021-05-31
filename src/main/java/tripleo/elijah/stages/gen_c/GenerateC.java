@@ -33,6 +33,7 @@ import tripleo.elijah.lang.TypeName;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.gen_generic.CodeGenerator;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
@@ -40,6 +41,7 @@ import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.BufferTabbedOutputStream;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.work.WorkJob;
 import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
 import tripleo.util.buffer.Buffer;
@@ -97,19 +99,9 @@ public class GenerateC implements CodeGenerator {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				WorkList wl = new WorkList();
-				generateCodeForMethod(generatedFunction, gr, wl);
+				generate_function(generatedFunction, gr, wl);
 				if (!wl.isEmpty())
 					wm.addJobs(wl);
-				for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
-					if (identTableEntry.isResolved()) {
-						GeneratedNode x = identTableEntry.resolved();
-
-						if (x instanceof GeneratedClass) {
-							generate_class((GeneratedClass) x, gr);
-						} else
-							throw new NotImplementedException();
-					}
-				}
 			} else if (generatedNode instanceof GeneratedClass) {
 				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 				generate_class(generatedClass, gr);
@@ -120,6 +112,55 @@ public class GenerateC implements CodeGenerator {
 		}
 
 		return gr;
+	}
+
+	static class WlGenerateFunctionC implements WorkJob {
+
+		private final GeneratedFunction gf;
+		private final GenerateResult gr;
+		private final WorkList wl;
+		private final GenerateC generateC;
+		private boolean _isDone = false;
+
+		public WlGenerateFunctionC(GeneratedFunction aGf, GenerateResult aGr, WorkList aWl, GenerateC aGenerateC) {
+			gf = aGf;
+			gr = aGr;
+			wl = aWl;
+			generateC = aGenerateC;
+		}
+
+		@Override
+		public void run(WorkManager aWorkManager) {
+			generateC.generate_function(gf, gr, wl);
+			_isDone = true;
+		}
+
+		@Override
+		public boolean isDone() {
+			return _isDone;
+		}
+	}
+
+	public void generate_function(GeneratedFunction aGeneratedFunction, GenerateResult gr, WorkList wl) {
+		generateCodeForMethod(aGeneratedFunction, gr, wl);
+		for (IdentTableEntry identTableEntry : aGeneratedFunction.idte_list) {
+			if (identTableEntry.isResolved()) {
+				GeneratedNode x = identTableEntry.resolved();
+
+				if (x instanceof GeneratedClass) {
+					generate_class((GeneratedClass) x, gr);
+				} else
+					throw new NotImplementedException();
+			}
+		}
+		for (ProcTableEntry pte : aGeneratedFunction.prte_list) {
+//			ClassInvocation ci = pte.getClassInvocation();
+			FunctionInvocation fi = pte.getFunctionInvocation();
+			GeneratedFunction gf = fi.getGenerated();
+			if (gf != null) {
+				wl.addJob(new WlGenerateFunctionC(gf, gr, wl, this));
+			}
+		}
 	}
 
 	@Override
