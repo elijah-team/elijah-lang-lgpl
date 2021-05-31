@@ -2000,7 +2000,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	static class Holder<T> {
+	public static class Holder<T> {
 		private T el;
 
 		public void set(T el) {
