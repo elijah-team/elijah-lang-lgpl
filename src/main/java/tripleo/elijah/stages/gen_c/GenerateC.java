@@ -369,7 +369,12 @@ public class GenerateC implements CodeGenerator {
 
 		String find_return_type(GeneratedFunction gf) {
 			final String returnType;
-			tte = gf.getTypeTableEntry(1);
+			@Nullable InstructionArgument result_index = gf.vte_lookup("Result");
+			// TODO Handle functions where result is returned in Value
+			if (result_index == null)
+				return "void"; // README Assuming Unit
+
+			tte = gf.getTypeTableEntry(((IntegerIA) result_index).getIndex());
 			GeneratedNode res = tte.resolved();
 			if (res instanceof GeneratedContainerNC) {
 				final GeneratedContainerNC nc = (GeneratedContainerNC) res;
