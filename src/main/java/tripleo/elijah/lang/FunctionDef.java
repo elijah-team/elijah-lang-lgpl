@@ -38,6 +38,10 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		scope3 = sco;
 	}
 
+	public IdentExpression getNameNode() {
+		return funName;
+	}
+
 	public enum Species {
 		DEF_FUN,
 		PROP_SET, PROP_GET, REG_FUN, CTOR, DTOR
