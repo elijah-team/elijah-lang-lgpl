@@ -2257,10 +2257,10 @@ public class DeduceTypes2 {
 									errSink.reportDiagnostic(resolveError);
 								}
 							} else if (ty.getType() == OS_Type.Type.USER_CLASS) {
-								OS_Element ele = ty.getClassOf();
+								ClassStatement klass = ty.getClassOf();
 								LookupResultList lrl = null;
 								try {
-									lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+									lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), klass.getContext());
 									OS_Element best = lrl.chooseBest(null);
 //									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 									assert best != null;
