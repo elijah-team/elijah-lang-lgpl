@@ -1237,6 +1237,15 @@ public class DeduceTypes2 {
 							@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression, pte);
 							vte.addPotentialType(instructionIndex, tte);
 							vte.setConstructable(pte);
+
+							ClassInvocation ci = new ClassInvocation(kl, null);
+							ci = phase.registerClassInvocation(ci);
+							ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+								@Override
+								public void onDone(GeneratedClass result) {
+									vte.resolveType(result);
+								}
+							});
 						} else {
 							System.err.println("7890 "+el.getClass().getName());
 						}
