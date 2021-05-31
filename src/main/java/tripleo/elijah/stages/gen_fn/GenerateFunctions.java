@@ -550,7 +550,7 @@ public class GenerateFunctions {
 		return gc;
 	}
 
-	public GeneratedNamespace generateNamespace(NamespaceStatement namespace1) {
+	@NotNull public GeneratedNamespace generateNamespace(NamespaceStatement namespace1) {
 		GeneratedNamespace gn = new GeneratedNamespace(namespace1, module);
 		AccessNotation an = null;
 
