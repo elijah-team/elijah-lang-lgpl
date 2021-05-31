@@ -37,7 +37,7 @@ public class IdentTableEntry extends BaseTableEntry implements Constructable, Ta
 	public InstructionArgument backlink;
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public TypeTableEntry type;
-	private GeneratedNode resolved;
+	private GeneratedNode resolvedType;
 	public OS_Element resolved_element;
 	public ProcTableEntry constructable_pte;
 
@@ -73,7 +73,7 @@ public class IdentTableEntry extends BaseTableEntry implements Constructable, Ta
 				", potentialTypes=" + potentialTypes +
 				", status=" + status +
 				", type=" + type +
-				", resolved=" + resolved +
+				", resolved=" + resolvedType +
 				'}';
 	}
 
@@ -83,15 +83,15 @@ public class IdentTableEntry extends BaseTableEntry implements Constructable, Ta
 
 	@Override
 	public void resolveType(GeneratedNode gn) {
-		resolved = gn;
+		resolvedType = gn;
 	}
 
 	public boolean isResolved() {
-		return resolved != null;
+		return resolvedType != null;
 	}
 
-	public GeneratedNode resolved() {
-		return resolved;
+	public GeneratedNode resolvedType() {
+		return resolvedType;
 	}
 
 	public void setResolvedElement(OS_Element el) {
