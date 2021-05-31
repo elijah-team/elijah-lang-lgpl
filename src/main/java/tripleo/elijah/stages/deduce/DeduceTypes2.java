@@ -31,6 +31,8 @@ import tripleo.elijah.stages.instructions.ProcIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.work.WorkList;
+import tripleo.elijah.work.WorkManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +46,7 @@ public class DeduceTypes2 {
 	private final OS_Module module;
 	private final DeducePhase phase;
 	private final ErrSink errSink;
+	WorkManager wm = new WorkManager();
 
 	public DeduceTypes2(OS_Module module, DeducePhase phase) {
 		this.module = module;
@@ -268,6 +271,12 @@ public class DeduceTypes2 {
 					// RESOLVE FUNCTION RETURN TYPES
 					//
 					resolve_function_return_type(generatedFunction);
+					//
+					// LOOKUP FUNCTIONS
+					//
+					for (ProcTableEntry pte : generatedFunction.prte_list) {
+						lookup_function_on_exit(pte);
+					}
 				}
 				break;
 			case ES:
@@ -470,6 +479,97 @@ public class DeduceTypes2 {
 				}
 			}
 		}
+	}
+
+	class Lookup_function_on_exit {
+
+		public void action(ProcTableEntry pte) {
+			WorkList wl = new WorkList();
+
+			FunctionInvocation fi = pte.getFunctionInvocation();
+			if (fi == null) return;
+
+			if (fi.getFunction() == null) {
+				if (fi.pte == null) {
+					return;
+				} else {
+					fi.setClassInvocation(fi.pte.getClassInvocation());
+				}
+			}
+
+			ClassInvocation ci = fi.getClassInvocation();
+			FunctionDef fd3 = fi.getFunction();
+			if (ci == null) {
+				ci = fi.pte.getClassInvocation();
+			}
+			if (fd3 == null) {
+				final ClassStatement klass = ci.getKlass();
+
+				Collection<ConstructorDef> cis = klass.getConstructors();
+				for (ConstructorDef constructorDef : cis) {
+					final Iterable<FormalArgListItem> constructorDefArgs = constructorDef.getArgs();
+
+					if (!constructorDefArgs.iterator().hasNext()) { // zero-sized arg list
+						fd3 = constructorDef;
+						break;
+					}
+				}
+			}
+
+			final OS_Element parent;
+			if (fd3 != null) {
+				parent = fd3.getParent();
+				if (parent instanceof ClassStatement) {
+					ci = new ClassInvocation((ClassStatement) parent, null);
+					proceed(fi, ci, (ClassStatement) parent, wl);
+				} else if (parent instanceof NamespaceStatement) {
+					proceed(fi, (NamespaceStatement) parent, wl);
+				}
+			} else {
+				parent = ci.getKlass();
+				proceed(fi, ci, (ClassStatement) parent, wl);
+			}
+
+//			proceed(fi, ci, parent);
+			wm.drain();
+		}
+
+		void proceed(FunctionInvocation fi, ClassInvocation ci, ClassStatement aParent, WorkList wl) {
+			ci = phase.registerClassInvocation(ci);
+
+			ClassStatement kl = ci.getKlass();
+			if (kl == null)
+				assert false;
+			else {
+				final FunctionDef fd2 = fi.getFunction();
+
+				if (fd2 == null && fi.pte.getArgs().size() == 0) {
+					// default ctor
+					wl.addJob(new WlGenerateDefaultCtor(phase.generatePhase.getGenerateFunctions(module), fi));
+				} else
+					wl.addJob(new WlGenerateFunction(phase.generatePhase.getGenerateFunctions(module), fi));
+
+				wm.addJobs(wl);
+			}
+		}
+
+		void proceed(FunctionInvocation fi, NamespaceStatement aParent, WorkList wl) {
+//			ci = phase.registerClassInvocation(ci);
+
+			final OS_Module module1 = aParent.getContext().module();
+
+			final NamespaceInvocation nsi = phase.registerNamespaceInvocation(aParent);
+
+			wl.addJob(new WlGenerateNamespace(phase.generatePhase.getGenerateFunctions(module1), nsi, phase.generatedClasses));
+			wl.addJob(new WlGenerateFunction(phase.generatePhase.getGenerateFunctions(module1), fi));
+
+			wm.addJobs(wl);
+		}
+	}
+
+	public void lookup_function_on_exit(ProcTableEntry pte) {
+		Lookup_function_on_exit lfoe = new Lookup_function_on_exit();
+		lfoe.action(pte);
 	}
 
 	public void assign_type_to_idte(IdentTableEntry ite,

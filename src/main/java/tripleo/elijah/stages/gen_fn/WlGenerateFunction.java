@@ -11,9 +11,11 @@ package tripleo.elijah.stages.gen_fn;
 import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
+import tripleo.elijah.stages.deduce.NamespaceInvocation;
 import tripleo.elijah.work.WorkJob;
 import tripleo.elijah.work.WorkManager;
 
@@ -38,16 +40,31 @@ public class WlGenerateFunction implements WorkJob {
 		@NotNull GeneratedFunction gf = generateFunctions.generateFunction(functionDef, classStatement, functionInvocation);
 //		lgf.add(gf);
 
-		final ClassInvocation ci = functionInvocation.getClassInvocation();
-		ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-			@Override
-			public void onDone(GeneratedClass result) {
-				gf.setCode(generateFunctions.module.parent.nextFunctionCode());
-				gf.setClass(result);
-				result.addFunction(functionDef, gf);
-			}
-		});
-
+		if (classStatement instanceof NamespaceStatement) {
+			final NamespaceInvocation nsi = functionInvocation.getNamespaceInvocation();
+			nsi.resolveDeferred().done(new DoneCallback<GeneratedNamespace>() {
+				@Override
+				public void onDone(GeneratedNamespace result) {
+					if (result.getFunction(functionDef) == null) {
+						gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+						gf.setClass(result);
+						result.addFunction(functionDef, gf);
+					}
+				}
+			});
+		} else {
+			final ClassInvocation ci = functionInvocation.getClassInvocation();
+			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(GeneratedClass result) {
+					if (result.getFunction(functionDef) == null) {
+						gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+						gf.setClass(result);
+						result.addFunction(functionDef, gf);
+					}
+				}
+			});
+		}
 		_isDone = true;
 	}
 
