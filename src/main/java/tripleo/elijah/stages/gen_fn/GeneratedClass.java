@@ -143,6 +143,9 @@ public class GeneratedClass extends GeneratedContainerNC {
 				if (varTableEntry.potentialTypes.size() == 1) {
 					TypeTableEntry varType1 = varTableEntry.potentialTypes.get(0);
 					if (varType1.resolved() == null) {
+						assert varType1.attached != null;
+						assert varType1.attached.getType() == OS_Type.Type.USER_CLASS;
+						//
 						ClassInvocation xci = new ClassInvocation(varType1.attached.getClassOf(), null);
 						xci = aDeducePhase.registerClassInvocation(xci);
 						@NotNull GenerateFunctions gf = aDeducePhase.generatePhase.getGenerateFunctions(xci.getKlass().getContext().module());
