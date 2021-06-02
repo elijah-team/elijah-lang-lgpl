@@ -31,6 +31,7 @@ public class GeneratedClass extends GeneratedContainerNC {
 	private final ClassStatement klass;
 	public Map<ConstructorDef, GeneratedFunction> constructors = new HashMap<ConstructorDef, GeneratedFunction>();
 	public ClassInvocation ci;
+	private boolean resolve_var_table_entries_already = false;
 
 	public GeneratedClass(ClassStatement klass, OS_Module module) {
 		this.klass = klass;
@@ -112,9 +113,12 @@ public class GeneratedClass extends GeneratedContainerNC {
         return module;
     }
 
-	public void resolve_var_table_entries(DeducePhase aDeducePhase) {
+	public boolean resolve_var_table_entries(DeducePhase aDeducePhase) {
+		boolean Result = false;
+
+		if (resolve_var_table_entries_already) return false;
+
 		for (VarTableEntry varTableEntry : varTable) {
-			int y=2;
 			if (varTableEntry.potentialTypes.size() == 0 && varTableEntry.varType == null) {
 				final TypeName tn = varTableEntry.typeName;
 				if (tn != null) {
@@ -145,6 +149,7 @@ public class GeneratedClass extends GeneratedContainerNC {
 						WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses);
 						wgc.run(null); // !
 						varType1.resolve(wgc.Result);
+						Result = true;
 					}
 					if (varType1.resolved() != null)
 						varTableEntry.resolve(varType1.resolved());
@@ -153,6 +158,9 @@ public class GeneratedClass extends GeneratedContainerNC {
 				}
 			}
 		}
+
+		resolve_var_table_entries_already = true; // TODO is this right?
+		return Result;
 	}
 
 	@Override

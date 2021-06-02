@@ -385,10 +385,14 @@ public class DeducePhase {
 				}
 			}
 		}
-		for (GeneratedNode generatedNode : generatedClasses) {
-			if (generatedNode instanceof GeneratedClass) {
-				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				generatedClass.resolve_var_table_entries(this);
+		List<GeneratedClass> gcs = new ArrayList<GeneratedClass>();
+		boolean all_resolve_var_table_entries = false;
+		while (!all_resolve_var_table_entries) {
+			for (GeneratedNode generatedNode : new ArrayList<>(generatedClasses)) {
+				if (generatedNode instanceof GeneratedClass) {
+					final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+					all_resolve_var_table_entries = generatedClass.resolve_var_table_entries(this); // TODO use a while loop to get all classes
+				}
 			}
 		}
 		sanityChecks();
