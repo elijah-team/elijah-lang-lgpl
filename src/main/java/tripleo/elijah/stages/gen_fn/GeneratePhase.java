@@ -24,7 +24,7 @@ public class GeneratePhase {
 	Map<OS_Module, GenerateFunctions> generateFunctions = new HashMap<OS_Module, GenerateFunctions>();
 
 	@NotNull
-	public GenerateFunctions getGenerateFunctions(OS_Module mod) {
+	public GenerateFunctions getGenerateFunctions(@NotNull OS_Module mod) {
 		final GenerateFunctions Result;
 		if (generateFunctions.containsKey(mod))
 			Result = generateFunctions.get(mod);
