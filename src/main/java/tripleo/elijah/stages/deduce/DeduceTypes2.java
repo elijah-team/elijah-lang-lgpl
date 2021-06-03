@@ -599,8 +599,7 @@ public class DeduceTypes2 {
 								ite.type.attached = xx;
 							} catch (ResolveError resolveError) {
 								System.out.println("192 Can't attach type to "+path);
-//								resolveError.printStackTrace(); // TODO print diagnostic
-//								continue;
+								errSink.reportDiagnostic(resolveError);
 							}
 						}
 					} else {
