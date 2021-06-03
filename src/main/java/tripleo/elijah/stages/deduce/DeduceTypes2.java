@@ -593,14 +593,21 @@ public class DeduceTypes2 {
 				public void foundElement(OS_Element x) {
 					ite.setStatus(BaseTableEntry.Status.KNOWN, x);
 					if (ite.type != null && ite.type.attached != null) {
-						if (ite.type.attached.getType() == OS_Type.Type.USER) {
+						switch (ite.type.attached.getType()) {
+						case USER:
 							try {
 								OS_Type xx = resolve_type(ite.type.attached, aFunctionContext);
 								ite.type.attached = xx;
 							} catch (ResolveError resolveError) {
-								System.out.println("192 Can't attach type to "+path);
+								System.out.println("192 Can't attach type to " + path);
 								errSink.reportDiagnostic(resolveError);
 							}
+							break;
+						case USER_CLASS:
+							// do nothing
+							break;
+						default:
+							throw new NotImplementedException();
 						}
 					} else {
 						int yy=2;
