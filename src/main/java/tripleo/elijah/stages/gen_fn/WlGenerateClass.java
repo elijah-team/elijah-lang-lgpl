@@ -29,7 +29,7 @@ public class WlGenerateClass implements WorkJob {
 	private final ClassInvocation classInvocation;
 	private final List<GeneratedNode> coll;
 	private boolean _isDone = false;
-	GeneratedClass Result;
+	private GeneratedClass Result;
 
 	public WlGenerateClass(GenerateFunctions aGenerateFunctions,
 						   ClassInvocation aClassInvocation,
@@ -73,6 +73,10 @@ public class WlGenerateClass implements WorkJob {
 	@Override
 	public boolean isDone() {
 		return _isDone;
+	}
+
+	public GeneratedClass getResult() {
+		return Result;
 	}
 }
 

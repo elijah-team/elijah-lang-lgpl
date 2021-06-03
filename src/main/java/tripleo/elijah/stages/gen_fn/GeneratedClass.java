@@ -151,7 +151,7 @@ public class GeneratedClass extends GeneratedContainerNC {
 						@NotNull GenerateFunctions gf = aDeducePhase.generatePhase.getGenerateFunctions(xci.getKlass().getContext().module());
 						WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses);
 						wgc.run(null); // !
-						varType1.resolve(wgc.Result);
+						varType1.resolve(wgc.getResult());
 						Result = true;
 					}
 					if (varType1.resolved() != null)
