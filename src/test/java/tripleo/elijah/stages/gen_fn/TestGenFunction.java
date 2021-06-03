@@ -15,6 +15,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
+import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.DeducePhase;
@@ -45,6 +46,14 @@ public class TestGenFunction {
 		final OS_Module m = c.realParseElijjahFile(f, file, false);
 		Assert.assertTrue("Method parsed correctly", m != null);
 		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
+
+		//
+		//
+		//
+		m.entryPoints = List_of((ClassStatement)m.findClass("Main"));
+		//
+		//
+		//
 
 		final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
 		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
