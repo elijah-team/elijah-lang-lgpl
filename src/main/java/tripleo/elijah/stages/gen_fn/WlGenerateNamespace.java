@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.stages.deduce.NamespaceInvocation;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkJob;
 import tripleo.elijah.work.WorkManager;
 
@@ -42,21 +43,26 @@ public class WlGenerateNamespace implements WorkJob {
 	@Override
 	public void run(WorkManager aWorkManager) {
 		final DeferredObject<GeneratedNamespace, Void, Void> resolvePromise = namespaceInvocation.resolveDeferred();
-		if (resolvePromise.isPending()) {
+		switch (resolvePromise.state()) {
+		case PENDING:
 			@NotNull GeneratedNamespace ns = generateFunctions.generateNamespace(namespaceStatement);
 			ns.setCode(generateFunctions.module.parent.nextClassCode());
 			if (coll != null)
 				coll.add(ns);
 
 			resolvePromise.resolve(ns);
-			Result  = ns;
-		} else {
+			Result = ns;
+			break;
+		case RESOLVED:
 			resolvePromise.then(new DoneCallback<GeneratedNamespace>() {
 				@Override
 				public void onDone(GeneratedNamespace result) {
 					Result = result;
 				}
 			});
+			break;
+		case REJECTED:
+			throw new NotImplementedException();
 		}
 		_isDone = true;
 	}
