@@ -1841,37 +1841,6 @@ public class DeduceTypes2 {
 									ectx = el.getContext();
 								}
 							}
-/*
-							OS_Element el2 = DeduceLookupUtils.lookup(tte.expression.getLeft(), ectx);
-							if (el2 == null) {
-								System.err.println("1062 "+tte.expression.getLeft());
-								throw new IllegalStateException("foo bar");
-							} else {
-								ectx = el2.getContext();
-								if (el2 instanceof ClassStatement) {
-									tte.attached = new OS_Type((ClassStatement) el2);
-								} else if (el2 instanceof FunctionDef) {
-									assert tte.attached == null;
-									switch (tte.expression.getKind()) {
-									case PROCEDURE_CALL:
-										final TypeName returnType = ((FunctionDef) el2).returnType();
-										if (returnType != null && !returnType.isNull()) {
-											tte.attached = new OS_Type(returnType);
-										} else {
-											// TODO we must find type at a later point
-											System.err.println("1105 we must find type at a later point for "+tte.expression);
-										}
-										break;
-									default:
-										tte.attached = new OS_FuncType((FunctionDef) el2);
-										break;
-									}
-								} else {
-									System.err.println("1017 "+el2.getClass().getName());
-									throw new NotImplementedException();
-								}
-							}
-*/
 						}
 					}
 				} else {
