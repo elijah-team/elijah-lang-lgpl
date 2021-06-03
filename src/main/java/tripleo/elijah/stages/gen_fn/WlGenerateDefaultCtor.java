@@ -56,7 +56,7 @@ public class WlGenerateDefaultCtor implements WorkJob {
 				IExpression e = ExpressionBuilder.build(left, ExpressionKind.ASSIGNMENT, right);
 				scope3.add(new StatementWrapper(e, cd.getContext(), cd));
 			} else {
-				if (getPragma("auto_construct")) {
+				if (true || getPragma("auto_construct")) {
 					scope3.add(new ConstructStatement(cd, cd.getContext(), varTableEntry.nameToken, null, null));
 				}
 			}
