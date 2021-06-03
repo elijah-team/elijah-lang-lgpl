@@ -5,13 +5,13 @@ import tripleo.elijah.gen.ICodeGen;
 public class StatementWrapper implements StatementItem, FunctionItem, OS_Element {
 
     private final IExpression expr;
-    private Context _ctx;
-    private OS_Element _parent;
+    private final Context _ctx;
+    private final OS_Element _parent;
 
-    public StatementWrapper(final IExpression aexpr, final Context ctx, final OS_Element parent) {
-        expr = aexpr;
-        _ctx = ctx;
-        _parent = parent;
+    public StatementWrapper(final IExpression aExpression, final Context aContext, final OS_Element aParent) {
+        expr = aExpression;
+        _ctx = aContext;
+        _parent = aParent;
     }
 
     @Override
