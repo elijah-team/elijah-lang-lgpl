@@ -2331,9 +2331,8 @@ public class DeduceTypes2 {
 
 							lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
 							OS_Element best = lrl.chooseBest(null);
-//							ite.setStatus(BaseTableEntry.Status.KNOWN, best); // README infinite loop
-//							tte = new tte
-							ite.setResolvedElement(best);
+							assert best == ele2;
+							ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 						} catch (ResolveError aResolveError) {
 							aResolveError.printStackTrace();
 							errSink.reportDiagnostic(aResolveError);
