@@ -391,6 +391,7 @@ public class DeducePhase {
 		List<GeneratedClass> gcs = new ArrayList<GeneratedClass>();
 		boolean all_resolve_var_table_entries = false;
 		while (!all_resolve_var_table_entries) {
+			if (generatedClasses.size() == 0) break;
 			for (GeneratedNode generatedNode : new ArrayList<>(generatedClasses)) {
 				if (generatedNode instanceof GeneratedClass) {
 					final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
