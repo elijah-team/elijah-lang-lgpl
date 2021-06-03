@@ -20,7 +20,8 @@ import java.util.List;
 public class LibraryStatementPart {
 	private String name;
 	private String dirName;
-	private List<Directive> dirs = new ArrayList<Directive>();
+   	private List<Directive> dirs = null;
+
 	private CompilerInstructions ci;
 
 	public void setName(final Token i1) {
@@ -40,6 +41,8 @@ public class LibraryStatementPart {
 	}
 
 	public void addDirective(final Token token, final IExpression iExpression) {
+		if (dirs == null)
+			dirs = new ArrayList<Directive>();
 		dirs.add(new Directive(token, iExpression));
 	}
 
