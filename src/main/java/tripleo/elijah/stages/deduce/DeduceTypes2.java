@@ -104,64 +104,7 @@ public class DeduceTypes2 {
 					// resolve all cte expressions
 					//
 					for (final ConstantTableEntry cte : generatedFunction.cte_list) {
-						final IExpression iv = cte.initialValue;
-						switch (iv.getKind()) {
-						case NUMERIC:
-							{
-								final OS_Type a = cte.getTypeTableEntry().attached;
-								if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
-									try {
-										cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), context);
-									} catch (ResolveError resolveError) {
-										System.out.println("71 Can't be here");
-//										resolveError.printStackTrace(); // TODO print diagnostic
-									}
-								}
-								break;
-							}
-						case STRING_LITERAL:
-							{
-								final OS_Type a = cte.getTypeTableEntry().attached;
-								if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
-									try {
-										cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.String_), context);
-									} catch (ResolveError resolveError) {
-										System.out.println("117 Can't be here");
-//										resolveError.printStackTrace(); // TODO print diagnostic
-									}
-								}
-								break;
-							}
-						case CHAR_LITERAL:
-							{
-								final OS_Type a = cte.getTypeTableEntry().attached;
-								if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
-									try {
-										cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemCharacter), context);
-									} catch (ResolveError resolveError) {
-										System.out.println("117 Can't be here");
-//										resolveError.printStackTrace(); // TODO print diagnostic
-									}
-								}
-								break;
-							}
-						case IDENT:
-							{
-								final OS_Type a = cte.getTypeTableEntry().attached;
-								assert a != null;
-								assert a.getType() != null;
-								if (a.getType() == OS_Type.Type.BUILT_IN && a.getBType() == BuiltInTypes.Boolean) {
-									assert BuiltInTypes.isBooleanText(cte.getName());
-								} else
-									throw new NotImplementedException();
-								break;
-							}
-						default:
-							{
-								System.err.println("8192 "+iv.getKind());
-								throw new NotImplementedException();
-							}
-						}
+						resolve_cte_expression(cte, context);
 					}
 					//
 					// resolve ident table
@@ -477,6 +420,70 @@ public class DeduceTypes2 {
 //					generatedFunction.deferred_calls.remove(deferred_call);
 					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
 				}
+			}
+		}
+	}
+
+	private void resolve_cte_expression(ConstantTableEntry cte, Context aContext) {
+		final IExpression iv = cte.initialValue;
+		switch (iv.getKind()) {
+		case NUMERIC:
+			{
+				final OS_Type a = cte.getTypeTableEntry().attached;
+				if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
+					try {
+						cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), aContext);
+					} catch (ResolveError resolveError) {
+						System.out.println("71 Can't be here");
+//										resolveError.printStackTrace(); // TODO print diagnostic
+					}
+				}
+				break;
+			}
+		case STRING_LITERAL:
+			{
+				final OS_Type a = cte.getTypeTableEntry().attached;
+				if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
+					try {
+						cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.String_), aContext);
+					} catch (ResolveError resolveError) {
+						System.out.println("117 Can't be here");
+//										resolveError.printStackTrace(); // TODO print diagnostic
+					}
+				}
+				break;
+			}
+		case CHAR_LITERAL:
+			{
+				final OS_Type a = cte.getTypeTableEntry().attached;
+				if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
+					try {
+						cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemCharacter), aContext);
+					} catch (ResolveError resolveError) {
+						System.out.println("117 Can't be here");
+//										resolveError.printStackTrace(); // TODO print diagnostic
+					}
+				}
+				break;
+			}
+		case IDENT:
+			{
+				final OS_Type a = cte.getTypeTableEntry().attached;
+				if (a != null) {
+					assert a.getType() != null;
+					if (a.getType() == OS_Type.Type.BUILT_IN && a.getBType() == BuiltInTypes.Boolean) {
+						assert BuiltInTypes.isBooleanText(cte.getName());
+					} else
+						throw new NotImplementedException();
+				} else {
+					assert false;
+				}
+				break;
+			}
+		default:
+			{
+				System.err.println("8192 "+iv.getKind());
+				throw new NotImplementedException();
 			}
 		}
 	}
