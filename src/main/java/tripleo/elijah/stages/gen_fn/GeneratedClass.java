@@ -116,7 +116,7 @@ public class GeneratedClass extends GeneratedContainerNC {
 	public boolean resolve_var_table_entries(DeducePhase aDeducePhase) {
 		boolean Result = false;
 
-		if (resolve_var_table_entries_already) return false;
+		if (resolve_var_table_entries_already) return true;
 
 		for (VarTableEntry varTableEntry : varTable) {
 			if (varTableEntry.potentialTypes.size() == 0 && varTableEntry.varType == null) {
