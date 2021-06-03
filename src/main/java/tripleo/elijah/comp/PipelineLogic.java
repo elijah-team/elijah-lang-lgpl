@@ -51,8 +51,10 @@ public class PipelineLogic {
 
 	public void generate(List<GeneratedNode> lgc) {
 		GenerateResult ggr = null;
+		final WorkManager wm = new WorkManager();
 		for (OS_Module mod : mods) {
-			ggr = run3(mod, lgc);
+			ggr = run3(mod, lgc, wm);
+			wm.drain();
 			gr.results().addAll(ggr.results());
 		}
 //		gr = ggr;
@@ -161,12 +163,11 @@ public class PipelineLogic {
 		return generatePhase.getGenerateFunctions(mod);
 	}
 
-	protected GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc) {
+	protected GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc, WorkManager wm) {
 		GenerateC ggc = new GenerateC(mod);
 //		ggc.generateCode(lgf);
 
 		GenerateResult gr = new GenerateResult();
-		WorkManager wm = new WorkManager();
 
 		for (GeneratedNode generatedNode : lgc) {
 			if (generatedNode.module() != mod) continue; // README curious
@@ -186,7 +187,6 @@ public class PipelineLogic {
 			}
 		}
 
-		wm.drain();
 		return gr;
 	}
 
