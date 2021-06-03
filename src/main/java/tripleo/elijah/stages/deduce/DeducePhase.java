@@ -17,6 +17,7 @@ import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.lang.OS_UnknownType;
 import tripleo.elijah.lang.TypeName;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.work.WorkList;
@@ -125,7 +126,9 @@ public class DeducePhase {
 		//
 		int i = gp.entrySet().size();
 		for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
-			if (map.get(entry.getKey()).equals(entry.getValue()))
+			final OS_Type entry_type = map.get(entry.getKey());
+			assert !(entry_type instanceof OS_UnknownType);
+			if (entry_type.equals(entry.getValue()))
 				i--;
 //				else
 //					return aClassInvocation;
