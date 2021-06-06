@@ -1319,6 +1319,7 @@ public class DeduceTypes2 {
 //						fi.setClassInvocation(ci);
 				ci = phase.registerClassInvocation(ci);
 				pte.setClassInvocation(ci);
+				fi.setClassInvocation(ci);
 			}
 			pte.setFunctionInvocation(fi);
 		} else {
