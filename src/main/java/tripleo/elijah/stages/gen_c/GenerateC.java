@@ -381,7 +381,7 @@ public class GenerateC implements CodeGenerator {
 				int code = nc.getCode();
 				return "Z"+code;
 			}
-			type = tte.attached;
+			type = tte.getAttached();
 
 			System.out.println("228 "+ type);
 			if (type != null && type.getType() == OS_Type.Type.BUILT_IN && type.getBType() == BuiltInTypes.Unit) {
@@ -719,7 +719,7 @@ public class GenerateC implements CodeGenerator {
 	}
 
 	private String getTypeNameForVariableEntry(VariableTableEntry input) {
-		OS_Type attached = input.type.attached;
+		OS_Type attached = input.type.getAttached();
 		if (attached.getType() == OS_Type.Type.USER_CLASS) {
 			return attached.getClassOf().name();
 		} else if (attached.getType() == OS_Type.Type.USER) {
@@ -757,7 +757,7 @@ public class GenerateC implements CodeGenerator {
 		final IntegerIA vte_targ_ = (IntegerIA) instruction.getArg(2);
 		final String target_name = getRealTargetName(gf, vte_num_);
 		final TypeTableEntry target_type_ = gf.getTypeTableEntry(vte_type_.getIndex());
-		final String target_type = getTypeName(target_type_.attached);
+		final String target_type = getTypeName(target_type_.getAttached());
 		final String source_target = getRealTargetName(gf, vte_targ_);
 
 		tos.put_string_ln(String.format("%s = (%s)%s;", target_name, target_type, source_target));
@@ -769,7 +769,7 @@ public class GenerateC implements CodeGenerator {
 		final String target_name = getRealTargetName(gf, vte_num);
 		final VariableTableEntry vte = gf.getVarTableEntry(vte_num.getIndex());
 
-		final OS_Type x = vte.type.attached;
+		final OS_Type x = vte.type.getAttached();
 		if (x == null) {
 			if (vte.vtt == VariableTableType.TEMP) {
 				System.err.println("8884 temp variable has no type "+vte+" "+gf);
@@ -832,7 +832,7 @@ public class GenerateC implements CodeGenerator {
 		if (pt.size() == 1) {
 			final TypeTableEntry ty = pt.get(0);
 //			System.err.println("8885 " +ty.attached);
-			final OS_Type attached = ty.attached;
+			final OS_Type attached = ty.getAttached();
 			final String z;
 			if (attached != null)
 				z = getTypeName(attached);

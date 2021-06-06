@@ -342,8 +342,8 @@ public class DeducePhase {
 		for (Map.Entry<IdentTableEntry, OnType> entry : idte_type_callbacks.entrySet()) {
 			IdentTableEntry idte = entry.getKey();
 			if (idte.type !=null && // TODO make a stage where this gets set (resolvePotentialTypes)
-					idte.type.attached != null)
-				entry.getValue().typeDeduced(idte.type.attached);
+					idte.type.getAttached() != null)
+				entry.getValue().typeDeduced(idte.type.getAttached());
 			else
 				entry.getValue().noTypeFound();
 		}
@@ -435,7 +435,7 @@ public class DeducePhase {
 						break;
 				}
 				for (TypeTableEntry pot_tte : identTableEntry.potentialTypes()) {
-					if (pot_tte.attached == null) {
+					if (pot_tte.getAttached() == null) {
 						System.err.println(String.format("267 null potential attached in %s in %s in %s", pot_tte, identTableEntry, generatedFunction));
 					}
 				}

@@ -132,8 +132,8 @@ public class DeduceTypes2 {
 					//
 					for (final VariableTableEntry vte : generatedFunction.vte_list) {
 //						System.out.println("704 "+vte.type.attached+" "+vte.potentialTypes());
-						if (vte.type.attached != null && vte.type.attached.getType() == OS_Type.Type.USER) {
-							final TypeName x = vte.type.attached.getTypeName();
+						if (vte.type.getAttached() != null && vte.type.getAttached().getType() == OS_Type.Type.USER) {
+							final TypeName x = vte.type.getAttached().getTypeName();
 							if (x instanceof NormalTypeName) {
 								final String tn = ((NormalTypeName) x).getName();
 								final LookupResultList lrl = x.getContext().lookup(tn);
@@ -148,7 +148,7 @@ public class DeduceTypes2 {
 	//									System.out.println("705 " + best);
 										// NOTE that when we set USER_CLASS from USER generic information is
 										// still contained in constructable_pte
-										vte.type.attached = new OS_Type((ClassStatement) best);
+										vte.type.setAttached(new OS_Type((ClassStatement) best));
 									}
 									//vte.el = best;
 									// NOTE we called resolve_var_table_entry above
@@ -170,7 +170,7 @@ public class DeduceTypes2 {
 						assign_type_to_idte(ite, generatedFunction, fd_ctx, context);
 					}
 					for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
-						@Nullable OS_Type attached = typeTableEntry.attached;
+						@Nullable OS_Type attached = typeTableEntry.getAttached();
 						if (attached == null) continue;
 						if (attached.getType() == OS_Type.Type.USER) {
 							TypeName tn = attached.getTypeName();
@@ -181,9 +181,9 @@ public class DeduceTypes2 {
 									continue; // TODO Skip these for now.
 							}
 							try {
-								typeTableEntry.attached = resolve_type(attached, attached.getTypeName().getContext());
-								if (typeTableEntry.attached.getType() == OS_Type.Type.USER_CLASS) {
-									ClassStatement c = typeTableEntry.attached.getClassOf();
+								typeTableEntry.setAttached(resolve_type(attached, attached.getTypeName().getContext()));
+								if (typeTableEntry.getAttached().getType() == OS_Type.Type.USER_CLASS) {
+									ClassStatement c = typeTableEntry.getAttached().getClassOf();
 									phase.onClass(c, new OnClass() {
 										// TODO what about ClassInvocation's?
 										@Override
@@ -329,7 +329,7 @@ public class DeduceTypes2 {
 									public void typeDecided(OS_Type aType) {
 										@Nullable InstructionArgument x = generatedFunction.vte_lookup("Result");
 										assert x != null;
-										((IntegerIA)x).getEntry().type.attached = aType;
+										((IntegerIA) x).getEntry().type.setAttached(aType);
 									}
 								});
 							}
@@ -390,10 +390,10 @@ public class DeduceTypes2 {
 			}
 		}
 		for (final VariableTableEntry vte : generatedFunction.vte_list) {
-			if (vte.type.attached == null) {
+			if (vte.type.getAttached() == null) {
 				int potential_size = vte.potentialTypes().size();
 				if (potential_size == 1)
-					vte.type.attached = getPotentialTypesVte(vte).get(0).attached;
+					vte.type.setAttached(getPotentialTypesVte(vte).get(0).getAttached());
 				else if (potential_size > 1) {
 					// TODO Check type compatibility
 					System.err.println("703 "+vte.getName()+" "+vte.potentialTypes());
@@ -429,10 +429,10 @@ public class DeduceTypes2 {
 		switch (iv.getKind()) {
 		case NUMERIC:
 			{
-				final OS_Type a = cte.getTypeTableEntry().attached;
+				final OS_Type a = cte.getTypeTableEntry().getAttached();
 				if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
 					try {
-						cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemInteger), aContext);
+						cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(BuiltInTypes.SystemInteger), aContext));
 					} catch (ResolveError resolveError) {
 						System.out.println("71 Can't be here");
 //										resolveError.printStackTrace(); // TODO print diagnostic
@@ -442,10 +442,10 @@ public class DeduceTypes2 {
 			}
 		case STRING_LITERAL:
 			{
-				final OS_Type a = cte.getTypeTableEntry().attached;
+				final OS_Type a = cte.getTypeTableEntry().getAttached();
 				if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
 					try {
-						cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.String_), aContext);
+						cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(BuiltInTypes.String_), aContext));
 					} catch (ResolveError resolveError) {
 						System.out.println("117 Can't be here");
 //										resolveError.printStackTrace(); // TODO print diagnostic
@@ -455,10 +455,10 @@ public class DeduceTypes2 {
 			}
 		case CHAR_LITERAL:
 			{
-				final OS_Type a = cte.getTypeTableEntry().attached;
+				final OS_Type a = cte.getTypeTableEntry().getAttached();
 				if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
 					try {
-						cte.getTypeTableEntry().attached = resolve_type(new OS_Type(BuiltInTypes.SystemCharacter), aContext);
+						cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(BuiltInTypes.SystemCharacter), aContext));
 					} catch (ResolveError resolveError) {
 						System.out.println("117 Can't be here");
 //										resolveError.printStackTrace(); // TODO print diagnostic
@@ -468,7 +468,7 @@ public class DeduceTypes2 {
 			}
 		case IDENT:
 			{
-				final OS_Type a = cte.getTypeTableEntry().attached;
+				final OS_Type a = cte.getTypeTableEntry().getAttached();
 				if (a != null) {
 					assert a.getType() != null;
 					if (a.getType() == OS_Type.Type.BUILT_IN && a.getBType() == BuiltInTypes.Boolean) {
@@ -592,22 +592,22 @@ public class DeduceTypes2 {
 				@Override
 				public void foundElement(OS_Element x) {
 					ite.setStatus(BaseTableEntry.Status.KNOWN, x);
-					if (ite.type != null && ite.type.attached != null) {
-						switch (ite.type.attached.getType()) {
+					if (ite.type != null && ite.type.getAttached() != null) {
+						switch (ite.type.getAttached().getType()) {
 						case USER:
 							try {
-								OS_Type xx = resolve_type(ite.type.attached, aFunctionContext);
-								ite.type.attached = xx;
+								OS_Type xx = resolve_type(ite.type.getAttached(), aFunctionContext);
+								ite.type.setAttached(xx);
 							} catch (ResolveError resolveError) {
 								System.out.println("192 Can't attach type to " + path);
 								errSink.reportDiagnostic(resolveError);
 							}
-							if (ite.type.attached.getType() == OS_Type.Type.USER_CLASS) {
-								use_user_class(ite.type.attached, ite);
+							if (ite.type.getAttached().getType() == OS_Type.Type.USER_CLASS) {
+								use_user_class(ite.type.getAttached(), ite);
 							}
 							break;
 						case USER_CLASS:
-							use_user_class(ite.type.attached, ite);
+							use_user_class(ite.type.getAttached(), ite);
 							break;
 						default:
 							throw new NotImplementedException();
@@ -621,11 +621,11 @@ public class DeduceTypes2 {
 								OS_Element best = lrl.chooseBest(null);
 								if (best != null) {
 									ite.setStatus(BaseTableEntry.Status.KNOWN, x);
-									if (ite.type != null && ite.type.attached != null) {
-										if (ite.type.attached.getType() == OS_Type.Type.USER) {
+									if (ite.type != null && ite.type.getAttached() != null) {
+										if (ite.type.getAttached().getType() == OS_Type.Type.USER) {
 											try {
-												OS_Type xx = resolve_type(ite.type.attached, aFunctionContext);
-												ite.type.attached = xx;
+												OS_Type xx = resolve_type(ite.type.getAttached(), aFunctionContext);
+												ite.type.setAttached(xx);
 											} catch (ResolveError resolveError) { // TODO double catch
 												System.out.println("210 Can't attach type to "+ite.getIdent());
 //												resolveError.printStackTrace(); // TODO print diagnostic
@@ -640,8 +640,8 @@ public class DeduceTypes2 {
 								System.err.println("184-506 Couldn't resolve "+ite.getIdent());
 								aResolveError.printStackTrace();
 							}
-							if (ite.type.attached.getType() == OS_Type.Type.USER_CLASS) {
-								use_user_class(ite.type.attached, ite);
+							if (ite.type.getAttached().getType() == OS_Type.Type.USER_CLASS) {
+								use_user_class(ite.type.getAttached(), ite);
 							}
 						}
 					}
@@ -794,8 +794,8 @@ public class DeduceTypes2 {
 
 		public void action_IntegerIA() {
 			VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
-			assert vte.type.attached != null; // TODO will fail when empty variable expression
-			@Nullable OS_Type ty = vte.type.attached;
+			assert vte.type.getAttached() != null; // TODO will fail when empty variable expression
+			@Nullable OS_Type ty = vte.type.getAttached();
 			implement_construct_type(vte, ty, null);
 		}
 
@@ -879,13 +879,13 @@ public class DeduceTypes2 {
 		if (vte_index != null) {
 			final VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(vte_index));
 
-			if (vte.type.attached != null) {
-				phase.typeDecided(generatedFunction, vte.type.attached);
+			if (vte.type.getAttached() != null) {
+				phase.typeDecided(generatedFunction, vte.type.getAttached());
 			} else {
 				@NotNull Collection<TypeTableEntry> pot1 = vte.potentialTypes();
 				ArrayList<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(pot1);
 				if (pot.size() == 1) {
-					phase.typeDecided(generatedFunction, pot.get(0).attached);
+					phase.typeDecided(generatedFunction, pot.get(0).getAttached());
 				} else if (pot.size() == 0) {
 					phase.typeDecided(generatedFunction, new OS_Type(BuiltInTypes.Unit));
 				} else {
@@ -906,11 +906,11 @@ public class DeduceTypes2 {
 		if (y instanceof VariableStatement) {
 			final VariableStatement vs = (VariableStatement) y;
 			TypeName typeName = vs.typeName();
-			if (ite.type == null || ite.type.attached == null) {
+			if (ite.type == null || ite.type.getAttached() == null) {
 				if (!(typeName.isNull())) {
 					if (ite.type == null)
 						ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
-					ite.type.attached = new OS_Type(typeName);
+					ite.type.setAttached(new OS_Type(typeName));
 				} else {
 					System.err.println("394 typename is null "+ vs.getName());
 				}
@@ -921,14 +921,14 @@ public class DeduceTypes2 {
 			if (ite.type == null) {
 				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 			} else
-				ite.type.attached = attached;
+				ite.type.setAttached(attached);
 		} else if (y instanceof FunctionDef) {
 			FunctionDef functionDef = ((FunctionDef) y);
 			OS_Type attached = new OS_FuncType(functionDef);
 			if (ite.type == null) {
 				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 			} else
-				ite.type.attached = attached;
+				ite.type.setAttached(attached);
 		} else if (y instanceof PropertyStatement) {
 			PropertyStatement ps = (PropertyStatement) y;
 			OS_Type attached;
@@ -951,7 +951,7 @@ public class DeduceTypes2 {
 			if (ite.type == null) {
 				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 			} else
-				ite.type.attached = attached;
+				ite.type.setAttached(attached);
 			int yy = 2;
 		} else if (y instanceof AliasStatement) {
 			System.err.println("396 AliasStatement");
@@ -1090,11 +1090,11 @@ public class DeduceTypes2 {
 	}
 
 	private void do_assign_constant(final GeneratedFunction generatedFunction, final Instruction instruction, final VariableTableEntry vte, final ConstTableIA i2) {
-		if (vte.type.attached != null) {
+		if (vte.type.getAttached() != null) {
 			// TODO check types
 		}
 		final ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
-		if (cte.type.attached == null) {
+		if (cte.type.getAttached() == null) {
 			System.out.println("Null type in CTE "+cte);
 		}
 //		vte.type = cte.type;
@@ -1136,11 +1136,11 @@ public class DeduceTypes2 {
 			if (e == null) continue;
 			switch (e.getKind()) {
 			case NUMERIC:
-				tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
+				tte.setAttached(new OS_Type(BuiltInTypes.SystemInteger));
 				//vte.type = tte;
 				break;
 			case CHAR_LITERAL:
-				tte.attached = new OS_Type(BuiltInTypes.SystemCharacter);
+				tte.setAttached(new OS_Type(BuiltInTypes.SystemCharacter));
 				break;
 			case IDENT:
 				do_assign_call_args_ident(generatedFunction, ctx, vte, instructionIndex, pte, i, tte, (IdentExpression) e);
@@ -1156,7 +1156,7 @@ public class DeduceTypes2 {
 								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
 							}
 							if (best instanceof FunctionDef) {
-								tte.attached = new OS_FuncType((FunctionDef) best);
+								tte.setAttached(new OS_FuncType((FunctionDef) best));
 								//vte.addPotentialType(instructionIndex, tte);
 							} else {
 								final int y=2;
@@ -1184,15 +1184,15 @@ public class DeduceTypes2 {
 								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
 							}
 							if (best instanceof FunctionDef) {
-								tte.attached = new OS_FuncType((FunctionDef) best);
+								tte.setAttached(new OS_FuncType((FunctionDef) best));
 								//vte.addPotentialType(instructionIndex, tte);
 							} else if (best instanceof ClassStatement) {
-								tte.attached = new OS_Type((ClassStatement) best);
+								tte.setAttached(new OS_Type((ClassStatement) best));
 							} else if (best instanceof VariableStatement) {
 								final VariableStatement vs = (VariableStatement) best;
 								@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(vs.getName());
 								TypeTableEntry tte1 = ((IntegerIA) vte_ia).getEntry().type;
-								tte.attached = tte1.attached;
+								tte.setAttached(tte1.getAttached());
 							} else {
 								final int y=2;
 								System.err.println(best.getClass().getName());
@@ -1345,7 +1345,7 @@ public class DeduceTypes2 {
 				@Override
 				public void onDone(TypeTableEntry result) {
 					assert vte != vte1;
-					aTte.attached = result.attached;
+					aTte.setAttached(result.getAttached());
 					vte.addPotentialType(aInstructionIndex, result);
 				}
 			});
@@ -1373,7 +1373,7 @@ public class DeduceTypes2 {
 							if (best instanceof FormalArgListItem) {
 								@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
 								final OS_Type osType = new OS_Type(fali.typeName());
-								if (!osType.equals(vte.type.attached)) {
+								if (!osType.equals(vte.type.getAttached())) {
 									@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
 											TypeTableEntry.Type.SPECIFIED, osType, fali.getNameToken(), vte1);
 									if (p.isResolved())
@@ -1412,7 +1412,7 @@ public class DeduceTypes2 {
 										@Override
 										public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable TypeTableEntry input) {
 											assert input != null;
-											return input.attached != null;
+											return input.getAttached() != null;
 										}
 									}));
 							// prevent infinite recursion
@@ -1434,7 +1434,7 @@ public class DeduceTypes2 {
 				@Override
 				public void typeDeduced(OS_Type aType) {
 					aPte.setArgType(ii, aType); // TODO does this belong here or in FunctionInvocation?
-					aTte.attached = aType; // since we know that tte.attached is always null here
+					aTte.setAttached(aType); // since we know that tte.attached is always null here
 				}
 
 				@Override
@@ -1460,7 +1460,7 @@ public class DeduceTypes2 {
 					} else {
 						final IdentTableEntry idte = generatedFunction.getIdentTableEntryFor(vs.getNameToken());
 						assert idte != null;
-						@Nullable OS_Type ty = idte.type.attached;
+						@Nullable OS_Type ty = idte.type.getAttached();
 						idte.onType(phase, new OnType() {
 							@Override public void typeDeduced(final OS_Type ty) {
 								assert ty != null;
@@ -1504,7 +1504,7 @@ public class DeduceTypes2 {
 							@NotNull TypeTableEntry tte3 = generatedFunction.newTypeTableEntry(
 									TypeTableEntry.Type.SPECIFIED, new OS_Type(vs.typeName()), vs.getNameToken());
 							idte.type = tte3;
-							ty = idte.type.attached;
+							ty = idte.type.getAttached();
 						}
 					}
 
@@ -1522,7 +1522,7 @@ public class DeduceTypes2 {
 							@Override
 							public void onDone(TypeTableEntry result) {
 	//							assert false; // TODO this code is never reached
-								final @Nullable OS_Type ty2 = result.attached;
+								final @Nullable OS_Type ty2 = result.getAttached();
 								assert ty2 != null;
 								OS_Type rtype = null;
 								try {
@@ -1599,11 +1599,11 @@ public class DeduceTypes2 {
 	}
 
 	private void do_assign_constant(final GeneratedFunction generatedFunction, final Instruction instruction, final IdentTableEntry idte, final ConstTableIA i2) {
-		if (idte.type != null && idte.type.attached != null) {
+		if (idte.type != null && idte.type.getAttached() != null) {
 			// TODO check types
 		}
 		final ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
-		if (cte.type.attached == null) {
+		if (cte.type.getAttached() == null) {
 			System.out.println("*** ERROR: Null type in CTE "+cte);
 		}
 		// idte.type may be null, but we still addPotentialType here
@@ -1623,7 +1623,7 @@ public class DeduceTypes2 {
 			switch (e.getKind()) {
 			case NUMERIC:
 			{
-				tte.attached = new OS_Type(BuiltInTypes.SystemInteger);
+				tte.setAttached(new OS_Type(BuiltInTypes.SystemInteger));
 				idte.type = tte; // TODO why not addPotentialType ? see below for example
 			}
 			break;
@@ -1632,7 +1632,7 @@ public class DeduceTypes2 {
 				final InstructionArgument vte_ia = generatedFunction.vte_lookup(((IdentExpression) e).getText());
 				final List<TypeTableEntry> ll = getPotentialTypesVte(generatedFunction, vte_ia);
 				if (ll.size() == 1) {
-					tte.attached = ll.get(0).attached;
+					tte.setAttached(ll.get(0).getAttached());
 					idte.addPotentialType(instructionIndex, ll.get(0));
 				} else
 					throw new NotImplementedException();
@@ -1713,7 +1713,7 @@ public class DeduceTypes2 {
 			} else {
 				final List<TypeTableEntry> tt = getPotentialTypesVte(vte);
 				if (tt.size() == 1) {
-					final OS_Type x = tt.get(0).attached;
+					final OS_Type x = tt.get(0).getAttached();
 					assert x != null;
 					assert x.getType() != null;
 					if (x.getType() == OS_Type.Type.USER_CLASS) {
@@ -1795,7 +1795,7 @@ public class DeduceTypes2 {
 					//
 					@NotNull List<TypeTableEntry> pot = getPotentialTypesVte(vte);
 					if (pot.size() == 1) {
-						OS_Type attached = pot.get(0).attached;
+						OS_Type attached = pot.get(0).getAttached();
 						if (attached != null) {
 							switch (attached.getType()) {
 							case USER_CLASS: {
@@ -2054,7 +2054,7 @@ public class DeduceTypes2 {
 				{
 					List<TypeTableEntry> pot = getPotentialTypesVte(vte);
 					if (pot.size() == 1) {
-						final OS_Type attached = pot.get(0).attached;
+						final OS_Type attached = pot.get(0).getAttached();
 						if (attached == null) {
 							try {
 								LookupResultList lrl = DeduceLookupUtils.lookupExpression(pot.get(0).expression.getLeft(), ctx);
@@ -2075,7 +2075,7 @@ public class DeduceTypes2 {
 										public void typeDecided(OS_Type aType) {
 											assert fd == generatedFunction.getFD();
 											//
-											pot.get(0).attached = aType;
+											pot.get(0).setAttached(aType);
 										}
 									});
 								}
@@ -2103,7 +2103,7 @@ public class DeduceTypes2 {
 					}
 				}
 
-				OS_Type attached = vte.type.attached;
+				OS_Type attached = vte.type.getAttached();
 				if (attached != null) {
 					switch (attached.getType()) {
 					case USER_CLASS:
@@ -2131,8 +2131,8 @@ public class DeduceTypes2 {
 				} else {
 					if (vte.potentialTypes().size() == 1) {
 						final ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
-						final OS_Type attached1 = pot.get(0).attached;
-						vte.type.attached = attached1;
+						final OS_Type attached1 = pot.get(0).getAttached();
+						vte.type.setAttached(attached1);
 						// TODO this will break
 						final TypeName attached1TypeName = attached1.getTypeName();
 						if (attached1TypeName instanceof RegularTypeName) {
@@ -2203,21 +2203,21 @@ public class DeduceTypes2 {
 						}
 					}
 					if (idte2.type != null) {
-						assert idte2.type.attached != null;
+						assert idte2.type.getAttached() != null;
 						try {
-							if (!(idte2.type.attached instanceof OS_UnknownType)) { // TODO
-								OS_Type rtype = resolve_type(idte2.type.attached, ectx);
+							if (!(idte2.type.getAttached() instanceof OS_UnknownType)) { // TODO
+								OS_Type rtype = resolve_type(idte2.type.getAttached(), ectx);
 								if (rtype.getType() == OS_Type.Type.USER_CLASS)
 									ectx = rtype.getClassOf().getContext();
 								else if (rtype.getType() == OS_Type.Type.FUNCTION)
 									ectx = ((OS_FuncType) rtype).getElement().getContext();
-								idte2.type.attached = rtype; // TODO may be losing alias information here
+								idte2.type.setAttached(rtype); // TODO may be losing alias information here
 							}
 						} catch (ResolveError resolveError) {
 							if (resolveError.resultsList().size() > 1)
 								errSink.reportDiagnostic(resolveError);
 							else
-								System.out.println("1089 Can't attach type to "+idte2.type.attached);
+								System.out.println("1089 Can't attach type to "+ idte2.type.getAttached());
 //							resolveError.printStackTrace(); // TODO print diagnostic
 							continue;
 						}
@@ -2263,11 +2263,11 @@ public class DeduceTypes2 {
 			if (y instanceof VariableStatement) {
 				final VariableStatement vs = (VariableStatement) y;
 				TypeName typeName = vs.typeName();
-				if (ite.type == null || ite.type.attached == null) {
+				if (ite.type == null || ite.type.getAttached() == null) {
 					if (!(typeName.isNull())) {
 						if (ite.type == null)
 							ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
-						ite.type.attached = new OS_Type(typeName);
+						ite.type.setAttached(new OS_Type(typeName));
 					} else {
 						System.err.println("394 typename is null "+ vs.getName());
 					}
@@ -2278,14 +2278,14 @@ public class DeduceTypes2 {
 				if (ite.type == null) {
 					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 				} else
-					ite.type.attached = attached;
+					ite.type.setAttached(attached);
 			} else if (y instanceof FunctionDef) {
 				FunctionDef functionDef = ((FunctionDef) y);
 				OS_Type attached = new OS_FuncType(functionDef);
 				if (ite.type == null) {
 					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 				} else
-					ite.type.attached = attached;
+					ite.type.setAttached(attached);
 			} else if (y instanceof PropertyStatement) {
 				PropertyStatement ps = (PropertyStatement) y;
 				OS_Type attached;
@@ -2308,7 +2308,7 @@ public class DeduceTypes2 {
 				if (ite.type == null) {
 					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 				} else
-					ite.type.attached = attached;
+					ite.type.setAttached(attached);
 				int yy = 2;
 			} else if (y instanceof AliasStatement) {
 				System.err.println("396 AliasStatement");
@@ -2333,9 +2333,9 @@ public class DeduceTypes2 {
 				if (bte instanceof VariableTableEntry) {
 					final VariableTableEntry vte = (VariableTableEntry) bte;
 					@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
-					if (vte.getStatus() == BaseTableEntry.Status.KNOWN && vte.type.attached != null && vte.el != null) {
+					if (vte.getStatus() == BaseTableEntry.Status.KNOWN && vte.type.getAttached() != null && vte.el != null) {
 
-						final OS_Type ty = vte.type.attached;
+						final OS_Type ty = vte.type.getAttached();
 
 						OS_Element ele2 = null;
 
@@ -2360,7 +2360,7 @@ public class DeduceTypes2 {
 						}
 					} else if (pot.size() == 1) {
 						TypeTableEntry tte = pot.get(0);
-						@Nullable OS_Type ty = tte.attached;
+						@Nullable OS_Type ty = tte.getAttached();
 						if (ty != null) {
 							if (ty.getType() == OS_Type.Type.USER) {
 								try {

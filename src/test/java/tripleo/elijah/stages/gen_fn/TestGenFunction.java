@@ -114,18 +114,18 @@ public class TestGenFunction {
 					for (int i = 0; i < gf.vte_list.size(); i++) {
 						final VariableTableEntry vte = gf.getVarTableEntry(i);
 						System.out.println(String.format("8007 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
-						if (vte.type.attached != null) {
-							Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
-							Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
+						if (vte.type.getAttached() != null) {
+							Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.getAttached().getType());
+							Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
 						}
 					}
 				} else if (gf.name().equals("factorial")) {
 					for (int i = 0; i < gf.vte_list.size(); i++) {
 						final VariableTableEntry vte = gf.getVarTableEntry(i);
 						System.out.println(String.format("8008 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
-						if (vte.type.attached != null) {
-							Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.attached.getType());
-							Assert.assertNotEquals(OS_Type.Type.USER, vte.type.attached.getType());
+						if (vte.type.getAttached() != null) {
+							Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.getAttached().getType());
+							Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
 						}
 					}
 				}

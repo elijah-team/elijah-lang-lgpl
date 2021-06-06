@@ -57,7 +57,7 @@ public class ProcTableEntry implements TableEntryIV {
 	}
 
 	public void setArgType(int aIndex, OS_Type aType) {
-		args.get(aIndex).attached = aType;
+		args.get(aIndex).setAttached(aType);
 	}
 
 	public void setClassInvocation(ClassInvocation aClassInvocation) {

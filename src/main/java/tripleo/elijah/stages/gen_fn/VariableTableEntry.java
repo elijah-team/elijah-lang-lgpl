@@ -64,13 +64,13 @@ public class VariableTableEntry extends BaseTableEntry implements Constructable,
 			potentialTypes.put(instructionIndex, tte);
 		else {
 			TypeTableEntry v = potentialTypes.get(instructionIndex);
-			if (v.attached == null)
-				v.attached = tte.attached;
+			if (v.getAttached() == null)
+				v.setAttached(tte.getAttached());
 			else if (tte.lifetime == TypeTableEntry.Type.TRANSIENT && v.lifetime == TypeTableEntry.Type.SPECIFIED) {
 				//v.attached = v.attached; // leave it as is
-			} else if (tte.lifetime == v.lifetime && v.attached == tte.attached) {
+			} else if (tte.lifetime == v.lifetime && v.getAttached() == tte.getAttached()) {
 				// leave as is
-			} else if (v.attached.equals(tte.attached)) {
+			} else if (v.getAttached().equals(tte.getAttached())) {
 				// leave as is
 			} else {
 				//
@@ -80,12 +80,12 @@ public class VariableTableEntry extends BaseTableEntry implements Constructable,
 //				System.err.println("v.attached: " + v.attached);
 //				System.err.println("tte.attached: " + tte.attached);
 				System.out.println("72 WARNING two types at the same location.");
-				if ((tte.attached != null && tte.attached.getType() != OS_Type.Type.USER) || v.attached.getType() != OS_Type.Type.USER_CLASS) {
+				if ((tte.getAttached() != null && tte.getAttached().getType() != OS_Type.Type.USER) || v.getAttached().getType() != OS_Type.Type.USER_CLASS) {
 					// TODO prefer USER_CLASS as we are assuming it is a resolved version of the other one
-					if (tte.attached == null)
-						tte.attached = v.attached;
-					else if (tte.attached.getType() == OS_Type.Type.USER_CLASS)
-						v.attached = tte.attached;
+					if (tte.getAttached() == null)
+						tte.setAttached(v.getAttached());
+					else if (tte.getAttached().getType() == OS_Type.Type.USER_CLASS)
+						v.setAttached(tte.getAttached());
 				}
 			}
 		}

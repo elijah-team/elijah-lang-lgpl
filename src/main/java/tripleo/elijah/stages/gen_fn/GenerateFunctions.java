@@ -404,7 +404,7 @@ public class GenerateFunctions {
 					// SEE IF CALL SHOULD BE DEFERRED
 					//
 					for (final TypeTableEntry argument_type : argument_types) {
-						if (argument_type.attached == null) {
+						if (argument_type.getAttached() == null) {
 							// still dont know the argument types at this point, which creates a problem
 							// for resolving functions, so wait until later when more information is available
 							if (!gf.deferred_calls.contains(i))

@@ -20,17 +20,22 @@ public class TypeTableEntry {
     final int index;
     public final Type lifetime;
     public final TableEntryIV tableEntry;
-    public @Nullable OS_Type attached;
+    @Nullable
+    private OS_Type attached;
     public final IExpression expression;
     private GeneratedNode _resolved;
 
-    public TypeTableEntry(final int index, final Type lifetime, @Nullable final OS_Type attached, final IExpression expression, TableEntryIV aTableEntryIV) {
+    public TypeTableEntry(final int index,
+                          final Type lifetime,
+                          @Nullable final OS_Type aAttached,
+                          final IExpression expression,
+                          TableEntryIV aTableEntryIV) {
         this.index = index;
         this.lifetime = lifetime;
-        if (attached == null || (attached.getType() == OS_Type.Type.USER && attached.getTypeName() == null))
-            this.attached = null;
+        if (aAttached == null || (aAttached.getType() == OS_Type.Type.USER && aAttached.getTypeName() == null))
+            attached = null;
         else
-            this.attached = attached;
+            attached = aAttached;
         this.expression = expression;
         this.tableEntry = aTableEntryIV;
     }
@@ -40,7 +45,7 @@ public class TypeTableEntry {
         return "TypeTableEntry{" +
                 "index=" + index +
                 ", lifetime=" + lifetime +
-                ", attached=" + attached +
+                ", attached=" + getAttached() +
                 ", expression=" + expression +
                 '}';
     }
@@ -59,6 +64,14 @@ public class TypeTableEntry {
 
     public boolean isResolved() {
         return _resolved != null;
+    }
+
+    public OS_Type getAttached() {
+        return attached;
+    }
+
+    public void setAttached(OS_Type aAttached) {
+        attached = aAttached;
     }
 
     public enum Type {
