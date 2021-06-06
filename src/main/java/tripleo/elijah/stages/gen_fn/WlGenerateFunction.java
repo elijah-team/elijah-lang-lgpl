@@ -27,6 +27,7 @@ public class WlGenerateFunction implements WorkJob {
 	private final GenerateFunctions generateFunctions;
 	private final FunctionInvocation functionInvocation;
 	private boolean _isDone = false;
+	private GeneratedFunction result;
 
 	public WlGenerateFunction(GenerateFunctions aGenerateFunctions, FunctionInvocation aFunctionInvocation) {
 		functionDef = aFunctionInvocation.getFunction();
@@ -65,12 +66,17 @@ public class WlGenerateFunction implements WorkJob {
 				}
 			});
 		}
+		result = gf;
 		_isDone = true;
 	}
 
 	@Override
 	public boolean isDone() {
 		return _isDone;
+	}
+
+	public GeneratedFunction getResult() {
+		return result;
 	}
 }
 
