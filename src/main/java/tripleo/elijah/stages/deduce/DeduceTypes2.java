@@ -602,9 +602,12 @@ public class DeduceTypes2 {
 								System.out.println("192 Can't attach type to " + path);
 								errSink.reportDiagnostic(resolveError);
 							}
+							if (ite.type.attached.getType() == OS_Type.Type.USER_CLASS) {
+								use_user_class(ite.type.attached, ite);
+							}
 							break;
 						case USER_CLASS:
-							// do nothing
+							use_user_class(ite.type.attached, ite);
 							break;
 						default:
 							throw new NotImplementedException();
@@ -637,7 +640,18 @@ public class DeduceTypes2 {
 								System.err.println("184-506 Couldn't resolve "+ite.getIdent());
 								aResolveError.printStackTrace();
 							}
+							if (ite.type.attached.getType() == OS_Type.Type.USER_CLASS) {
+								use_user_class(ite.type.attached, ite);
+							}
 						}
+					}
+				}
+
+				private void use_user_class(OS_Type aType, IdentTableEntry aEntry) {
+					int yy=2;
+					final ClassStatement cs = aType.getClassOf();
+					if (aEntry.constructable_pte != null) {
+						int yyy=3;
 					}
 				}
 
