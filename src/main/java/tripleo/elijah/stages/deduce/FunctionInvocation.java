@@ -58,9 +58,10 @@ public class FunctionInvocation {
 		WlGenerateFunction wlgf = new WlGenerateFunction(generatePhase.getGenerateFunctions(fd.getContext().module()), this);
 		wlgf.run(null);
 		GeneratedFunction gf = wlgf.getResult();
-		if (generateDeferred.isPending())
+		if (generateDeferred.isPending()) {
 			generateDeferred.resolve(gf);
-		_generated = gf;
+			_generated = gf;
+		}
 	}
 
 	public GeneratedFunction getGenerated() {
