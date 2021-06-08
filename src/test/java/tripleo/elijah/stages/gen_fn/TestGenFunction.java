@@ -159,7 +159,7 @@ public class TestGenFunction {
 			}
 		});
 
-		Assert.assertEquals(24, c.errorCount());
+		Assert.assertEquals(6, c.errorCount());
 	}
 
 	@Test
