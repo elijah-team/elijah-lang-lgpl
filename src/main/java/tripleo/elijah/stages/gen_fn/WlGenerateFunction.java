@@ -46,6 +46,7 @@ public class WlGenerateFunction implements WorkJob {
 
 			if (classStatement instanceof NamespaceStatement) {
 				final NamespaceInvocation nsi = functionInvocation.getNamespaceInvocation();
+				assert nsi != null;
 				nsi.resolveDeferred().done(new DoneCallback<GeneratedNamespace>() {
 					@Override
 					public void onDone(GeneratedNamespace result) {
