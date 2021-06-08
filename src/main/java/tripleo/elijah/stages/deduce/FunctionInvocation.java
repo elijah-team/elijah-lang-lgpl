@@ -15,6 +15,7 @@ import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 import tripleo.elijah.stages.gen_fn.WlGenerateFunction;
+import tripleo.elijah.util.NotImplementedException;
 
 /**
  * Created 1/21/21 9:04 PM
@@ -35,7 +36,7 @@ public class FunctionInvocation {
 		else if (invocation instanceof NamespaceInvocation)
 			setNamespaceInvocation((NamespaceInvocation) invocation);
 		else if (invocation == null)
-			;
+			throw new NotImplementedException();
 		else
 			throw new IllegalArgumentException("Unknown invocation");
 		setPhase(phase);
