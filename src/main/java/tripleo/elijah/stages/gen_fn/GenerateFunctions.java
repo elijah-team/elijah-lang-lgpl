@@ -461,6 +461,7 @@ public class GenerateFunctions {
 		} else if (item instanceof CaseConditional) {
 			gi.generate_case_conditional((CaseConditional) item);
 		} else if (item instanceof ClassStatement) {
+			// TODO this still has no ClassInvocation
 			GeneratedClass gc = generateClass((ClassStatement) item);
 			int ite_index = gf.addIdentTableEntry(((ClassStatement) item).getNameNode(), cctx);
 			IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
