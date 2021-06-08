@@ -100,8 +100,7 @@ public class TestGenFunction {
 			}
 		}
 
-		final GeneratePhase generatePhase = new GeneratePhase();
-		DeducePhase dp = new DeducePhase(generatePhase);
+		DeducePhase dp = new DeducePhase(generatePhase1);
 		dp.deduceModule(m, lgc, false);
 		dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);
