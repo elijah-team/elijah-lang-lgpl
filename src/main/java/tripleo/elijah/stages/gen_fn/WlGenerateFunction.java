@@ -37,36 +37,44 @@ public class WlGenerateFunction implements WorkJob {
 
 	@Override
 	public void run(WorkManager aWorkManager) {
-		OS_Element classStatement = functionDef.getParent();
-		@NotNull GeneratedFunction gf = generateFunctions.generateFunction(functionDef, classStatement, functionInvocation);
-//		lgf.add(gf);
+//		if (_isDone) return;
 
-		if (classStatement instanceof NamespaceStatement) {
-			final NamespaceInvocation nsi = functionInvocation.getNamespaceInvocation();
-			nsi.resolveDeferred().done(new DoneCallback<GeneratedNamespace>() {
-				@Override
-				public void onDone(GeneratedNamespace result) {
-					if (result.getFunction(functionDef) == null) {
-						gf.setCode(generateFunctions.module.parent.nextFunctionCode());
-						result.addFunction(functionDef, gf);
+		if (functionInvocation.getGenerated() == null) {
+			OS_Element classStatement = functionDef.getParent();
+			@NotNull GeneratedFunction gf = generateFunctions.generateFunction(functionDef, classStatement, functionInvocation);
+//			lgf.add(gf);
+
+			if (classStatement instanceof NamespaceStatement) {
+				final NamespaceInvocation nsi = functionInvocation.getNamespaceInvocation();
+				nsi.resolveDeferred().done(new DoneCallback<GeneratedNamespace>() {
+					@Override
+					public void onDone(GeneratedNamespace result) {
+						if (result.getFunction(functionDef) == null) {
+							gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+							result.addFunction(functionDef, gf);
+						}
+						gf.setClass(result);
 					}
-					gf.setClass(result);
-				}
-			});
+				});
+			} else {
+				final ClassInvocation ci = functionInvocation.getClassInvocation();
+				ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(GeneratedClass result) {
+						if (result.getFunction(functionDef) == null) {
+							gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+							result.addFunction(functionDef, gf);
+						}
+						gf.setClass(result);
+					}
+				});
+			}
+			result = gf;
+			functionInvocation.setGenerated(result);
+			functionInvocation.generateDeferred().resolve(result);
 		} else {
-			final ClassInvocation ci = functionInvocation.getClassInvocation();
-			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-				@Override
-				public void onDone(GeneratedClass result) {
-					if (result.getFunction(functionDef) == null) {
-						gf.setCode(generateFunctions.module.parent.nextFunctionCode());
-						result.addFunction(functionDef, gf);
-					}
-					gf.setClass(result);
-				}
-			});
+			result = functionInvocation.getGenerated();
 		}
-		result = gf;
 		_isDone = true;
 	}
 

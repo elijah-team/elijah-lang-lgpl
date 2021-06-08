@@ -13,6 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Type;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created 9/12/20 10:26 PM
  */
@@ -24,6 +27,11 @@ public class TypeTableEntry {
     private OS_Type attached;
     public final IExpression expression;
     private GeneratedNode _resolved;
+    private List<OnSetAttached> osacbs = new ArrayList<OnSetAttached>();
+
+    public interface OnSetAttached {
+        void onSetAttached(TypeTableEntry aTypeTableEntry);
+    }
 
     public TypeTableEntry(final int index,
                           final Type lifetime,
@@ -72,6 +80,13 @@ public class TypeTableEntry {
 
     public void setAttached(OS_Type aAttached) {
         attached = aAttached;
+        for (OnSetAttached cb : osacbs) {
+            cb.onSetAttached(this);
+        }
+    }
+
+    public void addSetAttached(OnSetAttached osa) {
+        osacbs.add(osa);
     }
 
     public enum Type {

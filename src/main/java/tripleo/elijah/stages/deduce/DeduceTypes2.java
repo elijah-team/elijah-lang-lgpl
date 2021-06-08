@@ -324,7 +324,7 @@ public class DeduceTypes2 {
 //							pte.resolved_element = e;
 							set_resolved_element_pte(expression, e, pte);
 							if (fd instanceof DefFunctionDef) {
-								forFunction(new FunctionInvocation((FunctionDef) e, pte), new ForFunction() {
+								forFunction(new FunctionInvocation((FunctionDef) e, pte, null, phase.generatePhase), new ForFunction() {
 									@Override
 									public void typeDecided(OS_Type aType) {
 										@Nullable InstructionArgument x = generatedFunction.vte_lookup("Result");
@@ -500,6 +500,7 @@ public class DeduceTypes2 {
 				if (fi.pte == null) {
 					return;
 				} else {
+					System.err.println("592 "+fi.getClassInvocation());
 					fi.setClassInvocation(fi.pte.getClassInvocation());
 				}
 			}
@@ -843,7 +844,7 @@ public class DeduceTypes2 {
 						}
 						// TODO also check arguments
 						{
-							FunctionInvocation fi = new FunctionInvocation(cc, pte);
+							FunctionInvocation fi = new FunctionInvocation(cc, pte, null, phase.generatePhase);
 							pte.setFunctionInvocation(fi);
 						}
 					}
@@ -1248,7 +1249,7 @@ public class DeduceTypes2 {
 							pte.resolved_element = el;
 						if (el instanceof FunctionDef) {
 							FunctionDef fd = (FunctionDef) el;
-							forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
+							forFunction(new FunctionInvocation(fd, pte, null, phase.generatePhase), new ForFunction() {
 								@Override
 								public void typeDecided(OS_Type aType) {
 									assert false;
@@ -1291,10 +1292,9 @@ public class DeduceTypes2 {
 		pte.setResolvedElement(e);
 		if (e instanceof ClassStatement) {
 			ClassInvocation ci = new ClassInvocation((ClassStatement) e, null);
-			FunctionInvocation fi = new FunctionInvocation(null, pte);
 //						fi.setClassInvocation(ci);
 			ci = phase.registerClassInvocation(ci);
-			pte.setClassInvocation(ci);
+			FunctionInvocation fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
 			pte.setFunctionInvocation(fi);
 
 			if (co != null) {
@@ -1308,19 +1308,19 @@ public class DeduceTypes2 {
 			}
 		} else if (e instanceof FunctionDef) {
 			FunctionDef fd = (FunctionDef) e;
-			FunctionInvocation fi = new FunctionInvocation(fd, pte);
+			FunctionInvocation fi;
 			final OS_Element parent = fd.getParent();
 			if (parent instanceof NamespaceStatement) {
 				final NamespaceInvocation nsi = phase.registerNamespaceInvocation((NamespaceStatement) parent);
 //				pte.setNamespaceInvocation(nsi);
-				fi.setNamespaceInvocation(nsi);
+				fi = new FunctionInvocation(fd, pte, nsi, phase.generatePhase);
 			} else if (parent instanceof ClassStatement) {
 				ClassInvocation ci = new ClassInvocation((ClassStatement) parent, null);
-//						fi.setClassInvocation(ci);
 				ci = phase.registerClassInvocation(ci);
 				pte.setClassInvocation(ci);
-				fi.setClassInvocation(ci);
-			}
+				fi = new FunctionInvocation(fd, pte, ci, phase.generatePhase);
+			} else
+				throw new IllegalStateException("Unknown parent");
 			pte.setFunctionInvocation(fi);
 		} else {
 			System.err.println("845 Unknown element for ProcTableEntry "+e);
@@ -1478,7 +1478,7 @@ public class DeduceTypes2 {
 									if (best2 instanceof FunctionDef) {
 										FunctionDef fd = (FunctionDef) best2;
 										ProcTableEntry pte = null;
-										forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
+										forFunction(new FunctionInvocation(fd, pte, null, phase.generatePhase), new ForFunction() {
 											@Override
 											public void typeDecided(final OS_Type aType) {
 												assert fd == generatedFunction.getFD();
@@ -1538,7 +1538,7 @@ public class DeduceTypes2 {
 									if (best2 instanceof FunctionDef) {
 										FunctionDef fd = (FunctionDef) best2;
 										ProcTableEntry pte = null;
-										forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
+										forFunction(new FunctionInvocation(fd, pte, null, phase.generatePhase), new ForFunction() {
 											@Override
 											public void typeDecided(final OS_Type aType) {
 												assert fd == generatedFunction.getFD();
@@ -1860,7 +1860,7 @@ public class DeduceTypes2 {
 										} else
 											assert false;
 									}
-									FunctionInvocation fi = new FunctionInvocation((FunctionDef) y.resolved_element, pte);
+									FunctionInvocation fi = new FunctionInvocation((FunctionDef) y.resolved_element, pte, null, phase.generatePhase);
 									int yyy=2;
 									if (pte.getFunctionInvocation() == null) {
 										pte.setFunctionInvocation(fi);
@@ -1960,7 +1960,7 @@ public class DeduceTypes2 {
 								// TODO use a virtual default ctor
 							}
 							FunctionDef selected_constructor = null;
-							FunctionInvocation fi = new FunctionInvocation(selected_constructor, prte);
+							FunctionInvocation fi = new FunctionInvocation(selected_constructor, prte, null, phase.generatePhase);
 		//					fi.setClassInvocation(ci);
 							prte.setFunctionInvocation(fi);
 						}
@@ -2070,7 +2070,7 @@ public class DeduceTypes2 {
 								}
 								if (fd != null) {
 									ProcTableEntry pte = null;
-									forFunction(new FunctionInvocation(fd, pte), new ForFunction() {
+									forFunction(new FunctionInvocation(fd, pte, null, phase.generatePhase), new ForFunction() {
 										@Override
 										public void typeDecided(OS_Type aType) {
 											assert fd == generatedFunction.getFD();

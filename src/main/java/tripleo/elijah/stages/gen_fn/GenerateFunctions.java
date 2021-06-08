@@ -615,8 +615,8 @@ public class GenerateFunctions {
 				FunctionDef f = (FunctionDef) fs.get();
 				final ClassInvocation ci = new ClassInvocation(classStatement, null);
 				wl.addJob(new WlGenerateClass(this, ci, lgc));
-				final FunctionInvocation fi = new FunctionInvocation(f, null);
-				fi.setClassInvocation(ci);
+				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, phase);
+//				fi.setPhase(phase);
 				wl.addJob(new WlGenerateFunction(this, fi));
 			}
 		}

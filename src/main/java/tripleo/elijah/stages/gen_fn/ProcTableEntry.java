@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Element;
@@ -15,6 +16,7 @@ import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.instructions.InstructionArgument;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.List;
 
@@ -34,12 +36,22 @@ public class ProcTableEntry implements TableEntryIV {
 	public OS_Element resolved_element;
 	private ClassInvocation classInvocation;
 	private FunctionInvocation functionInvocation;
+	private DeferredObject<ProcTableEntry, Void, Void> completeDeferred = new DeferredObject<ProcTableEntry, Void, Void>();
 
 	public ProcTableEntry(final int index, final IExpression aExpression, final InstructionArgument expression_num, final List<TypeTableEntry> args) {
 		this.index = index;
 		this.expression = aExpression;
 		this.expression_num = expression_num;
 		this.args = args;
+
+		for (TypeTableEntry tte : args) {
+			tte.addSetAttached(new TypeTableEntry.OnSetAttached() {
+				@Override
+				public void onSetAttached(TypeTableEntry aTypeTableEntry) {
+					ProcTableEntry.this.onSetAttached();
+				}
+			});
+		}
 	}
 
 	@Override @NotNull
@@ -58,6 +70,45 @@ public class ProcTableEntry implements TableEntryIV {
 
 	public void setArgType(int aIndex, OS_Type aType) {
 		args.get(aIndex).setAttached(aType);
+	}
+
+	public void onSetAttached() {
+		int state = 0;
+		if (args != null) {
+			final int ac = args.size();
+			int acx = 0;
+			for (TypeTableEntry tte : args) {
+				if (tte.getAttached() != null)
+					acx++;
+			}
+			if (acx < ac) {
+				state = 1;
+			} else if (acx > ac) {
+				state = 2;
+			} else if (acx == ac) {
+				state = 3;
+			}
+		} else {
+			state = 3;
+		}
+		switch (state) {
+			case 0:
+				throw new IllegalStateException();
+			case 1:
+				System.err.println("136 pte not finished resolving");
+				break;
+			case 2:
+				System.err.println("138 Internal compiler error");
+				break;
+			case 3:
+				int yyy=3;
+//				fi.makeGenerated(phase);
+//				GeneratedFunction gf = fi.getGenerated();
+				completeDeferred.resolve(this);
+				break;
+			default:
+				throw new NotImplementedException();
+		}
 	}
 
 	public void setClassInvocation(ClassInvocation aClassInvocation) {
@@ -82,6 +133,10 @@ public class ProcTableEntry implements TableEntryIV {
 
 	public FunctionInvocation getFunctionInvocation() {
 		return functionInvocation;
+	}
+
+	public DeferredObject<ProcTableEntry, Void, Void> completeDeferred() {
+		return completeDeferred;
 	}
 }
 
