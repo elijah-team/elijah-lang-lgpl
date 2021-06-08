@@ -106,6 +106,8 @@ public class TestGenFunction {
 		dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);
 
+		System.out.println(dp.functionMap);
+
 		for (final GeneratedNode gn : lgf) {
 			if (gn instanceof GeneratedFunction) {
 				GeneratedFunction gf = (GeneratedFunction) gn;
