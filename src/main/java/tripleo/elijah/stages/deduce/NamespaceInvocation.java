@@ -15,7 +15,7 @@ import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 /**
  * Created 5/31/21 12:00 PM
  */
-public class NamespaceInvocation {
+public class NamespaceInvocation implements IInvocation {
 
 	private final DeferredObject<GeneratedNamespace, Void, Void> resolveDeferred = new DeferredObject<GeneratedNamespace, Void, Void>();
 	private final NamespaceStatement namespaceStatement;

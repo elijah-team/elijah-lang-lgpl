@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Created 3/5/21 3:51 AM
  */
-public class ClassInvocation {
+public class ClassInvocation implements IInvocation {
 	private final ClassStatement cls;
 	public Map<TypeName, OS_Type> genericPart;
 	private final String constructorName;
