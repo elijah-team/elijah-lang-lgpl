@@ -124,15 +124,17 @@ public class GeneratedClass extends GeneratedContainerNC {
 				if (tn != null) {
 					if (tn instanceof NormalTypeName) {
 						final NormalTypeName tn2 = (NormalTypeName) tn;
-						LookupResultList lrl = tn.getContext().lookup(tn2.getName());
-						OS_Element best = lrl.chooseBest(null);
-						if (best != null) {
-							if (best instanceof AliasStatement)
-								best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
-							assert best instanceof ClassStatement;
-							varTableEntry.varType = new OS_Type((ClassStatement) best);
-						} else {
-							// TODO shouldn't this already be calculated?
+						if (!tn.isNull()) {
+							LookupResultList lrl = tn.getContext().lookup(tn2.getName());
+							OS_Element best = lrl.chooseBest(null);
+							if (best != null) {
+								if (best instanceof AliasStatement)
+									best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
+								assert best instanceof ClassStatement;
+								varTableEntry.varType = new OS_Type((ClassStatement) best);
+							} else {
+								// TODO shouldn't this already be calculated?
+							}
 						}
 					}
 				} else {
