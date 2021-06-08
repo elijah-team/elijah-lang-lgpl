@@ -50,12 +50,14 @@ public class TestGenFunction {
 		//
 		//
 		//
-		m.entryPoints = List_of((ClassStatement)m.findClass("Main"));
+		final ClassStatement main_class = (ClassStatement) m.findClass("Main");
+		m.entryPoints = List_of(main_class);
 		//
 		//
 		//
 
-		final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
+		final GeneratePhase generatePhase1 = new GeneratePhase();
+		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
 		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
 
 		List<GeneratedNode> lgf = new ArrayList<>();
@@ -66,6 +68,8 @@ public class TestGenFunction {
 				lgf.addAll(((GeneratedNamespace) generatedNode).functionMap.values());
 			// TODO enum
 		}
+
+//		Assert.assertEquals(2, lgf.size());
 
 		for (final GeneratedNode gn : lgf) {
 			if (gn instanceof GeneratedFunction) {
