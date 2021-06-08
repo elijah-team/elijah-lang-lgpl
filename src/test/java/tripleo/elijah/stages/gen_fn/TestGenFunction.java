@@ -16,9 +16,11 @@ import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.DeducePhase;
+import tripleo.elijah.stages.deduce.FunctionMapHook;
 import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.instructions.Instruction;
@@ -27,6 +29,7 @@ import tripleo.elijah.work.WorkManager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static tripleo.elijah.util.Helpers.List_of;
@@ -107,35 +110,54 @@ public class TestGenFunction {
 		DeducePhase dp = new DeducePhase(generatePhase1);
 		dp.deduceModule(m, lgc, false);
 		dp.finish();
-//		new DeduceTypes2(m).deduceFunctions(lgf);
 
-		System.out.println(dp.functionMap);
+		dp.addFunctionMapHook(new FunctionMapHook(){
+			@Override
+			public boolean matches(FunctionDef fd) {
+				final boolean b = fd.name().equals("main") && fd.getParent() == main_class;
+				return b;
+			}
 
-		for (final GeneratedNode gn : lgf) {
-			if (gn instanceof GeneratedFunction) {
-				GeneratedFunction gf = (GeneratedFunction) gn;
+			@Override
+			public void apply(Collection<GeneratedFunction> aGeneratedFunctions) {
+				assert aGeneratedFunctions.size() == 1;
 
-				if (gf.name().equals("main")) {
-					for (int i = 0; i < gf.vte_list.size(); i++) {
-						final VariableTableEntry vte = gf.getVarTableEntry(i);
-						System.out.println(String.format("8007 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
-						if (vte.type.getAttached() != null) {
-							Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.getAttached().getType());
-							Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
-						}
-					}
-				} else if (gf.name().equals("factorial")) {
-					for (int i = 0; i < gf.vte_list.size(); i++) {
-						final VariableTableEntry vte = gf.getVarTableEntry(i);
-						System.out.println(String.format("8008 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
-						if (vte.type.getAttached() != null) {
-							Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.getAttached().getType());
-							Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
-						}
+				GeneratedFunction gf = aGeneratedFunctions.iterator().next();
+
+				for (int i = 0; i < gf.vte_list.size(); i++) {
+					final VariableTableEntry vte = gf.getVarTableEntry(i);
+					System.out.println(String.format("8007 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
+					if (vte.type.getAttached() != null) {
+						Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.getAttached().getType());
+						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
 					}
 				}
 			}
-		}
+		});
+
+		dp.addFunctionMapHook(new FunctionMapHook(){
+			@Override
+			public boolean matches(FunctionDef fd) {
+				final boolean b = fd.name().equals("factorial") && fd.getParent() == main_class;
+				return b;
+			}
+
+			@Override
+			public void apply(Collection<GeneratedFunction> aGeneratedFunctions) {
+				assert aGeneratedFunctions.size() == 1;
+
+				GeneratedFunction gf = aGeneratedFunctions.iterator().next();
+
+				for (int i = 0; i < gf.vte_list.size(); i++) {
+					final VariableTableEntry vte = gf.getVarTableEntry(i);
+					System.out.println(String.format("8008 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
+					if (vte.type.getAttached() != null) {
+						Assert.assertNotEquals(OS_Type.Type.BUILT_IN, vte.type.getAttached().getType());
+						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
+					}
+				}
+			}
+		});
 
 		Assert.assertEquals(2, c.errorCount());
 	}
