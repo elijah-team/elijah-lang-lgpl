@@ -147,6 +147,12 @@ public class DeducePhase {
 		return nsi;
 	}
 
+	List<FunctionMapHook> functionMapHooks = new ArrayList<FunctionMapHook>();
+
+	public void addFunctionMapHook(FunctionMapHook aFunctionMapHook) {
+		functionMapHooks.add(aFunctionMapHook);
+	}
+
 	static class ResolvedVariables {
 		final IdentTableEntry identTableEntry;
 		final OS_Element parent;
@@ -400,6 +406,13 @@ public class DeducePhase {
 			}
 		}
 		sanityChecks();
+		for (Map.Entry<FunctionDef, Collection<GeneratedFunction>> entry : functionMap.asMap().entrySet()) {
+			for (FunctionMapHook functionMapHook : functionMapHooks) {
+				if (functionMapHook.matches(entry.getKey())) {
+					functionMapHook.apply(entry.getValue());
+				}
+			}
+		}
 	}
 
 	private void sanityChecks() {
