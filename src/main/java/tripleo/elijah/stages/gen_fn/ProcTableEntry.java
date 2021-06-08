@@ -101,10 +101,8 @@ public class ProcTableEntry implements TableEntryIV {
 				System.err.println("138 Internal compiler error");
 				break;
 			case 3:
-				int yyy=3;
-//				fi.makeGenerated(phase);
-//				GeneratedFunction gf = fi.getGenerated();
-				completeDeferred.resolve(this);
+				if (completeDeferred.isPending())
+					completeDeferred.resolve(this);
 				break;
 			default:
 				throw new NotImplementedException();
