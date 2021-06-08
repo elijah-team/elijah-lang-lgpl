@@ -512,6 +512,18 @@ public class DeduceTypes2 {
 				ci = fi.pte.getClassInvocation();
 			}
 			if (fd3 == null) {
+				if (ci == null) {
+					if (fi.getClassInvocation() == null && fi.getNamespaceInvocation() == null) {
+						if (fi.getFunction() == null) {
+							// Assume default constructor
+							ci = new ClassInvocation((ClassStatement) pte.resolved_element, null);
+							ci = phase.registerClassInvocation(ci);
+							fi.setClassInvocation(ci);
+						} else
+							throw new NotImplementedException();
+					} else
+						throw new NotImplementedException();
+				}
 				final ClassStatement klass = ci.getKlass();
 
 				Collection<ConstructorDef> cis = klass.getConstructors();
