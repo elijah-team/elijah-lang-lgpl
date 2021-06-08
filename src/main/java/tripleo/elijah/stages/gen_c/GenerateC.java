@@ -867,7 +867,7 @@ public class GenerateC implements CodeGenerator {
 			return "Z<-1>";
 	}
 
-	private String getTypeName(final OS_Type ty) {
+	@Deprecated private String getTypeName(final OS_Type ty) {
 		if (ty == null) throw new IllegalArgumentException("ty is null");
 		//
 		String z;
