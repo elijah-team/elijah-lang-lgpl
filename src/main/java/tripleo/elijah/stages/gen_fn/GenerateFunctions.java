@@ -16,7 +16,6 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.stages.deduce.ClassInvocation;
-import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
@@ -684,9 +683,9 @@ public class GenerateFunctions {
 
 				// TODO this will break one day
 				assert vte_left != null;
-				final VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(vte_left));
+				final VariableTableEntry vte = gf.getVarTableEntry(to_int(vte_left));
 				// ^^
-				vte.addPotentialType(inst, gf.getVarTableEntry(DeduceTypes2.to_int(vte_right)).type);
+				vte.addPotentialType(inst, gf.getVarTableEntry(to_int(vte_right)).type);
 			}
 		}
 
@@ -709,11 +708,11 @@ public class GenerateFunctions {
 			final Instruction instruction = gf.getInstruction(instruction_number);
 			if (left_ia instanceof IntegerIA) {
 				// Assuming this points to a variable and not ie a function
-				final VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(left_ia));
+				final VariableTableEntry vte = gf.getVarTableEntry(to_int(left_ia));
 //				vte.type = tte;
 				vte.addPotentialType(instruction.getIndex(), tte);
 			} else if (left_ia instanceof IdentIA) {
-				final IdentTableEntry idte = gf.getIdentTableEntry(DeduceTypes2.to_int(left_ia));
+				final IdentTableEntry idte = gf.getIdentTableEntry(to_int(left_ia));
 //				idte.type = tte;
 				idte.addPotentialType(instruction.getIndex(), tte);
 			}
@@ -738,11 +737,11 @@ public class GenerateFunctions {
 			final Instruction instruction = gf.getInstruction(instruction_number);
 			if (left_ia instanceof IntegerIA) {
 				// Assuming this points to a variable and not ie a function
-				final VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(left_ia));
+				final VariableTableEntry vte = gf.getVarTableEntry(to_int(left_ia));
 //				vte.type = tte;
 				vte.addPotentialType(instruction.getIndex(), tte);
 			} else if (left_ia instanceof IdentIA) {
-				final IdentTableEntry idte = gf.getIdentTableEntry(DeduceTypes2.to_int(left_ia));
+				final IdentTableEntry idte = gf.getIdentTableEntry(to_int(left_ia));
 //				idte.type = tte;
 				idte.addPotentialType(instruction.getIndex(), tte);
 			}
