@@ -1313,14 +1313,7 @@ public class DeduceTypes2 {
 							vte.addPotentialType(instructionIndex, tte);
 							vte.setConstructable(pte);
 
-							ClassInvocation ci = new ClassInvocation(kl, null);
-							ci = phase.registerClassInvocation(ci);
-							ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-								@Override
-								public void onDone(GeneratedClass result) {
-									vte.resolveType(result);
-								}
-							});
+							register_and_resolve(vte, kl);
 						} else {
 							System.err.println("7890 "+el.getClass().getName());
 						}
@@ -2476,15 +2469,19 @@ public class DeduceTypes2 {
 		}
 
 		public void resolve_vte_for_class(VariableTableEntry aVte, ClassStatement aKlass) {
-			ClassInvocation ci = new ClassInvocation(aKlass, null);
-			ci = phase.registerClassInvocation(ci);
-			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-				@Override
-				public void onDone(GeneratedClass result) {
-					aVte.resolveType(result);
-				}
-			});
+			register_and_resolve(aVte, aKlass);
 		}
+	}
+
+	public void register_and_resolve(VariableTableEntry aVte, ClassStatement aKlass) {
+		ClassInvocation ci = new ClassInvocation(aKlass, null);
+		ci = phase.registerClassInvocation(ci);
+		ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+			@Override
+			public void onDone(GeneratedClass result) {
+				aVte.resolveType(result);
+			}
+		});
 	}
 }
 
