@@ -868,8 +868,17 @@ public class GenerateC implements CodeGenerator {
 			z = "<function>";
 			break;
 		case USER:
-			System.err.println("Warning: USER TypeName in GenerateC "+ty.getTypeName());
-			z = String.format("Z<%s>", ty.getTypeName().toString());
+			final TypeName typeName = ty.getTypeName();
+			System.err.println("Warning: USER TypeName in GenerateC "+ typeName);
+			if (typeName != null) { // HACK
+				final String s = typeName.toString();
+				if (s.equals("Unit"))
+					z = "void";
+				else
+					z = String.format("Z<%s>", s);
+			} else {
+				z = "void";
+			}
 			break;
 		case BUILT_IN:
 			System.err.println("Warning: BUILT_IN TypeName in GenerateC");
