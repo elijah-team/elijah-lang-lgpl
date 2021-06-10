@@ -21,6 +21,7 @@ import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
+import tripleo.elijah.work.WorkManager;
 import tripleo.elijjah.lang.UnaryExpression;
 import tripleo.util.range.Range;
 
@@ -95,12 +96,27 @@ public class GenerateFunctions {
 		return gf;
 	}
 
+	/**
+	 * See {@link WlGenerateClass#run(WorkManager)}
+	 *
+	 * @param aClassStatement
+	 * @param aClassInvocation
+	 * @return
+	 */
 	public GeneratedClass generateClass(ClassStatement aClassStatement, ClassInvocation aClassInvocation) {
 		@NotNull GeneratedClass Result = generateClass(aClassStatement);
 		Result.ci = aClassInvocation;
 		return Result;
 	}
 
+	/**
+	 * See {@link WlGenerateFunction#run(WorkManager)}
+	 *
+	 * @param aFunctionDef
+	 * @param aClassStatement
+	 * @param aFunctionInvocation
+	 * @return
+	 */
 	public GeneratedFunction generateFunction(FunctionDef aFunctionDef, OS_Element aClassStatement, FunctionInvocation aFunctionInvocation) {
 		@NotNull GeneratedFunction Result = generateFunction(aFunctionDef, aClassStatement);
 		Result.fi = aFunctionInvocation;
