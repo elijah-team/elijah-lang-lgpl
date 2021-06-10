@@ -239,45 +239,50 @@ public class GenerateC implements CodeGenerator {
 
 	@Override
 	public void generate_namespace(GeneratedNamespace x, GenerateResult gr) {
+		// TODO do we need `self' parameters for namespace?
 		final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
 		final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
 		try {
-			tosHdr.put_string_ln("typedef struct {");
-			tosHdr.incr_tabs();
-//			tosHdr.put_string_ln("int _tag;");
-			for (GeneratedNamespace.VarTableEntry o : x.varTable){
-				final String typeName = getTypeNameForVarTableEntry(o);
+			if (x.varTable.size() > 0) {
+				tosHdr.put_string_ln("typedef struct {");
+				tosHdr.incr_tabs();
+//				tosHdr.put_string_ln("int _tag;");
+				for (GeneratedNamespace.VarTableEntry o : x.varTable) {
+					final String typeName = getTypeNameForVarTableEntry(o);
 
-				tosHdr.put_string_ln(String.format("%s* vm%s;", o.varType == null ? "void " : typeName, o.nameToken));
+					tosHdr.put_string_ln(String.format("%s* vm%s;", o.varType == null ? "void " : typeName, o.nameToken));
+				}
+
+				String class_name = getTypeName(x);
+				final int class_code = x.getCode();
+
+				tosHdr.dec_tabs();
+				tosHdr.put_string_ln("");
+				tosHdr.put_string_ln(String.format("} %s; // namespace `%s'", class_name, x.getName()));
+
+				tosHdr.put_string_ln("");
+				tosHdr.put_string_ln("");
+				tos.put_string_ln(String.format("%s* ZN%d() {", class_name, class_code));
+				tos.incr_tabs();
+				tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
+//				tos.put_string_ln(String.format("R->_tag = %d;", class_code));
+				tos.put_string_ln("return R;");
+				tos.dec_tabs();
+				tos.put_string_ln(String.format("} // namespace `%s'", x.getName()));
+				tos.put_string_ln("");
+				tos.flush();
 			}
-
-			String class_name = getTypeName(x);
-			final int class_code = x.getCode();
-
-			tosHdr.dec_tabs();
-			tosHdr.put_string_ln("");
-			tosHdr.put_string_ln(String.format("} %s; // namespace `%s'", class_name, x.getName()));
-
-			tosHdr.put_string_ln("");
-			tosHdr.put_string_ln("");
-			tos.put_string_ln(String.format("%s* ZC%d() {", class_name, class_code));
-			tos.incr_tabs();
-			tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
-//			tos.put_string_ln(String.format("R->_tag = %d;", class_code));
-			tos.put_string_ln("return R;");
-			tos.dec_tabs();
-			tos.put_string_ln(String.format("} // namespace `%s'", x.getName()));
-			tos.put_string_ln("");
-			tos.flush();
 		} finally {
 			tos.close();
 			tosHdr.close();
-			Buffer buf = tos.getBuffer();
-//			System.out.println(buf.getText());
-			gr.addNamespace(GenerateResult.TY.IMPL, x, buf);
-			Buffer buf2 = tosHdr.getBuffer();
-//			System.out.println(buf2.getText());
-			gr.addNamespace(GenerateResult.TY.HEADER, x, buf2);
+			if (x.varTable.size() > 0) { // TODO should we let this through?
+				Buffer buf = tos.getBuffer();
+//				System.out.println(buf.getText());
+				gr.addNamespace(GenerateResult.TY.IMPL, x, buf);
+				Buffer buf2 = tosHdr.getBuffer();
+//				System.out.println(buf2.getText());
+				gr.addNamespace(GenerateResult.TY.HEADER, x, buf2);
+			}
 		}
 	}
 
