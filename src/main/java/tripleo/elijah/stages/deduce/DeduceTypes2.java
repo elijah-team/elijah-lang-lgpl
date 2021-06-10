@@ -1286,7 +1286,16 @@ public class DeduceTypes2 {
 							pte.resolved_element = el;
 						if (el instanceof FunctionDef) {
 							FunctionDef fd = (FunctionDef) el;
-							final IInvocation invocation = getInvocation(generatedFunction);
+							final IInvocation invocation;
+							if (fd.getParent() == generatedFunction.getFD().getParent()) {
+								invocation = getInvocation(generatedFunction);
+							} else {
+								if (fd.getParent() instanceof NamespaceStatement) {
+									NamespaceInvocation ni = phase.registerNamespaceInvocation((NamespaceStatement) fd.getParent());
+									invocation = ni;
+								} else
+									throw new NotImplementedException();
+							}
 							forFunction(new FunctionInvocation(fd, pte, invocation, phase.generatePhase), new ForFunction() {
 								@Override
 								public void typeDecided(OS_Type aType) {
