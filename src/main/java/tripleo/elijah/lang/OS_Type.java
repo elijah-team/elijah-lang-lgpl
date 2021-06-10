@@ -166,7 +166,7 @@ public class OS_Type {
 	}
 
 	/*@ ensures type_of_type = Type.USER; */
-	public OS_Type(/*Normal*/final TypeName typeName) {
+	public OS_Type(final @NotNull TypeName typeName) {
 		this.ttype = typeName;
 		this.type_of_type = Type.USER;
 	}
