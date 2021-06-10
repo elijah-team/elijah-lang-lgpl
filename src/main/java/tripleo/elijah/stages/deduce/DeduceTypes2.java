@@ -170,45 +170,8 @@ public class DeduceTypes2 {
 						assign_type_to_idte(ite, generatedFunction, fd_ctx, context);
 					}
 					for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
-						@Nullable OS_Type attached = typeTableEntry.getAttached();
-						if (attached == null) continue;
-						if (attached.getType() == OS_Type.Type.USER) {
-							TypeName tn = attached.getTypeName();
-							switch (tn.kindOfType()) {
-								case FUNCTION:
-								case GENERIC:
-								case TYPE_OF:
-									continue; // TODO Skip these for now.
-							}
-							try {
-								typeTableEntry.setAttached(resolve_type(attached, attached.getTypeName().getContext()));
-								if (typeTableEntry.getAttached().getType() == OS_Type.Type.USER_CLASS) {
-									ClassStatement c = typeTableEntry.getAttached().getClassOf();
-									phase.onClass(c, new OnClass() {
-										// TODO what about ClassInvocation's?
-										@Override
-										public void classFound(GeneratedClass cc) {
-											typeTableEntry.resolve(cc);
-										}
-									});
-								} else {
-									System.err.println("245 Can't resolve typeTableEntry "+typeTableEntry);
-								}
-							} catch (ResolveError aResolveError) {
-								System.err.println("288 Failed to resolve type "+attached);
-								errSink.reportDiagnostic(aResolveError);
-							}
-						} else if (attached.getType() == OS_Type.Type.USER_CLASS) {
-							ClassStatement c = attached.getClassOf();
-							phase.onClass(c, new OnClass() {
-								// TODO what about ClassInvocation's?
-								@Override
-								public void classFound(GeneratedClass cc) {
-									typeTableEntry.resolve(cc);
-								}
-							});
-
-						}
+						Resolve_each_typename ret = new Resolve_each_typename(phase, this, errSink);
+						ret.action(typeTableEntry);
 					}
 					//
 					// RESOLVE FUNCTION RETURN TYPES
@@ -421,6 +384,64 @@ public class DeduceTypes2 {
 //					generatedFunction.deferred_calls.remove(deferred_call);
 					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
 				}
+			}
+		}
+	}
+
+	static class Resolve_each_typename {
+
+		private final DeducePhase phase;
+		private final DeduceTypes2 dt2;
+		private final ErrSink errSink;
+
+		public Resolve_each_typename(DeducePhase aPhase, DeduceTypes2 aDeduceTypes2, ErrSink aErrSink) {
+			phase = aPhase;
+			dt2 = aDeduceTypes2;
+			errSink = aErrSink;
+		}
+
+		public void action(TypeTableEntry typeTableEntry) {
+			@Nullable OS_Type attached = typeTableEntry.getAttached();
+			if (attached == null) return;
+			if (attached.getType() == OS_Type.Type.USER) {
+				action_USER(typeTableEntry, attached);
+			} else if (attached.getType() == OS_Type.Type.USER_CLASS) {
+				action_USER_CLASS(typeTableEntry, attached);
+			}
+		}
+
+		public void action_USER_CLASS(TypeTableEntry typeTableEntry, @Nullable OS_Type aAttached) {
+			ClassStatement c = aAttached.getClassOf();
+			assert c != null;
+			phase.onClass(c, new OnClass() {
+				// TODO what about ClassInvocation's?
+				@Override
+				public void classFound(GeneratedClass cc) {
+					typeTableEntry.resolve(cc);
+				}
+			});
+		}
+
+		public void action_USER(TypeTableEntry typeTableEntry, @Nullable OS_Type aAttached) {
+			TypeName tn = aAttached.getTypeName();
+			if (tn == null) return; // hack specifically for Result
+			switch (tn.kindOfType()) {
+				case FUNCTION:
+				case GENERIC:
+				case TYPE_OF:
+					return;
+			}
+			try {
+				typeTableEntry.setAttached(dt2.resolve_type(aAttached, aAttached.getTypeName().getContext()));
+				if (typeTableEntry.getAttached().getType() == OS_Type.Type.USER_CLASS) {
+					action_USER_CLASS(typeTableEntry, typeTableEntry.getAttached());
+				} else {
+					// TODO print diagnostic because resolve_type failed
+					System.err.println("245 Can't resolve typeTableEntry "+typeTableEntry);
+				}
+			} catch (ResolveError aResolveError) {
+				System.err.println("288 Failed to resolve type "+ aAttached);
+				errSink.reportDiagnostic(aResolveError);
 			}
 		}
 	}
