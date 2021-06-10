@@ -376,6 +376,8 @@ public class GenerateC implements CodeGenerator {
 			System.out.println("228 "+ type);
 			if (type != null && type.getType() == OS_Type.Type.BUILT_IN && type.getBType() == BuiltInTypes.Unit) {
 				returnType = "void";
+			} else if (type instanceof OS_Type.OS_UnitType) {
+				returnType = "void/*Unit*/";
 			} else if (type != null) {
 				returnType = String.format("/*267*/%s*", getTypeName(type));
 			} else {
