@@ -742,6 +742,17 @@ public class GenerateC implements CodeGenerator {
 		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER);
 	}
 
+	private String getTypeNameForGenClass(GeneratedNode aGenClass) {
+		String ty;
+		if (aGenClass instanceof GeneratedClass)
+			ty = getTypeName((GeneratedClass) aGenClass);
+		else if (aGenClass instanceof GeneratedNamespace)
+			ty = getTypeName((GeneratedNamespace) aGenClass);
+		else
+			ty = "Error_Unknown_GenClass";
+		return ty;
+	}
+
 	private String getTypeNameForVariableEntry(VariableTableEntry input) {
 		OS_Type attached = input.type.getAttached();
 		if (attached.getType() == OS_Type.Type.USER_CLASS) {
