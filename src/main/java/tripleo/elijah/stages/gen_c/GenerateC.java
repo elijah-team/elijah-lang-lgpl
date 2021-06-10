@@ -870,19 +870,18 @@ public class GenerateC implements CodeGenerator {
 		case USER:
 			final TypeName typeName = ty.getTypeName();
 			System.err.println("Warning: USER TypeName in GenerateC "+ typeName);
-			if (typeName != null) { // HACK
-				final String s = typeName.toString();
-				if (s.equals("Unit"))
-					z = "void";
-				else
-					z = String.format("Z<%s>", s);
-			} else {
+			final String s = typeName.toString();
+			if (s.equals("Unit"))
 				z = "void";
-			}
+			else
+				z = String.format("Z<%s>", s);
 			break;
 		case BUILT_IN:
 			System.err.println("Warning: BUILT_IN TypeName in GenerateC");
 			z = "Z"+ty.getBType().getCode();  // README should not even be here, but look at .name() for other code gen schemes
+			break;
+		case UNIT_TYPE:
+			z = "void";
 			break;
 		default:
 			throw new IllegalStateException("Unexpected value: " + ty.getType());
