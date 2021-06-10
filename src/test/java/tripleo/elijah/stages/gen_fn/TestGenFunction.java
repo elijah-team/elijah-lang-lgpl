@@ -74,42 +74,64 @@ public class TestGenFunction {
 
 //		Assert.assertEquals(2, lgf.size());
 
-		for (final GeneratedNode gn : lgf) {
-			if (gn instanceof GeneratedFunction) {
-				GeneratedFunction gf = (GeneratedFunction) gn;
-//				System.err.println("7000 "+gf);
-
-				if (gf.name().equals("main")) {
-					int pc = 0;
-					Assert.assertEquals(InstructionName.E, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.AGN, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.CALL, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.X, gf.getInstruction(pc++).getName());
-				} else if (gf.name().equals("factorial")) {
-					int pc = 0;
-					Assert.assertEquals(InstructionName.E, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.ES, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.JE, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.JMP, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.XS, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.AGN, gf.getInstruction(pc++).getName());
-					Assert.assertEquals(InstructionName.X, gf.getInstruction(pc++).getName());
-				}
-			}
-		}
-
 		DeducePhase dp = new DeducePhase(generatePhase1);
-		dp.deduceModule(m, lgc, false);
-		dp.finish();
+
+		WorkManager wm = new WorkManager();
+
+		dp.addFunctionMapHook(new FunctionMapHook(){
+			@Override
+			public boolean matches(FunctionDef fd) {
+				final boolean b = fd.name().equals("main") && fd.getParent() == main_class;
+				return b;
+			}
+
+			@Override
+			public void apply(Collection<GeneratedFunction> aGeneratedFunctions) {
+				assert aGeneratedFunctions.size() == 1;
+
+				GeneratedFunction gf = aGeneratedFunctions.iterator().next();
+
+				int pc = 0;
+				Assert.assertEquals(InstructionName.E, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGN, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.X, gf.getInstruction(pc++).getName());
+			}
+		});
+
+		dp.addFunctionMapHook(new FunctionMapHook(){
+			@Override
+			public boolean matches(FunctionDef fd) {
+				final boolean b = fd.name().equals("factorial") && fd.getParent() == main_class;
+				return b;
+			}
+
+			@Override
+			public void apply(Collection<GeneratedFunction> aGeneratedFunctions) {
+				assert aGeneratedFunctions.size() == 1;
+
+				GeneratedFunction gf = aGeneratedFunctions.iterator().next();
+
+				int pc = 0;
+				Assert.assertEquals(InstructionName.E, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.ES, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.DECL, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGNK, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.JE, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.CALLS, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.JMP, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.XS, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.AGN, gf.getInstruction(pc++).getName());
+				Assert.assertEquals(InstructionName.X, gf.getInstruction(pc++).getName());
+			}
+		});
+
 
 		dp.addFunctionMapHook(new FunctionMapHook(){
 			@Override
@@ -159,7 +181,10 @@ public class TestGenFunction {
 			}
 		});
 
-		Assert.assertEquals(6, c.errorCount());
+		dp.deduceModule(m, lgc, false);
+		dp.finish();
+
+		Assert.assertEquals(14, c.errorCount());
 	}
 
 	@Test
