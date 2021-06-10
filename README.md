@@ -13,7 +13,7 @@ pull-model: [![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/pul
 
 - [Background](#background)
 - [Install](#install)
-- [Other Software Required/Used](#other)
+- [Other Software Required/Used](#other-software-requiredused)
 - [Usage](#usage)
 - [Progress](#progress)
 - [Documentation](#documentation)
