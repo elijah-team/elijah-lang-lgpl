@@ -400,6 +400,8 @@ public class GenerateC implements CodeGenerator {
 
 		tos.incr_tabs();
 		//
+		boolean is_constructor = false, is_unit_type = false;
+		//
 		@NotNull List<Instruction> instructions = gf.instructions();
 		for (int instruction_index = 0; instruction_index < instructions.size(); instruction_index++) {
 			Instruction instruction = instructions.get(instruction_index);
