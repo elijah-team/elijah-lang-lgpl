@@ -522,8 +522,11 @@ public class DeduceTypes2 {
 				if (fi.pte == null) {
 					return;
 				} else {
-					System.err.println("592 "+fi.getClassInvocation());
-					fi.setClassInvocation(fi.pte.getClassInvocation());
+//					System.err.println("592 " + fi.getClassInvocation());
+					if (fi.pte.getClassInvocation() != null)
+						fi.setClassInvocation(fi.pte.getClassInvocation());
+//					else
+//						fi.pte.setClassInvocation(fi.getClassInvocation());
 				}
 			}
 
