@@ -410,13 +410,42 @@ public class GenerateC implements CodeGenerator {
 			if (label != null) {
 				tos.put_string_ln_no_tabs(label.getName() + ":");
 			}
+
 			switch (instruction.getName()) {
 			case E:
 				{
 					tos.put_string_ln("bool vsb;");
-					if (gmh.tte.isResolved()) {
-						String ty = getTypeName(gmh.tte);
-						tos.put_string_ln(String.format("%s vsr;", ty));
+					int state = 0;
+
+					if (gf.getFD() instanceof ConstructorDef)
+						state = 2;
+					else if (gmh.tte == null)
+						state = 3;
+					else if (gmh.tte.isResolved())
+						state = 1;
+					else if (gmh.tte.getAttached() instanceof OS_Type.OS_UnitType)
+						state = 4;
+
+					switch (state) {
+						case 0:
+							tos.put_string_ln("Error_TTE_Not_Resolved "+gmh.tte);
+							break;
+						case 1:
+							String ty = getTypeName(gmh.tte);
+							tos.put_string_ln(String.format("%s vsr;", ty));
+							break;
+						case 2:
+						case 3:
+							// Assuming ctor
+							is_constructor = true;
+							final GeneratedNode genClass = gf.getGenClass();
+							String ty2 = getTypeNameForGenClass(genClass);
+							tos.put_string_ln(String.format("%s vsr;", ty2));
+							break;
+						case 4:
+							// don't print anything
+							is_unit_type = true;
+							break;
 					}
 					tos.put_string_ln("{");
 					tos.incr_tabs();
@@ -426,9 +455,10 @@ public class GenerateC implements CodeGenerator {
 				{
 					tos.dec_tabs();
 					tos.put_string_ln("}");
-					if (gmh.tte.isResolved()) {
-						tos.put_string_ln("return vsr;");
-					}
+					if (!is_unit_type)
+						if (is_constructor || gmh.tte != null && gmh.tte.isResolved()) {
+							tos.put_string_ln("return vsr;");
+						}
 				}
 				break;
 			case ES:
