@@ -42,11 +42,17 @@ public class GetIdentIAPathTest_ForC {
 		@NotNull IdentExpression x_ident = IdentExpression.forString("X");
 		@NotNull IdentExpression foo_ident = IdentExpression.forString("foo");
 		//
+		VariableSequence vsq = new VariableSequence(null);
+		vsq.setParent(mock(ClassStatement.class));
+		VariableStatement foo_vs = new VariableStatement(vsq);
+		foo_vs.setName(foo_ident);
+		//
 		OS_Type type = null;
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
 		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte, mock(VariableStatement.class));
 		int ite_index = gf.addIdentTableEntry(foo_ident, null);
 		IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
+		ite.setResolvedElement(foo_vs);
 		ite.backlink = new IntegerIA(int_index, gf);
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		String x = getIdentIAPath(ident_ia, gf);
@@ -58,11 +64,39 @@ public class GetIdentIAPathTest_ForC {
 		@NotNull IdentExpression x_ident = IdentExpression.forString("x");
 		@NotNull IdentExpression foo_ident = IdentExpression.forString("foo");
 		//
+		final OS_Element mock_class = mock(ClassStatement.class);
+		expect(gf.getFD().getParent()).andReturn(mock_class);
+		expect(gf.getFD().getParent()).andReturn(mock_class);
+		replay(gf.getFD());
+
+		VariableSequence vsq = new VariableSequence(null);
+		vsq.setParent(mock(ClassStatement.class));
+		VariableStatement foo_vs = new VariableStatement(vsq);
+		foo_vs.setName(foo_ident);
+		VariableSequence vsq2 = new VariableSequence(null);
+		vsq.setParent(mock(ClassStatement.class));
+		VariableStatement x_vs = new VariableStatement(vsq2);
+		x_vs.setName(x_ident);
+
+/*
+		expect(mod.pullPackageName()).andReturn(OS_Package.default_package);
+		mod.add(anyObject(ClassStatement.class));
+		replay(mod);
+		ClassStatement el1 = new ClassStatement(mod, null);
+*/
+
+		//		el1.add(vsq);
+		//
 		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(), mod);
 		Context ctx = mock(Context.class);
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
 		InstructionArgument xx = gen.simplify_expression(expr, gf, ctx);
+		//
+		@NotNull IdentTableEntry x_ite = gf.getIdentTableEntry(0); // x
+		x_ite.setResolvedElement(x_vs);
+		@NotNull IdentTableEntry foo_ite = gf.getIdentTableEntry(1); // foo
+		foo_ite.setResolvedElement(foo_vs);
 		//
 		IdentIA ident_ia = (IdentIA) xx;
 		String x = getIdentIAPath(ident_ia, gf);
@@ -91,7 +125,15 @@ public class GetIdentIAPathTest_ForC {
 		IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
 		ite.backlink = new IntegerIA(int_index);
 */
-		IdentIA ident_ia = (IdentIA) xx;//new IdentIA(ite_index, gf);
+		VariableSequence vsq = new VariableSequence(null);
+		vsq.setParent(mock(ClassStatement.class));
+		VariableStatement foo_vs = new VariableStatement(vsq);
+		foo_vs.setName(foo_ident);
+
+		IdentIA ident_ia = (IdentIA) xx;
+		@NotNull IdentTableEntry ite = ((IdentIA) xx).getEntry();
+		ite.setResolvedElement(foo_vs);
+
 		String x = getIdentIAPath(ident_ia, gf);
 //		Assert.assertEquals("vvx->vmfoo", x); // TODO real expectation
 		Assert.assertEquals("vvx->vmfoo", x);
