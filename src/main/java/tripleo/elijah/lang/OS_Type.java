@@ -189,7 +189,7 @@ public class OS_Type {
 		return ttype;
 	}
 
-	private class OS_UnitType extends OS_Type {
+	public static class OS_UnitType extends OS_Type {
 
 		public OS_UnitType() {
 			super(Type.UNIT_TYPE);
