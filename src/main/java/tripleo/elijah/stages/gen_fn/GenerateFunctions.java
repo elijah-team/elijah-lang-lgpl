@@ -71,9 +71,15 @@ public class GenerateFunctions {
 					VariableTableType.SELF,
 					gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent), IdentExpression.forString("self")),
 					null);
+		final OS_Type returnType;
+		final TypeName returnType1 = fd.returnType();
+		if (returnType1 == null)
+			returnType = new OS_Type.OS_UnitType();
+		else
+			returnType = new OS_Type(returnType1);
 		gf.addVariableTableEntry("Result",
 				VariableTableType.RESULT,
-				gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fd.returnType()), IdentExpression.forString("Result")),
+				gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, returnType, IdentExpression.forString("Result")),
 				null); // TODO what about Unit returns?
 		for (final FormalArgListItem fali : fd.fal().falis) {
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
