@@ -112,7 +112,7 @@ Small note: If editing the Readme, please conform to the [standard-readme](https
 ## Contact
 
 oluoluolu+elijah \(at\) gmail.com
-[@tripleo33177393 Twitter](https://twitter.com/tripleo33177393)
+[@tripleo_sw Twitter](https://twitter.com/tripleo_sw)
 
 [google group](https://groups.google.com/forum/#!forum/elijjah)
 
