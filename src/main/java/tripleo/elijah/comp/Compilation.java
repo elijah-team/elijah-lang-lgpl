@@ -264,17 +264,23 @@ public class Compilation {
 		final File file = new File(aFilename);
 		long size = file.length();
 		byte[] ba = new byte[(int)size];  // README Counting on reasonable sizes here
-		FileInputStream bb = new FileInputStream(file);
-		bb.read(ba);
-
+		FileInputStream bb = null;
 		try {
-			String hh = Helpers.getHash(ba);
-			aBuf.append(hh);
-			aBuf.append(" ");
-			aBuf.append_ln(aFilename);
-		} catch (NoSuchAlgorithmException aE) {
-			eee.exception(aE);
-//			aE.printStackTrace();
+			bb = new FileInputStream(file);
+			bb.read(ba);
+
+			try {
+				String hh = Helpers.getHash(ba);
+				aBuf.append(hh);
+				aBuf.append(" ");
+				aBuf.append_ln(aFilename);
+			} catch (NoSuchAlgorithmException aE) {
+				eee.exception(aE);
+	//			aE.printStackTrace();
+			}
+		} finally {
+			if (bb != null)
+				bb.close();
 		}
 	}
 
