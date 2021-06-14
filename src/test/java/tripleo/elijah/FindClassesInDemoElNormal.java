@@ -14,8 +14,8 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
+import tripleo.elijah.entrypoints.MainClassEntryPoint;
 import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.util.Helpers;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class FindClassesInDemoElNormal {
 		final List<ClassStatement> aClassList = c.findClass("Main");
 		Assert.assertEquals(1, aClassList.size());
 
-		Assert.assertFalse("isMainClass", OS_Module.isMainClass(aClassList.get(0)));
+		Assert.assertFalse("isMainClass", MainClassEntryPoint.isMainClass(aClassList.get(0)));
 	}
 
 }
