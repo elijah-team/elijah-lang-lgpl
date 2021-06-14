@@ -11,17 +11,25 @@ package tripleo.elijah.util;
 import antlr.CommonToken;
 import antlr.Token;
 import com.thoughtworks.xstream.XStream;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.DotExpression;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijjah.ElijjahTokenTypes;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
 
 /**
  * Created 9/10/20 3:44 PM
@@ -120,6 +128,35 @@ public class Helpers {
 		}
 
 		return sb.toString();
+	}
+
+	public static String getHashForFilename(final String aFilename, final ErrSink aErrSink) throws IOException {
+		String hdigest = new DigestUtils(SHA_256).digestAsHex(new File(aFilename));
+		return hdigest;
+	}
+
+	@Nullable
+	public static String getHashForFilenameJava(String aFilename, ErrSink aErrSink) throws IOException {
+		final File file = new File(aFilename);
+		long size = file.length();
+		byte[] ba = new byte[(int)size];  // README Counting on reasonable sizes here
+		FileInputStream bb = null;
+		try {
+			bb = new FileInputStream(file);
+			bb.read(ba);
+
+			try {
+				String hh = getHash(ba);
+				return hh;
+			} catch (NoSuchAlgorithmException aE) {
+				aErrSink.exception(aE);
+//				aE.printStackTrace();
+			}
+		} finally {
+			if (bb != null)
+				bb.close();
+		}
+		return null;
 	}
 }
 

@@ -18,6 +18,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.Out;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.LibraryStatementPart;
@@ -44,7 +45,6 @@ import tripleo.util.io.FileCharSink;
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -261,26 +261,11 @@ public class Compilation {
 	}
 
 	public void append_hash(TextBuffer aBuf, String aFilename) throws IOException {
-		final File file = new File(aFilename);
-		long size = file.length();
-		byte[] ba = new byte[(int)size];  // README Counting on reasonable sizes here
-		FileInputStream bb = null;
-		try {
-			bb = new FileInputStream(file);
-			bb.read(ba);
-
-			try {
-				String hh = Helpers.getHash(ba);
-				aBuf.append(hh);
-				aBuf.append(" ");
-				aBuf.append_ln(aFilename);
-			} catch (NoSuchAlgorithmException aE) {
-				eee.exception(aE);
-	//			aE.printStackTrace();
-			}
-		} finally {
-			if (bb != null)
-				bb.close();
+		@Nullable final String hh = Helpers.getHashForFilename(aFilename, eee);
+		if (hh != null) {
+			aBuf.append(hh);
+			aBuf.append(" ");
+			aBuf.append_ln(aFilename);
 		}
 	}
 
