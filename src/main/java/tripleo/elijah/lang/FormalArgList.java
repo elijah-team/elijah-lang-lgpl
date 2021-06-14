@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 // Referenced classes of package pak2:
@@ -29,7 +30,7 @@ public class FormalArgList {
 		return falis.toString();
 	}
 
-	public Iterable<FormalArgListItem> items() {
+	public Collection<FormalArgListItem> items() {
 		return falis;
 	}
 }

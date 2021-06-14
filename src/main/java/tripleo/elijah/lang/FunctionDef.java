@@ -18,6 +18,7 @@ import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 // TODO FunctionDef is not a Container is it?
@@ -26,7 +27,7 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	protected Species _species;
 	private Scope3 scope3;
 
-	public Iterable<FormalArgListItem> getArgs() {
+	public Collection<FormalArgListItem> getArgs() {
 		return mFal.items();
 	}
 
