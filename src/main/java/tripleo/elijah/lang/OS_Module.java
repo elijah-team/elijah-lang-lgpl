@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.contexts.ModuleContext;
+import tripleo.elijah.entrypoints.EntryPoint;
+import tripleo.elijah.entrypoints.MainClassEntryPoint;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -40,7 +42,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	public Compilation parent;
 	private LibraryStatementPart lsp;
 	private String _fileName;
-	public @NotNull List<ClassStatement> entryPoints = new ArrayList<ClassStatement>();
+	public @NotNull List<EntryPoint> entryPoints = new ArrayList<EntryPoint>();
 	private IndexingStatement indexingStatement;
 
 	public @org.jetbrains.annotations.Nullable OS_Element findClass(final String className) {
@@ -219,14 +221,14 @@ public class OS_Module implements OS_Element, OS_Container {
 		for (final ModuleItem item : items) {
 			if (item instanceof ClassStatement) {
 				ClassStatement classStatement = (ClassStatement) item;
-				if (isMainClass(classStatement)) {
+				if (MainClassEntryPoint.isMainClass(classStatement)) {
 					Collection<ClassItem> x = classStatement.findFunction("main");
 					Collection<ClassItem> found = Collections2.filter(x, new Predicate<ClassItem>() {
 						@Override
 						public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable ClassItem input) {
 							assert input != null;
 							FunctionDef fd = (FunctionDef) input;
-							return is_main_function_with_no_args(fd);
+							return MainClassEntryPoint.is_main_function_with_no_args(fd);
 						}
 					});
 //					Iterator<ClassStatement> zz = x.stream()
@@ -245,7 +247,7 @@ public class OS_Module implements OS_Element, OS_Container {
 
 					final int eps = entryPoints.size();
 					for (ClassItem classItem : found) {
-						entryPoints.add((ClassStatement) classItem.getParent());
+						entryPoints.add(new MainClassEntryPoint((ClassStatement) classItem.getParent()));
 					}
 					assert entryPoints.size() == eps || entryPoints.size() == eps+1;
 
@@ -256,20 +258,6 @@ public class OS_Module implements OS_Element, OS_Container {
 
 
 		}
-	}
-
-	public static boolean isMainClass(@NotNull ClassStatement classStatement) {
-		// TODO what about Library (for windows dlls) etc?
-		return classStatement.getPackageName() == OS_Package.default_package && classStatement.name().equals("Main");
-	}
-
-	private boolean is_main_function_with_no_args(@NotNull FunctionDef fd) {
-		if (fd.getType() == FunctionDef.Species.REG_FUN || fd.getType() == FunctionDef.Species.DEF_FUN) {
-			if (fd.name().equals("main")) {
-				return !fd.getArgs().iterator().hasNext();
-			}
-		}
-		return false;
 	}
 
 	public void setContext(final ModuleContext mctx) {

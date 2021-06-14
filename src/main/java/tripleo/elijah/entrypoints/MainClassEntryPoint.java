@@ -8,9 +8,11 @@
  */
 package tripleo.elijah.entrypoints;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.OS_Package;
 
 import java.util.Collection;
 
@@ -32,6 +34,23 @@ public class MainClassEntryPoint extends AbstractEntryPoint {
 		if (main_function == null)
 			throw new IllegalArgumentException("Class does not define main");
 		klass = aKlass;
+	}
+
+	public static boolean isMainClass(@NotNull ClassStatement classStatement) {
+		// TODO what about Library (for windows dlls) etc?
+		return classStatement.getPackageName() == OS_Package.default_package && classStatement.name().equals("Main");
+	}
+
+	public static boolean is_main_function_with_no_args(@NotNull FunctionDef aFunctionDef) {
+		switch (aFunctionDef.getType()) {
+			case REG_FUN:
+			case DEF_FUN:
+				if (aFunctionDef.name().equals("main")) {
+					return !aFunctionDef.getArgs().iterator().hasNext();
+				}
+				break;
+		}
+		return false;
 	}
 
 	public FunctionDef getmainFunction() {
