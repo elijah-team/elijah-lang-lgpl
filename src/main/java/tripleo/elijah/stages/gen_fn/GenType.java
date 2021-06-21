@@ -9,13 +9,17 @@
 package tripleo.elijah.stages.gen_fn;
 
 import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.lang.TypeName;
+import tripleo.elijah.stages.deduce.ClassInvocation;
 
 /**
  * Created 5/31/21 1:32 PM
  */
 public class GenType {
 	OS_Type typeName; // TODO or just TypeName ??
+	TypeName nonGenericTypeName;
 	OS_Type resolved;
+	ClassInvocation ci;
 	GeneratedNode node;
 }
 
