@@ -60,7 +60,7 @@ public class MainClassEntryPoint extends AbstractEntryPoint {
 		return false;
 	}
 
-	public FunctionDef getmainFunction() {
+	public FunctionDef getMainFunction() {
 		return main_function;
 	}
 
