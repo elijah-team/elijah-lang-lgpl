@@ -20,8 +20,17 @@ import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
+import tripleo.elijah.stages.generate.ElSystem;
+import tripleo.elijah.stages.generate.OutputStrategy;
 import tripleo.elijah.stages.instructions.IdentIA;
+import tripleo.elijah.util.Helpers;
+import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
+import tripleo.util.buffer.Buffer;
+import tripleo.util.buffer.DefaultBuffer;
+import tripleo.util.buffer.TextBuffer;
+import tripleo.util.io.CharSink;
+import tripleo.util.io.FileCharSink;
 
 import java.io.BufferedWriter;
 import java.io.File;

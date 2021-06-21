@@ -11,14 +11,11 @@ package tripleo.elijah.comp;
 import antlr.ANTLRException;
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.Out;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.LibraryStatementPart;
@@ -27,26 +24,16 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
-import tripleo.elijah.stages.gen_generic.GenerateResult;
-import tripleo.elijah.stages.gen_generic.GenerateResultItem;
-import tripleo.elijah.stages.generate.ElSystem;
-import tripleo.elijah.stages.generate.OutputStrategy;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
 import tripleo.elijjah.EzLexer;
 import tripleo.elijjah.EzParser;
-import tripleo.util.buffer.Buffer;
-import tripleo.util.buffer.DefaultBuffer;
-import tripleo.util.buffer.TextBuffer;
-import tripleo.util.io.CharSink;
-import tripleo.util.io.FileCharSink;
 
-import java.io.*;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +56,7 @@ public class Compilation {
 	//
 	//
 	public PipelineLogic pipeline;
+	private ErrSink errSink;
 	//
 	//
 	//
@@ -179,93 +167,14 @@ public class Compilation {
 					pipeline.everythingBeforeGenerate(lgc);
 					pipeline.generate(lgc);
 
-					write_files(pipeline.gr);
-					{
-						final File file1 = new File("COMP", getCompilationNumberString());
-						file1.mkdirs();
-
-						PrintStream db_stream = new PrintStream(new File(file1, "buffers.txt"));
-						PipelineLogic.debug_buffers(pipeline.gr, db_stream);
-					}
+					pipeline.write_files(this);
+					pipeline.write_buffers(this);
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
 			}
 		} catch (final Exception e) {
 			errSink.exception(e);
-		}
-	}
-
-	public void write_files(GenerateResult input) throws IOException {
-		OutputStrategy os = new OutputStrategy();
-		os.per(OutputStrategy.Per.PER_CLASS);
-
-		ElSystem sys = new ElSystem();
-		sys.verbose = false;
-		sys.setCompilation(this);
-		sys.setOutputStrategy(os);
-		sys.generateOutputs(input);
-
-		Multimap<String, Buffer> mb = ArrayListMultimap.create();
-
-		for (GenerateResultItem ab : input.results()) {
-			mb.put(ab.output, ab.buffer);
-		}
-
-		final File file_prefix = new File("COMP", getCompilationNumberString());
-		file_prefix.mkdirs();
-		String prefix = file_prefix.toString();
-
-		{
-			final String fn1 = new File(file_prefix, "inputs.txt").toString();
-
-			DefaultBuffer buf = new DefaultBuffer("");
-//			FileBackedBuffer buf = new FileBackedBuffer(fn1);
-//			for (OS_Module module : modules) {
-//				final String fn = module.getFileName();
-//
-//				append_hash(buf, fn);
-//			}
-//
-//			for (CompilerInstructions ci : cis) {
-//				final String fn = ci.getFilename();
-//
-//				append_hash(buf, fn);
-//			}
-			for (File file : io.recordedreads) {
-				final String fn = file.toString();
-
-				append_hash(buf, fn);
-			}
-			String s = buf.getText();
-			Writer w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fn1, true)));
-			w.write(s);
-			w.close();
-		}
-
-		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
-			final String key = entry.getKey();
-			assert key != null;
-			Path path = FileSystems.getDefault().getPath(prefix, key);
-//			BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
-
-			path.getParent().toFile().mkdirs();
-
-			System.out.println("201 Writing path: "+path);
-			CharSink x = io.openWrite(path);
-			for (Buffer buffer : entry.getValue()) {
-				x.accept(buffer.getText());
-			}
-			((FileCharSink)x).close();
-		}
-	}
-
-	public void append_hash(TextBuffer aBuf, String aFilename) throws IOException {
-		@Nullable final String hh = Helpers.getHashForFilename(aFilename, eee);
-		if (hh != null) {
-			aBuf.append(hh);
-			aBuf.append(" ");
-			aBuf.append_ln(aFilename);
 		}
 	}
 
@@ -546,6 +455,9 @@ public class Compilation {
 		return String.format("%08x", _compilationNumber);
 	}
 
+	public ErrSink getErrSink() {
+		return errSink;
+	}
 }
 
 //
