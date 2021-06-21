@@ -55,14 +55,35 @@ public class FunctionInvocation {
 			makeGenerated(generatePhase);
 	}
 
-	private void makeGenerated(GeneratePhase generatePhase) {
-		WlGenerateFunction wlgf = new WlGenerateFunction(generatePhase.getGenerateFunctions(fd.getContext().module()), this);
-		wlgf.run(null);
-		GeneratedFunction gf = wlgf.getResult();
-		if (generateDeferred.isPending()) {
-			generateDeferred.resolve(gf);
-			_generated = gf;
+	void makeGenerated(GeneratePhase generatePhase, DeducePhase aPhase) {
+		OS_Module module = null;
+		if (fd != null)
+			module = fd.getContext().module();
+		if (module == null)
+			module = classInvocation.getKlass().getContext().module(); // README for constructors
+		if (fd != null) {
+			WlGenerateFunction wlgf = new WlGenerateFunction(generatePhase.getGenerateFunctions(module), this);
+			wlgf.run(null);
+			GeneratedFunction gf = wlgf.getResult();
+			if (gf.getGenClass() == null) {
+				if (namespaceInvocation != null) {
+//					namespaceInvocation = aPhase.registerNamespaceInvocation(namespaceInvocation.getNamespace());
+					WlGenerateNamespace wlgn = new WlGenerateNamespace(generatePhase.getGenerateFunctions(module),
+							namespaceInvocation,
+							aPhase.generatedClasses);
+					wlgn.run(null);
+					int y=2;
+				}
+			}
+		} else {
+			WlGenerateDefaultCtor wlgdc = new WlGenerateDefaultCtor(generatePhase.getGenerateFunctions(module), this);
+			wlgdc.run(null);
+//			GeneratedFunction gf = wlgdc.getResult();
 		}
+//		if (generateDeferred.isPending()) {
+//			generateDeferred.resolve(gf);
+//			_generated = gf;
+//		}
 	}
 
 	public GeneratedFunction getGenerated() {
