@@ -15,6 +15,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
+import tripleo.elijah.entrypoints.MainClassEntryPoint;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.OS_Module;
@@ -54,14 +55,16 @@ public class TestGenFunction {
 		//
 		//
 		final ClassStatement main_class = (ClassStatement) m.findClass("Main");
-		m.entryPoints = List_of(main_class);
+		m.entryPoints = List_of(new MainClassEntryPoint(main_class));
 		//
 		//
 		//
 
 		final GeneratePhase generatePhase1 = new GeneratePhase();
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
-		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+		final List<GeneratedNode> lgc = new ArrayList<>();
+		DeducePhase dp = new DeducePhase(generatePhase1);
+		gfm.generateFromEntryPoints(m.entryPoints, dp);
 
 		List<GeneratedNode> lgf = new ArrayList<>();
 		for (GeneratedNode generatedNode : lgc) {
@@ -74,7 +77,6 @@ public class TestGenFunction {
 
 //		Assert.assertEquals(2, lgf.size());
 
-		DeducePhase dp = new DeducePhase(generatePhase1);
 
 		WorkManager wm = new WorkManager();
 
@@ -205,7 +207,8 @@ public class TestGenFunction {
 
 		if (false) {
 			final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
-			final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+			final List<GeneratedNode> lgc = new ArrayList<>();
+			gfm.generateAllTopLevelClasses(lgc);
 
 			List<GeneratedNode> lgf = new ArrayList<>();
 			for (GeneratedNode generatedNode : lgc) {
@@ -262,7 +265,13 @@ public class TestGenFunction {
 		}
 
 		final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
-		final List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+		final List<GeneratedNode> lgc = new ArrayList<>();
+		gfm.generateAllTopLevelClasses(lgc);
+
+		final GeneratePhase generatePhase = new GeneratePhase();
+		DeducePhase dp = new DeducePhase(generatePhase);
+
+		WorkManager wm = new WorkManager();
 
 		List<GeneratedNode> lgf = new ArrayList<>();
 		for (GeneratedNode generatedNode : lgc) {

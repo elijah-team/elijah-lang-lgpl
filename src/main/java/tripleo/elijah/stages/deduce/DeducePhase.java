@@ -11,6 +11,7 @@ package tripleo.elijah.stages.deduce;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.NamespaceStatement;
@@ -189,7 +190,10 @@ public class DeducePhase {
 
 	public DeduceTypes2 deduceModule(OS_Module m) {
 		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
-		List<GeneratedNode> lgc = gfm.generateAllTopLevelClasses();
+		List<GeneratedNode> lgc = new ArrayList<>();
+
+		@NotNull List<EntryPoint> epl = m.entryPoints;
+		gfm.generateFromEntryPoints(epl, this);
 
 		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 		for (GeneratedNode lgci : lgc) {

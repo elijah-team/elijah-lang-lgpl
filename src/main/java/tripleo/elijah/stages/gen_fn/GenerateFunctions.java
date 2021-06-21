@@ -12,6 +12,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.entrypoints.ArbitraryFunctionEntryPoint;
+import tripleo.elijah.entrypoints.EntryPoint;
+import tripleo.elijah.entrypoints.MainClassEntryPoint;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
@@ -28,7 +31,6 @@ import tripleo.util.range.Range;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 import static tripleo.elijah.util.Helpers.List_of;
@@ -621,26 +623,28 @@ public class GenerateFunctions {
 
 		generateAllTopLevelClasses(R);
 
-		return R;
-	}
-
-	public void generateAllTopLevelClasses(List<GeneratedNode> lgc) {
+	public void generateFromEntryPoints(List<EntryPoint> epl, DeducePhase deducePhase) {
 		final WorkList wl = new WorkList();
-		for (ClassStatement classStatement : module.entryPoints) {
-			assert classStatement.name().equals("Main");
-			Optional<ClassItem> fs = classStatement.getItems().
-					stream().
-					filter(x -> x instanceof FunctionDef && ((FunctionDef) x).name().equals("main")).
-					findFirst();
-//					collect(Collectors.toList());
-//			assert fs.size() == 1;
-			if (fs.isPresent()) {
-				FunctionDef f = (FunctionDef) fs.get();
-				final ClassInvocation ci = new ClassInvocation(classStatement, null);
-				wl.addJob(new WlGenerateClass(this, ci, lgc));
-				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, phase);
+		for (EntryPoint entryPoint : module.entryPoints) {
+			if (entryPoint instanceof MainClassEntryPoint) {
+				final MainClassEntryPoint mcep = (MainClassEntryPoint) entryPoint;
+				@NotNull final ClassStatement cs = mcep.getKlass();
+				final FunctionDef f = mcep.getMainFunction();
+				final ClassInvocation ci = new ClassInvocation(cs, null);
+				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses));
+				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase);
 //				fi.setPhase(phase);
 				wl.addJob(new WlGenerateFunction(this, fi));
+			} else if (entryPoint instanceof ArbitraryFunctionEntryPoint) {
+				final ArbitraryFunctionEntryPoint afep = (ArbitraryFunctionEntryPoint) entryPoint;
+
+				final FunctionDef f = afep.getFunction();
+				final ClassInvocation ci = new ClassInvocation((ClassStatement) afep.getParent(), null);
+				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses));
+				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase);
+//				fi.setPhase(phase);
+				wl.addJob(new WlGenerateFunction(this, fi));
+
 			}
 		}
 		phase.wm.addJobs(wl);
