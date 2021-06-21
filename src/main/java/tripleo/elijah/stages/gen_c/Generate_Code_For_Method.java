@@ -51,20 +51,37 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 public class Generate_Code_For_Method {
 	GenerateC gc;
 
+	final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
+	final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
+
 	void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList, GenerateC aGenerateC) {
 		gc = aGenerateC;
+		
+		action(gf);
+		
+		tos.dec_tabs();
+		tos.put_string_ln("}");
+		tos.flush();
+		tos.close();
+		tosHdr.flush();
+		tosHdr.close();
+		Buffer buf = tos.getBuffer();
+//		System.out.println(buf.getText());
+		gr.addFunction(gf, buf, GenerateResult.TY.IMPL);
+		Buffer bufHdr = tosHdr.getBuffer();
+//		System.out.println(bufHdr.getText());
+		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER);
+	}
 
-		final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
-		final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
+	boolean is_constructor = false, is_unit_type = false;
 
+	private void action(GeneratedFunction gf) {
 		Generate_Method_Header gmh = new Generate_Method_Header(gf, gc);
 
 		tos.put_string_ln(String.format("%s {", gmh.header_string));
 		tosHdr.put_string_ln(String.format("%s;", gmh.header_string));
 
 		tos.incr_tabs();
-		//
-		boolean is_constructor = false, is_unit_type = false;
 		//
 		@NotNull List<Instruction> instructions = gf.instructions();
 		for (int instruction_index = 0; instruction_index < instructions.size(); instruction_index++) {
@@ -77,298 +94,48 @@ public class Generate_Code_For_Method {
 
 			switch (instruction.getName()) {
 				case E:
-				{
-					tos.put_string_ln("bool vsb;");
-					int state = 0;
-
-					if (gf.getFD() instanceof ConstructorDef)
-						state = 2;
-					else if (gmh.tte == null)
-						state = 3;
-					else if (gmh.tte.isResolved())
-						state = 1;
-					else if (gmh.tte.getAttached() instanceof OS_Type.OS_UnitType)
-						state = 4;
-
-					switch (state) {
-						case 0:
-							tos.put_string_ln("Error_TTE_Not_Resolved "+gmh.tte);
-							break;
-						case 1:
-							String ty = gc.getTypeName(gmh.tte);
-							tos.put_string_ln(String.format("%s vsr;", ty));
-							break;
-						case 2:
-						case 3:
-							// Assuming ctor
-							is_constructor = true;
-							final GeneratedNode genClass = gf.getGenClass();
-							String ty2 = gc.getTypeNameForGenClass(genClass);
-							tos.put_string_ln(String.format("%s vsr;", ty2));
-							break;
-						case 4:
-							// don't print anything
-							is_unit_type = true;
-							break;
-					}
-					tos.put_string_ln("{");
-					tos.incr_tabs();
-				}
-				break;
+					action_E(gf, gmh);
+					break;
 				case X:
-				{
-					tos.dec_tabs();
-					tos.put_string_ln("}");
-					if (!is_unit_type)
-						if (is_constructor || gmh.tte != null && gmh.tte.isResolved()) {
-							tos.put_string_ln("return vsr;");
-						}
-				}
-				break;
+					action_X(gmh);
+					break;
 				case ES:
-				{
-					tos.put_string_ln("{");
-					tos.incr_tabs();
-				}
-				break;
+					action_ES();
+					break;
 				case XS:
-				{
-					tos.dec_tabs();
-					tos.put_string_ln("}");
-				}
-				break;
+					action_XS();
+					break;
 				case AGN:
-				{
-					final InstructionArgument target = instruction.getArg(0);
-					final InstructionArgument value  = instruction.getArg(1);
-
-					final String realTarget;
-					if (target instanceof IntegerIA) {
-						realTarget = gc.getRealTargetName(gf, (IntegerIA) target);
-					} else {
-						realTarget = gc.getRealTargetName(gf, (IdentIA) target);
-					}
-					final String assignmentValue = gc.getAssignmentValue(gf.getSelf(), value, gf);
-					String s = String.format(Emit.emit("/*267*/")+"%s = %s;", realTarget, assignmentValue);
-					tos.put_string_ln(s);
-				}
-				break;
+					action_AGN(gf, instruction);
+					break;
 				case AGNK:
-				{
-					final InstructionArgument target = instruction.getArg(0);
-					final InstructionArgument value  = instruction.getArg(1);
-
-					final String realTarget = gc.getRealTargetName(gf, (IntegerIA) target);
-					final String assignmentValue = gc.getAssignmentValue(gf.getSelf(), value, gf);
-					String s = String.format(Emit.emit("/*278*/")+"%s = %s;", realTarget, assignmentValue);
-					tos.put_string_ln(s);
-				}
-				break;
+					action_AGNK(gf, instruction);
+					break;
 				case AGNT:
 					break;
 				case AGNF:
 					break;
 				case JE:
-				{
-					final InstructionArgument lhs    = instruction.getArg(0);
-					final InstructionArgument rhs    = instruction.getArg(1);
-					final InstructionArgument target = instruction.getArg(2);
-
-					final Label realTarget = (Label) target;
-
-					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lhs).getIndex());
-					assert rhs != null;
-
-					if (rhs instanceof ConstTableIA) {
-						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
-						final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
-						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
-					} else {
-						//
-						// TODO need to lookup special __eq__ function
-						//
-						String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
-						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
-
-						final int y = 2;
-					}
-				}
-				break;
+					action_JE(gf, instruction);
+					break;
 				case JNE:
-				{
-					final InstructionArgument lhs    = instruction.getArg(0);
-					final InstructionArgument rhs    = instruction.getArg(1);
-					final InstructionArgument target = instruction.getArg(2);
-
-					final Label realTarget = (Label) target;
-
-					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) lhs).getIndex());
-					assert rhs != null;
-
-					if (rhs instanceof ConstTableIA) {
-						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
-						final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
-						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
-					} else {
-						//
-						// TODO need to lookup special __ne__ function ??
-						//
-						String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
-						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
-
-						final int y = 2;
-					}
-				}
-				break;
+					action_JNE(gf, instruction);
+					break;
 				case JL:
-				{
-					final InstructionArgument lhs    = instruction.getArg(0);
-					final InstructionArgument rhs    = instruction.getArg(1);
-					final InstructionArgument target = instruction.getArg(2);
-
-					final Label realTarget = (Label) target;
-
-					final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) lhs).getIndex());
-					assert rhs != null;
-
-					if (rhs instanceof ConstTableIA) {
-						final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
-						final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
-						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
-					} else {
-						//
-						// TODO need to lookup special __lt__ function
-						//
-						String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
-						tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
-						tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
-
-						final int y = 2;
-					}
-				}
-				break;
+					action_JL(gf, instruction);
+					break;
 				case JMP:
-				{
-					final InstructionArgument target = instruction.getArg(0);
-//					InstructionArgument value  = instruction.getArg(1);
-
-					final Label realTarget = (Label) target;
-
-					tos.put_string_ln(String.format("goto %s;", realTarget.getName()));
-					final int y=2;
-				}
-				break;
+					action_JMP(instruction);
+					break;
 				case CONSTRUCT:
-				{
-					final InstructionArgument _arg0 = instruction.getArg(0);
-					assert _arg0 instanceof ProcIA;
-					final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) _arg0).getIndex());
-					List<TypeTableEntry> x = pte.getArgs();
-					int y = instruction.getArgsSize();
-//					InstructionArgument z = instruction.getArg(1);
-					ClassInvocation clsinv = pte.getClassInvocation();
-					if (clsinv != null) {
-
-						final InstructionArgument target = pte.expression_num;
-//						final InstructionArgument value  = instruction;
-
-						if (target instanceof IdentIA) {
-							// how to tell between named ctors and just a path?
-						}
-
-//						final String realTarget;
-//						if (target instanceof IntegerIA) {
-//							realTarget = getRealTargetName(gf, (IntegerIA) target);
-//						} else if (target instanceof IdentIA) {
-//							realTarget = getRealTargetName(gf, (IdentIA) target);
-//						} else {
-//							throw new NotImplementedException();
-//						}
-//						String s = String.format(Emit.emit("/*500*/")+"%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), instruction, clsinv, gf));
-						String s = String.format(Emit.emit("/*500*/")+"%s;", gc.getAssignmentValue(gf.getSelf(), instruction, clsinv, gf));
-						tos.put_string_ln(s);
-					}
-				}
-				break;
+					action_CONSTRUCT(gf, instruction);
+					break;
 				case CALL:
-				{
-					final StringBuilder sb = new StringBuilder();
-// 					System.err.println("9000 "+inst.getName());
-					final InstructionArgument x = instruction.getArg(0);
-					assert x instanceof ProcIA;
-					final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) x).getIndex());
-					{
-						if (pte.expression_num == null) {
-							final IdentExpression ptex = (IdentExpression) pte.expression;
-							String text = ptex.getText();
-							@org.jetbrains.annotations.Nullable InstructionArgument xx = gf.vte_lookup(text);
-							assert xx != null;
-							String realTargetName = gc.getRealTargetName(gf, (IntegerIA) xx);
-							sb.append(Emit.emit("/*424*/")+realTargetName);
-							sb.append('(');
-							final List<String> sl3 = gc.getArgumentStrings(gf, instruction);
-							sb.append(Helpers.String_join(", ", sl3));
-							sb.append(");");
-						} else {
-							final CReference reference = new CReference();
-							final IdentIA ia2 = (IdentIA) pte.expression_num;
-							reference.getIdentIAPath(ia2, gf);
-							final List<String> sl3 = gc.getArgumentStrings(gf, instruction);
-							reference.args(sl3);
-							String path = reference.build();
-
-							sb.append(Emit.emit("/*427*/")+path+";");
-						}
-					}
-					tos.put_string_ln(sb.toString());
-				}
-				break;
+					action_CALL(gf, instruction);
+					break;
 				case CALLS:
-//				throw new NotImplementedException();
-				{
-					final StringBuilder sb = new StringBuilder();
-					final InstructionArgument x = instruction.getArg(0);
-					assert x instanceof ProcIA;
-					final ProcTableEntry pte = gf.getProcTableEntry(to_int(x));
-					{
-						CReference reference = null;
-						if (pte.expression_num == null) {
-							final int y = 2;
-							final IdentExpression ptex = (IdentExpression) pte.expression;
-							String text = ptex.getText();
-							@org.jetbrains.annotations.Nullable InstructionArgument xx = gf.vte_lookup(text);
-							String xxx;
-							if (xx != null) {
-								xxx = gc.getRealTargetName(gf, (IntegerIA) xx);
-							} else {
-								xxx = text;
-								System.err.println("xxx is null " + text);
-							}
-							sb.append(Emit.emit("/*460*/")+xxx);
-						} else {
-							final IdentIA ia2 = (IdentIA) pte.expression_num;
-							reference = new CReference();
-							reference.getIdentIAPath(ia2, gf);
-							final List<String> sl3 = gc.getArgumentStrings(gf, instruction);
-							reference.args(sl3);
-							String path = reference.build();
-							sb.append(Emit.emit("/*463*/")+path);
-						}
-						if (reference == null){
-							sb.append('(');
-							final List<String> sl3 = gc.getArgumentStrings(gf, instruction);
-							sb.append(Helpers.String_join(", ", sl3));
-							sb.append(");");
-						}
-					}
-					tos.put_string_ln(sb.toString());
-				}
-				break;
+					action_CALLS(gf, instruction);
+					break;
 				case RET:
 					break;
 				case YIELD:
@@ -392,18 +159,281 @@ public class Generate_Code_For_Method {
 					throw new IllegalStateException("Unexpected value: " + instruction.getName());
 			}
 		}
+	}
+
+	private void action_XS() {
 		tos.dec_tabs();
 		tos.put_string_ln("}");
-		tos.flush();
-		tos.close();
-		tosHdr.flush();
-		tosHdr.close();
-		Buffer buf = tos.getBuffer();
-//		System.out.println(buf.getText());
-		gr.addFunction(gf, buf, GenerateResult.TY.IMPL);
-		Buffer bufHdr = tosHdr.getBuffer();
-//		System.out.println(bufHdr.getText());
-		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER);
+	}
+
+	private void action_ES() {
+		tos.put_string_ln("{");
+		tos.incr_tabs();
+	}
+
+	private void action_X(Generate_Method_Header aGmh) {
+		tos.dec_tabs();
+		tos.put_string_ln("}");
+		if (!is_unit_type)
+			if (is_constructor || aGmh.tte != null && aGmh.tte.isResolved()) {
+				tos.put_string_ln("return vsr;");
+			}
+	}
+
+	private void action_E(GeneratedFunction gf, Generate_Method_Header aGmh) {
+		tos.put_string_ln("bool vsb;");
+		int state = 0;
+
+		if (gf.getFD() instanceof ConstructorDef)
+			state = 2;
+		else if (aGmh.tte == null)
+			state = 3;
+		else if (aGmh.tte.isResolved())
+			state = 1;
+		else if (aGmh.tte.getAttached() instanceof OS_Type.OS_UnitType)
+			state = 4;
+
+		switch (state) {
+			case 0:
+				tos.put_string_ln("Error_TTE_Not_Resolved "+ aGmh.tte);
+				break;
+			case 1:
+				String ty = gc.getTypeName(aGmh.tte);
+				tos.put_string_ln(String.format("%s vsr;", ty));
+				break;
+			case 2:
+			case 3:
+				// Assuming ctor
+				is_constructor = true;
+				final GeneratedNode genClass = gf.getGenClass();
+				String ty2 = gc.getTypeNameForGenClass(genClass);
+				tos.put_string_ln(String.format("%s vsr;", ty2));
+				break;
+			case 4:
+				// don't print anything
+				is_unit_type = true;
+				break;
+		}
+		tos.put_string_ln("{");
+		tos.incr_tabs();
+	}
+
+	private void action_AGN(GeneratedFunction gf, Instruction aInstruction) {
+		final InstructionArgument target = aInstruction.getArg(0);
+		final InstructionArgument value  = aInstruction.getArg(1);
+
+		final String realTarget;
+		if (target instanceof IntegerIA) {
+			realTarget = gc.getRealTargetName(gf, (IntegerIA) target);
+		} else {
+			realTarget = gc.getRealTargetName(gf, (IdentIA) target);
+		}
+		final String assignmentValue = gc.getAssignmentValue(gf.getSelf(), value, gf);
+		String s = String.format(Emit.emit("/*267*/")+"%s = %s;", realTarget, assignmentValue);
+		tos.put_string_ln(s);
+	}
+
+	private void action_AGNK(GeneratedFunction gf, Instruction aInstruction) {
+		final InstructionArgument target = aInstruction.getArg(0);
+		final InstructionArgument value  = aInstruction.getArg(1);
+
+		final String realTarget = gc.getRealTargetName(gf, (IntegerIA) target);
+		final String assignmentValue = gc.getAssignmentValue(gf.getSelf(), value, gf);
+		String s = String.format(Emit.emit("/*278*/")+"%s = %s;", realTarget, assignmentValue);
+		tos.put_string_ln(s);
+	}
+
+	private void action_CALLS(GeneratedFunction gf, Instruction aInstruction) {
+		final StringBuilder sb = new StringBuilder();
+		final InstructionArgument x = aInstruction.getArg(0);
+		assert x instanceof ProcIA;
+		final ProcTableEntry pte = gf.getProcTableEntry(to_int(x));
+		{
+			CReference reference = null;
+			if (pte.expression_num == null) {
+				final int y = 2;
+				final IdentExpression ptex = (IdentExpression) pte.expression;
+				String text = ptex.getText();
+				@Nullable InstructionArgument xx = gf.vte_lookup(text);
+				String xxx;
+				if (xx != null) {
+					xxx = gc.getRealTargetName(gf, (IntegerIA) xx);
+				} else {
+					xxx = text;
+					System.err.println("xxx is null " + text);
+				}
+				sb.append(Emit.emit("/*460*/")+xxx);
+			} else {
+				final IdentIA ia2 = (IdentIA) pte.expression_num;
+				reference = new CReference();
+				reference.getIdentIAPath(ia2, gf);
+				final List<String> sl3 = gc.getArgumentStrings(gf, aInstruction);
+				reference.args(sl3);
+				String path = reference.build();
+				sb.append(Emit.emit("/*463*/")+path);
+			}
+			if (reference == null){
+				sb.append('(');
+				final List<String> sl3 = gc.getArgumentStrings(gf, aInstruction);
+				sb.append(Helpers.String_join(", ", sl3));
+				sb.append(");");
+			}
+		}
+		tos.put_string_ln(sb.toString());
+	}
+
+	private void action_CALL(GeneratedFunction gf, Instruction aInstruction) {
+		final StringBuilder sb = new StringBuilder();
+// 					System.err.println("9000 "+inst.getName());
+		final InstructionArgument x = aInstruction.getArg(0);
+		assert x instanceof ProcIA;
+		final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) x).getIndex());
+		{
+			if (pte.expression_num == null) {
+				final IdentExpression ptex = (IdentExpression) pte.expression;
+				String text = ptex.getText();
+				@Nullable InstructionArgument xx = gf.vte_lookup(text);
+				assert xx != null;
+				String realTargetName = gc.getRealTargetName(gf, (IntegerIA) xx);
+				sb.append(Emit.emit("/*424*/")+realTargetName);
+				sb.append('(');
+				final List<String> sl3 = gc.getArgumentStrings(gf, aInstruction);
+				sb.append(Helpers.String_join(", ", sl3));
+				sb.append(");");
+			} else {
+				final CReference reference = new CReference();
+				final IdentIA ia2 = (IdentIA) pte.expression_num;
+				reference.getIdentIAPath(ia2, gf);
+				final List<String> sl3 = gc.getArgumentStrings(gf, aInstruction);
+				reference.args(sl3);
+				String path = reference.build();
+
+				sb.append(Emit.emit("/*427*/")+path+";");
+			}
+		}
+		tos.put_string_ln(sb.toString());
+	}
+
+	private void action_CONSTRUCT(GeneratedFunction gf, Instruction aInstruction) {
+		final InstructionArgument _arg0 = aInstruction.getArg(0);
+		assert _arg0 instanceof ProcIA;
+		final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) _arg0).getIndex());
+		List<TypeTableEntry> x = pte.getArgs();
+		int y = aInstruction.getArgsSize();
+//					InstructionArgument z = instruction.getArg(1);
+		ClassInvocation clsinv = pte.getClassInvocation();
+		if (clsinv != null) {
+
+			final InstructionArgument target = pte.expression_num;
+//						final InstructionArgument value  = instruction;
+
+			if (target instanceof IdentIA) {
+				// how to tell between named ctors and just a path?
+			}
+
+//						final String realTarget;
+//						if (target instanceof IntegerIA) {
+//							realTarget = getRealTargetName(gf, (IntegerIA) target);
+//						} else if (target instanceof IdentIA) {
+//							realTarget = getRealTargetName(gf, (IdentIA) target);
+//						} else {
+//							throw new NotImplementedException();
+//						}
+//						String s = String.format(Emit.emit("/*500*/")+"%s = %s;", realTarget, getAssignmentValue(gf.getSelf(), instruction, clsinv, gf));
+			String s = String.format(Emit.emit("/*500*/")+"%s;", gc.getAssignmentValue(gf.getSelf(), aInstruction, clsinv, gf));
+			tos.put_string_ln(s);
+		}
+	}
+
+	private void action_JMP(Instruction aInstruction) {
+		final InstructionArgument target = aInstruction.getArg(0);
+//					InstructionArgument value  = instruction.getArg(1);
+
+		final Label realTarget = (Label) target;
+
+		tos.put_string_ln(String.format("goto %s;", realTarget.getName()));
+		final int y=2;
+	}
+
+	private void action_JL(GeneratedFunction gf, Instruction aInstruction) {
+		final InstructionArgument lhs    = aInstruction.getArg(0);
+		final InstructionArgument rhs    = aInstruction.getArg(1);
+		final InstructionArgument target = aInstruction.getArg(2);
+
+		final Label realTarget = (Label) target;
+
+		final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) lhs).getIndex());
+		assert rhs != null;
+
+		if (rhs instanceof ConstTableIA) {
+			final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
+			final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
+			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+		} else {
+			//
+			// TODO need to lookup special __lt__ function
+			//
+			String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
+			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+
+			final int y = 2;
+		}
+	}
+
+	private void action_JNE(GeneratedFunction gf, Instruction aInstruction) {
+		final InstructionArgument lhs    = aInstruction.getArg(0);
+		final InstructionArgument rhs    = aInstruction.getArg(1);
+		final InstructionArgument target = aInstruction.getArg(2);
+
+		final Label realTarget = (Label) target;
+
+		final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA) lhs).getIndex());
+		assert rhs != null;
+
+		if (rhs instanceof ConstTableIA) {
+			final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
+			final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
+			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+		} else {
+			//
+			// TODO need to lookup special __ne__ function ??
+			//
+			String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
+			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+
+			final int y = 2;
+		}
+	}
+
+	private void action_JE(GeneratedFunction gf, Instruction aInstruction) {
+		final InstructionArgument lhs    = aInstruction.getArg(0);
+		final InstructionArgument rhs    = aInstruction.getArg(1);
+		final InstructionArgument target = aInstruction.getArg(2);
+
+		final Label realTarget = (Label) target;
+
+		final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lhs).getIndex());
+		assert rhs != null;
+
+		if (rhs instanceof ConstTableIA) {
+			final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
+			final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
+			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+		} else {
+			//
+			// TODO need to lookup special __eq__ function
+			//
+			String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
+			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
+
+			final int y = 2;
+		}
 	}
 
 	// region generateCodeForMethod-helpers
