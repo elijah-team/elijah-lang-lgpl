@@ -13,6 +13,7 @@ import tripleo.elijah.lang.ClassItem;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.OS_Package;
+import tripleo.elijah.lang.TypeName;
 
 import java.util.Collection;
 
@@ -27,7 +28,13 @@ public class MainClassEntryPoint extends AbstractEntryPoint {
 		final Collection<ClassItem> main = aKlass.findFunction("main");
 		for (ClassItem classItem : main) {
 			FunctionDef fd = (FunctionDef) classItem;
-			if (fd.getArgs().size() == 0 && fd.returnType().isNull()) {
+			boolean return_type_is_null;
+			final TypeName typeName = fd.returnType();
+			if (typeName == null)
+				return_type_is_null = true;
+			else
+				return_type_is_null = typeName.isNull();
+			if (fd.getArgs().size() == 0 && return_type_is_null) {
 				main_function = fd;
 			}
 		}

@@ -14,6 +14,7 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.gen.ICodeGen;
 
@@ -134,16 +135,9 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 	 *
 	 * @return the associated TypeName or NULL
 	 */
-	public TypeName returnType() {
-//		if (_returnType.isNull()) System.err.println("101 NULL (Unresolved) returnType");
+	public @Nullable TypeName returnType() {
 		return _returnType;
 	}
-
-//	public void visit(JavaCodeGen gen) {
-//		// TODO Auto-generated method stub
-//		for (FunctionItem element : items)
-//			gen.addFunctionItem(element);
-//	}
 
 	@Override
 	public void visitGen(final ICodeGen visit) {
