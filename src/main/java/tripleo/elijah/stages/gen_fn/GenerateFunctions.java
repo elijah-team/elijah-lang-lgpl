@@ -636,7 +636,8 @@ public class GenerateFunctions {
 				final MainClassEntryPoint mcep = (MainClassEntryPoint) entryPoint;
 				@NotNull final ClassStatement cs = mcep.getKlass();
 				final FunctionDef f = mcep.getMainFunction();
-				final ClassInvocation ci = new ClassInvocation(cs, null);
+				ClassInvocation ci = new ClassInvocation(cs, null);
+				ci = deducePhase.registerClassInvocation(ci);
 				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses));
 				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase.generatePhase);
 //				fi.setPhase(phase);
@@ -645,7 +646,8 @@ public class GenerateFunctions {
 				final ArbitraryFunctionEntryPoint afep = (ArbitraryFunctionEntryPoint) entryPoint;
 
 				final FunctionDef f = afep.getFunction();
-				final ClassInvocation ci = new ClassInvocation((ClassStatement) afep.getParent(), null);
+				ClassInvocation ci = new ClassInvocation((ClassStatement) afep.getParent(), null);
+				ci = deducePhase.registerClassInvocation(ci);
 				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses));
 				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase.generatePhase);
 //				fi.setPhase(phase);
