@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.TypeName;
 import tripleo.elijah.stages.deduce.ClassInvocation;
@@ -16,11 +18,20 @@ import tripleo.elijah.stages.deduce.ClassInvocation;
  * Created 5/31/21 1:32 PM
  */
 public class GenType {
+	NamespaceStatement resolvedn;
 	OS_Type typeName; // TODO or just TypeName ??
 	TypeName nonGenericTypeName;
 	OS_Type resolved;
 	ClassInvocation ci;
 	GeneratedNode node;
+
+	public GenType(NamespaceStatement aNamespaceStatement) {
+		resolvedn = /*new OS_Type*/(aNamespaceStatement);
+	}
+
+	public GenType(ClassStatement aClassStatement) {
+		resolved = new OS_Type(aClassStatement);
+	}
 }
 
 //
