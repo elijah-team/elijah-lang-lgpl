@@ -198,7 +198,7 @@ public class TestGenFunction {
 		dp.deduceModule(m, lgc, false);
 		dp.finish();
 
-		Assert.assertEquals("All hooks ran", 4, ran_hooks.size());
+		Assert.assertEquals("Not all hooks ran", 4, ran_hooks.size());
 		Assert.assertEquals(14, c.errorCount());
 	}
 
