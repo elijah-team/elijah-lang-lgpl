@@ -191,15 +191,6 @@ public class OS_Module implements OS_Element, OS_Container {
 		return null;
 	}
 
-	public enum ElObjectType {
-		UNKNOWN,
-		CLASS,
-		NAMESPACE,
-		FUNCTION,
-		VAR_SEQ,
-		VAR
-	}
-
 	public void postConstruct() {
 		find_multiple_items();
 		//
@@ -265,15 +256,8 @@ public class OS_Module implements OS_Element, OS_Container {
 			Collection<ElObjectType> t = Collections2.transform(moduleItems, new Function<ModuleItem, ElObjectType>() {
 				@Override
 				public ElObjectType apply(@org.checkerframework.checker.nullness.qual.Nullable ModuleItem input) {
-					if (input instanceof ClassStatement)
-						return ElObjectType.CLASS;
-					else if (input instanceof NamespaceStatement)
-						return ElObjectType.NAMESPACE;
-					else if (input instanceof VariableSequence)
-						return ElObjectType.VAR_SEQ;
-					else if (input instanceof FunctionDef)
-						return ElObjectType.FUNCTION;
-					return ElObjectType.UNKNOWN;
+					assert input != null;
+					return DecideElObjectType.getElObjectType(input);
 				}
 			});
 
