@@ -27,7 +27,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 /**
  * Created 9/10/20 2:57 PM
  */
-public class GeneratedFunction implements GeneratedNode {
+public class GeneratedFunction extends AbstractGeneratedNode {
 	public final @Nullable FunctionDef fd;
 	public boolean deducedAlready;
 	public FunctionInvocation fi;
