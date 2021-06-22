@@ -883,7 +883,7 @@ public class DeduceTypes2 {
 						}
 						// TODO also check arguments
 						{
-							FunctionInvocation fi = new FunctionInvocation(cc, pte, null, phase.generatePhase);
+							FunctionInvocation fi = new FunctionInvocation(cc, pte, clsinv, phase.generatePhase);
 							pte.setFunctionInvocation(fi);
 						}
 					}
