@@ -63,9 +63,10 @@ public class TestGenFunction {
 
 		final GeneratePhase generatePhase1 = new GeneratePhase();
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
-		final List<GeneratedNode> lgc = new ArrayList<>();
 		DeducePhase dp = new DeducePhase(generatePhase1);
 		gfm.generateFromEntryPoints(m.entryPoints, dp);
+
+		final List<GeneratedNode> lgc = dp.generatedClasses; //new ArrayList<>();
 
 		List<GeneratedNode> lgf = new ArrayList<>();
 		for (GeneratedNode generatedNode : lgc) {
