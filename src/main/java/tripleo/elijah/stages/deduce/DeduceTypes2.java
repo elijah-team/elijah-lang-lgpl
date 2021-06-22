@@ -542,7 +542,7 @@ public class DeduceTypes2 {
 					if (fi.getClassInvocation() == null && fi.getNamespaceInvocation() == null) {
 						if (fi.getFunction() == null) {
 							// Assume default constructor
-							ci = new ClassInvocation((ClassStatement) pte.resolved_element, null);
+							ci = new ClassInvocation((ClassStatement) pte.getResolvedElement(), null);
 							ci = phase.registerClassInvocation(ci);
 							fi.setClassInvocation(ci);
 						} else
@@ -1289,7 +1289,7 @@ public class DeduceTypes2 {
 
 					final OS_Element best = lrl.chooseBest(null);
 					if (best != null)
-						pte.resolved_element = best; // TODO do we need to add a dependency for class?
+						pte.setResolvedElement(best); // TODO do we need to add a dependency for class?
 					else {
 						errSink.reportError("Cant resolve "+text);
 					}
@@ -1304,8 +1304,8 @@ public class DeduceTypes2 {
 
 					@Override
 					public void foundElement(OS_Element el) {
-						if (pte.resolved_element == null)
-							pte.resolved_element = el;
+						if (pte.getResolvedElement() == null)
+							pte.setResolvedElement(el);
 						if (el instanceof FunctionDef) {
 							FunctionDef fd = (FunctionDef) el;
 							final IInvocation invocation;
@@ -1746,7 +1746,7 @@ public class DeduceTypes2 {
 			final LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
 			final OS_Element best = lrl.chooseBest(null);
 			if (best != null)
-				pte.resolved_element = best; // TODO do we need to add a dependency for class?
+				pte.setResolvedElement(best); // TODO do we need to add a dependency for class?
 			else
 				throw new NotImplementedException();
 		}
@@ -1945,9 +1945,9 @@ public class DeduceTypes2 {
 										if (y.backlink instanceof ProcIA) {
 											final ProcIA backlink_ = (ProcIA) y.backlink;
 											@NotNull ProcTableEntry backlink = generatedFunction.getProcTableEntry(backlink_.getIndex());
-											assert backlink.resolved_element != null;
+											assert backlink.getResolvedElement() != null;
 											try {
-												LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), backlink.resolved_element.getContext());
+												LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), backlink.getResolvedElement().getContext());
 												@Nullable OS_Element best = lrl2.chooseBest(null);
 												assert best != null;
 												y.setStatus(BaseTableEntry.Status.KNOWN, best);
@@ -2035,7 +2035,7 @@ public class DeduceTypes2 {
 			} else if (ia instanceof ProcIA) {
 				ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
 				int y=2;
-				if (prte.resolved_element == null) {
+				if (prte.getResolvedElement() == null) {
 					IExpression exp = prte.expression;
 					if (exp instanceof ProcedureCallExpression) {
 						final ProcedureCallExpression pce = (ProcedureCallExpression) exp;
@@ -2047,7 +2047,7 @@ public class DeduceTypes2 {
 						LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx);
 						el = lrl.chooseBest(null);
 						ectx = el.getContext();
-						prte.resolved_element = el;
+						prte.setResolvedElement(el);
 						// handle constructor calls
 						if (el instanceof ClassStatement) {
 							assert prte.getClassInvocation() == null;
@@ -2070,7 +2070,7 @@ public class DeduceTypes2 {
 						throw new NotImplementedException();
 					}
 				} else {
-					el = prte.resolved_element;
+					el = prte.getResolvedElement();
 					ectx = el.getContext();
 				}
 			} else

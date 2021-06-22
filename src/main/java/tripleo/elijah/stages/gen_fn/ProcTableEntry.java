@@ -33,7 +33,7 @@ public class ProcTableEntry implements TableEntryIV {
 	 */
 	public final IExpression expression;
 	public final InstructionArgument expression_num;
-	public OS_Element resolved_element;
+	private OS_Element resolved_element;
 	private ClassInvocation classInvocation;
 	private FunctionInvocation functionInvocation;
 	private DeferredObject<ProcTableEntry, Void, Void> completeDeferred = new DeferredObject<ProcTableEntry, Void, Void>();
