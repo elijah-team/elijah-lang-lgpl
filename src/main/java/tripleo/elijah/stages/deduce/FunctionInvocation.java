@@ -43,17 +43,19 @@ public class FunctionInvocation {
 		setPhase(phase);
 	}
 
+/*
 	public void setPhase(final GeneratePhase generatePhase) {
 		if (pte != null)
 			pte.completeDeferred().then(new DoneCallback<ProcTableEntry>() {
 				@Override
 				public void onDone(ProcTableEntry result) {
-					makeGenerated(generatePhase);
+					makeGenerated(generatePhase, null);
 				}
 			});
 		else
-			makeGenerated(generatePhase);
+			makeGenerated(generatePhase, null);
 	}
+*/
 
 	void makeGenerated(GeneratePhase generatePhase, DeducePhase aPhase) {
 		OS_Module module = null;
