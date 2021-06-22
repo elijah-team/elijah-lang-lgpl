@@ -55,6 +55,7 @@ public class TestGenFunction {
 		//
 		//
 		final ClassStatement main_class = (ClassStatement) m.findClass("Main");
+		assert main_class != null;
 		m.entryPoints = List_of(new MainClassEntryPoint(main_class));
 		//
 		//
