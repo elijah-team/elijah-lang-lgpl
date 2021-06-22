@@ -70,6 +70,7 @@ public class TestGenFunction {
 
 		final List<GeneratedNode> lgc = dp.generatedClasses; //new ArrayList<>();
 
+/*
 		List<GeneratedNode> lgf = new ArrayList<>();
 		for (GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedClass)
@@ -78,9 +79,9 @@ public class TestGenFunction {
 				lgf.addAll(((GeneratedNamespace) generatedNode).functionMap.values());
 			// TODO enum
 		}
+*/
 
 //		Assert.assertEquals(2, lgf.size());
-
 
 		WorkManager wm = new WorkManager();
 
@@ -141,7 +142,6 @@ public class TestGenFunction {
 				ran_hooks.add(this);
 			}
 		});
-
 
 		dp.addFunctionMapHook(new FunctionMapHook(){
 			@Override
