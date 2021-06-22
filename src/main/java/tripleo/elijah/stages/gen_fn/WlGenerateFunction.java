@@ -40,11 +40,11 @@ public class WlGenerateFunction implements WorkJob {
 //		if (_isDone) return;
 
 		if (functionInvocation.getGenerated() == null) {
-			OS_Element classStatement = functionDef.getParent();
-			@NotNull GeneratedFunction gf = generateFunctions.generateFunction(functionDef, classStatement, functionInvocation);
+			OS_Element parent = functionDef.getParent();
+			@NotNull GeneratedFunction gf = generateFunctions.generateFunction(functionDef, parent, functionInvocation);
 //			lgf.add(gf);
 
-			if (classStatement instanceof NamespaceStatement) {
+			if (parent instanceof NamespaceStatement) {
 				final NamespaceInvocation nsi = functionInvocation.getNamespaceInvocation();
 				assert nsi != null;
 				nsi.resolveDeferred().done(new DoneCallback<GeneratedNamespace>() {
