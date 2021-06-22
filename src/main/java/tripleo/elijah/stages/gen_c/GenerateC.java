@@ -290,103 +290,139 @@ public class GenerateC implements CodeGenerator {
 		gcfm.generateCodeForMethod(gf, gr, aWorkList, this);
 	}
 
-	String getTypeNameForGenClass(GeneratedNode aGenClass) {
-		String ty;
-		if (aGenClass instanceof GeneratedClass)
-			ty = getTypeName((GeneratedClass) aGenClass);
-		else if (aGenClass instanceof GeneratedNamespace)
-			ty = getTypeName((GeneratedNamespace) aGenClass);
-		else
-			ty = "Error_Unknown_GenClass";
-		return ty;
-	}
-
-	String getTypeNameForVariableEntry(VariableTableEntry input) {
-		OS_Type attached = input.type.getAttached();
-		if (attached.getType() == OS_Type.Type.USER_CLASS) {
-			return attached.getClassOf().name();
-		} else if (attached.getType() == OS_Type.Type.USER) {
-			TypeName typeName = attached.getTypeName();
-			String name;
-			if (typeName instanceof NormalTypeName)
-				name = ((NormalTypeName) typeName).getName();
+	static class GetTypeName {
+		static String getTypeNameForGenClass(@NotNull GeneratedNode aGenClass) {
+			String ty;
+			if (aGenClass instanceof GeneratedClass)
+				ty = forGenClass((GeneratedClass) aGenClass);
+			else if (aGenClass instanceof GeneratedNamespace)
+				ty = forGenNamespace((GeneratedNamespace) aGenClass);
 			else
-				name = typeName.toString();
-			return String.format(Emit.emit("/*543*/")+"Z<%s>*", name);
-		} else
-			throw new NotImplementedException();
+				ty = "Error_Unknown_GenClass";
+			return ty;
+		}
+
+		static String forVTE(@NotNull VariableTableEntry input) {
+			OS_Type attached = input.type.getAttached();
+			if (attached.getType() == OS_Type.Type.USER_CLASS) {
+				return attached.getClassOf().name();
+			} else if (attached.getType() == OS_Type.Type.USER) {
+				TypeName typeName = attached.getTypeName();
+				String name;
+				if (typeName instanceof NormalTypeName)
+					name = ((NormalTypeName) typeName).getName();
+				else
+					name = typeName.toString();
+				return String.format(Emit.emit("/*543*/")+"Z<%s>*", name);
+			} else
+				throw new NotImplementedException();
+		}
+
+		static String forGenNamespace(@NotNull GeneratedNamespace aGeneratedNamespace) {
+			String z;
+			z = String.format("Z%d", aGeneratedNamespace.getCode());
+			return z;
+		}
+
+		static String forGenClass(@NotNull GeneratedClass aGeneratedClass) {
+			String z;
+			z = String.format("Z%d", aGeneratedClass.getCode());
+			return z;
+		}
+
+		static String forTypeTableEntry(@NotNull TypeTableEntry tte) {
+			GeneratedNode res = tte.resolved();
+			if (res instanceof GeneratedContainerNC) {
+				final GeneratedContainerNC nc = (GeneratedContainerNC) res;
+				int code = nc.getCode();
+				return "Z"+code;
+			} else
+				return "Z<-1>";
+		}
+
+		@Deprecated
+		static String forOSType(final @NotNull OS_Type ty) {
+			if (ty == null) throw new IllegalArgumentException("ty is null");
+			//
+			String z;
+			switch (ty.getType()) {
+				case USER_CLASS:
+					final ClassStatement el = ty.getClassOf();
+					z = String.format("Z%d", el._a.getCode());//.getName();
+					break;
+				case FUNCTION:
+					z = "<function>";
+					break;
+				case FUNC_EXPR:
+				{
+					z = "<function>";
+					OS_FuncExprType fe = (OS_FuncExprType) ty;
+					int y=2;
+				}
+				break;
+				case USER:
+					final TypeName typeName = ty.getTypeName();
+					System.err.println("Warning: USER TypeName in GenerateC "+ typeName);
+					final String s = typeName.toString();
+					if (s.equals("Unit"))
+						z = "void";
+					else
+						z = String.format("Z<%s>", s);
+					break;
+				case BUILT_IN:
+					System.err.println("Warning: BUILT_IN TypeName in GenerateC");
+					z = "Z"+ty.getBType().getCode();  // README should not even be here, but look at .name() for other code gen schemes
+					break;
+				case UNIT_TYPE:
+					z = "void";
+					break;
+				default:
+					throw new IllegalStateException("Unexpected value: " + ty.getType());
+			}
+			return z;
+		}
+
+		@Deprecated
+		static String forTypeName(final @NotNull TypeName typeName, final @NotNull ErrSink errSink) {
+			if (typeName instanceof RegularTypeName) {
+				final String name = ((RegularTypeName) typeName).getName(); // TODO convert to Z-name
+
+				return String.format("Z<%s>/*kklkl*/", name);
+//			return getTypeName(new OS_Type(typeName));
+			}
+			errSink.reportError("Type is not fully deduced "+typeName);
+			return ""+typeName; // TODO type is not fully deduced
+		}
 	}
 
-
-	String getTypeName(GeneratedNamespace aGeneratedNamespace) {
-		String z;
-		z = String.format("Z%d", aGeneratedNamespace.getCode());
-		return z;
+	String getTypeNameForGenClass(@NotNull GeneratedNode aGenClass) {
+		return GetTypeName.getTypeNameForGenClass(aGenClass);
 	}
 
-	String getTypeName(GeneratedClass aGeneratedClass) {
-		String z;
-		z = String.format("Z%d", aGeneratedClass.getCode());
-		return z;
+	String getTypeNameForVariableEntry(@NotNull VariableTableEntry input) {
+		return GetTypeName.forVTE(input);
 	}
 
-	String getTypeName(TypeTableEntry tte) {
-		GeneratedNode res = tte.resolved();
-		if (res instanceof GeneratedContainerNC) {
-			final GeneratedContainerNC nc = (GeneratedContainerNC) res;
-			int code = nc.getCode();
-			return "Z"+code;
-		} else
-			return "Z<-1>";
+	String getTypeName(@NotNull GeneratedNamespace aGeneratedNamespace) {
+		return GetTypeName.forGenNamespace(aGeneratedNamespace);
+	}
+
+	String getTypeName(@NotNull GeneratedClass aGeneratedClass) {
+		return GetTypeName.forGenClass(aGeneratedClass);
+	}
+
+	String getTypeName(@NotNull TypeTableEntry tte) {
+		return GetTypeName.forTypeTableEntry(tte);
 	}
 
 	@Deprecated
-	String getTypeName(final OS_Type ty) {
-		if (ty == null) throw new IllegalArgumentException("ty is null");
-		//
-		String z;
-		switch (ty.getType()) {
-		case USER_CLASS:
-			final ClassStatement el = ty.getClassOf();
-			z = String.format("Z%d", el._a.getCode());//.getName();
-			break;
-		case FUNCTION:
-			z = "<function>";
-			break;
-		case FUNC_EXPR:
-			z = "<function>";
-			break;
-		case USER:
-			final TypeName typeName = ty.getTypeName();
-			System.err.println("Warning: USER TypeName in GenerateC "+ typeName);
-			final String s = typeName.toString();
-			if (s.equals("Unit"))
-				z = "void";
-			else
-				z = String.format("Z<%s>", s);
-			break;
-		case BUILT_IN:
-			System.err.println("Warning: BUILT_IN TypeName in GenerateC");
-			z = "Z"+ty.getBType().getCode();  // README should not even be here, but look at .name() for other code gen schemes
-			break;
-		case UNIT_TYPE:
-			z = "void";
-			break;
-		default:
-			throw new IllegalStateException("Unexpected value: " + ty.getType());
-		}
-		return z;
+	String getTypeName(final @NotNull OS_Type ty) {
+		return GetTypeName.forOSType(ty);
 	}
 
-	String getTypeName(final TypeName typeName) {
-		if (typeName instanceof RegularTypeName) {
-			final String name = ((RegularTypeName) typeName).getName(); // TODO convert to Z-name
-
-//			return String.format("Z<%s>/*kklkl*/", name);
-			return getTypeName(new OS_Type(typeName));
-		}
-		module.parent.eee.reportError("Type is not fully deduced "+typeName);
-		return ""+typeName; // TODO type is not fully deduced
+	@Deprecated
+	String getTypeName(final @NotNull TypeName typeName) {
+		return GetTypeName.forTypeName(typeName, errSink);
 	}
 
 	@NotNull List<String> getArgumentStrings(final GeneratedFunction gf, final Instruction instruction) {
