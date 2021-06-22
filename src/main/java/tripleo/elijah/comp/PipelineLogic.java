@@ -91,7 +91,10 @@ public class PipelineLogic {
 
 	protected void run2(OS_Module mod, @NotNull List<EntryPoint> epl) {
 		final GenerateFunctions gfm = getGenerateFunctions(mod);
-		gfm.generateAllTopLevelClasses(lgc);
+		gfm.generateFromEntryPoints(epl, dp);
+
+		WorkManager wm = new WorkManager();
+		WorkList wl = new WorkList();
 
 //		for (final GeneratedNode gn : lgc) {
 //			if (gn instanceof GeneratedFunction) {
