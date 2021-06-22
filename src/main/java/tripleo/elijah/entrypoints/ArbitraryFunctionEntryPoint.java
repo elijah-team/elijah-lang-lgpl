@@ -16,7 +16,7 @@ import tripleo.elijah.lang.OS_Element;
 /**
  * Created 6/14/21 7:24 AM
  */
-public class ArbitraryFunctionEntryPoint {
+public class ArbitraryFunctionEntryPoint implements EntryPoint {
 	FunctionDef fd;
 
 	public ArbitraryFunctionEntryPoint(FunctionDef aFunction) {
