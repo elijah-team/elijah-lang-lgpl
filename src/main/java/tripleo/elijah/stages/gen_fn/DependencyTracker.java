@@ -9,14 +9,17 @@
 
 package tripleo.elijah.stages.gen_fn;
 
-import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.stages.deduce.FunctionInvocation;
+
+import java.util.List;
 
 /**
- * Created 10/29/20 4:51 AM
+ * Created 6/22/21 3:40 AM
  */
-public interface GeneratedNode {
-    String identityString();
-    OS_Module module();
+public interface DependencyTracker {
+	// for use in DeduceTypes2
+	List<GenType> dependentTypes();
+	List<FunctionInvocation> dependentFunctions();
 }
 
 //

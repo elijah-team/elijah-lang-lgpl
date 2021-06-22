@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Created 3/16/21 10:45 AM
  */
-public abstract class GeneratedContainerNC extends AbstractGeneratedNode implements GeneratedContainer {
+public abstract class GeneratedContainerNC extends AbstractDependencyTracker implements GeneratedContainer {
 	private int code = 0;
 
 	public Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
