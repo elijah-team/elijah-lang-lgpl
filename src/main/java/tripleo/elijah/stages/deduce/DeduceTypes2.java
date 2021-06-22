@@ -1270,7 +1270,7 @@ public class DeduceTypes2 {
 				}
 				break;
 
-				case GET_ITEM:
+			case GET_ITEM:
 				{
 					final GetItemExpression gie = (GetItemExpression) e;
 					do_assign_call_GET_ITEM(gie, tte, generatedFunction, ctx);
