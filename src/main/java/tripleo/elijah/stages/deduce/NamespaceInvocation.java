@@ -31,6 +31,11 @@ public class NamespaceInvocation implements IInvocation {
 	public NamespaceStatement getNamespace() {
 		return namespaceStatement;
 	}
+
+	@Override
+	public void setForFunctionInvocation(FunctionInvocation aFunctionInvocation) {
+		aFunctionInvocation.setNamespaceInvocation(this);
+	}
 }
 
 //

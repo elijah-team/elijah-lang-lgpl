@@ -67,6 +67,11 @@ public class ClassInvocation implements IInvocation {
 	public Promise<GeneratedClass, Void, Void> resolvePromise() {
 		return resolvePromise.promise();
 	}
+
+	@Override
+	public void setForFunctionInvocation(FunctionInvocation aFunctionInvocation) {
+		aFunctionInvocation.setClassInvocation(this);
+	}
 }
 
 //

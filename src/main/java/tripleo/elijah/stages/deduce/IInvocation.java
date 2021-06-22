@@ -15,6 +15,7 @@ package tripleo.elijah.stages.deduce;
  * Created 6/8/21 2:29 AM
  */
 public interface IInvocation {
+	void setForFunctionInvocation(FunctionInvocation aFunctionInvocation);
 }
 
 //

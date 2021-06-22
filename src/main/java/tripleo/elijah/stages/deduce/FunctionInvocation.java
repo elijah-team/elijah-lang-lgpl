@@ -31,9 +31,12 @@ public class FunctionInvocation {
 	private final DeferredObject<GeneratedFunction, Void, Void> generateDeferred = new DeferredObject<GeneratedFunction, Void, Void>();
 	private GeneratedFunction _generated = null;
 
-	public FunctionInvocation(FunctionDef aFunctionDef, ProcTableEntry aProcTableEntry, Object invocation, GeneratePhase phase) {
+	public FunctionInvocation(FunctionDef aFunctionDef, ProcTableEntry aProcTableEntry, IInvocation invocation, GeneratePhase phase) {
 		this.fd = aFunctionDef;
 		this.pte = aProcTableEntry;
+		assert invocation != null;
+		invocation.setForFunctionInvocation(this);
+/*
 		if (invocation instanceof ClassInvocation)
 			setClassInvocation((ClassInvocation) invocation);
 		else if (invocation instanceof NamespaceInvocation)
@@ -42,6 +45,7 @@ public class FunctionInvocation {
 			throw new NotImplementedException();
 		else
 			throw new IllegalArgumentException("Unknown invocation");
+*/
 //		setPhase(phase);
 	}
 
