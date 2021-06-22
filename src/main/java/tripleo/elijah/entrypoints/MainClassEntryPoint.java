@@ -20,7 +20,7 @@ import java.util.Collection;
 /**
  * Created 6/14/21 7:28 AM
  */
-public class MainClassEntryPoint extends AbstractEntryPoint {
+public class MainClassEntryPoint {
 	private FunctionDef main_function;
 	private final ClassStatement klass;
 

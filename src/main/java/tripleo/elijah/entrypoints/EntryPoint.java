@@ -18,8 +18,6 @@ import java.util.List;
  * Created 6/14/21 7:20 AM
  */
 public interface EntryPoint {
-	List<GenType> dependentTypes();
-	List<FunctionInvocation> dependentFunctions();
 }
 
 //

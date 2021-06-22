@@ -105,6 +105,7 @@ public class PipelineLogic {
 //			}
 //		}
 
+/*
 		for (EntryPoint entryPoint : epl) {
 			for (GenType dependentType : entryPoint.dependentTypes()) {
 //				dependentType.
@@ -114,6 +115,7 @@ public class PipelineLogic {
 				System.err.println(dependentFunction);
 			}
 		}
+*/
 
 		List<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 		List<GeneratedNode> resolved_nodes = new ArrayList<GeneratedNode>();
