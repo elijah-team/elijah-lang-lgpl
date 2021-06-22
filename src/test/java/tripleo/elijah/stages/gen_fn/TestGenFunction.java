@@ -291,8 +291,6 @@ public class TestGenFunction {
 			}
 		}
 
-		final GeneratePhase generatePhase = new GeneratePhase();
-		DeducePhase dp = new DeducePhase(generatePhase);
 		dp.deduceModule(m, lgc, false);
 		dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);
@@ -308,7 +306,6 @@ public class TestGenFunction {
 			}
 		}
 
-		WorkManager wm = new WorkManager();
 		GenerateC ggc = new GenerateC(m);
 		ggc.generateCode(lgf, wm);
 
