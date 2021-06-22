@@ -1361,12 +1361,16 @@ public class DeduceTypes2 {
 	}
 
 	public void set_resolved_element_pte(Constructable co, OS_Element e, ProcTableEntry pte) {
+		ClassInvocation ci;
+		FunctionInvocation fi;
+		GenType genType = null;
+
 		pte.setResolvedElement(e);
 		if (e instanceof ClassStatement) {
-			ClassInvocation ci = new ClassInvocation((ClassStatement) e, null);
+			ci = new ClassInvocation((ClassStatement) e, null);
 //						fi.setClassInvocation(ci);
 			ci = phase.registerClassInvocation(ci);
-			FunctionInvocation fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
+			fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
 			pte.setFunctionInvocation(fi);
 
 			if (co != null) {
@@ -1380,14 +1384,17 @@ public class DeduceTypes2 {
 			}
 		} else if (e instanceof FunctionDef) {
 			FunctionDef fd = (FunctionDef) e;
-			FunctionInvocation fi;
 			final OS_Element parent = fd.getParent();
 			if (parent instanceof NamespaceStatement) {
-				final NamespaceInvocation nsi = phase.registerNamespaceInvocation((NamespaceStatement) parent);
+				final NamespaceStatement namespaceStatement = (NamespaceStatement) parent;
+				genType = new GenType(namespaceStatement);
+				final NamespaceInvocation nsi = phase.registerNamespaceInvocation(namespaceStatement);
 //				pte.setNamespaceInvocation(nsi);
 				fi = new FunctionInvocation(fd, pte, nsi, phase.generatePhase);
 			} else if (parent instanceof ClassStatement) {
-				ClassInvocation ci = new ClassInvocation((ClassStatement) parent, null);
+				final ClassStatement classStatement = (ClassStatement) parent;
+				genType = new GenType(classStatement);
+				ci = new ClassInvocation(classStatement, null);
 				ci = phase.registerClassInvocation(ci);
 				pte.setClassInvocation(ci);
 				fi = new FunctionInvocation(fd, pte, ci, phase.generatePhase);
@@ -1396,7 +1403,24 @@ public class DeduceTypes2 {
 			pte.setFunctionInvocation(fi);
 		} else {
 			System.err.println("845 Unknown element for ProcTableEntry "+e);
+			return;
 		}
+		if (co != null) { // TODO really should pass in a param
+			AbstractDependencyTracker depTracker = null;
+			if (co instanceof IdentIA) {
+				final IdentIA identIA = (IdentIA) co;
+				depTracker = identIA.gf;
+			} else if (co instanceof IntegerIA) {
+				final IntegerIA integerIA = (IntegerIA) co;
+				depTracker = integerIA.gf;
+			}
+			if (depTracker != null) {
+				depTracker.addDependentFunction(fi);
+				if (genType != null)
+					depTracker.addDependentType(genType);
+			}
+		}
+
 	}
 
 	private void do_assign_call_args_ident(GeneratedFunction generatedFunction,
