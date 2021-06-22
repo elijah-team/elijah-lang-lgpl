@@ -236,7 +236,7 @@ public class OS_Module implements OS_Element, OS_Container {
 					for (ClassItem classItem : found) {
 						entryPoints.add(new MainClassEntryPoint((ClassStatement) classItem.getParent()));
 					}
-					assert entryPoints.size() == eps || entryPoints.size() == eps+1;
+					assert entryPoints.size() == eps || entryPoints.size() == eps+1; // TODO this will fail one day
 
 					System.out.println("243 " + entryPoints +" "+ _fileName);
 //					break; // allow for "extend" class
