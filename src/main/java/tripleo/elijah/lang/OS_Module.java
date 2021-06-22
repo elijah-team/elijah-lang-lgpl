@@ -15,8 +15,11 @@
 package tripleo.elijah.lang;
 
 import antlr.Token;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Multimap;
 import org.eclipse.jdt.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.ci.LibraryStatementPart;
@@ -29,7 +32,9 @@ import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 public class OS_Module implements OS_Element, OS_Container {
@@ -186,35 +191,17 @@ public class OS_Module implements OS_Element, OS_Container {
 		return null;
 	}
 
+	public enum ElObjectType {
+		UNKNOWN,
+		CLASS,
+		NAMESPACE,
+		FUNCTION,
+		VAR_SEQ,
+		VAR
+	}
+
 	public void postConstruct() {
-		for (final ModuleItem anElement : items) {
-			if (anElement instanceof OS_Element2) {
-				final String element_name = ((OS_Element2) anElement).name();
-				// TODO make and check a nametable, will fail for imports
-				if (element_name == null) {
-					throw new IllegalArgumentException("element2 with null name");
-//					System.err.println(String.format("*** OS_Element2 (%s) with null name", anElement));
-				} else {
-					for (final ModuleItem item : items) { // TODO Use Multimap
-						if (!(item instanceof OS_Element2 && item != anElement))
-							continue;
-						final String item_name = ((OS_Element2) item).name();
-						if (!(element_name.equals(item_name)))
-							continue;
-						if (anElement instanceof NamespaceStatement && item instanceof NamespaceStatement)
-							continue;
-
-						if (!(element_name.equals(""))) {
-							parent.eee.reportWarning(String.format(
-								"[Module#add] %s Already has a member by the name of %s",
-								this, element_name));
-							break;
-						}
-
-					}
-				}
-			}
-		}
+		find_multiple_items();
 		//
 		// FIND ALL ENTRY POINTS (should only be one per module)
 		//
@@ -257,6 +244,59 @@ public class OS_Module implements OS_Element, OS_Container {
 			}
 
 
+		}
+	}
+
+	private void find_multiple_items() {
+		Multimap<String, ModuleItem> items_map = ArrayListMultimap.create(items.size(), 1);
+		for (final ModuleItem item : items) {
+			if (!(item instanceof OS_Element2/* && item != anElement*/))
+				continue;
+			final String item_name = ((OS_Element2) item).name();
+			items_map.put(item_name, item);
+		}
+		for (String key : items_map.keys()) {
+			boolean warn = false;
+
+			Collection<ModuleItem> moduleItems = items_map.get(key);
+			if (moduleItems.size() < 2) // README really 1
+				continue;
+
+			Collection<ElObjectType> t = Collections2.transform(moduleItems, new Function<ModuleItem, ElObjectType>() {
+				@Override
+				public ElObjectType apply(@org.checkerframework.checker.nullness.qual.Nullable ModuleItem input) {
+					if (input instanceof ClassStatement)
+						return ElObjectType.CLASS;
+					else if (input instanceof NamespaceStatement)
+						return ElObjectType.NAMESPACE;
+					else if (input instanceof VariableSequence)
+						return ElObjectType.VAR_SEQ;
+					else if (input instanceof FunctionDef)
+						return ElObjectType.FUNCTION;
+					return ElObjectType.UNKNOWN;
+				}
+			});
+
+			Set<ElObjectType> st = new HashSet<ElObjectType>(t);
+			if (st.size() > 1)
+				warn = true;
+			if (moduleItems.size() > 1)
+				if (moduleItems.iterator().next() instanceof NamespaceStatement && st.size() == 1)
+					;
+				else
+					warn = true;
+
+			//
+			//
+			//
+
+			if (warn) {
+				final String module_name = this.toString(); // TODO print module name or something
+				final String s = String.format(
+						"[Module#add] %s Already has a member by the name of %s",
+						module_name, key);
+				parent.eee.reportWarning(s);
+			}
 		}
 	}
 
