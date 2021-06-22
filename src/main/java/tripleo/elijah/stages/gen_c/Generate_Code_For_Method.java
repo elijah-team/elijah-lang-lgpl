@@ -559,12 +559,13 @@ public class Generate_Code_For_Method {
 		OS_Type type;
 		TypeTableEntry tte;
 
-		public Generate_Method_Header(GeneratedFunction gf, GenerateC aGenerateC) {
+		public Generate_Method_Header(@NotNull GeneratedFunction gf, @NotNull GenerateC aGenerateC) {
+			gc            = aGenerateC;
 			name          = gf.fd.name();
+			//
 			return_type   = find_return_type(gf);
 			args_string   = find_args_string(gf);
 			header_string = find_header_string(gf);
-			gc            = aGenerateC;
 		}
 
 		String find_header_string(GeneratedFunction gf) {
