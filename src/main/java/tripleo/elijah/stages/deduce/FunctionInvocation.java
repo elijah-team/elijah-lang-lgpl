@@ -8,14 +8,16 @@
  */
 package tripleo.elijah.stages.deduce;
 
-import org.jdeferred2.DoneCallback;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
+import tripleo.elijah.stages.gen_fn.WlGenerateDefaultCtor;
 import tripleo.elijah.stages.gen_fn.WlGenerateFunction;
+import tripleo.elijah.stages.gen_fn.WlGenerateNamespace;
 import tripleo.elijah.util.NotImplementedException;
 
 /**
