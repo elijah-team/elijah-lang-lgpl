@@ -620,10 +620,13 @@ public class GenerateFunctions {
 		return gn;
 	}
 
-	public List<GeneratedNode> generateAllTopLevelClasses() {
-		List<GeneratedNode> R = new ArrayList<GeneratedNode>();
-
-		generateAllTopLevelClasses(R);
+//	public List<GeneratedNode> generateAllTopLevelClasses() {
+//		List<GeneratedNode> R = new ArrayList<GeneratedNode>();
+//
+//		generateAllTopLevelClasses(R);
+//
+//		return R;
+//	}
 
 	public void generateFromEntryPoints(List<EntryPoint> epl, DeducePhase deducePhase) {
 		final WorkList wl = new WorkList();
@@ -651,19 +654,20 @@ public class GenerateFunctions {
 		}
 		phase.wm.addJobs(wl);
 		phase.wm.drain();
-		if (false) {
-			for (final ModuleItem item : module.getItems()) {
-				if (item instanceof NamespaceStatement) {
-					final NamespaceStatement namespaceStatement = (NamespaceStatement) item;
-					GeneratedNamespace ns = generateNamespace(namespaceStatement);
-					lgc.add(ns);
-				} else if (item instanceof ClassStatement) {
-					final ClassStatement classStatement = (ClassStatement) item;
-					@NotNull GeneratedClass kl = generateClass(classStatement);
-					lgc.add(kl);
-				}
-				// TODO enums, datatypes, (type)aliases
+	}
+
+	public void generateAllTopLevelClasses(List<GeneratedNode> lgc) {
+		for (final ModuleItem item : module.getItems()) {
+			if (item instanceof NamespaceStatement) {
+				final NamespaceStatement namespaceStatement = (NamespaceStatement) item;
+				GeneratedNamespace ns = generateNamespace(namespaceStatement);
+				lgc.add(ns);
+			} else if (item instanceof ClassStatement) {
+				final ClassStatement classStatement = (ClassStatement) item;
+				@NotNull GeneratedClass kl = generateClass(classStatement);
+				lgc.add(kl);
 			}
+			// TODO enums, datatypes, (type)aliases
 		}
 	}
 
