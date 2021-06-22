@@ -593,8 +593,8 @@ public class GenerateFunctions {
 				throw new NotImplementedException();
 			} else if (item instanceof FunctionDef) {
 				//throw new NotImplementedException();
-				@NotNull GeneratedFunction f = generateFunction((FunctionDef) item, namespace1);
-				gn.addFunction((FunctionDef) item, f);
+//				@NotNull GeneratedFunction f = generateFunction((FunctionDef) item, namespace1);
+//				gn.addFunction((FunctionDef) item, f);
 			} else if (item instanceof DefFunctionDef) {
 				throw new NotImplementedException();
 			} else if (item instanceof NamespaceStatement) {
