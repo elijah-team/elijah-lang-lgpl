@@ -125,7 +125,9 @@ public class GenerateFunctions {
 	 * @param aFunctionInvocation
 	 * @return
 	 */
-	public GeneratedFunction generateFunction(FunctionDef aFunctionDef, OS_Element aClassStatement, FunctionInvocation aFunctionInvocation) {
+	public GeneratedFunction generateFunction(@NotNull FunctionDef aFunctionDef,
+											  @NotNull OS_Element aClassStatement,
+											  @NotNull FunctionInvocation aFunctionInvocation) {
 		@NotNull GeneratedFunction Result = generateFunction(aFunctionDef, aClassStatement);
 		Result.fi = aFunctionInvocation;
 		return Result;
