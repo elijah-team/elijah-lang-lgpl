@@ -49,14 +49,16 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
  * Created 6/21/21 5:53 AM
  */
 public class Generate_Code_For_Method {
+	public Generate_Code_For_Method(@NotNull GenerateC aGenerateC) {
+		gc = aGenerateC;
+	}
+
 	GenerateC gc;
 
 	final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
 	final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
 
-	void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList, GenerateC aGenerateC) {
-		gc = aGenerateC;
-		
+	void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
 		action(gf);
 		
 		tos.dec_tabs();
