@@ -40,7 +40,7 @@ public class FunctionInvocation {
 			throw new NotImplementedException();
 		else
 			throw new IllegalArgumentException("Unknown invocation");
-		setPhase(phase);
+//		setPhase(phase);
 	}
 
 /*
