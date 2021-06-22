@@ -117,7 +117,7 @@ public class PipelineLogic {
 		}
 */
 
-		List<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
+		List<GeneratedNode> lgc = dp.generatedClasses; //new ArrayList<GeneratedNode>();
 		List<GeneratedNode> resolved_nodes = new ArrayList<GeneratedNode>();
 
 		for (final GeneratedNode generatedNode : lgc) {
