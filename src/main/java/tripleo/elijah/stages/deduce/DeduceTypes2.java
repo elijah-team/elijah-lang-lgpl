@@ -1153,9 +1153,12 @@ public class DeduceTypes2 {
 			System.out.println("594 "+identIA.getEntry().getStatus());
 
 			resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
+
+				final String xx = generatedFunction.getIdentIAPathNormal(identIA);
+
 				@Override
 				public void foundElement(OS_Element e) {
-					System.out.println("600 "+generatedFunction.getIdentIAPathNormal(identIA)+" "+e);
+					System.out.println(String.format("600 %s %s", xx ,e));
 					System.out.println("601 "+identIA.getEntry().getStatus());
 					assert e == identIA.getEntry().resolved_element;
 					set_resolved_element_pte(identIA, e, pte);
@@ -1164,7 +1167,7 @@ public class DeduceTypes2 {
 				@Override
 				public void noFoundElement() {
 					// TODO create Diagnostic and quit
-					System.out.println("1005 Can't find element for " + generatedFunction.getIdentIAPathNormal(identIA));
+					System.out.println("1005 Can't find element for " + xx);
 				}
 			});
 		}
