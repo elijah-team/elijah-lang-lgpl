@@ -638,7 +638,7 @@ public class GenerateFunctions {
 				final FunctionDef f = mcep.getMainFunction();
 				final ClassInvocation ci = new ClassInvocation(cs, null);
 				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses));
-				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase);
+				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase.generatePhase);
 //				fi.setPhase(phase);
 				wl.addJob(new WlGenerateFunction(this, fi));
 			} else if (entryPoint instanceof ArbitraryFunctionEntryPoint) {
@@ -647,7 +647,7 @@ public class GenerateFunctions {
 				final FunctionDef f = afep.getFunction();
 				final ClassInvocation ci = new ClassInvocation((ClassStatement) afep.getParent(), null);
 				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses));
-				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase);
+				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase.generatePhase);
 //				fi.setPhase(phase);
 				wl.addJob(new WlGenerateFunction(this, fi));
 

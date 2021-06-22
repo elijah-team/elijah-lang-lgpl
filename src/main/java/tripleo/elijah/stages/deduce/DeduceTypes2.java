@@ -290,7 +290,7 @@ public class DeduceTypes2 {
 							set_resolved_element_pte(expression, e, pte);
 							if (fd instanceof DefFunctionDef) {
 								final IInvocation invocation = getInvocation(generatedFunction);
-								forFunction(new FunctionInvocation((FunctionDef) e, pte, invocation, phase), new ForFunction() {
+								forFunction(new FunctionInvocation((FunctionDef) e, pte, invocation, phase.generatePhase), new ForFunction() {
 									@Override
 									public void typeDecided(OS_Type aType) {
 										@Nullable InstructionArgument x = generatedFunction.vte_lookup("Result");
@@ -1206,7 +1206,7 @@ public class DeduceTypes2 {
 								} else 
 									throw new NotImplementedException(); // TODO implement me
 								
-								forFunction(new FunctionInvocation((FunctionDef) best, pte, invocation, phase), new ForFunction() {
+								forFunction(new FunctionInvocation((FunctionDef) best, pte, invocation, phase.generatePhase), new ForFunction() {
 									@Override
 									public void typeDecided(OS_Type aType) {
 										tte.setAttached(aType);
