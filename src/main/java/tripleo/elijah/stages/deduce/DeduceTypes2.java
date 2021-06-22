@@ -1368,7 +1368,6 @@ public class DeduceTypes2 {
 		pte.setResolvedElement(e);
 		if (e instanceof ClassStatement) {
 			ci = new ClassInvocation((ClassStatement) e, null);
-//						fi.setClassInvocation(ci);
 			ci = phase.registerClassInvocation(ci);
 			fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
 			pte.setFunctionInvocation(fi);
