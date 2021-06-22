@@ -61,6 +61,8 @@ public class TestGenFunction {
 		//
 		//
 
+		List<FunctionMapHook> ran_hooks = new ArrayList<>();
+
 		final GeneratePhase generatePhase1 = new GeneratePhase();
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
 		DeducePhase dp = new DeducePhase(generatePhase1);
@@ -103,6 +105,8 @@ public class TestGenFunction {
 				Assert.assertEquals(InstructionName.AGN, gf.getInstruction(pc++).getName());
 				Assert.assertEquals(InstructionName.CALL, gf.getInstruction(pc++).getName());
 				Assert.assertEquals(InstructionName.X, gf.getInstruction(pc++).getName());
+
+				ran_hooks.add(this);
 			}
 		});
 
@@ -133,6 +137,8 @@ public class TestGenFunction {
 				Assert.assertEquals(InstructionName.XS, gf.getInstruction(pc++).getName());
 				Assert.assertEquals(InstructionName.AGN, gf.getInstruction(pc++).getName());
 				Assert.assertEquals(InstructionName.X, gf.getInstruction(pc++).getName());
+
+				ran_hooks.add(this);
 			}
 		});
 
@@ -158,6 +164,8 @@ public class TestGenFunction {
 						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
 					}
 				}
+
+				ran_hooks.add(this);
 			}
 		});
 
@@ -182,12 +190,15 @@ public class TestGenFunction {
 						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
 					}
 				}
+
+				ran_hooks.add(this);
 			}
 		});
 
 		dp.deduceModule(m, lgc, false);
 		dp.finish();
 
+		Assert.assertEquals("All hooks ran", 4, ran_hooks.size());
 		Assert.assertEquals(14, c.errorCount());
 	}
 
