@@ -26,7 +26,7 @@ public class IntegerIA implements InstructionArgument, Constructable {
 				'}';
 	}
 
-	private final GeneratedFunction gf;
+	public final GeneratedFunction gf;
 
 	private final int index;
 
