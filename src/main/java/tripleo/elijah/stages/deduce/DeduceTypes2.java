@@ -879,7 +879,6 @@ public class DeduceTypes2 {
 						LookupResultList lrl = ectx.lookup(s);
 						OS_Element el2 = lrl.chooseBest(null);
 						if (el2 == null) {
-							int yy=2;
 							assert el instanceof VariableStatement;
 							VariableStatement vs = (VariableStatement) el;
 							@NotNull TypeName tn = vs.typeName();
