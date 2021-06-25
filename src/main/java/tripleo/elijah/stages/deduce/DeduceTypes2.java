@@ -1503,9 +1503,16 @@ public class DeduceTypes2 {
 				depTracker = integerIA.gf;
 			}
 			if (depTracker != null) {
-				depTracker.addDependentFunction(fi);
-				if (genType != null)
-					depTracker.addDependentType(genType);
+				if (genType == null && fi.getFunction() == null) {
+					// README Assume constructor
+					final ClassStatement c = fi.getClassInvocation().getKlass();
+					final GenType genType2 = new GenType(c);
+					depTracker.addDependentType(genType2);
+				} else {
+					depTracker.addDependentFunction(fi);
+					if (genType != null)
+						depTracker.addDependentType(genType);
+				}
 			}
 		}
 
