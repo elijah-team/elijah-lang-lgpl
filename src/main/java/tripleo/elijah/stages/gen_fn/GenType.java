@@ -32,6 +32,10 @@ public class GenType {
 	public GenType(ClassStatement aClassStatement) {
 		resolved = new OS_Type(aClassStatement);
 	}
+
+	public GenType() {
+
+	}
 }
 
 //
