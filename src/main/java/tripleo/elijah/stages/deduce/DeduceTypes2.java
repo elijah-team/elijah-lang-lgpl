@@ -1500,7 +1500,7 @@ public class DeduceTypes2 {
 					doLogic(ll);
 				}
 
-				public void doLogic(List<TypeTableEntry> potentialTypes) {
+				public void doLogic(@NotNull List<TypeTableEntry> potentialTypes) {
 					assert potentialTypes.size() >= 0;
 					switch (potentialTypes.size()) {
 						case 1:
