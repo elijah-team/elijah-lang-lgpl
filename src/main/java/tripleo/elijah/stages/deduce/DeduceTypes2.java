@@ -938,7 +938,8 @@ public class DeduceTypes2 {
 					final NormalTypeName tyn1 = (NormalTypeName) tyn;
 					_implement_construct_type(co, constructorName, (NormalTypeName) tyn);
 				}
-			}
+			} else
+				throw new NotImplementedException();
 			if (co != null) {
 				co.setConstructable(pte);
 				ClassInvocation best = pte.getClassInvocation();
