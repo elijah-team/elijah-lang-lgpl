@@ -225,50 +225,28 @@ public class DeducePhase {
 	 * @param _unused is unused
 	 */
 	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgc, boolean _unused) {
-		if (false) {
-			final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
-			for (GeneratedNode lgci : lgc) {
-				if (lgci instanceof GeneratedClass) {
-					lgf.addAll(((GeneratedClass) lgci).functionMap.values());
-				}
-			}
+		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 
-			deduceModule(m, lgf);
-		} else {
-//			deduceModule(m); // TODO what a controversial change
+		for (GeneratedNode lgci : lgc) {
+			if (lgci.module() != m) continue;
 
-			final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
-
-			for (GeneratedNode lgci : lgc) {
-				if (lgci.module() != m) continue;
-
-				if (lgci instanceof GeneratedClass) {
-					final Collection<GeneratedFunction> generatedFunctions = ((GeneratedClass) lgci).functionMap.values();
-//					for (GeneratedFunction generatedFunction : generatedFunctions) {
-//						generatedFunction.setClass(lgci); // TODO delete when done
-//					}
-					lgf.addAll(generatedFunctions);
-				}
-				if (lgci instanceof GeneratedNamespace) {
-					final Collection<GeneratedFunction> generatedFunctions = ((GeneratedNamespace) lgci).functionMap.values();
+			if (lgci instanceof GeneratedClass) {
+				final Collection<GeneratedFunction> generatedFunctions = ((GeneratedClass) lgci).functionMap.values();
 					for (GeneratedFunction generatedFunction : generatedFunctions) {
-						generatedFunction.setClass(lgci);
+//						generatedFunction.setClass(lgci); // TODO delete when done
+						assert generatedFunction.getGenClass() == lgci;
 					}
-					lgf.addAll(generatedFunctions);
+				lgf.addAll(generatedFunctions);
+			} else if (lgci instanceof GeneratedNamespace) {
+				final Collection<GeneratedFunction> generatedFunctions = ((GeneratedNamespace) lgci).functionMap.values();
+				for (GeneratedFunction generatedFunction : generatedFunctions) {
+					generatedFunction.setClass(lgci);
 				}
+				lgf.addAll(generatedFunctions);
 			}
-
-//			List<GeneratedNode> lgcc = new ArrayList<GeneratedNode>();
-//
-//			for (GeneratedNode generatedNode : lgc) {
-//				if (!(generatedNode instanceof GeneratedClass || generatedNode instanceof GeneratedNamespace)) continue;
-//				lgcc.add(generatedNode);
-//			}
-
-//			generatedClasses = lgcc;
-
-			deduceModule(m, lgf);
 		}
+
+		deduceModule(m, lgf);
 	}
 
 /*
