@@ -947,6 +947,15 @@ public class DeduceTypes2 {
 						}
 					}
 					clsinv = phase.registerClassInvocation(clsinv);
+					if (co != null) {
+						if (co instanceof IdentTableEntry) {
+							final IdentTableEntry idte3 = (IdentTableEntry) co;
+							idte3.type.genTypeCI(clsinv);
+						} else if (co instanceof VariableTableEntry) {
+							final VariableTableEntry vte = (VariableTableEntry) co;
+							vte.type.genTypeCI(clsinv);
+						}
+					}
 					pte.setClassInvocation(clsinv);
 					pte.setResolvedElement(best);
 					// set FunctionInvocation with pte args
