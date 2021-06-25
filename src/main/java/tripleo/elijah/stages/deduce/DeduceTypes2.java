@@ -173,6 +173,17 @@ public class DeduceTypes2 {
 						Resolve_each_typename ret = new Resolve_each_typename(phase, this, errSink);
 						ret.action(typeTableEntry);
 					}
+					{
+						final WorkManager workManager = new WorkManager();
+						Dependencies deps = new Dependencies(/*phase, this, errSink*/);
+						for (GenType genType : generatedFunction.dependentTypes()) {
+							deps.action_type(genType, workManager);
+						}
+						for (FunctionInvocation dependentFunction : generatedFunction.dependentFunctions()) {
+							deps.action_function(dependentFunction, workManager);
+						}
+						workManager.drain();
+					}
 					//
 					// RESOLVE FUNCTION RETURN TYPES
 					//
@@ -445,6 +456,44 @@ public class DeduceTypes2 {
 				System.err.println("288 Failed to resolve type "+ aAttached);
 				errSink.reportDiagnostic(aResolveError);
 			}
+		}
+	}
+
+	class Dependencies {
+		public void action_type(GenType genType, WorkManager aWorkManager) {
+			WorkList wl = new WorkList();
+			//
+			// TODO work this out further
+			if (genType.resolvedn != null) {
+				OS_Module mod = genType.resolvedn.getContext().module();
+				final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
+				NamespaceInvocation ni = phase.registerNamespaceInvocation(genType.resolvedn);
+				WlGenerateNamespace gen = new WlGenerateNamespace(gf, ni, phase.generatedClasses);
+				wl.addJob(gen);
+			} else if (genType.resolved != null) {
+				final ClassStatement c = genType.resolved.getClassOf();
+				final OS_Module mod = c.getContext().module();
+				final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
+				ClassInvocation ci;
+				if (genType.ci == null) {
+					ci = new ClassInvocation(c, null);
+					ci = phase.registerClassInvocation(ci);
+				} else
+					ci = genType.ci;
+				WlGenerateClass gen = new WlGenerateClass(gf, ci, phase.generatedClasses);
+				wl.addJob(gen);
+			}
+			//
+			aWorkManager.addJobs(wl);
+		}
+
+		public void action_function(FunctionInvocation aDependentFunction, WorkManager aWorkManager) {
+			final WorkList wl = new WorkList();
+			final OS_Module mod = aDependentFunction.getFunction().getContext().module();
+			final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
+			WlGenerateFunction gen = new WlGenerateFunction(gf, aDependentFunction);
+			wl.addJob(gen);
+			aWorkManager.addJobs(wl);
 		}
 	}
 
