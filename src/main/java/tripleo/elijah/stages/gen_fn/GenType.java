@@ -18,11 +18,11 @@ import tripleo.elijah.stages.deduce.ClassInvocation;
  * Created 5/31/21 1:32 PM
  */
 public class GenType {
-	NamespaceStatement resolvedn;
+	public NamespaceStatement resolvedn;
 	OS_Type typeName; // TODO or just TypeName ??
 	TypeName nonGenericTypeName;
-	OS_Type resolved;
-	ClassInvocation ci;
+	public OS_Type resolved;
+	public ClassInvocation ci;
 	GeneratedNode node;
 
 	public GenType(NamespaceStatement aNamespaceStatement) {
