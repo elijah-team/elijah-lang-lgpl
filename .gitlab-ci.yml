@@ -1,6 +1,7 @@
-image: maven:latest
+image: python:latest
 
 stages:
+  - deploy
   - pages
 
 
