@@ -1993,9 +1993,10 @@ public class DeduceTypes2 {
 										if (y.backlink instanceof ProcIA) {
 											final ProcIA backlink_ = (ProcIA) y.backlink;
 											@NotNull ProcTableEntry backlink = generatedFunction.getProcTableEntry(backlink_.getIndex());
-											assert backlink.getResolvedElement() != null;
+											final OS_Element resolvedElement = backlink.getResolvedElement();
+											assert resolvedElement != null;
 											try {
-												LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), backlink.getResolvedElement().getContext());
+												LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), resolvedElement.getContext());
 												@Nullable OS_Element best = lrl2.chooseBest(null);
 												assert best != null;
 												y.setStatus(BaseTableEntry.Status.KNOWN, best);
