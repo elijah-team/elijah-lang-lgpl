@@ -16,7 +16,7 @@ stages:
 
 pages:
   image: python:latest
-#  stage: deploy
+  stage: deploy
   only:
     - docs
   script:
