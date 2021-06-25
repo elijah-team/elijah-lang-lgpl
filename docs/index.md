@@ -24,7 +24,7 @@ See [Language Overview](language-overview.md) for more details on the language.
 All of this is a work in progress and your support would be appreciated.
 
 oluoluolu+elijah \(at\) gmail.com
-[@tripleo33177393 Twitter](https://twitter.com/tripleo33177393)
+[@tripleo_sw Twitter](https://twitter.com/tripleo_sw)
 
 [google group](https://groups.google.com/forum/#!forum/elijjah)
 

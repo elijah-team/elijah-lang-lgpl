@@ -10,3 +10,16 @@ plugins:
   - git-revision-date-localized
 markdown_extensions:
   - def_list
+
+nav:
+  - index.md
+  - language-overview.md
+  - Language:
+    - access_notation.md
+    - aliases.md
+    - type_names.md
+  Concepts:
+    - keywords.md
+    - special_words.md
+    - structure.md
+
