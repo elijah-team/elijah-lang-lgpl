@@ -38,6 +38,7 @@ import tripleo.elijah.work.WorkManager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -635,12 +636,22 @@ public class DeduceTypes2 {
 				parent = fd3.getParent();
 				if (parent instanceof ClassStatement) {
 					ci = new ClassInvocation((ClassStatement) parent, null);
+					{
+						Map<TypeName, OS_Type> gp = pte.getClassInvocation().genericPart;
+						int i = 0;
+						for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
+							ci.set(i, entry.getKey(), entry.getValue());
+							i++;
+						}
+					}
 					proceed(fi, ci, (ClassStatement) parent, wl);
 				} else if (parent instanceof NamespaceStatement) {
 					proceed(fi, (NamespaceStatement) parent, wl);
 				}
 			} else {
 				parent = ci.getKlass();
+				// TODO do we need to map genericPart here too?
+				assert ci.genericPart == null;
 				proceed(fi, ci, (ClassStatement) parent, wl);
 			}
 
