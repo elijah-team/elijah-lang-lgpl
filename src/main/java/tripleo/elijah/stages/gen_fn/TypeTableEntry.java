@@ -31,9 +31,9 @@ public class TypeTableEntry {
 	private GeneratedNode _resolved;
 	private final List<OnSetAttached> osacbs = new ArrayList<OnSetAttached>();
 
-    public interface OnSetAttached {
-        void onSetAttached(TypeTableEntry aTypeTableEntry);
-    }
+	public interface OnSetAttached {
+		void onSetAttached(TypeTableEntry aTypeTableEntry);
+	}
 
 	public TypeTableEntry(final int index,
 						  final Type lifetime,
@@ -82,25 +82,25 @@ public class TypeTableEntry {
 				'}';
 	}
 
-    public int getIndex() {
-        return index;
-    }
+	public int getIndex() {
+		return index;
+	}
 
-    public void resolve(GeneratedNode aResolved) {
-        _resolved = aResolved;
-    }
+	public void resolve(GeneratedNode aResolved) {
+		_resolved = aResolved;
+	}
 
-    public GeneratedNode resolved() {
-        return _resolved;
-    }
+	public GeneratedNode resolved() {
+		return _resolved;
+	}
 
-    public boolean isResolved() {
-        return _resolved != null;
-    }
+	public boolean isResolved() {
+		return _resolved != null;
+	}
 
-    public OS_Type getAttached() {
-        return attached;
-    }
+	public OS_Type getAttached() {
+		return attached;
+	}
 
 	public void setAttached(OS_Type aAttached) {
 		attached = aAttached;
@@ -112,9 +112,9 @@ public class TypeTableEntry {
 		}
 	}
 
-    public void addSetAttached(OnSetAttached osa) {
-        osacbs.add(osa);
-    }
+	public void addSetAttached(OnSetAttached osa) {
+		osacbs.add(osa);
+	}
 
 	public void genTypeCI(ClassInvocation aClsinv) {
 		genType.ci = aClsinv;
