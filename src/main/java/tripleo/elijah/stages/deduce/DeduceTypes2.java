@@ -884,6 +884,20 @@ public class DeduceTypes2 {
 							VariableStatement vs = (VariableStatement) el;
 							@NotNull TypeName tn = vs.typeName();
 							OS_Type ty = new OS_Type(tn);
+
+							if (idte2.type == null) {
+								// README Don't remember enough about the constructors to select a different one
+								@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, ty);
+								try {
+									@NotNull OS_Type resolved = resolve_type(ty, tn.getContext());
+									System.err.println("892 resolved: "+resolved);
+									tte.setAttached(resolved);
+								} catch (ResolveError aResolveError) {
+									errSink.reportDiagnostic(aResolveError);
+								}
+
+								idte2.type = tte;
+							}
 							// s is constructor name
 							implement_construct_type(idte2, ty, s);
 							return;
