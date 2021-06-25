@@ -936,57 +936,7 @@ public class DeduceTypes2 {
 				TypeName tyn = aTy.getTypeName();
 				if (tyn instanceof NormalTypeName) {
 					final NormalTypeName tyn1 = (NormalTypeName) tyn;
-					String s = tyn1.getName();
-					LookupResultList lrl = tyn1.getContext().lookup(s);
-					OS_Element best = lrl.chooseBest(null);
-					assert best instanceof ClassStatement;
-					List<TypeName> gp = ((ClassStatement) best).getGenericPart();
-					ClassInvocation clsinv = new ClassInvocation((ClassStatement) best, constructorName);
-					if (gp.size() == 0) {
-
-					} else {
-						TypeNameList gp2 = ((NormalTypeName) tyn).getGenericPart();
-						for (int i = 0; i < gp.size(); i++) {
-							final TypeName typeName = gp2.get(i);
-							@NotNull OS_Type typeName2;
-							try {
-								typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
-								clsinv.set(i, gp.get(i), typeName2);
-							} catch (ResolveError aResolveError) {
-								aResolveError.printStackTrace();
-							}
-						}
-					}
-					clsinv = phase.registerClassInvocation(clsinv);
-					if (co != null) {
-						if (co instanceof IdentTableEntry) {
-							final IdentTableEntry idte3 = (IdentTableEntry) co;
-							idte3.type.genTypeCI(clsinv);
-						} else if (co instanceof VariableTableEntry) {
-							final VariableTableEntry vte = (VariableTableEntry) co;
-							vte.type.genTypeCI(clsinv);
-						}
-					}
-					pte.setClassInvocation(clsinv);
-					pte.setResolvedElement(best);
-					// set FunctionInvocation with pte args
-					{
-						ConstructorDef cc = null;
-						if (constructorName != null) {
-							Collection<ConstructorDef> cs = ((ClassStatement) best).getConstructors();
-							for (ConstructorDef c : cs) {
-								if (c.name().equals(constructorName)) {
-									cc = c;
-									break;
-								}
-							}
-						}
-						// TODO also check arguments
-						{
-							FunctionInvocation fi = new FunctionInvocation(cc, pte, clsinv, phase.generatePhase);
-							pte.setFunctionInvocation(fi);
-						}
-					}
+					_implement_construct_type(co, constructorName, (NormalTypeName) tyn);
 				}
 			}
 			if (co != null) {
@@ -999,6 +949,58 @@ public class DeduceTypes2 {
 						co.resolveType(result);
 					}
 				});
+			}
+		}
+
+		private void _implement_construct_type(Constructable co, String constructorName, NormalTypeName aTyn1) {
+			String s = aTyn1.getName();
+			LookupResultList lrl = aTyn1.getContext().lookup(s);
+			OS_Element best = lrl.chooseBest(null);
+			assert best instanceof ClassStatement;
+			List<TypeName> gp = ((ClassStatement) best).getGenericPart();
+			ClassInvocation clsinv = new ClassInvocation((ClassStatement) best, constructorName);
+			if (gp.size() > 0) {
+				TypeNameList gp2 = aTyn1.getGenericPart();
+				for (int i = 0; i < gp.size(); i++) {
+					final TypeName typeName = gp2.get(i);
+					@NotNull OS_Type typeName2;
+					try {
+						typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
+						clsinv.set(i, gp.get(i), typeName2);
+					} catch (ResolveError aResolveError) {
+						aResolveError.printStackTrace();
+					}
+				}
+			}
+			clsinv = phase.registerClassInvocation(clsinv);
+			if (co != null) {
+				if (co instanceof IdentTableEntry) {
+					final IdentTableEntry idte3 = (IdentTableEntry) co;
+					idte3.type.genTypeCI(clsinv);
+				} else if (co instanceof VariableTableEntry) {
+					final VariableTableEntry vte = (VariableTableEntry) co;
+					vte.type.genTypeCI(clsinv);
+				}
+			}
+			pte.setClassInvocation(clsinv);
+			pte.setResolvedElement(best);
+			// set FunctionInvocation with pte args
+			{
+				ConstructorDef cc = null;
+				if (constructorName != null) {
+					Collection<ConstructorDef> cs = ((ClassStatement) best).getConstructors();
+					for (ConstructorDef c : cs) {
+						if (c.name().equals(constructorName)) {
+							cc = c;
+							break;
+						}
+					}
+				}
+				// TODO also check arguments
+				{
+					FunctionInvocation fi = new FunctionInvocation(cc, pte, clsinv, phase.generatePhase);
+					pte.setFunctionInvocation(fi);
+				}
 			}
 		}
 
