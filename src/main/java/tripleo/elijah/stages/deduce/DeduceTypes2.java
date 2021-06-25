@@ -31,6 +31,7 @@ import tripleo.elijah.stages.instructions.ProcIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.work.WorkJob;
 import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
 
@@ -489,9 +490,26 @@ public class DeduceTypes2 {
 
 		public void action_function(FunctionInvocation aDependentFunction, WorkManager aWorkManager) {
 			final WorkList wl = new WorkList();
-			final OS_Module mod = aDependentFunction.getFunction().getContext().module();
-			final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
-			WlGenerateFunction gen = new WlGenerateFunction(gf, aDependentFunction);
+			final FunctionDef function = aDependentFunction.getFunction();
+			WorkJob gen;
+			final OS_Module mod;
+			if (function != null) {
+				mod = function.getContext().module();
+				final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
+				gen = new WlGenerateFunction(gf, aDependentFunction);
+			} else {
+				ClassInvocation ci = aDependentFunction.getClassInvocation();
+				if (ci == null) {
+					NamespaceInvocation ni = aDependentFunction.getNamespaceInvocation();
+					if (ni == null)
+						assert false;
+					mod = ni.getNamespace().getContext().module();
+				} else {
+					mod = ci.getKlass().getContext().module();
+				}
+				final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
+				gen = new WlGenerateDefaultCtor(gf, aDependentFunction);
+			}
 			wl.addJob(gen);
 			aWorkManager.addJobs(wl);
 		}
