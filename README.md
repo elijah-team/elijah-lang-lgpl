@@ -31,3 +31,6 @@ oluoluolu+elijah (at) gmail.com
 [Elijjah by Example](https://elijjah-by-example.github.io)
 
 [GitBook: Elijjah by Example](https://oluoluolu-gh.gitbook.io/elijjah-by-example/)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgitlab.com%2Felijah-team%2Felijah-lang.svg?type=large)](https://app.fossa.com/projects/git%2Bgitlab.com%2Felijah-team%2Felijah-lang?ref=badge_large)
