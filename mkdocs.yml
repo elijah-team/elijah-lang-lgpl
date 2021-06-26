@@ -5,6 +5,7 @@ theme:
     scheme: preference
   font: false
 repo_url: https://gitlab.com/elijah-team/elijah-lang/
+site_url: https://elijah-team.gitlab.io/elijah-lang/
 repo_name: elijah-team/elijah-lang
 plugins:
   - git-revision-date-localized
