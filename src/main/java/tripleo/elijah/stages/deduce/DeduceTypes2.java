@@ -638,10 +638,12 @@ public class DeduceTypes2 {
 					ci = new ClassInvocation((ClassStatement) parent, null);
 					{
 						Map<TypeName, OS_Type> gp = pte.getClassInvocation().genericPart;
-						int i = 0;
-						for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
-							ci.set(i, entry.getKey(), entry.getValue());
-							i++;
+						if (gp != null) {
+							int i = 0;
+							for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
+								ci.set(i, entry.getKey(), entry.getValue());
+								i++;
+							}
 						}
 					}
 					proceed(fi, ci, (ClassStatement) parent, wl);
@@ -650,8 +652,17 @@ public class DeduceTypes2 {
 				}
 			} else {
 				parent = ci.getKlass();
-				// TODO do we need to map genericPart here too?
-				assert ci.genericPart == null;
+				{
+					final ClassInvocation classInvocation = pte.getClassInvocation();
+					if (classInvocation != null && classInvocation.genericPart != null) {
+						Map<TypeName, OS_Type> gp = classInvocation.genericPart;
+						int i = 0;
+						for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
+							ci.set(i, entry.getKey(), entry.getValue());
+							i++;
+						}
+					}
+				}
 				proceed(fi, ci, (ClassStatement) parent, wl);
 			}
 
