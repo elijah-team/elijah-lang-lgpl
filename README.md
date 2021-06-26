@@ -116,3 +116,4 @@ oluoluolu+elijah \(at\) gmail.com
 
 [google group](https://groups.google.com/forum/#!forum/elijjah)
 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgitlab.com%2Felijah-team%2Felijah-lang.svg?type=large)](https://app.fossa.com/projects/git%2Bgitlab.com%2Felijah-team%2Felijah-lang?ref=badge_large)
