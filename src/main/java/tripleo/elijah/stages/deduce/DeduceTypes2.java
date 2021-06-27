@@ -2256,12 +2256,18 @@ public class DeduceTypes2 {
 							ClassInvocation ci = new ClassInvocation((ClassStatement) el, null);
 	//						prte.setClassInvocation(ci);
 							Collection<ConstructorDef> cs = (((ClassStatement) el).getConstructors());
-							// TODO find a ctor that matches prte.getArgs()
+							ConstructorDef selected_constructor = null;
 							if (prte.getArgs().size() == 0 && cs.size() == 0) {
 								// TODO use a virtual default ctor
+								System.out.println("2262 use a virtual default ctor for "+prte.expression);
+								selected_constructor = ConstructorDef.defaultVirtualCtor;
+							} else {
+								// TODO find a ctor that matches prte.getArgs()
+								final List<TypeTableEntry> x = prte.getArgs();
+								int yy=2;
 							}
-							FunctionDef selected_constructor = null;
-							final IInvocation invocation = getInvocation(generatedFunction);
+							final IInvocation invocation = ci;
+							assert ((ClassStatement) el).getGenericPart().size() == 0;
 							FunctionInvocation fi = new FunctionInvocation(selected_constructor, prte, invocation, phase.generatePhase);
 		//					fi.setClassInvocation(ci);
 							prte.setFunctionInvocation(fi);
