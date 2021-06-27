@@ -11,6 +11,7 @@ package tripleo.elijah.lang;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableList;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.contexts.ClassContext;
@@ -34,6 +35,8 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	ClassInheritance _inh = new ClassInheritance(); // remove final for ClassBuilder
 	private ClassTypes _type;
 	private TypeNameList genericPart;
+
+	static final List<TypeName> emptyTypeNameList = ImmutableList.<TypeName>of();
 
 	public ClassStatement(final OS_Element parentElement, final Context parentContext) {
 		parent = parentElement; // setParent
@@ -200,7 +203,7 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 
 	public @NotNull List<TypeName> getGenericPart() {
 		if (genericPart == null)
-			return new ArrayList<TypeName>();
+			return emptyTypeNameList;
 		else
 			return genericPart.p;
 	}
