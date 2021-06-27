@@ -2172,6 +2172,31 @@ public class DeduceTypes2 {
 						} else {
 							el = idte.resolved_element;
 						}
+						{
+							if (el instanceof FunctionDef) {
+//								// wait until we have a PTE
+//								FunctionInvocation fi = new FunctionInvocation((FunctionDef) el, null, null, null);
+//								generatedFunction.addDependentFunction(fi);
+								final FunctionDef functionDef = (FunctionDef) el;
+								final OS_Element parent = functionDef.getParent();
+								GenType genType = null;
+								switch (DecideElObjectType.getElObjectType(parent)) {
+									case UNKNOWN:
+										break;
+									case CLASS:
+										genType = new GenType((ClassStatement) parent);
+										break;
+									case NAMESPACE:
+										genType = new GenType((NamespaceStatement) parent);
+										break;
+									default:
+										// do nothing
+										break;
+								}
+								if (genType != null)
+									generatedFunction.addDependentType(genType);
+							}
+						}
 						if (el != null) {
 							idte.setStatus(BaseTableEntry.Status.KNOWN, el);
 							if (el.getContext() != null)
