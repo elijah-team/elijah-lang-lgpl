@@ -23,34 +23,13 @@ import java.util.Collection;
 import java.util.List;
 
 // TODO FunctionDef is not a Container is it?
-public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
+public class FunctionDef extends BaseFunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
 
-	protected Species _species;
-	private Scope3 scope3;
-
-	public Collection<FormalArgListItem> getArgs() {
-		return mFal.items();
-	}
+	private TypeName _returnType = null;
 
 	public void setReturnType(final TypeName tn) {
 		this._returnType = tn;
 	}
-
-	public void scope(Scope3 sco) {
-		scope3 = sco;
-	}
-
-	public IdentExpression getNameNode() {
-		return funName;
-	}
-
-	public enum Species {
-		DEF_FUN,
-		PROP_SET, PROP_GET, REG_FUN, CTOR, DTOR
-	}
-
-	public Attached _a = new Attached();
-	private TypeName _returnType = null;
 
 	// region constructor
 
@@ -70,58 +49,24 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 
 	// endregion
 
-	// region arglist
+	// region modifiers
 
-	public FormalArgList fal() {
-		return mFal;
-	}
+	private FunctionModifiers _mod;
 
-	private FormalArgList mFal = new FormalArgList(); // remove final for FunctionDefBuilder
-
-	public void setFal(FormalArgList fal) {
-		mFal = fal;
+	public void set(final FunctionModifiers mod) {
+		assert _mod == null;
+		_mod = mod;
 	}
 
 	// endregion
 
-	@Override // OS_Element
-	public OS_Element getParent() {
-		return parent;
-	}
+	// region abstract
 
-	// region items
+	private boolean _isAbstract;
 
-	public void setType(final Species aSpecies) {
-		_species = aSpecies;
-	}
-
-	public List<FunctionItem> getItems() {
-		List<FunctionItem> collection = new ArrayList<FunctionItem>();
-		for (OS_Element element : scope3.items()) {
-			if (element instanceof FunctionItem)
-				collection.add((FunctionItem) element);
-		}
-		return collection;
-		//return mScope2.items;
-	}
-
-	@Override // OS_Container
-	public List<OS_Element2> items() {
-		final ArrayList<OS_Element2> a = new ArrayList<OS_Element2>();
-		for (final OS_Element functionItem : scope3.items()) {
-			if (functionItem instanceof OS_Element2)
-				a.add((OS_Element2) functionItem);
-		}
-		return a;
-	}
-
-	@Override // OS_Container
-	public void add(final OS_Element anElement) {
-		if (anElement instanceof FunctionItem) {
-//			mScope2.add((StatementItem) anElement);
-			scope3.add(anElement);
-		} else
-			throw new IllegalStateException(String.format("Cant add %s to FunctionDef", anElement));
+	public void setAbstract(final boolean b) {
+		_isAbstract = b;
+		if (b) {this.set(FunctionModifiers.ABSTRACT);}
 	}
 
 	// endregion
@@ -144,142 +89,20 @@ public class FunctionDef implements Documentable, ClassItem, OS_Container, OS_El
 		visit.visitFunctionDef(this);
 	}
 
-	// region name
+	@Override
+	public void postConstruct() { // TODO
 
-	private IdentExpression funName;
-
-	public void setName(final IdentExpression aText) {
-		funName = aText;
 	}
-
-	@Override // OS_Element2
-	public String name() {
-		if (funName == null)
-			return "";
-		return funName.getText();
-	}
-
-	// endregion
-
-	// region context
 
 	@Override // OS_Element
-	public Context getContext() {
-		return _a._context;
-	}
-
-	public void setContext(final FunctionContext ctx) {
-		_a.setContext(ctx);
-	}
-
-	// endregion
-
-	public void postConstruct() { // TODO
-	}
-
-	// region annotations
-
-	List<AnnotationClause> annotations = null;
-
-	public void addAnnotation(final AnnotationClause a) {
-		if (annotations == null)
-			annotations = new ArrayList<AnnotationClause>();
-		annotations.add(a);
-	}
-
-	public void walkAnnotations(AnnotationWalker annotationWalker) {
-		if (annotations == null) return;
-		for (AnnotationClause annotationClause : annotations) {
-			for (AnnotationPart annotationPart : annotationClause.aps) {
-				annotationWalker.annotation(annotationPart);
-			}
-		}
-	}
-
-	public Iterable<AnnotationPart> annotationIterable() {
-		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
-		if (annotations == null) return aps;
-		for (AnnotationClause annotationClause : annotations) {
-			for (AnnotationPart annotationPart : annotationClause.aps) {
-				aps.add(annotationPart);
-			}
-		}
-		return aps;
-	}
-
-	// endregion
-
-	// region Documentable
-	
-	@Override  // Documentable
-	public void addDocString(final Token aText) {
-//		mScope2.mDocs.add(aText.getText());
-		scope3.addDocString(aText);
-	}
-
-	// endregion
-
-	// region abstract
-
-	private boolean _isAbstract;
-
-	public void setAbstract(final boolean b) {
-		_isAbstract = b;
-		if (b) {this.set(FunctionModifiers.ABSTRACT);}
-	}
-
-	// endregion
-
-	// region modifiers
-
-	private FunctionModifiers _mod;
-
-	public void set(final FunctionModifiers mod) {
-		assert _mod == null;
-		_mod = mod;
-	}
-
-	// endregion
-
-	public Species getType() {
-		return _species;
+	public OS_Element getParent() {
+		return parent;
 	}
 
 	@Override
 	public String toString() {
 		return String.format("<Function %s %s %s>", parent, name(), getArgs());
 	}
-
-	public boolean hasItem(OS_Element element) {
-		return scope3.items().contains(element);
-	}
-
-	// region ClassItem
-
-	private AccessNotation access_note;
-	private El_Category category;
-
-	@Override
-	public void setCategory(El_Category aCategory) {
-		category = aCategory;
-	}
-
-	@Override
-	public void setAccess(AccessNotation aNotation) {
-		access_note = aNotation;
-	}
-
-	@Override
-	public El_Category getCategory() {
-		return category;
-	}
-
-	@Override
-	public AccessNotation getAccess() {
-		return access_note;
-	}
-
-	// endregion
 
 }
 

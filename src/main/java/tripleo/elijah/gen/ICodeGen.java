@@ -66,6 +66,8 @@ public interface ICodeGen {
 
 	void visitYield(YieldExpression aYieldExpression);
 
+	void visitConstructorDef(ConstructorDef aConstructorDef);
+
 	// return, continue, next
 }
 

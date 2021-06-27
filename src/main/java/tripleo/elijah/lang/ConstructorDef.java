@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.contexts.FunctionContext;
+import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.Helpers;
 
 /**
@@ -15,15 +17,49 @@ import tripleo.elijah.util.Helpers;
  *
  * Created 	Apr 16, 2020 at 7:34:07 AM
  */
-public class ConstructorDef extends FunctionDef {
+public class ConstructorDef extends BaseFunctionDef {
+	public static ConstructorDef defaultVirtualCtor = new ConstructorDef(null, null, null);
 
-	public ConstructorDef(final IdentExpression aConstructorName, final ClassStatement aParent, final Context cur) {
-		super(aParent, cur);
+	private final OS_Element parent;
+
+	public ConstructorDef(final IdentExpression aConstructorName, final ClassStatement aParent, final Context context) {
+		parent = aParent;
+		if (parent != null) {
+			if (aParent instanceof OS_Container) {
+				((OS_Container) parent).add(this);
+			} else {
+				throw new IllegalStateException("adding FunctionDef to " + aParent.getClass().getName());
+			}
+			_a.setContext(new FunctionContext(context, this));
+		}
+
 		if (aConstructorName != null)
 			setName(aConstructorName);
-		else setName(Helpers.string_to_ident("<>")); // hack for Context#lookup
+		else
+			setName(Helpers.string_to_ident("<>")); // hack for Context#lookup
 		setType(Species.CTOR);
 	}
+
+	@Override
+	public void visitGen(ICodeGen visit) {
+		visit.visitConstructorDef(this);
+	}
+
+	@Override // OS_Element
+	public OS_Element getParent() {
+		return parent;
+	}
+
+	@Override
+	public void postConstruct() {
+
+	}
+
+	@Override
+	public String toString() {
+		return String.format("<Constructor %s %s %s>", parent, name(), getArgs());
+	}
+
 
 }
 

@@ -22,12 +22,12 @@ import java.util.List;
  */
 public class FunctionContext extends Context {
 
-	private final FunctionDef carrier;
+	private final BaseFunctionDef carrier;
 	private final Context _parent;
 	public List<FunctionPrelimInstruction> functionPrelimInstructions = new ArrayList<FunctionPrelimInstruction>();
 	private int functionPrelimInstructionsNumber = 1;
 
-	public FunctionContext(final Context aParent, final FunctionDef fd) {
+	public FunctionContext(final Context aParent, final BaseFunctionDef fd) {
 		_parent = aParent;
 		carrier = fd;
 	}
