@@ -1429,6 +1429,16 @@ public class DeduceTypes2 {
 								if (fd.getParent() instanceof NamespaceStatement) {
 									NamespaceInvocation ni = phase.registerNamespaceInvocation((NamespaceStatement) fd.getParent());
 									invocation = ni;
+								} else if (fd.getParent() instanceof ClassStatement) {
+									final ClassStatement classStatement = (ClassStatement) fd.getParent();
+									ClassInvocation ci = new ClassInvocation(classStatement, null);
+									final List<TypeName> genericPart = classStatement.getGenericPart();
+									if (genericPart != null) {
+										// TODO handle generic parameters somehow
+
+									}
+									ci = phase.registerClassInvocation(ci);
+									invocation = ci;
 								} else
 									throw new NotImplementedException();
 							}
