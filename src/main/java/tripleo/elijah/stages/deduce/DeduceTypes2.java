@@ -74,7 +74,7 @@ public class DeduceTypes2 {
 			if (identTableEntry.resolved_element instanceof VariableStatement) {
 				final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
 				OS_Element el = vs.getParent().getParent();
-				OS_Element el2 = aGeneratedFunction.fd.getParent();
+				OS_Element el2 = aGeneratedFunction.getFD().getParent();
 				if (el != el2) {
 					if (el instanceof ClassStatement || el instanceof NamespaceStatement)
 						// NOTE there is no concept of gf here

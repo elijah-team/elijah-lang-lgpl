@@ -561,7 +561,7 @@ public class Generate_Code_For_Method {
 
 		public Generate_Method_Header(@NotNull GeneratedFunction gf, @NotNull GenerateC aGenerateC) {
 			gc            = aGenerateC;
-			name          = gf.fd.name();
+			name          = gf.getFD().name();
 			//
 			return_type   = find_return_type(gf);
 			args_string   = find_args_string(gf);
@@ -595,7 +595,7 @@ public class Generate_Code_For_Method {
 		String find_args_string(GeneratedFunction gf) {
 			final String args;
 			if (false) {
-				args = Helpers.String_join(", ", Collections2.transform(gf.fd.fal().falis, new Function<FormalArgListItem, String>() {
+				args = Helpers.String_join(", ", Collections2.transform(gf.getFD().fal().falis, new Function<FormalArgListItem, String>() {
 					@org.checkerframework.checker.nullness.qual.Nullable
 					@Override
 					public String apply(@org.checkerframework.checker.nullness.qual.Nullable final FormalArgListItem input) {

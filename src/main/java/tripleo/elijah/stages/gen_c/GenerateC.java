@@ -285,7 +285,7 @@ public class GenerateC implements CodeGenerator {
 	}
 
 	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
-		if (gf.fd == null) return;
+		if (gf.getFD() == null) return;
 		Generate_Code_For_Method gcfm = new Generate_Code_For_Method(this);
 		gcfm.generateCodeForMethod(gf, gr, aWorkList);
 	}
