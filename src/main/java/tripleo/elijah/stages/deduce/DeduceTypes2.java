@@ -1471,7 +1471,7 @@ public class DeduceTypes2 {
 									ClassInvocation ci = new ClassInvocation(classStatement, null);
 									final List<TypeName> genericPart = classStatement.getGenericPart();
 									if (genericPart.size() > 0) {
-										// TODO handle generic parameters somehow
+										// TODO handle generic parameters somehow (getInvocationFromBacklink?)
 
 									}
 									ci = phase.registerClassInvocation(ci);
