@@ -84,7 +84,13 @@ public class GenerateFunctions {
 				gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, returnType, IdentExpression.forString("Result")),
 				null); // TODO what about Unit returns?
 		for (final FormalArgListItem fali : fd.fal().falis) {
-			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
+			final TypeName typeName = fali.typeName();
+			final OS_Type type;
+			if (typeName != null)
+				type = new OS_Type(typeName);
+			else
+				type = null;
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, fali.getNameToken());
 			gf.addVariableTableEntry(fali.name(), VariableTableType.ARG, tte, fali);
 		} // TODO Exception !!??
 		//
