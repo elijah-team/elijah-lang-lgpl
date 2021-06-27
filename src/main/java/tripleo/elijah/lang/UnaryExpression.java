@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  *
  */
-package tripleo.elijjah.lang;
+package tripleo.elijah.lang;
 
 import tripleo.elijah.lang.AbstractExpression;
 import tripleo.elijah.lang.ExpressionKind;
