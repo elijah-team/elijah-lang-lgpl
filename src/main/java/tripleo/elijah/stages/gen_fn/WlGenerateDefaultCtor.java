@@ -63,7 +63,8 @@ public class WlGenerateDefaultCtor implements WorkJob {
 		}
 
 		OS_Element classStatement = cd.getParent();
-		@NotNull GeneratedFunction gf = generateFunctions.generateFunction(cd, classStatement, functionInvocation);
+		assert classStatement instanceof ClassStatement;
+		@NotNull GeneratedConstructor gf = generateFunctions.generateConstructor(cd, (ClassStatement) classStatement, functionInvocation);
 //		lgf.add(gf);
 
 		final ClassInvocation ci = functionInvocation.getClassInvocation();

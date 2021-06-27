@@ -47,8 +47,10 @@ public class GenerateFunctions {
 		module = aModule;
 	}
 
-	@NotNull private GeneratedFunction generateConstructor(ConstructorDef aConstructorDef, ClassStatement aKlass) {
-		final GeneratedFunction gf = new GeneratedFunction(aConstructorDef);
+	public @NotNull GeneratedConstructor generateConstructor(ConstructorDef aConstructorDef,
+															 ClassStatement aKlass,
+															 FunctionInvocation aFunctionInvocation) {
+		final GeneratedConstructor gf = new GeneratedConstructor(aConstructorDef);
 		final Context cctx = aConstructorDef.getContext();
 		final int e1 = add_i(gf, InstructionName.E, null, cctx);
 		for (final FunctionItem item : aConstructorDef.getItems()) {
@@ -62,6 +64,7 @@ public class GenerateFunctions {
 //			System.out.println(instruction);
 //		}
 //		GeneratedFunction.printTables(gf);
+		gf.fi = aFunctionInvocation;
 		return gf;
 	}
 
@@ -540,7 +543,7 @@ public class GenerateFunctions {
 //				gc.addClass(classStatement, gen_c);
 			} else if (item instanceof ConstructorDef) {
 				final ConstructorDef constructorDef = (ConstructorDef) item;
-				@NotNull GeneratedFunction f = generateConstructor(constructorDef, klass);
+				@NotNull GeneratedConstructor f = generateConstructor(constructorDef, klass, null); // TODO remove this null
 				gc.addConstructor(constructorDef, f);
 			} else if (item instanceof DestructorDef) {
 				throw new NotImplementedException();

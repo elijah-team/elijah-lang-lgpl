@@ -29,7 +29,7 @@ import java.util.Map;
 public class GeneratedClass extends GeneratedContainerNC {
 	private final OS_Module module;
 	private final ClassStatement klass;
-	public Map<ConstructorDef, GeneratedFunction> constructors = new HashMap<ConstructorDef, GeneratedFunction>();
+	public Map<ConstructorDef, GeneratedConstructor> constructors = new HashMap<ConstructorDef, GeneratedConstructor>();
 	public ClassInvocation ci;
 	private boolean resolve_var_table_entries_already = false;
 
@@ -95,7 +95,7 @@ public class GeneratedClass extends GeneratedContainerNC {
 		return Helpers.String_join(", ", ls);
 	}
 
-	public void addConstructor(ConstructorDef aConstructorDef, GeneratedFunction aGeneratedFunction) {
+	public void addConstructor(ConstructorDef aConstructorDef, @NotNull GeneratedConstructor aGeneratedFunction) {
 		constructors.put(aConstructorDef, aGeneratedFunction);
 	}
 
