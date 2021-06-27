@@ -18,6 +18,8 @@ import tripleo.elijah.util.Helpers;
  * Created 	Apr 16, 2020 at 7:34:07 AM
  */
 public class ConstructorDef extends BaseFunctionDef {
+
+	// TODO override name() ??
 	public static ConstructorDef defaultVirtualCtor = new ConstructorDef(null, null, null);
 
 	private final OS_Element parent;
