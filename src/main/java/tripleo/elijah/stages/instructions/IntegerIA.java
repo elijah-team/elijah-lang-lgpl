@@ -8,8 +8,8 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.Constructable;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 import tripleo.elijah.stages.gen_fn.VariableTableEntry;
@@ -26,11 +26,11 @@ public class IntegerIA implements InstructionArgument, Constructable {
 				'}';
 	}
 
-	public final GeneratedFunction gf;
+	public final BaseGeneratedFunction gf;
 
 	private final int index;
 
-	public IntegerIA(final int anIndex, GeneratedFunction aGeneratedFunction) {
+	public IntegerIA(final int anIndex, BaseGeneratedFunction aGeneratedFunction) {
 		index = anIndex;
 		gf = aGeneratedFunction;
 	}

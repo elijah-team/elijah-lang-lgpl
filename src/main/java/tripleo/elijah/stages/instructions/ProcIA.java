@@ -8,16 +8,16 @@
  */
 package tripleo.elijah.stages.instructions;
 
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 
 /**
  * Created 1/12/21 4:22 AM
  */
 public class ProcIA implements InstructionArgument {
 	private final int index;
-	private final GeneratedFunction gf;
+	private final BaseGeneratedFunction gf;
 
-	public ProcIA(int i, GeneratedFunction generatedFunction) {
+	public ProcIA(int i, BaseGeneratedFunction generatedFunction) {
 		this.index = i;
 		this.gf = generatedFunction;
 	}

@@ -9,8 +9,8 @@
 package tripleo.elijah.stages.instructions;
 
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.Constructable;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
@@ -20,7 +20,7 @@ import tripleo.elijah.stages.gen_fn.ProcTableEntry;
  */
 public class IdentIA implements InstructionArgument, Constructable {
 	private final int id;
-	public final GeneratedFunction gf;
+	public final BaseGeneratedFunction gf;
 //	private InstructionArgument prev;
 
 /*
@@ -30,7 +30,7 @@ public class IdentIA implements InstructionArgument, Constructable {
 	}
 */
 
-	public IdentIA(final int ite, final GeneratedFunction generatedFunction) {
+	public IdentIA(final int ite, final BaseGeneratedFunction generatedFunction) {
 		this.gf = generatedFunction;
 		this.id = ite;
 	}

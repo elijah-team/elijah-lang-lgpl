@@ -8,14 +8,14 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 
 /**
  * Created 9/10/20 3:35 PM
  */
 public class ConstTableIA implements InstructionArgument {
-    private final GeneratedFunction gf;
+    private final BaseGeneratedFunction gf;
     private final int index;
 
     @Override
@@ -28,7 +28,7 @@ public class ConstTableIA implements InstructionArgument {
             return String.format("(ct %d) [%s]", index, constantTableEntry.initialValue);
     }
 
-    public ConstTableIA(final int index, final GeneratedFunction generatedFunction) {
+    public ConstTableIA(final int index, final BaseGeneratedFunction generatedFunction) {
         this.index = index;
         this.gf = generatedFunction;
     }
