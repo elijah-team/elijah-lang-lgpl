@@ -30,7 +30,7 @@ public class WlGenerateFunction implements WorkJob {
 	private GeneratedFunction result;
 
 	public WlGenerateFunction(GenerateFunctions aGenerateFunctions, FunctionInvocation aFunctionInvocation) {
-		functionDef = aFunctionInvocation.getFunction();
+		functionDef = (FunctionDef) aFunctionInvocation.getFunction();
 		generateFunctions = aGenerateFunctions;
 		functionInvocation = aFunctionInvocation;
 	}

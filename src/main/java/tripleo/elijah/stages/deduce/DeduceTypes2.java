@@ -82,7 +82,7 @@ public class DeduceTypes2 {
 				}
 			}
 		}
-		aDeducePhase.addFunction(aGeneratedFunction, aGeneratedFunction.getFD());
+		aDeducePhase.addFunction(aGeneratedFunction, (FunctionDef) aGeneratedFunction.getFD());
 	}
 
 	List<Runnable> onRunnables = new ArrayList<Runnable>();
@@ -92,7 +92,7 @@ public class DeduceTypes2 {
 	}
 
 	public void deduce_generated_function(final GeneratedFunction generatedFunction) {
-		final FunctionDef fd = generatedFunction.getFD();
+		final FunctionDef fd = (FunctionDef) generatedFunction.getFD();
 		final Context fd_ctx = fd.getContext();
 		//
 		System.err.println("** deduce_generated_function "+ fd.name()+" "+fd);//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
