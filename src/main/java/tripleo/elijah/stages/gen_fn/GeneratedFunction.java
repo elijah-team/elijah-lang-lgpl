@@ -316,7 +316,11 @@ public class GeneratedFunction extends AbstractDependencyTracker implements Gene
 			{
 				ProcedureCallExpression pce = (ProcedureCallExpression) expression;
 				if (pce.getLeft() instanceof IdentExpression) {
-					int i = generateFunctions.addProcTableEntry(pce, null, generateFunctions.get_args_types(pce.getArgs(), this, context), this);
+					final IdentExpression identExpression = (IdentExpression) pce.getLeft();
+					int idte_index = addIdentTableEntry(identExpression, identExpression.getContext());
+					final IdentIA identIA = new IdentIA(idte_index, this);
+					final List<TypeTableEntry> args_types = generateFunctions.get_args_types(pce.getArgs(), this, context);
+					int i = generateFunctions.addProcTableEntry(pce, identIA, args_types, this);
 					return new ProcIA(i, this);
 				}
 				return get_assignment_path(pce.getLeft(), generateFunctions, context); // TODO this looks wrong. what are we supposed to be doing here?
