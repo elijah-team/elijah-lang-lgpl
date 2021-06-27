@@ -492,7 +492,7 @@ public class DeduceTypes2 {
 
 		public void action_function(FunctionInvocation aDependentFunction, WorkManager aWorkManager) {
 			final WorkList wl = new WorkList();
-			final FunctionDef function = aDependentFunction.getFunction();
+			final BaseFunctionDef function = aDependentFunction.getFunction();
 			WorkJob gen;
 			final OS_Module mod;
 			if (function != null) {
@@ -602,7 +602,7 @@ public class DeduceTypes2 {
 			}
 
 			ClassInvocation ci = fi.getClassInvocation();
-			FunctionDef fd3 = fi.getFunction();
+			BaseFunctionDef fd3 = fi.getFunction();
 			if (ci == null) {
 				ci = fi.pte.getClassInvocation();
 			}
@@ -678,7 +678,7 @@ public class DeduceTypes2 {
 			if (kl == null)
 				assert false;
 			else {
-				final FunctionDef fd2 = fi.getFunction();
+				final BaseFunctionDef fd2 = fi.getFunction();
 
 				if (fd2 == null && fi.pte.getArgs().size() == 0) {
 					// default ctor
