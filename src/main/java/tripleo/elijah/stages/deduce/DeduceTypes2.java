@@ -1188,6 +1188,9 @@ public class DeduceTypes2 {
 							} else
 								throw new NotImplementedException();
 						}
+						if (best == null) {
+							throw new ResolveError(IdentExpression.forString(typeName), lrl);
+						}
 						return new OS_Type((ClassStatement) best);
 					}
 				case String_:
@@ -1207,6 +1210,9 @@ public class DeduceTypes2 {
 							} else
 								throw new NotImplementedException();
 						}
+						if (best == null) {
+							throw new ResolveError(IdentExpression.forString(typeName), lrl);
+						}
 						return new OS_Type((ClassStatement) best);
 					}
 				case SystemCharacter:
@@ -1225,6 +1231,9 @@ public class DeduceTypes2 {
 								throw new NotImplementedException();
 							} else
 								throw new NotImplementedException();
+						}
+						if (best == null) {
+							throw new ResolveError(IdentExpression.forString(typeName), lrl);
 						}
 						return new OS_Type((ClassStatement) best);
 					}
@@ -2584,6 +2593,7 @@ public class DeduceTypes2 {
 				OS_Element x = null;
 				try {
 					x = DeduceLookupUtils._resolveAlias2((AliasStatement) y);
+					assert x != null;
 					ite.setStatus(BaseTableEntry.Status.KNOWN, x);
 					found_element_for_ite(generatedFunction, ite, x, ctx);
 				} catch (ResolveError aResolveError) {

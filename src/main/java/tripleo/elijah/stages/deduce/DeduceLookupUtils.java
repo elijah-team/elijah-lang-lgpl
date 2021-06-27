@@ -75,7 +75,7 @@ public class DeduceLookupUtils {
 		return lrl2.chooseBest(null);
 	}
 
-	@NotNull
+	@Nullable
 	public static OS_Element _resolveAlias2(final AliasStatement aliasStatement) throws ResolveError {
 		LookupResultList lrl2;
 		if (aliasStatement.getExpression() instanceof Qualident) {
