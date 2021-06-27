@@ -1045,6 +1045,7 @@ public class DeduceTypes2 {
 					phase.typeDecided(generatedFunction, new OS_Type(BuiltInTypes.Unit));
 				} else {
 					// TODO report some kind of error/diagnostic and/or let ForFunction know...
+					errSink.reportWarning("Can't resolve type of `Result'. potentialTypes > 1 for "+vte);
 				}
 			}
 		} else {
