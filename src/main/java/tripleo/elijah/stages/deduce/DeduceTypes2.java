@@ -1469,7 +1469,7 @@ public class DeduceTypes2 {
 									final ClassStatement classStatement = (ClassStatement) fd.getParent();
 									ClassInvocation ci = new ClassInvocation(classStatement, null);
 									final List<TypeName> genericPart = classStatement.getGenericPart();
-									if (genericPart != null) {
+									if (genericPart.size() > 0) {
 										// TODO handle generic parameters somehow
 
 									}

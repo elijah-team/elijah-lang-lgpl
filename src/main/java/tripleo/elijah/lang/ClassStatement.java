@@ -12,6 +12,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.util.NotImplementedException;
@@ -197,7 +198,7 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 		this.genericPart = genericPart;
 	}
 
-	public List<TypeName> getGenericPart() {
+	public @NotNull List<TypeName> getGenericPart() {
 		if (genericPart == null)
 			return new ArrayList<TypeName>();
 		else
