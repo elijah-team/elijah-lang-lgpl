@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements ClassItem, ModuleItem, StatementItem, FunctionItem, OS_Element, OS_Element2, Documentable, OS_Container {
 
-	public /*final*/ OS_Element parent;
+	private final OS_Element parent;
 	ClassInheritance _inh = new ClassInheritance(); // remove final for ClassBuilder
 	private ClassTypes _type;
 	private TypeNameList genericPart;
