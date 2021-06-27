@@ -44,7 +44,7 @@ program
 		indexingStatement[idx]				{pc.module.addIndexingStatement(idx);}
 	  )?
 	  (
-	    "package" xy=qualident opt_semi 	{pc.packageName(xy);pkg=pc.module.parent.makePackage(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);}
+	    "package" xy=qualident opt_semi 	{pkg=pc.defaultPackageName(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);}
 	  | programStatement[pc, out.module()] opt_semi
 	  )*
 	  EOF {out.module().postConstruct();out.FinishModule();}

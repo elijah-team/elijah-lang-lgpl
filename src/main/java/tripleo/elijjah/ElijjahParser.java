@@ -2,27 +2,28 @@
 
   package tripleo.elijjah;
 
-import antlr.NoViableAltException;
-import antlr.ParserSharedInputState;
-import antlr.RecognitionException;
-import antlr.Token;
 import antlr.TokenBuffer;
-import antlr.TokenStream;
 import antlr.TokenStreamException;
+import antlr.TokenStreamIOException;
+import antlr.ANTLRException;
+import antlr.LLkParser;
+import antlr.Token;
+import antlr.TokenStream;
+import antlr.RecognitionException;
+import antlr.NoViableAltException;
+import antlr.MismatchedTokenException;
+import antlr.SemanticException;
+import antlr.ParserSharedInputState;
 import antlr.collections.impl.BitSet;
-import tripleo.elijah.Out;
-import tripleo.elijah.contexts.*;
+
+import java.util.List;
+import java.util.ArrayList;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang.builder.*;
-import tripleo.elijah.lang.imports.AssigningImportStatement;
-import tripleo.elijah.lang.imports.NormalImportStatement;
-import tripleo.elijah.lang.imports.QualifiedImportStatement;
-import tripleo.elijah.lang.imports.RootedImportStatement;
-import tripleo.elijah.lang2.BuiltInTypes;
-import tripleo.elijjah.lang.UnaryExpression;
-
-import java.util.ArrayList;
-import java.util.List;
+import tripleo.elijah.contexts.*;
+import tripleo.elijah.lang.imports.*;
+import tripleo.elijah.lang2.*;
+import tripleo.elijah.*;
 
 public class ElijjahParser extends antlr.LLkParser       implements ElijjahTokenTypes
  {
@@ -105,7 +106,7 @@ public ElijjahParser(ParserSharedInputState state) {
 					xy=qualident();
 					opt_semi();
 					if ( inputState.guessing==0 ) {
-						pc.packageName(xy);pkg=pc.module.parent.makePackage(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);
+						pkg=pc.defaultPackageName(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);
 					}
 					break;
 				}
