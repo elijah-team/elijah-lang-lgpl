@@ -26,7 +26,6 @@ import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
-import tripleo.elijjah.lang.UnaryExpression;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
