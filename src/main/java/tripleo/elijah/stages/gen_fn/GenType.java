@@ -36,6 +36,18 @@ public class GenType {
 	public GenType() {
 
 	}
+
+	public void set(OS_Type aType) {
+		switch (aType.getType()) {
+		case USER:
+			typeName = aType;
+			break;
+		case USER_CLASS:
+			resolved = aType;
+		default:
+			System.err.println("48 Unknown in set: "+aType);
+		}
+	}
 }
 
 //

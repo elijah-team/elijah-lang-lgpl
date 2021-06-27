@@ -10,6 +10,7 @@ package tripleo.elijah.stages.deduce;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.ClassStatement;
@@ -20,7 +21,9 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.OS_UnknownType;
 import tripleo.elijah.lang.TypeName;
+import tripleo.elijah.stages.deduce.declarations.DeferredMember;
 import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
 import java.util.ArrayList;
@@ -152,6 +155,12 @@ public class DeducePhase {
 
 	public void addFunctionMapHook(FunctionMapHook aFunctionMapHook) {
 		functionMapHooks.add(aFunctionMapHook);
+	}
+
+	List<DeferredMember> deferredMembers = new ArrayList<DeferredMember>();
+
+	public void addDeferredMember(DeferredMember aDeferredMember) {
+		deferredMembers.add(aDeferredMember);
 	}
 
 	static class ResolvedVariables {
@@ -386,6 +395,35 @@ public class DeducePhase {
 					all_resolve_var_table_entries = generatedClass.resolve_var_table_entries(this); // TODO use a while loop to get all classes
 				}
 			}
+		}
+		for (DeferredMember deferredMember : deferredMembers) {
+			if (deferredMember.getParent() instanceof NamespaceStatement) {
+				final NamespaceStatement parent = (NamespaceStatement) deferredMember.getParent();
+				final NamespaceInvocation nsi = registerNamespaceInvocation(parent);
+				nsi.resolveDeferred()
+						.done(new DoneCallback<GeneratedNamespace>() {
+							@Override
+							public void onDone(GeneratedNamespace result) {
+								GeneratedContainer.VarTableEntry v = result.getVariable(deferredMember.getVariableStatement().getName());
+								assert v != null;
+								// TODO varType, potentialTypes and _resolved: which?
+								final OS_Type varType = v.varType;
+								final GenType genType = new GenType();
+								genType.set(varType);
+								if (genType.resolved == null) {
+									// HACK need to resolve, but this shouldn't be here
+									try {
+										@NotNull OS_Type rt = DeduceTypes2.resolve_type(null, varType, varType.getTypeName().getContext());
+										genType.set(rt);
+									} catch (ResolveError aResolveError) {
+										aResolveError.printStackTrace();
+									}
+								}
+								deferredMember.typeResolved().resolve(genType);
+							}
+						});
+			} else
+				throw new NotImplementedException();
 		}
 		sanityChecks();
 		for (Map.Entry<FunctionDef, Collection<GeneratedFunction>> entry : functionMap.asMap().entrySet()) {

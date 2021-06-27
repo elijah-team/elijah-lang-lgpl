@@ -19,6 +19,7 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.lang2.SpecialVariables;
+import tripleo.elijah.stages.deduce.declarations.DeferredMember;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.ConstTableIA;
 import tripleo.elijah.stages.instructions.FnCallArgs;
@@ -1066,6 +1067,28 @@ public class DeduceTypes2 {
 						ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
 					ite.type.setAttached(new OS_Type(typeName));
 				} else {
+					final OS_Element parent = vs.getParent().getParent();
+					if (parent instanceof NamespaceStatement || parent instanceof ClassStatement) {
+						assert parent != generatedFunction.getFD().getParent();
+						deferred_member(parent, getInvocationFromBacklink(ite.backlink), vs).typePromise().
+								done(new DoneCallback<GenType>() {
+									@Override
+									public void onDone(GenType result) {
+										if (ite.type == null)
+											ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+										assert result.resolved != null;
+										ite.type.setAttached(result.resolved);
+									}
+								});
+
+						GenType genType = null;
+						if (parent instanceof NamespaceStatement)
+							genType = new GenType((NamespaceStatement) parent);
+						else if (parent instanceof ClassStatement)
+							genType = new GenType((ClassStatement) parent);
+
+						generatedFunction.addDependentType(genType);
+					}
 					System.err.println("394 typename is null "+ vs.getName());
 				}
 			}
@@ -1121,6 +1144,18 @@ public class DeduceTypes2 {
 			//LookupResultList exp = lookupExpression();
 			System.out.println("2009 "+y);
 		}
+	}
+
+	private IInvocation getInvocationFromBacklink(InstructionArgument aBacklink) {
+		if (aBacklink == null) return null;
+		// TODO implement me
+		return null;
+	}
+
+	private DeferredMember deferred_member(OS_Element aParent, IInvocation aInvocation, VariableStatement aVariableStatement) {
+		DeferredMember dm = new DeferredMember(aParent, aInvocation, aVariableStatement);
+		phase.addDeferredMember(dm);
+		return dm;
 	}
 
 	@NotNull OS_Type resolve_type(final OS_Type type, final Context ctx) throws ResolveError {
