@@ -1030,6 +1030,7 @@ public class DeduceTypes2 {
 	}
 
 	void resolve_function_return_type(GeneratedFunction generatedFunction) {
+		// MODERNIZATION Does this have any affinity with DeferredMember?
 		@Nullable final InstructionArgument vte_index = generatedFunction.vte_lookup("Result");
 		if (vte_index != null) {
 			final VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(vte_index));
