@@ -10,7 +10,7 @@ package tripleo.elijah.stages.deduce;
 
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
-import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.BaseFunctionDef;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
@@ -18,20 +18,19 @@ import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 import tripleo.elijah.stages.gen_fn.WlGenerateDefaultCtor;
 import tripleo.elijah.stages.gen_fn.WlGenerateFunction;
 import tripleo.elijah.stages.gen_fn.WlGenerateNamespace;
-import tripleo.elijah.util.NotImplementedException;
 
 /**
  * Created 1/21/21 9:04 PM
  */
 public class FunctionInvocation {
-	private final FunctionDef fd;
+	private final BaseFunctionDef fd;
 	final ProcTableEntry pte;
 	private ClassInvocation classInvocation;
 	private NamespaceInvocation namespaceInvocation;
 	private final DeferredObject<GeneratedFunction, Void, Void> generateDeferred = new DeferredObject<GeneratedFunction, Void, Void>();
 	private GeneratedFunction _generated = null;
 
-	public FunctionInvocation(FunctionDef aFunctionDef, ProcTableEntry aProcTableEntry, IInvocation invocation, GeneratePhase phase) {
+	public FunctionInvocation(BaseFunctionDef aFunctionDef, ProcTableEntry aProcTableEntry, IInvocation invocation, GeneratePhase phase) {
 		this.fd = aFunctionDef;
 		this.pte = aProcTableEntry;
 		assert invocation != null;
@@ -98,7 +97,7 @@ public class FunctionInvocation {
 		return _generated;
 	}
 
-	public FunctionDef getFunction() {
+	public BaseFunctionDef getFunction() {
 		return fd;
 	}
 
