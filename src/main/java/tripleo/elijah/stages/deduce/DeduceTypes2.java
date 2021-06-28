@@ -495,11 +495,7 @@ public class DeduceTypes2 {
 			final BaseFunctionDef function = aDependentFunction.getFunction();
 			WorkJob gen;
 			final OS_Module mod;
-			if (function != null) {
-				mod = function.getContext().module();
-				final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
-				gen = new WlGenerateFunction(gf, aDependentFunction);
-			} else {
+			if (function == ConstructorDef.defaultVirtualCtor) {
 				ClassInvocation ci = aDependentFunction.getClassInvocation();
 				if (ci == null) {
 					NamespaceInvocation ni = aDependentFunction.getNamespaceInvocation();
@@ -511,6 +507,10 @@ public class DeduceTypes2 {
 				}
 				final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
 				gen = new WlGenerateDefaultCtor(gf, aDependentFunction);
+			} else {
+				mod = function.getContext().module();
+				final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
+				gen = new WlGenerateFunction(gf, aDependentFunction);
 			}
 			wl.addJob(gen);
 			aWorkManager.addJobs(wl);
@@ -680,7 +680,8 @@ public class DeduceTypes2 {
 			else {
 				final BaseFunctionDef fd2 = fi.getFunction();
 
-				if (fd2 == null && fi.pte.getArgs().size() == 0) {
+				if (fd2 == ConstructorDef.defaultVirtualCtor) {
+					assert fi.pte.getArgs().size() == 0;
 					// default ctor
 					wl.addJob(new WlGenerateDefaultCtor(phase.generatePhase.getGenerateFunctions(module), fi));
 				} else

@@ -11,6 +11,7 @@ package tripleo.elijah.stages.deduce;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.BaseFunctionDef;
+import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
@@ -68,7 +69,11 @@ public class FunctionInvocation {
 			module = fd.getContext().module();
 		if (module == null)
 			module = classInvocation.getKlass().getContext().module(); // README for constructors
-		if (fd != null) {
+		if (fd == ConstructorDef.defaultVirtualCtor) {
+			WlGenerateDefaultCtor wlgdc = new WlGenerateDefaultCtor(generatePhase.getGenerateFunctions(module), this);
+			wlgdc.run(null);
+//			GeneratedFunction gf = wlgdc.getResult();
+		} else {
 			WlGenerateFunction wlgf = new WlGenerateFunction(generatePhase.getGenerateFunctions(module), this);
 			wlgf.run(null);
 			GeneratedFunction gf = wlgf.getResult();
@@ -82,10 +87,6 @@ public class FunctionInvocation {
 					int y=2;
 				}
 			}
-		} else {
-			WlGenerateDefaultCtor wlgdc = new WlGenerateDefaultCtor(generatePhase.getGenerateFunctions(module), this);
-			wlgdc.run(null);
-//			GeneratedFunction gf = wlgdc.getResult();
 		}
 //		if (generateDeferred.isPending()) {
 //			generateDeferred.resolve(gf);
