@@ -2243,7 +2243,7 @@ public class DeduceTypes2 {
 							throw new NotImplementedException();
 						}
 					} else {
-//							errSink.reportError("1179 Can't resolve " + text);
+//						errSink.reportError("1179 Can't resolve " + text);
 						idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 						foundElement.doNoFoundElement();
 						return true;
@@ -2266,7 +2266,7 @@ public class DeduceTypes2 {
 						}
 					});
 				}
-//					assert idte.getStatus() != BaseTableEntry.Status.UNCHECKED;
+//				assert idte.getStatus() != BaseTableEntry.Status.UNCHECKED;
 			} else if (idte.getStatus() == BaseTableEntry.Status.KNOWN) {
 				el = idte.resolved_element;
 				ectx = el.getContext();
@@ -2288,7 +2288,6 @@ public class DeduceTypes2 {
 					if (!vs.typeName().isNull()) {
 						ectx = vs.typeName().getContext();
 						return RIA_STATE.CONTINUE;
-//								continue;
 					}
 				}
 				//
@@ -2305,7 +2304,6 @@ public class DeduceTypes2 {
 				}
 			} else {
 				errSink.reportError("1001 Can't resolve "+text);
-				//return null;
 				foundElement.doNoFoundElement();
 				return RIA_STATE.RETURN;
 			}
