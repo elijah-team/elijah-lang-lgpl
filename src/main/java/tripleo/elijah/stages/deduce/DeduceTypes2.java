@@ -247,6 +247,18 @@ public class DeduceTypes2 {
 							if (best1 != null) {
 								idte2.setStatus(BaseTableEntry.Status.KNOWN, best1);
 								// TODO check for elements which may contain type information
+								if (best1 instanceof VariableStatement) {
+									final VariableStatement vs = (VariableStatement) best1;
+									deferred_member(vs.getParent().getParent(), null, vs)
+										.typePromise()
+										.done(new DoneCallback<GenType>() {
+											@Override
+											public void onDone(GenType result) {
+												assert result.resolved != null;
+												idte2.type.setAttached(result.resolved);
+											}
+										});
+								}
 							} else {
 								idte2.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 								System.err.println("242 Bad lookup" + idte2.getIdent().getText());
