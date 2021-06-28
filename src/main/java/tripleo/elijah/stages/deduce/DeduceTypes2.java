@@ -416,6 +416,10 @@ public class DeduceTypes2 {
 		}
 	}
 
+	public String getFileName() {
+		return module.getFileName();
+	}
+
 	static class Resolve_each_typename {
 
 		private final DeducePhase phase;
