@@ -177,7 +177,7 @@ public class DeduceTypes2 {
 						ret.action(typeTableEntry);
 					}
 					{
-						final WorkManager workManager = new WorkManager();
+						final WorkManager workManager = wm;//new WorkManager();
 						Dependencies deps = new Dependencies(/*phase, this, errSink*/);
 						for (GenType genType : generatedFunction.dependentTypes()) {
 							deps.action_type(genType, workManager);
