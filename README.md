@@ -44,6 +44,9 @@ Elijah is not ready for prime-time yet. But you can test it by running it from t
   * python (not yet)
   * java-compiler (java8, although I use 11)
   * JDeferred
+  * Apache Commons Codec and CLI
+  * XStream (although it is not being used now)
+  * Google Guava
 
 ## Usage
 
