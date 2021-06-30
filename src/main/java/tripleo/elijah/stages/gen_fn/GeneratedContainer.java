@@ -10,6 +10,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.OS_Element;
@@ -31,6 +32,7 @@ public interface GeneratedContainer extends GeneratedNode {
     public class VarTableEntry {
         public final IdentExpression nameToken;
         public final IExpression initialValue;
+        private final OS_Element parent;
         TypeName typeName;
         public OS_Type varType;
         List<TypeTableEntry> potentialTypes = new ArrayList<TypeTableEntry>();
@@ -47,15 +49,15 @@ public interface GeneratedContainer extends GeneratedNode {
             parent          = aElement;
         }
 
-        public void addPotentialTypes(Collection<TypeTableEntry> aPotentialTypes) {
+        public void addPotentialTypes(@NotNull Collection<TypeTableEntry> aPotentialTypes) {
             potentialTypes.addAll(aPotentialTypes);
         }
 
-        public void resolve(GeneratedNode aResolved) {
+        public void resolve(@NotNull GeneratedNode aResolved) {
             _resolved = aResolved;
         }
 
-        public GeneratedNode resolved() {
+        public @Nullable GeneratedNode resolved() {
             return _resolved;
         }
 
