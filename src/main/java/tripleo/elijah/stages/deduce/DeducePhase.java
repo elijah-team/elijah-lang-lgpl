@@ -165,10 +165,12 @@ public class DeducePhase {
 
 	static class ResolvedVariables {
 		final IdentTableEntry identTableEntry;
-		final OS_Element parent;
+		final OS_Element parent; // README tripleo.elijah.lang._CommonNC, but that's package-private
 		final String varName;
 
 		public ResolvedVariables(IdentTableEntry aIdentTableEntry, OS_Element aParent, String aVarName) {
+			assert aParent instanceof ClassStatement || aParent instanceof NamespaceStatement;
+
 			identTableEntry = aIdentTableEntry;
 			parent = aParent;
 			varName = aVarName;
