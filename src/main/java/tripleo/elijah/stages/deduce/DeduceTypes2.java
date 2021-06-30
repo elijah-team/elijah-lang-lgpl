@@ -127,12 +127,14 @@ public class DeduceTypes2 {
 										ProcTableEntry pte2 = pte;
 										int y=2;
 
-										if (eh instanceof ClassStatement || eh instanceof NamespaceStatement) {
+										final OS_Element el = eh.getElement();
+
+										if (el instanceof ClassStatement || el instanceof NamespaceStatement) {
 											GenType genType = null;
-											if (eh instanceof NamespaceStatement)
-												genType = new GenType((NamespaceStatement) eh);
-											else if (eh instanceof ClassStatement)
-												genType = new GenType((ClassStatement) eh);
+											if (el instanceof NamespaceStatement)
+												genType = new GenType((NamespaceStatement) el);
+											else if (el instanceof ClassStatement)
+												genType = new GenType((ClassStatement) el);
 
 											generatedFunction.addDependentType(genType);
 										}
