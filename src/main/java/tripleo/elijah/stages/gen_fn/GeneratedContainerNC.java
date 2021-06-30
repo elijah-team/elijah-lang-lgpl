@@ -34,7 +34,7 @@ public abstract class GeneratedContainerNC extends AbstractDependencyTracker imp
 
 	public void addVarTableEntry(AccessNotation an, VariableStatement vs) {
 		// TODO dont ignore AccessNotation
-		varTable.add(new VarTableEntry(vs.getNameToken(), vs.initialValue(), vs.typeName()));
+		varTable.add(new VarTableEntry(vs.getNameToken(), vs.initialValue(), vs.typeName(), vs.getParent().getParent()));
 	}
 
 	@Override

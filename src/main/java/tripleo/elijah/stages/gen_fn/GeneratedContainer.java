@@ -36,10 +36,15 @@ public interface GeneratedContainer extends GeneratedNode {
         List<TypeTableEntry> potentialTypes = new ArrayList<TypeTableEntry>();
         private GeneratedNode _resolved;
 
-        public VarTableEntry(IdentExpression aNameToken, IExpression aInitialValue, @NotNull TypeName aTypeName) {
-            this.nameToken = aNameToken;
-            this.initialValue = aInitialValue;
-            this.typeName = aTypeName;
+        public VarTableEntry(@NotNull IdentExpression aNameToken,
+                             IExpression aInitialValue,
+                             @NotNull TypeName aTypeName,
+                             @NotNull OS_Element aElement) {
+            nameToken       = aNameToken;
+            initialValue    = aInitialValue;
+            typeName        = aTypeName;
+            varType         = new OS_Type(typeName);
+            parent          = aElement;
         }
 
         public void addPotentialTypes(Collection<TypeTableEntry> aPotentialTypes) {
@@ -52,6 +57,10 @@ public interface GeneratedContainer extends GeneratedNode {
 
         public GeneratedNode resolved() {
             return _resolved;
+        }
+
+        public @NotNull OS_Element getParent() {
+            return parent;
         }
     }
 }
