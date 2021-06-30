@@ -1,3 +1,16 @@
-antlr      FREE  https://web.archive.org/web/20110718165021/http://www.antlr.org/pipermail/antlr-interest/2004-February/006340.html
+antlr      FREE  
+            https://mvnrepository.com/artifact/antlr/antlr
+            https://web.archive.org/web/20110718165021/http://www.antlr.org/pipermail/antlr-interest/2004-February/006340.html
 java       GPL
 javassist  LGPL  https://raw.githubusercontent.com/jboss-javassist/javassist/master/License.html
+JDeferred  Apache 2.0
+            https://search.maven.org/artifact/org.jdeferred.v2/jdeferred-core
+            https://github.com/jdeferred/jdeferred/blob/master/LICENSE.txt
+Apache Commons Codec and CLI (obviously Apache)
+            https://mvnrepository.com/artifact/commons-codec/commons-codec
+            https://mvnrepository.com/artifact/commons-cli/commons-cli
+XStream    BSD 3-Clause
+            https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream
+Google Guava Apache 2.0
+            https://mvnrepository.com/artifact/com.google.guava/guava
+            

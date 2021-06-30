@@ -44,6 +44,9 @@ Elijah is not ready for prime-time yet. But you can test it by running it from t
   * python (not yet)
   * java-compiler (java8, although I use 11)
   * JDeferred
+  * Apache Commons Codec and CLI
+  * XStream (although it is not being used now)
+  * Google Guava
 
 ## Usage
 
@@ -116,3 +119,4 @@ oluoluolu+elijah \(at\) gmail.com
 
 [google group](https://groups.google.com/forum/#!forum/elijjah)
 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgitlab.com%2Felijah-team%2Felijah-lang.svg?type=large)](https://app.fossa.com/projects/git%2Bgitlab.com%2Felijah-team%2Felijah-lang?ref=badge_large)
