@@ -2162,11 +2162,11 @@ public class DeduceTypes2 {
 					@NotNull IdentTableEntry y = generatedFunction.getIdentTableEntry(to_int(x));
 					y.addStatusListener(new BaseTableEntry.StatusListener() {
 						@Override
-						public void onChange(OS_Element el3, BaseTableEntry.Status newStatus) {
+						public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 							if (newStatus == BaseTableEntry.Status.KNOWN) {
-//							assert el2 != el3;
+//							assert el2 != eh;
 								System.out.println("1424 Found for " + normal_path);
-								foundElement.doFoundElement(el3);
+								foundElement.doFoundElement(eh.getElement());
 							}
 						}
 					});
@@ -2759,7 +2759,7 @@ public class DeduceTypes2 {
 		}
 
 		@Override
-		public void onChange(OS_Element el, BaseTableEntry.Status newStatus) {
+		public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 			if (newStatus == BaseTableEntry.Status.KNOWN) {
 				if (bte instanceof VariableTableEntry) {
 					final VariableTableEntry vte = (VariableTableEntry) bte;

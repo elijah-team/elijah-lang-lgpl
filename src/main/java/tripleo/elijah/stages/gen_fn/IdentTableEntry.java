@@ -47,9 +47,9 @@ public class IdentTableEntry extends BaseTableEntry implements Constructable, Ta
         this.pc     = pc;
         addStatusListener(new StatusListener() {
 			@Override
-			public void onChange(OS_Element el, Status newStatus) {
+			public void onChange(IElementHolder eh, Status newStatus) {
 				if (newStatus == Status.KNOWN) {
-					setResolvedElement(el);
+					setResolvedElement(eh.getElement());
 				}
 			}
 		});
