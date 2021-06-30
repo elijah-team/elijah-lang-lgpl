@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.BaseFunctionDef;
 import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
@@ -28,7 +29,7 @@ public class FunctionInvocation {
 	final ProcTableEntry pte;
 	private ClassInvocation classInvocation;
 	private NamespaceInvocation namespaceInvocation;
-	private final DeferredObject<GeneratedFunction, Void, Void> generateDeferred = new DeferredObject<GeneratedFunction, Void, Void>();
+	private final DeferredObject<BaseGeneratedFunction, Void, Void> generateDeferred = new DeferredObject<tripleo.elijah.stages.gen_fn.BaseGeneratedFunction, Void, Void>();
 	private GeneratedFunction _generated = null;
 
 	public FunctionInvocation(BaseFunctionDef aFunctionDef, ProcTableEntry aProcTableEntry, IInvocation invocation, GeneratePhase phase) {
@@ -118,7 +119,7 @@ public class FunctionInvocation {
 		namespaceInvocation = aNamespaceInvocation;
 	}
 
-	public DeferredObject<GeneratedFunction, Void, Void> generateDeferred() {
+	public DeferredObject<BaseGeneratedFunction, Void, Void> generateDeferred() {
 		return generateDeferred;
 	}
 
