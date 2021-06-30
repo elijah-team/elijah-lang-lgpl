@@ -110,6 +110,39 @@ public class DeduceTypes2 {
 						resolve_cte_expression(cte, context);
 					}
 					//
+					// add proc table listeners
+					//
+					for (ProcTableEntry pte : generatedFunction.prte_list) {
+						InstructionArgument en = pte.expression_num;
+						if (en != null) {
+							if (en instanceof IdentIA) {
+								final IdentIA identIA = (IdentIA) en;
+								@NotNull IdentTableEntry idte = identIA.getEntry();
+								idte.addStatusListener(new BaseTableEntry.StatusListener() {
+									@Override
+									public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
+										if (newStatus != BaseTableEntry.Status.KNOWN)
+											return;
+
+										ProcTableEntry pte2 = pte;
+										int y=2;
+
+										if (eh instanceof ClassStatement || eh instanceof NamespaceStatement) {
+											GenType genType = null;
+											if (eh instanceof NamespaceStatement)
+												genType = new GenType((NamespaceStatement) eh);
+											else if (eh instanceof ClassStatement)
+												genType = new GenType((ClassStatement) eh);
+
+											generatedFunction.addDependentType(genType);
+										}
+									}
+								});
+							} else
+								throw new NotImplementedException();
+						}
+					}
+					//
 					// resolve ident table
 					//
 					for (IdentTableEntry ite : generatedFunction.idte_list) {
@@ -823,7 +856,10 @@ public class DeduceTypes2 {
 				} else if (itee.backlink instanceof IdentIA) {
 					x = generatedFunction.getIdentTableEntry(to_int(itee.backlink));
 					itex = ((IdentTableEntry) x).backlink;
-				} else if (itee.backlink == null || itee.backlink instanceof ProcIA) {
+				} else if (itee.backlink instanceof ProcIA) {
+					x = generatedFunction.getProcTableEntry(to_int(itee.backlink));
+					itex = null; //((ProcTableEntry) x).backlink;
+				} else if (itee.backlink == null) {
 					itex = null;
 					x = null;
 				}
@@ -2152,7 +2188,7 @@ public class DeduceTypes2 {
 //				y.setStatus(BaseTableEntry.Status.KNOWN, el);
 			} else if (x instanceof ProcIA) {
 				@NotNull ProcTableEntry y = generatedFunction.getProcTableEntry(to_int(x));
-//				y.setStatus(BaseTableEntry.Status.KNOWN, el); // TODO
+				y.setStatus(BaseTableEntry.Status.KNOWN, el);
 			} else
 				throw new NotImplementedException();
 		}
@@ -2727,83 +2763,115 @@ public class DeduceTypes2 {
 			if (newStatus == BaseTableEntry.Status.KNOWN) {
 				if (bte instanceof VariableTableEntry) {
 					final VariableTableEntry vte = (VariableTableEntry) bte;
-					@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
-					if (vte.getStatus() == BaseTableEntry.Status.KNOWN && vte.type.getAttached() != null && vte.el != null) {
+					onChangeVTE(vte);
+				} else if (bte instanceof ProcTableEntry) {
+					final ProcTableEntry pte = (ProcTableEntry) bte;
+					if (pte.getStatus() == BaseTableEntry.Status.KNOWN) { // TODO might be obvious
+						if (pte.getFunctionInvocation() != null) {
+							FunctionInvocation fi = pte.getFunctionInvocation();
+							BaseFunctionDef fd = fi.getFunction();
+							if (fd instanceof ConstructorDef) {
+								fi.generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
+									@Override
+									public void onDone(BaseGeneratedFunction result) {
+										GeneratedConstructor constructorDef = (GeneratedConstructor) result;
 
-						final OS_Type ty = vte.type.getAttached();
+										@NotNull BaseFunctionDef ele = constructorDef.getFD();
 
-						OS_Element ele2 = null;
-
+										try {
+											LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+											OS_Element best = lrl.chooseBest(null);
+											ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+										} catch (ResolveError aResolveError) {
+											aResolveError.printStackTrace();
+											errSink.reportDiagnostic(aResolveError);
+										}
+									}
+								});
+							}
+						} else
+							throw new NotImplementedException();
+					} else {
+						System.out.println("1621");
+						LookupResultList lrl = null;
 						try {
-							if (ty.getType() == OS_Type.Type.USER) {
-								@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
-								OS_Element ele = ty2.getElement();
-								LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
-								ele2 = lrl.chooseBest(null);
-							} else
-								ele2 = ty.getClassOf(); // TODO might fail later (use getElement?)
-
-							LookupResultList lrl = null;
-
-							lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
+							lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ctx);
 							OS_Element best = lrl.chooseBest(null);
-							assert best == ele2;
-							ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+							assert best != null;
+							ite.setResolvedElement(best);
+							found_element_for_ite(null, ite, best, ctx);
+//						ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 						} catch (ResolveError aResolveError) {
 							aResolveError.printStackTrace();
-							errSink.reportDiagnostic(aResolveError);
 						}
-					} else if (pot.size() == 1) {
-						TypeTableEntry tte = pot.get(0);
-						@Nullable OS_Type ty = tte.getAttached();
-						if (ty != null) {
-							if (ty.getType() == OS_Type.Type.USER) {
-								try {
-									@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
-									OS_Element ele = ty2.getElement();
-									LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
-									OS_Element best = lrl.chooseBest(null);
-									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+					}
+				}
+			}
+		}
+
+		private void onChangeVTE(VariableTableEntry vte) {
+			@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
+			if (vte.getStatus() == BaseTableEntry.Status.KNOWN && vte.type.getAttached() != null && vte.el != null) {
+
+				final OS_Type ty = vte.type.getAttached();
+
+				OS_Element ele2 = null;
+
+				try {
+					if (ty.getType() == OS_Type.Type.USER) {
+						@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
+						OS_Element ele = ty2.getElement();
+						LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+						ele2 = lrl.chooseBest(null);
+					} else
+						ele2 = ty.getClassOf(); // TODO might fail later (use getElement?)
+
+					LookupResultList lrl = null;
+
+					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
+					OS_Element best = lrl.chooseBest(null);
+					assert best == ele2;
+					ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+				} catch (ResolveError aResolveError) {
+					aResolveError.printStackTrace();
+					errSink.reportDiagnostic(aResolveError);
+				}
+			} else if (pot.size() == 1) {
+				TypeTableEntry tte = pot.get(0);
+				@Nullable OS_Type ty = tte.getAttached();
+				if (ty != null) {
+					if (ty.getType() == OS_Type.Type.USER) {
+						try {
+							@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
+							OS_Element ele = ty2.getElement();
+							LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+							OS_Element best = lrl.chooseBest(null);
+							ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 //									ite.setResolvedElement(best);
 
-									final ClassStatement klass = (ClassStatement) ele;
+							final ClassStatement klass = (ClassStatement) ele;
 
-									resolve_vte_for_class(vte, klass);
-								} catch (ResolveError resolveError) {
-									errSink.reportDiagnostic(resolveError);
-								}
-							} else if (ty.getType() == OS_Type.Type.USER_CLASS) {
-								ClassStatement klass = ty.getClassOf();
-								LookupResultList lrl = null;
-								try {
-									lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), klass.getContext());
-									OS_Element best = lrl.chooseBest(null);
+							resolve_vte_for_class(vte, klass);
+						} catch (ResolveError resolveError) {
+							errSink.reportDiagnostic(resolveError);
+						}
+					} else if (ty.getType() == OS_Type.Type.USER_CLASS) {
+						ClassStatement klass = ty.getClassOf();
+						LookupResultList lrl = null;
+						try {
+							lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), klass.getContext());
+							OS_Element best = lrl.chooseBest(null);
 //									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
-									assert best != null;
-									ite.setResolvedElement(best);
+							assert best != null;
+							ite.setResolvedElement(best);
 
-									resolve_vte_for_class(vte, klass);
-								} catch (ResolveError aResolveError) {
-									aResolveError.printStackTrace();
-								}
-							}
-						} else {
-							System.err.println("1696");
+							resolve_vte_for_class(vte, klass);
+						} catch (ResolveError aResolveError) {
+							aResolveError.printStackTrace();
 						}
 					}
 				} else {
-					System.out.println("1621");
-					LookupResultList lrl = null;
-					try {
-						lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ctx);
-						OS_Element best = lrl.chooseBest(null);
-						assert best != null;
-						ite.setResolvedElement(best);
-						found_element_for_ite(null, ite, best, ctx);
-//						ite.setStatus(BaseTableEntry.Status.KNOWN, best);
-					} catch (ResolveError aResolveError) {
-						aResolveError.printStackTrace();
-					}
+					System.err.println("1696");
 				}
 			}
 		}

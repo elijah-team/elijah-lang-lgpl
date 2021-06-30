@@ -29,7 +29,7 @@ public abstract class BaseTableEntry {
 		if (newStatus == Status.KNOWN && el == null)
 			assert false;
 		for (StatusListener statusListener : statusListenerList) {
-			statusListener.onChange(el, newStatus);
+			statusListener.onChange(new GenericElementHolder(el), newStatus);
 		}
 	}
 
@@ -42,7 +42,7 @@ public abstract class BaseTableEntry {
 	}
 
 	public interface StatusListener {
-		void onChange(OS_Element el, Status newStatus);
+		void onChange(IElementHolder eh, Status newStatus);
 	}
 }
 

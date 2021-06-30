@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created 9/12/20 10:07 PM
  */
-public class ProcTableEntry implements TableEntryIV {
+public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 	public final int index;
 	public final List<TypeTableEntry> args;
 	/**
@@ -43,6 +43,15 @@ public class ProcTableEntry implements TableEntryIV {
 		this.expression = aExpression;
 		this.expression_num = expression_num;
 		this.args = args;
+
+		addStatusListener(new StatusListener() {
+			@Override
+			public void onChange(IElementHolder eh, Status newStatus) {
+				if (newStatus == Status.KNOWN) {
+					setResolvedElement(eh.getElement());
+				}
+			}
+		});
 
 		for (TypeTableEntry tte : args) {
 			tte.addSetAttached(new TypeTableEntry.OnSetAttached() {
