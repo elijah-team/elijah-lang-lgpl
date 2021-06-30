@@ -24,12 +24,12 @@ public abstract class BaseTableEntry {
 		return status;
 	}
 
-	public void setStatus(Status newStatus, OS_Element el) {
+	public void setStatus(Status newStatus, IElementHolder eh) {
 		status = newStatus;
-		if (newStatus == Status.KNOWN && el == null)
+		if (newStatus == Status.KNOWN && eh.getElement() == null)
 			assert false;
 		for (StatusListener statusListener : statusListenerList) {
-			statusListener.onChange(new GenericElementHolder(el), newStatus);
+			statusListener.onChange(eh, newStatus);
 		}
 	}
 
