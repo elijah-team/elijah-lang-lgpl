@@ -280,7 +280,7 @@ public class DeduceTypes2 {
 							LookupResultList lrl1 = fd_ctx.lookup(idte2.getIdent().getText());
 							OS_Element best1 = lrl1.chooseBest(null);
 							if (best1 != null) {
-								idte2.setStatus(BaseTableEntry.Status.KNOWN, best1);
+								idte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best1));
 								// TODO check for elements which may contain type information
 								if (best1 instanceof VariableStatement) {
 									final VariableStatement vs = (VariableStatement) best1;
@@ -773,7 +773,7 @@ public class DeduceTypes2 {
 
 				@Override
 				public void foundElement(OS_Element x) {
-					ite.setStatus(BaseTableEntry.Status.KNOWN, x);
+					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
 					if (ite.type != null && ite.type.getAttached() != null) {
 						switch (ite.type.getAttached().getType()) {
 						case USER:
@@ -802,7 +802,7 @@ public class DeduceTypes2 {
 								lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), aFunctionContext);
 								OS_Element best = lrl.chooseBest(null);
 								if (best != null) {
-									ite.setStatus(BaseTableEntry.Status.KNOWN, x);
+									ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
 									if (ite.type != null && ite.type.getAttached() != null) {
 										if (ite.type.getAttached().getType() == OS_Type.Type.USER) {
 											try {
@@ -882,7 +882,7 @@ public class DeduceTypes2 {
 
 				@Override
 				public void foundElement(OS_Element e) {
-					ite.setStatus(BaseTableEntry.Status.KNOWN, e);
+					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
 					found_element_for_ite(generatedFunction, ite, e, ctx);
 				}
 
@@ -899,7 +899,7 @@ public class DeduceTypes2 {
 		if (vte.el == null)
 			return;
 		{
-			vte.setStatus(BaseTableEntry.Status.KNOWN, vte.el);
+			vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(vte.el));
 		}
 	}
 
@@ -1194,7 +1194,7 @@ public class DeduceTypes2 {
 				ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 				errSink.reportError("399 resolveAlias returned null");
 			} else {
-				ite.setStatus(BaseTableEntry.Status.KNOWN, x);
+				ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
 				found_element_for_ite(generatedFunction, ite, x, ctx);
 			}
 		} else {
@@ -1724,8 +1724,8 @@ public class DeduceTypes2 {
 									vte1.typeDeferred.resolve(vte2.type);
 //								vte.type = vte2.type;
 //								tte.attached = vte.type.attached;
-								vte.setStatus(BaseTableEntry.Status.KNOWN, best);
-								vte2.setStatus(BaseTableEntry.Status.KNOWN, best); // TODO ??
+								vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+								vte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best)); // TODO ??
 							} else {
 								int y = 2;
 								System.err.println("543 " + best.getClass().getName());
@@ -2159,14 +2159,14 @@ public class DeduceTypes2 {
 				if (x instanceof IntegerIA) {
 					assert false;
 					@NotNull VariableTableEntry y = generatedFunction.getVarTableEntry(to_int(x));
-					y.setStatus(BaseTableEntry.Status.KNOWN, el);
+					y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 				} else if (x instanceof IdentIA) {
 					@NotNull IdentTableEntry y = generatedFunction.getIdentTableEntry(to_int(x));
 					y.addStatusListener(new BaseTableEntry.StatusListener() {
 						@Override
 						public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 							if (newStatus == BaseTableEntry.Status.KNOWN) {
-//							assert el2 != eh;
+//								assert el2 != eh.getElement();
 								System.out.println("1424 Found for " + normal_path);
 								foundElement.doFoundElement(eh.getElement());
 							}
@@ -2183,14 +2183,14 @@ public class DeduceTypes2 {
 			InstructionArgument x = aS.get(0);
 			if (x instanceof IntegerIA) {
 				@NotNull VariableTableEntry y = generatedFunction.getVarTableEntry(to_int(x));
-				y.setStatus(BaseTableEntry.Status.KNOWN, el);
+				y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else if (x instanceof IdentIA) {
 				@NotNull IdentTableEntry y = generatedFunction.getIdentTableEntry(to_int(x));
 				assert y.getStatus() == BaseTableEntry.Status.KNOWN;
 //				y.setStatus(BaseTableEntry.Status.KNOWN, el);
 			} else if (x instanceof ProcIA) {
 				@NotNull ProcTableEntry y = generatedFunction.getProcTableEntry(to_int(x));
-				y.setStatus(BaseTableEntry.Status.KNOWN, el);
+				y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else
 				throw new NotImplementedException();
 		}
@@ -2289,7 +2289,7 @@ public class DeduceTypes2 {
 						}
 					}
 					if (el != null) {
-						idte.setStatus(BaseTableEntry.Status.KNOWN, el);
+						idte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 						if (el.getContext() != null)
 							ectx = el.getContext();
 						else {
@@ -2309,7 +2309,7 @@ public class DeduceTypes2 {
 						@Override
 						public void foundElement(OS_Element e) {
 							foundElement.doFoundElement(e);
-							idte.setStatus(BaseTableEntry.Status.KNOWN, e);
+							idte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
 						}
 
 						@Override
@@ -2382,7 +2382,7 @@ public class DeduceTypes2 {
 								LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), resolvedElement.getContext());
 								@Nullable OS_Element best = lrl2.chooseBest(null);
 								assert best != null;
-								y.setStatus(BaseTableEntry.Status.KNOWN, best);
+								y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 							} catch (ResolveError aResolveError) {
 								aResolveError.printStackTrace();
 								assert false;
@@ -2748,7 +2748,7 @@ public class DeduceTypes2 {
 				try {
 					x = DeduceLookupUtils._resolveAlias2((AliasStatement) y);
 					assert x != null;
-					ite.setStatus(BaseTableEntry.Status.KNOWN, x);
+					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
 					found_element_for_ite(generatedFunction, ite, x, ctx);
 				} catch (ResolveError aResolveError) {
 					ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
@@ -2783,7 +2783,7 @@ public class DeduceTypes2 {
 										try {
 											LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
 											OS_Element best = lrl.chooseBest(null);
-											ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+											ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 										} catch (ResolveError aResolveError) {
 											aResolveError.printStackTrace();
 											errSink.reportDiagnostic(aResolveError);
@@ -2833,7 +2833,7 @@ public class DeduceTypes2 {
 					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
 					OS_Element best = lrl.chooseBest(null);
 					assert best == ele2;
-					ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 				} catch (ResolveError aResolveError) {
 					aResolveError.printStackTrace();
 					errSink.reportDiagnostic(aResolveError);
@@ -2848,7 +2848,7 @@ public class DeduceTypes2 {
 							OS_Element ele = ty2.getElement();
 							LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
 							OS_Element best = lrl.chooseBest(null);
-							ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+							ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 //									ite.setResolvedElement(best);
 
 							final ClassStatement klass = (ClassStatement) ele;

@@ -196,7 +196,7 @@ public class GetIdentIAPathTest_ForC {
 		//
 		IdentIA ident_ia = (IdentIA) xx;
 		IdentTableEntry ite = ident_ia.getEntry();
-		ite.setStatus(BaseTableEntry.Status.KNOWN, functionDef);
+		ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(functionDef));
 
 		// This assumes we want a function call
 		// but what if we want a function pointer or a curry or function reference?
