@@ -2359,7 +2359,7 @@ public class DeduceTypes2 {
 				foundElement.doNoFoundElement();
 				return RIA_STATE.RETURN;
 			}
-			return null;
+			return RIA_STATE.NEXT;
 		}
 
 		private void action_002(@NotNull List<TypeTableEntry> aPot) {
