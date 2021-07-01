@@ -113,6 +113,88 @@ public class DeduceTypes2 {
 					// add proc table listeners
 					//
 					for (ProcTableEntry pte : generatedFunction.prte_list) {
+						pte.addStatusListener(new BaseTableEntry.StatusListener() {
+							@Override
+							public void onChange(final IElementHolder eh, final BaseTableEntry.Status newStatus) {
+								Constructable co = null;
+								if (eh instanceof ConstructableElementHolder) {
+									final ConstructableElementHolder constructableElementHolder = (ConstructableElementHolder) eh;
+									co = constructableElementHolder.getConstructable();
+								}
+								set_resolved_element_pte(co, eh.getElement(), pte);
+							}
+
+							void set_resolved_element_pte(final Constructable co, final OS_Element e, final ProcTableEntry pte) {
+								ClassInvocation ci;
+								FunctionInvocation fi;
+								GenType genType = null;
+
+//								pte.setResolvedElement(e); // README already done
+								if (e instanceof ClassStatement) {
+									ci = new ClassInvocation((ClassStatement) e, null);
+									ci = phase.registerClassInvocation(ci);
+									fi = new FunctionInvocation(ConstructorDef.defaultVirtualCtor, pte, ci, phase.generatePhase);
+									pte.setFunctionInvocation(fi);
+
+									if (co != null) {
+										co.setConstructable(pte);
+										ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+											@Override
+											public void onDone(GeneratedClass result) {
+												co.resolveType(result);
+											}
+										});
+									}
+								} else if (e instanceof FunctionDef) {
+									FunctionDef fd = (FunctionDef) e;
+									final OS_Element parent = fd.getParent();
+									if (parent instanceof NamespaceStatement) {
+										final NamespaceStatement namespaceStatement = (NamespaceStatement) parent;
+										genType = new GenType(namespaceStatement);
+										final NamespaceInvocation nsi = phase.registerNamespaceInvocation(namespaceStatement);
+//										pte.setNamespaceInvocation(nsi);
+										genType.ci = nsi;
+										fi = new FunctionInvocation(fd, pte, nsi, phase.generatePhase);
+									} else if (parent instanceof ClassStatement) {
+										final ClassStatement classStatement = (ClassStatement) parent;
+										genType = new GenType(classStatement);
+										ci = new ClassInvocation(classStatement, null);
+										ci = phase.registerClassInvocation(ci);
+										genType.ci = ci;
+										pte.setClassInvocation(ci);
+										fi = new FunctionInvocation(fd, pte, ci, phase.generatePhase);
+									} else
+										throw new IllegalStateException("Unknown parent");
+									pte.setFunctionInvocation(fi);
+								} else {
+									System.err.println("845 Unknown element for ProcTableEntry "+e);
+									return;
+								}
+								if (co != null) { // TODO really should pass in a param
+									AbstractDependencyTracker depTracker = null;
+									if (co instanceof IdentIA) {
+										final IdentIA identIA = (IdentIA) co;
+										depTracker = identIA.gf;
+									} else if (co instanceof IntegerIA) {
+										final IntegerIA integerIA = (IntegerIA) co;
+										depTracker = integerIA.gf;
+									}
+									if (depTracker != null) {
+										if (genType == null && fi.getFunction() == null) {
+											// README Assume constructor
+											final ClassStatement c = fi.getClassInvocation().getKlass();
+											final GenType genType2 = new GenType(c);
+											depTracker.addDependentType(genType2);
+										} else {
+											depTracker.addDependentFunction(fi);
+											if (genType != null)
+												depTracker.addDependentType(genType);
+										}
+									}
+								}
+							}
+						});
+
 						InstructionArgument en = pte.expression_num;
 						if (en != null) {
 							if (en instanceof IdentIA) {
@@ -348,7 +430,8 @@ public class DeduceTypes2 {
 						@Override
 						public void foundElement(OS_Element e) {
 //							pte.resolved_element = e;
-							set_resolved_element_pte(expression, e, pte);
+							pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, expression));
+//							set_resolved_element_pte(expression, e, pte);
 							if (fd instanceof DefFunctionDef) {
 								final IInvocation invocation = getInvocation(generatedFunction);
 								forFunction(new FunctionInvocation((FunctionDef) e, pte, invocation, phase.generatePhase), new ForFunction() {
@@ -1376,7 +1459,8 @@ public class DeduceTypes2 {
 					System.out.println(String.format("600 %s %s", xx ,e));
 					System.out.println("601 "+identIA.getEntry().getStatus());
 					assert e == identIA.getEntry().resolved_element;
-					set_resolved_element_pte(identIA, e, pte);
+//					set_resolved_element_pte(identIA, e, pte);
+					pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
 				}
 
 				@Override
@@ -1583,75 +1667,6 @@ public class DeduceTypes2 {
 			return ni;
 		} else
 			return classInvocation;
-	}
-
-	public void set_resolved_element_pte(Constructable co, OS_Element e, ProcTableEntry pte) {
-		ClassInvocation ci;
-		FunctionInvocation fi;
-		GenType genType = null;
-
-		pte.setResolvedElement(e);
-		if (e instanceof ClassStatement) {
-			ci = new ClassInvocation((ClassStatement) e, null);
-			ci = phase.registerClassInvocation(ci);
-			fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
-			pte.setFunctionInvocation(fi);
-
-			if (co != null) {
-				co.setConstructable(pte);
-				ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-					@Override
-					public void onDone(GeneratedClass result) {
-						co.resolveType(result);
-					}
-				});
-			}
-		} else if (e instanceof FunctionDef) {
-			FunctionDef fd = (FunctionDef) e;
-			final OS_Element parent = fd.getParent();
-			if (parent instanceof NamespaceStatement) {
-				final NamespaceStatement namespaceStatement = (NamespaceStatement) parent;
-				genType = new GenType(namespaceStatement);
-				final NamespaceInvocation nsi = phase.registerNamespaceInvocation(namespaceStatement);
-//				pte.setNamespaceInvocation(nsi);
-				fi = new FunctionInvocation(fd, pte, nsi, phase.generatePhase);
-			} else if (parent instanceof ClassStatement) {
-				final ClassStatement classStatement = (ClassStatement) parent;
-				genType = new GenType(classStatement);
-				ci = new ClassInvocation(classStatement, null);
-				ci = phase.registerClassInvocation(ci);
-				pte.setClassInvocation(ci);
-				fi = new FunctionInvocation(fd, pte, ci, phase.generatePhase);
-			} else
-				throw new IllegalStateException("Unknown parent");
-			pte.setFunctionInvocation(fi);
-		} else {
-			System.err.println("845 Unknown element for ProcTableEntry "+e);
-			return;
-		}
-		if (co != null) { // TODO really should pass in a param
-			AbstractDependencyTracker depTracker = null;
-			if (co instanceof IdentIA) {
-				final IdentIA identIA = (IdentIA) co;
-				depTracker = identIA.gf;
-			} else if (co instanceof IntegerIA) {
-				final IntegerIA integerIA = (IntegerIA) co;
-				depTracker = integerIA.gf;
-			}
-			if (depTracker != null) {
-				if (genType == null && fi.getFunction() == null) {
-					// README Assume constructor
-					final ClassStatement c = fi.getClassInvocation().getKlass();
-					final GenType genType2 = new GenType(c);
-					depTracker.addDependentType(genType2);
-				} else {
-					depTracker.addDependentFunction(fi);
-					if (genType != null)
-						depTracker.addDependentType(genType);
-				}
-			}
-		}
-
 	}
 
 	private void do_assign_call_args_ident(GeneratedFunction generatedFunction,
@@ -2076,7 +2091,8 @@ public class DeduceTypes2 {
 		final LookupResultList lrl = ctx.lookup(pn);
 		final OS_Element best = lrl.chooseBest(null);
 		if (best != null) {
-			set_resolved_element_pte(null, best, pte); // TODO check arity and arg matching
+			pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(best, null));
+//			set_resolved_element_pte(null, best, pte); // TODO check arity and arg matching
 			return true;
 		}
 		return false;
