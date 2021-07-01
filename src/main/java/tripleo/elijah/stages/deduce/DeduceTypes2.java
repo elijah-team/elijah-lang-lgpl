@@ -615,8 +615,10 @@ public class DeduceTypes2 {
 				if (genType.ci == null) {
 					ci = new ClassInvocation(c, null);
 					ci = phase.registerClassInvocation(ci);
-				} else
-					ci = genType.ci;
+				} else {
+					assert genType.ci instanceof ClassInvocation;
+					ci = (ClassInvocation) genType.ci;
+				}
 				WlGenerateClass gen = new WlGenerateClass(gf, ci, phase.generatedClasses);
 				wl.addJob(gen);
 			}

@@ -12,7 +12,7 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.TypeName;
-import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.deduce.IInvocation;
 
 /**
  * Created 5/31/21 1:32 PM
@@ -22,7 +22,7 @@ public class GenType {
 	OS_Type typeName; // TODO or just TypeName ??
 	TypeName nonGenericTypeName;
 	public OS_Type resolved;
-	public ClassInvocation ci;
+	public IInvocation ci;
 	GeneratedNode node;
 
 	public GenType(NamespaceStatement aNamespaceStatement) {
