@@ -2200,14 +2200,14 @@ public class DeduceTypes2 {
 		private void updateStatus(List<InstructionArgument> aS) {
 			InstructionArgument x = aS.get(0);
 			if (x instanceof IntegerIA) {
-				@NotNull VariableTableEntry y = generatedFunction.getVarTableEntry(to_int(x));
+				@NotNull VariableTableEntry y = ((IntegerIA)x).getEntry();
 				y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else if (x instanceof IdentIA) {
-				@NotNull IdentTableEntry y = generatedFunction.getIdentTableEntry(to_int(x));
+				@NotNull IdentTableEntry y = ((IdentIA) x).getEntry();
 				assert y.getStatus() == BaseTableEntry.Status.KNOWN;
 //				y.setStatus(BaseTableEntry.Status.KNOWN, el);
 			} else if (x instanceof ProcIA) {
-				@NotNull ProcTableEntry y = generatedFunction.getProcTableEntry(to_int(x));
+				@NotNull ProcTableEntry y = /*((ProcIA) x).getEntry()*/generatedFunction.getProcTableEntry(to_int(x));
 				y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else
 				throw new NotImplementedException();
