@@ -52,9 +52,9 @@ public class TranslateModule {
 		final TabbedOutputStream w = stream_for(item.getPackageName().getName(), cls_name);
 		try {
 			{
-				final OS_Package packageName = item.getPackageName();
+				final String packageName = item.getPackageName().getName();
 				if (!packageName.equals("")) {
-					final String pkg_decl = "package " + packageName.getName()+";";
+					final String pkg_decl = "package " + packageName+";";
 					w.put_string_ln(pkg_decl);
 					w.put_string_ln("");
 				}
@@ -90,9 +90,9 @@ public class TranslateModule {
 		final TabbedOutputStream w = stream_for(item.getPackageName().getName(), ns_name);
 		try {
 			{
-				final OS_Package packageName = item.getPackageName();
+				final String packageName = item.getPackageName().getName();
 				if (!packageName.equals("")) {
-					final String pkg_decl = "package " + packageName.getName()+";";
+					final String pkg_decl = "package " + packageName+";";
 					w.put_string_ln(pkg_decl);
 					w.put_string_ln("");
 				}
