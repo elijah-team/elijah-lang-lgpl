@@ -2266,7 +2266,8 @@ public class DeduceTypes2 {
 					LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx);
 					el = lrl.chooseBest(null);
 					ectx = el.getContext();
-					prte.setResolvedElement(el);
+//					prte.setResolvedElement(el);
+					prte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 					// handle constructor calls
 					if (el instanceof ClassStatement) {
 						assert prte.getClassInvocation() == null;
