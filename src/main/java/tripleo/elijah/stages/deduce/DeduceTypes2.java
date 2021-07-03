@@ -2299,9 +2299,6 @@ public class DeduceTypes2 {
 					}
 					{
 						if (el instanceof FunctionDef) {
-//								// wait until we have a PTE
-//								FunctionInvocation fi = new FunctionInvocation((FunctionDef) el, null, null, null);
-//								generatedFunction.addDependentFunction(fi);
 							final FunctionDef functionDef = (FunctionDef) el;
 							final OS_Element parent = functionDef.getParent();
 							GenType genType = null;
