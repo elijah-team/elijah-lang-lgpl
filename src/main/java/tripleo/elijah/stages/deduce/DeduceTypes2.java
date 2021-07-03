@@ -337,8 +337,11 @@ public class DeduceTypes2 {
 					//
 					// LOOKUP FUNCTIONS
 					//
-					for (ProcTableEntry pte : generatedFunction.prte_list) {
-						lookup_function_on_exit(pte);
+					{
+						for (ProcTableEntry pte : generatedFunction.prte_list) {
+							lookup_function_on_exit(pte);
+						}
+						wm.drain();
 					}
 				}
 				break;
@@ -743,10 +746,9 @@ public class DeduceTypes2 {
 	}
 
 	class Lookup_function_on_exit {
+		WorkList wl = new WorkList();
 
 		public void action(ProcTableEntry pte) {
-			WorkList wl = new WorkList();
-
 			FunctionInvocation fi = pte.getFunctionInvocation();
 			if (fi == null) return;
 
@@ -829,7 +831,6 @@ public class DeduceTypes2 {
 			}
 
 //			proceed(fi, ci, parent);
-			wm.drain();
 		}
 
 		void proceed(FunctionInvocation fi, ClassInvocation ci, ClassStatement aParent, WorkList wl) {
