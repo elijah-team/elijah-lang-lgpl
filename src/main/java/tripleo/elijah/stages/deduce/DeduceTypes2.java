@@ -789,12 +789,15 @@ public class DeduceTypes2 {
 				if (parent instanceof ClassStatement) {
 					ci = new ClassInvocation((ClassStatement) parent, null);
 					{
-						Map<TypeName, OS_Type> gp = pte.getClassInvocation().genericPart;
-						if (gp != null) {
-							int i = 0;
-							for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
-								ci.set(i, entry.getKey(), entry.getValue());
-								i++;
+						final ClassInvocation classInvocation = pte.getClassInvocation();
+						if (classInvocation != null) {
+							Map<TypeName, OS_Type> gp = classInvocation.genericPart;
+							if (gp != null) {
+								int i = 0;
+								for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
+									ci.set(i, entry.getKey(), entry.getValue());
+									i++;
+								}
 							}
 						}
 					}
