@@ -304,6 +304,8 @@ public class GenerateC implements CodeGenerator {
 
 		static String forVTE(@NotNull VariableTableEntry input) {
 			OS_Type attached = input.type.getAttached();
+			if (input.getStatus() == BaseTableEntry.Status.UNCHECKED)
+				return "Error_UNCHECKED_Type";
 			if (attached.getType() == OS_Type.Type.USER_CLASS) {
 				return attached.getClassOf().name();
 			} else if (attached.getType() == OS_Type.Type.USER) {
