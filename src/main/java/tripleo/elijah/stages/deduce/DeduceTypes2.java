@@ -2245,7 +2245,8 @@ public class DeduceTypes2 {
 //				y.setStatus(BaseTableEntry.Status.KNOWN, el);
 			} else if (x instanceof ProcIA) {
 				@NotNull ProcTableEntry y = /*((ProcIA) x).getEntry()*/generatedFunction.getProcTableEntry(to_int(x));
-				y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
+				assert y.getStatus() == BaseTableEntry.Status.KNOWN;
+				//y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else
 				throw new NotImplementedException();
 		}
