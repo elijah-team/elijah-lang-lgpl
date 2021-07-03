@@ -67,7 +67,7 @@ public class TestBasic {
 
 		// README this needs changing when running make
 		Assert.assertEquals(0, (int)errorCount.get(0)); // TODO Error count obviously should be 0
-		Assert.assertEquals(16, (int)errorCount.get(1)); // TODO Error count obviously should be 0
+		Assert.assertEquals(10, (int)errorCount.get(1)); // TODO Error count obviously should be 0
 		Assert.assertEquals(0, (int)errorCount.get(2)); // TODO Error count obviously should be 0
 	}
 
