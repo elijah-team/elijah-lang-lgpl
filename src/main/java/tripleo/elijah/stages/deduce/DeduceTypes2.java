@@ -64,17 +64,26 @@ public class DeduceTypes2 {
 				deduceOneFunction(generatedFunction, phase);
 			}
 		}
-		for (GeneratedNode generatedNode : phase.generatedClasses) {
-			GeneratedContainerNC generatedContainerNC = (GeneratedContainerNC) generatedNode;
-			Collection<GeneratedFunction> lgf2 = generatedContainerNC.functionMap.values();
-			for (final GeneratedFunction generatedFunction : lgf2) {
-				deduceOneFunction(generatedFunction, phase);
+		List<GeneratedNode> generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
+		int size;
+		do {
+			size = 0;
+			{
+				for (GeneratedNode generatedNode : generatedClasses) {
+					GeneratedContainerNC generatedContainerNC = (GeneratedContainerNC) generatedNode;
+					Collection<GeneratedFunction> lgf2 = generatedContainerNC.functionMap.values();
+					for (final GeneratedFunction generatedFunction : lgf2) {
+						if (deduceOneFunction(generatedFunction, phase))
+							size++;
+					}
+				}
 			}
-		}
+			generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
+		} while (size > 0);
 	}
 
-	public void deduceOneFunction(GeneratedFunction aGeneratedFunction, DeducePhase aDeducePhase) {
-		if (aGeneratedFunction.deducedAlready) return;
+	public boolean deduceOneFunction(GeneratedFunction aGeneratedFunction, DeducePhase aDeducePhase) {
+		if (aGeneratedFunction.deducedAlready) return false;
 		deduce_generated_function(aGeneratedFunction);
 		aGeneratedFunction.deducedAlready = true;
 		for (IdentTableEntry identTableEntry : aGeneratedFunction.idte_list) {
@@ -90,6 +99,7 @@ public class DeduceTypes2 {
 			}
 		}
 		aDeducePhase.addFunction(aGeneratedFunction, (FunctionDef) aGeneratedFunction.getFD());
+		return true;
 	}
 
 	List<Runnable> onRunnables = new ArrayList<Runnable>();
