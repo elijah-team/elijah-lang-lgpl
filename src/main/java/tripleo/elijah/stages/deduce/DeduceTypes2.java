@@ -742,10 +742,10 @@ public class DeduceTypes2 {
 			if (ci == null) {
 				ci = fi.pte.getClassInvocation();
 			}
-			if (fd3 == null) {
+			if (fd3 == ConstructorDef.defaultVirtualCtor) {
 				if (ci == null) {
 					if (fi.getClassInvocation() == null && fi.getNamespaceInvocation() == null) {
-						if (fi.getFunction() == null) {
+						if (fi.getFunction() == ConstructorDef.defaultVirtualCtor) { // TODO thought we already checked this
 							// Assume default constructor
 							ci = new ClassInvocation((ClassStatement) pte.getResolvedElement(), null);
 							ci = phase.registerClassInvocation(ci);
