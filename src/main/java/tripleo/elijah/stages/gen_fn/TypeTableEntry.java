@@ -63,7 +63,7 @@ public class TypeTableEntry {
 			break;
 		case USER_CLASS:
 //			ClassStatement c = attached.getClassOf();
-			genType.resolved = attached; // c
+			genType.resolved = aAttached/*attached*/; // c
 			break;
 		case UNIT_TYPE:
 			genType.resolved = aAttached;
