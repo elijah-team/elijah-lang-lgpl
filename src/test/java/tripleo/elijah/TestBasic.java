@@ -59,14 +59,15 @@ public class TestBasic {
 
 			c.feedCmdLine(List_of(s, "-sO"));
 
-			System.err.println(String.format("Error count should be 0 but is %d for %s", c.errorCount(), s));
+			if (c.errorCount() != 0)
+				System.err.println(String.format("Error count should be 0 but is %d for %s", c.errorCount(), s));
 			errorCount.put(index, c.errorCount());
 			index++;
 		}
 
 		// README this needs changing when running make
 		Assert.assertEquals(0, (int)errorCount.get(0)); // TODO Error count obviously should be 0
-		Assert.assertEquals(4, (int)errorCount.get(1)); // TODO Error count obviously should be 0
+		Assert.assertEquals(16, (int)errorCount.get(1)); // TODO Error count obviously should be 0
 		Assert.assertEquals(0, (int)errorCount.get(2)); // TODO Error count obviously should be 0
 	}
 
