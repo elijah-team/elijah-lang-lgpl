@@ -856,8 +856,11 @@ public class DeduceTypes2 {
 					assert fi.pte.getArgs().size() == 0;
 					// default ctor
 					wl.addJob(new WlGenerateDefaultCtor(phase.generatePhase.getGenerateFunctions(module), fi));
-				} else
+				} else if (fd2 instanceof ConstructorDef) {
+					wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, null)); // TODO check this
+				} else {
 					wl.addJob(new WlGenerateFunction(phase.generatePhase.getGenerateFunctions(module), fi));
+				}
 
 				wm.addJobs(wl);
 			}
