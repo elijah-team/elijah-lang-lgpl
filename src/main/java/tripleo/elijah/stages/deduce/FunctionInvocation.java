@@ -26,7 +26,7 @@ import tripleo.elijah.stages.gen_fn.WlGenerateNamespace;
  */
 public class FunctionInvocation {
 	private final BaseFunctionDef fd;
-	final ProcTableEntry pte;
+	public final ProcTableEntry pte;
 	private ClassInvocation classInvocation;
 	private NamespaceInvocation namespaceInvocation;
 	private final DeferredObject<BaseGeneratedFunction, Void, Void> generateDeferred = new DeferredObject<tripleo.elijah.stages.gen_fn.BaseGeneratedFunction, Void, Void>();
