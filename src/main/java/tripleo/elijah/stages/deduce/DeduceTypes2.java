@@ -960,6 +960,7 @@ public class DeduceTypes2 {
 					itex = ((IdentTableEntry) x).backlink;
 				} else if (itee.backlink instanceof ProcIA) {
 					x = generatedFunction.getProcTableEntry(to_int(itee.backlink));
+					itee.setCallablePTE((ProcTableEntry) x);
 					itex = null; //((ProcTableEntry) x).backlink;
 				} else if (itee.backlink == null) {
 					itex = null;
