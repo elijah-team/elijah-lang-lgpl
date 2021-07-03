@@ -744,14 +744,11 @@ public class DeduceTypes2 {
 			}
 			if (fd3 == ConstructorDef.defaultVirtualCtor) {
 				if (ci == null) {
-					if (fi.getClassInvocation() == null && fi.getNamespaceInvocation() == null) {
-						if (fi.getFunction() == ConstructorDef.defaultVirtualCtor) { // TODO thought we already checked this
-							// Assume default constructor
-							ci = new ClassInvocation((ClassStatement) pte.getResolvedElement(), null);
-							ci = phase.registerClassInvocation(ci);
-							fi.setClassInvocation(ci);
-						} else
-							throw new NotImplementedException();
+					if (/*fi.getClassInvocation() == null &&*/ fi.getNamespaceInvocation() == null) {
+						// Assume default constructor
+						ci = new ClassInvocation((ClassStatement) pte.getResolvedElement(), null);
+						ci = phase.registerClassInvocation(ci);
+						fi.setClassInvocation(ci);
 					} else
 						throw new NotImplementedException();
 				}
