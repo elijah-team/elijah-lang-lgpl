@@ -65,6 +65,8 @@ public class TypeTableEntry {
 //			ClassStatement c = attached.getClassOf();
 			genType.resolved = attached; // c
 			break;
+		case UNIT_TYPE:
+			genType.resolved = aAttached;
 		default:
 //			throw new NotImplementedException();
 			System.err.println("73 "+aAttached);
