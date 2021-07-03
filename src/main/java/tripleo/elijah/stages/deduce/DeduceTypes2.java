@@ -616,9 +616,9 @@ public class DeduceTypes2 {
 	}
 
 	class Dependencies {
+		final WorkList wl = new WorkList();
+
 		public void action_type(GenType genType, WorkManager aWorkManager) {
-			WorkList wl = new WorkList();
-			//
 			// TODO work this out further
 			if (genType.resolvedn != null) {
 				OS_Module mod = genType.resolvedn.getContext().module();
@@ -646,7 +646,6 @@ public class DeduceTypes2 {
 		}
 
 		public void action_function(FunctionInvocation aDependentFunction, WorkManager aWorkManager) {
-			final WorkList wl = new WorkList();
 			final BaseFunctionDef function = aDependentFunction.getFunction();
 			WorkJob gen;
 			final OS_Module mod;
