@@ -29,7 +29,7 @@ public class WlGenerateFunction implements WorkJob {
 	private boolean _isDone = false;
 	private GeneratedFunction result;
 
-	public WlGenerateFunction(GenerateFunctions aGenerateFunctions, FunctionInvocation aFunctionInvocation) {
+	public WlGenerateFunction(GenerateFunctions aGenerateFunctions, @NotNull FunctionInvocation aFunctionInvocation) {
 		functionDef = (FunctionDef) aFunctionInvocation.getFunction();
 		generateFunctions = aGenerateFunctions;
 		functionInvocation = aFunctionInvocation;

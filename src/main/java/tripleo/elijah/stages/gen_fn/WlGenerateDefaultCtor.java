@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import org.jdeferred2.DoneCallback;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.ClassInvocation;
@@ -26,6 +27,7 @@ public class WlGenerateDefaultCtor implements WorkJob {
 	private final FunctionInvocation functionInvocation;
 	private boolean _isDone = false;
 
+	@Contract(pure = true)
 	public WlGenerateDefaultCtor(@NotNull GenerateFunctions aGenerateFunctions, FunctionInvocation aFunctionInvocation) {
 		generateFunctions = aGenerateFunctions;
 		functionInvocation = aFunctionInvocation;

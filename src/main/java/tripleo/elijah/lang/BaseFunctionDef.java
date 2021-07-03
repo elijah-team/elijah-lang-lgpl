@@ -59,7 +59,7 @@ public abstract class BaseFunctionDef implements Documentable, ClassItem, OS_Con
 		return scope3.items().contains(element);
 	}
 
-	public List<FunctionItem> getItems() {
+	public @NotNull List<FunctionItem> getItems() {
 		List<FunctionItem> collection = new ArrayList<FunctionItem>();
 		for (OS_Element element : scope3.items()) {
 			if (element instanceof FunctionItem)
