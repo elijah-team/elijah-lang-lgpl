@@ -427,6 +427,8 @@ public class DeducePhase {
 */
 							}
 						});
+			} else if (deferredMember.getParent() instanceof ClassStatement) {
+				// TODO do something
 			} else
 				throw new NotImplementedException();
 		}
