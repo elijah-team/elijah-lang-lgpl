@@ -195,7 +195,7 @@ public class DeducePhase {
 
 	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf) {
 		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this);
-		System.err.println("196 DeduceTypes "+deduceTypes2.getFileName());
+//		System.err.println("196 DeduceTypes "+deduceTypes2.getFileName());
 		deduceTypes2.deduceFunctions(lgf);
 		return deduceTypes2;
 	}
