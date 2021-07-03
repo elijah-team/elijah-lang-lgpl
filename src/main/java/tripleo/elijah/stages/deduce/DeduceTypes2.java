@@ -511,7 +511,7 @@ public class DeduceTypes2 {
 				} else {
 					// potential_size == 0
 					// Result is handled by phase.typeDecideds, self is always valid
-					if (vte.getName() != null && !(vte.getName().equals("Result") || vte.getName().equals("self")))
+					if (vte.getName() != null && !(vte.vtt == VariableTableType.RESULT || vte.vtt == VariableTableType.SELF))
 						errSink.reportDiagnostic(new CantDecideType(vte, vte.potentialTypes()));
 				}
 			}
