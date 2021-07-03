@@ -34,7 +34,7 @@ public class ClassContext extends Context {
 		for (final ClassItem item: carrier.getItems()) {
 			if (!(item instanceof ClassStatement) &&
 				!(item instanceof NamespaceStatement) &&
-				!(item instanceof FunctionDef) &&
+				!(item instanceof BaseFunctionDef) &&
 				!(item instanceof VariableSequence) &&
 				!(item instanceof AliasStatement) &&
 				!(item instanceof PropertyStatement)
