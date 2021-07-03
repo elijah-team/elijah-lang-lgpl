@@ -206,19 +206,38 @@ public class DeduceTypes2 {
 										if (newStatus != BaseTableEntry.Status.KNOWN)
 											return;
 
-										ProcTableEntry pte2 = pte;
-										int y=2;
-
 										final OS_Element el = eh.getElement();
 
-										if (el instanceof ClassStatement || el instanceof NamespaceStatement) {
-											GenType genType = null;
-											if (el instanceof NamespaceStatement)
-												genType = new GenType((NamespaceStatement) el);
-											else if (el instanceof ClassStatement)
-												genType = new GenType((ClassStatement) el);
+										@NotNull ElObjectType type = DecideElObjectType.getElObjectType(el);
 
+										switch (type) {
+										case NAMESPACE:
+											GenType genType = new GenType((NamespaceStatement) el);
 											generatedFunction.addDependentType(genType);
+											break;
+										case CLASS:
+											GenType genType2 = new GenType((ClassStatement) el);
+											generatedFunction.addDependentType(genType2);
+											break;
+										case FUNCTION:
+											IdentIA identIA2 = null;
+											if (pte.expression_num instanceof IdentIA)
+												identIA2 = (IdentIA) pte.expression_num;
+											if (identIA2 != null) {
+												@NotNull IdentTableEntry idte2 = identIA.getEntry();
+												ProcTableEntry procTableEntry = idte2.getCallablePTE();
+												if (procTableEntry != null) {
+													ClassInvocation ci = procTableEntry.getFunctionInvocation().getClassInvocation();
+													// do we register?? probably not
+													assert ci != null;
+													FunctionInvocation fi = new FunctionInvocation((FunctionDef) el, pte, ci, phase.generatePhase);
+													generatedFunction.addDependentFunction(fi);
+												}
+											}
+											break;
+										default:
+											System.err.println(String.format("228 Don't know what to do %s %s", type, el));
+											break;
 										}
 									}
 								});
