@@ -2444,11 +2444,21 @@ public class DeduceTypes2 {
 						} else
 							assert false;
 					}
-					final IInvocation invocation = getInvocation(generatedFunction);
-					FunctionInvocation fi = new FunctionInvocation((FunctionDef) y.resolved_element, pte, invocation, phase.generatePhase);
-					int yyy=2;
-					if (pte.getFunctionInvocation() == null) {
-						pte.setFunctionInvocation(fi);
+					FunctionInvocation fi = null;
+					if (y.resolved_element instanceof ClassStatement) {
+						// assuming no constructor name or generic parameters based on function syntax
+						ClassInvocation ci = new ClassInvocation((ClassStatement) y.resolved_element, null);
+						ci = phase.registerClassInvocation(ci);
+						fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
+					} else if (y.resolved_element instanceof FunctionDef) {
+						final IInvocation invocation = getInvocation(generatedFunction);
+						fi = new FunctionInvocation((FunctionDef) y.resolved_element, pte, invocation, phase.generatePhase);
+					} else
+						assert false;
+					if (fi != null) {
+						if (pte.getFunctionInvocation() == null) {
+							pte.setFunctionInvocation(fi);
+						}
 					}
 					el = y.resolved_element;
 					ectx = el.getContext();
