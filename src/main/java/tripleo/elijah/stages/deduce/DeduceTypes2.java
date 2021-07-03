@@ -1698,7 +1698,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	public IInvocation getInvocation(GeneratedFunction generatedFunction) {
+	public IInvocation getInvocation(@NotNull GeneratedFunction generatedFunction) {
 		final ClassInvocation classInvocation = generatedFunction.fi.getClassInvocation();
 		final NamespaceInvocation ni;
 		if (classInvocation == null) {
@@ -1708,15 +1708,15 @@ public class DeduceTypes2 {
 			return classInvocation;
 	}
 
-	private void do_assign_call_args_ident(GeneratedFunction generatedFunction,
+	private void do_assign_call_args_ident(@NotNull GeneratedFunction generatedFunction,
 										   Context ctx,
 										   VariableTableEntry vte,
 										   int aInstructionIndex,
 										   ProcTableEntry aPte,
 										   int aI,
 										   TypeTableEntry aTte,
-										   IdentExpression aE) {
-		final String e_text = aE.getText();
+										   @NotNull IdentExpression aExpression) {
+		final String e_text = aExpression.getText();
 		final InstructionArgument vte_ia = generatedFunction.vte_lookup(e_text);
 //		System.out.println("10000 "+vte_ia);
 		if (vte_ia != null) {
@@ -1807,7 +1807,7 @@ public class DeduceTypes2 {
 			};
 			onFinish(runnable);
 		} else {
-			int ia = generatedFunction.addIdentTableEntry(aE, ctx);
+			int ia = generatedFunction.addIdentTableEntry(aExpression, ctx);
 			IdentTableEntry idte = generatedFunction.getIdentTableEntry(ia);
 			idte.addPotentialType(aInstructionIndex, aTte); // TODO DotExpression??
 			final int ii = aI;
