@@ -413,6 +413,7 @@ public class DeducePhase {
 								final OS_Type varType = v.varType;
 								final GenType genType = new GenType();
 								genType.set(varType);
+/*
 								if (genType.resolved == null) {
 									// HACK need to resolve, but this shouldn't be here
 									try {
@@ -423,6 +424,7 @@ public class DeducePhase {
 									}
 								}
 								deferredMember.typeResolved().resolve(genType);
+*/
 							}
 						});
 			} else
