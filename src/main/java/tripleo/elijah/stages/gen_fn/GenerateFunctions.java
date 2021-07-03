@@ -548,8 +548,8 @@ public class GenerateFunctions {
 			} else if (item instanceof DestructorDef) {
 				throw new NotImplementedException();
 			} else if (item instanceof DefFunctionDef) {
-				@NotNull GeneratedFunction f = generateFunction((DefFunctionDef) item, klass);
-				gc.addFunction((DefFunctionDef) item, f);
+//				@NotNull GeneratedFunction f = generateFunction((DefFunctionDef) item, klass);
+//				gc.addFunction((DefFunctionDef) item, f);
 			} else if (item instanceof FunctionDef) {
 				// README handled in WlGenerateFunction
 //				@NotNull GeneratedFunction f = generateFunction((FunctionDef) item, klass);
