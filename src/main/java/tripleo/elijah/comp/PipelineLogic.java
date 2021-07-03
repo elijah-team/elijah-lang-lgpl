@@ -232,22 +232,22 @@ public class PipelineLogic {
 			if (generatedNode instanceof GeneratedFunction) {
 
 			} else if (generatedNode instanceof GeneratedClass) {
-				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
-					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
-						final IdentIA ia2 = new IdentIA(identTableEntry.getIndex(), generatedFunction);
-						final String s = generatedFunction.getIdentIAPathNormal(ia2);
-						if (identTableEntry/*.isResolved()*/.getStatus() == BaseTableEntry.Status.KNOWN) {
-//							GeneratedNode node = identTableEntry.resolved();
-//							resolved_nodes.add(node);
-							System.out.println("91 Resolved IDENT "+ s);
-						} else {
-//							assert identTableEntry.getStatus() == BaseTableEntry.Status.UNKNOWN;
-//							identTableEntry.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-							System.out.println("92 Unresolved IDENT "+ s);
-						}
-					}
-				}
+//				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+//				for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
+//					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+//						final IdentIA ia2 = new IdentIA(identTableEntry.getIndex(), generatedFunction);
+//						final String s = generatedFunction.getIdentIAPathNormal(ia2);
+//						if (identTableEntry/*.isResolved()*/.getStatus() == BaseTableEntry.Status.KNOWN) {
+////							GeneratedNode node = identTableEntry.resolved();
+////							resolved_nodes.add(node);
+//							System.out.println("91 Resolved IDENT "+ s);
+//						} else {
+////							assert identTableEntry.getStatus() == BaseTableEntry.Status.UNKNOWN;
+////							identTableEntry.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+//							System.out.println("92 Unresolved IDENT "+ s);
+//						}
+//					}
+//				}
 			} else if (generatedNode instanceof GeneratedNamespace) {
 //				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
 //				NamespaceStatement namespaceStatement = generatedNamespace.getNamespaceStatement();
