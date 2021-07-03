@@ -64,6 +64,13 @@ public class DeduceTypes2 {
 				deduceOneFunction(generatedFunction, phase);
 			}
 		}
+		for (GeneratedNode generatedNode : phase.generatedClasses) {
+			GeneratedContainerNC generatedContainerNC = (GeneratedContainerNC) generatedNode;
+			Collection<GeneratedFunction> lgf2 = generatedContainerNC.functionMap.values();
+			for (final GeneratedFunction generatedFunction : lgf2) {
+				deduceOneFunction(generatedFunction, phase);
+			}
+		}
 	}
 
 	public void deduceOneFunction(GeneratedFunction aGeneratedFunction, DeducePhase aDeducePhase) {
