@@ -639,7 +639,7 @@ public class GenerateFunctions {
 
 	public void generateFromEntryPoints(List<EntryPoint> epl, DeducePhase deducePhase) {
 		final WorkList wl = new WorkList();
-		for (EntryPoint entryPoint : module.entryPoints) {
+		for (EntryPoint entryPoint : epl) {
 			if (entryPoint instanceof MainClassEntryPoint) {
 				final MainClassEntryPoint mcep = (MainClassEntryPoint) entryPoint;
 				@NotNull final ClassStatement cs = mcep.getKlass();
