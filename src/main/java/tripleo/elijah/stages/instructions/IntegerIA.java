@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.instructions;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.Constructable;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
@@ -39,7 +40,7 @@ public class IntegerIA implements InstructionArgument, Constructable {
 		return index;
 	}
 
-	public VariableTableEntry getEntry() {
+	public @NotNull VariableTableEntry getEntry() {
 		return gf.getVarTableEntry(index);
 	}
 
