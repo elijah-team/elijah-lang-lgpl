@@ -22,6 +22,8 @@ public class DecideElObjectType {
 			return ElObjectType.NAMESPACE;
 		else if (input instanceof VariableSequence)
 			return ElObjectType.VAR_SEQ;
+		else if (input instanceof VariableStatement)
+			return ElObjectType.VAR;
 		else if (input instanceof FunctionDef)
 			return ElObjectType.FUNCTION;
 		return ElObjectType.UNKNOWN;
