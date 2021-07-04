@@ -258,6 +258,29 @@ public class DeduceTypes2 {
 										}
 									}
 								});
+							} else if (en instanceof IntegerIA) {
+								final IntegerIA integerIA = (IntegerIA) en;
+								@NotNull VariableTableEntry vte = integerIA.getEntry();
+								vte.addStatusListener(new BaseTableEntry.StatusListener() {
+									@Override
+									public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
+										if (newStatus != BaseTableEntry.Status.KNOWN)
+											return;
+
+										@NotNull VariableTableEntry vte2 = vte;
+
+										final OS_Element el = eh.getElement();
+
+										@NotNull ElObjectType type = DecideElObjectType.getElObjectType(el);
+
+										switch (type) {
+										case VAR:
+											break;
+										default:
+											throw new NotImplementedException();
+										}
+									}
+								});
 							} else
 								throw new NotImplementedException();
 						}
