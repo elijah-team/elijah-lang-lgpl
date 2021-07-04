@@ -36,7 +36,7 @@ public interface GeneratedContainer extends GeneratedNode {
         TypeName typeName;
         public OS_Type varType;
         List<TypeTableEntry> potentialTypes = new ArrayList<TypeTableEntry>();
-        private GeneratedNode _resolved;
+        private GeneratedNode _resolvedType;
 
         public VarTableEntry(@NotNull IdentExpression aNameToken,
                              IExpression aInitialValue,
@@ -53,12 +53,12 @@ public interface GeneratedContainer extends GeneratedNode {
             potentialTypes.addAll(aPotentialTypes);
         }
 
-        public void resolve(@NotNull GeneratedNode aResolved) {
-            _resolved = aResolved;
+        public void resolve(@NotNull GeneratedNode aResolvedType) {
+            _resolvedType = aResolvedType;
         }
 
-        public @Nullable GeneratedNode resolved() {
-            return _resolved;
+        public @Nullable GeneratedNode resolvedType() {
+            return _resolvedType;
         }
 
         public @NotNull OS_Element getParent() {

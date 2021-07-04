@@ -218,8 +218,8 @@ public class GenerateC implements CodeGenerator {
 
 	@NotNull public String getTypeNameForVarTableEntry(GeneratedContainer.VarTableEntry o) {
 		final String typeName;
-		if (o.resolved() != null) {
-			GeneratedNode xx = o.resolved();
+		if (o.resolvedType() != null) {
+			GeneratedNode xx = o.resolvedType();
 			if (xx instanceof GeneratedClass) {
 				typeName = getTypeName((GeneratedClass) xx);
 			} else if (xx instanceof GeneratedNamespace) {
