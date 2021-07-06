@@ -264,6 +264,10 @@ public class GenerateC implements CodeGenerator {
 				tos.incr_tabs();
 				tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
 //				tos.put_string_ln(String.format("R->_tag = %d;", class_code));
+				for (GeneratedNamespace.VarTableEntry o : x.varTable) {
+//					final String typeName = getTypeNameForVarTableEntry(o);
+					tosHdr.put_string_ln(String.format("R->vm%s = 0;", o.nameToken));
+				}
 				tos.put_string_ln("return R;");
 				tos.dec_tabs();
 				tos.put_string_ln(String.format("} // namespace `%s'", x.getName()));
