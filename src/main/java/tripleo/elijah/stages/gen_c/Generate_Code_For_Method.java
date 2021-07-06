@@ -653,7 +653,8 @@ public class Generate_Code_For_Method {
 			} else if (type != null) {
 				returnType = String.format("/*267*/%s*", gc.getTypeName(type));
 			} else {
-//			throw new IllegalStateException();
+//				throw new IllegalStateException();
+				System.err.println("655 Shouldn't be here (type is null)");
 				returnType = "void/*2*/";
 			}
 			return returnType;
