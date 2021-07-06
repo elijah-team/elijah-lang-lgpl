@@ -82,12 +82,9 @@ public class GenerateC implements CodeGenerator {
 				generate_function(generatedFunction, gr, wl);
 				if (!wl.isEmpty())
 					wm.addJobs(wl);
-			} else if (generatedNode instanceof GeneratedClass) {
-				GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				generate_class(generatedClass, gr);
-			} else if (generatedNode instanceof GeneratedNamespace) {
-				GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-				generate_namespace(generatedNamespace, gr);
+			} else if (generatedNode instanceof GeneratedContainerNC) {
+				GeneratedContainerNC containerNC = (GeneratedContainerNC) generatedNode;
+				containerNC.generateCode(this, gr);
 			}
 		}
 
