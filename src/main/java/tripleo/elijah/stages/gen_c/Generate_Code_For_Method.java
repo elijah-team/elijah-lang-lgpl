@@ -61,8 +61,6 @@ public class Generate_Code_For_Method {
 	void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
 		action(gf);
 		
-		tos.dec_tabs();
-		tos.put_string_ln("}");
 		tos.flush();
 		tos.close();
 		tosHdr.flush();
@@ -161,6 +159,8 @@ public class Generate_Code_For_Method {
 					throw new IllegalStateException("Unexpected value: " + instruction.getName());
 			}
 		}
+		tos.dec_tabs();
+		tos.put_string_ln("}");
 	}
 
 	private void action_XS() {
