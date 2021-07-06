@@ -145,13 +145,13 @@ public class Generate_Code_For_Method {
 				case PC:
 					break;
 				case IS_A:
-					generate_method_is_a(instruction, tos, gf);
+					action_IS_A(instruction, tos, gf);
 					break;
 				case DECL:
-					generate_method_decl(instruction, tos, gf);
+					action_DECL(instruction, tos, gf);
 					break;
 				case CAST_TO:
-					generate_method_cast(instruction, tos, gf);
+					action_CAST(instruction, tos, gf);
 					break;
 				case NOP:
 					break;
@@ -438,9 +438,7 @@ public class Generate_Code_For_Method {
 		}
 	}
 
-	// region generateCodeForMethod-helpers
-
-	private void generate_method_is_a(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
+	private void action_IS_A(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
 		final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
 		final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
 		final Label target_label      = ((LabelIA) instruction.getArg(2)).label;
@@ -455,7 +453,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
 	}
 
-	private void generate_method_cast(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
+	private void action_CAST(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
 		final IntegerIA  vte_num_ = (IntegerIA) instruction.getArg(0);
 		final IntegerIA vte_type_ = (IntegerIA) instruction.getArg(1);
 		final IntegerIA vte_targ_ = (IntegerIA) instruction.getArg(2);
@@ -467,7 +465,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(String.format("%s = (%s)%s;", target_name, target_type, source_target));
 	}
 
-	private void generate_method_decl(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
+	private void action_DECL(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
 		final SymbolIA decl_type = (SymbolIA)  instruction.getArg(0);
 		final IntegerIA  vte_num = (IntegerIA) instruction.getArg(1);
 		final String target_name = gc.getRealTargetName(gf, vte_num);
@@ -546,8 +544,6 @@ public class Generate_Code_For_Method {
 		}
 		System.err.println("8886 y is null (No typename specified)");
 	}
-
-	// endregion
 
 	static class Generate_Method_Header {
 
