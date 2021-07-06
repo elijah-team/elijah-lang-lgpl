@@ -626,9 +626,16 @@ public class Generate_Code_For_Method {
 		String find_return_type(GeneratedFunction gf) {
 			final String returnType;
 			@Nullable InstructionArgument result_index = gf.vte_lookup("Result");
-			// TODO Handle functions where result is returned in Value
-			if (result_index == null)
-				return "void"; // README Assuming Unit
+			if (result_index == null) {
+				// if there is no Result, there should be Value
+				result_index = gf.vte_lookup("Value");
+				// but Value might be passed in. If it is, discard value
+				@NotNull VariableTableEntry vte = ((IntegerIA) result_index).getEntry();
+				if (vte.vtt != VariableTableType.RESULT)
+					result_index = null;
+				if (result_index == null)
+					return "void"; // README Assuming Unit
+			}
 
 			tte = gf.getTypeTableEntry(((IntegerIA) result_index).getIndex());
 			GeneratedNode res = tte.resolved();
