@@ -195,6 +195,12 @@ public class GenerateC implements CodeGenerator {
 					tos.put_string_ln("R->vsv = 0;");
 				else if (decl.prim_decl.equals("bool"))
 					tos.put_string_ln("R->vsv = false;");
+			} else {
+				for (GeneratedClass.VarTableEntry o : x.varTable){
+					final String typeName = getTypeNameForVarTableEntry(o);
+					// TODO this should be the result of getDefaultValue for each type
+					tos.put_string_ln(String.format("R->vm%s = 0;", o.nameToken));
+				}
 			}
 			tos.put_string_ln("return R;");
 			tos.dec_tabs();
