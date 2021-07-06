@@ -633,15 +633,16 @@ public class Generate_Code_For_Method {
 					return "void"; // README Assuming Unit
 			}
 
-			if (result_index != null) {
-				tte = gf.getTypeTableEntry(((IntegerIA) result_index).getIndex());
-				GeneratedNode res = tte.resolved();
-				if (res instanceof GeneratedContainerNC) {
-					final GeneratedContainerNC nc = (GeneratedContainerNC) res;
-					int code = nc.getCode();
-					return "Z"+code;
-				}
+			// Get it from resolved
+			tte = gf.getTypeTableEntry(((IntegerIA) result_index).getIndex());
+			GeneratedNode res = tte.resolved();
+			if (res instanceof GeneratedContainerNC) {
+				final GeneratedContainerNC nc = (GeneratedContainerNC) res;
+				int code = nc.getCode();
+				return "Z"+code;
 			}
+
+			// Get it from type.attached
 			type = tte.getAttached();
 
 			System.out.println("228 "+ type);
