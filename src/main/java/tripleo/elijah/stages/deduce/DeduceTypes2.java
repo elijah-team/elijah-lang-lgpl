@@ -879,6 +879,7 @@ public class DeduceTypes2 {
 				if (fd2 == ConstructorDef.defaultVirtualCtor) {
 					state = 1;
 				} else if (fd2 instanceof ConstructorDef) {
+					assert fi.getClassInvocation().getConstructorName() == null;
 					state = 2;
 				} else {
 					if (fi.getFunction() == null && fi.getClassInvocation() != null)
