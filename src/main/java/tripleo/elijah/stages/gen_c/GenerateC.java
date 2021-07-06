@@ -40,16 +40,13 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
  * Created 10/8/20 7:13 AM
  */
 public class GenerateC implements CodeGenerator {
-	private final OS_Module module;
 	private final ErrSink errSink;
 
 	public GenerateC(final OS_Module m) {
-		this.module = m;
-		errSink = module.parent.eee;
+		errSink = m.parent.getErrSink();
 	}
 
 	public GenerateC(final OS_Module m, ErrSink aErrSink) {
-		this.module = m;
 		errSink = aErrSink;
 	}
 
@@ -460,7 +457,7 @@ public class GenerateC implements CodeGenerator {
 
 	static class GetAssignmentValue {
 
-		public String FnCallArgs(FnCallArgs fca, GeneratedFunction gf, OS_Module module) {
+		public String FnCallArgs(FnCallArgs fca, GeneratedFunction gf) {
 			final StringBuilder sb = new StringBuilder();
 			final Instruction inst = fca.getExpression();
 //			System.err.println("9000 "+inst.getName());
@@ -477,7 +474,7 @@ public class GenerateC implements CodeGenerator {
 					sb.append(ptex.getText());
 					sb.append(Emit.emit("/*671*/")+"(");
 
-					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
+					final List<String> sll = getAssignmentValueArgs(inst, gf);
 					sb.append(Helpers.String_join(", ", sll));
 
 					sb.append(")");
@@ -486,7 +483,7 @@ public class GenerateC implements CodeGenerator {
 					if (ia2.getEntry().getStatus() == BaseTableEntry.Status.KNOWN) {
 						final CReference reference = new CReference();
 						reference.getIdentIAPath(ia2, gf);
-						final List<String> sll = getAssignmentValueArgs(inst, gf, module);
+						final List<String> sll = getAssignmentValueArgs(inst, gf);
 						reference.args(sll);
 						String path = reference.build();
 						sb.append(Emit.emit("/*827*/")+path);
@@ -510,7 +507,7 @@ public class GenerateC implements CodeGenerator {
 					reference = new CReference();
 					final IdentIA ia2 = (IdentIA) pte.expression_num;
 					reference.getIdentIAPath(ia2, gf);
-					final List<String> sll = getAssignmentValueArgs(inst, gf, module);
+					final List<String> sll = getAssignmentValueArgs(inst, gf);
 					reference.args(sll);
 					String path = reference.build();
 					sb.append(Emit.emit("/*807*/")+path);
@@ -527,7 +524,7 @@ public class GenerateC implements CodeGenerator {
 				if (true /*reference == null*/) {
 					sb.append(Emit.emit("/*810*/") + "(");
 					{
-						final List<String> sll = getAssignmentValueArgs(inst, gf, module);
+						final List<String> sll = getAssignmentValueArgs(inst, gf);
 						sb.append(Helpers.String_join(", ", sll));
 					}
 					sb.append(");");
@@ -559,7 +556,7 @@ public class GenerateC implements CodeGenerator {
 		}
 
 		@NotNull
-		private List<String> getAssignmentValueArgs(final Instruction inst, final GeneratedFunction gf, OS_Module module) {
+		private List<String> getAssignmentValueArgs(final Instruction inst, final GeneratedFunction gf) {
 			final int args_size = inst.getArgsSize();
 			final List<String> sll = new ArrayList<String>();
 			for (int i = 1; i < args_size; i++) {
@@ -632,13 +629,13 @@ public class GenerateC implements CodeGenerator {
 			return reference.build();
 		}
 
-		public String forClassInvocation(Instruction aInstruction, ClassInvocation aClsinv, GeneratedFunction gf, OS_Module module) {
+		public String forClassInvocation(Instruction aInstruction, ClassInvocation aClsinv, GeneratedFunction gf) {
 			int y=2;
 			InstructionArgument _arg0 = aInstruction.getArg(0);
 			@NotNull ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) _arg0).getIndex());
 			final CtorReference reference = new CtorReference();
 			reference.getConstructorPath(pte.expression_num, gf);
-			@NotNull List<String> x = getAssignmentValueArgs(aInstruction, gf, module);
+			@NotNull List<String> x = getAssignmentValueArgs(aInstruction, gf);
 			reference.args(x);
 			return reference.build(aClsinv);
 		}
@@ -646,7 +643,7 @@ public class GenerateC implements CodeGenerator {
 
 	String getAssignmentValue(VariableTableEntry aSelf, Instruction aInstruction, ClassInvocation aClsinv, GeneratedFunction gf) {
 		GetAssignmentValue gav = new GetAssignmentValue();
-		return gav.forClassInvocation(aInstruction, aClsinv, gf, module);
+		return gav.forClassInvocation(aInstruction, aClsinv, gf);
 	}
 
 	@NotNull
@@ -654,7 +651,7 @@ public class GenerateC implements CodeGenerator {
 		GetAssignmentValue gav = new GetAssignmentValue();
 		if (value instanceof FnCallArgs) {
 			final FnCallArgs fca = (FnCallArgs) value;
-			return gav.FnCallArgs(fca, gf, module);
+			return gav.FnCallArgs(fca, gf);
 		}
 
 		if (value instanceof ConstTableIA) {
