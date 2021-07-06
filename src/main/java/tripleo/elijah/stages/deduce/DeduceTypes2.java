@@ -98,8 +98,64 @@ public class DeduceTypes2 {
 				}
 			}
 		}
+		{
+			final GeneratedFunction gf = aGeneratedFunction;
+
+			@Nullable InstructionArgument result_index = gf.vte_lookup("Result");
+			if (result_index == null) {
+				// if there is no Result, there should be Value
+				result_index = gf.vte_lookup("Value");
+				// but Value might be passed in. If it is, discard value
+				if (result_index != null) {
+					@NotNull VariableTableEntry vte = ((IntegerIA) result_index).getEntry();
+					if (vte.vtt != VariableTableType.RESULT) {
+						result_index = null;
+					}
+				}
+			}
+			if (result_index != null) {
+				@NotNull VariableTableEntry vte = ((IntegerIA) result_index).getEntry();
+				if (vte.resolvedType() == null) {
+					OS_Type a = vte.type.getAttached();
+					if (a != null) {
+						// see resolve_function_return_type
+						switch (a.getType()) {
+							case USER_CLASS:
+								dof_uc(vte, a);
+								break;
+							case USER:
+								try {
+									@NotNull OS_Type rt = resolve_type(a, a.getTypeName().getContext());
+									dof_uc(vte, rt);
+								} catch (ResolveError aResolveError) {
+									errSink.reportDiagnostic(aResolveError);
+								}
+								break;
+							default:
+								// TODO do nothing for now
+								int y3 = 2;
+								break;
+						}
+					} /*else
+							throw new NotImplementedException();*/
+				}
+			}
+		}
 		aDeducePhase.addFunction(aGeneratedFunction, (FunctionDef) aGeneratedFunction.getFD());
 		return true;
+	}
+
+	private void dof_uc(@NotNull VariableTableEntry aVte, OS_Type aA) {
+		// we really want a ci from somewhere
+		assert aA.getClassOf().getGenericPart().size() == 0;
+		ClassInvocation ci = new ClassInvocation(aA.getClassOf(), null);
+		ci = phase.registerClassInvocation(ci);
+		ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+			@Override
+			public void onDone(GeneratedClass result) {
+				aVte.resolveType(result);
+			}
+		});
 	}
 
 	List<Runnable> onRunnables = new ArrayList<Runnable>();
