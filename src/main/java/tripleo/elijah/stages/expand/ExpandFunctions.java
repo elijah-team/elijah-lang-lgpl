@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.expand;
 
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
@@ -315,6 +316,7 @@ public class ExpandFunctions {
 	public FunctionPrelimInstruction expandExpression(@NotNull final IExpression n, final FunctionContext fc) {
 		if (n.getKind() == ExpressionKind.IDENT) {
 			final LookupResultList lrl = /*context*/fc.lookup(((IdentExpression)n).getText());
+			final ErrSink errSink = module.parent.getErrSink();
 			if (/*lrl.results().size() == 1*/true) { // TODO the reason were having problems here is constraints vs shadowing
 				// TODO what to do here??
 				final OS_Element element = lrl.chooseBest(null);
@@ -339,10 +341,10 @@ public class ExpandFunctions {
 					}
 				}
 				System.err.println("89 "+n);//element.getClass().getName());
-				module.parent.eee.reportError("type not specified: "+ getElementName(element));
+				errSink.reportError("type not specified: "+ getElementName(element));
 				return null;
 			}
-			module.parent.eee.reportError("IDENT not found: "+((IdentExpression) n).getText());
+			errSink.reportError("IDENT not found: "+((IdentExpression) n).getText());
 			NotImplementedException.raise();
 		} else if (n.getKind() == ExpressionKind.NUMERIC) {
 //			return new OS_Type(BuiltInTypes.SystemInteger);

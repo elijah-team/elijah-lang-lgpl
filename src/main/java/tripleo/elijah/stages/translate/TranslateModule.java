@@ -33,7 +33,7 @@ public class TranslateModule {
 					} else
 						System.out.println("8000 "+item);
 				} catch (final IOException e) {
-					module.parent.eee.exception(e);
+					module.parent.getErrSink().exception(e);
 				}
 			}
 		} finally {

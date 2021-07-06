@@ -44,7 +44,7 @@ public class Compilation {
 
 	private final int _compilationNumber;
 	private IO io;
-	public ErrSink eee;
+	private ErrSink eee;
 	public final List<OS_Module> modules = new ArrayList<OS_Module>();
 	private final Map<String, OS_Module> fn2m = new HashMap<String, OS_Module>();
 	private final Map<String, CompilerInstructions> fn2ci = new HashMap<String, CompilerInstructions>();
@@ -56,7 +56,6 @@ public class Compilation {
 	//
 	//
 	public PipelineLogic pipeline;
-	private ErrSink errSink;
 	//
 	//
 	//
@@ -456,7 +455,7 @@ public class Compilation {
 	}
 
 	public ErrSink getErrSink() {
-		return errSink;
+		return eee;
 	}
 }
 

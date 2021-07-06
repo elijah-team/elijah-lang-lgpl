@@ -54,7 +54,7 @@ public class DeduceTypes2 {
 	public DeduceTypes2(OS_Module module, DeducePhase phase) {
 		this.module = module;
 		this.phase = phase;
-		this.errSink = module.parent.eee;
+		this.errSink = module.parent.getErrSink();
 	}
 
 	public void deduceFunctions(final @NotNull Iterable<GeneratedNode> lgf) {

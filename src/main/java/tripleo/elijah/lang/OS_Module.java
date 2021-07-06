@@ -105,7 +105,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	@Override
 	public void add(final OS_Element anElement) {
 		if (!(anElement instanceof ModuleItem)) {
-			parent.eee.info(String.format(
+			parent.getErrSink().info(String.format(
 					"[Module#add] not adding %s to OS_Module", anElement.getClass().getName()));
 			return; // TODO FalseAddDiagnostic
 		}
@@ -279,7 +279,7 @@ public class OS_Module implements OS_Element, OS_Container {
 				final String s = String.format(
 						"[Module#add] %s Already has a member by the name of %s",
 						module_name, key);
-				parent.eee.reportWarning(s);
+				parent.getErrSink().reportWarning(s);
 			}
 		}
 	}
