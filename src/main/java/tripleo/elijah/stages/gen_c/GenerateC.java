@@ -72,10 +72,10 @@ public class GenerateC implements CodeGenerator {
 		});
 	}
 
-	public GenerateResult generateCode(final Collection<GeneratedNode> lgf, final WorkManager wm) {
+	public GenerateResult generateCode(final Collection<GeneratedNode> lgn, final WorkManager wm) {
 		GenerateResult gr = new GenerateResult();
 
-		for (final GeneratedNode generatedNode : lgf) {
+		for (final GeneratedNode generatedNode : lgn) {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				WorkList wl = new WorkList();
