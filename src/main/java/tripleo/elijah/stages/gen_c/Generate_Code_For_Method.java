@@ -646,9 +646,7 @@ public class Generate_Code_For_Method {
 			type = tte.getAttached();
 
 			System.out.println("228 "+ type);
-			if (type != null && type.getType() == OS_Type.Type.BUILT_IN && type.getBType() == BuiltInTypes.Unit) {
-				returnType = "void";
-			} else if (type instanceof OS_Type.OS_UnitType) {
+			if (type.isUnitType()) {
 				returnType = "void/*Unit*/";
 			} else if (type != null) {
 				returnType = String.format("/*267*/%s*", gc.getTypeName(type));
