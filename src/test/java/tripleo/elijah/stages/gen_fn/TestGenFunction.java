@@ -244,7 +244,7 @@ public class TestGenFunction {
 			dp.finish();
 
 			WorkManager wm = new WorkManager();
-			new GenerateC(m).generateCode(lgf, wm);
+			new GenerateC(/*m*/eee).generateCode(lgf, wm);
 		} else {
 			PipelineLogic pipelineLogic = new PipelineLogic();
 			ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
@@ -319,7 +319,7 @@ public class TestGenFunction {
 			}
 		}
 
-		GenerateC ggc = new GenerateC(m);
+		GenerateC ggc = new GenerateC(/*m*/eee);
 		ggc.generateCode(lgf, wm);
 
 		GenerateResult gr = new GenerateResult();

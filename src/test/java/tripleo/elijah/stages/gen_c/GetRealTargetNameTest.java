@@ -57,7 +57,7 @@ public class GetRealTargetNameTest {
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		ident_ia.setPrev(new IntegerIA(int_index, gf));
 		//
-		GenerateC c = new GenerateC(mod, new StdErrSink());
+		GenerateC c = new GenerateC(/*mod,*/ new StdErrSink());
 		//
 		Emit.emitting = false;
 		String x = c.getRealTargetName(gf, ident_ia);
