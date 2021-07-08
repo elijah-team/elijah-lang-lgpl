@@ -388,9 +388,11 @@ public class DeduceTypes2 {
 														@Override
 														public void onDone(FunctionInvocation functionInvocation) {
 															ClassInvocation ci = functionInvocation.getClassInvocation();
+															NamespaceInvocation nsi = functionInvocation.getNamespaceInvocation();
 															// do we register?? probably not
-															assert ci != null;
-															FunctionInvocation fi = new FunctionInvocation((FunctionDef) el, pte, ci, phase.generatePhase);
+															if (ci == null && nsi == null)
+																assert false;
+															FunctionInvocation fi = new FunctionInvocation((FunctionDef) el, pte, ci != null ? ci : nsi, phase.generatePhase);
 															generatedFunction.addDependentFunction(fi);
 														}
 													});
