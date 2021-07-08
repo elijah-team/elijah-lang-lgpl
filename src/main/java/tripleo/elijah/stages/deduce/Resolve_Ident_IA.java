@@ -78,11 +78,23 @@ class Resolve_Ident_IA {
 						continue;
 					case RETURN:
 						return;
-					default:
+					case NEXT:
 						break;
+					default:
+						throw new IllegalStateException("Can't be here");
 				}
 			} else if (ia instanceof IdentIA) {
-				if (action_IdentIA(s, (IdentIA) ia)) return;
+				RIA_STATE state = action_IdentIA(s, (IdentIA) ia);
+				switch (state) {
+					case CONTINUE:
+						continue; // never happens here
+					case RETURN:
+						return;
+					case NEXT:
+						break;
+					default:
+						throw new IllegalStateException("Can't be here");
+				}
 			} else if (ia instanceof ProcIA) {
 				action_ProcIA(ia);
 			} else
@@ -187,13 +199,13 @@ class Resolve_Ident_IA {
 		}
 	}
 
-	private boolean action_IdentIA(List<InstructionArgument> aS, IdentIA ia) {
+	private RIA_STATE action_IdentIA(List<InstructionArgument> aS, IdentIA ia) {
 		final IdentTableEntry idte = ia.getEntry();
 		if (idte.getStatus() == BaseTableEntry.Status.UNKNOWN) {
 			System.out.println("1257 Not found for " + generatedFunction.getIdentIAPathNormal(ia));
 			// No need checking more than once
 			foundElement.doNoFoundElement();
-			return true;
+			return RIA_STATE.RETURN;
 		}
 		//assert idte.backlink == null;
 
@@ -239,7 +251,7 @@ class Resolve_Ident_IA {
 					errSink.reportError("1179 Can't resolve " + text);
 					idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 					foundElement.doNoFoundElement();
-					return true;
+					return RIA_STATE.RETURN;
 				}
 			} else if (false) {
 				deduceTypes2.resolveIdentIA2_(ectx/*context*/, aS, generatedFunction, new FoundElement(phase) {
@@ -264,7 +276,7 @@ class Resolve_Ident_IA {
 			el = idte.resolved_element;
 			ectx = el.getContext();
 		}
-		return false;
+		return RIA_STATE.NEXT;
 	}
 
 	private RIA_STATE action_IntegerIA(InstructionArgument ia) {
