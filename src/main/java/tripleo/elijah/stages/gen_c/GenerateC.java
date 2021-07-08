@@ -42,11 +42,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 public class GenerateC implements CodeGenerator {
 	private final ErrSink errSink;
 
-	public GenerateC(final OS_Module m) {
-		errSink = m.parent.getErrSink();
-	}
-
-	public GenerateC(final OS_Module m, ErrSink aErrSink) {
+	public GenerateC(ErrSink aErrSink) {
 		errSink = aErrSink;
 	}
 
