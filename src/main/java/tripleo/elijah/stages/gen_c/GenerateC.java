@@ -126,8 +126,12 @@ public class GenerateC implements CodeGenerator {
 
 				if (x instanceof GeneratedClass) {
 					generate_class((GeneratedClass) x, gr);
-				} else
+				} else if (x instanceof GeneratedFunction) {
+					wl.addJob(new WlGenerateFunctionC((GeneratedFunction) x, gr, wl, this));
+				} else {
+					System.err.println(x);
 					throw new NotImplementedException();
+				}
 			}
 		}
 		for (ProcTableEntry pte : aGeneratedFunction.prte_list) {
