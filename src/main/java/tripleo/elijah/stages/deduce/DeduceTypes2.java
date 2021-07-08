@@ -15,6 +15,7 @@ import org.jdeferred2.Promise;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
+import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
@@ -789,6 +790,8 @@ public class DeduceTypes2 {
 				typeTableEntry.setAttached(dt2.resolve_type(aAttached, aAttached.getTypeName().getContext()));
 				if (typeTableEntry.getAttached().getType() == OS_Type.Type.USER_CLASS) {
 					action_USER_CLASS(typeTableEntry, typeTableEntry.getAttached());
+				} else if (typeTableEntry.getAttached().getType() == OS_Type.Type.GENERIC_TYPENAME) {
+					System.err.println(String.format("801 Generic Typearg %s for %s", tn, "genericFunction.getFD().getParent()"));
 				} else {
 					// TODO print diagnostic because resolve_type failed
 					System.err.println("245 Can't resolve typeTableEntry "+typeTableEntry);
@@ -1644,6 +1647,10 @@ public class DeduceTypes2 {
 							if (tn.asSimpleString().equals("Any"))
 								return new OS_AnyType();
 							throw new ResolveError(tn1, lrl);
+						}
+
+						if (best instanceof ClassContext.OS_TypeNameElement) {
+							return new OS_GenericTypeNameType((ClassContext.OS_TypeNameElement) best);
 						}
 
 						return new OS_Type((ClassStatement) best);
