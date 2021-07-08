@@ -20,7 +20,7 @@ import tripleo.elijah.stages.deduce.IInvocation;
 public class GenType {
 	public NamespaceStatement resolvedn;
 	OS_Type typeName; // TODO or just TypeName ??
-	TypeName nonGenericTypeName;
+	public TypeName nonGenericTypeName;
 	public OS_Type resolved;
 	public IInvocation ci;
 	GeneratedNode node;
