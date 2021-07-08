@@ -80,6 +80,22 @@ public class DeduceTypes2 {
 			}
 			generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
 		} while (size > 0);
+		do {
+			size = 0;
+			{
+				for (GeneratedNode generatedNode : generatedClasses) {
+					if (!(generatedNode instanceof GeneratedClass)) continue;
+//					GeneratedContainerNC generatedContainerNC = (GeneratedContainerNC) generatedNode;
+					GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+					Collection<GeneratedConstructor> lgf2 = generatedClass.constructors.values();
+					for (final GeneratedConstructor generatedConstructor : lgf2) {
+						if (deduceOneConstructor(generatedConstructor, phase))
+							size++;
+					}
+				}
+			}
+			generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
+		} while (size > 0);
 	}
 
 	public boolean deduceOneFunction(GeneratedFunction aGeneratedFunction, DeducePhase aDeducePhase) {
@@ -142,6 +158,69 @@ public class DeduceTypes2 {
 			}
 		}
 		aDeducePhase.addFunction(aGeneratedFunction, (FunctionDef) aGeneratedFunction.getFD());
+		return true;
+	}
+
+	public boolean deduceOneConstructor(GeneratedConstructor aGeneratedConstructor, DeducePhase aDeducePhase) {
+		if (aGeneratedConstructor.deducedAlready) return false;
+		deduce_generated_function_base(aGeneratedConstructor, aGeneratedConstructor.getFD());
+		aGeneratedConstructor.deducedAlready = true;
+		for (IdentTableEntry identTableEntry : aGeneratedConstructor.idte_list) {
+			if (identTableEntry.resolved_element instanceof VariableStatement) {
+				final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
+				OS_Element el = vs.getParent().getParent();
+				OS_Element el2 = aGeneratedConstructor.getFD().getParent();
+				if (el != el2) {
+					if (el instanceof ClassStatement || el instanceof NamespaceStatement)
+						// NOTE there is no concept of gf here
+						aDeducePhase.registerResolvedVariable(identTableEntry, el, vs.getName());
+				}
+			}
+		}
+		{
+			final GeneratedConstructor gf = aGeneratedConstructor;
+
+			@Nullable InstructionArgument result_index = gf.vte_lookup("Result");
+			if (result_index == null) {
+				// if there is no Result, there should be Value
+				result_index = gf.vte_lookup("Value");
+				// but Value might be passed in. If it is, discard value
+				if (result_index != null) {
+					@NotNull VariableTableEntry vte = ((IntegerIA) result_index).getEntry();
+					if (vte.vtt != VariableTableType.RESULT) {
+						result_index = null;
+					}
+				}
+			}
+			if (result_index != null) {
+				@NotNull VariableTableEntry vte = ((IntegerIA) result_index).getEntry();
+				if (vte.resolvedType() == null) {
+					OS_Type a = vte.type.getAttached();
+					if (a != null) {
+						// see resolve_function_return_type
+						switch (a.getType()) {
+							case USER_CLASS:
+								dof_uc(vte, a);
+								break;
+							case USER:
+								try {
+									@NotNull OS_Type rt = resolve_type(a, a.getTypeName().getContext());
+									dof_uc(vte, rt);
+								} catch (ResolveError aResolveError) {
+									errSink.reportDiagnostic(aResolveError);
+								}
+								break;
+							default:
+								// TODO do nothing for now
+								int y3 = 2;
+								break;
+						}
+					} /*else
+							throw new NotImplementedException();*/
+				}
+			}
+		}
+//		aDeducePhase.addFunction(aGeneratedConstructor, (FunctionDef) aGeneratedConstructor.getFD()); // TODO do we need this?
 		return true;
 	}
 
@@ -1360,7 +1439,11 @@ public class DeduceTypes2 {
 				} else {
 					final OS_Element parent = vs.getParent().getParent();
 					if (parent instanceof NamespaceStatement || parent instanceof ClassStatement) {
-						assert parent != generatedFunction.getFD().getParent();
+						if (generatedFunction instanceof GeneratedFunction) {
+							final GeneratedFunction generatedFunction1 = (GeneratedFunction) generatedFunction;
+							assert parent != generatedFunction1.getFD().getParent();
+						} else
+							assert parent != ((GeneratedConstructor)generatedFunction).getFD().getParent();
 						deferred_member(parent, getInvocationFromBacklink(ite.backlink), vs).typePromise().
 								done(new DoneCallback<GenType>() {
 									@Override
