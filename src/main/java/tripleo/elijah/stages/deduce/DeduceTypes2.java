@@ -1431,10 +1431,14 @@ public class DeduceTypes2 {
 				}
 			}
 		} else {
-			// if Result is not present, then make function return Unit
-			// TODO May not be correct in all cases, such as when Value is present
-			// but works for current code structure, where Result is a always present
-			phase.typeDecided((GeneratedFunction) generatedFunction, new OS_Type(BuiltInTypes.Unit));
+			if (generatedFunction instanceof GeneratedConstructor) {
+				// cant set return type of constructors
+			} else {
+				// if Result is not present, then make function return Unit
+				// TODO May not be correct in all cases, such as when Value is present
+				// but works for current code structure, where Result is a always present
+				phase.typeDecided((GeneratedFunction) generatedFunction, new OS_Type(BuiltInTypes.Unit));
+			}
 		}
 	}
 
