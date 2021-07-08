@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jdeferred2.DoneCallback;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.IExpression;
@@ -37,6 +38,7 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 	private ClassInvocation classInvocation;
 	private FunctionInvocation functionInvocation;
 	private DeferredObject<ProcTableEntry, Void, Void> completeDeferred = new DeferredObject<ProcTableEntry, Void, Void>();
+	private DeferredObject<FunctionInvocation, Void, Void> onFunctionInvocations = new DeferredObject<FunctionInvocation, Void, Void>();
 
 	public ProcTableEntry(final int index, final IExpression aExpression, final InstructionArgument expression_num, final List<TypeTableEntry> args) {
 		this.index = index;
@@ -135,7 +137,9 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 	}
 
 	public void setFunctionInvocation(FunctionInvocation aFunctionInvocation) {
+		// NOTE this can only be called once because of Promise
 		functionInvocation = aFunctionInvocation;
+		onFunctionInvocations.resolve(functionInvocation);
 	}
 
 	public FunctionInvocation getFunctionInvocation() {
@@ -144,6 +148,10 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 
 	public DeferredObject<ProcTableEntry, Void, Void> completeDeferred() {
 		return completeDeferred;
+	}
+
+	public void onFunctionInvocation(final DoneCallback<FunctionInvocation> callback) {
+		onFunctionInvocations.then(callback);
 	}
 }
 

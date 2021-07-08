@@ -383,11 +383,16 @@ public class DeduceTypes2 {
 												@NotNull IdentTableEntry idte2 = identIA.getEntry();
 												ProcTableEntry procTableEntry = idte2.getCallablePTE();
 												if (procTableEntry != null) {
-													ClassInvocation ci = procTableEntry.getFunctionInvocation().getClassInvocation();
-													// do we register?? probably not
-													assert ci != null;
-													FunctionInvocation fi = new FunctionInvocation((FunctionDef) el, pte, ci, phase.generatePhase);
-													generatedFunction.addDependentFunction(fi);
+													procTableEntry.onFunctionInvocation(new DoneCallback<FunctionInvocation>() {
+														@Override
+														public void onDone(FunctionInvocation functionInvocation) {
+															ClassInvocation ci = functionInvocation.getClassInvocation();
+															// do we register?? probably not
+															assert ci != null;
+															FunctionInvocation fi = new FunctionInvocation((FunctionDef) el, pte, ci, phase.generatePhase);
+															generatedFunction.addDependentFunction(fi);
+														}
+													});
 												}
 											}
 											break;
