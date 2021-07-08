@@ -28,7 +28,6 @@ public class TypeTableEntry {
 	private OS_Type attached;
 	private final GenType genType = new GenType();
 	public final IExpression expression;
-	private GeneratedNode _resolved;
 	private final List<OnSetAttached> osacbs = new ArrayList<OnSetAttached>();
 
 	public interface OnSetAttached {
@@ -89,15 +88,15 @@ public class TypeTableEntry {
 	}
 
 	public void resolve(GeneratedNode aResolved) {
-		_resolved = aResolved;
+		genType.node = aResolved;
 	}
 
 	public GeneratedNode resolved() {
-		return _resolved;
+		return genType.node;
 	}
 
 	public boolean isResolved() {
-		return _resolved != null;
+		return genType.node != null;
 	}
 
 	public OS_Type getAttached() {
