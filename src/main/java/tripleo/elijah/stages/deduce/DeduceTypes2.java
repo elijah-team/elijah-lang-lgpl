@@ -166,6 +166,10 @@ public class DeduceTypes2 {
 
 	public void deduce_generated_function(final GeneratedFunction generatedFunction) {
 		final FunctionDef fd = (FunctionDef) generatedFunction.getFD();
+		deduce_generated_function_base(generatedFunction, fd);
+	}
+
+	public void deduce_generated_function_base(final BaseGeneratedFunction generatedFunction, BaseFunctionDef fd) {
 		final Context fd_ctx = fd.getContext();
 		//
 		System.err.println("** deduce_generated_function "+ fd.name()+" "+fd);//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
@@ -991,7 +995,7 @@ public class DeduceTypes2 {
 	}
 
 	public void assign_type_to_idte(IdentTableEntry ite,
-									GeneratedFunction generatedFunction,
+									BaseGeneratedFunction generatedFunction,
 									Context aFunctionContext,
 									Context aContext) {
 		if (!ite.hasResolvedElement()) {
@@ -1075,7 +1079,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	public void resolve_ident_table_entry(IdentTableEntry ite, GeneratedFunction generatedFunction, Context ctx) {
+	public void resolve_ident_table_entry(IdentTableEntry ite, BaseGeneratedFunction generatedFunction, Context ctx) {
 		InstructionArgument itex = new IdentIA(ite.getIndex(), generatedFunction);
 		while (itex != null) {
 			IdentTableEntry itee = generatedFunction.getIdentTableEntry(to_int(itex));
@@ -1125,7 +1129,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	public void resolve_var_table_entry(VariableTableEntry vte, GeneratedFunction generatedFunction, Context ctx) {
+	public void resolve_var_table_entry(VariableTableEntry vte, BaseGeneratedFunction generatedFunction, Context ctx) {
 		if (vte.el == null)
 			return;
 		{
@@ -1135,13 +1139,13 @@ public class DeduceTypes2 {
 
 	class Implement_construct {
 
-		private final GeneratedFunction generatedFunction;
+		private final BaseGeneratedFunction generatedFunction;
 		private final Instruction instruction;
 		private final InstructionArgument expression;
 
 		private final ProcTableEntry pte;
 
-		public Implement_construct(GeneratedFunction aGeneratedFunction, Instruction aInstruction) {
+		public Implement_construct(BaseGeneratedFunction aGeneratedFunction, Instruction aInstruction) {
 			generatedFunction = aGeneratedFunction;
 			instruction = aInstruction;
 
@@ -1304,17 +1308,17 @@ public class DeduceTypes2 {
 		}
 	}
 
-	void implement_construct(GeneratedFunction generatedFunction, Instruction instruction) {
+	void implement_construct(BaseGeneratedFunction generatedFunction, Instruction instruction) {
 		final Implement_construct ic = newImplement_construct(generatedFunction, instruction);
 		ic.action();
 	}
 
 	@NotNull
-	public DeduceTypes2.Implement_construct newImplement_construct(GeneratedFunction generatedFunction, Instruction instruction) {
+	public DeduceTypes2.Implement_construct newImplement_construct(BaseGeneratedFunction generatedFunction, Instruction instruction) {
 		return new Implement_construct(generatedFunction, instruction);
 	}
 
-	void resolve_function_return_type(GeneratedFunction generatedFunction) {
+	void resolve_function_return_type(BaseGeneratedFunction generatedFunction) {
 		// MODERNIZATION Does this have any affinity with DeferredMember?
 		@Nullable final InstructionArgument vte_index = generatedFunction.vte_lookup("Result");
 		if (vte_index != null) {
@@ -1342,7 +1346,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	void found_element_for_ite(GeneratedFunction generatedFunction, IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
+	void found_element_for_ite(BaseGeneratedFunction generatedFunction, IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
 		assert y == ite.resolved_element;
 
 		if (y instanceof VariableStatement) {
@@ -1574,7 +1578,7 @@ public class DeduceTypes2 {
 //		throw new IllegalStateException("Cant be here.");
 	}
 
-	private void do_assign_constant(final GeneratedFunction generatedFunction, final Instruction instruction, final VariableTableEntry vte, final ConstTableIA i2) {
+	private void do_assign_constant(final BaseGeneratedFunction generatedFunction, final Instruction instruction, final VariableTableEntry vte, final ConstTableIA i2) {
 		if (vte.type.getAttached() != null) {
 			// TODO check types
 		}
@@ -1586,7 +1590,7 @@ public class DeduceTypes2 {
 		vte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
-	private void do_assign_call(final GeneratedFunction generatedFunction,
+	private void do_assign_call(final BaseGeneratedFunction generatedFunction,
 								final Context ctx,
 								final VariableTableEntry vte,
 								final FnCallArgs fca,
@@ -1816,7 +1820,7 @@ public class DeduceTypes2 {
 			return classInvocation;
 	}
 
-	private void do_assign_call_args_ident(@NotNull GeneratedFunction generatedFunction,
+	private void do_assign_call_args_ident(@NotNull BaseGeneratedFunction generatedFunction,
 										   Context ctx,
 										   VariableTableEntry vte,
 										   int aInstructionIndex,
@@ -1934,7 +1938,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private void do_assign_call_GET_ITEM(GetItemExpression gie, TypeTableEntry tte, GeneratedFunction generatedFunction, Context ctx) {
+	private void do_assign_call_GET_ITEM(GetItemExpression gie, TypeTableEntry tte, BaseGeneratedFunction generatedFunction, Context ctx) {
 		try {
 			final LookupResultList lrl = DeduceLookupUtils.lookupExpression(gie.getLeft(), ctx);
 			final OS_Element best = lrl.chooseBest(null);
@@ -2089,7 +2093,7 @@ public class DeduceTypes2 {
 		phase.forFunction(this, gf, forFunction);
 	}
 
-	private void do_assign_constant(final GeneratedFunction generatedFunction, final Instruction instruction, final IdentTableEntry idte, final ConstTableIA i2) {
+	private void do_assign_constant(final BaseGeneratedFunction generatedFunction, final Instruction instruction, final IdentTableEntry idte, final ConstTableIA i2) {
 		if (idte.type != null && idte.type.getAttached() != null) {
 			// TODO check types
 		}
@@ -2101,7 +2105,7 @@ public class DeduceTypes2 {
 		idte.addPotentialType(instruction.getIndex(), cte.type);
 	}
 
-	private void do_assign_call(final GeneratedFunction generatedFunction,
+	private void do_assign_call(final BaseGeneratedFunction generatedFunction,
 								final Context ctx,
 								final IdentTableEntry idte,
 								final FnCallArgs fca,
@@ -2145,7 +2149,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	private void implement_calls(final GeneratedFunction gf, final Context context, final InstructionArgument i2, final ProcTableEntry fn1, final int pc) {
+	private void implement_calls(final BaseGeneratedFunction gf, final Context context, final InstructionArgument i2, final ProcTableEntry fn1, final int pc) {
 		if (gf.deferred_calls.contains(pc)) {
 			System.err.println("Call is deferred "/*+gf.getInstruction(pc)*/+" "+fn1);
 			return;
@@ -2153,7 +2157,7 @@ public class DeduceTypes2 {
 		implement_calls_(gf, context, i2, fn1, pc);
 	}
 
-	private void implement_calls_(final GeneratedFunction gf,
+	private void implement_calls_(final BaseGeneratedFunction gf,
 								  final Context context,
 								  final InstructionArgument i2,
 								  final ProcTableEntry pte,
@@ -2260,7 +2264,7 @@ public class DeduceTypes2 {
 		resolveIdentIA2_(context, s, generatedFunction, foundElement);
 	}
 
-	public void resolveIdentIA_(Context context, IdentIA identIA, GeneratedFunction generatedFunction, FoundElement foundElement) {
+	public void resolveIdentIA_(Context context, IdentIA identIA, BaseGeneratedFunction generatedFunction, FoundElement foundElement) {
 		Resolve_Ident_IA ria = new Resolve_Ident_IA(this, phase, context, identIA, generatedFunction, foundElement, errSink);
 		ria.action();
 	}
@@ -2279,7 +2283,7 @@ public class DeduceTypes2 {
 
 	public void resolveIdentIA2_(@NotNull final Context ctx,
 								 @NotNull final List<InstructionArgument> s,
-								 @NotNull final GeneratedFunction generatedFunction,
+								 @NotNull final BaseGeneratedFunction generatedFunction,
 								 @NotNull final FoundElement foundElement) {
 		OS_Element el = null;
 		Context ectx = ctx;

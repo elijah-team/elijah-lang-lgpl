@@ -41,6 +41,7 @@ public class GeneratedConstructor extends BaseGeneratedFunction {
 
 	// endregion
 
+	@Override
 	public @NotNull BaseFunctionDef getFD() {
 		if (cd == null) throw new IllegalStateException("No function");
 		return cd;

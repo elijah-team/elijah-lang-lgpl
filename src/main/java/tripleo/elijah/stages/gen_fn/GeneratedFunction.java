@@ -41,6 +41,7 @@ public class GeneratedFunction extends BaseGeneratedFunction {
 
 	// endregion
 
+	@Override
 	public @NotNull BaseFunctionDef getFD() {
 		if (fd != null) return fd;
 		throw new IllegalStateException("No function");

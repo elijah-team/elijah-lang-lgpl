@@ -429,6 +429,8 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	public GeneratedNode getGenClass() {
 		return genClass;
 	}
+
+	public abstract BaseFunctionDef getFD();
 }
 
 //

@@ -13,15 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.gen_fn.BaseTableEntry;
-import tripleo.elijah.stages.gen_fn.GenType;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GenericElementHolder;
-import tripleo.elijah.stages.gen_fn.IElementHolder;
-import tripleo.elijah.stages.gen_fn.IdentTableEntry;
-import tripleo.elijah.stages.gen_fn.ProcTableEntry;
-import tripleo.elijah.stages.gen_fn.TypeTableEntry;
-import tripleo.elijah.stages.gen_fn.VariableTableEntry;
+import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
@@ -37,7 +29,7 @@ import java.util.List;
 class Resolve_Ident_IA {
 	private final Context context;
 	private final IdentIA identIA;
-	private final GeneratedFunction generatedFunction;
+	private final BaseGeneratedFunction generatedFunction;
 	private final FoundElement foundElement;
 	private final ErrSink errSink;
 
@@ -49,7 +41,7 @@ class Resolve_Ident_IA {
 							final @NotNull DeducePhase aPhase,
 							final @NotNull Context aContext,
 							final @NotNull IdentIA aIdentIA,
-							final @NotNull GeneratedFunction aGeneratedFunction,
+							final BaseGeneratedFunction aGeneratedFunction,
 							final @NotNull FoundElement aFoundElement,
 							final @NotNull ErrSink aErrSink) {
 		context = aContext;
