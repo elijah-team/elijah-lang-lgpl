@@ -543,13 +543,11 @@ public class DeduceTypes2 {
 					System.err.println("298 "+x);
 					resolveIdentIA_(context, expression, generatedFunction, new FoundElement(phase) {
 
-						final String xx = x;
+						@SuppressWarnings("unused") final String xx = x;
 
 						@Override
 						public void foundElement(OS_Element e) {
-//							pte.resolved_element = e;
 							pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, expression));
-//							set_resolved_element_pte(expression, e, pte);
 							if (fd instanceof DefFunctionDef) {
 								final IInvocation invocation = getInvocation(generatedFunction);
 								forFunction(new FunctionInvocation((FunctionDef) e, pte, invocation, phase.generatePhase), new ForFunction() {
@@ -1139,9 +1137,9 @@ public class DeduceTypes2 {
 
 		private final GeneratedFunction generatedFunction;
 		private final Instruction instruction;
-
-		final ProcTableEntry pte;
 		private final InstructionArgument expression;
+
+		private final ProcTableEntry pte;
 
 		public Implement_construct(GeneratedFunction aGeneratedFunction, Instruction aInstruction) {
 			// README all these asserts are redundant, I know
