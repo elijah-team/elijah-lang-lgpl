@@ -553,7 +553,7 @@ public class DeduceTypes2 {
 						public void foundElement(OS_Element e) {
 							pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, expression));
 							if (fd instanceof DefFunctionDef) {
-								final IInvocation invocation = getInvocation(generatedFunction);
+								final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
 								forFunction(new FunctionInvocation((FunctionDef) e, pte, invocation, phase.generatePhase), new ForFunction() {
 									@Override
 									public void typeDecided(OS_Type aType) {
@@ -1325,14 +1325,14 @@ public class DeduceTypes2 {
 			final VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(vte_index));
 
 			if (vte.type.getAttached() != null) {
-				phase.typeDecided(generatedFunction, vte.type.getAttached());
+				phase.typeDecided((GeneratedFunction) generatedFunction, vte.type.getAttached());
 			} else {
 				@NotNull Collection<TypeTableEntry> pot1 = vte.potentialTypes();
 				ArrayList<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(pot1);
 				if (pot.size() == 1) {
-					phase.typeDecided(generatedFunction, pot.get(0).getAttached());
+					phase.typeDecided((GeneratedFunction) generatedFunction, pot.get(0).getAttached());
 				} else if (pot.size() == 0) {
-					phase.typeDecided(generatedFunction, new OS_Type(BuiltInTypes.Unit));
+					phase.typeDecided((GeneratedFunction) generatedFunction, new OS_Type(BuiltInTypes.Unit));
 				} else {
 					// TODO report some kind of error/diagnostic and/or let ForFunction know...
 					errSink.reportWarning("Can't resolve type of `Result'. potentialTypes > 1 for "+vte);
@@ -1342,7 +1342,7 @@ public class DeduceTypes2 {
 			// if Result is not present, then make function return Unit
 			// TODO May not be correct in all cases, such as when Value is present
 			// but works for current code structure, where Result is a always present
-			phase.typeDecided(generatedFunction, new OS_Type(BuiltInTypes.Unit));
+			phase.typeDecided((GeneratedFunction) generatedFunction, new OS_Type(BuiltInTypes.Unit));
 		}
 	}
 
@@ -1760,7 +1760,7 @@ public class DeduceTypes2 {
 							FunctionDef fd = (FunctionDef) el;
 							final IInvocation invocation;
 							if (fd.getParent() == generatedFunction.getFD().getParent()) {
-								invocation = getInvocation(generatedFunction);
+								invocation = getInvocation((GeneratedFunction) generatedFunction);
 							} else {
 								if (fd.getParent() instanceof NamespaceStatement) {
 									NamespaceInvocation ni = phase.registerNamespaceInvocation((NamespaceStatement) fd.getParent());
@@ -1845,7 +1845,7 @@ public class DeduceTypes2 {
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
-					final List<TypeTableEntry> ll = getPotentialTypesVte(generatedFunction, vte_ia);
+					final List<TypeTableEntry> ll = getPotentialTypesVte((GeneratedFunction) generatedFunction, vte_ia);
 					doLogic(ll);
 				}
 
@@ -1971,7 +1971,7 @@ public class DeduceTypes2 {
 									if (best2 instanceof FunctionDef) {
 										FunctionDef fd = (FunctionDef) best2;
 										ProcTableEntry pte = null;
-										final IInvocation invocation = getInvocation(generatedFunction);
+										final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
 										forFunction(new FunctionInvocation(fd, pte, invocation, phase.generatePhase), new ForFunction() {
 											@Override
 											public void typeDecided(final OS_Type aType) {
@@ -2032,7 +2032,7 @@ public class DeduceTypes2 {
 									if (best2 instanceof FunctionDef) {
 										FunctionDef fd = (FunctionDef) best2;
 										ProcTableEntry pte = null;
-										final IInvocation invocation = getInvocation(generatedFunction);
+										final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
 										forFunction(new FunctionInvocation(fd, pte, invocation, phase.generatePhase), new ForFunction() {
 											@Override
 											public void typeDecided(final OS_Type aType) {
@@ -2125,7 +2125,7 @@ public class DeduceTypes2 {
 			case IDENT:
 			{
 				final InstructionArgument vte_ia = generatedFunction.vte_lookup(((IdentExpression) e).getText());
-				final List<TypeTableEntry> ll = getPotentialTypesVte(generatedFunction, vte_ia);
+				final List<TypeTableEntry> ll = getPotentialTypesVte((GeneratedFunction) generatedFunction, vte_ia);
 				if (ll.size() == 1) {
 					tte.setAttached(ll.get(0).getAttached());
 					idte.addPotentialType(instructionIndex, ll.get(0));
@@ -2321,7 +2321,7 @@ public class DeduceTypes2 {
 								}
 								if (fd != null) {
 									ProcTableEntry pte = null;
-									final IInvocation invocation = getInvocation(generatedFunction);
+									final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
 									forFunction(new FunctionInvocation(fd, pte, invocation, phase.generatePhase), new ForFunction() {
 										@Override
 										public void typeDecided(OS_Type aType) {

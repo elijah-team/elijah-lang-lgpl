@@ -343,7 +343,7 @@ class Resolve_Ident_IA {
 					ci = phase.registerClassInvocation(ci);
 					fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
 				} else if (y.resolved_element instanceof FunctionDef) {
-					final IInvocation invocation = deduceTypes2.getInvocation(generatedFunction);
+					final IInvocation invocation = deduceTypes2.getInvocation((GeneratedFunction) generatedFunction);
 					fi = new FunctionInvocation((FunctionDef) y.resolved_element, pte, invocation, phase.generatePhase);
 				} else
 					assert false;
