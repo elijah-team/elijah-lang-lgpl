@@ -69,12 +69,13 @@ public class PipelineLogic {
 	public void generate(List<GeneratedNode> lgc) {
 		GenerateResult ggr = null;
 		final WorkManager wm = new WorkManager();
+		// README use any errSink, they should all be the same
+		final GenerateC generateC = new GenerateC(mods.get(0).parent.getErrSink());
 		for (OS_Module mod : mods) {
-			ggr = run3(mod, lgc, wm);
+			ggr = run3(mod, lgc, wm, generateC);
 			wm.drain();
 			gr.results().addAll(ggr.results());
 		}
-//		gr = ggr;
 	}
 
 	public static void debug_buffers(GenerateResult gr, PrintStream stream) {
@@ -196,15 +197,12 @@ public class PipelineLogic {
 		return generatePhase.getGenerateFunctions(mod);
 	}
 
-	protected GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc, WorkManager wm) {
-		GenerateC ggc = new GenerateC(mod);
-//		ggc.generateCode(lgf);
-
+	protected GenerateResult run3(OS_Module mod, List<GeneratedNode> lgc, WorkManager wm, GenerateC ggc) {
 		GenerateResult gr = new GenerateResult();
 
 		for (GeneratedNode generatedNode : lgc) {
 			if (generatedNode.module() != mod) continue; // README curious
-			//
+
 			if (generatedNode instanceof GeneratedContainerNC) {
 				final GeneratedContainerNC nc = (GeneratedContainerNC) generatedNode;
 
