@@ -464,7 +464,7 @@ public class DeduceTypes2 {
 							throw new NotImplementedException();
 					} else if (agn_lhs instanceof IdentIA) {
 						final IdentIA arg = (IdentIA) agn_lhs;
-						final IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(arg));
+						final IdentTableEntry idte = arg.getEntry();
 						final InstructionArgument i2 = instruction.getArg(1);
 						if (i2 instanceof IntegerIA) {
 							final VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(i2));
@@ -1177,14 +1177,14 @@ public class DeduceTypes2 {
 				Context ectx = generatedFunction.getFD().getContext();
 				for (InstructionArgument ia2 : x) {
 					if (ia2 instanceof IntegerIA) {
-						@NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(ia2));
+						@NotNull VariableTableEntry vte = ((IntegerIA) ia2).getEntry();
 						// TODO will fail if we try to construct a tmp var, but we never try to do that
 						assert vte.vtt != VariableTableType.TEMP;
 						assert vte.el  != null;
 						el    = vte.el;
 						ectx  = el.getContext();
 					} else if (ia2 instanceof IdentIA) {
-						@NotNull IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(ia2));
+						@NotNull IdentTableEntry idte2 = ((IdentIA) ia2).getEntry();
 						final String s = idte2.getIdent().toString();
 						LookupResultList lrl = ectx.lookup(s);
 						OS_Element el2 = lrl.chooseBest(null);
