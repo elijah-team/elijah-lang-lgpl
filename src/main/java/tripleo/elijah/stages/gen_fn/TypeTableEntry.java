@@ -26,7 +26,7 @@ public class TypeTableEntry {
 	public final TableEntryIV tableEntry;
 	@Nullable
 	private OS_Type attached;
-	private final GenType genType = new GenType();
+	public final GenType genType = new GenType();
 	public final IExpression expression;
 	private final List<OnSetAttached> osacbs = new ArrayList<OnSetAttached>();
 

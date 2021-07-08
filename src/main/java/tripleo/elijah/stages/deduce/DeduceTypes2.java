@@ -2642,7 +2642,13 @@ public class DeduceTypes2 {
 				try {
 					if (ty.getType() == OS_Type.Type.USER) {
 						@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
-						OS_Element ele = ty2.getElement();
+						OS_Element ele;
+						if (vte.type.genType.resolved == null) {
+							if (ty2.getType() == OS_Type.Type.USER_CLASS) {
+								vte.type.genType.resolved = ty2;
+							}
+						}
+						ele = ty2.getElement();
 						LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
 						ele2 = lrl.chooseBest(null);
 					} else
