@@ -238,6 +238,9 @@ class Resolve_Ident_IA {
 						}
 						if (genType != null)
 							generatedFunction.addDependentType(genType);
+					} else if (el instanceof ClassStatement) {
+						GenType genType = new GenType((ClassStatement) el);
+						generatedFunction.addDependentType(genType);
 					}
 				}
 				if (el != null) {
