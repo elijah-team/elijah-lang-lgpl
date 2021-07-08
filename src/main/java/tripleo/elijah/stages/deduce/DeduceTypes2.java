@@ -1142,10 +1142,10 @@ public class DeduceTypes2 {
 		private final ProcTableEntry pte;
 
 		public Implement_construct(GeneratedFunction aGeneratedFunction, Instruction aInstruction) {
-			// README all these asserts are redundant, I know
 			generatedFunction = aGeneratedFunction;
 			instruction = aInstruction;
 
+			// README all these asserts are redundant, I know
 			assert instruction.getName() == InstructionName.CONSTRUCT;
 			assert instruction.getArg(0) instanceof ProcIA;
 
