@@ -1296,12 +1296,12 @@ public class DeduceTypes2 {
 				}
 				// TODO also check arguments
 				{
+					if (cc == null) assert pte.getArgs().size() == 0;
 					FunctionInvocation fi = new FunctionInvocation(cc, pte, clsinv, phase.generatePhase);
 					pte.setFunctionInvocation(fi);
 				}
 			}
 		}
-
 	}
 
 	void implement_construct(GeneratedFunction generatedFunction, Instruction instruction) {
