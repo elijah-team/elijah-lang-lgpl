@@ -909,6 +909,13 @@ public class GenerateFunctions {
 			expression_num = gf.get_assignment_path(left, this, cctx);
 		}
 		final int i = addProcTableEntry(left, expression_num, get_args_types(args, gf, cctx), gf);
+		{
+			@NotNull ProcTableEntry pte = gf.getProcTableEntry(i);
+			if (expression_num instanceof IdentIA) {
+				@NotNull IdentTableEntry idte = ((IdentIA) expression_num).getEntry();
+				idte.setCallablePTE(pte);
+			}
+		}
 		final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
 		l.add(new ProcIA(i, gf));
 		l.addAll(simplify_args(args, gf, cctx));
