@@ -170,7 +170,7 @@ class Resolve_Ident_IA {
 				if (el instanceof ClassStatement) {
 					assert prte.getClassInvocation() == null;
 					ClassInvocation ci = new ClassInvocation((ClassStatement) el, null);
-					//						prte.setClassInvocation(ci);
+//					prte.setClassInvocation(ci);
 					Collection<ConstructorDef> cs = (((ClassStatement) el).getConstructors());
 					ConstructorDef selected_constructor = null;
 					if (prte.getArgs().size() == 0 && cs.size() == 0) {
@@ -185,7 +185,7 @@ class Resolve_Ident_IA {
 					final IInvocation invocation = ci;
 					assert ((ClassStatement) el).getGenericPart().size() == 0;
 					FunctionInvocation fi = new FunctionInvocation(selected_constructor, prte, invocation, phase.generatePhase);
-					//					fi.setClassInvocation(ci);
+//					fi.setClassInvocation(ci);
 					prte.setFunctionInvocation(fi);
 				}
 			} catch (ResolveError aResolveError) {
