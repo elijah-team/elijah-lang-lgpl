@@ -494,7 +494,8 @@ public class GenerateC implements CodeGenerator {
 					sb.append(")");
 				} else {
 					final IdentIA ia2 = (IdentIA) pte.expression_num;
-					if (ia2.getEntry().getStatus() == BaseTableEntry.Status.KNOWN) {
+					final IdentTableEntry idte = ia2.getEntry();
+					if (idte.getStatus() == BaseTableEntry.Status.KNOWN) {
 						final CReference reference = new CReference();
 						reference.getIdentIAPath(ia2, gf);
 						final List<String> sll = getAssignmentValueArgs(inst, gf);
