@@ -495,9 +495,12 @@ public class DeduceTypes2 {
 						int y=2;
 						assign_type_to_idte(ite, generatedFunction, fd_ctx, context);
 					}
-					for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
+					{
+						// TODO why are we doing this?
 						Resolve_each_typename ret = new Resolve_each_typename(phase, this, errSink);
-						ret.action(typeTableEntry);
+						for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
+							ret.action(typeTableEntry);
+						}
 					}
 					{
 						final WorkManager workManager = wm;//new WorkManager();
