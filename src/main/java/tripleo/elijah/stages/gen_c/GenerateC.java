@@ -146,7 +146,7 @@ public class GenerateC implements CodeGenerator {
 
 	@Override
 	public void generate_class(GeneratedClass x, GenerateResult gr) {
-		int y=2;
+		if (x.generatedAlready) return;
 		switch (x.getKlass().getType()) {
 			// Don't generate class definition for these three
 			case INTERFACE:
@@ -214,6 +214,7 @@ public class GenerateC implements CodeGenerator {
 //			System.out.println(buf2.getText());
 			gr.addClass(GenerateResult.TY.HEADER, x, buf2);
 		}
+		x.generatedAlready = true;
 	}
 
 	@NotNull public String getTypeNameForVarTableEntry(GeneratedContainer.VarTableEntry o) {
@@ -237,6 +238,7 @@ public class GenerateC implements CodeGenerator {
 
 	@Override
 	public void generate_namespace(GeneratedNamespace x, GenerateResult gr) {
+		if (x.generatedAlready) return;
 		// TODO do we need `self' parameters for namespace?
 		final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
 		final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
@@ -293,6 +295,7 @@ public class GenerateC implements CodeGenerator {
 				gr.addNamespace(GenerateResult.TY.HEADER, x, buf2);
 			}
 		}
+		x.generatedAlready = true;
 	}
 
 	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
