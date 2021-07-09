@@ -66,6 +66,12 @@ public class TypeTableEntry {
 			break;
 		case UNIT_TYPE:
 			genType.resolved = aAttached;
+		case BUILT_IN:
+			if (genType.typeName != null)
+				genType.resolved = aAttached;
+			else
+				genType.typeName = aAttached;
+			break;
 		default:
 //			throw new NotImplementedException();
 			System.err.println("73 "+aAttached);
