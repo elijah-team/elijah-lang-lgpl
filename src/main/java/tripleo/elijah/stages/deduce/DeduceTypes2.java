@@ -1269,6 +1269,15 @@ public class DeduceTypes2 {
 		if (vte.el == null)
 			return;
 		{
+			if (vte.type.getAttached() == null && vte.constructable_pte != null) {
+				ClassStatement c = vte.constructable_pte.getFunctionInvocation().getClassInvocation().getKlass();
+				final OS_Type attached = new OS_Type(c);
+				// TODO this should have been set somewhere already
+				//  typeName and nonGenericTypeName are not set
+				//  but at this point probably wont be needed
+				vte.type.genType.resolved = attached;
+				vte.type.setAttached(attached);
+			}
 			vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(vte.el));
 		}
 	}
@@ -1357,6 +1366,9 @@ public class DeduceTypes2 {
 								assert el3 == el2;
 								if (el2 instanceof ConstructorDef) {
 									GenType type = deducePath.getType(i);
+									if (type.nonGenericTypeName == null) {
+										type.nonGenericTypeName = deducePath.getType(i-1).nonGenericTypeName; // HACK. not guararnteed to work!
+									}
 									OS_Type ty = new OS_Type(type.nonGenericTypeName);
 									implement_construct_type(idte2, ty, s);
 								}
