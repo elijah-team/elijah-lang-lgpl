@@ -475,6 +475,14 @@ public class DeduceTypes2 {
 										// NOTE that when we set USER_CLASS from USER generic information is
 										// still contained in constructable_pte
 										vte.type.setAttached(new OS_Type((ClassStatement) best));
+										vte.type.genTypeCI(genCI(vte.type));
+										((ClassInvocation) vte.type.genType.ci).resolvePromise().done(new DoneCallback<GeneratedClass>() {
+											@Override
+											public void onDone(GeneratedClass result) {
+												vte.type.genType.node = result;
+												vte.resolveType(result);
+											}
+										});
 									}
 									//vte.el = best;
 									// NOTE we called resolve_var_table_entry above
@@ -742,6 +750,38 @@ public class DeduceTypes2 {
 				}
 			}
 		}
+	}
+
+	/**
+	 * See {@link Implement_construct#_implement_construct_type}
+	 */
+	private ClassInvocation genCI(TypeTableEntry aType) {
+		GenType genType = aType.genType;
+		if (genType.nonGenericTypeName != null) {
+			NormalTypeName aTyn1 = (NormalTypeName) genType.nonGenericTypeName;
+			String constructorName = null; // TODO this comes from nowhere
+			ClassStatement best = genType.resolved.getClassOf();
+			//
+			List<TypeName> gp = best.getGenericPart();
+			ClassInvocation clsinv = new ClassInvocation(best, constructorName);
+			if (gp.size() > 0) {
+				TypeNameList gp2 = aTyn1.getGenericPart();
+				for (int i = 0; i < gp.size(); i++) {
+					final TypeName typeName = gp2.get(i);
+					@NotNull OS_Type typeName2;
+					try {
+						typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
+						clsinv.set(i, gp.get(i), typeName2);
+					} catch (ResolveError aResolveError) {
+						aResolveError.printStackTrace();
+						return null;
+					}
+				}
+			}
+			clsinv = phase.registerClassInvocation(clsinv);
+			return clsinv;
+		}
+		return null;
 	}
 
 	private FunctionInvocation newFunctionInvocation(BaseFunctionDef aFunctionDef, ProcTableEntry aPte, IInvocation aInvocation, DeducePhase aDeducePhase) {
