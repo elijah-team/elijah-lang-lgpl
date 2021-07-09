@@ -2871,7 +2871,7 @@ public class DeduceTypes2 {
 
 					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
 					OS_Element best = lrl.chooseBest(null);
-					assert best == ele2;
+					if (best != ele2) System.err.println("2824 Divergent for "+ite);;
 					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 				} catch (ResolveError aResolveError) {
 					aResolveError.printStackTrace();
