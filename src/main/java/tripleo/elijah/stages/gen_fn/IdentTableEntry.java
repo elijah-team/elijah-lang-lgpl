@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.stages.deduce.DeducePath;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.OnType;
 import tripleo.elijah.stages.instructions.IdentIA;
@@ -21,6 +22,7 @@ import tripleo.elijah.stages.instructions.IntegerIA;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -120,6 +122,11 @@ public class IdentTableEntry extends BaseTableEntry implements Constructable, Ta
 	@Override
 	public void setConstructable(ProcTableEntry aPte) {
 		constructable_pte = aPte;
+	}
+
+	public DeducePath buildDeducePath(BaseGeneratedFunction generatedFunction) {
+		@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(new IdentIA(index, generatedFunction));
+		return new DeducePath(this, x);
 	}
 }
 

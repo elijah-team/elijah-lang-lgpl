@@ -1268,27 +1268,31 @@ public class DeduceTypes2 {
 		}
 
 		public void action_IdentIA() {
-			IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(expression));
-			@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(expression);
+			IdentTableEntry idte = ((IdentIA)expression).getEntry();
+			DeducePath deducePath = idte.buildDeducePath(generatedFunction);
 			{
-				OS_Element el = null;
+				OS_Element el3;
 				Context ectx = generatedFunction.getFD().getContext();
-				for (InstructionArgument ia2 : x) {
+				for (int i = 0; i < deducePath.size(); i++) {
+					InstructionArgument ia2 = deducePath.getIA(i);
+
+					el3 = deducePath.getElement(i);
+
 					if (ia2 instanceof IntegerIA) {
 						@NotNull VariableTableEntry vte = ((IntegerIA) ia2).getEntry();
 						// TODO will fail if we try to construct a tmp var, but we never try to do that
 						assert vte.vtt != VariableTableType.TEMP;
-						assert vte.el  != null;
-						el    = vte.el;
-						ectx  = el.getContext();
+						assert el3     != null;
+						assert i       == 0;
+						ectx  = deducePath.getContext(i);
 					} else if (ia2 instanceof IdentIA) {
 						@NotNull IdentTableEntry idte2 = ((IdentIA) ia2).getEntry();
 						final String s = idte2.getIdent().toString();
 						LookupResultList lrl = ectx.lookup(s);
 						OS_Element el2 = lrl.chooseBest(null);
 						if (el2 == null) {
-							assert el instanceof VariableStatement;
-							VariableStatement vs = (VariableStatement) el;
+							assert el3 instanceof VariableStatement;
+							VariableStatement vs = (VariableStatement) el3;
 							@NotNull TypeName tn = vs.typeName();
 							OS_Type ty = new OS_Type(tn);
 
@@ -1309,8 +1313,16 @@ public class DeduceTypes2 {
 							implement_construct_type(idte2, ty, s);
 							return;
 						} else {
-							el = el2;
-							ectx = el2.getContext();
+							if (i+1 == deducePath.size()) {
+								assert el3 == el2;
+								if (el2 instanceof ConstructorDef) {
+									GenType type = deducePath.getType(i);
+									OS_Type ty = new OS_Type(type.nonGenericTypeName);
+									implement_construct_type(idte2, ty, s);
+								}
+							} else {
+								ectx = deducePath.getContext(i);
+							}
 						}
 //						implement_construct_type(idte/*??*/, ty, null); // TODO how bout when there is no ctor name
 					} else {
