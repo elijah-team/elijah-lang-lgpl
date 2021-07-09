@@ -290,7 +290,7 @@ public class DeduceTypes2 {
 								if (e instanceof ClassStatement) {
 									ci = new ClassInvocation((ClassStatement) e, null);
 									ci = phase.registerClassInvocation(ci);
-									fi = new FunctionInvocation(ConstructorDef.defaultVirtualCtor, pte, ci, phase.generatePhase);
+									fi = newFunctionInvocation(ConstructorDef.defaultVirtualCtor, pte, ci, phase);
 									pte.setFunctionInvocation(fi);
 
 									if (co != null) {
@@ -311,7 +311,7 @@ public class DeduceTypes2 {
 										final NamespaceInvocation nsi = phase.registerNamespaceInvocation(namespaceStatement);
 //										pte.setNamespaceInvocation(nsi);
 										genType.ci = nsi;
-										fi = new FunctionInvocation(fd, pte, nsi, phase.generatePhase);
+										fi = newFunctionInvocation(fd, pte, nsi, phase);
 									} else if (parent instanceof ClassStatement) {
 										final ClassStatement classStatement = (ClassStatement) parent;
 										genType = new GenType(classStatement);
@@ -319,7 +319,7 @@ public class DeduceTypes2 {
 										ci = phase.registerClassInvocation(ci);
 										genType.ci = ci;
 										pte.setClassInvocation(ci);
-										fi = new FunctionInvocation(fd, pte, ci, phase.generatePhase);
+										fi = newFunctionInvocation(fd, pte, ci, phase);
 									} else
 										throw new IllegalStateException("Unknown parent");
 									pte.setFunctionInvocation(fi);
@@ -392,7 +392,7 @@ public class DeduceTypes2 {
 															// do we register?? probably not
 															if (ci == null && nsi == null)
 																assert false;
-															FunctionInvocation fi = new FunctionInvocation((FunctionDef) el, pte, ci != null ? ci : nsi, phase.generatePhase);
+															FunctionInvocation fi = newFunctionInvocation((FunctionDef) el, pte, ci != null ? ci : nsi, phase);
 															generatedFunction.addDependentFunction(fi);
 														}
 													});
@@ -644,7 +644,7 @@ public class DeduceTypes2 {
 							pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, expression));
 							if (fd instanceof DefFunctionDef) {
 								final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
-								forFunction(new FunctionInvocation((FunctionDef) e, pte, invocation, phase.generatePhase), new ForFunction() {
+								forFunction(newFunctionInvocation((FunctionDef) e, pte, invocation, phase), new ForFunction() {
 									@Override
 									public void typeDecided(OS_Type aType) {
 										@Nullable InstructionArgument x = generatedFunction.vte_lookup("Result");
@@ -742,6 +742,12 @@ public class DeduceTypes2 {
 				}
 			}
 		}
+	}
+
+	private FunctionInvocation newFunctionInvocation(BaseFunctionDef aFunctionDef, ProcTableEntry aPte, IInvocation aInvocation, DeducePhase aDeducePhase) {
+		FunctionInvocation fi = new FunctionInvocation(aFunctionDef, aPte, aInvocation, aDeducePhase.generatePhase);
+		// TODO register here
+		return fi;
 	}
 
 	public String getFileName() {
@@ -1391,7 +1397,7 @@ public class DeduceTypes2 {
 				// TODO also check arguments
 				{
 					if (cc == null) assert pte.getArgs().size() == 0;
-					FunctionInvocation fi = new FunctionInvocation(cc, pte, clsinv, phase.generatePhase);
+					FunctionInvocation fi = newFunctionInvocation(cc, pte, clsinv, phase);
 					pte.setFunctionInvocation(fi);
 				}
 			}
@@ -1761,7 +1767,7 @@ public class DeduceTypes2 {
 								} else 
 									throw new NotImplementedException(); // TODO implement me
 								
-								forFunction(new FunctionInvocation((FunctionDef) best, pte, invocation, phase.generatePhase), new ForFunction() {
+								forFunction(newFunctionInvocation((FunctionDef) best, pte, invocation, phase), new ForFunction() {
 									@Override
 									public void typeDecided(OS_Type aType) {
 										tte.setAttached(aType);
@@ -1880,7 +1886,7 @@ public class DeduceTypes2 {
 								} else
 									throw new NotImplementedException();
 							}
-							forFunction(new FunctionInvocation(fd, pte, invocation, phase.generatePhase), new ForFunction() {
+							forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
 								@Override
 								public void typeDecided(OS_Type aType) {
 									assert false;
@@ -2074,7 +2080,7 @@ public class DeduceTypes2 {
 										FunctionDef fd = (FunctionDef) best2;
 										ProcTableEntry pte = null;
 										final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
-										forFunction(new FunctionInvocation(fd, pte, invocation, phase.generatePhase), new ForFunction() {
+										forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
 											@Override
 											public void typeDecided(final OS_Type aType) {
 												assert fd == generatedFunction.getFD();
@@ -2135,7 +2141,7 @@ public class DeduceTypes2 {
 										FunctionDef fd = (FunctionDef) best2;
 										ProcTableEntry pte = null;
 										final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
-										forFunction(new FunctionInvocation(fd, pte, invocation, phase.generatePhase), new ForFunction() {
+										forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
 											@Override
 											public void typeDecided(final OS_Type aType) {
 												assert fd == generatedFunction.getFD();
@@ -2424,7 +2430,7 @@ public class DeduceTypes2 {
 								if (fd != null) {
 									ProcTableEntry pte = null;
 									final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
-									forFunction(new FunctionInvocation(fd, pte, invocation, phase.generatePhase), new ForFunction() {
+									forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
 										@Override
 										public void typeDecided(OS_Type aType) {
 											assert fd == generatedFunction.getFD();
