@@ -23,7 +23,7 @@ public class GenType {
 	public TypeName nonGenericTypeName;
 	public OS_Type resolved;
 	public IInvocation ci;
-	GeneratedNode node;
+	public GeneratedNode node;
 
 	public GenType(NamespaceStatement aNamespaceStatement) {
 		resolvedn = /*new OS_Type*/(aNamespaceStatement);
