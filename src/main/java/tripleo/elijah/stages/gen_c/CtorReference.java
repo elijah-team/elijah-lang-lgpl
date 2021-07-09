@@ -65,7 +65,10 @@ public class CtorReference {
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = gf.getIdentTableEntry(to_int(ia));
 				OS_Element resolved_element = idte.resolved_element;
-				if (resolved_element != null) {
+				if (idte.resolvedType() != null) {
+					_resolved = idte.resolvedType();
+					ctorName = ((ConstructorDef) resolved_element).name();
+				} else if (resolved_element != null) {
 					if (resolved_element instanceof VariableStatement) {
 						addRef(((VariableStatement) resolved_element).getName(), CReference.Ref.MEMBER);
 					} else if (resolved_element instanceof ConstructorDef) {
