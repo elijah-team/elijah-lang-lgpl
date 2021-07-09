@@ -1020,51 +1020,49 @@ public class DeduceTypes2 {
 			ci = phase.registerClassInvocation(ci);
 
 			ClassStatement kl = ci.getKlass();
-			if (kl == null)
-				assert false;
-			else {
-				final BaseFunctionDef fd2 = fi.getFunction();
-				int state = 0;
+			assert kl != null;
 
-				if (fd2 == ConstructorDef.defaultVirtualCtor) {
-					state = 1;
-				} else if (fd2 instanceof ConstructorDef) {
-					if (fi.getClassInvocation().getConstructorName() != null)
-						state = 3;
-					else
-						state = 2;
-				} else {
-					if (fi.getFunction() == null && fi.getClassInvocation() != null)
-						state = 3;
-					else
-						state = 4;
-				}
+			final BaseFunctionDef fd2 = fi.getFunction();
+			int state = 0;
 
-				switch (state) {
-				case 1:
-					assert fi.pte.getArgs().size() == 0;
-					// default ctor
-					wl.addJob(new WlGenerateDefaultCtor(phase.generatePhase.getGenerateFunctions(module), fi));
-					break;
-				case 2:
-					wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, null)); // TODO check this
-					break;
-				case 3:
-					// README this is a special case to generate constructor
-					// TODO should it be GenerateDefaultCtor? (check args size and ctor-name)
-					final String constructorName = fi.getClassInvocation().getConstructorName();
-					final IdentExpression constructorName1 = constructorName != null ? IdentExpression.forString(constructorName) : null;
-					wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, constructorName1));
-					break;
-				case 4:
-					wl.addJob(new WlGenerateFunction(phase.generatePhase.getGenerateFunctions(module), fi));
-					break;
-				default:
-					throw new NotImplementedException();
-				}
-
-				wm.addJobs(wl);
+			if (fd2 == ConstructorDef.defaultVirtualCtor) {
+				state = 1;
+			} else if (fd2 instanceof ConstructorDef) {
+				if (fi.getClassInvocation().getConstructorName() != null)
+					state = 3;
+				else
+					state = 2;
+			} else {
+				if (fi.getFunction() == null && fi.getClassInvocation() != null)
+					state = 3;
+				else
+					state = 4;
 			}
+
+			switch (state) {
+			case 1:
+				assert fi.pte.getArgs().size() == 0;
+				// default ctor
+				wl.addJob(new WlGenerateDefaultCtor(phase.generatePhase.getGenerateFunctions(module), fi));
+				break;
+			case 2:
+				wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, null)); // TODO check this
+				break;
+			case 3:
+				// README this is a special case to generate constructor
+				// TODO should it be GenerateDefaultCtor? (check args size and ctor-name)
+				final String constructorName = fi.getClassInvocation().getConstructorName();
+				final IdentExpression constructorName1 = constructorName != null ? IdentExpression.forString(constructorName) : null;
+				wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, constructorName1));
+				break;
+			case 4:
+				wl.addJob(new WlGenerateFunction(phase.generatePhase.getGenerateFunctions(module), fi));
+				break;
+			default:
+				throw new NotImplementedException();
+			}
+
+			wm.addJobs(wl);
 		}
 
 		void proceed(FunctionInvocation fi, NamespaceStatement aParent, WorkList wl) {
