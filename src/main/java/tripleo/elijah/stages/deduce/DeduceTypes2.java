@@ -1439,9 +1439,21 @@ public class DeduceTypes2 {
 				if (co instanceof IdentTableEntry) {
 					final IdentTableEntry idte3 = (IdentTableEntry) co;
 					idte3.type.genTypeCI(clsinv);
+					clsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+						@Override
+						public void onDone(GeneratedClass result) {
+							idte3.resolveType(result);
+						}
+					});
 				} else if (co instanceof VariableTableEntry) {
 					final VariableTableEntry vte = (VariableTableEntry) co;
 					vte.type.genTypeCI(clsinv);
+					clsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+						@Override
+						public void onDone(GeneratedClass result) {
+							vte.resolveType(result);
+						}
+					});
 				}
 			}
 			pte.setClassInvocation(clsinv);
