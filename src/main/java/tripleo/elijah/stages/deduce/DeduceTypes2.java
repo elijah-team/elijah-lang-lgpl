@@ -2810,13 +2810,20 @@ public class DeduceTypes2 {
 						try {
 							@NotNull OS_Type ty2;
 							if (ty.getType() == OS_Type.Type.USER) {
-								ty2 = resolve_type(ty, ty.getTypeName().getContext());
+								if (typ.isNull()) {
+//									ty = ((VariableTableEntry) bte).type.getAttached();
+									ty2 = ((VariableTableEntry) bte).type.getAttached();//resolve_type(ty, ty.getTypeName().getContext());
+								} else {
+									assert ty != null;
+									assert ty.getTypeName() != null;
+									ty2 = resolve_type(ty, ty.getTypeName().getContext());
+								}
 								OS_Element ele = ty2.getElement();
 							} else
 								ty2 = ty;
 
 							// no expression or TableEntryIV below
-							ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, ty); // or ty2?
+							ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, ty2); // or ty2?
 						} catch (ResolveError aResolveError) {
 							errSink.reportDiagnostic(aResolveError);
 						}
