@@ -1198,7 +1198,7 @@ public class DeduceTypes2 {
 
 				if (x != null) {
 //					System.err.println("162 Adding FoundParent for "+itee);
-					x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext())); // TODO context??
+					x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext(), generatedFunction)); // TODO context??
 				}
 			}
 		}
@@ -2607,14 +2607,16 @@ public class DeduceTypes2 {
 	}
 
 	public class FoundParent implements BaseTableEntry.StatusListener {
-		private IdentTableEntry ite;
 		private BaseTableEntry bte;
+		private IdentTableEntry ite;
 		private Context ctx;
+		private BaseGeneratedFunction generatedFunction;
 
-		public FoundParent(BaseTableEntry bte, IdentTableEntry ite, Context ctx) {
-			this.ite = ite;
-			this.bte = bte;
-			this.ctx = ctx;
+		public FoundParent(BaseTableEntry aBte, IdentTableEntry aIte, Context aCtx, BaseGeneratedFunction aGeneratedFunction) {
+			bte = aBte;
+			ite = aIte;
+			ctx = aCtx;
+			generatedFunction = aGeneratedFunction;
 		}
 
 		void found_element_for_ite2(GeneratedFunction generatedFunction, IdentTableEntry ite, Context ctx) {
@@ -2733,6 +2735,26 @@ public class DeduceTypes2 {
 //						ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 						} catch (ResolveError aResolveError) {
 							aResolveError.printStackTrace();
+						}
+					}
+				}
+				{
+					if (ite.type == null && eh.getElement() instanceof VariableStatement) {
+						@NotNull TypeName typ = ((VariableStatement) eh.getElement()).typeName();
+						OS_Type ty = new OS_Type(typ);
+
+						try {
+							@NotNull OS_Type ty2;
+							if (ty.getType() == OS_Type.Type.USER) {
+								ty2 = resolve_type(ty, ty.getTypeName().getContext());
+								OS_Element ele = ty2.getElement();
+							} else
+								ty2 = ty;
+
+							// no expression or TableEntryIV below
+							ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, ty); // or ty2?
+						} catch (ResolveError aResolveError) {
+							errSink.reportDiagnostic(aResolveError);
 						}
 					}
 				}
