@@ -685,10 +685,12 @@ public class GenerateFunctions {
 	class Generate_item_assignment {
 
 		public void procedure_call(@NotNull BaseGeneratedFunction gf, BasicBinaryExpression bbe, ProcedureCallExpression pce, Context cctx) {
-			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), bbe.getLeft());
-			final String text = ((IdentExpression) bbe.getLeft()).getText();
-			final InstructionArgument lookup = gf.vte_lookup(text);
-			if (lookup != null) {
+			final IExpression left = bbe.getLeft();
+
+			final InstructionArgument lookup = simplify_expression(left, gf, cctx);
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, bbe.getType(), left);
+
+			if (lookup instanceof IntegerIA) {
 				// TODO should be AGNC
 				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(lookup,
 						new FnCallArgs(expression_to_call(pce, gf, cctx), gf)), cctx);
@@ -696,14 +698,27 @@ public class GenerateFunctions {
 				final VariableTableEntry vte = gf.getVarTableEntry(((IntegerIA)lookup).getIndex());
 				vte.addPotentialType(instruction.getIndex(), tte);
 			} else {
-				final int vte_num = addVariableTableEntry(text, tte, gf, (IdentExpression) bbe.getLeft());
-				add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(vte_num, gf)), cctx);
-				// TODO should be AGNC
-				final int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num, gf),
-						new FnCallArgs(expression_to_call(pce, gf, cctx), gf)), cctx);
-				final Instruction instruction = gf.getInstruction(instruction_number);
-				final VariableTableEntry vte = gf.getVarTableEntry(vte_num);
-				vte.addPotentialType(instruction.getIndex(), tte);
+				if (left instanceof IdentExpression) {
+					final String text = ((IdentExpression) left).getText();
+					final int vte_num = addVariableTableEntry(text, tte, gf, (IdentExpression) left);
+
+					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(vte_num, gf)), cctx);
+					// TODO should be AGNC
+					final int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num, gf),
+							new FnCallArgs(expression_to_call(pce, gf, cctx), gf)), cctx);
+					final Instruction instruction = gf.getInstruction(instruction_number);
+					final VariableTableEntry vte = gf.getVarTableEntry(vte_num);
+					vte.addPotentialType(instruction.getIndex(), tte);
+				} else {
+					assert lookup instanceof IdentIA;
+
+					// TODO should be AGNC
+					final int instruction_number = add_i(gf, InstructionName.AGN, List_of(lookup,
+							new FnCallArgs(expression_to_call(pce, gf, cctx), gf)), cctx);
+					final Instruction instruction = gf.getInstruction(instruction_number);
+					@NotNull IdentTableEntry ite = ((IdentIA) lookup).getEntry();
+					ite.addPotentialType(instruction.getIndex(), tte);
+				}
 			}
 		}
 
