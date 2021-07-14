@@ -8,16 +8,41 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.contexts.FunctionContext;
+import tripleo.elijah.gen.ICodeGen;
+
 /**
  * @author Tripleo
  *
  * Created 	Apr 16, 2020 at 7:35:50 AM
  */
-public class DestructorDef extends FunctionDef {
+public class DestructorDef extends BaseFunctionDef {
 
-	public DestructorDef(final ClassStatement classStatement, final Context cur) {
-		super(classStatement, cur);
+	private final ClassStatement parent;
+
+	public DestructorDef(final ClassStatement aClassStatement, final Context context) {
+		parent = aClassStatement;
+		if (aClassStatement instanceof OS_Container) {
+			((OS_Container) parent).add(this);
+		} else {
+			throw new IllegalStateException("adding DestructorDef to " + aClassStatement.getClass().getName());
+		}
+		_a.setContext(new FunctionContext(context, this));
 		setType(Species.DTOR);
 	}
 
+	@Override
+	public void visitGen(ICodeGen visit) {
+		visit.visitDestructor(this);
+	}
+
+	@Override
+	public OS_Element getParent() {
+		return null;
+	}
+
+	@Override
+	public void postConstruct() {
+
+	}
 }

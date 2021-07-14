@@ -13,13 +13,47 @@
  */
 package tripleo.elijah.lang;
 
+import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.contexts.FunctionContext;
+import tripleo.elijah.gen.ICodeGen;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefFunctionDef extends FunctionDef {
+public class DefFunctionDef extends BaseFunctionDef {
+
+	private final OS_Element parent;
 
 	public DefFunctionDef(OS_Element aElement, Context aContext) {
-		super(aElement, aContext);
+		parent = aElement;
+		if (aElement instanceof OS_Container) {
+			((OS_Container) parent).add(this);
+		} else if (aElement instanceof PropertyStatement) {
+			// do nothing
+		} else {
+			throw new IllegalStateException("adding DefFunctionDef to " + aElement.getClass().getName());
+		}
+		_a.setContext(new FunctionContext(aContext, this));
+		setType(Species.DEF_FUN);
+	}
+
+	private TypeName _returnType = null;
+
+	public void setReturnType(final TypeName tn) {
+		this._returnType = tn;
+	}
+
+	/**
+	 * Can be {@code null} under the following circumstances:<br/><br/>
+	 *
+	 * 1. The compiler(parser) didn't get a chance to set it yet<br/>
+	 * 2. The programmer did not specify a return value and the compiler must deduce it<br/>
+	 * 3. The function is a void-type and specification isn't required <br/>
+	 *
+	 * @return the associated TypeName or NULL
+	 */
+	public @Nullable TypeName returnType() {
+		return _returnType;
 	}
 
 	private IExpression _expr;
@@ -35,6 +69,16 @@ public class DefFunctionDef extends FunctionDef {
 
 
 	@Override
+	public void visitGen(ICodeGen visit) {
+		visit.visitDefFunction(this);
+	}
+
+	@Override
+	public OS_Element getParent() {
+		return parent;
+	}
+
+	@Override
 	public List<FunctionItem> getItems() {
 		return _items; // TODO what about scope?
 	}
@@ -44,7 +88,7 @@ public class DefFunctionDef extends FunctionDef {
 	*/
 	@Override
 	public void postConstruct() {
-		super.postConstruct();
+//		super.postConstruct();
 		if (getItems().size() != 1)
 			throw new IllegalStateException("Too many items"); // TODO convert to diagnostic?
 	}
