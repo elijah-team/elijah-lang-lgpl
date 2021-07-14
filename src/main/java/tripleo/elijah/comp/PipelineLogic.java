@@ -21,6 +21,7 @@ import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.generate.ElSystem;
 import tripleo.elijah.stages.generate.OutputStrategy;
+import tripleo.elijah.stages.post_deduce.PostDeduce;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
@@ -62,6 +63,10 @@ public class PipelineLogic {
 //		List<List<EntryPoint>> entryPoints = mods.stream().map(mod -> mod.entryPoints).collect(Collectors.toList());
 		dp.finish();
 		lgc.addAll(dp.generatedClasses);
+		for (OS_Module mod : mods) {
+			PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
+			pd.analyze();
+		}
 	}
 
 	public void generate(List<GeneratedNode> lgc) {
