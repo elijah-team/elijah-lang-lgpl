@@ -63,15 +63,6 @@ public class GeneratedFunction extends BaseGeneratedFunction {
 		return ""+fd;
 	}
 
-	private DeferredObject<OS_Type, Void, Void> typeDeferred = new DeferredObject<OS_Type, Void, Void>();
-
-	public Promise<OS_Type, Void, Void> typePromise() {
-		return typeDeferred.promise();
-	}
-
-	public DeferredObject<OS_Type, Void, Void> typeDeferred() {
-		return typeDeferred;
-	}
 }
 
 //
