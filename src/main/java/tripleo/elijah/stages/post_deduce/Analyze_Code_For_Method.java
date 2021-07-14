@@ -429,9 +429,9 @@ public class Analyze_Code_For_Method {
 		final OS_Type x = vte.type.getAttached();
 		if (x == null) {
 			if (vte.vtt == VariableTableType.TEMP) {
-				System.err.println("8884 temp variable has no type "+vte+" "+gf);
+				pd.log.error("8884 temp variable has no type {} {}",vte,gf);
 			} else {
-				System.err.println("8885 x is null (No typename specified) for " + vte.getName());
+				pd.log.error("8885 x is null (No typename specified) for {}", vte.getName());
 			}
 			return;
 		}
