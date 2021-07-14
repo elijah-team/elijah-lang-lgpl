@@ -1801,6 +1801,17 @@ public class DeduceTypes2 {
 					assert e == identIA.getEntry().resolved_element;
 //					set_resolved_element_pte(identIA, e, pte);
 					pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
+					pte.getFunctionInvocation().generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
+						@Override
+						public void onDone(BaseGeneratedFunction bgf) {
+							bgf.typePromise().then(new DoneCallback<OS_Type>() {
+								@Override
+								public void onDone(OS_Type result) {
+									vte.typeDeferred().resolve(result);
+								}
+							});
+						}
+					});
 				}
 
 				@Override

@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_fn;
 
 import org.jdeferred2.DoneCallback;
+import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.IExpression;
@@ -155,6 +156,16 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 
 	public void onFunctionInvocation(final DoneCallback<FunctionInvocation> callback) {
 		onFunctionInvocations.then(callback);
+	}
+
+	private DeferredObject<OS_Type, Void, Void> typeDeferred = new DeferredObject<>();
+
+	public DeferredObject<OS_Type, Void, Void> typeDeferred() {
+		return typeDeferred;
+	}
+
+	public Promise<OS_Type, Void, Void> typePromise() {
+		return typeDeferred.promise();
 	}
 }
 

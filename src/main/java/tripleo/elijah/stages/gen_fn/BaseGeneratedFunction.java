@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jdeferred2.Promise;
+import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
@@ -47,6 +49,7 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	private int _nextTemp = 0;
 	private GeneratedNode genClass;
 	private GeneratedContainerNC parent;
+	private DeferredObject<OS_Type, Void, Void> typeDeferred = new DeferredObject<OS_Type, Void, Void>();
 
 	public static void printTables(GeneratedFunction gf) {
 		System.out.println("VariableTable ");
@@ -431,6 +434,14 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	}
 
 	public abstract BaseFunctionDef getFD();
+
+	public Promise<OS_Type, Void, Void> typePromise() {
+		return typeDeferred.promise();
+	}
+
+	public DeferredObject<OS_Type, Void, Void> typeDeferred() {
+		return typeDeferred;
+	}
 }
 
 //
