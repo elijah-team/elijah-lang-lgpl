@@ -709,7 +709,7 @@ public class DeduceTypes2 {
 				// README potentialType info is already added by MatchConditional
 				break;
 			case DECL:
-//				throw new NotImplementedException();
+				// README for GenerateC, etc: marks the spot where a declaration should go. Wouldn't be necessary if we had proper Range's
 				break;
 			case IS_A:
 				break;
