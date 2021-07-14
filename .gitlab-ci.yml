@@ -2,7 +2,7 @@ image: python:latest
 
 stages:
   - deploy
-  - pages
+#  - pages
 
 
 #production:
@@ -18,8 +18,6 @@ stages:
 pages:
   image: python:latest
   stage: deploy
-  only:
-    - docs
   script:
     - pip install mkdocs-material  mkdocs-git-revision-date-plugin mkdocs-git-revision-date-localized-plugin
     - mkdocs build --site-dir public
