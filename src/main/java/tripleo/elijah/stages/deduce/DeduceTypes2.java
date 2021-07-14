@@ -244,6 +244,11 @@ public class DeduceTypes2 {
 		onRunnables.add(r);
 	}
 
+	public void deduce_generated_constructor(final GeneratedFunction generatedFunction) {
+		final ConstructorDef fd = (ConstructorDef) generatedFunction.getFD();
+		deduce_generated_function_base(generatedFunction, fd);
+	}
+
 	public void deduce_generated_function(final GeneratedFunction generatedFunction) {
 		final FunctionDef fd = (FunctionDef) generatedFunction.getFD();
 		deduce_generated_function_base(generatedFunction, fd);
