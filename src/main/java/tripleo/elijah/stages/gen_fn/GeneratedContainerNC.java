@@ -15,6 +15,7 @@ import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.gen_generic.CodeGenerator;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
+import tripleo.elijah.stages.post_deduce.IPostDeduce;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,6 +79,8 @@ public abstract class GeneratedContainerNC extends AbstractDependencyTracker imp
 	}
 
 	public abstract void generateCode(CodeGenerator aGgc, GenerateResult aGr);
+
+	public abstract void analyzeNode(IPostDeduce aPostDeduce);
 }
 
 //
