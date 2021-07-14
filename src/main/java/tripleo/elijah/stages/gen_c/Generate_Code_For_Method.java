@@ -639,7 +639,7 @@ public class Generate_Code_For_Method {
 			if (res instanceof GeneratedContainerNC) {
 				final GeneratedContainerNC nc = (GeneratedContainerNC) res;
 				int code = nc.getCode();
-				return "Z"+code;
+				return String.format("Z%d*",code);
 			}
 
 			// Get it from type.attached
