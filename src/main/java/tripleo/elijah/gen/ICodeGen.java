@@ -68,6 +68,10 @@ public interface ICodeGen {
 
 	void visitConstructorDef(ConstructorDef aConstructorDef);
 
+	void visitDefFunction(DefFunctionDef aDefFunctionDef);
+
+	void visitDestructor(DestructorDef aDestructorDef);
+
 	// return, continue, next
 }
 
