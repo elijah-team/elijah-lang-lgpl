@@ -201,7 +201,7 @@ public class Generate_Code_For_Method {
 				break;
 			case 1:
 				String ty = gc.getTypeName(aGmh.tte);
-				tos.put_string_ln(String.format("%s vsr;", ty));
+				tos.put_string_ln(String.format("%s* vsr;", ty));
 				break;
 			case 2:
 			case 3:
