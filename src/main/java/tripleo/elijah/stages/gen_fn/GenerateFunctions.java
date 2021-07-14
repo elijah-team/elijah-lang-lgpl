@@ -542,9 +542,9 @@ public class GenerateFunctions {
 //				@NotNull GeneratedClass gen_c = generateClass(classStatement);
 //				gc.addClass(classStatement, gen_c);
 			} else if (item instanceof ConstructorDef) {
-				final ConstructorDef constructorDef = (ConstructorDef) item;
-				@NotNull GeneratedConstructor f = generateConstructor(constructorDef, klass, null); // TODO remove this null
-				gc.addConstructor(constructorDef, f);
+//				final ConstructorDef constructorDef = (ConstructorDef) item;
+//				@NotNull GeneratedConstructor f = generateConstructor(constructorDef, klass, null); // TODO remove this null
+//				gc.addConstructor(constructorDef, f);
 			} else if (item instanceof DestructorDef) {
 				throw new NotImplementedException();
 			} else if (item instanceof DefFunctionDef) {
