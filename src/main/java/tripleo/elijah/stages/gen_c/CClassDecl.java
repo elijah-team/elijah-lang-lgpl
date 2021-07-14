@@ -38,7 +38,7 @@ public class CClassDecl {
 		prim = true;
 	}
 
-	void evaluatePrimitive() {
+	public void evaluatePrimitive() {
 		ClassStatement xx = generatedClass.getKlass();
 		xx.walkAnnotations(new AnnotationWalker() {
 			@Override
