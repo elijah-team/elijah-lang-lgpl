@@ -104,6 +104,11 @@ public class CReference {
 									resolved = gen;
 							}
 						}
+						if (resolved == null) {
+							GeneratedNode resolved1 = idte.resolvedType();
+							if (resolved1 instanceof GeneratedFunction)
+								resolved = resolved1;
+						}
 					}
 					if (resolved == null) {
 						System.err.println("***88*** resolved is null for "+idte);
