@@ -99,7 +99,7 @@ public class VariableTableEntry extends BaseTableEntry implements Constructable,
 		return index;
 	}
 
-	public DeferredObject<TypeTableEntry, Void, Void> typeDeferred = new DeferredObject<TypeTableEntry, Void, Void>();
+	private DeferredObject<OS_Type, Void, Void> typeDeferred = new DeferredObject<OS_Type, Void, Void>();
 
 	public Promise<TypeTableEntry, Void, Void> promise() {
 		return typeDeferred.promise();

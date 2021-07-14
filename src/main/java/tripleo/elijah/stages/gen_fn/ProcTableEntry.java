@@ -150,7 +150,7 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 		return functionInvocation;
 	}
 
-	public DeferredObject<ProcTableEntry, Void, Void> completeDeferred() {
+	private DeferredObject<ProcTableEntry, Void, Void> completeDeferred() {
 		return completeDeferred;
 	}
 
