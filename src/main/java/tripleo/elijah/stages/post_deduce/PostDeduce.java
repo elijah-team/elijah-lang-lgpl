@@ -293,38 +293,38 @@ public class PostDeduce implements IPostDeduce {
 			//
 			String z;
 			switch (ty.getType()) {
-				case USER_CLASS:
-					final ClassStatement el = ty.getClassOf();
-					z = String.format("Z%d", el._a.getCode());//.getName();
-					break;
-				case FUNCTION:
-					z = "<function>";
-					break;
-				case FUNC_EXPR:
+			case USER_CLASS:
+				final ClassStatement el = ty.getClassOf();
+				z = String.format("Z%d", el._a.getCode());//.getName();
+				break;
+			case FUNCTION:
+				z = "<function>";
+				break;
+			case FUNC_EXPR:
 				{
 					z = "<function>";
 					OS_FuncExprType fe = (OS_FuncExprType) ty;
 					int y=2;
 				}
 				break;
-				case USER:
-					final TypeName typeName = ty.getTypeName();
-					System.err.println("Warning: USER TypeName in GenerateC "+ typeName);
-					final String s = typeName.toString();
-					if (s.equals("Unit"))
-						z = "void";
-					else
-						z = String.format("Z<%s>", s);
-					break;
-				case BUILT_IN:
-					System.err.println("Warning: BUILT_IN TypeName in GenerateC");
-					z = "Z"+ty.getBType().getCode();  // README should not even be here, but look at .name() for other code gen schemes
-					break;
-				case UNIT_TYPE:
+			case USER:
+				final TypeName typeName = ty.getTypeName();
+				System.err.println("Warning: USER TypeName in GenerateC "+ typeName);
+				final String s = typeName.toString();
+				if (s.equals("Unit"))
 					z = "void";
-					break;
-				default:
-					throw new IllegalStateException("Unexpected value: " + ty.getType());
+				else
+					z = String.format("Z<%s>", s);
+				break;
+			case BUILT_IN:
+				System.err.println("Warning: BUILT_IN TypeName in GenerateC");
+				z = "Z"+ty.getBType().getCode();  // README should not even be here, but look at .name() for other code gen schemes
+				break;
+			case UNIT_TYPE:
+				z = "void";
+				break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + ty.getType());
 			}
 			return z;
 		}
