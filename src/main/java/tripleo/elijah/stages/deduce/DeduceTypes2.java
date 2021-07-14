@@ -2033,13 +2033,13 @@ public class DeduceTypes2 {
 //		System.out.println("10000 "+vte_ia);
 		if (vte_ia != null) {
 			final VariableTableEntry vte1 = generatedFunction.getVarTableEntry(to_int(vte_ia));
-			final Promise<TypeTableEntry, Void, Void> p = vte1.promise();
-			p.done(new DoneCallback<TypeTableEntry>() {
+			final Promise<OS_Type, Void, Void> p = vte1.typePromise();
+			p.done(new DoneCallback<OS_Type>() {
 				@Override
-				public void onDone(TypeTableEntry result) {
+				public void onDone(OS_Type result) {
 					assert vte != vte1;
-					aTte.setAttached(result.getAttached());
-					vte.addPotentialType(aInstructionIndex, result);
+					aTte.setAttached(result/*.getAttached()*/);
+//					vte.addPotentialType(aInstructionIndex, result); // TODO!!
 				}
 			});
 			Runnable runnable = new Runnable() {
@@ -2058,7 +2058,7 @@ public class DeduceTypes2 {
 							if (p.isResolved())
 								System.out.printf("1047 (vte already resolved) vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, potentialTypes.get(0));
 							else
-								vte1.typeDeferred.resolve(potentialTypes.get(0));
+								vte1.typeDeferred().resolve(potentialTypes.get(0).getAttached());
 							break;
 						case 0:
 							LookupResultList lrl = ctx.lookup(e_text);
@@ -2072,7 +2072,7 @@ public class DeduceTypes2 {
 									if (p.isResolved())
 										System.out.printf("890 Already resolved type: vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
 									else
-										vte1.typeDeferred.resolve(tte1);
+										vte1.typeDeferred().resolve(tte1.getAttached());
 								}
 //								vte.type = tte1;
 //								tte.attached = tte1.attached;
@@ -2087,7 +2087,7 @@ public class DeduceTypes2 {
 								if (p.isResolved())
 									System.out.printf("915 Already resolved type: vte2.type = %s, gf = %s %n", vte1.type, generatedFunction);
 								else
-									vte1.typeDeferred.resolve(vte2.type);
+									vte1.typeDeferred().resolve(vte2.type.getAttached());
 //								vte.type = vte2.type;
 //								tte.attached = vte.type.attached;
 								vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
@@ -2212,11 +2212,11 @@ public class DeduceTypes2 {
 						VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(vte_ia));
 
 	//					final @Nullable OS_Type ty2 = vte2.type.attached;
-						vte2.typeDeferred.promise().done(new DoneCallback<TypeTableEntry>() {
+						vte2.typePromise().done(new DoneCallback<OS_Type>() {
 							@Override
-							public void onDone(TypeTableEntry result) {
+							public void onDone(OS_Type result) {
 	//							assert false; // TODO this code is never reached
-								final @Nullable OS_Type ty2 = result.getAttached();
+								final @Nullable OS_Type ty2 = result/*.getAttached()*/;
 								assert ty2 != null;
 								OS_Type rtype = null;
 								try {
@@ -2810,10 +2810,10 @@ public class DeduceTypes2 {
 							//assert attached != null;
 							if (attached == null) {
 								System.err.println("2842 attached == null for "+((VariableTableEntry) bte).type);
-								((VariableTableEntry) bte).typeDeferred.promise().done(new DoneCallback<TypeTableEntry>() {
+								((VariableTableEntry) bte).typePromise().done(new DoneCallback<OS_Type>() {
 									@Override
-									public void onDone(TypeTableEntry result) {
-										final OS_Type attached1 = result.getAttached();
+									public void onDone(OS_Type result) {
+										final OS_Type attached1 = result/*.getAttached()*/;
 										assert attached1 != null;
 										try {
 											OS_Type ty3 = resolve_type(attached1, attached1.getTypeName().getContext());
