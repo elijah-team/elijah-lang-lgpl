@@ -8,11 +8,14 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jdeferred2.Promise;
+import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.BaseFunctionDef;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.OS_Type;
 
 /**
  * Created 6/27/21 9:40 AM
@@ -60,7 +63,15 @@ public class GeneratedFunction extends BaseGeneratedFunction {
 		return ""+fd;
 	}
 
+	private DeferredObject<OS_Type, Void, Void> typeDeferred = new DeferredObject<OS_Type, Void, Void>();
 
+	public Promise<OS_Type, Void, Void> typePromise() {
+		return typeDeferred.promise();
+	}
+
+	public DeferredObject<OS_Type, Void, Void> typeDeferred() {
+		return typeDeferred;
+	}
 }
 
 //

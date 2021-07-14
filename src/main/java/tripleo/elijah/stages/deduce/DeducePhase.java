@@ -271,10 +271,11 @@ public class DeducePhase {
 		forFunctions.add(new Triplet(deduceTypes2, gf, forFunction));
 	}
 
-	Map<GeneratedFunction, OS_Type> typeDecideds = new HashMap<GeneratedFunction, OS_Type>();
+//	Map<GeneratedFunction, OS_Type> typeDecideds = new HashMap<GeneratedFunction, OS_Type>();
 
 	public void typeDecided(GeneratedFunction gf, final OS_Type aType) {
-		typeDecideds.put(gf, aType);
+		gf.typeDeferred().resolve(aType);
+//		typeDecideds.put(gf, aType);
 	}
 
 	public void finish() {
@@ -347,6 +348,7 @@ public class DeducePhase {
 			else
 				entry.getValue().noTypeFound();
 		}
+/*
 		for (Map.Entry<GeneratedFunction, OS_Type> entry : typeDecideds.entrySet()) {
 			for (Triplet triplet : forFunctions) {
 				if (triplet.gf.getGenerated() == entry.getKey()) {
@@ -356,6 +358,7 @@ public class DeducePhase {
 				}
 			}
 		}
+*/
 /*
 		for (Map.Entry<FunctionDef, GeneratedFunction> entry : functionMap.entries()) {
 			FunctionInvocation fi = new FunctionInvocation(entry.getKey(), null);
