@@ -336,13 +336,13 @@ public class GenerateC implements CodeGenerator {
 
 		static String forGenNamespace(@NotNull GeneratedNamespace aGeneratedNamespace) {
 			String z;
-			z = String.format("Z%d", aGeneratedNamespace.getCode());
+			z = String.format("Z%d*", aGeneratedNamespace.getCode());
 			return z;
 		}
 
 		static String forGenClass(@NotNull GeneratedClass aGeneratedClass) {
 			String z;
-			z = String.format("Z%d", aGeneratedClass.getCode());
+			z = String.format("Z%d*", aGeneratedClass.getCode());
 			return z;
 		}
 
