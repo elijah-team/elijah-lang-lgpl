@@ -87,7 +87,7 @@ public class CReference {
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
 					GeneratedNode resolved = null;
-					if (resolved_element instanceof GeneratedClass) {
+					if (resolved_element instanceof ClassStatement) {
 						if (idte.type != null)
 							resolved = idte.type.resolved();
 						if (resolved == null)
