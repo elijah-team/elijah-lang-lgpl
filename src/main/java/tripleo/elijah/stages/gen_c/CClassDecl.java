@@ -23,8 +23,8 @@ import java.util.ArrayList;
  */
 public class CClassDecl {
 	private final GeneratedClass generatedClass;
-	protected String prim_decl;
-	protected boolean prim = false;
+	public String prim_decl;
+	public boolean prim = false;
 
 	public CClassDecl(GeneratedClass generatedClass) {
 		this.generatedClass = generatedClass;
