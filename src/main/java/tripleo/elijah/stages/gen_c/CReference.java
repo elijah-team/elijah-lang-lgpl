@@ -43,7 +43,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 public class CReference {
 	String rtext = null;
 	private List<String> args;
-	List<Reference> refs = new ArrayList<Reference>();
+	List<Reference> refs;
 
 	static class Reference {
 		String text;
@@ -66,6 +66,7 @@ public class CReference {
 	public String getIdentIAPath(final @NotNull IdentIA ia2, GeneratedFunction generatedFunction) {
 		assert ia2.gf == generatedFunction;
 		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
+		refs = new ArrayList<Reference>(s.size());
 
 		//
 		// TODO NOT LOOKING UP THINGS, IE PROPERTIES, MEMBERS
@@ -116,7 +117,6 @@ public class CReference {
 						String text2 = (Emit.emit("/*114*/") + String.format("%s is UNKNOWN", text1));
 						addRef(text2, Ref.MEMBER);
 					}
-
 				}
 			} else if (ia instanceof ProcIA) {
 				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
