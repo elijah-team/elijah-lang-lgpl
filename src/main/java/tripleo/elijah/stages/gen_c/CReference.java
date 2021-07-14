@@ -18,6 +18,7 @@ import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.PropertyStatement;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.gen_fn.BaseTableEntry;
+import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
@@ -85,9 +86,12 @@ public class CReference {
 				final IdentTableEntry idte = ((IdentIA)ia).getEntry();
 				OS_Element resolved_element = idte.resolved_element;
 				if (resolved_element != null) {
-					GeneratedNode resolved = idte.type != null ? idte.type.resolved() : null;
-					if (resolved == null) {
-						resolved = idte.resolvedType();
+					GeneratedNode resolved = null;
+					if (resolved_element instanceof GeneratedClass) {
+						if (idte.type != null)
+							resolved = idte.type.resolved();
+						if (resolved == null)
+							resolved = idte.resolvedType();
 					}
 					if (resolved == null) {
 						System.err.println("***88*** resolved is null for "+idte);
