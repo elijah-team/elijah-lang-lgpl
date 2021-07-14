@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.gen_c;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.AliasStatement;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.ConstructorDef;
@@ -17,6 +18,7 @@ import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.PropertyStatement;
 import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.gen_fn.BaseTableEntry;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
@@ -92,6 +94,16 @@ public class CReference {
 							resolved = idte.type.resolved();
 						if (resolved == null)
 							resolved = idte.resolvedType();
+					} else if (resolved_element instanceof FunctionDef) {
+						@Nullable ProcTableEntry pte = idte.getCallablePTE();
+						if (pte != null) {
+							FunctionInvocation fi = pte.getFunctionInvocation();
+							if (fi != null) {
+								GeneratedFunction gen = fi.getGenerated();
+								if (gen != null)
+									resolved = gen;
+							}
+						}
 					}
 					if (resolved == null) {
 						System.err.println("***88*** resolved is null for "+idte);
