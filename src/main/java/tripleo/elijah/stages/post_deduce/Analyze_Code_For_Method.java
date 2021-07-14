@@ -497,7 +497,7 @@ public class Analyze_Code_For_Method {
 				z = pd.getTypeName(attached);
 			else
 				z = Emit.emit("/*763*/")+"Unknown";
-			pd.log.info("505/8890 Z<{}> {};", z, target_name);
+			pd.log.warn("505/8890 Z<{}> {};", z, target_name);
 		}
 		pd.log.error("8886 y is null (No typename specified)");
 	}
