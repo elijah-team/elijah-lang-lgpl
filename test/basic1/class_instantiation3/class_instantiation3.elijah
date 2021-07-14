@@ -24,7 +24,7 @@ class Main {
 
 		println(foo.f)
 
-		iterate 1 to 10 with i {
+		iterate from 1 to 10 with i {
 			foo.f = randInt(1, 100)
 			print(i)
 			print(" ")
