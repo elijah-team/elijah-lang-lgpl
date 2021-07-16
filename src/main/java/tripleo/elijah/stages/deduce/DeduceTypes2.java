@@ -1856,6 +1856,8 @@ public class DeduceTypes2 {
 								@Override
 								public void onDone(OS_Type result) {
 									vte.typeDeferred().resolve(result);
+									if (vte.type.getAttached() == null)
+										vte.type.setAttached(result);
 								}
 							});
 						}
