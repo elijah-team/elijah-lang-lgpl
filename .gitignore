@@ -8,3 +8,5 @@ target/
 output/
 target-/
 COMP*/
+.idea/workspace.xml
+.idea/gitlab-quickmr.xml
