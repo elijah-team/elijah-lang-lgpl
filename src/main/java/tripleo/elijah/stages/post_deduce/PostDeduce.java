@@ -47,7 +47,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
  * Created 10/8/20 7:13 AM
  */
 public class PostDeduce implements IPostDeduce {
-	final protected Logger log = LoggerFactory.getLogger(PostDeduce.class);
+	final static protected Logger log = LoggerFactory.getLogger(PostDeduce.class);
 
 	private final ErrSink errSink;
 	private final DeducePhase dp;
