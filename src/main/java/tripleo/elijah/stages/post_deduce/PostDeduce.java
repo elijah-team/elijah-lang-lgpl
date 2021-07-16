@@ -19,6 +19,7 @@ import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeducePhase;
+import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.gen_c.CClassDecl;
 import tripleo.elijah.stages.gen_c.CReference;
 import tripleo.elijah.stages.gen_c.CtorReference;
@@ -438,14 +439,24 @@ public class PostDeduce implements IPostDeduce {
 					final IdentTableEntry idte = ia2.getEntry();
 					if (idte.getStatus() == BaseTableEntry.Status.KNOWN) {
 						final CReference reference = new CReference();
-						final GeneratedFunction pte_generated = pte.getFunctionInvocation().getGenerated();
-						if (idte.resolvedType() == null && pte_generated != null)
-							idte.resolveType(pte_generated);
-						reference.getIdentIAPath(ia2, gf);
-						final List<String> sll = getAssignmentValueArgs(inst, gf);
-						reference.args(sll);
-						String path = reference.build();
-						sb.append(Emit.emit("/*827*/")+path);
+						final FunctionInvocation functionInvocation = pte.getFunctionInvocation();
+						if (functionInvocation == null || functionInvocation.getFunction() == ConstructorDef.defaultVirtualCtor) {
+							PostDeduce.log.warn("444 defaultVirtualCtor or null");
+							reference.getIdentIAPath(ia2, gf);
+							final List<String> sll = getAssignmentValueArgs(inst, gf);
+							reference.args(sll);
+							String path = reference.build();
+							sb.append(Emit.emit("/*829*/") + path);
+						} else {
+							final GeneratedFunction pte_generated = functionInvocation.getGenerated();
+							if (idte.resolvedType() == null && pte_generated != null)
+								idte.resolveType(pte_generated);
+							reference.getIdentIAPath(ia2, gf);
+							final List<String> sll = getAssignmentValueArgs(inst, gf);
+							reference.args(sll);
+							String path = reference.build();
+							sb.append(Emit.emit("/*827*/") + path);
+						}
 					} else {
 						final String path = gf.getIdentIAPathNormal(ia2);
 						sb.append(Emit.emit("/*828*/")+String.format("%s is UNKNOWN", path));
