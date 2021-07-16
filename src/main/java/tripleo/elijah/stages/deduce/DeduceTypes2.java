@@ -2031,9 +2031,21 @@ public class DeduceTypes2 {
 							forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
 								@Override
 								public void typeDecided(OS_Type aType) {
-									assert false;
-									assert fd == generatedFunction.getFD();
-									//
+									if (!vte.typeDeferred().isPending()) {
+										if (vte.resolvedType() == null) {
+											final ClassInvocation ci = genCI(vte.type);
+											vte.type.genTypeCI(ci);
+											ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+												@Override
+												public void onDone(GeneratedClass result) {
+													vte.resolveType(result);
+												}
+											});
+										}
+										System.err.println("2041 type already found "+vte);
+										return; // type already found
+									}
+									// I'm not sure if below is ever called
 									@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, pte.expression, pte);
 									vte.addPotentialType(instructionIndex, tte);
 								}
