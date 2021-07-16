@@ -177,20 +177,6 @@ public class DeducePhase {
 		}
 	}
 
-	static class Triplet {
-
-		private final DeduceTypes2 deduceTypes2;
-		private final FunctionInvocation gf;
-		private final ForFunction forFunction;
-
-		public Triplet(DeduceTypes2 deduceTypes2, FunctionInvocation gf, ForFunction forFunction) {
-			this.deduceTypes2 = deduceTypes2;
-			this.gf = gf;
-			this.forFunction = forFunction;
-		}
-	}
-
-	private final List<Triplet> forFunctions = new ArrayList<Triplet>();
 	private final Multimap<FunctionDef, GeneratedFunction> functionMap = ArrayListMultimap.create();
 
 	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf) {
@@ -261,14 +247,19 @@ public class DeducePhase {
 		deduceModule(m, lgf);
 	}
 
-/*
-	public void forFunction(DeduceTypes2 deduceTypes2, GeneratedFunction gf, ForFunction forFunction) {
-		forFunctions.add(new Triplet(deduceTypes2, gf, forFunction));
-	}
-*/
-
-	public void forFunction(DeduceTypes2 deduceTypes2, FunctionInvocation gf, ForFunction forFunction) {
-		forFunctions.add(new Triplet(deduceTypes2, gf, forFunction));
+	public void forFunction(DeduceTypes2 deduceTypes2, FunctionInvocation fi, ForFunction forFunction) {
+		System.err.println("272 "+fi.getFunction()+" "+fi.pte);
+		fi.generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {
+			@Override
+			public void onDone(BaseGeneratedFunction result) {
+				result.typePromise().then(new DoneCallback<OS_Type>() {
+					@Override
+					public void onDone(OS_Type result) {
+						forFunction.typeDecided(result);
+					}
+				});
+			}
+		});
 	}
 
 //	Map<GeneratedFunction, OS_Type> typeDecideds = new HashMap<GeneratedFunction, OS_Type>();
