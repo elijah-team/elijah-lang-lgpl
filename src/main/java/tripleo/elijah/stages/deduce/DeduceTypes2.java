@@ -808,6 +808,32 @@ public class DeduceTypes2 {
 			clsinv = phase.registerClassInvocation(clsinv);
 			return clsinv;
 		}
+		if (genType.resolved != null) {
+			ClassStatement best = genType.resolved.getClassOf();
+			String constructorName = null; // TODO what to do about this, nothing I guess
+
+			List<TypeName> gp = best.getGenericPart();
+			ClassInvocation clsinv = new ClassInvocation(best, constructorName);
+			assert best.getGenericPart().size() == 0;
+/*
+			if (gp.size() > 0) {
+				TypeNameList gp2 = aTyn1.getGenericPart();
+				for (int i = 0; i < gp.size(); i++) {
+					final TypeName typeName = gp2.get(i);
+					@NotNull OS_Type typeName2;
+					try {
+						typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
+						clsinv.set(i, gp.get(i), typeName2);
+					} catch (ResolveError aResolveError) {
+						aResolveError.printStackTrace();
+						return null;
+					}
+				}
+			}
+*/
+			clsinv = phase.registerClassInvocation(clsinv);
+			return clsinv;
+		}
 		return null;
 	}
 
