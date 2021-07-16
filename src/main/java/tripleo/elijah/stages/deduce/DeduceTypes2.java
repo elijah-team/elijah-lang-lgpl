@@ -1589,21 +1589,25 @@ public class DeduceTypes2 {
 				} else {
 					final OS_Element parent = vs.getParent().getParent();
 					if (parent instanceof NamespaceStatement || parent instanceof ClassStatement) {
+						boolean state;
 						if (generatedFunction instanceof GeneratedFunction) {
 							final GeneratedFunction generatedFunction1 = (GeneratedFunction) generatedFunction;
-							assert parent != generatedFunction1.getFD().getParent();
-						} else
-							assert parent != ((GeneratedConstructor)generatedFunction).getFD().getParent();
-						deferred_member(parent, getInvocationFromBacklink(ite.backlink), vs).typePromise().
-								done(new DoneCallback<GenType>() {
-									@Override
-									public void onDone(GenType result) {
-										if (ite.type == null)
-											ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
-										assert result.resolved != null;
-										ite.type.setAttached(result.resolved);
-									}
-								});
+							state = (parent != generatedFunction1.getFD().getParent());
+						} else {
+							state = (parent != ((GeneratedConstructor) generatedFunction).getFD().getParent());
+						}
+						if (state) {
+							deferred_member(parent, getInvocationFromBacklink(ite.backlink), vs).typePromise().
+									done(new DoneCallback<GenType>() {
+										@Override
+										public void onDone(GenType result) {
+											if (ite.type == null)
+												ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+											assert result.resolved != null;
+											ite.type.setAttached(result.resolved);
+										}
+									});
+						}
 
 						GenType genType = null;
 						if (parent instanceof NamespaceStatement)
