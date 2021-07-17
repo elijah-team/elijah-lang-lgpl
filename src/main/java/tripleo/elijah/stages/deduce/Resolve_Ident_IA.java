@@ -296,8 +296,8 @@ class Resolve_Ident_IA {
 
 					@Override
 					public void foundElement(OS_Element e) {
-						foundElement.doFoundElement(e);
 						idte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
+						foundElement.doFoundElement(e);
 					}
 
 					@Override
