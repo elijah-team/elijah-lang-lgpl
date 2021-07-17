@@ -290,7 +290,7 @@ class Resolve_Ident_IA {
 					foundElement.doNoFoundElement();
 					return RIA_STATE.RETURN;
 				}
-			} else if (false) {
+			} else /*if (false)*/ {
 				deduceTypes2.resolveIdentIA2_(ectx/*context*/, aS, generatedFunction, new FoundElement(phase) {
 					final String z = generatedFunction.getIdentIAPathNormal(ia);
 
