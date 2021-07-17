@@ -849,6 +849,10 @@ public class DeduceTypes2 {
 		return module.getFileName();
 	}
 
+	public GenerateFunctions getGenerateFunctions(OS_Module aModule) {
+		return phase.generatePhase.getGenerateFunctions(aModule);
+	}
+
 	static class Resolve_each_typename {
 
 		private final DeducePhase phase;

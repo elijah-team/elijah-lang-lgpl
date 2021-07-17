@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,7 @@ import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.ProcIA;
 import tripleo.elijah.util.NotImplementedException;
+import tripleo.elijah.work.WorkList;
 
 import java.util.Collection;
 import java.util.List;
@@ -161,24 +163,64 @@ class Resolve_Ident_IA {
 				// handle constructor calls
 				if (el instanceof ClassStatement) {
 					assert prte.getClassInvocation() == null;
-					ClassInvocation ci = new ClassInvocation((ClassStatement) el, null);
-//					prte.setClassInvocation(ci);
-					Collection<ConstructorDef> cs = (((ClassStatement) el).getConstructors());
-					ConstructorDef selected_constructor = null;
-					if (prte.getArgs().size() == 0 && cs.size() == 0) {
-						// TODO use a virtual default ctor
-						System.out.println("2262 use a virtual default ctor for " + prte.expression);
-						selected_constructor = ConstructorDef.defaultVirtualCtor;
+					if (prte.getFunctionInvocation() == null) {
+						ClassInvocation ci = new ClassInvocation((ClassStatement) el, null);
+
+						ci = phase.registerClassInvocation(ci);
+//						prte.setClassInvocation(ci);
+						Collection<ConstructorDef> cs = (((ClassStatement) el).getConstructors());
+						ConstructorDef selected_constructor = null;
+						if (prte.getArgs().size() == 0 && cs.size() == 0) {
+							// TODO use a virtual default ctor
+							System.out.println("2262 use a virtual default ctor for " + prte.expression);
+							selected_constructor = ConstructorDef.defaultVirtualCtor;
+						} else {
+							// TODO find a ctor that matches prte.getArgs()
+							final List<TypeTableEntry> x = prte.getArgs();
+							int yy = 2;
+						}
+						assert ((ClassStatement) el).getGenericPart().size() == 0;
+						FunctionInvocation fi = new FunctionInvocation(selected_constructor, prte, ci, phase.generatePhase);
+//						fi.setClassInvocation(ci);
+						prte.setFunctionInvocation(fi);
+						if (fi.getFunction() instanceof ConstructorDef) {
+							GenType genType = new GenType(ci.getKlass());
+							genType.ci = ci;
+							ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+								@Override
+								public void onDone(GeneratedClass result) {
+									genType.node = result;
+								}
+							});
+							generatedFunction.addDependentType(genType);
+							generatedFunction.addDependentFunction(fi);
+						} else
+							generatedFunction.addDependentFunction(fi);
 					} else {
-						// TODO find a ctor that matches prte.getArgs()
-						final List<TypeTableEntry> x = prte.getArgs();
-						int yy = 2;
+						// TODO does nothing
+						FunctionInvocation fi = prte.getFunctionInvocation();
+						ClassInvocation ci = fi.getClassInvocation();
+						if (fi.getFunction() instanceof ConstructorDef) {
+							GenType genType = new GenType(ci.getKlass());
+							genType.ci = ci;
+							ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+								@Override
+								public void onDone(GeneratedClass result) {
+									genType.node = result;
+								}
+							});
+							final WorkList wl = new WorkList();
+							final OS_Module module = fi.getClassInvocation().getKlass().getContext().module();
+							final GenerateFunctions generateFunctions = deduceTypes2.getGenerateFunctions(module);
+							if (prte.getFunctionInvocation().getFunction() == ConstructorDef.defaultVirtualCtor)
+								wl.addJob(new WlGenerateDefaultCtor(generateFunctions, fi));
+							else
+								wl.addJob(new WlGenerateCtor(generateFunctions, fi, null));
+							deduceTypes2.wm.addJobs(wl);
+//							generatedFunction.addDependentType(genType);
+//							generatedFunction.addDependentFunction(fi);
+						}
 					}
-					final IInvocation invocation = ci;
-					assert ((ClassStatement) el).getGenericPart().size() == 0;
-					FunctionInvocation fi = new FunctionInvocation(selected_constructor, prte, invocation, phase.generatePhase);
-//					fi.setClassInvocation(ci);
-					prte.setFunctionInvocation(fi);
 				}
 			} catch (ResolveError aResolveError) {
 				aResolveError.printStackTrace();
