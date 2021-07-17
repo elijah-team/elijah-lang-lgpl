@@ -711,6 +711,7 @@ public class DeduceTypes2 {
 									@NotNull IdentTableEntry idte2 = identIA.getEntry();
 									ProcTableEntry procTableEntry = idte2.getCallablePTE();
 									if (procTableEntry != null) {
+										// TODO doesn't seem like we need this
 										procTableEntry.onFunctionInvocation(new DoneCallback<FunctionInvocation>() {
 											@Override
 											public void onDone(FunctionInvocation functionInvocation) {
@@ -723,6 +724,7 @@ public class DeduceTypes2 {
 												generatedFunction.addDependentFunction(fi);
 											}
 										});
+										// END
 									}
 								}
 								break;
