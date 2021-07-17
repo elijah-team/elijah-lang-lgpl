@@ -134,6 +134,10 @@ public class ProcedureCallExpression implements IExpression {
 		return String.format("ProcedureCallExpression{%s %s}", getLeft(), args != null ? args.toString() : "()");
 	}
 
+	public String printableString() {
+		return String.format("%s%s", getLeft(), args != null ? args.toString() : "()");
+	}
+
 	// endregion
 
 	// region type (to remove)

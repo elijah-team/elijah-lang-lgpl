@@ -124,7 +124,8 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 				text = idte.getIdent().getText();
 			} else if (ia instanceof ProcIA) {
 				final ProcTableEntry prte = getProcTableEntry(to_int(ia));
-				text = prte.expression.toString(); // TODO this is wrong but I don't see any other way without adding new fields
+				assert prte.expression instanceof ProcedureCallExpression;
+				text = ((ProcedureCallExpression)prte.expression).printableString();
 			} else
 				throw new NotImplementedException();
 			sl.add(text);
