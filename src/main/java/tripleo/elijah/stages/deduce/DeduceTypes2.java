@@ -133,6 +133,7 @@ public class DeduceTypes2 {
 			if (result_index != null) {
 				@NotNull VariableTableEntry vte = ((IntegerIA) result_index).getEntry();
 				if (vte.resolvedType() == null) {
+					GenType b = vte.genType;
 					OS_Type a = vte.type.getAttached();
 					if (a != null) {
 						// see resolve_function_return_type
@@ -141,8 +142,11 @@ public class DeduceTypes2 {
 								dof_uc(vte, a);
 								break;
 							case USER:
+								vte.genType.typeName = a;
 								try {
 									@NotNull OS_Type rt = resolve_type(a, a.getTypeName().getContext());
+									if (rt.getClassOf().getGenericPart().size() > 0)
+										vte.genType.nonGenericTypeName = a.getTypeName(); // TODO might be wrong
 									dof_uc(vte, rt);
 								} catch (ResolveError aResolveError) {
 									errSink.reportDiagnostic(aResolveError);
@@ -196,6 +200,7 @@ public class DeduceTypes2 {
 			if (result_index != null) {
 				@NotNull VariableTableEntry vte = ((IntegerIA) result_index).getEntry();
 				if (vte.resolvedType() == null) {
+					GenType b = vte.genType;
 					OS_Type a = vte.type.getAttached();
 					if (a != null) {
 						// see resolve_function_return_type
@@ -204,8 +209,11 @@ public class DeduceTypes2 {
 								dof_uc(vte, a);
 								break;
 							case USER:
+								b.typeName = a;
 								try {
 									@NotNull OS_Type rt = resolve_type(a, a.getTypeName().getContext());
+									if (rt.getClassOf().getGenericPart().size() > 0)
+										b.nonGenericTypeName = a.getTypeName(); // TODO might be wrong
 									dof_uc(vte, rt);
 								} catch (ResolveError aResolveError) {
 									errSink.reportDiagnostic(aResolveError);
@@ -230,6 +238,10 @@ public class DeduceTypes2 {
 		assert aA.getClassOf().getGenericPart().size() == 0;
 		ClassInvocation ci = new ClassInvocation(aA.getClassOf(), null);
 		ci = phase.registerClassInvocation(ci);
+
+		aVte.genType.resolved = aA; // README assuming OS_Type cannot represent namespaces
+		aVte.genType.ci = ci;
+
 		ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
 			@Override
 			public void onDone(GeneratedClass result) {
@@ -808,6 +820,7 @@ public class DeduceTypes2 {
 				}
 			}
 			clsinv = phase.registerClassInvocation(clsinv);
+			genType.ci = clsinv;
 			return clsinv;
 		}
 		if (genType.resolved != null) {
@@ -834,6 +847,7 @@ public class DeduceTypes2 {
 			}
 */
 			clsinv = phase.registerClassInvocation(clsinv);
+			genType.ci = clsinv;
 			return clsinv;
 		}
 		return null;
@@ -1489,6 +1503,7 @@ public class DeduceTypes2 {
 					final TypeName typeName = gp2.get(i);
 					@NotNull OS_Type typeName2;
 					try {
+						// TODO transition to GenType
 						typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
 						clsinv.set(i, gp.get(i), typeName2);
 					} catch (ResolveError aResolveError) {
@@ -2155,8 +2170,21 @@ public class DeduceTypes2 {
 //							vte.addPotentialType(instructionIndex, ll.get(0));
 							if (p.isResolved())
 								System.out.printf("1047 (vte already resolved) vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, potentialTypes.get(0));
-							else
-								vte1.typeDeferred().resolve(potentialTypes.get(0).getAttached());
+							else {
+								final OS_Type attached = potentialTypes.get(0).getAttached();
+								if (attached == null) return;
+								switch (attached.getType()) {
+									case USER:
+										vte1.type.setAttached(attached); // !!
+										break;
+									case USER_CLASS:
+										vte1.typeDeferred().resolve(attached);
+										break;
+									default:
+										errSink.reportWarning("Unexpected value: " + attached.getType());
+//										throw new IllegalStateException("Unexpected value: " + attached.getType());
+								}
+							}
 							break;
 						case 0:
 							LookupResultList lrl = ctx.lookup(e_text);
@@ -2286,8 +2314,11 @@ public class DeduceTypes2 {
 											public void typeDecided(final OS_Type aType) {
 												assert fd == generatedFunction.getFD();
 												//
-												@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, idte); // TODO expression?
-												idte.type = tte1;
+												if (idte.type == null) {
+													@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, aType, idte); // TODO expression?
+													idte.type = tte1;
+												} else
+													idte.type.setAttached(aType);
 											}
 										});
 									} else {
@@ -2666,6 +2697,7 @@ public class DeduceTypes2 {
 								throw new NotImplementedException();
 							}
 						} else {
+							// TODO what is the state of vte.genType here?
 							switch (attached.getType()) {
 							case USER_CLASS:
 								ectx = attached.getClassOf().getContext(); // TODO can combine later
@@ -2828,10 +2860,14 @@ public class DeduceTypes2 {
 						try {
 							if (!(idte2.type.getAttached() instanceof OS_UnknownType)) { // TODO
 								OS_Type rtype = resolve_type(idte2.type.getAttached(), ectx);
-								if (rtype.getType() == OS_Type.Type.USER_CLASS)
+								switch (rtype.getType()) {
+								case USER_CLASS:
 									ectx = rtype.getClassOf().getContext();
-								else if (rtype.getType() == OS_Type.Type.FUNCTION)
+									break;
+								case FUNCTION:
 									ectx = ((OS_FuncType) rtype).getElement().getContext();
+									break;
+								}
 								idte2.type.setAttached(rtype); // TODO may be losing alias information here
 							}
 						} catch (ResolveError resolveError) {
@@ -3004,8 +3040,13 @@ public class DeduceTypes2 {
 						ty2 = ty;
 
 					// no expression or TableEntryIV below
-					if (ty2 != null)
-						ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, ty2); // or ty2?
+					if (ty2 != null) {
+						final TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null);
+						// trying to keep genType up to date
+						tte.setAttached(ty);
+						tte.setAttached(ty2);
+						ite.type = tte; // or ty2?
+					}
 				} catch (ResolveError aResolveError) {
 					errSink.reportDiagnostic(aResolveError);
 				}
@@ -3094,6 +3135,7 @@ public class DeduceTypes2 {
 					if (ty.getType() == OS_Type.Type.USER) {
 						try {
 							@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
+							// TODO ite.setAttached(ty2) ??
 							OS_Element ele = ty2.getElement();
 							LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
 							OS_Element best = lrl.chooseBest(null);
