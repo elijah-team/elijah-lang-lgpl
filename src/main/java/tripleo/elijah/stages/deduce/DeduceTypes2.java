@@ -1131,7 +1131,10 @@ public class DeduceTypes2 {
 			int state = 0;
 
 			if (fd2 == ConstructorDef.defaultVirtualCtor) {
-				state = 1;
+				if (fi.pte.getArgs().size() == 0)
+					state = 1;
+				else
+					state = 2;
 			} else if (fd2 instanceof ConstructorDef) {
 				if (fi.getClassInvocation().getConstructorName() != null)
 					state = 3;
