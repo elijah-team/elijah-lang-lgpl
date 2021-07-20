@@ -31,6 +31,7 @@ public class VariableTableEntry extends BaseTableEntry implements Constructable,
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public int tempNum = -1;
 	public ProcTableEntry constructable_pte;
+	public GenType genType = new GenType();
 	private GeneratedNode _resolvedType;
 
 	public VariableTableEntry(final int index, final VariableTableType var1, final String name, final TypeTableEntry type, final OS_Element el) {
