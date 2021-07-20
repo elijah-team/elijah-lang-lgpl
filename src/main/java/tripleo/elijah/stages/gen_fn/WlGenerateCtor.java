@@ -43,99 +43,101 @@ public class WlGenerateCtor implements WorkJob {
 
 	@Override
 	public void run(WorkManager aWorkManager) {
-		final ClassStatement klass = functionInvocation.getClassInvocation().getKlass();
-		DeduceTypes2.Holder<GeneratedClass> hGenClass = new DeduceTypes2.Holder<>();
-		functionInvocation.getClassInvocation().resolvePromise().then(new DoneCallback<GeneratedClass>() {
-			@Override
-			public void onDone(GeneratedClass result) {
-				hGenClass.set(result);
-			}
-		});
-		GeneratedClass genClass = hGenClass.get();
-		assert genClass != null;
-
-		ConstructorDef cd = new ConstructorDef(constructorName, klass, klass.getContext());
-		Scope3 scope3 = new Scope3(cd);
-		cd.scope(scope3);
-		for (GeneratedContainer.VarTableEntry varTableEntry : genClass.varTable) {
-			if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
-				IExpression left = varTableEntry.nameToken;
-				IExpression right = varTableEntry.initialValue;
-
-				IExpression e = ExpressionBuilder.build(left, ExpressionKind.ASSIGNMENT, right);
-				scope3.add(new StatementWrapper(e, cd.getContext(), cd));
-			} else {
-				if (true || getPragma("auto_construct")) {
-					scope3.add(new ConstructStatement(cd, cd.getContext(), varTableEntry.nameToken, null, null));
+		if (functionInvocation.generateDeferred().isPending()) {
+			final ClassStatement klass = functionInvocation.getClassInvocation().getKlass();
+			DeduceTypes2.Holder<GeneratedClass> hGenClass = new DeduceTypes2.Holder<>();
+			functionInvocation.getClassInvocation().resolvePromise().then(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(GeneratedClass result) {
+					hGenClass.set(result);
 				}
-			}
-		}
+			});
+			GeneratedClass genClass = hGenClass.get();
+			assert genClass != null;
 
-		OS_Element classStatement_ = cd.getParent();
-		assert classStatement_ instanceof ClassStatement;
+			ConstructorDef cd = new ConstructorDef(constructorName, klass, klass.getContext());
+			Scope3 scope3 = new Scope3(cd);
+			cd.scope(scope3);
+			for (GeneratedContainer.VarTableEntry varTableEntry : genClass.varTable) {
+				if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
+					IExpression left = varTableEntry.nameToken;
+					IExpression right = varTableEntry.initialValue;
 
-		ClassStatement classStatement = (ClassStatement) classStatement_;
-		Collection<ConstructorDef> cs = classStatement.getConstructors();
-		ConstructorDef c = null;
-		if (constructorName != null) {
-			for (ConstructorDef cc : cs) {
-				if (cc.name().equals(constructorName.getText()))
-					c = cc;
-			}
-		} else {
-			// TODO match based on arguments
-			ProcTableEntry pte = functionInvocation.pte;
-			List<TypeTableEntry> args = pte.getArgs();
-			// isResolved -> GeneratedNode, etc or getAttached -> OS_Element
-			for (ConstructorDef cc : cs) {
-				Collection<FormalArgListItem> cc_args = cc.getArgs();
-				if (cc_args.size() == args.size()) {
-					if (args.size() == 0) {
-						c = cc;
-						break;
+					IExpression e = ExpressionBuilder.build(left, ExpressionKind.ASSIGNMENT, right);
+					scope3.add(new StatementWrapper(e, cd.getContext(), cd));
+				} else {
+					if (true || getPragma("auto_construct")) {
+						scope3.add(new ConstructStatement(cd, cd.getContext(), varTableEntry.nameToken, null, null));
 					}
-					int y=2;
 				}
 			}
-		}
 
-		{
-			// TODO what about multiple inheritance?
+			OS_Element classStatement_ = cd.getParent();
+			assert classStatement_ instanceof ClassStatement;
 
-			// add inherit statement, if any
+			ClassStatement classStatement = (ClassStatement) classStatement_;
+			Collection<ConstructorDef> cs = classStatement.getConstructors();
+			ConstructorDef c = null;
+			if (constructorName != null) {
+				for (ConstructorDef cc : cs) {
+					if (cc.name().equals(constructorName.getText()))
+						c = cc;
+				}
+			} else {
+				// TODO match based on arguments
+				ProcTableEntry pte = functionInvocation.pte;
+				List<TypeTableEntry> args = pte.getArgs();
+				// isResolved -> GeneratedNode, etc or getAttached -> OS_Element
+				for (ConstructorDef cc : cs) {
+					Collection<FormalArgListItem> cc_args = cc.getArgs();
+					if (cc_args.size() == args.size()) {
+						if (args.size() == 0) {
+							c = cc;
+							break;
+						}
+						int y = 2;
+					}
+				}
+			}
 
-			// add code from c
-			if (c != null) {
-				ArrayList<FunctionItem> is = new ArrayList<>(c.getItems());
+			{
+				// TODO what about multiple inheritance?
 
-				// skip initializers (already present in cd)
+				// add inherit statement, if any
+
+				// add code from c
+				if (c != null) {
+					ArrayList<FunctionItem> is = new ArrayList<>(c.getItems());
+
+					// skip initializers (already present in cd)
 //				FunctionItem firstElement = is.get(0);
 //				if (firstElement instanceof InheritStatement) {
 //					cd.insertInherit(firstElement);
 //					is.remove(0);
 //				}
 
-				for (FunctionItem item : is) {
-					cd.add(item);
+					for (FunctionItem item : is) {
+						cd.add(item);
+					}
 				}
 			}
-		}
 
-		@NotNull GeneratedConstructor gf = generateFunctions.generateConstructor(cd, (ClassStatement) classStatement_, functionInvocation);
+			@NotNull GeneratedConstructor gf = generateFunctions.generateConstructor(cd, (ClassStatement) classStatement_, functionInvocation);
 //		lgf.add(gf);
 
-		final ClassInvocation ci = functionInvocation.getClassInvocation();
-		ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-			@Override
-			public void onDone(GeneratedClass result) {
-				gf.setCode(generateFunctions.module.parent.nextFunctionCode());
-				gf.setClass(result);
-				result.constructors.put(cd, gf);
-			}
-		});
+			final ClassInvocation ci = functionInvocation.getClassInvocation();
+			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(GeneratedClass result) {
+					gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+					gf.setClass(result);
+					result.constructors.put(cd, gf);
+				}
+			});
 
-		functionInvocation.generateDeferred().resolve(gf);
-		functionInvocation.setGenerated(gf);
+			functionInvocation.generateDeferred().resolve(gf);
+			functionInvocation.setGenerated(gf);
+		}
 
 		_isDone = true;
 	}

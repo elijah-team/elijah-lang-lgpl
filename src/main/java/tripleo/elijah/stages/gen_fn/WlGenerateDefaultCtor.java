@@ -35,49 +35,54 @@ public class WlGenerateDefaultCtor implements WorkJob {
 
 	@Override
 	public void run(WorkManager aWorkManager) {
-		final ClassStatement klass = functionInvocation.getClassInvocation().getKlass();
-		DeduceTypes2.Holder<GeneratedClass> hGenClass = new DeduceTypes2.Holder<>();
-		functionInvocation.getClassInvocation().resolvePromise().then(new DoneCallback<GeneratedClass>() {
-			@Override
-			public void onDone(GeneratedClass result) {
-				hGenClass.set(result);
-			}
-		});
-		GeneratedClass genClass = hGenClass.get();
-		assert genClass != null;
+		if (functionInvocation.generateDeferred().isPending()) {
+			final ClassStatement klass = functionInvocation.getClassInvocation().getKlass();
+			DeduceTypes2.Holder<GeneratedClass> hGenClass = new DeduceTypes2.Holder<>();
+			functionInvocation.getClassInvocation().resolvePromise().then(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(GeneratedClass result) {
+					hGenClass.set(result);
+				}
+			});
+			GeneratedClass genClass = hGenClass.get();
+			assert genClass != null;
 
-		ConstructorDef cd = new ConstructorDef(null, klass, klass.getContext());
-		cd.setName(Helpers.string_to_ident("<ctor>"));
-		Scope3 scope3 = new Scope3(cd);
-		cd.scope(scope3);
-		for (GeneratedContainer.VarTableEntry varTableEntry : genClass.varTable) {
-			if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
-				IExpression left = varTableEntry.nameToken;
-				IExpression right = varTableEntry.initialValue;
+			ConstructorDef cd = new ConstructorDef(null, klass, klass.getContext());
+			cd.setName(Helpers.string_to_ident("<ctor>"));
+			Scope3 scope3 = new Scope3(cd);
+			cd.scope(scope3);
+			for (GeneratedContainer.VarTableEntry varTableEntry : genClass.varTable) {
+				if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
+					IExpression left = varTableEntry.nameToken;
+					IExpression right = varTableEntry.initialValue;
 
-				IExpression e = ExpressionBuilder.build(left, ExpressionKind.ASSIGNMENT, right);
-				scope3.add(new StatementWrapper(e, cd.getContext(), cd));
-			} else {
-				if (true || getPragma("auto_construct")) {
-					scope3.add(new ConstructStatement(cd, cd.getContext(), varTableEntry.nameToken, null, null));
+					IExpression e = ExpressionBuilder.build(left, ExpressionKind.ASSIGNMENT, right);
+					scope3.add(new StatementWrapper(e, cd.getContext(), cd));
+				} else {
+					if (true || getPragma("auto_construct")) {
+						scope3.add(new ConstructStatement(cd, cd.getContext(), varTableEntry.nameToken, null, null));
+					}
 				}
 			}
-		}
 
-		OS_Element classStatement = cd.getParent();
-		assert classStatement instanceof ClassStatement;
-		@NotNull GeneratedConstructor gf = generateFunctions.generateConstructor(cd, (ClassStatement) classStatement, functionInvocation);
+			OS_Element classStatement = cd.getParent();
+			assert classStatement instanceof ClassStatement;
+			@NotNull GeneratedConstructor gf = generateFunctions.generateConstructor(cd, (ClassStatement) classStatement, functionInvocation);
 //		lgf.add(gf);
 
-		final ClassInvocation ci = functionInvocation.getClassInvocation();
-		ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-			@Override
-			public void onDone(GeneratedClass result) {
-				gf.setCode(generateFunctions.module.parent.nextFunctionCode());
-				gf.setClass(result);
-				result.constructors.put(cd, gf);
-			}
-		});
+			final ClassInvocation ci = functionInvocation.getClassInvocation();
+			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(GeneratedClass result) {
+					gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+					gf.setClass(result);
+					result.constructors.put(cd, gf);
+				}
+			});
+
+			functionInvocation.generateDeferred().resolve(gf);
+			functionInvocation.setGenerated(gf);
+		}
 
 		_isDone = true;
 	}
