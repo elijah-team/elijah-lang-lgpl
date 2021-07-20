@@ -20,17 +20,8 @@ import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.NormalTypeName;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.TypeName;
-import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.stages.deduce.ClassInvocation;
-import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
-import tripleo.elijah.stages.gen_fn.GeneratedClass;
-import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
-import tripleo.elijah.stages.gen_fn.ProcTableEntry;
-import tripleo.elijah.stages.gen_fn.TypeTableEntry;
-import tripleo.elijah.stages.gen_fn.VariableTableEntry;
+import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.BufferTabbedOutputStream;
@@ -58,7 +49,7 @@ public class Generate_Code_For_Method {
 	final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
 	final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
 
-	void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
+	void generateCodeForMethod(BaseGeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
 		action(gf);
 		
 		tos.flush();
@@ -73,9 +64,24 @@ public class Generate_Code_For_Method {
 		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER);
 	}
 
+	void generateCodeForConstructor(GeneratedConstructor gf, GenerateResult gr, WorkList aWorkList) {
+		action(gf);
+
+		tos.flush();
+		tos.close();
+		tosHdr.flush();
+		tosHdr.close();
+		Buffer buf = tos.getBuffer();
+//		System.out.println(buf.getText());
+		gr.addConstructor(gf, buf, GenerateResult.TY.IMPL);
+		Buffer bufHdr = tosHdr.getBuffer();
+//		System.out.println(bufHdr.getText());
+		gr.addConstructor(gf, bufHdr, GenerateResult.TY.HEADER);
+	}
+
 	boolean is_constructor = false, is_unit_type = false;
 
-	private void action(GeneratedFunction gf) {
+	private void action(BaseGeneratedFunction gf) {
 		Generate_Method_Header gmh = new Generate_Method_Header(gf, gc);
 
 		tos.put_string_ln(String.format("%s {", gmh.header_string));
@@ -182,7 +188,7 @@ public class Generate_Code_For_Method {
 			}
 	}
 
-	private void action_E(GeneratedFunction gf, Generate_Method_Header aGmh) {
+	private void action_E(BaseGeneratedFunction gf, Generate_Method_Header aGmh) {
 		tos.put_string_ln("bool vsb;");
 		int state = 0;
 
@@ -220,7 +226,7 @@ public class Generate_Code_For_Method {
 		tos.incr_tabs();
 	}
 
-	private void action_AGN(GeneratedFunction gf, Instruction aInstruction) {
+	private void action_AGN(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final InstructionArgument target = aInstruction.getArg(0);
 		final InstructionArgument value  = aInstruction.getArg(1);
 
@@ -235,7 +241,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(s);
 	}
 
-	private void action_AGNK(GeneratedFunction gf, Instruction aInstruction) {
+	private void action_AGNK(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final InstructionArgument target = aInstruction.getArg(0);
 		final InstructionArgument value  = aInstruction.getArg(1);
 
@@ -245,7 +251,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(s);
 	}
 
-	private void action_CALLS(GeneratedFunction gf, Instruction aInstruction) {
+	private void action_CALLS(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final StringBuilder sb = new StringBuilder();
 		final InstructionArgument x = aInstruction.getArg(0);
 		assert x instanceof ProcIA;
@@ -284,7 +290,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(sb.toString());
 	}
 
-	private void action_CALL(GeneratedFunction gf, Instruction aInstruction) {
+	private void action_CALL(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final StringBuilder sb = new StringBuilder();
 // 					System.err.println("9000 "+inst.getName());
 		final InstructionArgument x = aInstruction.getArg(0);
@@ -316,7 +322,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(sb.toString());
 	}
 
-	private void action_CONSTRUCT(GeneratedFunction gf, Instruction aInstruction) {
+	private void action_CONSTRUCT(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final InstructionArgument _arg0 = aInstruction.getArg(0);
 		assert _arg0 instanceof ProcIA;
 		final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) _arg0).getIndex());
@@ -357,7 +363,7 @@ public class Generate_Code_For_Method {
 		final int y=2;
 	}
 
-	private void action_JL(GeneratedFunction gf, Instruction aInstruction) {
+	private void action_JL(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final InstructionArgument lhs    = aInstruction.getArg(0);
 		final InstructionArgument rhs    = aInstruction.getArg(1);
 		final InstructionArgument target = aInstruction.getArg(2);
@@ -384,7 +390,7 @@ public class Generate_Code_For_Method {
 		}
 	}
 
-	private void action_JNE(GeneratedFunction gf, Instruction aInstruction) {
+	private void action_JNE(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final InstructionArgument lhs    = aInstruction.getArg(0);
 		final InstructionArgument rhs    = aInstruction.getArg(1);
 		final InstructionArgument target = aInstruction.getArg(2);
@@ -411,7 +417,7 @@ public class Generate_Code_For_Method {
 		}
 	}
 
-	private void action_JE(GeneratedFunction gf, Instruction aInstruction) {
+	private void action_JE(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final InstructionArgument lhs    = aInstruction.getArg(0);
 		final InstructionArgument rhs    = aInstruction.getArg(1);
 		final InstructionArgument target = aInstruction.getArg(2);
@@ -438,7 +444,7 @@ public class Generate_Code_For_Method {
 		}
 	}
 
-	private void action_IS_A(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
+	private void action_IS_A(Instruction instruction, BufferTabbedOutputStream tos, BaseGeneratedFunction gf) {
 		final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
 		final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
 		final Label target_label      = ((LabelIA) instruction.getArg(2)).label;
@@ -453,7 +459,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
 	}
 
-	private void action_CAST(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
+	private void action_CAST(Instruction instruction, BufferTabbedOutputStream tos, BaseGeneratedFunction gf) {
 		final IntegerIA  vte_num_ = (IntegerIA) instruction.getArg(0);
 		final IntegerIA vte_type_ = (IntegerIA) instruction.getArg(1);
 		final IntegerIA vte_targ_ = (IntegerIA) instruction.getArg(2);
@@ -465,7 +471,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(String.format("%s = (%s)%s;", target_name, target_type, source_target));
 	}
 
-	private void action_DECL(Instruction instruction, BufferTabbedOutputStream tos, GeneratedFunction gf) {
+	private void action_DECL(Instruction instruction, BufferTabbedOutputStream tos, BaseGeneratedFunction gf) {
 		final SymbolIA decl_type = (SymbolIA)  instruction.getArg(0);
 		final IntegerIA  vte_num = (IntegerIA) instruction.getArg(1);
 		final String target_name = gc.getRealTargetName(gf, vte_num);
@@ -555,7 +561,7 @@ public class Generate_Code_For_Method {
 		OS_Type type;
 		TypeTableEntry tte;
 
-		public Generate_Method_Header(@NotNull GeneratedFunction gf, @NotNull GenerateC aGenerateC) {
+		public Generate_Method_Header(BaseGeneratedFunction gf, @NotNull GenerateC aGenerateC) {
 			gc            = aGenerateC;
 			name          = gf.getFD().name();
 			//
@@ -564,7 +570,7 @@ public class Generate_Code_For_Method {
 			header_string = find_header_string(gf);
 		}
 
-		String find_header_string(GeneratedFunction gf) {
+		String find_header_string(BaseGeneratedFunction gf) {
 			GeneratedContainerNC parent = gf.getParent();
 			if (parent == null)
 				parent = (GeneratedContainerNC) gf.getGenClass(); // TODO might not type check, but why not?
@@ -588,7 +594,7 @@ public class Generate_Code_For_Method {
 			}
 		}
 
-		String find_args_string(GeneratedFunction gf) {
+		String find_args_string(BaseGeneratedFunction gf) {
 			final String args;
 			if (false) {
 				args = Helpers.String_join(", ", Collections2.transform(gf.getFD().fal().falis, new Function<FormalArgListItem, String>() {
@@ -619,7 +625,7 @@ public class Generate_Code_For_Method {
 			return args;
 		}
 
-		String find_return_type(GeneratedFunction gf) {
+		String find_return_type(BaseGeneratedFunction gf) {
 			final String returnType;
 			@Nullable InstructionArgument result_index = gf.vte_lookup("Result");
 			if (result_index == null) {

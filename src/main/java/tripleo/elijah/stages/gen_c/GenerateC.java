@@ -111,7 +111,10 @@ public class GenerateC implements CodeGenerator {
 
 		@Override
 		public void run(WorkManager aWorkManager) {
-			generateC.generate_function((GeneratedFunction) gf, gr, wl);
+			if (gf instanceof GeneratedFunction)
+				generateC.generate_function((GeneratedFunction) gf, gr, wl);
+			else
+				generateC.generate_constructor((GeneratedConstructor) gf, gr, wl);
 			_isDone = true;
 		}
 
@@ -142,6 +145,37 @@ public class GenerateC implements CodeGenerator {
 			FunctionInvocation fi = pte.getFunctionInvocation();
 			if (fi == null) {
 				// TODO constructor
+			} else {
+				BaseGeneratedFunction gf = fi.getGenerated();
+				if (gf != null) {
+					wl.addJob(new WlGenerateFunctionC(gf, gr, wl, this));
+				}
+			}
+		}
+	}
+
+	public void generate_constructor(GeneratedConstructor aGeneratedConstructor, GenerateResult gr, WorkList wl) {
+		generateCodeForMethod(aGeneratedConstructor, gr, wl);
+		for (IdentTableEntry identTableEntry : aGeneratedConstructor.idte_list) {
+			if (identTableEntry.isResolved()) {
+				GeneratedNode x = identTableEntry.resolvedType();
+
+				if (x instanceof GeneratedClass) {
+					generate_class((GeneratedClass) x, gr);
+				} else if (x instanceof GeneratedFunction) {
+					wl.addJob(new WlGenerateFunctionC((GeneratedFunction) x, gr, wl, this));
+				} else {
+					System.err.println(x);
+					throw new NotImplementedException();
+				}
+			}
+		}
+		for (ProcTableEntry pte : aGeneratedConstructor.prte_list) {
+//			ClassInvocation ci = pte.getClassInvocation();
+			FunctionInvocation fi = pte.getFunctionInvocation();
+			if (fi == null) {
+				// TODO constructor
+				int y=2;
 			} else {
 				BaseGeneratedFunction gf = fi.getGenerated();
 				if (gf != null) {
@@ -305,10 +339,16 @@ public class GenerateC implements CodeGenerator {
 		x.generatedAlready = true;
 	}
 
-	private void generateCodeForMethod(GeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
+	private void generateCodeForMethod(BaseGeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
 		if (gf.getFD() == null) return;
 		Generate_Code_For_Method gcfm = new Generate_Code_For_Method(this);
 		gcfm.generateCodeForMethod(gf, gr, aWorkList);
+	}
+
+	private void generateCodeForConstructor(GeneratedConstructor gf, GenerateResult gr, WorkList aWorkList) {
+		if (gf.getFD() == null) return;
+		Generate_Code_For_Method gcfm = new Generate_Code_For_Method(this);
+		gcfm.generateCodeForConstructor(gf, gr, aWorkList);
 	}
 
 	static class GetTypeName {
@@ -448,7 +488,7 @@ public class GenerateC implements CodeGenerator {
 		return GetTypeName.forTypeName(typeName, errSink);
 	}
 
-	@NotNull List<String> getArgumentStrings(final GeneratedFunction gf, final Instruction instruction) {
+	@NotNull List<String> getArgumentStrings(final BaseGeneratedFunction gf, final Instruction instruction) {
 		final List<String> sl3 = new ArrayList<String>();
 		final int args_size = instruction.getArgsSize();
 		for (int i = 1; i < args_size; i++) {
@@ -678,13 +718,13 @@ public class GenerateC implements CodeGenerator {
 		}
 	}
 
-	String getAssignmentValue(VariableTableEntry aSelf, Instruction aInstruction, ClassInvocation aClsinv, GeneratedFunction gf) {
+	String getAssignmentValue(VariableTableEntry aSelf, Instruction aInstruction, ClassInvocation aClsinv, BaseGeneratedFunction gf) {
 		GetAssignmentValue gav = new GetAssignmentValue();
 		return gav.forClassInvocation(aInstruction, aClsinv, gf);
 	}
 
 	@NotNull
-	String getAssignmentValue(VariableTableEntry value_of_this, final InstructionArgument value, final GeneratedFunction gf) {
+	String getAssignmentValue(VariableTableEntry value_of_this, final InstructionArgument value, final BaseGeneratedFunction gf) {
 		GetAssignmentValue gav = new GetAssignmentValue();
 		if (value instanceof FnCallArgs) {
 			final FnCallArgs fca = (FnCallArgs) value;
@@ -710,12 +750,12 @@ public class GenerateC implements CodeGenerator {
 		return ""+value;
 	}
 
-	String getRealTargetName(final GeneratedFunction gf, final IntegerIA target) {
+	String getRealTargetName(final BaseGeneratedFunction gf, final IntegerIA target) {
 		final VariableTableEntry varTableEntry = gf.getVarTableEntry(target.getIndex());
 		return getRealTargetName(gf, varTableEntry);
 	}
 
-	static String getRealTargetName(final GeneratedFunction gf, final VariableTableEntry varTableEntry) {
+	static String getRealTargetName(final BaseGeneratedFunction gf, final VariableTableEntry varTableEntry) {
 		final String vte_name = varTableEntry.getName();
 		if (varTableEntry.vtt == VariableTableType.TEMP) {
 			if (varTableEntry.getName() == null) {
@@ -734,7 +774,7 @@ public class GenerateC implements CodeGenerator {
 		}
 	}
 
-	private static boolean isValue(GeneratedFunction gf, String name) {
+	private static boolean isValue(BaseGeneratedFunction gf, String name) {
 		if (!name.equals("Value")) return false;
 		//
 		FunctionDef fd = (FunctionDef) gf.getFD();
@@ -756,7 +796,7 @@ public class GenerateC implements CodeGenerator {
 		}
 	}
 
-	String getRealTargetName(final GeneratedFunction gf, final IdentIA target) {
+	String getRealTargetName(final BaseGeneratedFunction gf, final IdentIA target) {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		LinkedList<String> ls = new LinkedList<String>();
 		// TODO in Deduce set property lookupType to denote what type of lookup it is: MEMBER, LOCAL, or CLOSURE

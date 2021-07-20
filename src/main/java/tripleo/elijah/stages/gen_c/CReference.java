@@ -66,7 +66,7 @@ public class CReference {
 		refs.add(new Reference(text, type));
 	}
 
-	public String getIdentIAPath(final @NotNull IdentIA ia2, GeneratedFunction generatedFunction) {
+	public String getIdentIAPath(final @NotNull IdentIA ia2, BaseGeneratedFunction generatedFunction) {
 		assert ia2.gf == generatedFunction;
 		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
 		refs = new ArrayList<Reference>(s.size());
@@ -161,7 +161,7 @@ public class CReference {
 										  int i,
 										  int sSize,
 										  OS_Element resolved_element,
-										  GeneratedFunction generatedFunction,
+										  BaseGeneratedFunction generatedFunction,
 										  GeneratedNode aResolved) {
 		boolean b = false;
 		if (resolved_element instanceof ClassStatement) {
@@ -217,8 +217,8 @@ public class CReference {
 			OS_Element parent = resolved_element.getParent();
 			int code;
 			if (aResolved != null) {
-				assert aResolved instanceof GeneratedFunction;
-				final GeneratedFunction rf = (GeneratedFunction) aResolved;
+				assert aResolved instanceof BaseGeneratedFunction;
+				final BaseGeneratedFunction rf = (BaseGeneratedFunction) aResolved;
 				GeneratedNode gc = rf.getGenClass();
 				if (gc instanceof GeneratedContainerNC) // and not another function
 					code = ((GeneratedContainerNC) gc).getCode();
