@@ -2917,6 +2917,7 @@ public class DeduceTypes2 {
 			generatedFunction = aGeneratedFunction;
 		}
 
+		// TODO this function probably needs to be updated, and/or rmeoved
 		void found_element_for_ite2(GeneratedFunction generatedFunction, IdentTableEntry ite, Context ctx) {
 			OS_Element y = ite.resolved_element;
 
