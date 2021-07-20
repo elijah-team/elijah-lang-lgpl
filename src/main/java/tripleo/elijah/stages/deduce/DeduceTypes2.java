@@ -3106,22 +3106,22 @@ public class DeduceTypes2 {
 										final OS_Type attached1 = result.resolved != null ? result.resolved : result.typeName;
 										if (attached1 != null) {
 											switch (attached1.getType()) {
-												case USER_CLASS:
-													ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached1);
-													break;
-												case USER:
-													try {
-														OS_Type ty3 = resolve_type(attached1, attached1.getTypeName().getContext());
-														// no expression or TableEntryIV below
-														@NotNull TypeTableEntry tte4 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null);
-														// README trying to keep genType up to date
-														tte4.setAttached(attached1);
-														tte4.setAttached(ty3);
-														ite.type = tte4; // or ty2?
-													} catch (ResolveError aResolveError) {
-														aResolveError.printStackTrace();
-													}
-													break;
+											case USER_CLASS:
+												ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached1);
+												break;
+											case USER:
+												try {
+													OS_Type ty3 = resolve_type(attached1, attached1.getTypeName().getContext());
+													// no expression or TableEntryIV below
+													@NotNull TypeTableEntry tte4 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null);
+													// README trying to keep genType up to date
+													tte4.setAttached(attached1);
+													tte4.setAttached(ty3);
+													ite.type = tte4; // or ty2?
+												} catch (ResolveError aResolveError) {
+													aResolveError.printStackTrace();
+												}
+												break;
 											}
 										}
 									}
