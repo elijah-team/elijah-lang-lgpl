@@ -1845,6 +1845,29 @@ public class DeduceTypes2 {
 		final int instructionIndex = instruction.getIndex();
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		IdentIA identIA = (IdentIA) pte.expression_num;
+
+		if (vte.getStatus() == BaseTableEntry.Status.UNCHECKED) {
+			pte.typePromise().then(new DoneCallback<OS_Type>() {
+				@Override
+				public void onDone(OS_Type result) {
+					vte.typeDeferred().resolve(result);
+				}
+			});
+			if (vte.el != null) {
+				try {
+					OS_Element el;
+					if (vte.el instanceof IdentExpression)
+						el = DeduceLookupUtils.lookup((IdentExpression) vte.el, ctx);
+					else
+						el = DeduceLookupUtils.lookup(((VariableStatement) vte.el).getNameToken(), ctx);
+					vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
+				} catch (ResolveError aResolveError) {
+					errSink.reportDiagnostic(aResolveError);
+					return;
+				}
+			}
+		}
+
 		if (identIA != null){
 //			System.out.println("594 "+identIA.getEntry().getStatus());
 
