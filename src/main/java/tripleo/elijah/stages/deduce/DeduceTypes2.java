@@ -2802,7 +2802,7 @@ public class DeduceTypes2 {
 								errSink.reportError("1442 Don't know " + typeName.getClass().getName());
 								throw new NotImplementedException();
 							}
-						} else
+						} else if (state != 1)
 							System.out.println("1006 Can't find type of " + text);
 					}
 				}
