@@ -2836,7 +2836,6 @@ public class DeduceTypes2 {
 									});
 								}
 							});
-							int y = 2;
 							// but for now, just set ectx
 							InstructionArgument en = procTableEntry.expression_num;
 							if (en instanceof IdentIA) {
@@ -2850,34 +2849,40 @@ public class DeduceTypes2 {
 								}
 							}
 						}
-						if (state == 0) {
+						switch (state) {
+						case 0:
 							assert attached1 != null;
 							vte.type.setAttached(attached1);
 							// TODO this will break
 							switch (attached1.getType()) {
-							case USER:
-								final TypeName attached1TypeName = attached1.getTypeName();
-								assert attached1TypeName instanceof RegularTypeName;
-								final Qualident realName = ((RegularTypeName) attached1TypeName).getRealName();
-								try {
-									final List<LookupResult> lrl = DeduceLookupUtils.lookupExpression(realName, ectx).results();
-									ectx = lrl.get(0).getElement().getContext();
-								} catch (ResolveError aResolveError) {
-									aResolveError.printStackTrace();
-									int y = 2;
+								case USER:
+									final TypeName attached1TypeName = attached1.getTypeName();
+									assert attached1TypeName instanceof RegularTypeName;
+									final Qualident realName = ((RegularTypeName) attached1TypeName).getRealName();
+									try {
+										final List<LookupResult> lrl = DeduceLookupUtils.lookupExpression(realName, ectx).results();
+										ectx = lrl.get(0).getElement().getContext();
+									} catch (ResolveError aResolveError) {
+										aResolveError.printStackTrace();
+										int y = 2;
+										throw new NotImplementedException();
+									}
+									break;
+								case USER_CLASS:
+									ectx = attached1.getClassOf().getContext();
+									break;
+								default:
+									final TypeName typeName = attached1.getTypeName();
+									errSink.reportError("1442 Don't know " + typeName.getClass().getName());
 									throw new NotImplementedException();
-								}
-								break;
-							case USER_CLASS:
-								ectx = attached1.getClassOf().getContext();
-								break;
-							default:
-								final TypeName typeName = attached1.getTypeName();
-								errSink.reportError("1442 Don't know " + typeName.getClass().getName());
-								throw new NotImplementedException();
 							}
-						} else if (state != 1)
+							break;
+						case 1:
+							break;
+						default:
 							System.out.println("1006 Can't find type of " + text);
+							break;
+						}
 					}
 				}
 			} else if (ia2 instanceof IdentIA) {
