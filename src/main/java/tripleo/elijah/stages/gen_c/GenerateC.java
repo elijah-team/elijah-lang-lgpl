@@ -96,13 +96,13 @@ public class GenerateC implements CodeGenerator {
 
 	static class WlGenerateFunctionC implements WorkJob {
 
-		private final GeneratedFunction gf;
+		private final BaseGeneratedFunction gf;
 		private final GenerateResult gr;
 		private final WorkList wl;
 		private final GenerateC generateC;
 		private boolean _isDone = false;
 
-		public WlGenerateFunctionC(GeneratedFunction aGf, GenerateResult aGr, WorkList aWl, GenerateC aGenerateC) {
+		public WlGenerateFunctionC(BaseGeneratedFunction aGf, GenerateResult aGr, WorkList aWl, GenerateC aGenerateC) {
 			gf = aGf;
 			gr = aGr;
 			wl = aWl;
@@ -143,7 +143,7 @@ public class GenerateC implements CodeGenerator {
 			if (fi == null) {
 				// TODO constructor
 			} else {
-				GeneratedFunction gf = fi.getGenerated();
+				BaseGeneratedFunction gf = fi.getGenerated();
 				if (gf != null) {
 					wl.addJob(new WlGenerateFunctionC(gf, gr, wl, this));
 				}
@@ -515,7 +515,7 @@ public class GenerateC implements CodeGenerator {
 							String path = reference.build();
 							sb.append(Emit.emit("/*829*/") + path);
 						} else {
-							final GeneratedFunction pte_generated = functionInvocation.getGenerated();
+							final BaseGeneratedFunction pte_generated = functionInvocation.getGenerated();
 							if (idte.resolvedType() == null && pte_generated != null)
 								idte.resolveType(pte_generated);
 							reference.getIdentIAPath(ia2, gf);
