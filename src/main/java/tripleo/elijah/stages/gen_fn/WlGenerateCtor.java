@@ -103,19 +103,21 @@ public class WlGenerateCtor implements WorkJob {
 			// TODO what about multiple inheritance?
 
 			// add inherit statement, if any
-			ArrayList<FunctionItem> is = new ArrayList<>(c.getItems());
-/*
-			FunctionItem firstElement = is.get(0);
-			if (firstElement instanceof InheritStatement) {
-				cd.insertInherit(firstElement);
-				is.remove(0);
-			}
-*/
-			// skip initiailizers (already present in cd)
+
 			// add code from c
-			assert c != null;
-			for (FunctionItem item : is) {
-				cd.add(item);
+			if (c != null) {
+				ArrayList<FunctionItem> is = new ArrayList<>(c.getItems());
+
+				// skip initializers (already present in cd)
+//				FunctionItem firstElement = is.get(0);
+//				if (firstElement instanceof InheritStatement) {
+//					cd.insertInherit(firstElement);
+//					is.remove(0);
+//				}
+
+				for (FunctionItem item : is) {
+					cd.add(item);
+				}
 			}
 		}
 
