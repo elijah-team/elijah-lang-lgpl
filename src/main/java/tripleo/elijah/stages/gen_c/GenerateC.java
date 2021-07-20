@@ -111,7 +111,7 @@ public class GenerateC implements CodeGenerator {
 
 		@Override
 		public void run(WorkManager aWorkManager) {
-			generateC.generate_function(gf, gr, wl);
+			generateC.generate_function((GeneratedFunction) gf, gr, wl);
 			_isDone = true;
 		}
 
