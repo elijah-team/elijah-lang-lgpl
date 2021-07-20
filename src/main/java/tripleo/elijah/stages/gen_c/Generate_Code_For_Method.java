@@ -625,41 +625,69 @@ public class Generate_Code_For_Method {
 			return args;
 		}
 
-		String find_return_type(BaseGeneratedFunction gf) {
-			final String returnType;
-			@Nullable InstructionArgument result_index = gf.vte_lookup("Result");
-			if (result_index == null) {
-				// if there is no Result, there should be Value
-				result_index = gf.vte_lookup("Value");
-				// but Value might be passed in. If it is, discard value
+		@NotNull String find_return_type(BaseGeneratedFunction gf) {
+			String returnType = null;
+			if (gf instanceof GeneratedConstructor) {
+				@Nullable InstructionArgument result_index = gf.vte_lookup("self");
 				@NotNull VariableTableEntry vte = ((IntegerIA) result_index).getEntry();
-				if (vte.vtt != VariableTableType.RESULT)
-					result_index = null;
-				if (result_index == null)
-					return "void"; // README Assuming Unit
-			}
+				assert vte.vtt == VariableTableType.SELF;
 
-			// Get it from resolved
-			tte = gf.getTypeTableEntry(((IntegerIA) result_index).getIndex());
-			GeneratedNode res = tte.resolved();
-			if (res instanceof GeneratedContainerNC) {
-				final GeneratedContainerNC nc = (GeneratedContainerNC) res;
-				int code = nc.getCode();
-				return String.format("Z%d*",code);
-			}
+				// Get it from resolved
+				tte = gf.getTypeTableEntry(((IntegerIA) result_index).getIndex());
+				GeneratedNode res = tte.resolved();
+				if (res instanceof GeneratedContainerNC) {
+					final GeneratedContainerNC nc = (GeneratedContainerNC) res;
+					int code = nc.getCode();
+					return String.format("Z%d*",code);
+				}
 
-			// Get it from type.attached
-			type = tte.getAttached();
+				// Get it from type.attached
+				type = tte.getAttached();
 
-			System.out.println("228 "+ type);
-			if (type.isUnitType()) {
-				returnType = "void/*Unit*/";
-			} else if (type != null) {
-				returnType = String.format("/*267*/%s*", gc.getTypeName(type));
+				System.out.println("228-1 "+ type);
+				if (type.isUnitType()) {
+					assert false;
+				} else if (type != null) {
+					returnType = String.format("/*267*/%s*", gc.getTypeName(type));
+				} else {
+					System.err.println("655 Shouldn't be here (type is null)");
+					returnType = "void/*2*/";
+				}
 			} else {
-//				throw new IllegalStateException();
-				System.err.println("655 Shouldn't be here (type is null)");
-				returnType = "void/*2*/";
+				@Nullable InstructionArgument result_index = gf.vte_lookup("Result");
+				if (result_index == null) {
+					// if there is no Result, there should be Value
+					result_index = gf.vte_lookup("Value");
+					// but Value might be passed in. If it is, discard value
+					@NotNull VariableTableEntry vte = ((IntegerIA) result_index).getEntry();
+					if (vte.vtt != VariableTableType.RESULT)
+						result_index = null;
+					if (result_index == null)
+						return "void"; // README Assuming Unit
+				}
+
+				// Get it from resolved
+				tte = gf.getTypeTableEntry(((IntegerIA) result_index).getIndex());
+				GeneratedNode res = tte.resolved();
+				if (res instanceof GeneratedContainerNC) {
+					final GeneratedContainerNC nc = (GeneratedContainerNC) res;
+					int code = nc.getCode();
+					return String.format("Z%d*",code);
+				}
+
+				// Get it from type.attached
+				type = tte.getAttached();
+
+				System.out.println("228 "+ type);
+				if (type.isUnitType()) {
+					returnType = "void/*Unit*/";
+				} else if (type != null) {
+					returnType = String.format("/*267*/%s*", gc.getTypeName(type));
+				} else {
+	//				throw new IllegalStateException();
+					System.err.println("655 Shouldn't be here (type is null)");
+					returnType = "void/*2*/";
+				}
 			}
 			return returnType;
 		}
