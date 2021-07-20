@@ -2207,7 +2207,8 @@ public class DeduceTypes2 {
 												vte1.typeDeferred().resolve(attached);
 												break;
 											default:
-												throw new IllegalStateException("Unexpected value: " + attached.getType());
+												errSink.reportWarning("Unexpected value: " + attached.getType());
+//												throw new IllegalStateException("Unexpected value: " + attached.getType());
 										}
 									}
 								}
