@@ -48,9 +48,14 @@ public class GenerateFunctions {
 	}
 
 	public @NotNull GeneratedConstructor generateConstructor(ConstructorDef aConstructorDef,
-															 ClassStatement aKlass,
+															 ClassStatement parent, // TODO Namespace constructors
 															 FunctionInvocation aFunctionInvocation) {
 		final GeneratedConstructor gf = new GeneratedConstructor(aConstructorDef);
+		if (parent instanceof ClassStatement)
+			gf.addVariableTableEntry("self",
+					VariableTableType.SELF,
+					gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent), IdentExpression.forString("self")),
+					null);
 		final Context cctx = aConstructorDef.getContext();
 		final int e1 = add_i(gf, InstructionName.E, null, cctx);
 		for (final FunctionItem item : aConstructorDef.getItems()) {
