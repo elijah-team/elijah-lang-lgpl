@@ -2580,16 +2580,34 @@ public class DeduceTypes2 {
 						final OS_Type attached = pot.get(0).getAttached();
 						if (attached == null) {
 							try {
-								LookupResultList lrl = DeduceLookupUtils.lookupExpression(pot.get(0).expression.getLeft(), ctx);
-								OS_Element best = lrl.chooseBest(Helpers.List_of(
-										new DeduceUtils.MatchFunctionArgs(
-												(ProcedureCallExpression) pot.get(0).expression)));
-								final FunctionDef fd;
-								if (best instanceof FunctionDef) {
-									fd = (FunctionDef) best;
+								FunctionDef fd = null;
+								ProcTableEntry pte = null;
+								TableEntryIV xx = pot.get(0).tableEntry;
+								if (xx != null) {
+									if (xx instanceof ProcTableEntry) {
+										final ProcTableEntry procTableEntry = (ProcTableEntry) xx;
+										pte = procTableEntry;
+										InstructionArgument xxx = procTableEntry.expression_num;
+										if (xxx instanceof IdentIA) {
+											final IdentIA identIA = (IdentIA) xxx;
+											@NotNull IdentTableEntry xxxx = identIA.getEntry();
+											DeducePath deducePath = xxxx.buildDeducePath(generatedFunction);
+											@Nullable OS_Element el5 = deducePath.getElement(deducePath.size() - 1);
+											int y = 2;
+											fd = (FunctionDef) el5;
+										}
+									}
 								} else {
-									fd = null;
-									System.err.println("1195 Can't find match");
+									LookupResultList lrl = DeduceLookupUtils.lookupExpression(pot.get(0).expression.getLeft(), ctx);
+									OS_Element best = lrl.chooseBest(Helpers.List_of(
+											new DeduceUtils.MatchFunctionArgs(
+													(ProcedureCallExpression) pot.get(0).expression)));
+									if (best instanceof FunctionDef) {
+										fd = (FunctionDef) best;
+									} else {
+										fd = null;
+										System.err.println("1195 Can't find match");
+									}
 								}
 								if (fd != null) {
 									ProcTableEntry pte = null;
