@@ -521,7 +521,7 @@ public class GenerateC implements CodeGenerator {
 
 	static class GetAssignmentValue {
 
-		public String FnCallArgs(FnCallArgs fca, GeneratedFunction gf) {
+		public String FnCallArgs(FnCallArgs fca, BaseGeneratedFunction gf) {
 			final StringBuilder sb = new StringBuilder();
 			final Instruction inst = fca.getExpression();
 //			System.err.println("9000 "+inst.getName());
@@ -613,7 +613,7 @@ public class GenerateC implements CodeGenerator {
 			}
 		}
 
-		public String ConstTableIA(ConstTableIA constTableIA, GeneratedFunction gf) {
+		public String ConstTableIA(ConstTableIA constTableIA, BaseGeneratedFunction gf) {
 			final ConstantTableEntry cte = gf.getConstTableEntry(constTableIA.getIndex());
 //			System.err.println(("9001-3 "+cte.initialValue));
 			switch (cte.initialValue.getKind()) {
@@ -633,7 +633,7 @@ public class GenerateC implements CodeGenerator {
 		}
 
 		@NotNull
-		private List<String> getAssignmentValueArgs(final Instruction inst, final GeneratedFunction gf) {
+		private List<String> getAssignmentValueArgs(final Instruction inst, final BaseGeneratedFunction gf) {
 			final int args_size = inst.getArgsSize();
 			final List<String> sll = new ArrayList<String>();
 			for (int i = 1; i < args_size; i++) {
@@ -693,20 +693,20 @@ public class GenerateC implements CodeGenerator {
 			throw new NotImplementedException();
 		}
 
-		public String IntegerIA(IntegerIA integerIA, GeneratedFunction gf) {
+		public String IntegerIA(IntegerIA integerIA, BaseGeneratedFunction gf) {
 			VariableTableEntry vte = gf.getVarTableEntry(integerIA.getIndex());
 			String x = getRealTargetName(gf, vte);
 			return x;
 		}
 
-		public String IdentIA(IdentIA identIA, GeneratedFunction gf) {
+		public String IdentIA(IdentIA identIA, BaseGeneratedFunction gf) {
 			assert gf == identIA.gf;
 			final CReference reference = new CReference();
 			reference.getIdentIAPath(identIA, gf);
 			return reference.build();
 		}
 
-		public String forClassInvocation(Instruction aInstruction, ClassInvocation aClsinv, GeneratedFunction gf) {
+		public String forClassInvocation(Instruction aInstruction, ClassInvocation aClsinv, BaseGeneratedFunction gf) {
 			int y=2;
 			InstructionArgument _arg0 = aInstruction.getArg(0);
 			@NotNull ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) _arg0).getIndex());

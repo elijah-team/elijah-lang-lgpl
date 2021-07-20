@@ -13,8 +13,8 @@ import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.VariableTableEntry;
@@ -44,7 +44,7 @@ public class CtorReference {
 		refs.add(new CReference.Reference(text, type));
 	}
 
-	public void getConstructorPath(InstructionArgument ia2, GeneratedFunction gf) {
+	public void getConstructorPath(InstructionArgument ia2, BaseGeneratedFunction gf) {
 		final List<InstructionArgument> s = CReference._getIdentIAPathList(ia2);
 
 		for (int i = 0, sSize = s.size(); i < sSize; i++) {
