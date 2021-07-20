@@ -158,13 +158,13 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 		onFunctionInvocations.then(callback);
 	}
 
-	private DeferredObject<OS_Type, Void, Void> typeDeferred = new DeferredObject<>();
+	private DeferredObject<GenType, Void, Void> typeDeferred = new DeferredObject<GenType, Void, Void>();
 
-	public DeferredObject<OS_Type, Void, Void> typeDeferred() {
+	public DeferredObject<GenType, Void, Void> typeDeferred() {
 		return typeDeferred;
 	}
 
-	public Promise<OS_Type, Void, Void> typePromise() {
+	public Promise<GenType, Void, Void> typePromise() {
 		return typeDeferred.promise();
 	}
 }
