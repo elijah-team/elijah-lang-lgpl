@@ -2886,7 +2886,7 @@ public class DeduceTypes2 {
 					}
 				}
 			} else if (ia2 instanceof IdentIA) {
-				final IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(ia2));
+				final IdentTableEntry idte2 = ((IdentIA) ia2).getEntry();
 				final String text = idte2.getIdent().getText();
 
 				final LookupResultList lrl = ectx.lookup(text);
@@ -2903,7 +2903,7 @@ public class DeduceTypes2 {
 								if (!vs.typeName().isNull()) {
 									TypeTableEntry tte;
 									OS_Type attached;
-									if (/*vs.typeName() == null &&*/ vs.initialValue() != IExpression.UNASSIGNED) { // TODO was always false
+									if (vs.initialValue() != IExpression.UNASSIGNED) {
 										attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
 									} else { // if (vs.typeName() != null) {
 										attached = new OS_Type(vs.typeName());
