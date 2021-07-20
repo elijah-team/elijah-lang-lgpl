@@ -30,7 +30,7 @@ public class FunctionInvocation {
 	private ClassInvocation classInvocation;
 	private NamespaceInvocation namespaceInvocation;
 	private final DeferredObject<BaseGeneratedFunction, Void, Void> generateDeferred = new DeferredObject<tripleo.elijah.stages.gen_fn.BaseGeneratedFunction, Void, Void>();
-	private GeneratedFunction _generated = null;
+	private BaseGeneratedFunction _generated = null;
 
 	public FunctionInvocation(BaseFunctionDef aFunctionDef, ProcTableEntry aProcTableEntry, IInvocation invocation, GeneratePhase phase) {
 		this.fd = aFunctionDef;
@@ -95,7 +95,7 @@ public class FunctionInvocation {
 //		}
 	}
 
-	public GeneratedFunction getGenerated() {
+	public BaseGeneratedFunction getGenerated() {
 		return _generated;
 	}
 
@@ -123,7 +123,7 @@ public class FunctionInvocation {
 		return generateDeferred;
 	}
 
-	public void setGenerated(GeneratedFunction aGeneratedFunction) {
+	public void setGenerated(BaseGeneratedFunction aGeneratedFunction) {
 		_generated = aGeneratedFunction;
 	}
 }

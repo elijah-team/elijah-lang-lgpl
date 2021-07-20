@@ -134,6 +134,9 @@ public class WlGenerateCtor implements WorkJob {
 			}
 		});
 
+		functionInvocation.generateDeferred().resolve(gf);
+		functionInvocation.setGenerated(gf);
+
 		_isDone = true;
 	}
 
