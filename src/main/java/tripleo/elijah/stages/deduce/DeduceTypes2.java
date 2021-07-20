@@ -2658,19 +2658,26 @@ public class DeduceTypes2 {
 						final OS_Type attached1 = pot.get(0).getAttached();
 						vte.type.setAttached(attached1);
 						// TODO this will break
-						final TypeName attached1TypeName = attached1.getTypeName();
-						if (attached1TypeName instanceof RegularTypeName) {
+						switch (attached1.getType()) {
+						case USER:
+							final TypeName attached1TypeName = attached1.getTypeName();
+							assert attached1TypeName instanceof RegularTypeName;
+							final Qualident realName = ((RegularTypeName) attached1TypeName).getRealName();
 							try {
-								ectx = DeduceLookupUtils.lookupExpression(((RegularTypeName) attached1TypeName).getRealName(), ectx).results().get(0).getElement().getContext();
+								final List<LookupResult> lrl = DeduceLookupUtils.lookupExpression(realName, ectx).results();
+								ectx = lrl.get(0).getElement().getContext();
 							} catch (ResolveError aResolveError) {
 								aResolveError.printStackTrace();
 								int y=2;
 								throw new NotImplementedException();
 							}
-						} else if (attached1.getType() == OS_Type.Type.USER_CLASS) {
+							break;
+						case USER_CLASS:
 							ectx = attached1.getClassOf().getContext();
-						} else {
-							System.out.println("1442 Don't know "+attached1TypeName.getClass().getName());
+							break;
+						default:
+							final TypeName typeName = attached1.getTypeName();
+							errSink.reportError("1442 Don't know "+ typeName.getClass().getName());
 							throw new NotImplementedException();
 						}
 					} else
