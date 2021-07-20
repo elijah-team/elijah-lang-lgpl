@@ -2169,8 +2169,19 @@ public class DeduceTypes2 {
 											TypeTableEntry.Type.SPECIFIED, osType, fali.getNameToken(), vte1);
 									if (p.isResolved())
 										System.out.printf("890 Already resolved type: vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
-									else
-										vte1.typeDeferred().resolve(tte1.getAttached());
+									else {
+										final OS_Type attached = tte1.getAttached();
+										switch (attached.getType()) {
+											case USER:
+												vte1.type.setAttached(attached); // !!
+												break;
+											case USER_CLASS:
+												vte1.typeDeferred().resolve(attached);
+												break;
+											default:
+												throw new IllegalStateException("Unexpected value: " + attached.getType());
+										}
+									}
 								}
 //								vte.type = tte1;
 //								tte.attached = tte1.attached;
