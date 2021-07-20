@@ -957,11 +957,11 @@ public class DeduceTypes2 {
 				} else {
 					mod = ci.getKlass().getContext().module();
 				}
-				final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
+				final GenerateFunctions gf = getGenerateFunctions(mod);
 				gen = new WlGenerateDefaultCtor(gf, aDependentFunction);
 			} else {
 				mod = function.getContext().module();
-				final GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
+				final GenerateFunctions gf = getGenerateFunctions(mod);
 				gen = new WlGenerateFunction(gf, aDependentFunction);
 			}
 			wl.addJob(gen);
