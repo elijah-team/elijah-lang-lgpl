@@ -252,9 +252,9 @@ public class DeducePhase {
 		fi.generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {
 			@Override
 			public void onDone(BaseGeneratedFunction result) {
-				result.typePromise().then(new DoneCallback<OS_Type>() {
+				result.typePromise().then(new DoneCallback<GenType>() {
 					@Override
-					public void onDone(OS_Type result) {
+					public void onDone(GenType result) {
 						forFunction.typeDecided(result);
 					}
 				});
@@ -264,7 +264,7 @@ public class DeducePhase {
 
 //	Map<GeneratedFunction, OS_Type> typeDecideds = new HashMap<GeneratedFunction, OS_Type>();
 
-	public void typeDecided(GeneratedFunction gf, final OS_Type aType) {
+	public void typeDecided(GeneratedFunction gf, final GenType aType) {
 		gf.typeDeferred().resolve(aType);
 //		typeDecideds.put(gf, aType);
 	}

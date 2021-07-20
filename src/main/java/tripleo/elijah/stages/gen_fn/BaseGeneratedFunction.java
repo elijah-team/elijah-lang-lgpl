@@ -49,7 +49,7 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	private int _nextTemp = 0;
 	private GeneratedNode genClass;
 	private GeneratedContainerNC parent;
-	private DeferredObject<OS_Type, Void, Void> typeDeferred = new DeferredObject<OS_Type, Void, Void>();
+	private DeferredObject<GenType, Void, Void> typeDeferred = new DeferredObject<GenType, Void, Void>();
 
 	public static void printTables(GeneratedFunction gf) {
 		System.out.println("VariableTable ");
@@ -436,11 +436,11 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 
 	public abstract BaseFunctionDef getFD();
 
-	public Promise<OS_Type, Void, Void> typePromise() {
+	public Promise<GenType, Void, Void> typePromise() {
 		return typeDeferred.promise();
 	}
 
-	public DeferredObject<OS_Type, Void, Void> typeDeferred() {
+	public DeferredObject<GenType, Void, Void> typeDeferred() {
 		return typeDeferred;
 	}
 }

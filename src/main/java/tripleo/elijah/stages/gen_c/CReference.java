@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.AliasStatement;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.ConstructorDef;
+import tripleo.elijah.lang.DefFunctionDef;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Element;

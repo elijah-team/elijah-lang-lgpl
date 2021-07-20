@@ -8,13 +8,13 @@
  */
 package tripleo.elijah.stages.deduce;
 
-import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.stages.gen_fn.GenType;
 
 /**
  * Created 12/24/20 3:58 AM
  */
 public abstract class ForFunction {
-	public abstract void typeDecided(final OS_Type aType);
+	public abstract void typeDecided(final GenType aType);
 }
 
 //
