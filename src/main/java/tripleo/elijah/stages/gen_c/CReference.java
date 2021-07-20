@@ -243,6 +243,36 @@ public class CReference {
 			}
 			String text2 = String.format("Z%d%s", code, ((FunctionDef) resolved_element).name());
 			addRef(text2, Ref.FUNCTION);
+		} else if (resolved_element instanceof DefFunctionDef) {
+			OS_Element parent = resolved_element.getParent();
+			int code;
+			if (aResolved != null) {
+				assert aResolved instanceof BaseGeneratedFunction;
+				final BaseGeneratedFunction rf = (BaseGeneratedFunction) aResolved;
+				GeneratedNode gc = rf.getGenClass();
+				if (gc instanceof GeneratedContainerNC) // and not another function
+					code = ((GeneratedContainerNC) gc).getCode();
+				else
+					code = -2;
+			} else {
+				if (parent instanceof ClassStatement) {
+					code = ((ClassStatement) parent)._a.getCode();
+				} else if (parent instanceof NamespaceStatement) {
+					code = ((NamespaceStatement) parent)._a.getCode();
+				} else {
+					// TODO what about FunctionDef, etc
+					code = -1;
+				}
+			}
+			// TODO what about overloaded functions
+			assert i == sSize-1; // Make sure we are ending with a ProcedureCall
+			sl.clear();
+			if (code == -1) {
+//				text2 = String.format("ZT%d_%d", enclosing_function._a.getCode(), closure_index);
+			}
+			final DefFunctionDef defFunctionDef = (DefFunctionDef) resolved_element;
+			String text2 = String.format("Z%d%s", code, defFunctionDef.name());
+			addRef(text2, Ref.FUNCTION);
 		} else if (resolved_element instanceof VariableStatement) {
 			// first getParent is VariableSequence
 			final String text2 = ((VariableStatement) resolved_element).getName();
