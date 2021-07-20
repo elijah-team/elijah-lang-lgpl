@@ -19,8 +19,8 @@ import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.PropertyStatement;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
+import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.BaseTableEntry;
-import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
@@ -99,7 +99,7 @@ public class CReference {
 						if (pte != null) {
 							FunctionInvocation fi = pte.getFunctionInvocation();
 							if (fi != null) {
-								GeneratedFunction gen = fi.getGenerated();
+								BaseGeneratedFunction gen = fi.getGenerated();
 								if (gen != null)
 									resolved = gen;
 							}
