@@ -111,11 +111,12 @@ public class TypeTableEntry {
 
 	public void setAttached(OS_Type aAttached) {
 		attached = aAttached;
-		if (aAttached != null)
+		if (aAttached != null) {
 			_settingAttached(aAttached);
 
-		for (OnSetAttached cb : osacbs) {
-			cb.onSetAttached(this);
+			for (OnSetAttached cb : osacbs) {
+				cb.onSetAttached(this);
+			}
 		}
 	}
 
