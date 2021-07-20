@@ -74,7 +74,7 @@ public class WlGenerateFunction implements WorkJob {
 			functionInvocation.setGenerated(result);
 			functionInvocation.generateDeferred().resolve(result);
 		} else {
-			result = functionInvocation.getGenerated();
+			result = (GeneratedFunction) functionInvocation.getGenerated();
 		}
 		_isDone = true;
 	}
