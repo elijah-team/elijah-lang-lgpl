@@ -2659,8 +2659,8 @@ public class DeduceTypes2 {
 										InstructionArgument xxx = procTableEntry.expression_num;
 										if (xxx instanceof IdentIA) {
 											final IdentIA identIA = (IdentIA) xxx;
-											@NotNull IdentTableEntry xxxx = identIA.getEntry();
-											DeducePath deducePath = xxxx.buildDeducePath(generatedFunction);
+											@NotNull IdentTableEntry ite = identIA.getEntry();
+											DeducePath deducePath = ite.buildDeducePath(generatedFunction);
 											@Nullable OS_Element el5 = deducePath.getElement(deducePath.size() - 1);
 											int y = 2;
 											fd = (FunctionDef) el5;
