@@ -2700,34 +2700,67 @@ public class DeduceTypes2 {
 					}
 				} else {
 					if (vte.potentialTypes().size() == 1) {
+						int state = 0;
 						final ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
 						final OS_Type attached1 = pot.get(0).getAttached();
-						vte.type.setAttached(attached1);
-						// TODO this will break
-						switch (attached1.getType()) {
-						case USER:
-							final TypeName attached1TypeName = attached1.getTypeName();
-							assert attached1TypeName instanceof RegularTypeName;
-							final Qualident realName = ((RegularTypeName) attached1TypeName).getRealName();
-							try {
-								final List<LookupResult> lrl = DeduceLookupUtils.lookupExpression(realName, ectx).results();
-								ectx = lrl.get(0).getElement().getContext();
-							} catch (ResolveError aResolveError) {
-								aResolveError.printStackTrace();
-								int y=2;
+						TableEntryIV te = pot.get(0).tableEntry;
+						if (te instanceof ProcTableEntry) {
+							final ProcTableEntry procTableEntry = (ProcTableEntry) te;
+							// This is how it should be done, with an Incremental
+							procTableEntry.getFunctionInvocation().generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
+								@Override
+								public void onDone(BaseGeneratedFunction result) {
+									result.typePromise().then(new DoneCallback<OS_Type>() {
+										@Override
+										public void onDone(OS_Type result) {
+											vte.typeDeferred().resolve(result); // save for later
+										}
+									});
+								}
+							});
+							int y = 2;
+							// but for now, just set ectx
+							InstructionArgument en = procTableEntry.expression_num;
+							if (en instanceof IdentIA) {
+								final IdentIA identIA = (IdentIA) en;
+								DeducePath ded = identIA.getEntry().buildDeducePath(generatedFunction);
+								@Nullable OS_Element el2 = ded.getElement(ded.size() - 1);
+								if (el2 != null) {
+									state = 1;
+									ectx = el2.getContext();
+									vte.type.setAttached(attached1);
+								}
+							}
+						}
+						if (state == 0) {
+							assert attached1 != null;
+							vte.type.setAttached(attached1);
+							// TODO this will break
+							switch (attached1.getType()) {
+							case USER:
+								final TypeName attached1TypeName = attached1.getTypeName();
+								assert attached1TypeName instanceof RegularTypeName;
+								final Qualident realName = ((RegularTypeName) attached1TypeName).getRealName();
+								try {
+									final List<LookupResult> lrl = DeduceLookupUtils.lookupExpression(realName, ectx).results();
+									ectx = lrl.get(0).getElement().getContext();
+								} catch (ResolveError aResolveError) {
+									aResolveError.printStackTrace();
+									int y = 2;
+									throw new NotImplementedException();
+								}
+								break;
+							case USER_CLASS:
+								ectx = attached1.getClassOf().getContext();
+								break;
+							default:
+								final TypeName typeName = attached1.getTypeName();
+								errSink.reportError("1442 Don't know " + typeName.getClass().getName());
 								throw new NotImplementedException();
 							}
-							break;
-						case USER_CLASS:
-							ectx = attached1.getClassOf().getContext();
-							break;
-						default:
-							final TypeName typeName = attached1.getTypeName();
-							errSink.reportError("1442 Don't know "+ typeName.getClass().getName());
-							throw new NotImplementedException();
-						}
-					} else
-						System.out.println("1006 Can't find type of " + text);
+						} else
+							System.out.println("1006 Can't find type of " + text);
+					}
 				}
 			} else if (ia2 instanceof IdentIA) {
 				final IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(ia2));
