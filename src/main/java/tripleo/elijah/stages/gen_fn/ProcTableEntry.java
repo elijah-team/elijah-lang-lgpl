@@ -138,7 +138,7 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 	}
 
 	public void setFunctionInvocation(FunctionInvocation aFunctionInvocation) {
-		// NOTE this can only be called once because of Promise
+		// NOTE if called more than once, will lose old callbacks
 		if (functionInvocation != aFunctionInvocation) {
 			functionInvocation = aFunctionInvocation;
 			onFunctionInvocations = new DeferredObject<FunctionInvocation, Void, Void>(); // TODO loses callbacks
