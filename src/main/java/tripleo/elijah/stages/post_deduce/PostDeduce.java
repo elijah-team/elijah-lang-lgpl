@@ -448,7 +448,7 @@ public class PostDeduce implements IPostDeduce {
 							String path = reference.build();
 							sb.append(Emit.emit("/*829*/") + path);
 						} else {
-							final GeneratedFunction pte_generated = functionInvocation.getGenerated();
+							final BaseGeneratedFunction pte_generated = functionInvocation.getGenerated();
 							if (idte.resolvedType() == null && pte_generated != null)
 								idte.resolveType(pte_generated);
 							reference.getIdentIAPath(ia2, gf);
