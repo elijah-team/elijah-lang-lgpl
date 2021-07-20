@@ -2633,16 +2633,18 @@ public class DeduceTypes2 {
 									}
 								}
 								if (fd != null) {
-									ProcTableEntry pte = null;
 									final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
-									forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
+									final FunctionDef fd2 = fd;
+									forFunction(newFunctionInvocation(fd2, pte, invocation, phase), new ForFunction() {
 										@Override
 										public void typeDecided(OS_Type aType) {
-											assert fd == generatedFunction.getFD();
+											assert fd2 == generatedFunction.getFD();
 											//
 											pot.get(0).setAttached(aType);
 										}
 									});
+								} else {
+									errSink.reportError("1196 Can't find function");
 								}
 							} catch (ResolveError aResolveError) {
 								aResolveError.printStackTrace();
