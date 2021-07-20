@@ -2262,7 +2262,7 @@ public class DeduceTypes2 {
 			final int ii = aI;
 			idte.onType(phase, new OnType() {
 				@Override
-				public void typeDeduced(OS_Type aType) {
+				public void typeDeduced(@NotNull OS_Type aType) {
 					aPte.setArgType(ii, aType); // TODO does this belong here or in FunctionInvocation?
 					aTte.setAttached(aType); // since we know that tte.attached is always null here
 				}
@@ -2292,7 +2292,7 @@ public class DeduceTypes2 {
 						assert idte != null;
 						@Nullable OS_Type ty = idte.type.getAttached();
 						idte.onType(phase, new OnType() {
-							@Override public void typeDeduced(final OS_Type ty) {
+							@Override public void typeDeduced(final @NotNull OS_Type ty) {
 								assert ty != null;
 								OS_Type rtype = null;
 								try {

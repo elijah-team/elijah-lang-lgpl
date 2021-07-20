@@ -8,13 +8,14 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.OS_Type;
 
 /**
  * Created 1/24/21 2:06 PM
  */
 public interface OnType {
-	void typeDeduced(final OS_Type aType);
+	void typeDeduced(final @NotNull OS_Type aType);
 
 	void noTypeFound();
 }
