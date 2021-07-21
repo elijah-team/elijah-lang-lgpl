@@ -75,7 +75,7 @@ public class TestIdentNormal {
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
 		final List<InstructionArgument> ss = generatedFunction._getIdentIAPathList(identIA);
-		d2.resolveIdentIA2_(ctx2, ss/*identIA*/, generatedFunction, new FoundElement(phase) {
+		d2.resolveIdentIA2_(ctx2, null, ss/*identIA*/, generatedFunction, new FoundElement(phase) {
 			@Override
 			public void foundElement(OS_Element e) {
 				System.out.println(e);
