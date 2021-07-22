@@ -313,8 +313,9 @@ public class DeduceTypes2 {
 					//
 					for (final VariableTableEntry vte : generatedFunction.vte_list) {
 //						System.out.println("704 "+vte.type.attached+" "+vte.potentialTypes());
-						if (vte.type.getAttached() != null && vte.type.getAttached().getType() == OS_Type.Type.USER) {
-							final TypeName x = vte.type.getAttached().getTypeName();
+						final OS_Type attached = vte.type.getAttached();
+						if (attached != null && attached.getType() == OS_Type.Type.USER) {
+							final TypeName x = attached.getTypeName();
 							if (x instanceof NormalTypeName) {
 								final String tn = ((NormalTypeName) x).getName();
 								final LookupResultList lrl = x.getContext().lookup(tn);
@@ -329,8 +330,12 @@ public class DeduceTypes2 {
 	//									System.out.println("705 " + best);
 										// NOTE that when we set USER_CLASS from USER generic information is
 										// still contained in constructable_pte
-										vte.type.setAttached(new OS_Type((ClassStatement) best));
-										vte.type.genTypeCI(genCI(vte.type));
+										GenType genType = new GenType();
+										genType.typeName = attached;
+										genType.resolved = new OS_Type((ClassStatement) best);
+										genType.ci = genCI(vte.type);
+										vte.type.setAttached(genType);
+										// set node when available
 										((ClassInvocation) vte.type.genType.ci).resolvePromise().done(new DoneCallback<GeneratedClass>() {
 											@Override
 											public void onDone(GeneratedClass result) {
