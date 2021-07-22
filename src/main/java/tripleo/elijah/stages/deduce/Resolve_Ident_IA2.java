@@ -182,10 +182,11 @@ class Resolve_Ident_IA2 {
 
 	private void ia2_IdentIA_VariableStatement(Context ectx, IdentTableEntry idte, VariableStatement vs) {
 		try {
+			final boolean has_initial_value = vs.initialValue() != IExpression.UNASSIGNED;
 			if (!vs.typeName().isNull()) {
 				TypeTableEntry tte;
 				OS_Type attached;
-				if (vs.initialValue() != IExpression.UNASSIGNED) {
+				if (has_initial_value) {
 					attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
 				} else { // if (vs.typeName() != null) {
 					attached = new OS_Type(vs.typeName());
@@ -193,7 +194,7 @@ class Resolve_Ident_IA2 {
 
 				IExpression initialValue;
 
-				if (vs.initialValue() != IExpression.UNASSIGNED) {
+				if (has_initial_value) {
 					initialValue = vs.initialValue();
 				} else {
 //						attached = new OS_Type(vs.typeName());
@@ -202,7 +203,7 @@ class Resolve_Ident_IA2 {
 
 				tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, initialValue);
 				idte.type = tte;
-			} else if (vs.initialValue() != IExpression.UNASSIGNED) {
+			} else if (has_initial_value) {
 				OS_Type attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
 				TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 				idte.type = tte;
