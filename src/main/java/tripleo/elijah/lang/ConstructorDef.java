@@ -18,6 +18,7 @@ import tripleo.elijah.util.Helpers;
  * Created 	Apr 16, 2020 at 7:34:07 AM
  */
 public class ConstructorDef extends BaseFunctionDef {
+	public static final IdentExpression emptyConstructorName = Helpers.string_to_ident("<>");
 
 	// TODO override name() ??
 	public static ConstructorDef defaultVirtualCtor = new ConstructorDef(null, null, null);
@@ -38,7 +39,7 @@ public class ConstructorDef extends BaseFunctionDef {
 		if (aConstructorName != null)
 			setName(aConstructorName);
 		else
-			setName(Helpers.string_to_ident("<>")); // hack for Context#lookup
+			setName(emptyConstructorName); // hack for Context#lookup
 		setType(Species.CTOR);
 	}
 
