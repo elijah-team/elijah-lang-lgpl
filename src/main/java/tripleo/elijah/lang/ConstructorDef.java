@@ -24,8 +24,8 @@ public class ConstructorDef extends BaseFunctionDef {
 
 	private final OS_Element parent;
 
-	public ConstructorDef(final IdentExpression aConstructorName, final ClassStatement aParent, final Context context) {
-		parent = aParent;
+	public ConstructorDef(final IdentExpression aConstructorName, final _CommonNC aParent, final Context context) {
+		parent = (OS_Element) aParent;
 		if (parent != null) {
 			if (aParent instanceof OS_Container) {
 				((OS_Container) parent).add(this);
