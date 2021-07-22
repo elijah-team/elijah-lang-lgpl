@@ -48,7 +48,8 @@ public class WlGenerateDefaultCtor implements WorkJob {
 			assert genClass != null;
 
 			ConstructorDef cd = new ConstructorDef(null, klass, klass.getContext());
-			cd.setName(Helpers.string_to_ident("<ctor>"));
+//			cd.setName(Helpers.string_to_ident("<ctor>"));
+			cd.setName(ConstructorDef.emptyConstructorName);
 			Scope3 scope3 = new Scope3(cd);
 			cd.scope(scope3);
 			for (GeneratedContainer.VarTableEntry varTableEntry : genClass.varTable) {
