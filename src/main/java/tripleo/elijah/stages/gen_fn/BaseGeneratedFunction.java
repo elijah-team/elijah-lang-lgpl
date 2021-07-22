@@ -41,10 +41,8 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	public @NotNull List<ConstantTableEntry> cte_list = new ArrayList<ConstantTableEntry>();
 	public @NotNull List<VariableTableEntry> vte_list = new ArrayList<VariableTableEntry>();
 	public @NotNull List<ProcTableEntry> prte_list = new ArrayList<ProcTableEntry>();
-	@NotNull
-	public List<TypeTableEntry> tte_list = new ArrayList<TypeTableEntry>();
-	@NotNull
-	public List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
+	public @NotNull List<TypeTableEntry> tte_list = new ArrayList<TypeTableEntry>();
+	public @NotNull List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
 	private int label_count = 0;
 	private int _nextTemp = 0;
 	private GeneratedNode genClass;
