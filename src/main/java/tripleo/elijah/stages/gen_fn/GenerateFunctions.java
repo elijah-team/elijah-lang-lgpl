@@ -51,6 +51,7 @@ public class GenerateFunctions {
 															 ClassStatement parent, // TODO Namespace constructors
 															 FunctionInvocation aFunctionInvocation) {
 		final GeneratedConstructor gf = new GeneratedConstructor(aConstructorDef);
+		gf.setFunctionInvocation(aFunctionInvocation);
 		if (parent instanceof ClassStatement)
 			gf.addVariableTableEntry("self",
 					VariableTableType.SELF,
