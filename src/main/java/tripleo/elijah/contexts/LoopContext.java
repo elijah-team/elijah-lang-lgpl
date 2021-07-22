@@ -42,6 +42,27 @@ public class LoopContext extends Context {
 			}
 		}
 
+		for (final StatementItem item: carrier.getItems()) {
+			if (!(item instanceof ClassStatement) &&
+					!(item instanceof NamespaceStatement) &&
+					!(item instanceof FunctionDef) &&
+					!(item instanceof VariableSequence) &&
+					!(item instanceof AliasStatement)
+			) continue;
+			if (item instanceof OS_Element2) {
+				if (((OS_Element2) item).name().equals(name)) {
+					Result.add(name, level, (OS_Element) item, this);
+				}
+			}
+			if (item instanceof VariableSequence) {
+				System.out.println("1102 "+item);
+				for (final VariableStatement vs : ((VariableSequence) item).items()) {
+					if (vs.getName().equals(name))
+						Result.add(name, level, vs, this);
+				}
+			}
+		}
+
 		if (carrier.getParent() != null) {
 			final Context context = getParent();
 			if (!alreadySearched.contains(context) || !one)
