@@ -1361,17 +1361,19 @@ public class DeduceTypes2 {
 	public void resolve_ident_table_entry(IdentTableEntry ite, BaseGeneratedFunction generatedFunction, Context ctx) {
 		InstructionArgument itex = new IdentIA(ite.getIndex(), generatedFunction);
 		while (itex != null) {
-			IdentTableEntry itee = generatedFunction.getIdentTableEntry(to_int(itex));
+			IdentTableEntry itee = ((IdentIA) itex).getEntry();
 			while (itex != null) {
 				BaseTableEntry x = null;
 				if (itee.backlink instanceof IntegerIA) {
-					x = generatedFunction.getVarTableEntry(to_int(itee.backlink));
+					@NotNull VariableTableEntry vte = ((IntegerIA) itee.backlink).getEntry();
+					x = vte;
+//					if (vte.constructable_pte != null)
 					itex = null;
 				} else if (itee.backlink instanceof IdentIA) {
-					x = generatedFunction.getIdentTableEntry(to_int(itee.backlink));
+					x = ((IdentIA) itee.backlink).getEntry();
 					itex = ((IdentTableEntry) x).backlink;
 				} else if (itee.backlink instanceof ProcIA) {
-					x = generatedFunction.getProcTableEntry(to_int(itee.backlink));
+					x = ((ProcIA) itee.backlink).getEntry();
 					itee.setCallablePTE((ProcTableEntry) x);
 					itex = null; //((ProcTableEntry) x).backlink;
 				} else if (itee.backlink == null) {
