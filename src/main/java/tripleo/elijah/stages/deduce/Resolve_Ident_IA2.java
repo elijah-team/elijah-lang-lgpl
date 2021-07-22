@@ -197,7 +197,7 @@ class Resolve_Ident_IA2 {
 				if (has_initial_value) {
 					initialValue = vs.initialValue();
 				} else {
-//						attached = new OS_Type(vs.typeName());
+//					attached = new OS_Type(vs.typeName());
 					initialValue = null; // README presumably there is none, ie when generated
 				}
 
@@ -210,11 +210,11 @@ class Resolve_Ident_IA2 {
 			} else {
 				System.err.println("Empty Variable Expression");
 				throw new IllegalStateException("Empty Variable Expression");
-//					return; // TODO call noFoundElement, raise exception
+//				return; // TODO call noFoundElement, raise exception
 			}
 		} catch (ResolveError aResolveError) {
 			System.err.println("1937 resolve error " + vs.getName());
-//				aResolveError.printStackTrace();
+//			aResolveError.printStackTrace();
 			errSink.reportDiagnostic(aResolveError);
 		}
 	}
