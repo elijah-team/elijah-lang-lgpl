@@ -168,11 +168,11 @@ class Resolve_Ident_IA2 {
 						errSink.reportDiagnostic(resolveError);
 					else
 						System.out.println("1089 Can't attach type to " + idte2.type.getAttached());
-//							resolveError.printStackTrace(); // TODO print diagnostic
+//					resolveError.printStackTrace(); // TODO print diagnostic
 					return RIA_STATE.CONTINUE;
 				}
 			} else {
-//					throw new IllegalStateException("who knows");
+//				throw new IllegalStateException("who knows");
 				errSink.reportWarning("2010 idte2.type == null for " + text);
 			}
 		}
