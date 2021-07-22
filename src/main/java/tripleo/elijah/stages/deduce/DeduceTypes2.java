@@ -1205,7 +1205,7 @@ public class DeduceTypes2 {
 		void proceed(FunctionInvocation fi, ClassInvocation ci, ClassStatement aParent, WorkList wl) {
 			ci = phase.registerClassInvocation(ci);
 
-			ClassStatement kl = ci.getKlass();
+			ClassStatement kl = ci.getKlass(); // TODO Don't you see aParent??
 			assert kl != null;
 
 			final BaseFunctionDef fd2 = fi.getFunction();
