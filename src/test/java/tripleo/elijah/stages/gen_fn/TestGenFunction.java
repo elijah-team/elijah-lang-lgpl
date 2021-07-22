@@ -203,7 +203,7 @@ public class TestGenFunction {
 	}
 
 	@Test
-	public void testBasic1GenericElijah() throws Exception {
+	public void testGenericA() throws Exception {
 		final StdErrSink errSink = new StdErrSink();
 		final Compilation c = new Compilation(errSink, new IO());
 
