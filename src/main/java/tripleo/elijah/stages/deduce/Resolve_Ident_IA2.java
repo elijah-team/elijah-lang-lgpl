@@ -107,7 +107,7 @@ class Resolve_Ident_IA2 {
 	}
 
 	private RIA_STATE ia2_IdentIA(IdentIA ia2, Context ectx) {
-		final IdentTableEntry idte2 = ((IdentIA) ia2).getEntry();
+		final IdentTableEntry idte2 = ia2.getEntry();
 		final String text = idte2.getIdent().getText();
 
 		final LookupResultList lrl = ectx.lookup(text);
