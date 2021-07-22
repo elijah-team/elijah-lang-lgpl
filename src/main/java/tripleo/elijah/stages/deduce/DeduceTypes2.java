@@ -1979,9 +1979,21 @@ public class DeduceTypes2 {
 							bgf.typePromise().then(new DoneCallback<GenType>() {
 								@Override
 								public void onDone(GenType result) {
-									vte.typeDeferred().resolve(result);
-									if (vte.type.getAttached() == null)
-										vte.type.setAttached(result.resolved != null ? result.resolved : result.typeName);
+									/*if (!vte.typeDeferred().isPending()) {
+										vte.typePromise().then(new DoneCallback<GenType>() {
+											@Override
+											public void onDone(GenType result1) {
+												assert result == result1;
+											}
+										});
+									} else*/ /*{
+										vte.typeDeferred().resolve(result);
+										if (vte.type.getAttached() == null)
+											vte.type.setAttached(result.resolved != null ? result.resolved : result.typeName);
+									}*/
+									@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved); // TODO there has to be a better way
+									tte.genType.copy(result);
+									vte.addPotentialType(instructionIndex, tte);
 								}
 							});
 						}
