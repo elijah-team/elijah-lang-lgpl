@@ -204,60 +204,12 @@ public class TestGenFunction {
 
 	@Test
 	public void testBasic1GenericElijah() throws Exception {
-		final StdErrSink eee = new StdErrSink();
-		final Compilation c = new Compilation(eee, new IO());
+		final StdErrSink errSink = new StdErrSink();
+		final Compilation c = new Compilation(errSink, new IO());
 
-		final String f = "test/basic1/genericA.elijah";
-		final File file = new File(f);
-		final OS_Module m = c.realParseElijjahFile(f, file, false);
-		Assert.assertTrue("Method parsed correctly", m != null);
-		m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
-		c.findStdLib("c");
+		final String f = "test/basic1/genericA/";
 
-		for (final CompilerInstructions ci : c.cis) {
-			c.use(ci, false);
-		}
-
-		if (false) {
-			final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
-			final List<GeneratedNode> lgc = new ArrayList<>();
-			gfm.generateAllTopLevelClasses(lgc);
-
-			List<GeneratedNode> lgf = new ArrayList<>();
-			for (GeneratedNode generatedNode : lgc) {
-				if (generatedNode instanceof GeneratedClass)
-					lgf.addAll(((GeneratedClass) generatedNode).functionMap.values());
-				if (generatedNode instanceof GeneratedNamespace)
-					lgf.addAll(((GeneratedNamespace) generatedNode).functionMap.values());
-				// TODO enum
-			}
-
-//			for (GeneratedFunction gf : lgf) {
-//				for (Instruction instruction : gf.instructions()) {
-//					System.out.println("8100 "+instruction);
-//				}
-//			}
-
-			final GeneratePhase generatePhase = new GeneratePhase();
-			DeducePhase dp = new DeducePhase(generatePhase);
-			dp.deduceModule(m, lgc, false);
-			dp.finish();
-
-			WorkManager wm = new WorkManager();
-			new GenerateC(/*m*/eee).generateCode(lgf, wm);
-		} else {
-			PipelineLogic pipelineLogic = new PipelineLogic();
-			ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
-/*
-			pipelineLogic.addModule(m.prelude);
-			pipelineLogic.addModule(m);
-*/
-			for (OS_Module module : c.modules) {
-				pipelineLogic.addModule(module);
-			}
-			pipelineLogic.everythingBeforeGenerate(lgc);
-			pipelineLogic.generate(lgc);
-		}
+		c.feedCmdLine(List_of(f));
 	}
 
 //	@Test // ignore because of generateAllTopLevelClasses
