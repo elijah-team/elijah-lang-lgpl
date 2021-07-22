@@ -125,6 +125,27 @@ class Resolve_Ident_IA2 {
 					OS_Type attached = new OS_UnknownType(el);
 					TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, idte2);
 					idte2.type = tte;
+
+					// Set type to something other than Unknown when found
+					@Nullable ProcTableEntry pte = idte2.getCallablePTE();
+					if (pte == null) {
+
+					}
+					assert pte != null;
+					assert pte.getFunctionInvocation() != null;
+
+					pte.getFunctionInvocation().generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {
+						@Override
+						public void onDone(BaseGeneratedFunction result) {
+							result.typePromise().then(new DoneCallback<GenType>() {
+								@Override
+								public void onDone(GenType result) {
+									// NOTE there is no Promise-type notification for when type changes
+									idte2.type.setAttached(result);
+								}
+							});
+						}
+					});
 				}
 			}
 			if (idte2.type != null) {
