@@ -10,18 +10,11 @@ package tripleo.elijah.stages.gen_c;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tripleo.elijah.lang.AliasStatement;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.ConstructorDef;
-import tripleo.elijah.lang.DefFunctionDef;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.NamespaceStatement;
-import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.PropertyStatement;
-import tripleo.elijah.lang.VariableStatement;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.BaseTableEntry;
+import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
 import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
@@ -142,10 +135,26 @@ public class CReference {
 				}
 			} else if (ia instanceof ProcIA) {
 				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
-//				GeneratedFunction y = prte.resolved();
-//				text = functionName(y);
-				text = (prte.expression.getLeft()).toString();
-//				assert i == sSize-1;
+				final BaseGeneratedFunction generated = prte.getFunctionInvocation().getGenerated();
+				if (generated == null) {
+					throw new IllegalStateException();
+				} else {
+					if (generated instanceof GeneratedConstructor) {
+						int y = 2;
+						final GeneratedContainerNC genClass = (GeneratedContainerNC) generated.getGenClass();
+						final IdentExpression constructorName = generated.getFD().getNameNode();
+						final String constructorNameText;
+						if (constructorName == ConstructorDef.emptyConstructorName) {
+							constructorNameText = "";
+						} else {
+							constructorNameText = constructorName.getText();
+						}
+						text = String.format("ZC%d%s", genClass.getCode(), constructorNameText);
+					} else {
+						final GeneratedContainerNC genClass = (GeneratedContainerNC) generated.getGenClass();
+						text = String.format("Z%d%s", genClass.getCode(), generated.getFD().getNameNode().getText());
+					}
+				}
 				addRef(text, Ref.FUNCTION); // TODO needs to use name of resolved function
 			} else {
 				throw new NotImplementedException();
