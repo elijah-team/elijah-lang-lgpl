@@ -48,6 +48,15 @@ public class GenType {
 			System.err.println("48 Unknown in set: "+aType);
 		}
 	}
+
+	public void copy(GenType aGenType) {
+		if (resolvedn == null) resolvedn = aGenType.resolvedn;
+		if (typeName == null) typeName = aGenType.typeName;
+		if (nonGenericTypeName == null) nonGenericTypeName = aGenType.nonGenericTypeName;
+		if (resolved == null) resolved = aGenType.resolved;
+		if (ci == null) ci = aGenType.ci;
+		if (node == null) node = aGenType.node;
+	}
 }
 
 //
