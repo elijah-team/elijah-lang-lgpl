@@ -76,6 +76,7 @@ class Resolve_Ident_IA2 {
 				final @NotNull IdentTableEntry ite = ((IdentIA) ia2).getEntry();
 				if (!ite.hasResolvedElement()) {
 					int y = 2;
+					ia2_IdentIA((IdentIA) ia2, ectx);
 				}
 				int y = 2;
 			}
