@@ -13,14 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GenType;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.IdentTableEntry;
-import tripleo.elijah.stages.gen_fn.ProcTableEntry;
-import tripleo.elijah.stages.gen_fn.TableEntryIV;
-import tripleo.elijah.stages.gen_fn.TypeTableEntry;
-import tripleo.elijah.stages.gen_fn.VariableTableEntry;
+import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
@@ -133,22 +126,40 @@ class Resolve_Ident_IA2 {
 					@Nullable ProcTableEntry pte = idte2.getCallablePTE();
 					if (pte == null) {
 
-					}
-					assert pte != null;
-					assert pte.getFunctionInvocation() != null;
-
-					pte.getFunctionInvocation().generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {
-						@Override
-						public void onDone(BaseGeneratedFunction result) {
-							result.typePromise().then(new DoneCallback<GenType>() {
-								@Override
-								public void onDone(GenType result) {
-									// NOTE there is no Promise-type notification for when type changes
-									idte2.type.setAttached(result);
+					} else {
+						assert pte != null;
+						FunctionInvocation fi = pte.getFunctionInvocation();
+						if (fi == null) {
+							InstructionArgument bl = idte2.backlink;
+							IInvocation invocation = null;
+							if (bl instanceof IntegerIA) {
+								final IntegerIA integerIA = (IntegerIA) bl;
+								@NotNull VariableTableEntry vte = integerIA.getEntry();
+								if (vte.constructable_pte != null) {
+									ProcTableEntry cpte = vte.constructable_pte;
+									invocation = cpte.getFunctionInvocation().getClassInvocation();
 								}
-							});
+							} else if (bl instanceof IdentIA) {
+								assert false;
+							}
+
+							fi = new FunctionInvocation((BaseFunctionDef) el, pte, invocation, phase.generatePhase);
+							pte.setFunctionInvocation(fi);
 						}
-					});
+
+						pte.getFunctionInvocation().generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {
+							@Override
+							public void onDone(BaseGeneratedFunction result) {
+								result.typePromise().then(new DoneCallback<GenType>() {
+									@Override
+									public void onDone(GenType result) {
+										// NOTE there is no Promise-type notification for when type changes
+										idte2.type.setAttached(result);
+									}
+								});
+							}
+						});
+					}
 				}
 			}
 			if (idte2.type != null) {
