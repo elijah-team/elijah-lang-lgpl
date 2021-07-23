@@ -8,9 +8,15 @@
  */
 package tripleo.elijah.stages.generate;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.LibraryStatementPart;
+import tripleo.elijah.lang.ClassStatement;
+import tripleo.elijah.lang.DecideElObjectType;
+import tripleo.elijah.lang.ElObjectType;
+import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.NamespaceTypes;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
@@ -58,12 +64,41 @@ public class OutputStrategyC {
 		sb.append("/");
 		OS_Package pkg = generatedNamespace.getNamespaceStatement().getPackageName();
 		if (pkg != OS_Package.default_package) {
+			if (pkg == null)
+				pkg = findPackage(generatedNamespace.getNamespaceStatement());
 			sb.append(pkg.getName());
 			sb.append("/");
 		}
 		sb.append(filename);
 		appendExtension(aTy, sb);
 		return sb.toString();
+	}
+
+	private OS_Package findPackage(OS_Element e) {
+		while (e != null) {
+			e = e.getParent();
+			if (e.getContext().getParent() == e.getContext())
+				e = null;
+			else {
+				@NotNull ElObjectType t = DecideElObjectType.getElObjectType(e);
+				switch (t) {
+					case NAMESPACE:
+						if (((NamespaceStatement) e).getPackageName() != null)
+							return ((NamespaceStatement) e).getPackageName();
+						break;
+					case CLASS:
+						if (((ClassStatement) e).getPackageName() != null)
+							return ((ClassStatement) e).getPackageName();
+						break;
+					case FUNCTION:
+						continue;
+					default:
+						// datatype, enum, alias
+						continue;
+				}
+			}
+		}
+		return null;
 	}
 
 	String strip_elijah_extension(String aFilename) {
@@ -105,6 +140,8 @@ public class OutputStrategyC {
 		sb.append("/");
 		OS_Package pkg = generatedClass.getKlass().getPackageName();
 		if (pkg != OS_Package.default_package) {
+			if (pkg == null)
+				pkg = findPackage(generatedClass.getKlass());
 			sb.append(pkg.getName());
 			sb.append("/");
 		}
