@@ -117,6 +117,9 @@ class Resolve_Ident_IA2 {
 			foundElement.doNoFoundElement();
 			return RIA_STATE.RETURN;
 		} else {
+			if (!idte2.hasResolvedElement()) {
+				idte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
+			}
 			if (idte2.type == null) {
 				if (el instanceof VariableStatement) {
 					VariableStatement vs = (VariableStatement) el;
