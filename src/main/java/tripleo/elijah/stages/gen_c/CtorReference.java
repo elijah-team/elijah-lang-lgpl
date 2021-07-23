@@ -68,7 +68,8 @@ public class CtorReference {
 				if (idte.resolvedType() != null) {
 					_resolved = idte.resolvedType();
 					ctorName = ((ConstructorDef) resolved_element).name();
-				} else if (resolved_element != null) {
+				} /*else if (resolved_element != null) {
+					assert false;
 					if (resolved_element instanceof VariableStatement) {
 						addRef(((VariableStatement) resolved_element).getName(), CReference.Ref.MEMBER);
 					} else if (resolved_element instanceof ConstructorDef) {
@@ -87,7 +88,7 @@ public class CtorReference {
 
 //						addRef(((ConstructorDef) resolved_element).name(), CReference.Ref.CONSTRUCTOR);
 					}
-				}
+				}*/
 			} else if (ia instanceof ProcIA) {
 //				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
 //				text = (prte.expression.getLeft()).toString();
