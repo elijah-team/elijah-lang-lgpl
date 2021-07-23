@@ -333,7 +333,8 @@ public class DeduceTypes2 {
 										GenType genType = new GenType();
 										genType.typeName = attached;
 										genType.resolved = new OS_Type((ClassStatement) best);
-										genType.ci = genCI(vte.type);
+										genType.copy(vte.type.genType);
+										genType.ci = genCI(genType);
 										vte.type.setAttached(genType);
 										// set node when available
 										((ClassInvocation) vte.type.genType.ci).resolvePromise().done(new DoneCallback<GeneratedClass>() {
