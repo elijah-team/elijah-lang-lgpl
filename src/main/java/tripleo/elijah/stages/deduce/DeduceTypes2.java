@@ -921,7 +921,7 @@ public class DeduceTypes2 {
 
 	final List<FunctionInvocation> functionInvocations = new ArrayList<>();
 
-	private FunctionInvocation newFunctionInvocation(BaseFunctionDef aFunctionDef, ProcTableEntry aPte, IInvocation aInvocation, DeducePhase aDeducePhase) {
+	FunctionInvocation newFunctionInvocation(BaseFunctionDef aFunctionDef, ProcTableEntry aPte, IInvocation aInvocation, DeducePhase aDeducePhase) {
 		FunctionInvocation fi = new FunctionInvocation(aFunctionDef, aPte, aInvocation, aDeducePhase.generatePhase);
 		// TODO register here
 		return fi;
