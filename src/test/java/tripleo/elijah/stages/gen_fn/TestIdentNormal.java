@@ -14,11 +14,15 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FoundElement;
+import tripleo.elijah.stages.deduce.FunctionInvocation;
+import tripleo.elijah.stages.deduce.IInvocation;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
+import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
 
 import java.util.List;
@@ -30,7 +34,7 @@ import static org.easymock.EasyMock.*;
  */
 public class TestIdentNormal {
 
-	@Test(expected = IllegalStateException.class)
+//	@Test(expected = IllegalStateException.class) // TODO proves nothing
 	public void test() {
 		Compilation comp = new Compilation(new StdErrSink(), new IO());
 		OS_Module mod = new OS_Module();//mock(OS_Module.class);
@@ -88,28 +92,35 @@ public class TestIdentNormal {
 		});
 	}
 
-	@Test
+//	@Test // TODO just a mess
 	public void test2() {
 		Compilation comp = new Compilation(new StdErrSink(), new IO());
-		OS_Module mod = new OS_Module();//mock(OS_Module.class);
+		OS_Module mod = new OS_Module();
 		mod.setParent(comp);
-		FunctionDef fd = mock(FunctionDef.class);
-		Context ctx1 = mock(Context.class);
+//		FunctionDef fd = mock(FunctionDef.class);
 		Context ctx2 = mock(Context.class);
 
-		GenerateFunctions generateFunctions = new GenerateFunctions(new GeneratePhase(), mod);
-		GeneratedFunction generatedFunction = new GeneratedFunction(fd);
+		final GeneratePhase generatePhase = new GeneratePhase();
+		DeducePhase phase = new DeducePhase(generatePhase);
+
+		GenerateFunctions generateFunctions = new GenerateFunctions(generatePhase, mod);
 
 		//
 		//
 		//
 
 		ClassStatement cs = new ClassStatement(mod, mod.getContext());
+		final IdentExpression capitalX = IdentExpression.forString("X");
+		cs.setName(capitalX);
+		FunctionDef fd = new FunctionDef(cs, cs.getContext());
+		Context ctx1 = fd.getContext();
+		fd.setName(IdentExpression.forString("main"));
 		FunctionDef fd2 = new FunctionDef(cs, cs.getContext());
 		fd2.setName(IdentExpression.forString("foo"));
 
-		TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(cs));
-		generatedFunction.addVariableTableEntry("x", VariableTableType.VAR, tte, cs);
+//		GeneratedFunction generatedFunction = new GeneratedFunction(fd);
+//		TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, new OS_Type(cs));
+//		generatedFunction.addVariableTableEntry("x", VariableTableType.VAR, tte, cs);
 
 		//
 		//
@@ -119,33 +130,71 @@ public class TestIdentNormal {
 		VariableStatement vs = seq.next();
 		final IdentExpression x = IdentExpression.forString("x");
 		vs.setName(x);
+		ProcedureCallExpression pce2 = new ProcedureCallExpression();
+		pce2.setLeft(capitalX);
+		vs.initial(pce2);
+		IBinaryExpression e = ExpressionBuilder.build(x, ExpressionKind.ASSIGNMENT, pce2);
+
 		final IdentExpression foo = IdentExpression.forString("foo");
 		ProcedureCallExpression pce = new ProcedureCallExpression();
 		pce.setLeft(new DotExpression(x, foo));
 
-		InstructionArgument s = generateFunctions.simplify_expression(pce, generatedFunction, ctx2);
+		fd.scope(new Scope3(fd));
+		fd.add(seq);
+		fd.add(new StatementWrapper(pce2, ctx1, fd));
+		fd2.scope(new Scope3(fd2));
+		fd2.add(new StatementWrapper(pce, ctx2, fd2));
+
+		ClassInvocation ci = new ClassInvocation(cs, null);
+		ci = phase.registerClassInvocation(ci);
+		ProcTableEntry pte2 = null;
+		FunctionInvocation fi = new FunctionInvocation(fd, pte2, ci, generatePhase);
+//		expect(fd.returnType()).andReturn(null);
+		final FormalArgList formalArgList = new FormalArgList();
+//		expect(fd.fal()).andReturn(formalArgList);
+//		expect(fd.fal()).andReturn(formalArgList);
+//		expect(fd2.returnType()).andReturn(null);
+		GeneratedFunction generatedFunction = generateFunctions.generateFunction(fd, cs, fi);
+
 /*
-		@NotNull List<InstructionArgument> l = generatedFunction._getIdentIAPathList(s);
-		System.out.println(l);
+		InstructionArgument es = generateFunctions.simplify_expression(e, generatedFunction, ctx2);
+
+		InstructionArgument s = generateFunctions.simplify_expression(pce, generatedFunction, ctx2);
 */
-//      System.out.println(generatedFunction.getIdentIAPathNormal());
 
 		//
 		//
 		//
 
-		vs.initial(pce);
+		LookupResultList lrl = new LookupResultList();
+		lrl.add("foo", 1, fd2, ctx2);
 
-		GeneratedFunction generatedFunction2 = new GeneratedFunction(fd2);
-		generatedFunction2.addVariableTableEntry("self", VariableTableType.SELF, null, null);
-		final TypeTableEntry type = null;
-		int res = generatedFunction2.addVariableTableEntry("Result", VariableTableType.RESULT, type, null);
+		expect(ctx2.lookup("foo")).andReturn(lrl);
+
+		LookupResultList lrl2 = new LookupResultList();
+		lrl2.add("X", 1, cs, ctx1);
+
+		expect(ctx2.lookup("X")).andReturn(lrl2);
 
 		//
 		//
 		//
 
-		replay(fd, ctx1, ctx2);
+
+		ClassInvocation invocation2 = new ClassInvocation(cs, null);
+		invocation2 = phase.registerClassInvocation(invocation2);
+		ProcTableEntry pte3 = null;
+		FunctionInvocation fi2 = new FunctionInvocation(fd2, pte3, invocation2, generatePhase);
+		GeneratedFunction generatedFunction2 = generateFunctions.generateFunction(fd2, fd2.getParent(), fi2);//new GeneratedFunction(fd2);
+//		generatedFunction2.addVariableTableEntry("self", VariableTableType.SELF, null, null);
+//		final TypeTableEntry type = null;
+//		int res = generatedFunction2.addVariableTableEntry("Result", VariableTableType.RESULT, type, null);
+
+		//
+		//
+		//
+
+		replay(ctx2);
 
 		//
 		//
@@ -153,12 +202,12 @@ public class TestIdentNormal {
 
 		IdentIA identIA = new IdentIA(0, generatedFunction);
 
-		final GeneratePhase generatePhase = new GeneratePhase();
-		DeducePhase phase = new DeducePhase(generatePhase);
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
-//		final List<InstructionArgument> ss = generatedFunction._getIdentIAPathList(identIA);
-		d2.resolveIdentIA2_(ctx2, /*ss*/identIA, generatedFunction, new FoundElement(phase) {
+		(new IntegerIA(0, generatedFunction)).getEntry().setConstructable(generatedFunction.getProcTableEntry(0));
+		identIA.getEntry().setCallablePTE(generatedFunction.getProcTableEntry(1));
+
+		d2.resolveIdentIA2_(ctx2, identIA, generatedFunction, new FoundElement(phase) {
 			@Override
 			public void foundElement(OS_Element e) {
 				assert e == fd2;
@@ -170,7 +219,7 @@ public class TestIdentNormal {
 			}
 		});
 
-		verify(fd, ctx1, ctx2);
+		verify(ctx2);
 	}
 
 }
