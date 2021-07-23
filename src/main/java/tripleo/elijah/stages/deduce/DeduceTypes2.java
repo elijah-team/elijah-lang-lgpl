@@ -2696,7 +2696,7 @@ public class DeduceTypes2 {
 
 	public void resolveIdentIA2_(Context context, IdentIA identIA, GeneratedFunction generatedFunction, FoundElement foundElement) {
 		final List<InstructionArgument> s = generatedFunction._getIdentIAPathList(identIA);
-		resolveIdentIA2_(context, null, s, generatedFunction, foundElement);
+		resolveIdentIA2_(context, identIA, s, generatedFunction, foundElement);
 	}
 
 	public void resolveIdentIA_(Context context, IdentIA identIA, BaseGeneratedFunction generatedFunction, FoundElement foundElement) {
