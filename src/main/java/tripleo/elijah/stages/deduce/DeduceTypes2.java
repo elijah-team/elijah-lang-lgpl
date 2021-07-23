@@ -413,7 +413,7 @@ public class DeduceTypes2 {
 							vte.addPotentialType(instruction.getIndex(), vte2.type);
 						} else if (i2 instanceof FnCallArgs) {
 							final FnCallArgs fca = (FnCallArgs) i2;
-							do_assign_call(generatedFunction, fd_ctx, vte, fca, instruction);
+							do_assign_call(generatedFunction, context, vte, fca, instruction);
 						} else if (i2 instanceof ConstTableIA) {
 							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
 						} else if (i2 instanceof IdentIA) {
