@@ -3,7 +3,6 @@ image: maven:latest
 
 stages:
   - build
-  - sast
   - pages
   - test
   - pages
