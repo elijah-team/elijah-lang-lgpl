@@ -2,28 +2,16 @@
 image: maven:latest
 
 stages:
-  - build
-  - pages
+#  - build
   - test
-  - pages
   - deploy
 
-
-#production:
-#  stage: deploy
+#build:
+#  stage: build
+#  image: alpine
 #  script:
-#  - curl --location "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar zx
-#  - ./cf login -u $CF_USERNAME -p $CF_PASSWORD -a 'api.run.pivotal.io'
-#  - ./cf push
-#  only:
-#  - master
-
-build:
-  stage: build
-  image: alpine
-  script:
-    - echo Skipping because this doesn\'t do anything anyway
-    #- mvn $MAVEN_CLI_OPTS -e compile
+#    - echo Skipping because this doesn\'t do anything anyway
+#    #- mvn $MAVEN_CLI_OPTS -e compile
 
 test:
   stage: test
