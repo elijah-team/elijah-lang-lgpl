@@ -266,21 +266,30 @@ class Resolve_Ident_IA {
 						final FunctionDef functionDef = (FunctionDef) el;
 						final OS_Element parent = functionDef.getParent();
 						GenType genType = null;
+						IInvocation invocation = null;
 						switch (DecideElObjectType.getElObjectType(parent)) {
-							case UNKNOWN:
-								break;
-							case CLASS:
-								genType = new GenType((ClassStatement) parent);
-								break;
-							case NAMESPACE:
-								genType = new GenType((NamespaceStatement) parent);
-								break;
-							default:
-								// do nothing
-								break;
+						case UNKNOWN:
+							break;
+						case CLASS:
+							genType = new GenType((ClassStatement) parent);
+							invocation = new ClassInvocation((ClassStatement) parent, null);
+							break;
+						case NAMESPACE:
+							genType = new GenType((NamespaceStatement) parent);
+							invocation = new NamespaceInvocation((NamespaceStatement) parent);
+							break;
+						default:
+							// do nothing
+							break;
 						}
-						if (genType != null)
+						if (genType != null) {
 							generatedFunction.addDependentType(genType);
+
+							if (invocation != null) {
+								FunctionInvocation fi = new FunctionInvocation((BaseFunctionDef) el, null, invocation, phase.generatePhase);
+								generatedFunction.addDependentFunction(fi);
+							}
+						}
 					} else if (el instanceof ClassStatement) {
 						GenType genType = new GenType((ClassStatement) el);
 						generatedFunction.addDependentType(genType);
