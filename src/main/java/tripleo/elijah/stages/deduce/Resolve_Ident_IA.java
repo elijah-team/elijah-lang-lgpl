@@ -136,9 +136,9 @@ class Resolve_Ident_IA {
 			assert y.getStatus() == BaseTableEntry.Status.KNOWN;
 //				y.setStatus(BaseTableEntry.Status.KNOWN, el);
 		} else if (x instanceof ProcIA) {
-			@NotNull ProcTableEntry y = /*((ProcIA) x).getEntry()*/generatedFunction.getProcTableEntry(DeduceTypes2.to_int(x));
+			@NotNull ProcTableEntry y = ((ProcIA) x).getEntry();
 			assert y.getStatus() == BaseTableEntry.Status.KNOWN;
-			//y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
+			y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 		} else
 			throw new NotImplementedException();
 	}
