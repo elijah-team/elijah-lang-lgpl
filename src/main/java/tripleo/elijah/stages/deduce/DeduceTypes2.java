@@ -403,8 +403,9 @@ public class DeduceTypes2 {
 					// LOOKUP FUNCTIONS
 					//
 					{
+						Lookup_function_on_exit lfoe = new Lookup_function_on_exit();
 						for (ProcTableEntry pte : generatedFunction.prte_list) {
-							lookup_function_on_exit(pte);
+							lfoe.action(pte);
 						}
 						wm.drain();
 					}
@@ -1296,11 +1297,6 @@ public class DeduceTypes2 {
 
 			wm.addJobs(wl);
 		}
-	}
-
-	public void lookup_function_on_exit(ProcTableEntry pte) {
-		Lookup_function_on_exit lfoe = new Lookup_function_on_exit();
-		lfoe.action(pte);
 	}
 
 	public void assign_type_to_idte(IdentTableEntry ite,
