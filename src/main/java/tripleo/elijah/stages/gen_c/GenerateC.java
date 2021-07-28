@@ -154,6 +154,11 @@ public class GenerateC implements CodeGenerator {
 			FunctionInvocation fi = pte.getFunctionInvocation();
 			if (fi == null) {
 				// TODO constructor
+				int y=2;
+/*
+				if (pte.getClassInvocation() == null)
+					assert pte.getStatus() == BaseTableEntry.Status.UNKNOWN;
+*/
 			} else {
 				BaseGeneratedFunction gf = fi.getGenerated();
 				if (gf != null) {

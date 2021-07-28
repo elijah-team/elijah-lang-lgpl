@@ -2702,6 +2702,7 @@ public class DeduceTypes2 {
 			System.err.println(String.format("i2 is not IntegerIA (%s)",i2.getClass().getName()));
 		}
 
+		pte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 	}
 
 	private boolean lookup_name_calls(final Context ctx, final String pn, final ProcTableEntry pte) {
