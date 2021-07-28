@@ -2702,7 +2702,7 @@ public class DeduceTypes2 {
 
 	private boolean lookup_name_calls(final Context ctx, final String pn, final ProcTableEntry pte) {
 		final LookupResultList lrl = ctx.lookup(pn);
-		final OS_Element best = lrl.chooseBest(null);
+		final OS_Element best = lrl.chooseBest(null); // TODO check arity and arg matching
 		if (best != null) {
 			pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(best, null));
 //			set_resolved_element_pte(null, best, pte); // TODO check arity and arg matching
