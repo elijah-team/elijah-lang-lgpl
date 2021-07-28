@@ -637,7 +637,8 @@ public class DeduceTypes2 {
 						final ConstructableElementHolder constructableElementHolder = (ConstructableElementHolder) eh;
 						co = constructableElementHolder.getConstructable();
 					}
-					set_resolved_element_pte(co, eh.getElement(), pte);
+					if (newStatus != BaseTableEntry.Status.UNKNOWN) // means eh is null
+						set_resolved_element_pte(co, eh.getElement(), pte);
 				}
 
 				void set_resolved_element_pte(final Constructable co, final OS_Element e, final ProcTableEntry pte) {
