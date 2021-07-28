@@ -362,6 +362,13 @@ public class DeduceTypes2 {
 							}
 						}
 					}
+					for (final VariableTableEntry vte : generatedFunction.vte_list) {
+						if (vte.vtt == VariableTableType.ARG) {
+							if (vte.type.getAttached().getType() == OS_Type.Type.USER)
+								//throw new AssertionError();
+								errSink.reportError("369 ARG USER type (not deduced) "+vte);
+						}
+					}
 					//
 					// ATTACH A TYPE TO IDTE'S
 					//
