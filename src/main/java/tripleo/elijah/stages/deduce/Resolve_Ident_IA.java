@@ -272,11 +272,12 @@ class Resolve_Ident_IA {
 							break;
 						case CLASS:
 							genType = new GenType((ClassStatement) parent);
-							invocation = new ClassInvocation((ClassStatement) parent, null);
+							ClassInvocation ci = new ClassInvocation((ClassStatement) parent, null);
+							invocation = phase.registerClassInvocation(ci);
 							break;
 						case NAMESPACE:
 							genType = new GenType((NamespaceStatement) parent);
-							invocation = new NamespaceInvocation((NamespaceStatement) parent);
+							invocation = phase.registerNamespaceInvocation((NamespaceStatement) parent);
 							break;
 						default:
 							// do nothing
@@ -285,9 +286,10 @@ class Resolve_Ident_IA {
 						if (genType != null) {
 							generatedFunction.addDependentType(genType);
 
+							// TODO might not be needed
 							if (invocation != null) {
 								FunctionInvocation fi = new FunctionInvocation((BaseFunctionDef) el, null, invocation, phase.generatePhase);
-								generatedFunction.addDependentFunction(fi);
+//								generatedFunction.addDependentFunction(fi); // README program fails if this is included
 							}
 						}
 					} else if (el instanceof ClassStatement) {
