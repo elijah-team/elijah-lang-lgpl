@@ -2694,8 +2694,8 @@ public class DeduceTypes2 {
 			}
 		} else {
 			final int y=2;
-			assert Pattern.matches("__.*__", ((IdentExpression) pn1).getText());
-			System.err.println("i2 is not IntegerIA ("+i2.getClass().getName()+")");
+			assert Pattern.matches("__.*__", pn);
+			System.err.println(String.format("i2 is not IntegerIA (%s)",i2.getClass().getName()));
 		}
 
 	}
