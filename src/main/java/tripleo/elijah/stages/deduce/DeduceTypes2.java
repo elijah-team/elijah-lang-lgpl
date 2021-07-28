@@ -515,16 +515,16 @@ public class DeduceTypes2 {
 				final ProcTableEntry pte = generatedFunction.getProcTableEntry(pte_num);
 //				final InstructionArgument i2 = (instruction.getArg(1));
 				{
-					final IdentIA expression = (IdentIA) pte.expression_num;
-					final String x = generatedFunction.getIdentIAPathNormal(expression);
+					final IdentIA identIA = (IdentIA) pte.expression_num;
+					final String x = generatedFunction.getIdentIAPathNormal(identIA);
 					System.err.println("298 Calling "+x);
-					resolveIdentIA_(context, expression, generatedFunction, new FoundElement(phase) {
+					resolveIdentIA_(context, identIA, generatedFunction, new FoundElement(phase) {
 
 						@SuppressWarnings("unused") final String xx = x;
 
 						@Override
 						public void foundElement(OS_Element e) {
-							pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, expression));
+							pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
 							if (fd instanceof DefFunctionDef) {
 								final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
 								forFunction(newFunctionInvocation((FunctionDef) e, pte, invocation, phase), new ForFunction() {
@@ -542,7 +542,7 @@ public class DeduceTypes2 {
 						public void noFoundElement() {
 							errSink.reportError("370 Can't find callsite "+x);
 							// TODO don't know if this is right
-							@NotNull IdentTableEntry entry = expression.getEntry();
+							@NotNull IdentTableEntry entry = identIA.getEntry();
 							if (entry.getStatus() != BaseTableEntry.Status.UNKNOWN)
 								entry.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 						}
