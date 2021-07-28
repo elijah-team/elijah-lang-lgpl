@@ -973,7 +973,7 @@ public class DeduceTypes2 {
 			errSink = aErrSink;
 		}
 
-		public void action(TypeTableEntry typeTableEntry) {
+		public void action(@NotNull TypeTableEntry typeTableEntry) {
 			@Nullable OS_Type attached = typeTableEntry.getAttached();
 			if (attached == null) return;
 			if (attached.getType() == OS_Type.Type.USER) {
@@ -983,7 +983,7 @@ public class DeduceTypes2 {
 			}
 		}
 
-		public void action_USER_CLASS(TypeTableEntry typeTableEntry, @Nullable OS_Type aAttached) {
+		public void action_USER_CLASS(TypeTableEntry typeTableEntry, @NotNull OS_Type aAttached) {
 			ClassStatement c = aAttached.getClassOf();
 			assert c != null;
 			phase.onClass(c, new OnClass() {
