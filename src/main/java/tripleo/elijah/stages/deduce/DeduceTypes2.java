@@ -990,7 +990,7 @@ public class DeduceTypes2 {
 				// TODO what about ClassInvocation's?
 				@Override
 				public void classFound(GeneratedClass cc) {
-					typeTableEntry.resolve(cc);
+					typeTableEntry.resolve(cc); // set genType.node
 				}
 			});
 		}
