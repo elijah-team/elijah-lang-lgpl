@@ -1006,13 +1006,17 @@ public class DeduceTypes2 {
 			}
 			try {
 				typeTableEntry.setAttached(dt2.resolve_type(aAttached, aAttached.getTypeName().getContext()));
-				if (typeTableEntry.getAttached().getType() == OS_Type.Type.USER_CLASS) {
+				switch (typeTableEntry.getAttached().getType()) {
+				case USER_CLASS:
 					action_USER_CLASS(typeTableEntry, typeTableEntry.getAttached());
-				} else if (typeTableEntry.getAttached().getType() == OS_Type.Type.GENERIC_TYPENAME) {
+					break;
+				case GENERIC_TYPENAME:
 					System.err.println(String.format("801 Generic Typearg %s for %s", tn, "genericFunction.getFD().getParent()"));
-				} else {
+					break;
+				default:
 					// TODO print diagnostic because resolve_type failed
-					System.err.println("245 Can't resolve typeTableEntry "+typeTableEntry);
+					System.err.println("245 Can't resolve typeTableEntry " + typeTableEntry);
+					break;
 				}
 			} catch (ResolveError aResolveError) {
 				System.err.println("288 Failed to resolve type "+ aAttached);
@@ -2672,8 +2676,8 @@ public class DeduceTypes2 {
 				if (tt.size() == 1) {
 					final OS_Type x = tt.get(0).getAttached();
 					assert x != null;
-					assert x.getType() != null;
-					if (x.getType() == OS_Type.Type.USER_CLASS) {
+					switch (x.getType()) {
+					case USER_CLASS:
 						final Context ctx1 = x.getClassOf().getContext();
 
 						found = lookup_name_calls(ctx1, pn, pte);
@@ -2687,8 +2691,11 @@ public class DeduceTypes2 {
 							//throw new NotImplementedException(); // TODO
 							errSink.reportError("Special Function not found " + pn);
 						}
-					} else
+						break;
+					default:
 						assert false;
+						break;
+					}
 				} else
 					assert false;
 			}
