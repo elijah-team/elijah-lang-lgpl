@@ -12,6 +12,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.jdeferred2.DoneCallback;
 import org.jdeferred2.Promise;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
@@ -2771,6 +2772,7 @@ public class DeduceTypes2 {
 		private Context ctx;
 		private BaseGeneratedFunction generatedFunction;
 
+		@Contract(pure = true)
 		public FoundParent(BaseTableEntry aBte, IdentTableEntry aIte, Context aCtx, BaseGeneratedFunction aGeneratedFunction) {
 			bte = aBte;
 			ite = aIte;
