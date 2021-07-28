@@ -297,11 +297,11 @@ class Resolve_Ident_IA {
 				}
 				if (el != null) {
 					idte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
-					if (el.getContext() != null)
-						ectx = el.getContext();
-					else {
+
+					if (el.getContext() == null)
 						throw new IllegalStateException("2468 null context");
-					}
+
+					ectx = el.getContext();
 				} else {
 					errSink.reportError("1179 Can't resolve " + text);
 					idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
