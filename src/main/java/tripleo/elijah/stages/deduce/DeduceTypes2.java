@@ -379,10 +379,10 @@ public class DeduceTypes2 {
 					}
 					{
 						// TODO why are we doing this?
-						Resolve_each_typename ret = new Resolve_each_typename(phase, this, errSink);
-						for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
-							ret.action(typeTableEntry);
-						}
+//						Resolve_each_typename ret = new Resolve_each_typename(phase, this, errSink);
+//						for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
+//							ret.action(typeTableEntry);
+//						}
 					}
 					{
 						final WorkManager workManager = wm;//new WorkManager();
