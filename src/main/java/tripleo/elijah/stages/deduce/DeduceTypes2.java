@@ -2704,8 +2704,8 @@ public class DeduceTypes2 {
 		final LookupResultList lrl = ctx.lookup(pn);
 		final OS_Element best = lrl.chooseBest(null); // TODO check arity and arg matching
 		if (best != null) {
-			pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(best, null));
-//			set_resolved_element_pte(null, best, pte); // TODO check arity and arg matching
+			pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(best, null)); // TODO why include if only to be null?
+//			set_resolved_element_pte(null, best, pte);
 			return true;
 		}
 		return false;
