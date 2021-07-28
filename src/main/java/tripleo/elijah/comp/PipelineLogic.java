@@ -65,7 +65,7 @@ public class PipelineLogic {
 		lgc.addAll(dp.generatedClasses);
 		for (OS_Module mod : mods) {
 			PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
-			pd.analyze();
+//			pd.analyze();
 		}
 	}
 
