@@ -46,13 +46,13 @@ class Resolve_Ident_IA {
 							final BaseGeneratedFunction aGeneratedFunction,
 							final @NotNull FoundElement aFoundElement,
 							final @NotNull ErrSink aErrSink) {
+		deduceTypes2 = aDeduceTypes2;
+		phase = aPhase;
 		context = aContext;
 		identIA = aIdentIA;
 		generatedFunction = aGeneratedFunction;
 		foundElement = aFoundElement;
 		errSink = aErrSink;
-		deduceTypes2 = aDeduceTypes2;
-		phase = aPhase;
 	}
 
 	OS_Element el;
