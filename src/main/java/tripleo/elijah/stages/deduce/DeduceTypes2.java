@@ -2076,8 +2076,9 @@ public class DeduceTypes2 {
 								forFunction(newFunctionInvocation((FunctionDef) best, pte, invocation, phase), new ForFunction() {
 									@Override
 									public void typeDecided(GenType aType) {
-										tte.setAttached(gt(aType));
-										//vte.addPotentialType(instructionIndex, tte);
+										tte.setAttached(gt(aType)); // TODO stop setting attached!
+										tte.genType.copy(aType);
+//										vte.addPotentialType(instructionIndex, tte);
 									}
 								});
 //								tte.setAttached(new OS_FuncType((FunctionDef) best));
