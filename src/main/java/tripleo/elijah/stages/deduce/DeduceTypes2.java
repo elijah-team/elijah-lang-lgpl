@@ -1996,7 +1996,8 @@ public class DeduceTypes2 {
 				public void foundElement(OS_Element e) {
 //					System.out.println(String.format("600 %s %s", xx ,e));
 //					System.out.println("601 "+identIA.getEntry().getStatus());
-					assert e == identIA.getEntry().resolved_element;
+					final OS_Element resolved_element = identIA.getEntry().resolved_element;
+					assert e == resolved_element;
 //					set_resolved_element_pte(identIA, e, pte);
 					pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
 					pte.getFunctionInvocation().generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
