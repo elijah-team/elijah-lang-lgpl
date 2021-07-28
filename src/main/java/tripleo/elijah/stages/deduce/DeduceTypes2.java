@@ -1014,8 +1014,7 @@ public class DeduceTypes2 {
 					System.err.println(String.format("801 Generic Typearg %s for %s", tn, "genericFunction.getFD().getParent()"));
 					break;
 				default:
-					// TODO print diagnostic because resolve_type failed
-					System.err.println("245 Can't resolve typeTableEntry " + typeTableEntry);
+					System.err.println("245 typeTableEntry attached wrong type " + typeTableEntry);
 					break;
 				}
 			} catch (ResolveError aResolveError) {
