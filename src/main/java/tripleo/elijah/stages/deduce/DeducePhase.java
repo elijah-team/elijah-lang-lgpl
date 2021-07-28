@@ -248,7 +248,7 @@ public class DeducePhase {
 	}
 
 	public void forFunction(DeduceTypes2 deduceTypes2, FunctionInvocation fi, ForFunction forFunction) {
-		System.err.println("272 "+fi.getFunction()+" "+fi.pte);
+//		System.err.println("272 forFunction\n\t"+fi.getFunction()+"\n\t"+fi.pte);
 		fi.generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {
 			@Override
 			public void onDone(BaseGeneratedFunction result) {
