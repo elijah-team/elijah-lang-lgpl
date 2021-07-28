@@ -1424,7 +1424,7 @@ public class DeduceTypes2 {
 
 				@Override
 				public void foundElement(OS_Element e) {
-					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
+//					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e)); // this is called in resolveIdentIA_
 					found_element_for_ite(generatedFunction, ite, e, ctx);
 				}
 
