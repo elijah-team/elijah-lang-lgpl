@@ -94,6 +94,15 @@ public class GenerateC implements CodeGenerator {
 		return gr;
 	}
 
+	@NotNull
+	public String getTypeName(GeneratedNode aNode) {
+		if (aNode instanceof GeneratedClass)
+			return getTypeName((GeneratedClass) aNode);
+		if (aNode instanceof GeneratedNamespace)
+			return getTypeName((GeneratedNamespace) aNode);
+		throw new IllegalStateException("Must be class or namespace.");
+	}
+
 	static class WlGenerateFunctionC implements WorkJob {
 
 		private final BaseGeneratedFunction gf;
