@@ -105,10 +105,10 @@ class Resolve_Ident_IA {
 			InstructionArgument x = s.get(s.size() - 1);
 			if (x instanceof IntegerIA) {
 				assert false;
-				@NotNull VariableTableEntry y = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(x));
+				@NotNull VariableTableEntry y = ((IntegerIA) x).getEntry();
 				y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else if (x instanceof IdentIA) {
-				@NotNull IdentTableEntry y = generatedFunction.getIdentTableEntry(DeduceTypes2.to_int(x));
+				@NotNull IdentTableEntry y = ((IdentIA) x).getEntry();
 				y.addStatusListener(new BaseTableEntry.StatusListener() {
 					@Override
 					public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
