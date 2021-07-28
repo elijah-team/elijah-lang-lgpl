@@ -269,7 +269,12 @@ public class DeduceTypes2 {
 	public void deduce_generated_function_base(final BaseGeneratedFunction generatedFunction, BaseFunctionDef fd) {
 		final Context fd_ctx = fd.getContext();
 		//
-		System.err.println("** deduce_generated_function "+ fd.name()+" "+fd);//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
+		{
+			ProcTableEntry pte = generatedFunction.fi.pte;
+			final String pte_string = getPTEString(pte);
+			System.err.println("** deduce_generated_function "+ fd.name()+" "+pte_string);//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
+		}
+		//
 		//
 		for (final Instruction instruction : generatedFunction.instructions()) {
 			final Context context = generatedFunction.getContextFromPC(instruction.getIndex());
@@ -781,20 +786,33 @@ public class DeduceTypes2 {
 		}
 	}
 
-	@Nullable
-	private String getPTEString(ProcTableEntry pte) {
+	private @NotNull String getPTEString(ProcTableEntry pte) {
 		String pte_string;
 		if (pte == null)
 			pte_string = "[]";
 		else {
+			List<String> l = new ArrayList<String>();
+
 			for (TypeTableEntry typeTableEntry : pte.getArgs()) {
 				if (typeTableEntry.getAttached() == null)
 					System.err.println("267 attached == null");
 
 				OS_Type attached = typeTableEntry.getAttached();
-				int y=2;
+				if (attached != null)
+					l.add(attached.toString());
+				else {
+					if (typeTableEntry.expression != null)
+						l.add(String.format("<Unknown expression: %s>", typeTableEntry.expression));
+					else
+						l.add("<Unknkown>");
+				}
 			}
-			pte_string = null;
+
+			StringBuilder sb2 = new StringBuilder();
+			sb2.append("[");
+			sb2.append(Helpers.String_join(", ", l));
+			sb2.append("]");
+			pte_string = sb2.toString();
 		}
 		return pte_string;
 	}
