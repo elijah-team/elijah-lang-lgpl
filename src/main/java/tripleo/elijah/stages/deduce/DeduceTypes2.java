@@ -1816,6 +1816,10 @@ public class DeduceTypes2 {
 	}
 
 	private DeferredMember deferred_member(OS_Element aParent, IInvocation aInvocation, VariableStatement aVariableStatement) {
+		if (aInvocation == null) {
+			if (aParent instanceof NamespaceStatement)
+				aInvocation = phase.registerNamespaceInvocation((NamespaceStatement) aParent);
+		}
 		DeferredMember dm = new DeferredMember(aParent, aInvocation, aVariableStatement);
 		phase.addDeferredMember(dm);
 		return dm;
