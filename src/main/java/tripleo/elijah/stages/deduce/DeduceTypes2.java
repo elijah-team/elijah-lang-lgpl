@@ -461,9 +461,8 @@ public class DeduceTypes2 {
 								// TODO check for elements which may contain type information
 								if (best1 instanceof VariableStatement) {
 									final VariableStatement vs = (VariableStatement) best1;
-									deferred_member(vs.getParent().getParent(), null, vs)
-										.typePromise()
-										.done(new DoneCallback<GenType>() {
+									DeferredMember dm = deferred_member(vs.getParent().getParent(), null, vs, idte2);
+									dm.typePromise().done(new DoneCallback<GenType>() {
 											@Override
 											public void onDone(GenType result) {
 												assert result.resolved != null;
@@ -1721,7 +1720,8 @@ public class DeduceTypes2 {
 							state = (parent != ((GeneratedConstructor) generatedFunction).getFD().getParent());
 						}
 						if (state) {
-							deferred_member(parent, getInvocationFromBacklink(ite.backlink), vs).typePromise().
+							DeferredMember dm = deferred_member(parent, getInvocationFromBacklink(ite.backlink), vs, ite);
+							dm.typePromise().
 									done(new DoneCallback<GenType>() {
 										@Override
 										public void onDone(GenType result) {
@@ -1802,6 +1802,17 @@ public class DeduceTypes2 {
 		if (aBacklink == null) return null;
 		// TODO implement me
 		return null;
+	}
+
+	private DeferredMember deferred_member(OS_Element aParent, IInvocation aInvocation, VariableStatement aVariableStatement, IdentTableEntry ite) {
+		DeferredMember dm = deferred_member(aParent, aInvocation, aVariableStatement);
+		dm.externalRef().then(new DoneCallback<GeneratedNode>() {
+			@Override
+			public void onDone(GeneratedNode result) {
+				ite.externalRef = result;
+			}
+		});
+		return dm;
 	}
 
 	private DeferredMember deferred_member(OS_Element aParent, IInvocation aInvocation, VariableStatement aVariableStatement) {
