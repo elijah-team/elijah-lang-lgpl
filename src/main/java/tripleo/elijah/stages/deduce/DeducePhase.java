@@ -408,6 +408,17 @@ public class DeducePhase {
 								final OS_Type varType = v.varType;
 								final GenType genType = new GenType();
 								genType.set(varType);
+
+//								if (deferredMember.getInvocation() instanceof NamespaceInvocation) {
+//									((NamespaceInvocation) deferredMember.getInvocation()).resolveDeferred().done(new DoneCallback<GeneratedNamespace>() {
+//										@Override
+//										public void onDone(GeneratedNamespace result) {
+//											result;
+//										}
+//									});
+//								}
+
+								deferredMember.externalRefDeferred().resolve(result);
 /*
 								if (genType.resolved == null) {
 									// HACK need to resolve, but this shouldn't be here
