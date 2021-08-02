@@ -188,10 +188,11 @@ public class DeducePhase {
 
 	public DeduceTypes2 deduceModule(OS_Module m) {
 		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
-		List<GeneratedNode> lgc = new ArrayList<>();
 
 		@NotNull List<EntryPoint> epl = m.entryPoints;
 		gfm.generateFromEntryPoints(epl, this);
+
+		List<GeneratedNode> lgc = generatedClasses;
 
 		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 		for (GeneratedNode lgci : lgc) {
