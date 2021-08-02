@@ -75,6 +75,7 @@ public class VariableTableEntry extends BaseTableEntry implements Constructable,
 			} else if (v.getAttached().equals(tte.getAttached())) {
 				// leave as is
 			} else {
+				assert false;
 				//
 				// Make sure you check the differences between USER and USER_CLASS types
 				// May not be any
