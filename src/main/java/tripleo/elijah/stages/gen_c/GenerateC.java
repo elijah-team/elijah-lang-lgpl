@@ -811,14 +811,44 @@ public class GenerateC implements CodeGenerator {
 	}
 
 	String getRealTargetName(final BaseGeneratedFunction gf, final IdentIA target) {
+		int state = 0, code = -1;
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		LinkedList<String> ls = new LinkedList<String>();
 		// TODO in Deduce set property lookupType to denote what type of lookup it is: MEMBER, LOCAL, or CLOSURE
 		InstructionArgument backlink = identTableEntry.backlink;
-		if (backlink == null)
-			ls.add(Emit.emit("/*912*/")+"vsc->vm"+identTableEntry.getIdent().getText()); // TODO blindly adding "vm" might not always work, also put in loop
-		else
-			ls.add(Emit.emit("/*872*/")+"vm"+identTableEntry.getIdent().getText()); // TODO blindly adding "vm" might not always work, also put in loop
+		final String text = identTableEntry.getIdent().getText();
+		if (backlink == null) {
+			if (identTableEntry.resolved_element instanceof VariableStatement) {
+				final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
+				OS_Element parent = vs.getParent().getParent();
+				if (parent != gf.getFD()) {
+					// we want identTableEntry.resolved which will be a GeneratedMember
+					// which will have a container which will be either be a function,
+					// statement (semantic block, loop, match, etc) or a GeneratedContainerNC
+					int y=2;
+					GeneratedNode er = identTableEntry.externalRef;
+					if (er instanceof GeneratedContainerNC) {
+						final GeneratedContainerNC nc = (GeneratedContainerNC) er;
+						assert nc instanceof GeneratedNamespace;
+						GeneratedNamespace ns = (GeneratedNamespace) nc;
+//						if (ns.isInstance()) {}
+						state = 1;
+						code = nc.getCode();
+					}
+				}
+			}
+			switch (state) {
+			case 0:
+				ls.add(Emit.emit("/*912*/")+"vsc->vm"+ text); // TODO blindly adding "vm" might not always work, also put in loop
+				break;
+			case 1:
+				ls.add(Emit.emit("/*845*/")+String.format("zNZ%d_instance->vm%s", code, text));
+				break;
+			default:
+				throw new IllegalStateException("Can't be here");
+			}
+		} else
+			ls.add(Emit.emit("/*872*/")+"vm"+ text); // TODO blindly adding "vm" might not always work, also put in loop
 		while (backlink != null) {
 			if (backlink instanceof IntegerIA) {
 				IntegerIA integerIA = (IntegerIA) backlink;
