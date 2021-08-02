@@ -11,6 +11,7 @@ package tripleo.elijah.stages.gen_fn;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.entrypoints.ArbitraryFunctionEntryPoint;
 import tripleo.elijah.entrypoints.EntryPoint;
@@ -930,17 +931,25 @@ public class GenerateFunctions {
 			expression_num = gf.get_assignment_path(left, this, cctx);
 		}
 		final int i = addProcTableEntry(left, expression_num, get_args_types(args, gf, cctx), gf);
+		final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
+		l.add(new ProcIA(i, gf));
+		l.addAll(simplify_args(args, gf, cctx));
+		final int instructionIndex = add_i(gf, InstructionName.CALL, l, cctx);
 		{
 			@NotNull ProcTableEntry pte = gf.getProcTableEntry(i);
 			if (expression_num instanceof IdentIA) {
 				@NotNull IdentTableEntry idte = ((IdentIA) expression_num).getEntry();
 				idte.setCallablePTE(pte);
+				pte.typePromise().then(new DoneCallback<GenType>() { // TODO should this be done here?
+					@Override
+					public void onDone(GenType result) {
+						@NotNull TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved);
+						tte.genType.copy(result);
+						idte.addPotentialType(instructionIndex, tte);
+					}
+				});
 			}
 		}
-		final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
-		l.add(new ProcIA(i, gf));
-		l.addAll(simplify_args(args, gf, cctx));
-		add_i(gf, InstructionName.CALL, l, cctx);
 	}
 
 	private @NotNull List<InstructionArgument> simplify_args(@org.jetbrains.annotations.Nullable final ExpressionList args, final @NotNull BaseGeneratedFunction gf, final Context cctx) {
