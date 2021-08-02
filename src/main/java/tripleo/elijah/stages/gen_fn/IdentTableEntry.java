@@ -39,6 +39,7 @@ public class IdentTableEntry extends BaseTableEntry implements Constructable, Ta
 	public InstructionArgument backlink;
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public TypeTableEntry type;
+	public GeneratedNode externalRef;
 	private GeneratedNode resolvedType;
 	public OS_Element resolved_element;
 	public ProcTableEntry constructable_pte;
