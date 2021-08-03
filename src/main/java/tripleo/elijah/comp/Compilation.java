@@ -112,6 +112,7 @@ public class Compilation {
 					silent = true;
 				}
 
+				CompilerInstructions ez_file = null;
 				final String[] args2 = cmd.getArgs();
 
 				for (int i = 0; i < args2.length; i++) {
@@ -131,7 +132,8 @@ public class Compilation {
 							} else if (ezs.size() == 0) {
 								eee.reportError("9999 No .ez files found.");
 							} else {
-								add_ci(ezs.get(0));
+								ez_file = ezs.get(0);
+								add_ci(ez_file);
 							}
 						} else
 							eee.reportError("9995 Not a directory "+f.getAbsolutePath());
@@ -180,6 +182,9 @@ public class Compilation {
 					pipeline.write_buffers(this);
 
 					writeLogs(silent, pipeline.deduceLogs);
+
+					if (ez_file != null)
+						System.out.println(String.format("*** %d errors for %s", errorCount(), ez_file.getFilename()));
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
