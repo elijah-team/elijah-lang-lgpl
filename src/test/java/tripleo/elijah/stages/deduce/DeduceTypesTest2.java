@@ -53,7 +53,7 @@ public class DeduceTypesTest2 {
 		//
 		final GeneratePhase generatePhase = new GeneratePhase();
 		DeducePhase dp = new DeducePhase(generatePhase);
-		DeduceTypes2 d = dp.deduceModule(mod);
+		DeduceTypes2 d = dp.deduceModule(mod, new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity());
 //		final DeduceTypes d = new DeduceTypes(mod);
 		final OS_Type x = DeduceLookupUtils.deduceExpression(d, x1, fc);
 		System.out.println(x);
