@@ -61,7 +61,7 @@ public class DeduceTypes2 {
 	public DeduceTypes2(OS_Module module, DeducePhase phase, DtLog.Verbosity verbosity) {
 		this.module = module;
 		this.phase = phase;
-		this.errSink = module.parent.getErrSink();
+		this.errSink = module.getCompilation().getErrSink();
 		this.LOG = new DtLog(module.getFileName(), verbosity == DtLog.Verbosity.VERBOSE);
 	}
 
