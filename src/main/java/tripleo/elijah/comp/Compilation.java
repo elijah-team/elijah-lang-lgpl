@@ -23,6 +23,7 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
+import tripleo.elijah.stages.deduce.DtLog;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
@@ -31,8 +32,10 @@ import tripleo.elijjah.EzLexer;
 import tripleo.elijjah.EzParser;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,13 +88,14 @@ public class Compilation {
 	public String stage = "O"; // Output
 
 	public void main(final List<String> args, final ErrSink errSink) {
-		boolean do_out = false;
+		boolean do_out = false, silent = false;
 		try {
 			if (args.size() > 0) {
 				final Options options = new Options();
 				options.addOption("s", true, "stage: E: parse; O: output");
 				options.addOption("showtree", false, "show tree");
 				options.addOption("out", false, "make debug files");
+				options.addOption("silent", false, "suppress DeduceType output to console");
 				final CommandLineParser clp = new DefaultParser();
 				final CommandLine cmd = clp.parse(options, args.toArray(new String[args.size()]));
 
@@ -103,6 +107,9 @@ public class Compilation {
 				}
 				if (cmd.hasOption("out")) {
 					do_out = true;
+				}
+				if (isGitlab_ci() || cmd.hasOption("silent")) {
+					silent = true;
 				}
 
 				final String[] args2 = cmd.getArgs();
@@ -143,7 +150,10 @@ public class Compilation {
 					// do nothing. job over
 				} else {
 					pipeline = new PipelineLogic();
+					pipeline.verbose = !silent;
+
 					ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
+
 					for (final OS_Module module : modules) {
 						if (false) {
 /*
@@ -168,12 +178,48 @@ public class Compilation {
 
 					pipeline.write_files(this);
 					pipeline.write_buffers(this);
+
+					writeLogs(silent, pipeline.deduceLogs);
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
 			}
 		} catch (final Exception e) {
 			errSink.exception(e);
+		}
+	}
+
+	public DtLog.Verbosity gitlabCIVerbosity() {
+		final boolean gitlab_ci = isGitlab_ci();
+		return gitlab_ci ? DtLog.Verbosity.SILENT : DtLog.Verbosity.VERBOSE;
+	}
+
+	public boolean isGitlab_ci() {
+		return System.getenv("GITLAB_CI") != null;
+	}
+
+	private void writeLogs(boolean aSilent, List<DtLog> aDeduceLogs) {
+		if (/*aSilent ==*/ true) {
+			for (DtLog deduceLog : aDeduceLogs) {
+				String s1 = deduceLog.getFileName();
+				String s2 = s1.replace(System.getProperty("file.separator"), "~~");
+
+				final File file1 = new File("COMP", getCompilationNumberString());
+				final File file2 = new File(file1, "logs");
+				file2.mkdirs();
+
+				try {
+					final File psf = new File(file2, s2);
+					System.out.println("202 Writing "+psf.toString());
+
+					PrintStream ps = new PrintStream(psf);
+					for (DtLog.LogEntry entry : deduceLog.getEntries()) {
+						ps.println(String.format("[%s] [%tD %tT] %s %s", s1, entry.time, entry.time, entry.level, entry.message));
+					}
+				} catch (FileNotFoundException e) {
+					getErrSink().exception(e);
+				}
+			}
 		}
 	}
 

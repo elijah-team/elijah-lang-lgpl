@@ -63,10 +63,8 @@ public class DeduceTypes2 {
 		this.phase = phase;
 		this.errSink = module.getCompilation().getErrSink();
 		this.LOG = new DtLog(module.getFileName(), verbosity == DtLog.Verbosity.VERBOSE);
-	}
-
-	public DtLog getLOG() {
-		return LOG;
+		//
+		phase.addDeduceLog(LOG);
 	}
 
 	public void deduceFunctions(final @NotNull Iterable<GeneratedNode> lgf) {

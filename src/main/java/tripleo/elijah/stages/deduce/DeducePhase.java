@@ -163,6 +163,12 @@ public class DeducePhase {
 		deferredMembers.add(aDeferredMember);
 	}
 
+	public List<DtLog> deduceLogs = new ArrayList<DtLog>();
+
+	public void addDeduceLog(DtLog aLog) {
+		deduceLogs.add(aLog);
+	}
+
 	static class ResolvedVariables {
 		final IdentTableEntry identTableEntry;
 		final OS_Element parent; // README tripleo.elijah.lang._CommonNC, but that's package-private
@@ -179,14 +185,14 @@ public class DeducePhase {
 
 	private final Multimap<FunctionDef, GeneratedFunction> functionMap = ArrayListMultimap.create();
 
-	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf) {
-		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this);
+	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf, DtLog.Verbosity verbosity) {
+		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this, verbosity);
 //		System.err.println("196 DeduceTypes "+deduceTypes2.getFileName());
 		deduceTypes2.deduceFunctions(lgf);
 		return deduceTypes2;
 	}
 
-	public DeduceTypes2 deduceModule(OS_Module m) {
+	public DeduceTypes2 deduceModule(OS_Module m, DtLog.Verbosity verbosity) {
 		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
 
 		@NotNull List<EntryPoint> epl = m.entryPoints;
@@ -214,7 +220,7 @@ public class DeducePhase {
 
 //		generatedClasses = lgc;
 
-		return deduceModule(m, lgf);
+		return deduceModule(m, lgf, verbosity);
 	}
 
 	/**
@@ -222,8 +228,9 @@ public class DeducePhase {
 	 * @param m the module
 	 * @param lgc the result of generateAllTopLevelClasses
 	 * @param _unused is unused
+	 * @param verbosity
 	 */
-	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgc, boolean _unused) {
+	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgc, boolean _unused, DtLog.Verbosity verbosity) {
 		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 
 		for (GeneratedNode lgci : lgc) {
@@ -245,7 +252,7 @@ public class DeducePhase {
 			}
 		}
 
-		deduceModule(m, lgf);
+		deduceModule(m, lgf, verbosity);
 	}
 
 	public void forFunction(DeduceTypes2 deduceTypes2, FunctionInvocation fi, ForFunction forFunction) {

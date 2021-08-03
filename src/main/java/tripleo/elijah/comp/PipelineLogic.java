@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeducePhase;
+import tripleo.elijah.stages.deduce.DtLog;
 import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
@@ -55,6 +56,8 @@ public class PipelineLogic {
 
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
 	public GenerateResult gr = new GenerateResult();
+	public List<DtLog> deduceLogs = null;
+	public boolean verbose = true;
 
 	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
 		for (OS_Module mod : mods) {
@@ -63,10 +66,12 @@ public class PipelineLogic {
 //		List<List<EntryPoint>> entryPoints = mods.stream().map(mod -> mod.entryPoints).collect(Collectors.toList());
 		dp.finish();
 		lgc.addAll(dp.generatedClasses);
-		for (OS_Module mod : mods) {
-			PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
+//		for (OS_Module mod : mods) {
+//			PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
 //			pd.analyze();
-		}
+//		}
+		//
+		deduceLogs = dp.deduceLogs;
 	}
 
 	public void generate(List<GeneratedNode> lgc) {
@@ -178,7 +183,7 @@ public class PipelineLogic {
 			}
 		}
 
-		dp.deduceModule(mod, lgc, true);
+		dp.deduceModule(mod, lgc, true, getVerbosity());
 
 		resolveCheck(lgc);
 
@@ -350,6 +355,10 @@ public class PipelineLogic {
 
 		PrintStream db_stream = new PrintStream(new File(file1, "buffers.txt"));
 		debug_buffers(gr, db_stream);
+	}
+
+	public DtLog.Verbosity getVerbosity() {
+		return verbose ? DtLog.Verbosity.VERBOSE : DtLog.Verbosity.SILENT;
 	}
 }
 
