@@ -155,7 +155,7 @@ class Resolve_Ident_IA {
 					throw new IllegalArgumentException("double pce!");
 			}
 			try {
-				LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx);
+				LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx, deduceTypes2);
 				el = lrl.chooseBest(null);
 				ectx = el.getContext();
 //					prte.setResolvedElement(el);
@@ -387,7 +387,7 @@ class Resolve_Ident_IA {
 						final OS_Element resolvedElement = backlink.getResolvedElement();
 						assert resolvedElement != null;
 						try {
-							LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), resolvedElement.getContext());
+							LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), resolvedElement.getContext(), deduceTypes2);
 							@Nullable OS_Element best = lrl2.chooseBest(null);
 							assert best != null;
 							y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));

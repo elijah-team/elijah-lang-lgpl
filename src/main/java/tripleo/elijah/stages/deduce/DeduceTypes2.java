@@ -338,7 +338,7 @@ public class DeduceTypes2 {
 								OS_Element best = lrl.chooseBest(null);
 								if (best != null) {
 									while (best instanceof AliasStatement) {
-										best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
+										best = DeduceLookupUtils._resolveAlias((AliasStatement) best, this);
 									}
 									if (!(OS_Type.isConcreteType(best))) {
 										errSink.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
@@ -1347,7 +1347,7 @@ public class DeduceTypes2 {
 						if (!ite.hasResolvedElement()) {
 							LookupResultList lrl = null;
 							try {
-								lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), aFunctionContext);
+								lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), aFunctionContext, DeduceTypes2.this);
 								OS_Element best = lrl.chooseBest(null);
 								if (best != null) {
 									ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
@@ -1840,7 +1840,7 @@ public class DeduceTypes2 {
 	}
 
 	@NotNull
-	static OS_Type resolve_type(final OS_Module module, final OS_Type type, final Context ctx) throws ResolveError {
+	/*static*/ OS_Type resolve_type(final OS_Module module, final OS_Type type, final Context ctx) throws ResolveError {
 		switch (type.getType()) {
 
 		case BUILT_IN:
@@ -1857,7 +1857,7 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
 							} else if (OS_Type.isConcreteType(best)) {
 								throw new NotImplementedException();
 							} else
@@ -1879,7 +1879,7 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
 							} else if (OS_Type.isConcreteType(best)) {
 								throw new NotImplementedException();
 							} else
@@ -1901,7 +1901,7 @@ public class DeduceTypes2 {
 						OS_Element best = lrl.chooseBest(null);
 						while (!(best instanceof ClassStatement)) {
 							if (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
 							} else if (OS_Type.isConcreteType(best)) {
 								throw new NotImplementedException();
 							} else
@@ -1936,7 +1936,7 @@ public class DeduceTypes2 {
 						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(tn, tn1.getContext(), this);
 						OS_Element best = lrl.chooseBest(null);
 						while (best instanceof AliasStatement) {
-							best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
+							best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
 						}
 						if (best == null) {
 							if (tn.asSimpleString().equals("Any"))
@@ -2000,9 +2000,9 @@ public class DeduceTypes2 {
 				try {
 					OS_Element el;
 					if (vte.el instanceof IdentExpression)
-						el = DeduceLookupUtils.lookup((IdentExpression) vte.el, ctx);
+						el = DeduceLookupUtils.lookup((IdentExpression) vte.el, ctx, this);
 					else
-						el = DeduceLookupUtils.lookup(((VariableStatement) vte.el).getNameToken(), ctx);
+						el = DeduceLookupUtils.lookup(((VariableStatement) vte.el).getNameToken(), ctx, this);
 					vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 				} catch (ResolveError aResolveError) {
 					errSink.reportDiagnostic(aResolveError);
@@ -2081,11 +2081,11 @@ public class DeduceTypes2 {
 				{
 					final ProcedureCallExpression pce = (ProcedureCallExpression) e;
 					try {
-						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(pce.getLeft(), ctx);
+						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(pce.getLeft(), ctx, this);
 						OS_Element best = lrl.chooseBest(null);
 						if (best != null) {
 							while (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
 							}
 							if (best instanceof FunctionDef) {
 								final OS_Element parent = best.getParent();
@@ -2127,11 +2127,11 @@ public class DeduceTypes2 {
 				{
 					final DotExpression de = (DotExpression) e;
 					try {
-						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(de.getLeft(), ctx);
+						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(de.getLeft(), ctx, this);
 						OS_Element best = lrl.chooseBest(null);
 						if (best != null) {
 							while (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
+								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
 							}
 							if (best instanceof FunctionDef) {
 								tte.setAttached(new OS_FuncType((FunctionDef) best));
@@ -2425,7 +2425,7 @@ public class DeduceTypes2 {
 
 	private void do_assign_call_GET_ITEM(GetItemExpression gie, TypeTableEntry tte, BaseGeneratedFunction generatedFunction, Context ctx) {
 		try {
-			final LookupResultList lrl = DeduceLookupUtils.lookupExpression(gie.getLeft(), ctx);
+			final LookupResultList lrl = DeduceLookupUtils.lookupExpression(gie.getLeft(), ctx, this);
 			final OS_Element best = lrl.chooseBest(null);
 			if (best != null) {
 				if (best instanceof VariableStatement) { // TODO what about alias?
@@ -2868,7 +2868,7 @@ public class DeduceTypes2 {
 				LOG.err("396 AliasStatement");
 				OS_Element x = null;
 				try {
-					x = DeduceLookupUtils._resolveAlias2((AliasStatement) y);
+					x = DeduceLookupUtils._resolveAlias2((AliasStatement) y, DeduceTypes2.this);
 					assert x != null;
 					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
 					found_element_for_ite(generatedFunction, ite, x, ctx);
@@ -2974,7 +2974,7 @@ public class DeduceTypes2 {
 								@NotNull BaseFunctionDef ele = constructorDef.getFD();
 
 								try {
-									LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+									LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext(), DeduceTypes2.this);
 									OS_Element best = lrl.chooseBest(null);
 									ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 								} catch (ResolveError aResolveError) {
@@ -2990,7 +2990,7 @@ public class DeduceTypes2 {
 				LOG.info("1621");
 				LookupResultList lrl = null;
 				try {
-					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ctx);
+					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ctx, DeduceTypes2.this);
 					OS_Element best = lrl.chooseBest(null);
 					assert best != null;
 					ite.setResolvedElement(best);
@@ -3020,14 +3020,14 @@ public class DeduceTypes2 {
 							}
 						}
 						ele = ty2.getElement();
-						LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+						LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext(), DeduceTypes2.this);
 						ele2 = lrl.chooseBest(null);
 					} else
 						ele2 = ty.getClassOf(); // TODO might fail later (use getElement?)
 
 					LookupResultList lrl = null;
 
-					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
+					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext(), DeduceTypes2.this);
 					OS_Element best = lrl.chooseBest(null);
 					if (best != ele2) LOG.err(String.format("2824 Divergent for %s, %s and %s", ite, best, ele2));;
 					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
@@ -3044,7 +3044,7 @@ public class DeduceTypes2 {
 							@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
 							// TODO ite.setAttached(ty2) ??
 							OS_Element ele = ty2.getElement();
-							LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext());
+							LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext(), DeduceTypes2.this);
 							OS_Element best = lrl.chooseBest(null);
 							ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 //									ite.setResolvedElement(best);
@@ -3059,7 +3059,7 @@ public class DeduceTypes2 {
 						ClassStatement klass = ty.getClassOf();
 						LookupResultList lrl = null;
 						try {
-							lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), klass.getContext());
+							lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), klass.getContext(), DeduceTypes2.this);
 							OS_Element best = lrl.chooseBest(null);
 //									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 							assert best != null;

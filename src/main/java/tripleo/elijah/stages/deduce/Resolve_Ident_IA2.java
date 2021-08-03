@@ -201,7 +201,7 @@ class Resolve_Ident_IA2 {
 				TypeTableEntry tte;
 				OS_Type attached;
 				if (has_initial_value) {
-					attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
+					attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ectx);
 				} else { // if (vs.typeName() != null) {
 					attached = new OS_Type(vs.typeName());
 				}
@@ -218,7 +218,7 @@ class Resolve_Ident_IA2 {
 				tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, initialValue);
 				idte.type = tte;
 			} else if (has_initial_value) {
-				OS_Type attached = DeduceLookupUtils.deduceExpression(vs.initialValue(), ectx);
+				OS_Type attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ectx);
 				TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 				idte.type = tte;
 			} else {
@@ -335,7 +335,7 @@ class Resolve_Ident_IA2 {
 						assert attached1TypeName instanceof RegularTypeName;
 						final Qualident realName = ((RegularTypeName) attached1TypeName).getRealName();
 						try {
-							final List<LookupResult> lrl = DeduceLookupUtils.lookupExpression(realName, ectx).results();
+							final List<LookupResult> lrl = DeduceLookupUtils.lookupExpression(realName, ectx, deduceTypes2).results();
 							ectx = lrl.get(0).getElement().getContext();
 						} catch (ResolveError aResolveError) {
 							aResolveError.printStackTrace();
@@ -380,7 +380,7 @@ class Resolve_Ident_IA2 {
 					}
 				}
 			} else {
-				LookupResultList lrl = DeduceLookupUtils.lookupExpression(pot.get(0).expression.getLeft(), ctx);
+				LookupResultList lrl = DeduceLookupUtils.lookupExpression(pot.get(0).expression.getLeft(), ctx, deduceTypes2);
 				OS_Element best = lrl.chooseBest(Helpers.List_of(
 						new DeduceUtils.MatchFunctionArgs(
 								(ProcedureCallExpression) pot.get(0).expression)));
