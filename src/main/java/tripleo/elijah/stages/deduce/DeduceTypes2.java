@@ -51,12 +51,22 @@ public class DeduceTypes2 {
 	private final OS_Module module;
 	private final DeducePhase phase;
 	private final ErrSink errSink;
+	private final DtLog LOG;
 	WorkManager wm = new WorkManager();
 
 	public DeduceTypes2(OS_Module module, DeducePhase phase) {
+		this(module, phase, DtLog.Verbosity.VERBOSE);
+	}
+
+	public DeduceTypes2(OS_Module module, DeducePhase phase, DtLog.Verbosity verbosity) {
 		this.module = module;
 		this.phase = phase;
 		this.errSink = module.parent.getErrSink();
+		this.LOG = new DtLog(module.getFileName(), verbosity == DtLog.Verbosity.VERBOSE);
+	}
+
+	public DtLog getLOG() {
+		return LOG;
 	}
 
 	public void deduceFunctions(final @NotNull Iterable<GeneratedNode> lgf) {
@@ -273,13 +283,13 @@ public class DeduceTypes2 {
 		{
 			ProcTableEntry pte = generatedFunction.fi.pte;
 			final String pte_string = getPTEString(pte);
-			System.err.println("** deduce_generated_function "+ fd.name()+" "+pte_string);//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
+			LOG.err("** deduce_generated_function "+ fd.name()+" "+pte_string);//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
 		}
 		//
 		//
 		for (final Instruction instruction : generatedFunction.instructions()) {
 			final Context context = generatedFunction.getContextFromPC(instruction.getIndex());
-//			System.out.println("8006 " + instruction);
+//			LOG.info("8006 " + instruction);
 			switch (instruction.getName()) {
 			case E:
 				{
@@ -312,13 +322,13 @@ public class DeduceTypes2 {
 					for (Runnable runnable : onRunnables) {
 						runnable.run();
 					}
-//					System.out.println("167 "+generatedFunction);
+//					LOG.info("167 "+generatedFunction);
 					//
 					// ATTACH A TYPE TO VTE'S
 					// CONVERT USER TYPES TO USER_CLASS TYPES
 					//
 					for (final VariableTableEntry vte : generatedFunction.vte_list) {
-//						System.out.println("704 "+vte.type.attached+" "+vte.potentialTypes());
+//						LOG.info("704 "+vte.type.attached+" "+vte.potentialTypes());
 						final OS_Type attached = vte.type.getAttached();
 						if (attached != null && attached.getType() == OS_Type.Type.USER) {
 							final TypeName x = attached.getTypeName();
@@ -333,7 +343,7 @@ public class DeduceTypes2 {
 									if (!(OS_Type.isConcreteType(best))) {
 										errSink.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
 									} else {
-	//									System.out.println("705 " + best);
+	//									LOG.info("705 " + best);
 										// NOTE that when we set USER_CLASS from USER generic information is
 										// still contained in constructable_pte
 										GenType genType = new GenType();
@@ -353,7 +363,7 @@ public class DeduceTypes2 {
 									}
 									//vte.el = best;
 									// NOTE we called resolve_var_table_entry above
-									System.err.println("200 "+best);
+									LOG.err("200 "+best);
 									if (vte.el != null)
 										assert vte.getStatus() == BaseTableEntry.Status.KNOWN;
 //									vte.setStatus(BaseTableEntry.Status.KNOWN, best/*vte.el*/);
@@ -472,7 +482,7 @@ public class DeduceTypes2 {
 								}
 							} else {
 								idte2.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-								System.err.println("242 Bad lookup" + idte2.getIdent().getText());
+								LOG.err("242 Bad lookup" + idte2.getIdent().getText());
 							}
 							idte.addPotentialType(instruction.getIndex(), idte2.type);
 						} else if (i2 instanceof ConstTableIA) {
@@ -496,11 +506,11 @@ public class DeduceTypes2 {
 			case AGNT:
 				break;
 			case AGNF:
-				System.err.println("292 Encountered AGNF");
+				LOG.err("292 Encountered AGNF");
 				break;
 			case JE:
 				{
-					System.err.println("296 Encountered JE");
+					LOG.err("296 Encountered JE");
 				}
 				break;
 			case JNE:
@@ -516,7 +526,7 @@ public class DeduceTypes2 {
 				{
 					final IdentIA identIA = (IdentIA) pte.expression_num;
 					final String x = generatedFunction.getIdentIAPathNormal(identIA);
-					System.err.println("298 Calling "+x);
+					LOG.err("298 Calling "+x);
 					resolveIdentIA_(context, identIA, generatedFunction, new FoundElement(phase) {
 
 						@SuppressWarnings("unused") final String xx = x;
@@ -598,7 +608,7 @@ public class DeduceTypes2 {
 					vte.type.setAttached(getPotentialTypesVte(vte).get(0).getAttached());
 				else if (potential_size > 1) {
 					// TODO Check type compatibility
-					System.err.println("703 "+vte.getName()+" "+vte.potentialTypes());
+					LOG.err("703 "+vte.getName()+" "+vte.potentialTypes());
 					errSink.reportDiagnostic(new CantDecideType(vte, vte.potentialTypes()));
 				} else {
 					// potential_size == 0
@@ -683,7 +693,7 @@ public class DeduceTypes2 {
 							throw new IllegalStateException("Unknown parent");
 						pte.setFunctionInvocation(fi);
 					} else {
-						System.err.println("845 Unknown element for ProcTableEntry "+e);
+						LOG.err("845 Unknown element for ProcTableEntry "+e);
 						return;
 					}
 					if (co != null) { // TODO really should pass in a param
@@ -761,7 +771,7 @@ public class DeduceTypes2 {
 								}
 								break;
 							default:
-								System.err.println(String.format("228 Don't know what to do %s %s", type, el));
+								LOG.err(String.format("228 Don't know what to do %s %s", type, el));
 								break;
 							}
 						}
@@ -804,7 +814,7 @@ public class DeduceTypes2 {
 
 			for (TypeTableEntry typeTableEntry : pte.getArgs()) {
 				if (typeTableEntry.getAttached() == null)
-					System.err.println("267 attached == null");
+					LOG.err("267 attached == null");
 
 				OS_Type attached = typeTableEntry.getAttached();
 				if (attached != null)
@@ -1012,14 +1022,14 @@ public class DeduceTypes2 {
 					action_USER_CLASS(typeTableEntry, typeTableEntry.getAttached());
 					break;
 				case GENERIC_TYPENAME:
-					System.err.println(String.format("801 Generic Typearg %s for %s", tn, "genericFunction.getFD().getParent()"));
+					LOG.err(String.format("801 Generic Typearg %s for %s", tn, "genericFunction.getFD().getParent()"));
 					break;
 				default:
-					System.err.println("245 typeTableEntry attached wrong type " + typeTableEntry);
+					LOG.err("245 typeTableEntry attached wrong type " + typeTableEntry);
 					break;
 				}
 			} catch (ResolveError aResolveError) {
-				System.err.println("288 Failed to resolve type "+ aAttached);
+				LOG.err("288 Failed to resolve type "+ aAttached);
 				errSink.reportDiagnostic(aResolveError);
 			}
 		}
@@ -1091,7 +1101,7 @@ public class DeduceTypes2 {
 					try {
 						cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(BuiltInTypes.SystemInteger), aContext));
 					} catch (ResolveError resolveError) {
-						System.out.println("71 Can't be here");
+						LOG.info("71 Can't be here");
 //										resolveError.printStackTrace(); // TODO print diagnostic
 					}
 				}
@@ -1104,7 +1114,7 @@ public class DeduceTypes2 {
 					try {
 						cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(BuiltInTypes.String_), aContext));
 					} catch (ResolveError resolveError) {
-						System.out.println("117 Can't be here");
+						LOG.info("117 Can't be here");
 //										resolveError.printStackTrace(); // TODO print diagnostic
 					}
 				}
@@ -1117,7 +1127,7 @@ public class DeduceTypes2 {
 					try {
 						cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(BuiltInTypes.SystemCharacter), aContext));
 					} catch (ResolveError resolveError) {
-						System.out.println("117 Can't be here");
+						LOG.info("117 Can't be here");
 //										resolveError.printStackTrace(); // TODO print diagnostic
 					}
 				}
@@ -1139,7 +1149,7 @@ public class DeduceTypes2 {
 			}
 		default:
 			{
-				System.err.println("8192 "+iv.getKind());
+				LOG.err("8192 "+iv.getKind());
 				throw new NotImplementedException();
 			}
 		}
@@ -1156,7 +1166,7 @@ public class DeduceTypes2 {
 				if (fi.pte == null) {
 					return;
 				} else {
-//					System.err.println("592 " + fi.getClassInvocation());
+//					LOG.err("592 " + fi.getClassInvocation());
 					if (fi.pte.getClassInvocation() != null)
 						fi.setClassInvocation(fi.pte.getClassInvocation());
 //					else
@@ -1319,7 +1329,7 @@ public class DeduceTypes2 {
 								OS_Type xx = resolve_type(ite.type.getAttached(), aFunctionContext);
 								ite.type.setAttached(xx);
 							} catch (ResolveError resolveError) {
-								System.out.println("192 Can't attach type to " + path);
+								LOG.info("192 Can't attach type to " + path);
 								errSink.reportDiagnostic(resolveError);
 							}
 							if (ite.type.getAttached().getType() == OS_Type.Type.USER_CLASS) {
@@ -1347,17 +1357,17 @@ public class DeduceTypes2 {
 												OS_Type xx = resolve_type(ite.type.getAttached(), aFunctionContext);
 												ite.type.setAttached(xx);
 											} catch (ResolveError resolveError) { // TODO double catch
-												System.out.println("210 Can't attach type to "+ite.getIdent());
+												LOG.info("210 Can't attach type to "+ite.getIdent());
 //												resolveError.printStackTrace(); // TODO print diagnostic
 //												continue;
 											}
 										}
 									}
 								} else {
-									System.err.println("184 Couldn't resolve "+ite.getIdent());
+									LOG.err("184 Couldn't resolve "+ite.getIdent());
 								}
 							} catch (ResolveError aResolveError) {
-								System.err.println("184-506 Couldn't resolve "+ite.getIdent());
+								LOG.err("184-506 Couldn't resolve "+ite.getIdent());
 								aResolveError.printStackTrace();
 							}
 							if (ite.type.getAttached().getType() == OS_Type.Type.USER_CLASS) {
@@ -1408,7 +1418,7 @@ public class DeduceTypes2 {
 				}
 
 				if (x != null) {
-//					System.err.println("162 Adding FoundParent for "+itee);
+//					LOG.err("162 Adding FoundParent for "+itee);
 					x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext(), generatedFunction)); // TODO context??
 				}
 			}
@@ -1521,7 +1531,7 @@ public class DeduceTypes2 {
 								@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, ty);
 								try {
 									@NotNull OS_Type resolved = resolve_type(ty, tn.getContext());
-									System.err.println("892 resolved: "+resolved);
+									LOG.err("892 resolved: "+resolved);
 									tte.setAttached(resolved);
 								} catch (ResolveError aResolveError) {
 									errSink.reportDiagnostic(aResolveError);
@@ -1741,7 +1751,7 @@ public class DeduceTypes2 {
 
 						generatedFunction.addDependentType(genType);
 					}
-					System.err.println("394 typename is null "+ vs.getName());
+					LOG.err("394 typename is null "+ vs.getName());
 				}
 			}
 		} else if (y instanceof ClassStatement) {
@@ -1769,7 +1779,7 @@ public class DeduceTypes2 {
 				try {
 					attached = new OS_Type(resolve_type(new OS_Type(ps.getTypeName()), ctx).getClassOf());
 				} catch (ResolveError resolveError) {
-					System.err.println("378 resolveError");
+					LOG.err("378 resolveError");
 					resolveError.printStackTrace();
 					return;
 				}
@@ -1783,8 +1793,8 @@ public class DeduceTypes2 {
 				ite.type.setAttached(attached);
 			int yy = 2;
 		} else if (y instanceof AliasStatement) {
-			System.err.println("396 AliasStatement");
-			OS_Element x = DeduceLookupUtils._resolveAlias((AliasStatement) y);
+			LOG.err("396 AliasStatement");
+			OS_Element x = DeduceLookupUtils._resolveAlias((AliasStatement) y, this);
 			if (x == null) {
 				ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 				errSink.reportError("399 resolveAlias returned null");
@@ -1794,7 +1804,7 @@ public class DeduceTypes2 {
 			}
 		} else {
 			//LookupResultList exp = lookupExpression();
-			System.out.println("2009 "+y);
+			LOG.info("2009 "+y);
 		}
 	}
 
@@ -1922,8 +1932,8 @@ public class DeduceTypes2 {
 				case NORMAL:
 					{
 						final Qualident tn = ((NormalTypeName) tn1).getRealName();
-						System.out.println("799 [resolving USER type named] " + tn);
-						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(tn, tn1.getContext());
+						LOG.info("799 [resolving USER type named] " + tn);
+						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(tn, tn1.getContext(), this);
 						OS_Element best = lrl.chooseBest(null);
 						while (best instanceof AliasStatement) {
 							best = DeduceLookupUtils._resolveAlias2((AliasStatement) best);
@@ -1964,7 +1974,7 @@ public class DeduceTypes2 {
 		}
 		final ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
 		if (cte.type.getAttached() == null) {
-			System.out.println("Null type in CTE "+cte);
+			LOG.info("Null type in CTE "+cte);
 		}
 //		vte.type = cte.type;
 		vte.addPotentialType(instruction.getIndex(), cte.type);
@@ -2002,7 +2012,7 @@ public class DeduceTypes2 {
 		}
 
 		if (identIA != null){
-//			System.out.println("594 "+identIA.getEntry().getStatus());
+//			LOG.info("594 "+identIA.getEntry().getStatus());
 
 			resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
 
@@ -2010,8 +2020,8 @@ public class DeduceTypes2 {
 
 				@Override
 				public void foundElement(OS_Element e) {
-//					System.out.println(String.format("600 %s %s", xx ,e));
-//					System.out.println("601 "+identIA.getEntry().getStatus());
+//					LOG.info(String.format("600 %s %s", xx ,e));
+//					LOG.info("601 "+identIA.getEntry().getStatus());
 					final OS_Element resolved_element = identIA.getEntry().resolved_element;
 					assert e == resolved_element;
 //					set_resolved_element_pte(identIA, e, pte);
@@ -2046,14 +2056,14 @@ public class DeduceTypes2 {
 				@Override
 				public void noFoundElement() {
 					// TODO create Diagnostic and quit
-					System.out.println("1005 Can't find element for " + xx);
+					LOG.info("1005 Can't find element for " + xx);
 				}
 			});
 		}
 		List<TypeTableEntry> args = pte.getArgs();
 		for (int i = 0; i < args.size(); i++) {
 			final TypeTableEntry tte = args.get(i); // TODO this looks wrong
-//			System.out.println("770 "+tte);
+//			LOG.info("770 "+tte);
 			final IExpression e = tte.expression;
 			if (e == null) continue;
 			switch (e.getKind()) {
@@ -2135,7 +2145,7 @@ public class DeduceTypes2 {
 								tte.setAttached(tte1.getAttached());
 							} else {
 								final int y=2;
-								System.err.println(best.getClass().getName());
+								LOG.err(best.getClass().getName());
 								throw new NotImplementedException();
 							}
 						} else {
@@ -2222,7 +2232,7 @@ public class DeduceTypes2 {
 												}
 											});
 										}
-										System.err.println("2041 type already found "+vte);
+										LOG.err("2041 type already found "+vte);
 										return; // type already found
 									}
 									// I'm not sure if below is ever called
@@ -2239,13 +2249,13 @@ public class DeduceTypes2 {
 
 							register_and_resolve(vte, kl);
 						} else {
-							System.err.println("7890 "+el.getClass().getName());
+							LOG.err("7890 "+el.getClass().getName());
 						}
 					}
 
 					@Override
 					public void noFoundElement() {
-						System.err.println("IdentIA path cannot be resolved "+ x);
+						LOG.err("IdentIA path cannot be resolved "+ x);
 					}
 				});
 			}
@@ -2272,7 +2282,7 @@ public class DeduceTypes2 {
 										   @NotNull IdentExpression aExpression) {
 		final String e_text = aExpression.getText();
 		final InstructionArgument vte_ia = generatedFunction.vte_lookup(e_text);
-//		System.out.println("10000 "+vte_ia);
+//		LOG.info("10000 "+vte_ia);
 		if (vte_ia != null) {
 			final VariableTableEntry vte1 = generatedFunction.getVarTableEntry(to_int(vte_ia));
 			final Promise<GenType, Void, Void> p = vte1.typePromise();
@@ -2369,7 +2379,7 @@ public class DeduceTypes2 {
 								vte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best)); // TODO ??
 							} else {
 								int y = 2;
-								System.err.println("543 " + best.getClass().getName());
+								LOG.err("543 " + best.getClass().getName());
 								throw new NotImplementedException();
 							}
 							break;
@@ -2387,7 +2397,7 @@ public class DeduceTypes2 {
 							if (potentialTypes1.size() < potentialTypes.size())
 								doLogic(potentialTypes1);
 							else
-								System.out.println("913 Don't know");
+								LOG.info("913 Don't know");
 							break;
 					}
 				}
@@ -2407,7 +2417,7 @@ public class DeduceTypes2 {
 
 				@Override
 				public void noTypeFound() {
-					System.err.println("719 no type found "+generatedFunction.getIdentIAPathNormal(new IdentIA(ia, generatedFunction)));
+					LOG.err("719 no type found "+generatedFunction.getIdentIAPathNormal(new IdentIA(ia, generatedFunction)));
 				}
 			});
 		}
@@ -2577,7 +2587,7 @@ public class DeduceTypes2 {
 		}
 		final ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
 		if (cte.type.getAttached() == null) {
-			System.out.println("*** ERROR: Null type in CTE "+cte);
+			LOG.info("*** ERROR: Null type in CTE "+cte);
 		}
 		// idte.type may be null, but we still addPotentialType here
 		idte.addPotentialType(instruction.getIndex(), cte.type);
@@ -2590,7 +2600,7 @@ public class DeduceTypes2 {
 								final int instructionIndex) {
 		final ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
 		for (final TypeTableEntry tte : pte.getArgs()) {
-			System.out.println("771 "+tte);
+			LOG.info("771 "+tte);
 			final IExpression e = tte.expression;
 			if (e == null) continue;
 			switch (e.getKind()) {
@@ -2629,7 +2639,7 @@ public class DeduceTypes2 {
 
 	private void implement_calls(final BaseGeneratedFunction gf, final Context context, final InstructionArgument i2, final ProcTableEntry fn1, final int pc) {
 		if (gf.deferred_calls.contains(pc)) {
-			System.err.println("Call is deferred "/*+gf.getInstruction(pc)*/+" "+fn1);
+			LOG.err("Call is deferred "/*+gf.getInstruction(pc)*/+" "+fn1);
 			return;
 		}
 		implement_calls_(gf, context, i2, fn1, pc);
@@ -2651,7 +2661,7 @@ public class DeduceTypes2 {
 
 		final String pn2 = SpecialFunctions.reverse_name(pn);
 		if (pn2 != null) {
-//			System.out.println("7002 "+pn2);
+//			LOG.info("7002 "+pn2);
 			found = lookup_name_calls(context, pn2, pte);
 			if (found) return;
 		}
@@ -2662,10 +2672,10 @@ public class DeduceTypes2 {
 			final String vteName = vte.getName();
 			if (vteName != null) {
 				if (SpecialVariables.contains(vteName)) {
-					System.err.println("Skipping special variable " + vteName + " " + pn);
+					LOG.err("Skipping special variable " + vteName + " " + pn);
 				} else {
 					final LookupResultList lrl2 = ctx.lookup(vteName);
-//					System.out.println("7003 "+vteName+" "+ctx);
+//					LOG.info("7003 "+vteName+" "+ctx);
 					final OS_Element best2 = lrl2.chooseBest(null);
 					if (best2 != null) {
 						found = lookup_name_calls(best2.getContext(), pn, pte);
@@ -2714,7 +2724,7 @@ public class DeduceTypes2 {
 		} else {
 			final int y=2;
 			assert Pattern.matches("__.*__", pn);
-			System.err.println(String.format("i2 is not IntegerIA (%s)",i2.getClass().getName()));
+			LOG.err(String.format("i2 is not IntegerIA (%s)",i2.getClass().getName()));
 		}
 
 		pte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
@@ -2813,7 +2823,7 @@ public class DeduceTypes2 {
 							ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
 						ite.type.setAttached(new OS_Type(typeName));
 					} else {
-						System.err.println("394 typename is null "+ vs.getName());
+						LOG.err("394 typename is null "+ vs.getName());
 					}
 				}
 			} else if (y instanceof ClassStatement) {
@@ -2841,7 +2851,7 @@ public class DeduceTypes2 {
 					try {
 						attached = new OS_Type(resolve_type(new OS_Type(ps.getTypeName()), ctx).getClassOf());
 					} catch (ResolveError resolveError) {
-						System.err.println("378 resolveError");
+						LOG.err("378 resolveError");
 						resolveError.printStackTrace();
 						return;
 					}
@@ -2855,7 +2865,7 @@ public class DeduceTypes2 {
 					ite.type.setAttached(attached);
 				int yy = 2;
 			} else if (y instanceof AliasStatement) {
-				System.err.println("396 AliasStatement");
+				LOG.err("396 AliasStatement");
 				OS_Element x = null;
 				try {
 					x = DeduceLookupUtils._resolveAlias2((AliasStatement) y);
@@ -2868,7 +2878,7 @@ public class DeduceTypes2 {
 				}
 			} else {
 				//LookupResultList exp = lookupExpression();
-				System.out.println("2009 "+y);
+				LOG.info("2009 "+y);
 			}
 		}
 
@@ -2899,7 +2909,7 @@ public class DeduceTypes2 {
 							final OS_Type attached = ((VariableTableEntry) bte).type.getAttached();
 							//assert attached != null;
 							if (attached == null) {
-								System.err.println("2842 attached == null for "+((VariableTableEntry) bte).type);
+								LOG.err("2842 attached == null for "+((VariableTableEntry) bte).type);
 								((VariableTableEntry) bte).typePromise().done(new DoneCallback<GenType>() {
 									@Override
 									public void onDone(GenType result) {
@@ -2977,7 +2987,7 @@ public class DeduceTypes2 {
 				} else
 					throw new NotImplementedException();
 			} else {
-				System.out.println("1621");
+				LOG.info("1621");
 				LookupResultList lrl = null;
 				try {
 					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ctx);
@@ -3019,7 +3029,7 @@ public class DeduceTypes2 {
 
 					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext());
 					OS_Element best = lrl.chooseBest(null);
-					if (best != ele2) System.err.println(String.format("2824 Divergent for %s, %s and %s", ite, best, ele2));;
+					if (best != ele2) LOG.err(String.format("2824 Divergent for %s, %s and %s", ite, best, ele2));;
 					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 				} catch (ResolveError aResolveError) {
 					aResolveError.printStackTrace();
@@ -3061,7 +3071,7 @@ public class DeduceTypes2 {
 						}
 					}
 				} else {
-					System.err.println("1696");
+					LOG.err("1696");
 				}
 			}
 		}
