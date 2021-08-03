@@ -10,6 +10,10 @@ package tripleo.elijah.lang;
 
 import org.junit.Assert;
 import org.junit.Test;
+import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.comp.ErrSink;
+import tripleo.elijah.comp.StdErrSink;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.ResolveError;
 import tripleo.elijah.util.Helpers;
 
@@ -20,13 +24,17 @@ public class TypeOfTypeNameTest {
 	@Test
 	public void typeOfSimpleQualident() throws ResolveError {
 		//
-		// CREATE MOCK
+		// CREATE MOCKS
 		//
 		Context ctx = mock(Context.class);
+		OS_Module mod = mock(OS_Module.class);
+		Compilation c = mock(Compilation.class);
 
 		//
 		// CREATE VARIABLES
 		//
+		ErrSink e = new StdErrSink();
+
 		String typeNameString = "AbstractFactory";
 
 		VariableStatement var_x = new VariableStatement(null);
@@ -47,28 +55,36 @@ public class TypeOfTypeNameTest {
 		//
 		// SET UP EXPECTATIONS
 		//
+		expect(mod.getFileName()).andReturn("foo.elijah");
+		expect(c.getErrSink()).andReturn(e);
+		expect(mod.getCompilation()).andReturn(c);
 		expect(ctx.lookup(var_x.getName())).andReturn(lrl);
-		replay(ctx);
+		replay(ctx, mod, c);
 
 		//
 		// VERIFY EXPECTATIONS
 		//
-		TypeName tn = t.resolve(ctx);
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, null);
+		TypeName tn = t.resolve(ctx, deduceTypes2);
 //		System.out.println(tn);
-		verify(ctx);
+		verify(ctx, mod, c);
 		Assert.assertEquals(typeNameString, tn.toString());
 	}
 
 	@Test
 	public void typeOfComplexQualident() throws ResolveError {
 		//
-		// CREATE MOCK
+		// CREATE MOCKS
 		//
 		Context ctx = mock(Context.class);
+		OS_Module mod = mock(OS_Module.class);
+		Compilation c = mock(Compilation.class);
 
 		//
 		// CREATE VARIABLES
 		//
+		ErrSink e = new StdErrSink();
+
 		String typeNameString = "package.AbstractFactory";
 
 		VariableStatement var_x = new VariableStatement(null);
@@ -89,15 +105,19 @@ public class TypeOfTypeNameTest {
 		//
 		// SET UP EXPECTATIONS
 		//
+		expect(mod.getFileName()).andReturn("foo.elijah");
+		expect(mod.getCompilation()).andReturn(c);
+		expect(c.getErrSink()).andReturn(e);
 		expect(ctx.lookup("x")).andReturn(lrl);
-		replay(ctx);
+		replay(ctx, mod, c);
 
 		//
 		// VERIFY EXPECTATIONS
 		//
-		TypeName tn = t.resolve(ctx);
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, null);
+		TypeName tn = t.resolve(ctx, deduceTypes2);
 //		System.out.println(tn);
-		verify(ctx);
+		verify(ctx, mod, c);
 		Assert.assertEquals(typeNameString, tn.toString());
 	}
 
@@ -179,6 +199,7 @@ public class TypeOfTypeNameTest {
 		final String typeNameString = "SystemInteger";
 
 		OS_Module mod = new OS_Module();
+		mod.parent = mock(Compilation.class);
 		Context mod_ctx = mod.getContext();
 
 		ClassStatement st_af = new ClassStatement(mod, mod_ctx);
@@ -219,6 +240,9 @@ public class TypeOfTypeNameTest {
 		//
 		// SET UP EXPECTATIONS
 		//
+//		OS_Module mod = mock(OS_Module.class);
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, null);
+//		expect(mod.getFileName()).andReturn("foo.elijah");
 		expect(ctx.lookup("x")).andReturn(lrl);
 //		expect(ctx.lookup("y")).andReturn(lrl4);
 		expect(ctx.lookup(typeNameString1)).andReturn(lrl2);
@@ -228,7 +252,7 @@ public class TypeOfTypeNameTest {
 		//
 		// VERIFY EXPECTATIONS
 		//
-		TypeName tn = t.resolve(ctx);
+		TypeName tn = t.resolve(ctx, deduceTypes2);
 //		System.out.println(tn);
 		verify(ctx);
 		Assert.assertEquals(typeNameString, tn.toString());
