@@ -27,10 +27,10 @@ public class DtLog {
 		INFO, ERROR
 	}
 
-	class LogEntry {
-		long time;
-		Level level;
-		String message;
+	public class LogEntry {
+		public long time;
+		public Level level;
+		public String message;
 
 		public LogEntry(long aTime, Level aLevel, String aS) {
 			time = aTime;
