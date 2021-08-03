@@ -972,7 +972,7 @@ public class DeduceTypes2 {
 		return phase.generatePhase.getGenerateFunctions(aModule);
 	}
 
-	static class Resolve_each_typename {
+	class Resolve_each_typename {
 
 		private final DeducePhase phase;
 		private final DeduceTypes2 dt2;
