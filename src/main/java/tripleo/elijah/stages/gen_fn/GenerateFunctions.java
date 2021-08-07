@@ -56,11 +56,12 @@ public class GenerateFunctions {
 															 FunctionInvocation aFunctionInvocation) {
 		final GeneratedConstructor gf = new GeneratedConstructor(aConstructorDef);
 		gf.setFunctionInvocation(aFunctionInvocation);
-		if (parent instanceof ClassStatement)
-			gf.addVariableTableEntry("self",
-					VariableTableType.SELF,
-					gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent), IdentExpression.forString("self")),
-					null);
+		if (parent instanceof ClassStatement) {
+			final OS_Type parentType = new OS_Type((ClassStatement) parent);
+			final IdentExpression selfIdent = IdentExpression.forString("self");
+			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, parentType, selfIdent);
+			gf.addVariableTableEntry("self", VariableTableType.SELF, tte, null);
+		}
 		final Context cctx = aConstructorDef.getContext();
 		final int e1 = add_i(gf, InstructionName.E, null, cctx);
 		for (final FunctionItem item : aConstructorDef.getItems()) {
