@@ -23,8 +23,9 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
-import tripleo.elijah.stages.deduce.DtLog;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.logging.LogEntry;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
@@ -194,18 +195,18 @@ public class Compilation {
 		}
 	}
 
-	public DtLog.Verbosity gitlabCIVerbosity() {
+	public ElLog.Verbosity gitlabCIVerbosity() {
 		final boolean gitlab_ci = isGitlab_ci();
-		return gitlab_ci ? DtLog.Verbosity.SILENT : DtLog.Verbosity.VERBOSE;
+		return gitlab_ci ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE;
 	}
 
 	public boolean isGitlab_ci() {
 		return System.getenv("GITLAB_CI") != null;
 	}
 
-	private void writeLogs(boolean aSilent, List<DtLog> aDeduceLogs) {
+	private void writeLogs(boolean aSilent, List<ElLog> aDeduceLogs) {
 		if (/*aSilent ==*/ true) {
-			for (DtLog deduceLog : aDeduceLogs) {
+			for (ElLog deduceLog : aDeduceLogs) {
 				String s1 = deduceLog.getFileName();
 				String s2 = s1.replace(System.getProperty("file.separator"), "~~");
 
@@ -218,7 +219,7 @@ public class Compilation {
 					System.out.println("202 Writing "+psf.toString());
 
 					PrintStream ps = new PrintStream(psf);
-					for (DtLog.LogEntry entry : deduceLog.getEntries()) {
+					for (LogEntry entry : deduceLog.getEntries()) {
 						ps.println(String.format("[%s] [%tD %tT] %s %s", s1, entry.time, entry.time, entry.level, entry.message));
 					}
 				} catch (FileNotFoundException e) {

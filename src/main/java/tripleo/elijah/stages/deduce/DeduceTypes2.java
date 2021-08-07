@@ -32,6 +32,7 @@ import tripleo.elijah.stages.instructions.InstructionName;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.ProcIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkJob;
@@ -51,18 +52,18 @@ public class DeduceTypes2 {
 	private final OS_Module module;
 	private final DeducePhase phase;
 	private final ErrSink errSink;
-	private final DtLog LOG;
+	private final ElLog LOG;
 	WorkManager wm = new WorkManager();
 
 	public DeduceTypes2(OS_Module module, DeducePhase phase) {
-		this(module, phase, DtLog.Verbosity.VERBOSE);
+		this(module, phase, ElLog.Verbosity.VERBOSE);
 	}
 
-	public DeduceTypes2(OS_Module module, DeducePhase phase, DtLog.Verbosity verbosity) {
+	public DeduceTypes2(OS_Module module, DeducePhase phase, ElLog.Verbosity verbosity) {
 		this.module = module;
 		this.phase = phase;
 		this.errSink = module.getCompilation().getErrSink();
-		this.LOG = new DtLog(module.getFileName(), verbosity == DtLog.Verbosity.VERBOSE);
+		this.LOG = new ElLog(module.getFileName(), verbosity == ElLog.Verbosity.VERBOSE);
 		//
 		phase.addDeduceLog(LOG);
 	}

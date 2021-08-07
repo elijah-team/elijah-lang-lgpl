@@ -23,6 +23,7 @@ import tripleo.elijah.lang.OS_UnknownType;
 import tripleo.elijah.lang.TypeName;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
 import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
@@ -163,9 +164,9 @@ public class DeducePhase {
 		deferredMembers.add(aDeferredMember);
 	}
 
-	public List<DtLog> deduceLogs = new ArrayList<DtLog>();
+	public List<ElLog> deduceLogs = new ArrayList<ElLog>();
 
-	public void addDeduceLog(DtLog aLog) {
+	public void addDeduceLog(ElLog aLog) {
 		deduceLogs.add(aLog);
 	}
 
@@ -185,14 +186,14 @@ public class DeducePhase {
 
 	private final Multimap<FunctionDef, GeneratedFunction> functionMap = ArrayListMultimap.create();
 
-	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf, DtLog.Verbosity verbosity) {
+	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf, ElLog.Verbosity verbosity) {
 		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this, verbosity);
 //		System.err.println("196 DeduceTypes "+deduceTypes2.getFileName());
 		deduceTypes2.deduceFunctions(lgf);
 		return deduceTypes2;
 	}
 
-	public DeduceTypes2 deduceModule(OS_Module m, DtLog.Verbosity verbosity) {
+	public DeduceTypes2 deduceModule(OS_Module m, ElLog.Verbosity verbosity) {
 		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
 
 		@NotNull List<EntryPoint> epl = m.entryPoints;
@@ -230,7 +231,7 @@ public class DeducePhase {
 	 * @param _unused is unused
 	 * @param verbosity
 	 */
-	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgc, boolean _unused, DtLog.Verbosity verbosity) {
+	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgc, boolean _unused, ElLog.Verbosity verbosity) {
 		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 
 		for (GeneratedNode lgci : lgc) {

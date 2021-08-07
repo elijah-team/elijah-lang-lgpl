@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  *
  */
-package tripleo.elijah.stages.deduce;
+package tripleo.elijah.stages.logging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,47 +14,31 @@ import java.util.List;
 /**
  * Created 8/3/21 3:46 AM
  */
-public class DtLog {
+public class ElLog {
 	private final String fileName;
-	private final boolean verbose;
+	private final Verbosity verbose;
 	private final List<LogEntry> entries = new ArrayList<>();
 
 	public enum Verbosity {
 		SILENT, VERBOSE
 	}
 
-	enum Level {
-		INFO, ERROR
-	}
-
-	public class LogEntry {
-		public long time;
-		public Level level;
-		public String message;
-
-		public LogEntry(long aTime, Level aLevel, String aS) {
-			time = aTime;
-			level = aLevel;
-			message = aS;
-		}
-	}
-
-	public DtLog(String aFileName, boolean aVerbose) {
+	public ElLog(String aFileName, Verbosity aVerbose) {
 		fileName = aFileName;
 		verbose = aVerbose;
 	}
 
 	public void err(String aMessage) {
 		long time = System.currentTimeMillis();
-		entries.add(new LogEntry(time, Level.ERROR, aMessage));
-		if (verbose)
+		entries.add(new LogEntry(time, LogEntry.Level.ERROR, aMessage));
+		if (verbose == Verbosity.VERBOSE)
 			System.err.println(aMessage);
 	}
 
 	public void info(String aMessage) {
 		long time = System.currentTimeMillis();
-		entries.add(new LogEntry(time, Level.INFO, aMessage));
-		if (verbose)
+		entries.add(new LogEntry(time, LogEntry.Level.INFO, aMessage));
+		if (verbose == Verbosity.VERBOSE)
 			System.out.println(aMessage);
 	}
 

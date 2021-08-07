@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeducePhase;
-import tripleo.elijah.stages.deduce.DtLog;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
@@ -56,7 +56,7 @@ public class PipelineLogic {
 
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
 	public GenerateResult gr = new GenerateResult();
-	public List<DtLog> deduceLogs = null;
+	public List<ElLog> deduceLogs = null;
 	public boolean verbose = true;
 
 	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
@@ -357,8 +357,8 @@ public class PipelineLogic {
 		debug_buffers(gr, db_stream);
 	}
 
-	public DtLog.Verbosity getVerbosity() {
-		return verbose ? DtLog.Verbosity.VERBOSE : DtLog.Verbosity.SILENT;
+	public ElLog.Verbosity getVerbosity() {
+		return verbose ? ElLog.Verbosity.VERBOSE : ElLog.Verbosity.SILENT;
 	}
 }
 
