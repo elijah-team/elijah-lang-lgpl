@@ -17,6 +17,7 @@ import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 
 public class DeduceTypesTest2 {
@@ -51,9 +52,11 @@ public class DeduceTypesTest2 {
 		//
 		//
 		//
-		final GeneratePhase generatePhase = new GeneratePhase();
+//		final ElLog.Verbosity verbosity = mod.parent.gitlabCIVerbosity();
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
 		DeducePhase dp = new DeducePhase(generatePhase);
-		DeduceTypes2 d = dp.deduceModule(mod, new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity());
+		DeduceTypes2 d = dp.deduceModule(mod, verbosity1);
 //		final DeduceTypes d = new DeduceTypes(mod);
 		final OS_Type x = DeduceLookupUtils.deduceExpression(d, x1, fc);
 		System.out.println(x);

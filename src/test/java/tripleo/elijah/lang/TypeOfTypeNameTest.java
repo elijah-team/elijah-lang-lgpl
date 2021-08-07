@@ -12,11 +12,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
+import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.ResolveError;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 
 import static org.easymock.EasyMock.*;
@@ -66,7 +68,9 @@ public class TypeOfTypeNameTest {
 		//
 		// VERIFY EXPECTATIONS
 		//
-		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(new GeneratePhase()));
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase));
 		TypeName tn = t.resolve(ctx, deduceTypes2);
 //		System.out.println(tn);
 		verify(ctx, mod, c);
@@ -116,7 +120,9 @@ public class TypeOfTypeNameTest {
 		//
 		// VERIFY EXPECTATIONS
 		//
-		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(new GeneratePhase()));
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase));
 		TypeName tn = t.resolve(ctx, deduceTypes2);
 //		System.out.println(tn);
 		verify(ctx, mod, c);
@@ -243,7 +249,9 @@ public class TypeOfTypeNameTest {
 		// SET UP EXPECTATIONS
 		//
 //		OS_Module mod = mock(OS_Module.class);
-		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(new GeneratePhase()));
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase));
 //		expect(mod.getFileName()).andReturn("foo.elijah");
 		expect(ctx.lookup("x")).andReturn(lrl);
 //		expect(ctx.lookup("y")).andReturn(lrl4);

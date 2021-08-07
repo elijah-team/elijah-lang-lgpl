@@ -26,6 +26,7 @@ import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.work.WorkManager;
 
 import java.io.File;
@@ -63,7 +64,8 @@ public class TestGenFunction {
 
 		List<FunctionMapHook> ran_hooks = new ArrayList<>();
 
-		final GeneratePhase generatePhase1 = new GeneratePhase();
+		final ElLog.Verbosity verbosity1 = c.gitlabCIVerbosity();
+		final GeneratePhase generatePhase1 = new GeneratePhase(verbosity1);
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
 		DeducePhase dp = new DeducePhase(generatePhase1);
 		gfm.generateFromEntryPoints(m.entryPoints, dp);
@@ -229,11 +231,12 @@ public class TestGenFunction {
 			c.use(ci, false);
 		}
 
-		final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
+		final ElLog.Verbosity verbosity1 = c.gitlabCIVerbosity();
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
+		final GenerateFunctions gfm = new GenerateFunctions(generatePhase, m);
 		final List<GeneratedNode> lgc = new ArrayList<>();
 		gfm.generateAllTopLevelClasses(lgc);
 
-		final GeneratePhase generatePhase = new GeneratePhase();
 		DeducePhase dp = new DeducePhase(generatePhase);
 
 		WorkManager wm = new WorkManager();
@@ -303,7 +306,7 @@ public class TestGenFunction {
 				c.use(ci, false);
 			}
 
-			PipelineLogic pipelineLogic = new PipelineLogic();
+			PipelineLogic pipelineLogic = new PipelineLogic(aVerbosity);
 			ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 
 			for (OS_Module module : c.modules) {

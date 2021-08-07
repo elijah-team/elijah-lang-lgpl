@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.comp.IO;
+import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_c.CReference;
 import tripleo.elijah.stages.gen_c.Emit;
@@ -19,6 +22,7 @@ import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 
 import static org.easymock.EasyMock.*;
@@ -87,7 +91,8 @@ public class GetIdentIAPathTest_ForC {
 
 		//		el1.add(vsq);
 		//
-		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(), mod);
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(verbosity1), mod);
 		Context ctx = mock(Context.class);
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
@@ -110,7 +115,8 @@ public class GetIdentIAPathTest_ForC {
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
-		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(), mod);
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(verbosity1), mod);
 		Context ctx = mock(Context.class);
 		//
 		OS_Type type = null;
@@ -187,7 +193,8 @@ public class GetIdentIAPathTest_ForC {
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
 		//
-		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(), mod);
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(verbosity1), mod);
 		InstructionArgument xx = gen.simplify_expression(expr, gf, ctx);
 
 		//

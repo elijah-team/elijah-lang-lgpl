@@ -8,8 +8,8 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import jdk.vm.ci.code.CompilationRequest;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.StdErrSink;
@@ -19,11 +19,10 @@ import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FoundElement;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
-import tripleo.elijah.stages.deduce.IInvocation;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
-import tripleo.elijah.stages.instructions.VariableTableType;
+import tripleo.elijah.stages.logging.ElLog;
 
 import java.util.List;
 
@@ -43,7 +42,9 @@ public class TestIdentNormal {
 		Context ctx1 = mock(Context.class);
 		Context ctx2 = mock(Context.class);
 
-		GenerateFunctions generateFunctions = new GenerateFunctions(new GeneratePhase(), mod);
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
+		GenerateFunctions generateFunctions = new GenerateFunctions(generatePhase, mod);
 		GeneratedFunction generatedFunction = new GeneratedFunction(fd);
 		VariableSequence seq = new VariableSequence(ctx1);
 		VariableStatement vs = new VariableStatement(seq);
@@ -74,7 +75,6 @@ public class TestIdentNormal {
 
 		IdentIA identIA = new IdentIA(1, generatedFunction);
 
-		final GeneratePhase generatePhase = new GeneratePhase();
 		DeducePhase phase = new DeducePhase(generatePhase);
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
@@ -100,7 +100,8 @@ public class TestIdentNormal {
 //		FunctionDef fd = mock(FunctionDef.class);
 		Context ctx2 = mock(Context.class);
 
-		final GeneratePhase generatePhase = new GeneratePhase();
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
 		DeducePhase phase = new DeducePhase(generatePhase);
 
 		GenerateFunctions generateFunctions = new GenerateFunctions(generatePhase, mod);
