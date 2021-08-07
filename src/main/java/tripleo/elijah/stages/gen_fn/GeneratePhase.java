@@ -10,6 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.work.WorkManager;
 
 import java.util.HashMap;
@@ -22,6 +23,11 @@ public class GeneratePhase {
 	public WorkManager wm = new WorkManager();
 
 	Map<OS_Module, GenerateFunctions> generateFunctions = new HashMap<OS_Module, GenerateFunctions>();
+	private ElLog.Verbosity verbosity;
+
+	public GeneratePhase(ElLog.Verbosity aVerbosity) {
+		verbosity = aVerbosity;
+	}
 
 	@NotNull
 	public GenerateFunctions getGenerateFunctions(@NotNull OS_Module mod) {
@@ -35,6 +41,9 @@ public class GeneratePhase {
 		return Result;
 	}
 
+	public ElLog.Verbosity getVerbosity() {
+		return verbosity;
+	}
 }
 
 //

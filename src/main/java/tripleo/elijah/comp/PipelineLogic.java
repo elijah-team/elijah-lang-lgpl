@@ -51,8 +51,13 @@ import java.util.Map;
  * Created 12/30/20 2:14 AM
  */
 public class PipelineLogic {
-	final GeneratePhase generatePhase = new GeneratePhase();
-	final DeducePhase dp = new DeducePhase(generatePhase);
+	final GeneratePhase generatePhase;
+	final DeducePhase dp;
+
+	public PipelineLogic(ElLog.Verbosity aVerbosity) {
+		generatePhase = new GeneratePhase(aVerbosity);
+		dp = new DeducePhase(generatePhase);
+	}
 
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
 	public GenerateResult gr = new GenerateResult();
