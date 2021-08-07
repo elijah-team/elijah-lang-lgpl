@@ -306,7 +306,8 @@ public class TestGenFunction {
 				c.use(ci, false);
 			}
 
-			PipelineLogic pipelineLogic = new PipelineLogic(aVerbosity);
+			ElLog.Verbosity verbosity = c.gitlabCIVerbosity();
+			PipelineLogic pipelineLogic = new PipelineLogic(verbosity);
 			ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 
 			for (OS_Module module : c.modules) {
