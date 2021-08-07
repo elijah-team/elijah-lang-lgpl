@@ -25,7 +25,8 @@ public class DeduceTypesTest2 {
 	@Test
 	public void testDeduceIdentExpression() throws ResolveError {
 		final OS_Module mod = new OS_Module();
-		mod.parent = new Compilation(new StdErrSink(), new IO());
+		final Compilation c = new Compilation(new StdErrSink(), new IO());
+		mod.parent = c;
 		mod.prelude = mod.parent.findPrelude("c");
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
@@ -52,8 +53,7 @@ public class DeduceTypesTest2 {
 		//
 		//
 		//
-//		final ElLog.Verbosity verbosity = mod.parent.gitlabCIVerbosity();
-		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		final ElLog.Verbosity verbosity1 = c.gitlabCIVerbosity();
 		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
 		DeducePhase dp = new DeducePhase(generatePhase);
 		DeduceTypes2 d = dp.deduceModule(mod, verbosity1);
