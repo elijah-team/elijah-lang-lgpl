@@ -193,12 +193,12 @@ public class Compilation {
 		}
 	}
 
-	public ElLog.Verbosity gitlabCIVerbosity() {
+	public static ElLog.Verbosity gitlabCIVerbosity() {
 		final boolean gitlab_ci = isGitlab_ci();
 		return gitlab_ci ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE;
 	}
 
-	public boolean isGitlab_ci() {
+	public static boolean isGitlab_ci() {
 		return System.getenv("GITLAB_CI") != null;
 	}
 
