@@ -15,16 +15,21 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeducePhase;
-import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.stages.gen_c.GenerateC;
-import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.gen_fn.GenerateFunctions;
+import tripleo.elijah.stages.gen_fn.GeneratePhase;
+import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.generate.ElSystem;
 import tripleo.elijah.stages.generate.OutputStrategy;
-import tripleo.elijah.stages.post_deduce.PostDeduce;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
-import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
 import tripleo.util.buffer.Buffer;
 import tripleo.util.buffer.DefaultBuffer;
@@ -107,31 +112,10 @@ public class PipelineLogic {
 		final GenerateFunctions gfm = getGenerateFunctions(mod);
 		gfm.generateFromEntryPoints(epl, dp);
 
-		WorkManager wm = new WorkManager();
-		WorkList wl = new WorkList();
+//		WorkManager wm = new WorkManager();
+//		WorkList wl = new WorkList();
 
-//		for (final GeneratedNode gn : lgc) {
-//			if (gn instanceof GeneratedFunction) {
-//				GeneratedFunction gf = (GeneratedFunction) gn;
-//				for (final Instruction instruction : gf.instructions()) {
-//					System.out.println("8100 " + instruction);
-//				}
-//			}
-//		}
-
-/*
-		for (EntryPoint entryPoint : epl) {
-			for (GenType dependentType : entryPoint.dependentTypes()) {
-//				dependentType.
-				System.err.println(dependentType);
-			}
-			for (FunctionInvocation dependentFunction : entryPoint.dependentFunctions()) {
-				System.err.println(dependentFunction);
-			}
-		}
-*/
-
-		List<GeneratedNode> lgc = dp.generatedClasses; //new ArrayList<GeneratedNode>();
+		List<GeneratedNode> lgc = dp.generatedClasses;
 		List<GeneratedNode> resolved_nodes = new ArrayList<GeneratedNode>();
 
 		for (final GeneratedNode generatedNode : lgc) {
