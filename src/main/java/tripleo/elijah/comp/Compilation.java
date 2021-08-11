@@ -19,13 +19,13 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.Out;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.LibraryStatementPart;
+import tripleo.elijah.comp.functionality.f202.F202;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
-import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
-import tripleo.elijah.stages.logging.LogEntry;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
@@ -33,10 +33,8 @@ import tripleo.elijjah.EzLexer;
 import tripleo.elijjah.EzParser;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -204,27 +202,11 @@ public class Compilation {
 		return System.getenv("GITLAB_CI") != null;
 	}
 
-	private void writeLogs(boolean aSilent, List<ElLog> aDeduceLogs) {
-		if (/*aSilent ==*/ true) {
-			for (ElLog deduceLog : aDeduceLogs) {
-				String s1 = deduceLog.getFileName();
-				String s2 = s1.replace(System.getProperty("file.separator"), "~~");
-
-				final File file1 = new File("COMP", getCompilationNumberString());
-				final File file2 = new File(file1, "logs");
-				file2.mkdirs();
-
-				try {
-					final File psf = new File(file2, s2);
-					System.out.println("202 Writing "+psf.toString());
-
-					PrintStream ps = new PrintStream(psf);
-					for (LogEntry entry : deduceLog.getEntries()) {
-						ps.println(String.format("[%s] [%tD %tT] %s %s", s1, entry.time, entry.time, entry.level, entry.message));
-					}
-				} catch (FileNotFoundException e) {
-					getErrSink().exception(e);
-				}
+	private void writeLogs(boolean aSilent, List<ElLog> aLogs) {
+		if (true || aSilent) {
+			for (ElLog deduceLog : aLogs) {
+				final F202 f202 = new F202(getErrSink(), this);
+				f202.processLog(deduceLog);
 			}
 		}
 	}
