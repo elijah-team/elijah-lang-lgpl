@@ -68,37 +68,103 @@ public class DeduceTypes2 {
 		List<GeneratedNode> generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
 		int size;
 		do {
-			size = 0;
-			{
-				for (GeneratedNode generatedNode : generatedClasses) {
-					GeneratedContainerNC generatedContainerNC = (GeneratedContainerNC) generatedNode;
-					Collection<GeneratedFunction> lgf2 = generatedContainerNC.functionMap.values();
-					for (final GeneratedFunction generatedFunction : lgf2) {
-						if (deduceOneFunction(generatedFunction, phase))
-							size++;
-					}
-				}
-			}
+			size = df_helper(generatedClasses, new dfhi_functions());
 			generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
 		} while (size > 0);
 		do {
-			size = 0;
-			{
-				for (GeneratedNode generatedNode : generatedClasses) {
-					if (!(generatedNode instanceof GeneratedClass)) continue;
-//					GeneratedContainerNC generatedContainerNC = (GeneratedContainerNC) generatedNode;
-					GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-					Collection<GeneratedConstructor> lgf2 = generatedClass.constructors.values();
-					for (final GeneratedConstructor generatedConstructor : lgf2) {
-						if (deduceOneConstructor(generatedConstructor, phase))
-							size++;
-					}
-				}
-			}
+			size = df_helper(generatedClasses, new dfhi_constructors());
 			generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
 		} while (size > 0);
 	}
 
+	/**
+	 * Deduce functions or constructors contained in classes list
+	 *
+	 * @param aGeneratedClasses assumed to be a list of {@link GeneratedContainerNC}
+	 * @param dfhi specifies what to select for:<br>
+	 *             {@link dfhi_functions} will select all functions from {@code functionMap}, and <br>
+	 *             {@link dfhi_constructors} will select all constructors from {@code constructors}.
+	 * @param <T> generic parameter taken from {@code dfhi}
+	 * @return the number of deduced functions or constructors, or 0
+	 */
+	<T> int df_helper(List<GeneratedNode> aGeneratedClasses, df_helper_i<T> dfhi) {
+		int size = 0;
+		for (GeneratedNode generatedNode : aGeneratedClasses) {
+			GeneratedContainerNC generatedContainerNC = (GeneratedContainerNC) generatedNode;
+			final df_helper<T> dfh = dfhi.get(generatedContainerNC);
+			if (dfh == null) continue;
+			Collection<T> lgf2 = dfh.collection();
+			for (final T generatedConstructor : lgf2) {
+				if (dfh.deduce(generatedConstructor))
+					size++;
+			}
+		}
+		return size;
+	}
+
+	interface df_helper_i<T> {
+		df_helper<T> get(GeneratedContainerNC generatedClass);
+	}
+
+	class dfhi_constructors implements df_helper_i<GeneratedConstructor> {
+		@Override
+		public df_helper_Constructors get(GeneratedContainerNC aGeneratedContainerNC) {
+			if (aGeneratedContainerNC instanceof GeneratedClass) // TODO namespace constructors
+				return new df_helper_Constructors((GeneratedClass) aGeneratedContainerNC);
+			else
+				return null;
+		}
+	}
+
+	class dfhi_functions implements df_helper_i<GeneratedFunction> {
+		@Override
+		public df_helper_Functions get(GeneratedContainerNC aGeneratedContainerNC) {
+			return new df_helper_Functions(aGeneratedContainerNC);
+		}
+	}
+
+	interface df_helper<T> {
+		Collection<T> collection();
+
+		boolean deduce(T generatedConstructor);
+	}
+
+	class df_helper_Constructors implements df_helper<GeneratedConstructor> {
+		private final GeneratedClass generatedClass;
+
+		public df_helper_Constructors(GeneratedClass aGeneratedClass) {
+			generatedClass = aGeneratedClass;
+		}
+
+		@Override
+		public Collection<GeneratedConstructor> collection() {
+			return generatedClass.constructors.values();
+		}
+
+		@Override
+		public boolean deduce(GeneratedConstructor generatedConstructor) {
+			return deduceOneConstructor(generatedConstructor, phase);
+		}
+	}
+
+	class df_helper_Functions implements df_helper<GeneratedFunction> {
+		private final GeneratedContainerNC generatedContainerNC;
+
+		public df_helper_Functions(GeneratedContainerNC aGeneratedContainerNC) {
+			generatedContainerNC = aGeneratedContainerNC;
+		}
+
+		@Override
+		public Collection<GeneratedFunction> collection() {
+			return generatedContainerNC.functionMap.values();
+		}
+
+		@Override
+		public boolean deduce(GeneratedFunction aGeneratedFunction) {
+			return deduceOneFunction(aGeneratedFunction, phase);
+		}
+	}
+	
 	public boolean deduceOneFunction(GeneratedFunction aGeneratedFunction, DeducePhase aDeducePhase) {
 		if (aGeneratedFunction.deducedAlready) return false;
 		deduce_generated_function(aGeneratedFunction);
