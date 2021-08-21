@@ -8,7 +8,6 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
-import jdk.vm.ci.code.CompilationRequest;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
@@ -205,7 +204,7 @@ public class TestIdentNormal {
 
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
-		(new IntegerIA(0, generatedFunction)).getEntry().setConstructable(generatedFunction.getProcTableEntry(0));
+		generatedFunction.getVarTableEntry(0).setConstructable(generatedFunction.getProcTableEntry(0));
 		identIA.getEntry().setCallablePTE(generatedFunction.getProcTableEntry(1));
 
 		d2.resolveIdentIA2_(ctx2, identIA, generatedFunction, new FoundElement(phase) {
