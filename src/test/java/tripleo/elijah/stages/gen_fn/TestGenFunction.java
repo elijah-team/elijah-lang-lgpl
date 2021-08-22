@@ -290,32 +290,8 @@ public class TestGenFunction {
 		final StdErrSink eee = new StdErrSink();
 		final Compilation c = new Compilation(eee, new IO());
 
-		final String f = "test/basic1/backlink3/backlink3.elijah";
-		if (false) {
-			final File file = new File(f);
-			final OS_Module m = c.realParseElijjahFile(f, file, false);
-			Assert.assertEquals("Method parsed correctly", 0, c.errorCount());
-			m.prelude = c.findPrelude("c"); // TODO we dont know which prelude to find yet
-
-			c.findStdLib("c");
-
-			for (final CompilerInstructions ci : c.cis) {
-				c.use(ci, false);
-			}
-
-			PipelineLogic pipelineLogic = new PipelineLogic();
-			ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
-
-			for (OS_Module module : c.modules) {
-				pipelineLogic.addModule(module);
-			}
-
-			pipelineLogic.everythingBeforeGenerate(lgc);
-			pipelineLogic.generate(lgc);
-		} else {
-			final String ff = "test/basic1/backlink3/";
-			c.feedCmdLine(List_of(ff));
-		}
+		final String ff = "test/basic1/backlink3/";
+		c.feedCmdLine(List_of(ff));
 	}
 }
 
