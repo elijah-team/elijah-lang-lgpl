@@ -36,8 +36,8 @@ import java.util.List;
  * Created 12/30/20 2:14 AM
  */
 public class PipelineLogic {
-	final GeneratePhase generatePhase = new GeneratePhase();
-	final DeducePhase dp = new DeducePhase(generatePhase);
+	public final GeneratePhase generatePhase = new GeneratePhase();
+	public final DeducePhase dp = new DeducePhase(generatePhase);
 
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
 	public GenerateResult gr = new GenerateResult();
