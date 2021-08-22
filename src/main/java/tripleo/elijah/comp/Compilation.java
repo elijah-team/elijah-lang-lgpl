@@ -23,6 +23,7 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
+import tripleo.elijah.stages.deduce.FunctionMapHook;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
@@ -439,6 +440,10 @@ public class Compilation {
 
 	public ErrSink getErrSink() {
 		return eee;
+	}
+
+	public void addFunctionMapHook(FunctionMapHook aFunctionMapHook) {
+		pipelineLogic.dp.addFunctionMapHook(aFunctionMapHook);
 	}
 }
 
