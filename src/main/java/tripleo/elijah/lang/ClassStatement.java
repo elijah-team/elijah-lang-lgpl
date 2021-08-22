@@ -158,7 +158,7 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	// region annotations
 
 	public Iterable<AnnotationPart> annotationIterable() {
-		List<AnnotationPart> annotations = hdr.annos;
+		List<AnnotationClause> annotations = hdr.annos;
 		
 		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
 		if (annotations == null) return aps;
