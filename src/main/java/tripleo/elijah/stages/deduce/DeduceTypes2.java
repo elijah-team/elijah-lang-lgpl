@@ -1118,47 +1118,17 @@ public class DeduceTypes2 {
 	}
 
 	private void resolve_cte_expression(ConstantTableEntry cte, Context aContext) {
-		final IExpression iv = cte.initialValue;
-		switch (iv.getKind()) {
+		final IExpression initialValue = cte.initialValue;
+		switch (initialValue.getKind()) {
 		case NUMERIC:
-			{
-				final OS_Type a = cte.getTypeTableEntry().getAttached();
-				if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
-					try {
-						cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(BuiltInTypes.SystemInteger), aContext));
-					} catch (ResolveError resolveError) {
-						System.out.println("71 Can't be here");
-//										resolveError.printStackTrace(); // TODO print diagnostic
-					}
-				}
-				break;
-			}
+			resolve_cte_expression_builtin(cte, aContext, BuiltInTypes.SystemInteger);
+			break;
 		case STRING_LITERAL:
-			{
-				final OS_Type a = cte.getTypeTableEntry().getAttached();
-				if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
-					try {
-						cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(BuiltInTypes.String_), aContext));
-					} catch (ResolveError resolveError) {
-						System.out.println("117 Can't be here");
-//										resolveError.printStackTrace(); // TODO print diagnostic
-					}
-				}
-				break;
-			}
+			resolve_cte_expression_builtin(cte, aContext, BuiltInTypes.String_);
+			break;
 		case CHAR_LITERAL:
-			{
-				final OS_Type a = cte.getTypeTableEntry().getAttached();
-				if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
-					try {
-						cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(BuiltInTypes.SystemCharacter), aContext));
-					} catch (ResolveError resolveError) {
-						System.out.println("117 Can't be here");
-//										resolveError.printStackTrace(); // TODO print diagnostic
-					}
-				}
-				break;
-			}
+			resolve_cte_expression_builtin(cte, aContext, BuiltInTypes.SystemCharacter);
+			break;
 		case IDENT:
 			{
 				final OS_Type a = cte.getTypeTableEntry().getAttached();
@@ -1175,8 +1145,20 @@ public class DeduceTypes2 {
 			}
 		default:
 			{
-				System.err.println("8192 "+iv.getKind());
+				System.err.println("8192 "+initialValue.getKind());
 				throw new NotImplementedException();
+			}
+		}
+	}
+
+	private void resolve_cte_expression_builtin(ConstantTableEntry cte, Context aContext, BuiltInTypes aBuiltInType) {
+		final OS_Type a = cte.getTypeTableEntry().getAttached();
+		if (a == null || a.getType() != OS_Type.Type.USER_CLASS) {
+			try {
+				cte.getTypeTableEntry().setAttached(resolve_type(new OS_Type(aBuiltInType), aContext));
+			} catch (ResolveError resolveError) {
+				System.out.println("117 Can't be here");
+//				resolveError.printStackTrace(); // TODO print diagnostic
 			}
 		}
 	}
