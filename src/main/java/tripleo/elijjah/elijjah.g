@@ -41,7 +41,7 @@ program
          IndexingStatement idx=null;
          OS_Package pkg;}
     : (
-		idx=indexingStatement				{pc.addIndexingStatement(idx, module);}
+		idx=indexingStatement				{module.setIndexingStatement(idx);}
 	  )?
 	  (
 	    "package" xy=qualident opt_semi 	{pkg=pc.defaultPackageName(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);}
@@ -50,11 +50,11 @@ program
 	  EOF {out.module().postConstruct();out.FinishModule();}
 	;
 indexingStatement returns [IndexingStatement idx]
-		{ExpressionList el=null;idx=null;}
+		{ExpressionList el=null;idx=null;IndexingItem item;}
 	: "indexing" 				{idx=new IndexingStatement();}
-		(i1:IDENT 			    {idx.setName(i1);}
+		(i1:IDENT
 		 TOK_COLON 			    
-		 el=expressionList		{idx.setExprs(el);})*
+		 el=expressionList		{item=new IndexingItem(i1, el);idx.add(item);})*
 	;
 constantValue returns [IExpression e]
 	 {e=null;}

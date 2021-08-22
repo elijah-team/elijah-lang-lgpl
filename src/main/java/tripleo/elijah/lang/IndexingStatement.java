@@ -12,6 +12,8 @@ import antlr.Token;
 import tripleo.elijah.lang.ExpressionList;
 import tripleo.elijah.lang.OS_Module;
 
+import java.util.ArrayList;
+
 /**
  * @author Tripleo
  *
@@ -19,22 +21,16 @@ import tripleo.elijah.lang.OS_Module;
  */
 public class IndexingStatement {
 
-	private Token name;
-	private ExpressionList exprs;
 	private final OS_Module parent;
-
+	private final List<IndexingItem> items = new ArrayList<IndexingItem>();
+	
 	public IndexingStatement(final OS_Module module) {
 		this.parent = module;
 	}
 
-	public void setName(final Token i1) {
-		this.name = i1;
+	public void add(final IndexingItem i) {
+		items.add(i);
 	}
-
-	public void setExprs(final ExpressionList el) {
-		this.exprs = el;
-	}
-
 }
 
 //
