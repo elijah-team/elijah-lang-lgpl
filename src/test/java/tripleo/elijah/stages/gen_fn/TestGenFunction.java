@@ -63,9 +63,10 @@ public class TestGenFunction {
 
 		List<FunctionMapHook> ran_hooks = new ArrayList<>();
 
-		final GeneratePhase generatePhase1 = new GeneratePhase();
+		c.pipelineLogic = new PipelineLogic();
+		final GeneratePhase generatePhase1 = c.pipelineLogic.generatePhase;//new GeneratePhase();
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
-		DeducePhase dp = new DeducePhase(generatePhase1);
+		DeducePhase dp = c.pipelineLogic.dp;//new DeducePhase(generatePhase1);
 		gfm.generateFromEntryPoints(m.entryPoints, dp);
 
 		final List<GeneratedNode> lgc = dp.generatedClasses; //new ArrayList<>();
