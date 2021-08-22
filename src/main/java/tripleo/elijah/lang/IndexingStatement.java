@@ -13,6 +13,7 @@ import tripleo.elijah.lang.ExpressionList;
 import tripleo.elijah.lang.OS_Module;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tripleo
@@ -21,15 +22,15 @@ import java.util.ArrayList;
  */
 public class IndexingStatement {
 
-	private final OS_Module parent;
+	private OS_Module parent;
 	private final List<IndexingItem> items = new ArrayList<IndexingItem>();
 	
-	public IndexingStatement(final OS_Module module) {
-		this.parent = module;
-	}
-
 	public void add(final IndexingItem i) {
 		items.add(i);
+	}
+
+	public void setParent(OS_Module aParent) {
+		parent = aParent;
 	}
 }
 
