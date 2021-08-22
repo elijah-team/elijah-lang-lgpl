@@ -72,7 +72,7 @@ public ElijjahParser(ParserSharedInputState state) {
 			{
 				idx=indexingStatement();
 				if ( inputState.guessing==0 ) {
-					module.setIndexingStatement(idx);
+					out.module().setIndexingStatement(idx);
 				}
 				break;
 			}

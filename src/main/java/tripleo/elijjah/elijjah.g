@@ -40,7 +40,7 @@ program
          IndexingStatement idx=null;
          OS_Package pkg;}
     : (
-		idx=indexingStatement				{module.setIndexingStatement(idx);}
+		idx=indexingStatement				{out.module().setIndexingStatement(idx);}
 	  )?
 	  (
 	    "package" xy=qualident opt_semi 	{pkg=pc.defaultPackageName(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);}
