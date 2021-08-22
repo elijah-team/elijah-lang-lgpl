@@ -22,7 +22,7 @@ public class Pipeline {
 	}
 
 
-	public void run() {
+	public void run() throws Exception {
 		for (PipelineMember pl : pls) {
 			pl.run();
 		}
