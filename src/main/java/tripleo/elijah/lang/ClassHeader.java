@@ -9,6 +9,7 @@
 package tripleo.elijah.lang;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created 8/22/21 16:22
@@ -20,6 +21,7 @@ public class ClassHeader {
 	ClassTypes type;
 	ClassInheritance inh = new ClassInheritance();
 	TypeNameList genericPart;
+	private boolean isConst;
 
 	public ClassHeader(boolean aExtends, List<AnnotationClause> as) {
 		extends_ = aExtends;
