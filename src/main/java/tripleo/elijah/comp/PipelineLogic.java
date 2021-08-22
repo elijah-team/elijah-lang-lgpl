@@ -8,43 +8,29 @@
  */
 package tripleo.elijah.comp;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
-import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.gen_fn.GenerateFunctions;
+import tripleo.elijah.stages.gen_fn.GeneratePhase;
+import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
-import tripleo.elijah.stages.generate.ElSystem;
-import tripleo.elijah.stages.generate.OutputStrategy;
 import tripleo.elijah.stages.post_deduce.PostDeduce;
-import tripleo.elijah.util.Helpers;
 import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
-import tripleo.util.buffer.Buffer;
-import tripleo.util.buffer.DefaultBuffer;
-import tripleo.util.buffer.TextBuffer;
-import tripleo.util.io.CharSink;
-import tripleo.util.io.FileCharSink;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
-import java.io.Writer;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created 12/30/20 2:14 AM
