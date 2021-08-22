@@ -34,9 +34,6 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	static final List<TypeName> emptyTypeNameList = ImmutableList.<TypeName>of();
 	
 	private final OS_Element parent;
-	ClassInheritance _inh = new ClassInheritance(); // remove final for ClassBuilder
-	private ClassTypes _type;
-	private TypeNameList genericPart;
 
 	private ClassHeader hdr;
 	
