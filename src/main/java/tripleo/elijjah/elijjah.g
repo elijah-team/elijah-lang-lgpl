@@ -116,80 +116,11 @@ classStatement [OS_Element parent, Context cctx, List<AnnotationClause> as] retu
       (invariantStatement[cls.invariantStatement()])?
      )
     RCURLY {cls.postConstruct();cur=ctx.getParent();}
-    | {cb = new ClassBuilder();cb.annotations(as);cb.setParent(parent);cb.setParentContext(cur);}
+/*    | {cb = new ClassBuilder();cb.annotations(as);cb.setParent(parent);cb.setParentContext(cur);}
 	  classDefinition_interface[cb] // want to cb.build() here 
 	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
 						{cls=cb.build();}
-	)
-	;
-classStatement2 [BaseScope sc]
-		{AnnotationClause a=null;ClassBuilder cb=null;}
-	: {cb = new ClassBuilder();}
-	(a=annotation_clause  {cb.annotation_clause(a);})*
-	  //{cb.annotations(a);}
-	( classDefinition_normal[cb] 
-    | classDefinition_struct[cb] 
-    | classDefinition_signature[cb] 
-    | classDefinition_abstract[cb] 
-    | classDefinition_interface[cb] 
-	)
-	;
-classDefinition_normal [ClassBuilder cb]
-		{IdentExpression i1=null;ClassContext ctx=null;TypeNameList tnl=null;}
-	: "class" 			    	{cb.setType(ClassTypes.NORMAL);}
-      i1=ident               	{cb.setName(i1);}
-	  ( LBRACK tnl=typeNameList2 RBRACK { cb.setGenericPart(tnl);})?
-      ( classDefinition_inheritance[cb] )?
-      LCURLY
-     (classScope2[cb.getScope()]
-//     |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // interface cant be abstract
-//      (invariantStatement2[sc])?
-     )
-     RCURLY
- 	;
-classDefinition_struct [ClassBuilder cb]
-		{IdentExpression i1=null;ClassContext ctx=null;}
-	: "class" "struct"    		{cb.setType(ClassTypes.STRUCTURE);}
-      i1=ident               	{cb.setName(i1);}
-      ( classDefinition_inheritance[cb] )?
-      LCURLY                  	
-      classScope2[cb.getScope()]
-      RCURLY
- 	;
-classDefinition_signature [ClassBuilder cb]
-		{IdentExpression i1=null;ClassContext ctx=null;}
-	: "class" "signature"    	{cb.setType(ClassTypes.SIGNATURE);}
-      i1=ident               	{cb.setName(i1);}
-      ( classDefinition_inheritance[cb] )?
-      LCURLY                  	
-      classScope2_signature[cb.getScope()]
-      RCURLY
- 	;
-classDefinition_abstract [ClassBuilder cb]
-		{ClassStatement cls=null;IdentExpression i1=null;}
-	: "class" "abstract"    	{cb.setType(ClassTypes.ABSTRACT);}
-      i1=ident               	{cb.setName(i1);}
-      ( classDefinition_inheritance[cb] )?
-      LCURLY                  	
-      (classScope2[cb.getScope()]
-      |"abstract"         {cls.setType(ClassTypes.ABSTRACT);} // TODO: NPE
-        (invariantStatement2[cb.getScope()])?
-      )
-      RCURLY
- 	;
-classDefinition_interface [ClassBuilder cb]
-		{IdentExpression i1=null;ClassContext ctx=null;TypeNameList tnl=null;}
-	: "class" "interface"    	{cb.setType(ClassTypes.INTERFACE);}
-      i1=ident               	{cb.setName(i1);}
-	  ( LBRACK tnl=typeNameList2 RBRACK { cb.setGenericPart(tnl);})?
-      ( classDefinition_inheritance[cb] )?
-      LCURLY                  	
-      classScope2_interface[cb.getScope()]
-      RCURLY
- 	;
-classDefinition_inheritance [ClassBuilder cb]
-	: (LPAREN classInheritance_ [cb.classInheritance()] RPAREN)
-    | classInheritanceRuby      [cb.classInheritance()]
+	)*/
 	;
 classScope[ClassStatement cr]
         {AccessNotation acs=null;TypeAliasStatement tal=null;}
@@ -206,51 +137,6 @@ classScope[ClassStatement cr]
     | acs=accessNotation {cr.addAccess(acs);}
     )*
     (invariantStatement[cr.invariantStatement()])?
-    ;
-classScope2[ClassScope cr]
-        {AccessNotation acs=null;}
-    : docstrings[cr]
-    ( constructorDef2[cr]
-    | destructorDef2[cr]
-    | functionDef2[cr.funcDef()]
-    | varStmt2[cr]
-    | "type" IDENT BECOMES IDENT ( BOR IDENT)*
-    | typeAlias2[cr.typeAlias()]
-    | programStatement2[cr]
-    | acs=accessNotation {cr.addAccess(acs);}
-    )*
-    (invariantStatement2[cr])?
-    ;
-classScope2_signature[ClassScope cr]
-        {AccessNotation acs=null;}
-    : docstrings[cr]
-    ( //constructorDef2[cr]
-    //| destructorDef2[cr]
-    | functionDef2[cr.funcDef()]
-    | varStmt2[cr] // TODO lint shouldn't have var's, but maybe consts
-    | "type" IDENT BECOMES IDENT ( BOR IDENT)*
-    | typeAlias2[cr.typeAlias()]
-    | programStatement2[cr]
-    | acs=accessNotation {cr.addAccess(acs);}
-    )*
-    (invariantStatement2[cr])?
-    ;
-classScope2_interface[ClassScope cr]
-        {AccessNotation acs=null;}
-    : docstrings[cr]
-    ( //constructorDef2[cr]
-    //| destructorDef2[cr]
-    //| 
-	functionDef2_interface[cr.funcDef()]
-    | varStmt2[cr]
-    | "type" IDENT BECOMES IDENT ( BOR IDENT)*
-    | typeAlias2[cr.typeAlias()]
-    | programStatement2[cr]
-	| propertyStatement2_abstract[cr]
-	| propertyStatement2[cr]
-    | acs=accessNotation {cr.addAccess(acs);}
-    )*
-    (invariantStatement2[cr])?
     ;
 annotation_clause returns [AnnotationClause a]
 		{Qualident q=null;ExpressionList el=null;a=new AnnotationClause();AnnotationPart ap=null;}
@@ -272,18 +158,7 @@ namespaceStatement__ [NamespaceStatement cls, List<AnnotationClause> as]
      namespaceScope[cls]
     RCURLY {cls.postConstruct();cur=ctx.getParent();}
     ;
-namespaceStatement2[BaseScope sc]
-		{NamespaceStatementBuilder cls = new NamespaceStatementBuilder();AnnotationClause a=null;NamespaceContext ctx=null;IdentExpression i1=null;}
-	: (a=annotation_clause      {cls.annotations(a);})*
-    "namespace"
-    (  i1=ident  	            {cls.setName(i1);}
-    | 				            {cls.setType(NamespaceTypes.MODULE);}
-    )?
-    LCURLY                      //{ctx=new NamespaceContext(cur, cls);cls.setContext(ctx);cur=ctx;}
-     namespaceScope2[cls.scope()]
-    RCURLY //{cls.postConstruct();cur=ctx.getParent();}
-								{sc.add(cls);}
-    ;
+
 importStatement[OS_Element el] returns [ImportStatement pc]
 	 {pc=null;ImportContext ctx=null;}
     : "from" {pc=new RootedImportStatement(el);ctx=new ImportContext(cur, pc);pc.setContext(ctx);cur=ctx;}
@@ -299,17 +174,19 @@ importStatement[OS_Element el] returns [ImportStatement pc]
             importPart3[(NormalImportStatement)pc] (COMMA importPart3[(NormalImportStatement)pc])*
         ) opt_semi
     ;
+    /*
 importStatement2[BaseScope sc]
 	 {ImportStatementBuilder ib=new ImportStatementBuilder(); ImportStatement pc=null; QualidentList qil=null;}
     : "from" xy=qualident "import" qil=qualidentList2 {ib.rooted(xy, qil);} opt_semi
     | "import"
         ( (IDENT BECOMES) =>
             importPart1_[ib] (COMMA importPart1_[ib])*
-        | (qualident /*DOT*/ LCURLY) =>
+        | (qualident /*DOT* / LCURLY) =>
         |   importPart2_[ib] (COMMA importPart2_[ib])*
         |   importPart3_[ib] (COMMA importPart3_[ib])*
         ) opt_semi
     ;
+*/
 importPart1 [AssigningImportStatement cr] //current rule
 		{IdentExpression i1=null;Qualident q1=null;}
     : i1=ident BECOMES q1=qualident {cr.addAssigningPart(i1,q1);}
@@ -322,18 +199,20 @@ importPart3 [NormalImportStatement cr] //current rule
 		{Qualident q2;}
     : q2=qualident {cr.addNormalPart(q2);}
     ;
+    /*
 importPart1_ [ImportStatementBuilder cr] //current rule
 		{IdentExpression i1=null;Qualident q1=null;}
     : i1=ident BECOMES q1=qualident {cr.addAssigningPart(i1,q1);}
     ;
 importPart2_ [ImportStatementBuilder cr] //current rule
 		{Qualident q3;IdentList il=new IdentList();}
-    : q3=qualident /*DOT*/ LCURLY il=identList2 { cr.addSelectivePart(q3, il);} RCURLY
+    : q3=qualident /*DOT* / LCURLY il=identList2 { cr.addSelectivePart(q3, il);} RCURLY
     ;
 importPart3_ [ImportStatementBuilder cr] //current rule
 		{Qualident q2;}
     : q2=qualident {cr.addNormalPart(q2);}
     ;
+    */
 classInheritance_[ClassInheritance ci]
 		{TypeName tn=null;}
 	:
@@ -364,21 +243,6 @@ destructorDef[ClassStatement cr]
 		sco=scope3[dd] {dd.scope(sco);}
 					{dd.postConstruct();}
 	;
-constructorDef2[ClassScope cr]
-        {ConstructorDefBuilder cd=new ConstructorDefBuilder();IdentExpression x1=null;FormalArgList fal=null;}
-	: ("constructor"|"ctor")
-		(x1=ident   {cd.setName(x1);}
-		|           {cd.setName(null);} // TODO style
-		)
-		fal=opfal	{cd.fal(fal);}
-		constructor_scope2[cd.scope()]
-	;
-destructorDef2[ClassScope cr]
-        {DestructorDefBuilder dd=new DestructorDefBuilder();FormalArgList fal=null;}
-	: ("destructor"|"dtor") //{dd=cr.addDtor();}
-		fal=opfal	{dd.fal(fal);}
-		scope2[dd.scope()]
-	;
 namespaceScope[NamespaceStatement cr]
         {AccessNotation acs=null;TypeAliasStatement tal=null;}
     : docstrings[cr]
@@ -387,16 +251,6 @@ namespaceScope[NamespaceStatement cr]
     | tal=typeAlias[cr]						{cr.add(tal);} //[cr.typeAlias()]
     | programStatement[cr.XXX(), cr]
     | acs=accessNotation 					{cr.addAccess(acs);}) opt_semi )*
-    (invariantStatement[cr.invariantStatement()])?
-    ;
-namespaceScope2[NamespaceScope cr]
-        {AccessNotation acs=null;}
-    : docstrings[cr]
-    (( functionDef2[cr.funcDef()]
-    | varStmt2[cr]
-    | typeAlias2[cr.typeAlias()]
-    | programStatement2[cr]
-    | acs=accessNotation {cr.addAccess(acs);}) opt_semi )*
     (invariantStatement[cr.invariantStatement()])?
     ;
 scope3[OS_Element parent] returns [Scope3 sc]
@@ -410,37 +264,6 @@ scope3[OS_Element parent] returns [Scope3 sc]
       | "return" ((expression) => (expr=expression)|)
       | withStatement[sc.getParent()]
       | syntacticBlockScope[sc.getParent()]
-      ) opt_semi )*
-      RCURLY
-    ;
-scope2[BaseScope sc]
-      //{IExpression expr;}
-    : LCURLY docstrings[sc]
-      ((statement2[sc]
-      | expr=expression 				{sc.statementWrapper(expr);} //expr.setContext(cur);
-      | classStatement2[sc]
-      | "continue"						{sc.continue_statement();}
-      | "break" /* opt label? */		{sc.break_statement();}
-	  | "return" ((expression) =>  (expr=expression)
-	  									{sc.return_expression(expr);}
-	  			| 						{sc.return_expression(null);})
-      | withStatement2[sc]
-      | syntacticBlockScope2[sc]
-      ) opt_semi )*
-      RCURLY
-    ;
-constructor_scope2[ConstructorDefScope sc]
-      //{IExpression expr;}
-    : LCURLY docstrings[sc]
-      ((statement2[sc]
-      | expr=expression 				{sc.statementWrapper(expr);} //expr.setContext(cur);
-      | classStatement2[sc]
-      | "continue"						{sc.continue_statement();}
-      | "break" /* opt label? */		{sc.break_statement();}
-	  | "return" ((expression) =>  (expr=expression) {sc.return_expression(expr);}
-			|							{sc.return_expression(null);})
-      | withStatement2[sc]
-      | syntacticBlockScope2[sc]
       ) opt_semi )*
       RCURLY
     ;
@@ -458,17 +281,7 @@ syntacticBlockScope[OS_Element aParent]
 		sco=scope3[sb] {sb.scope(sco);}
 									{sb.postConstruct();cur=cur.getParent();}
 	;
-withStatement2[BaseScope sc]
-		{WithStatementBuilder ws=new WithStatementBuilder();VariableSequenceBuilder vsqb=ws.sb();}
-	: "with" varStmt_i2[vsqb] ({vsqb.next();} COMMA varStmt_i2[vsqb])
-       scope2[ws.scope()]
-									{sc.add(ws);}
-	;
-syntacticBlockScope2[BaseScope sc]
-		{SyntacticBlockBuilder sbb=new SyntacticBlockBuilder();}
-	: 	scope2[sbb.scope()]
-									{sc.add(sbb);}
-	;
+
 functionScope[FunctionDef parent] returns [Scope3 sc]
 		{sc=new Scope3(parent);ClassStatement cls=null;}
     : LCURLY docstrings[sc]
@@ -489,25 +302,6 @@ functionScope[FunctionDef parent] returns [Scope3 sc]
 //	  (postConditionSegment[sc])?
 	  RCURLY
     ;
-functionScope2[FunctionDefScope sc]
-    : LCURLY docstrings[sc]
-	  (preConditionSegment[sc])? 
-	  (
-        (
-            ( statement2[sc]
-            | expr=expression 			{sc.statementWrapper(expr);}
-            | classStatement2[sc]
-//            | "continue"				{sc.continue_statement();}
-//            | "break" /* opt label? */	{sc.break_statement();}
-            | returnExpressionFunctionDefScope[sc]
-            )
-            opt_semi
-        )*
-      | "abstract" opt_semi {sc.setAbstract();}
-      ) 
-	  (postConditionSegment[sc])?
-	  RCURLY
-    ;
 returnExpressionFunctionDefScope [FunctionDefScope sc]
 	: "return" 
 			(
@@ -516,11 +310,6 @@ returnExpressionFunctionDefScope [FunctionDefScope sc]
 			|							{sc.return_expression(null);}
 			)
 	;
-//invariantStatement2_ [ClassScope sc]
-//	: "pre" LCURLY
-//	    (p=invariantSegment 				{sc.addInvariant(p);})*
-//	  RCURLY
-//	;
 preConditionSegment [FunctionDefScope sc]
 		{Precondition p=null;}
 	: "pre" LCURLY
@@ -553,28 +342,6 @@ functionDef[FunctionDef fd]
     sco=functionScope[fd] 		{fd.scope(sco);}
     							{fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();cur=ctx.getParent();}
     ;
-functionDef2[FunctionDefBuilder fb]
-    	{AnnotationClause a=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}
-    : (a=annotation_clause      {fb.addAnnotation(a);})*
-    i1=ident                    {fb.setName(i1);}
-    ( "const"                   {fb.set(FunctionModifiers.CONST);}
-    | "immutable"               {fb.set(FunctionModifiers.IMMUTABLE);})?
-    fal=opfal					{fb.fal(fal);}
-    (TOK_ARROW tn=typeName2 	{fb.setReturnType(tn);})?
-    functionScope2[fb.scope()]	{fb.setSpecies(FunctionDef.Species.DEF_FUN);} // TODO might not always be DEF_FUN?
-    ;
-functionDef2_interface[FunctionDefBuilder fb]
-    	{AnnotationClause a=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}
-    : (a=annotation_clause      {fb.addAnnotation(a);})*
-    i1=ident                    {fb.setName(i1);}
-    ( "const"                   {fb.set(FunctionModifiers.CONST);}
-    | "immutable"               {fb.set(FunctionModifiers.IMMUTABLE);})?
-    fal=opfal					{fb.fal(fal);}
-    (TOK_ARROW tn=typeName2 	{fb.setReturnType(tn);})?
-    (functionScope2[fb.scope()]
-	|
-	)							{fb.setSpecies(FunctionDef.Species.REG_FUN);}
-    ;
 programStatement[ProgramClosure pc, OS_Element cont]
 		{ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();AliasStatement als=null;}
     : imp=importStatement[cont]
@@ -583,12 +350,6 @@ programStatement[ProgramClosure pc, OS_Element cont]
     | classStatement[cont, cur, as] // TODO check if class in class works
     )
     | als=aliasStatement[cont] 			//{cont.add(als);} //[pc.aliasStatement(cont)]
-    ;
-programStatement2[ClassOrNamespaceScope cont]
-	: importStatement2[cont]
-	| namespaceStatement2[cont]
-	| classStatement2[cont]
-	| aliasStatement2[cont]
     ;
 varStmt[StatementClosure cr, OS_Element aParent]
         {VariableSequence vsq=null;TypeName tn=null;}
@@ -666,19 +427,7 @@ statement[StatementClosure cr, OS_Element aParent]
 	| "yield" expr=expression {cr.yield(expr);}
 	) opt_semi
 	;
-statement2[BaseScope cr] // was BaseFunctionDefScope
-	:
-	( expr=assignmentExpression 				{cr.statementWrapper(expr);}
-	| ifConditional2[cr]
-	| matchConditional2[cr]
-	| caseConditional2[cr]
-	| varStmt2[cr]
-	| whileLoop2[cr]
-	| frobeIteration2[cr]
-	| constructExpression2[cr]
-	| yieldExpression[cr]
-	) opt_semi
-	;
+
 constructExpression2[BaseScope cr] // was BaseFunctionDefScope
 		{Qualident q=null;ExpressionList o=null;}
 	: "construct" q=qualident
@@ -1136,73 +885,6 @@ frobeIteration[StatementClosure cr]
     )
     sco=scope3[loop] {loop.scope(sco);}
     ;
-ifConditional2[BaseScope sc]
-        {IfConditionalBuilder ifb = new IfConditionalBuilder();}
-	: "if" expr=expression 		{ifb.base_expr.expr(expr);}
-	scope2[ifb.base_expr.scope()]
-	( ("else" "if")=> elseif_part2[ifb.new_expr()] )*
-	( "else" scope2[ifb.else_part.scope()])?
-								{sc.add(ifb);}
-	;
-elseif_part2[IfConditionalBuilder.Doublet ifex]
-	: ("elseif" | "else" "if") 
-		expr=expression 		{ifex.expr(expr);}
-	  scope2[ifex.scope()] 
-	;
-matchConditional2[BaseScope sc] //MatchConditional mc, OS_Element aParent]
-		{MatchConditionalBuilder mc = new MatchConditionalBuilder();
-		 TypeName tn=null;
-		 IdentExpression i1=null;}
-    : "match" expr=expression {mc.expr(expr);}
-      LCURLY 
-      ( 	i1=ident TOK_COLON tn=typeName2 scope2[mc.typeMatchscope(i1, tn)]
-      | 	expr=expression scope2[mc.normalscope(expr)]
-      | 	"val" i1=ident scope2[mc.valNormalscope(i1)]
-      )+
-      RCURLY 
-	  							{sc.add(mc);}
-    ;
-caseConditional2[BaseScope sc]
-           {CaseConditionalBuilder mc = new CaseConditionalBuilder(); }
-    : "case" expr=expression {mc.expr(expr);}
-      LCURLY                
-      ( expr=expression scope2[mc.scope(expr)] )*
-      RCURLY 
-	  							{sc.add(mc);}
-    ;
-
-whileLoop2[BaseScope sc]
-	 {LoopBuilder loop=new LoopBuilder();LoopContext ctx;}
-	:
-	( "while"                 {loop.type(LoopTypes.WHILE);}
-	  expr=expression         {loop.expr(expr);}
-	           //                 {ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;}
-	  scope2[loop.scope()]
-	| "do"                    {loop.type(LoopTypes.DO_WHILE);}
-	         //                   {ctx=new LoopContext(cur, loop);loop.setContext((LoopContext)ctx);cur=ctx;}
-	  scope2[loop.scope()]
-      "while" expr=expression {loop.expr(expr);}
-    )
-								{sc.add(loop);}
-    ;
-frobeIteration2[BaseScope cr]
-	 {LoopBuilder loop=new LoopBuilder();/*LoopContext ctx=null;*/IdentExpression i1=null, i2=null, i3=null;}
-	:"iterate"
-	                          	//{ctx=new LoopContext(cur, loop);loop.setContext(ctx);cur=ctx;}
-	( "from"                   	{loop.type(LoopTypes.FROM_TO_TYPE);}
-	  expr=expression          	{loop.frompart(expr);}
-	  "to" expr=expression     	{loop.topart(expr);}
-      	("with" i1=ident       	{loop.iterName(i1);})?
-	| "to"                     	{loop.type(LoopTypes.TO_TYPE);}
-	  expr=expression          	{loop.topart(expr);}
-      	("with" i2=ident       	{loop.iterName(i2);})?
-	|                          	{loop.type(LoopTypes.EXPR_TYPE);}
-	  expr=expression          	{loop.topart(expr);}
-      	("with" i3=ident       	{loop.iterName(i3);})?
-    )
-    scope2[loop.scope()]
-								{cr.add(loop);}
-    ;
 
 //
 // TYPENAMES
@@ -1323,7 +1005,7 @@ propertyStatement2_abstract[ClassScope cr]
 	|"set" SEMI {ps.addSet();}
 	)* RCURLY {cr.addProp(ps);}
 	;
-propertyStatement2[ClassScope cr]
+/*propertyStatement2[ClassScope cr]
 		{PropertyStatementBuilder ps=new PropertyStatementBuilder();IdentExpression prop_name=null;TypeName tn=null;}
 	: ("prop"|"property") prop_name=ident {ps.setName(prop_name);}
 			(TOK_COLON|TOK_ARROW) tn=typeName2 {ps.setTypeName(tn);} LCURLY
@@ -1331,7 +1013,7 @@ propertyStatement2[ClassScope cr]
 	|"set" (SEMI {ps.addSet();} | scope2[ps.set_scope()])
 	)* RCURLY {cr.addProp(ps);} // account for multitude
 	;
-
+*/
 
 //----------------------------------------------------------------------------
 // The Elijjah scanner
