@@ -126,7 +126,7 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	}
 
 	public void postConstruct() {
-		assert nameToken != null;
+		assert hdr.nameToken != null;
 		int destructor_count = 0;
 		for (ClassItem item : items) {
 			if (item instanceof DestructorDef)
@@ -231,6 +231,13 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 			}
 		});
 	}
+
+	@Override
+	public String getName() {
+		if (hdr.nameToken == null) throw new IllegalStateException("null name");
+		return hdr.nameToken.getText();
+	}
+
 }
 
 //
