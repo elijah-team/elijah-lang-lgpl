@@ -45,9 +45,13 @@ public class WritePipeline implements PipelineMember {
 	final OutputStrategy os;
 	final ElSystem sys;
 
+	private final File file_prefix;
+
 	public WritePipeline(Compilation aCompilation, GenerateResult aGr) {
 		c = aCompilation;
 		gr = aGr;
+
+		file_prefix = new File("COMP", c.getCompilationNumberString());
 
 		os = new OutputStrategy();
 		os.per(OutputStrategy.Per.PER_CLASS); // TODO this needs to be configured per lsp
@@ -73,7 +77,6 @@ public class WritePipeline implements PipelineMember {
 			mb.put(ab.output, ab.buffer);
 		}
 
-		final File file_prefix = new File("COMP", c.getCompilationNumberString());
 		file_prefix.mkdirs();
 		String prefix = file_prefix.toString();
 
@@ -134,10 +137,9 @@ public class WritePipeline implements PipelineMember {
 	}
 
 	public void write_buffers() throws FileNotFoundException {
-		final File file1 = new File("COMP", c.getCompilationNumberString());
-		file1.mkdirs();
+		file_prefix.mkdirs();
 
-		PrintStream db_stream = new PrintStream(new File(file1, "buffers.txt"));
+		PrintStream db_stream = new PrintStream(new File(file_prefix, "buffers.txt"));
 		PipelineLogic.debug_buffers(gr, db_stream);
 	}
 
