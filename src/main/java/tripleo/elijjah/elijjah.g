@@ -40,8 +40,8 @@ program
          out.module().setContext(mctx);cur=mctx;
          IndexingStatement idx=null;
          OS_Package pkg;}
-    : ( 									{idx=pc.indexingStatement();}
-		indexingStatement[idx]				{pc.module.addIndexingStatement(idx);}
+    : (
+		idx=indexingStatement				{pc.addIndexingStatement(idx, module);}
 	  )?
 	  (
 	    "package" xy=qualident opt_semi 	{pkg=pc.defaultPackageName(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);}
@@ -49,9 +49,9 @@ program
 	  )*
 	  EOF {out.module().postConstruct();out.FinishModule();}
 	;
-indexingStatement[IndexingStatement idx]
-		{ExpressionList el=null;}
-	: "indexing" 
+indexingStatement returns [IndexingStatement idx]
+		{ExpressionList el=null;idx=null;}
+	: "indexing" 				{idx=new IndexingStatement();}
 		(i1:IDENT 			    {idx.setName(i1);}
 		 TOK_COLON 			    
 		 el=expressionList		{idx.setExprs(el);})*
