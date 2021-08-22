@@ -97,7 +97,7 @@ class_inheritance [ClassHeader ch]
 	;
 
 classStatement [OS_Element parent, Context cctx, List<AnnotationClause> as] returns [ClassStatement cls]
-		{cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;TypeNameList tnl=null;
+		{cls=null;ClassContext ctx=null;IdentExpression i1=null;TypeNameList tnl=null;
 		ClassHeader ch=null;}
 	:
 	ch=class_header[as]		{cls = new ClassStatement(parent, cctx);cls.setHeader(ch);}
@@ -298,6 +298,7 @@ functionScope[FunctionDef parent] returns [Scope3 sc]
 //	  (postConditionSegment[sc])?
 	  RCURLY
     ;
+/*
 returnExpressionFunctionDefScope [FunctionDefScope sc]
 	: "return" 
 			(
@@ -306,6 +307,7 @@ returnExpressionFunctionDefScope [FunctionDefScope sc]
 			|							{sc.return_expression(null);}
 			)
 	;
+
 preConditionSegment [FunctionDefScope sc]
 		{Precondition p=null;}
 	: "pre" LCURLY
@@ -318,6 +320,7 @@ postConditionSegment [FunctionDefScope sc]
 		(LCURLY (po=postcondition {sc.addPostCondition(po);})* RCURLY
 	  	| 		(po=postcondition {sc.addPostCondition(po);})* )
 	;
+*/
 precondition returns [Precondition prec]
 		{prec=new Precondition();IdentExpression id=null;}
 	: (id=ident TOK_COLON {prec.id(id);})? expr=expression {prec.expr(expr);}
@@ -370,24 +373,6 @@ varStmt_i3[VariableStatement vs]
 	: i=ident                   {vs.setName(i);}
 	( BECOMES expr=expression   {vs.initial(expr);})?
 	;
-varStmt2[BaseScope cs]
-        {VariableSequenceBuilder vsqb=new VariableSequenceBuilder();TypeName tn=null;}
-    :					
-	( "var"
-    | "const"           {vsqb.defaultModifiers(TypeModifiers.CONST);}
-    | "val"             {vsqb.defaultModifiers(TypeModifiers.VAL);}
-    )
-    ( varStmt_i2[vsqb] ({vsqb.next();} COMMA varStmt_i2[vsqb])*
-		( TOK_COLON tn=typeName2    {vsqb.setTypeName(tn);})?
-    )
-						{cs.add(vsqb);}
-    ;
-varStmt_i2[VariableSequenceBuilder vsb]
-		{TypeName tn=null;IdentExpression i=null;}
-	: i=ident                   {vsb.setName(i);}
-//	( TOK_COLON tn=typeName2    {vsb.setTypeName(tn);})?
-	( BECOMES expr=expression   {vsb.setInitial(expr);})?
-	;
 typeAlias[OS_Element cont] returns [TypeAliasStatement cr]
 		{TypeAliasBuilder tab=new TypeAliasBuilder();cr=null;}
 	: typeAlias2[tab]				{tab.setParent(cont);
@@ -423,22 +408,24 @@ statement[StatementClosure cr, OS_Element aParent]
 	| "yield" expr=expression {cr.yield(expr);}
 	) opt_semi
 	;
-
+/*
 constructExpression2[BaseScope cr] // was BaseFunctionDefScope
 		{Qualident q=null;ExpressionList o=null;}
 	: "construct" q=qualident
 		(LPAREN (o=expressionList)? RPAREN)? // optional empty parens
 												{cr.constructExpression(q,o);}
 	;
+*/
 constructExpression[StatementClosure cr]
 		{Qualident q=null;ExpressionList o=null;}
 	: "construct" q=qualident
 		(LPAREN (o=expressionList)? RPAREN)? // optional empty parens
 												{cr.constructExpression(q,o);}
 	;
-yieldExpression [BaseScope cr] // was BaseFunctionDefScope
+/*yieldExpression [BaseScope cr] // was BaseFunctionDefScope
 	: "yield" expr=expression 					{cr.yield(expr);}
 	;
+*/
 opt_semi: (SEMI|);
 identList2 returns [IdentList ail]
 		{IdentExpression s=null;ail=new IdentList();}
@@ -477,6 +464,7 @@ invariantStatement[InvariantStatement cr]
          TOK_COLON)?
          expr=expression    {isp.setExpr(expr);})*
     ;
+/*
 invariantStatement2[ClassScope sc]
         {InvariantStatementPart isp=null;IdentExpression i1=null;}
 	: "invariant"
@@ -487,6 +475,7 @@ invariantStatement2[ClassScope sc]
          expr=expression    		
 		 							{sc.addInvariantStatementPart(i1, expr);})*
     ;
+*/
 accessNotation returns [AccessNotation acs]
         { TypeNameList tnl=null;acs=new AccessNotation();}
 	: "access" (category:STRING_LITERAL (shorthand:IDENT EQUAL)? LCURLY tnl=typeNameList2 RCURLY
@@ -988,7 +977,7 @@ propertyStatement[PropertyStatement ps]
 	|"set" (SEMI {ps.addSet();} | sco=scope3[ps] {ps.set_scope(sco);})
 	)* RCURLY // account for multitude
 	;
-propertyStatement2_abstract[ClassScope cr]
+/*propertyStatement2_abstract[ClassScope cr]
 		{PropertyStatementBuilder ps=new PropertyStatementBuilder();IdentExpression prop_name=null;TypeName tn=null;}
 	: ("prop"|"property") prop_name=ident {ps.setName(prop_name);}
 			(TOK_COLON|TOK_ARROW) tn=typeName2 {ps.setTypeName(tn);} LCURLY
@@ -996,7 +985,7 @@ propertyStatement2_abstract[ClassScope cr]
 	|"set" SEMI {ps.addSet();}
 	)* RCURLY {cr.addProp(ps);}
 	;
-/*propertyStatement2[ClassScope cr]
+propertyStatement2[ClassScope cr]
 		{PropertyStatementBuilder ps=new PropertyStatementBuilder();IdentExpression prop_name=null;TypeName tn=null;}
 	: ("prop"|"property") prop_name=ident {ps.setName(prop_name);}
 			(TOK_COLON|TOK_ARROW) tn=typeName2 {ps.setTypeName(tn);} LCURLY
