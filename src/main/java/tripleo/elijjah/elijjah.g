@@ -22,7 +22,6 @@ options {
 }
 
 tokens {
-    //"tokens"; 
     AS="as"; CAST_TO="cast_to";
 }
 
@@ -70,10 +69,38 @@ qualident returns [Qualident q]
       (d1:DOT r2=ident {q.appendDot(d1); q.append(r2);})*
     ;
 
+class_header [List<AnnotationClause> as] returns [ClassHeader ch]
+		{ch=null;boolean extends_=false;IdentExpression class_name=null;TypeNameList tnl=null;}
+	: ("extend"			{extends_=true;})?
+	  "class"			{ch = new ClassHeader(extends_, as);}
+	  class_modifier[ch]
+      class_name=ident	{ch.setName(class_name);}
+	  ( LBRACK tnl=typeNameList2 RBRACK { ch.setGenericPart(tnl);})?
+      (class_inheritance[ch] )?
+      ("const"			{ch.setConst(true);})?
+	;
+
+class_modifier [ClassHeader ch]
+	: ("struct"       	{ch.setType(ClassTypes.STRUCTURE);}
+	  |"signature"    	{ch.setType(ClassTypes.SIGNATURE);}
+	  |"abstract"     	{ch.setType(ClassTypes.ABSTRACT);}
+	  |"annotation"   	{ch.setType(ClassTypes.ANNOTATION);}
+	  |"exception"    	{ch.setType(ClassTypes.EXCEPTION);}
+	  |				   	{ch.setType(ClassTypes.NORMAL);}
+	  )
+	;
+
+class_inheritance [ClassHeader ch]
+	: LPAREN classInheritance_ [ch.inheritancePart()] RPAREN
+    | classInheritanceRuby     [ch.inheritancePart()]
+	;
+
 classStatement [OS_Element parent, Context cctx, List<AnnotationClause> as] returns [ClassStatement cls]
-		{cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;TypeNameList tnl=null;}
-	: 
-    ("class"				{cls = new ClassStatement(parent, cctx);cls.addAnnotations(as);}
+		{cls=null;ClassContext ctx=null;IdentExpression i1=null;ClassBuilder cb=null;TypeNameList tnl=null;
+		ClassHeader ch=null;}
+	:
+	ch=class_header[as]		{cls = new ClassStatement(parent, cctx);cls.setHeader(ch);}
+/*    ("class"				{cls = new ClassStatement(parent, cctx);cls.addAnnotations(as);}
             ("struct"       {cls.setType(ClassTypes.STRUCTURE);}
             |"signature"    {cls.setType(ClassTypes.SIGNATURE);}
             |"abstract"     {cls.setType(ClassTypes.ABSTRACT);}
@@ -82,7 +109,8 @@ classStatement [OS_Element parent, Context cctx, List<AnnotationClause> as] retu
 	  ( LBRACK tnl=typeNameList2 RBRACK { cls.setGenericPart(tnl);})?
     ((LPAREN classInheritance_ [cls.classInheritance()] RPAREN)
     | classInheritanceRuby [cls.classInheritance()] )?
-    LCURLY                  {cur=cls.getContext();ctx=(ClassContext)cur;}
+*/
+    LCURLY                  {ctx=cls.getContext();cur=ctx;}
      (classScope[cls]
      |"abstract"         {cls.setType(ClassTypes.ABSTRACT);}
       (invariantStatement[cls.invariantStatement()])?

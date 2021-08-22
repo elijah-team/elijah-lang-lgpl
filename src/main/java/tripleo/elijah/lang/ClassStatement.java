@@ -31,12 +31,18 @@ import java.util.List;
  */
 public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements ClassItem, ModuleItem, StatementItem, FunctionItem, OS_Element, OS_Element2, Documentable, OS_Container {
 
+	static final List<TypeName> emptyTypeNameList = ImmutableList.<TypeName>of();
+	
 	private final OS_Element parent;
 	ClassInheritance _inh = new ClassInheritance(); // remove final for ClassBuilder
 	private ClassTypes _type;
 	private TypeNameList genericPart;
 
-	static final List<TypeName> emptyTypeNameList = ImmutableList.<TypeName>of();
+	private ClassHeader hdr;
+	
+	public void setHeader(ClassHeader aCh) {
+		hdr = aCh;
+	}
 
 	public ClassStatement(final OS_Element parentElement, final Context parentContext) {
 		parent = parentElement; // setParent
@@ -93,8 +99,8 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	}
 
 	@Override // OS_Element
-	public Context getContext() {
-		return _a._context;
+	public ClassContext getContext() {
+		return (ClassContext) _a._context;
 	}
 
 	public void setContext(final ClassContext ctx) {
@@ -114,11 +120,12 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	}
 
 	public void setType(final ClassTypes aType) {
-		_type = aType;
+//		_type = aType;
+		throw new NotImplementedException();
 	}
 
 	public ClassTypes getType() {
-		return _type;
+		return hdr.type;
 	}
 
 	public void postConstruct() {
@@ -128,21 +135,22 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 			if (item instanceof DestructorDef)
 				destructor_count++;
 		}
-		assert destructor_count == 0 || destructor_count ==1;
+		assert destructor_count == 0 || destructor_count == 1;
 	}
 
 	// region inheritance
 
 	public IdentExpression getNameNode() {
-		return nameToken;
+		return hdr.nameToken;
 	}
 
 	public void setInheritance(ClassInheritance inh) {
-		_inh = inh;
+//		_inh = inh;
+		throw new NotImplementedException();
 	}
 
 	public ClassInheritance classInheritance() {
-		return _inh;
+		return hdr.inh;
 	}
 
 	// endregion
@@ -150,6 +158,8 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	// region annotations
 
 	public Iterable<AnnotationPart> annotationIterable() {
+		List<AnnotationPart> annotations = hdr.annos;
+		
 		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
 		if (annotations == null) return aps;
 		for (AnnotationClause annotationClause : annotations) {
@@ -198,14 +208,15 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	// endregion
 
 	public void setGenericPart(TypeNameList genericPart) {
-		this.genericPart = genericPart;
+//		this.genericPart = genericPart;
+		throw new NotImplementedException();
 	}
 
 	public @NotNull List<TypeName> getGenericPart() {
-		if (genericPart == null)
+		if (hdr.genericPart == null)
 			return emptyTypeNameList;
 		else
-			return genericPart.p;
+			return hdr.genericPart.p;
 	}
 
 	public Collection<ConstructorDef> getConstructors() {
