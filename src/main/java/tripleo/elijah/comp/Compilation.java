@@ -23,7 +23,6 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
@@ -55,7 +54,8 @@ public class Compilation {
 	//
 	//
 	//
-	public PipelineLogic pipeline;
+	public PipelineLogic pipelineLogic;
+	private Pipeline pipelines = new Pipeline();
 	//
 	//
 	//
@@ -142,32 +142,15 @@ public class Compilation {
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
-					pipeline = new PipelineLogic();
-					ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
-					for (final OS_Module module : modules) {
-						if (false) {
-/*
-							new DeduceTypes(module).deduce();
-							for (final OS_Element2 item : module.items()) {
-								if (item instanceof ClassStatement || item instanceof NamespaceStatement) {
-									System.err.println("8001 "+item);
-								}
-							}
-							new TranslateModule(module).translate();
-*/
-//							new ExpandFunctions(module).expand();
-//
-//  	    				final JavaCodeGen visit = new JavaCodeGen();
-//			        		module.visitGen(visit);
-						} else {
-							pipeline.addModule(module);
-						}
-					}
-					pipeline.everythingBeforeGenerate(lgc);
-					pipeline.generate(lgc);
+					pipelineLogic = new PipelineLogic();
+					final DeducePipeline dpl = new DeducePipeline(this);
+					pipelines.add(dpl);
+					final GeneratePipeline gpl = new GeneratePipeline(this, dpl);
+					pipelines.add(gpl);
+					final WritePipeline wpl = new WritePipeline(this, pipelineLogic.gr);
+					pipelines.add(wpl);
 
-					pipeline.write_files(this);
-					pipeline.write_buffers(this);
+					pipelines.run();
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
