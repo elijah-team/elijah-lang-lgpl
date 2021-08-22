@@ -82,7 +82,8 @@ class_header [List<AnnotationClause> as] returns [ClassHeader ch]
 
 class_modifier [ClassHeader ch]
 	: ("struct"       	{ch.setType(ClassTypes.STRUCTURE);}
-	  |"signature"    	{ch.setType(ClassTypes.SIGNATURE);}
+	  |"signature"     	{ch.setType(ClassTypes.SIGNATURE);}
+	  |"interface"     	{ch.setType(ClassTypes.INTERFACE);}
 	  |"abstract"     	{ch.setType(ClassTypes.ABSTRACT);}
 	  |"annotation"   	{ch.setType(ClassTypes.ANNOTATION);}
 	  |"exception"    	{ch.setType(ClassTypes.EXCEPTION);}
@@ -116,11 +117,6 @@ classStatement [OS_Element parent, Context cctx, List<AnnotationClause> as] retu
       (invariantStatement[cls.invariantStatement()])?
      )
     RCURLY {cls.postConstruct();cur=ctx.getParent();}
-/*    | {cb = new ClassBuilder();cb.annotations(as);cb.setParent(parent);cb.setParentContext(cur);}
-	  classDefinition_interface[cb] // want to cb.build() here 
-	  					//{((OS_Container)parent).add(cb.build());} // TODO this code is not necessary for containers and will fail when not contianers
-						{cls=cb.build();}
-	)*/
 	;
 classScope[ClassStatement cr]
         {AccessNotation acs=null;TypeAliasStatement tal=null;}
@@ -456,11 +452,6 @@ expression returns [IExpression ee]
 aliasStatement[OS_Element cont] returns [AliasStatement pc]
 		{IdentExpression i1=null;pc=new AliasStatement(cont);}
 	: "alias" i1=ident {pc.setName(i1);} BECOMES xy=qualident {pc.setExpression(xy);}
-	;
-aliasStatement2[BaseScope sc]
-		{AliasStatementBuilder pc = new AliasStatementBuilder();IdentExpression i1=null;}
-	: "alias" i1=ident {pc.setName(i1);} BECOMES xy=qualident {pc.setExpression(xy);}
-			{sc.add(pc);}
 	;
 qualidentList[QualidentList qal]
 		{Qualident qid;}
