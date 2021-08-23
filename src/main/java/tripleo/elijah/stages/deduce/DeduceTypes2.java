@@ -63,7 +63,7 @@ public class DeduceTypes2 {
 		this.module = module;
 		this.phase = phase;
 		this.errSink = module.getCompilation().getErrSink();
-		this.LOG = new ElLog(module.getFileName(), verbosity == ElLog.Verbosity.VERBOSE);
+		this.LOG = new ElLog(module.getFileName(), verbosity);
 		//
 		phase.addDeduceLog(LOG);
 	}
