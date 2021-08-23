@@ -22,6 +22,8 @@ public class Scope3 implements Documentable {
 	private final Scope3StatementClosure asc = new Scope3StatementClosure();
 	private final List<OS_Element> _items = new ArrayList<OS_Element>();
 	private final List<Token> _docstrings = new ArrayList<Token>();
+	private List<Postcondition> postconditions;
+	private List<Precondition> preconditions;
 
 	public Scope3(OS_Element aParent) {
 		parent = aParent;
@@ -58,6 +60,18 @@ public class Scope3 implements Documentable {
 
 	public VariableSequence varSeq() {
 		return asc.varSeq(asc.getParent().getContext());
+	}
+
+	public void addPreCondition(Precondition aPrecondition) {
+		if (preconditions == null)
+			preconditions = new ArrayList<Precondition>();
+		preconditions.add(aPrecondition);
+	}
+
+	public void addPostCondition(Postcondition aPostcondition) {
+		if (postconditions == null)
+			postconditions = new ArrayList<Postcondition>();
+		postconditions.add(aPostcondition);
 	}
 
 	private class Scope3StatementClosure implements StatementClosure {

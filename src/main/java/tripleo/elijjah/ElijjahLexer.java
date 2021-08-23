@@ -43,64 +43,68 @@ public ElijjahLexer(LexerSharedInputState state) {
 	setCaseSensitive(true);
 	literals = new Hashtable();
 	literals.put(new ANTLRHashString("signature", this), new Integer(21));
-	literals.put(new ANTLRHashString("case", this), new Integer(100));
-	literals.put(new ANTLRHashString("to", this), new Integer(104));
-	literals.put(new ANTLRHashString("this", this), new Integer(92));
-	literals.put(new ANTLRHashString("procedure", this), new Integer(95));
+	literals.put(new ANTLRHashString("case", this), new Integer(105));
+	literals.put(new ANTLRHashString("to", this), new Integer(109));
+	literals.put(new ANTLRHashString("this", this), new Integer(97));
+	literals.put(new ANTLRHashString("procedure", this), new Integer(100));
 	literals.put(new ANTLRHashString("interface", this), new Integer(22));
 	literals.put(new ANTLRHashString("class", this), new Integer(16));
-	literals.put(new ANTLRHashString("get", this), new Integer(116));
+	literals.put(new ANTLRHashString("get", this), new Integer(120));
 	literals.put(new ANTLRHashString("destructor", this), new Integer(41));
 	literals.put(new ANTLRHashString("exception", this), new Integer(25));
-	literals.put(new ANTLRHashString("construct", this), new Integer(53));
-	literals.put(new ANTLRHashString("false", this), new Integer(91));
-	literals.put(new ANTLRHashString("true", this), new Integer(90));
+	literals.put(new ANTLRHashString("construct", this), new Integer(58));
+	literals.put(new ANTLRHashString("false", this), new Integer(96));
+	literals.put(new ANTLRHashString("true", this), new Integer(95));
 	literals.put(new ANTLRHashString("indexing", this), new Integer(7));
-	literals.put(new ANTLRHashString("def", this), new Integer(113));
-	literals.put(new ANTLRHashString("typeof", this), new Integer(107));
+	literals.put(new ANTLRHashString("ensures", this), new Integer(50));
+	literals.put(new ANTLRHashString("def", this), new Integer(53));
+	literals.put(new ANTLRHashString("typeof", this), new Integer(112));
 	literals.put(new ANTLRHashString("import", this), new Integer(36));
 	literals.put(new ANTLRHashString("dtor", this), new Integer(42));
-	literals.put(new ANTLRHashString("prop", this), new Integer(114));
-	literals.put(new ANTLRHashString("invariant", this), new Integer(55));
-	literals.put(new ANTLRHashString("set", this), new Integer(117));
-	literals.put(new ANTLRHashString("immutable", this), new Integer(47));
-	literals.put(new ANTLRHashString("func", this), new Integer(108));
-	literals.put(new ANTLRHashString("proc", this), new Integer(109));
-	literals.put(new ANTLRHashString("access", this), new Integer(56));
-	literals.put(new ANTLRHashString("generic", this), new Integer(105));
+	literals.put(new ANTLRHashString("prop", this), new Integer(118));
+	literals.put(new ANTLRHashString("invariant", this), new Integer(60));
+	literals.put(new ANTLRHashString("pre", this), new Integer(47));
+	literals.put(new ANTLRHashString("set", this), new Integer(121));
+	literals.put(new ANTLRHashString("immutable", this), new Integer(51));
+	literals.put(new ANTLRHashString("func", this), new Integer(113));
+	literals.put(new ANTLRHashString("proc", this), new Integer(114));
+	literals.put(new ANTLRHashString("access", this), new Integer(61));
+	literals.put(new ANTLRHashString("generic", this), new Integer(110));
 	literals.put(new ANTLRHashString("continue", this), new Integer(43));
-	literals.put(new ANTLRHashString("match", this), new Integer(99));
+	literals.put(new ANTLRHashString("post", this), new Integer(49));
+	literals.put(new ANTLRHashString("match", this), new Integer(104));
 	literals.put(new ANTLRHashString("extend", this), new Integer(15));
 	literals.put(new ANTLRHashString("cast_to", this), new Integer(5));
 	literals.put(new ANTLRHashString("ctor", this), new Integer(40));
-	literals.put(new ANTLRHashString("do", this), new Integer(102));
+	literals.put(new ANTLRHashString("do", this), new Integer(107));
 	literals.put(new ANTLRHashString("type", this), new Integer(30));
-	literals.put(new ANTLRHashString("in", this), new Integer(110));
-	literals.put(new ANTLRHashString("alias", this), new Integer(51));
-	literals.put(new ANTLRHashString("null", this), new Integer(93));
+	literals.put(new ANTLRHashString("in", this), new Integer(115));
+	literals.put(new ANTLRHashString("alias", this), new Integer(56));
+	literals.put(new ANTLRHashString("null", this), new Integer(98));
 	literals.put(new ANTLRHashString("namespace", this), new Integer(34));
-	literals.put(new ANTLRHashString("function", this), new Integer(94));
-	literals.put(new ANTLRHashString("is_a", this), new Integer(77));
-	literals.put(new ANTLRHashString("elseif", this), new Integer(98));
-	literals.put(new ANTLRHashString("ref", this), new Integer(112));
-	literals.put(new ANTLRHashString("while", this), new Integer(101));
+	literals.put(new ANTLRHashString("function", this), new Integer(99));
+	literals.put(new ANTLRHashString("is_a", this), new Integer(82));
+	literals.put(new ANTLRHashString("elseif", this), new Integer(103));
+	literals.put(new ANTLRHashString("ref", this), new Integer(117));
+	literals.put(new ANTLRHashString("while", this), new Integer(106));
 	literals.put(new ANTLRHashString("const", this), new Integer(19));
 	literals.put(new ANTLRHashString("abstract", this), new Integer(23));
 	literals.put(new ANTLRHashString("from", this), new Integer(35));
+	literals.put(new ANTLRHashString("requires", this), new Integer(48));
 	literals.put(new ANTLRHashString("annotation", this), new Integer(24));
 	literals.put(new ANTLRHashString("break", this), new Integer(44));
-	literals.put(new ANTLRHashString("out", this), new Integer(111));
+	literals.put(new ANTLRHashString("out", this), new Integer(116));
 	literals.put(new ANTLRHashString("return", this), new Integer(45));
-	literals.put(new ANTLRHashString("property", this), new Integer(115));
-	literals.put(new ANTLRHashString("if", this), new Integer(96));
-	literals.put(new ANTLRHashString("yield", this), new Integer(52));
+	literals.put(new ANTLRHashString("property", this), new Integer(119));
+	literals.put(new ANTLRHashString("if", this), new Integer(101));
+	literals.put(new ANTLRHashString("yield", this), new Integer(57));
 	literals.put(new ANTLRHashString("constructor", this), new Integer(39));
-	literals.put(new ANTLRHashString("iterate", this), new Integer(103));
+	literals.put(new ANTLRHashString("iterate", this), new Integer(108));
 	literals.put(new ANTLRHashString("struct", this), new Integer(20));
-	literals.put(new ANTLRHashString("val", this), new Integer(50));
+	literals.put(new ANTLRHashString("val", this), new Integer(55));
 	literals.put(new ANTLRHashString("package", this), new Integer(6));
-	literals.put(new ANTLRHashString("else", this), new Integer(97));
-	literals.put(new ANTLRHashString("var", this), new Integer(49));
+	literals.put(new ANTLRHashString("else", this), new Integer(102));
+	literals.put(new ANTLRHashString("var", this), new Integer(54));
 	literals.put(new ANTLRHashString("with", this), new Integer(46));
 	literals.put(new ANTLRHashString("as", this), new Integer(4));
 }
@@ -1090,7 +1094,7 @@ tryAgain:
 		
 		match("//");
 		{
-		_loop338:
+		_loop369:
 		do {
 			if ((_tokenSet_0.member(LA(1)))) {
 				{
@@ -1098,7 +1102,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop338;
+				break _loop369;
 			}
 			
 		} while (true);
@@ -1144,7 +1148,7 @@ tryAgain:
 		
 		match("/*");
 		{
-		_loop344:
+		_loop375:
 		do {
 			if ((LA(1)=='\r') && (LA(2)=='\n') && ((LA(3) >= '\u0000' && LA(3) <= '\u00ff')) && ((LA(4) >= '\u0000' && LA(4) <= '\u00ff'))) {
 				match('\r');
@@ -1168,7 +1172,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop344;
+				break _loop375;
 			}
 			
 		} while (true);
@@ -1259,17 +1263,17 @@ tryAgain:
 		case 'u':
 		{
 			{
-			int _cnt354=0;
-			_loop354:
+			int _cnt385=0;
+			_loop385:
 			do {
 				if ((LA(1)=='u')) {
 					match('u');
 				}
 				else {
-					if ( _cnt354>=1 ) { break _loop354; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
+					if ( _cnt385>=1 ) { break _loop385; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
 				}
 				
-				_cnt354++;
+				_cnt385++;
 			} while (true);
 			}
 			mHEX_DIGIT(false);
@@ -1349,7 +1353,7 @@ tryAgain:
 		
 		match('"');
 		{
-		_loop350:
+		_loop381:
 		do {
 			if ((LA(1)=='\\')) {
 				mESC(false);
@@ -1360,7 +1364,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop350;
+				break _loop381;
 			}
 			
 		} while (true);
@@ -1471,7 +1475,7 @@ tryAgain:
 		}
 		}
 		{
-		_loop368:
+		_loop399:
 		do {
 			switch ( LA(1)) {
 			case 'a':  case 'b':  case 'c':  case 'd':
@@ -1515,7 +1519,7 @@ tryAgain:
 			}
 			default:
 			{
-				break _loop368;
+				break _loop399;
 			}
 			}
 		} while (true);
@@ -1542,17 +1546,17 @@ tryAgain:
 			{
 			if (((LA(1) >= '0' && LA(1) <= '9'))) {
 				{
-				int _cnt372=0;
-				_loop372:
+				int _cnt403=0;
+				_loop403:
 				do {
 					if (((LA(1) >= '0' && LA(1) <= '9'))) {
 						matchRange('0','9');
 					}
 					else {
-						if ( _cnt372>=1 ) { break _loop372; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
+						if ( _cnt403>=1 ) { break _loop403; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
 					}
 					
-					_cnt372++;
+					_cnt403++;
 				} while (true);
 				}
 				{
@@ -1612,17 +1616,17 @@ tryAgain:
 					}
 					}
 					{
-					int _cnt379=0;
-					_loop379:
+					int _cnt410=0;
+					_loop410:
 					do {
 						if ((_tokenSet_5.member(LA(1))) && (true) && (true) && (true)) {
 							mHEX_DIGIT(false);
 						}
 						else {
-							if ( _cnt379>=1 ) { break _loop379; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
+							if ( _cnt410>=1 ) { break _loop410; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
 						}
 						
-						_cnt379++;
+						_cnt410++;
 					} while (true);
 					}
 					break;
@@ -1631,17 +1635,17 @@ tryAgain:
 				case '4':  case '5':  case '6':  case '7':
 				{
 					{
-					int _cnt381=0;
-					_loop381:
+					int _cnt412=0;
+					_loop412:
 					do {
 						if (((LA(1) >= '0' && LA(1) <= '7'))) {
 							matchRange('0','7');
 						}
 						else {
-							if ( _cnt381>=1 ) { break _loop381; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
+							if ( _cnt412>=1 ) { break _loop412; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
 						}
 						
-						_cnt381++;
+						_cnt412++;
 					} while (true);
 					}
 					break;
@@ -1661,7 +1665,7 @@ tryAgain:
 				matchRange('1','9');
 				}
 				{
-				_loop384:
+				_loop415:
 				do {
 					switch ( LA(1)) {
 					case '0':  case '1':  case '2':  case '3':
@@ -1678,7 +1682,7 @@ tryAgain:
 					}
 					default:
 					{
-						break _loop384;
+						break _loop415;
 					}
 					}
 				} while (true);
@@ -1779,13 +1783,13 @@ tryAgain:
 					{
 						match('.');
 						{
-						_loop391:
+						_loop422:
 						do {
 							if (((LA(1) >= '0' && LA(1) <= '9'))) {
 								matchRange('0','9');
 							}
 							else {
-								break _loop391;
+								break _loop422;
 							}
 							
 						} while (true);
@@ -1900,17 +1904,17 @@ tryAgain:
 		}
 		}
 		{
-		int _cnt399=0;
-		_loop399:
+		int _cnt430=0;
+		_loop430:
 		do {
 			if (((LA(1) >= '0' && LA(1) <= '9'))) {
 				matchRange('0','9');
 			}
 			else {
-				if ( _cnt399>=1 ) { break _loop399; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
+				if ( _cnt430>=1 ) { break _loop430; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
 			}
 			
-			_cnt399++;
+			_cnt430++;
 		} while (true);
 		}
 		if ( _createToken && _token==null && _ttype!=Token.SKIP ) {

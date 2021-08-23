@@ -104,6 +104,18 @@ public class FunctionDef extends BaseFunctionDef implements Documentable, ClassI
 		return String.format("<Function %s %s %s>", parent, name(), getArgs());
 	}
 
+	@Override
+	public void setHeader(FunctionHeader aFunctionHeader) {
+		setFal(aFunctionHeader.getFal());
+		set(aFunctionHeader.getModifier());
+		setName(aFunctionHeader.getName());
+		setReturnType(aFunctionHeader.getReturnType());
+	}
+
+	public void setBody(FunctionBody aFunctionBody) {
+		scope(aFunctionBody.scope3);
+		setAbstract(aFunctionBody.getAbstract());
+	}
 }
 
 //

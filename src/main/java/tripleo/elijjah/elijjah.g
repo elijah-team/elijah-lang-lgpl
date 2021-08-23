@@ -143,7 +143,7 @@ annotation_clause returns [AnnotationClause a]
 			)?                                  {a.add(ap);}
 		)+ RBRACK
 	;
-namespaceStatement__ [NamespaceStatement cls, List<AnnotationClause> as]
+namespaceStatement [NamespaceStatement cls, List<AnnotationClause> as]
 		{AnnotationClause a=null;NamespaceContext ctx=null;IdentExpression i1=null;}
 	: {cls.addAnnotations(as);}
     "namespace"
@@ -195,33 +195,21 @@ importPart3 [NormalImportStatement cr] //current rule
 		{Qualident q2;}
     : q2=qualident {cr.addNormalPart(q2);}
     ;
-    /*
-importPart1_ [ImportStatementBuilder cr] //current rule
-		{IdentExpression i1=null;Qualident q1=null;}
-    : i1=ident BECOMES q1=qualident {cr.addAssigningPart(i1,q1);}
-    ;
-importPart2_ [ImportStatementBuilder cr] //current rule
-		{Qualident q3;IdentList il=new IdentList();}
-    : q3=qualident /*DOT* / LCURLY il=identList2 { cr.addSelectivePart(q3, il);} RCURLY
-    ;
-importPart3_ [ImportStatementBuilder cr] //current rule
-		{Qualident q2;}
-    : q2=qualident {cr.addNormalPart(q2);}
-    ;
-    */
+
 classInheritance_[ClassInheritance ci]
 		{TypeName tn=null;}
-	:
-    tn=inhTypeName {ci.add(tn);}
-      (COMMA tn=inhTypeName {ci.add(tn);})*
+	: tn=inhTypeName 			{ci.add(tn);}
+      (COMMA tn=inhTypeName 	{ci.add(tn);})*
     ;
-classInheritanceRuby[ClassInheritance ci]:
-    LT_ classInheritance_[ci]
+classInheritanceRuby[ClassInheritance ci]
+    : LT_ classInheritance_[ci]
     ;
+
 docstrings[Documentable sc]:
     ((STRING_LITERAL)=> (s1:STRING_LITERAL {if (sc!=null) sc.addDocString(s1);})+
     |)
     ;
+
 constructorDef[ClassStatement cr]
         {ConstructorDef cd=null;IdentExpression x1=null;FormalArgList fal=null;}
 	: ("constructor"|"ctor")
@@ -307,20 +295,19 @@ returnExpressionFunctionDefScope [FunctionDefScope sc]
 			|							{sc.return_expression(null);}
 			)
 	;
-
-preConditionSegment [FunctionDefScope sc]
+*/
+preConditionSegment [Scope3 sc]
 		{Precondition p=null;}
-	: "pre" LCURLY
+	: ("pre"|"requires") LCURLY
 	    (p=precondition 					{sc.addPreCondition(p);})*
 	  RCURLY
 	;
-postConditionSegment [FunctionDefScope sc]
+postConditionSegment [Scope3 sc]
 		{Postcondition po=null;}
-	: "post" 
-		(LCURLY (po=postcondition {sc.addPostCondition(po);})* RCURLY
-	  	| 		(po=postcondition {sc.addPostCondition(po);})* )
+	: ("post"|"ensures")
+		LCURLY (po=postcondition {sc.addPostCondition(po);})* ((RCURLY RCURLY)=> RCURLY)
 	;
-*/
+
 precondition returns [Precondition prec]
 		{prec=new Precondition();IdentExpression id=null;}
 	: (id=ident TOK_COLON {prec.id(id);})? expr=expression {prec.expr(expr);}
@@ -341,11 +328,64 @@ functionDef[FunctionDef fd]
     sco=functionScope[fd] 		{fd.scope(sco);}
     							{fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();cur=ctx.getParent();}
     ;
+
+function_definition [List<AnnotationClause> as] returns [BaseFunctionDef fd]
+		{fd=null;}
+	: fd=def_function_definition[as]
+	| fd=normal_function_definition[as]
+	;
+normal_function_definition [List<AnnotationClause> as] returns [FunctionDef fd]
+		{fd=null;FunctionHeader fh=null;FunctionBody fb=null;}
+	: fh=function_header
+	  fb=function_body
+	  {fd=new FunctionDef(parent, ctx);fd.setAnnotations(as);fd.setHeader(fh);fd.setBody(fb);} // TODO parent, ctx
+	;
+def_function_definition [List<AnnotationClause> as] returns [DefFunctionDef fd]
+		{fd=null;FunctionHeader fh=null;IExpression fb=null;}
+	: "def"
+	  fh=function_header
+	  fb=expression (opt_semi)?
+	  {fd=new DefFunctionDef(parent, ctx);fd.setAnnotations(as);fd.setHeader(fh);fd.setBody(fb);} // TODO named docstrings
+	;
+function_header returns [FunctionHeader fh]
+		{fh=new FunctionHeader();IdentExpression i1=null;FormalArgList fal=null;TypeName tn=null;}
+	: i1=ident                  {fh.setName(i1);}
+      ( "const"                 {fh.setModifier(FunctionModifiers.CONST);}
+      | "immutable"             {fh.setModifier(FunctionModifiers.IMMUTABLE);})?
+      fal=opfal 				{fh.setFal(fal);}
+      (TOK_ARROW tn=typeName2 	{fh.setReturnType(tn);})?
+	;
+function_body returns [FunctionBody fb]
+		{fb=null;}
+	: fb=function_body_mandatory
+	| 		{fb=new FunctionBodyEmpty();}
+	;
+function_body_mandatory returns [FunctionBody fb]
+		{fb=new FunctionBody();Scope3 sc=new Scope3(parent);ClassStatement cls=null;fb.scope3=sc;} // TODO: parent
+	: LCURLY docstrings[sc]
+      (preConditionSegment[sc])?
+		(
+		  (
+			  ( statement[sc.statementClosure(), sc.getParent()]
+			  | expr=expression {sc.statementWrapper(expr);}
+			  | cls=classStatement[sc.getParent(), cur, null/*annotations*/] {sc.add(cls);}
+			  | "continue"
+			  | "break" // opt label?
+			  )
+			  opt_semi
+		  )*
+		  ("return" ((expression) => (expr=expression)|) )?
+		| "abstract" opt_semi {fb.setAbstract(true);}
+		)
+  	  (postConditionSegment[sc])?
+	  RCURLY
+	;
+
 programStatement[ProgramClosure pc, OS_Element cont]
 		{ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();AliasStatement als=null;}
     : imp=importStatement[cont]
 	| (a=annotation_clause      {as.add(a);})*
-    (  namespaceStatement__[new NamespaceStatement(cont, cur), as]
+    ( namespaceStatement[new NamespaceStatement(cont, cur), as]
     | classStatement[cont, cur, as] // TODO check if class in class works
     )
     | als=aliasStatement[cont] 			//{cont.add(als);} //[pc.aliasStatement(cont)]
