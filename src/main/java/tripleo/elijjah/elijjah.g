@@ -368,7 +368,7 @@ function_header returns [FunctionHeader fh]
 function_body [OS_Element parent] returns [FunctionBody fb]
 		{fb=null;}
 	: fb=function_body_mandatory[parent]
-	| 		{fb=new FunctionBodyEmpty();}
+	| opt_semi		{fb=new FunctionBodyEmpty();}
 	;
 function_body_mandatory [OS_Element parent] returns [FunctionBody fb]
 		{fb=new FunctionBody();Scope3 sc=new Scope3(parent);ClassStatement cls=null;fb.scope3=sc;} // TODO: parent

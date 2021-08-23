@@ -3232,6 +3232,7 @@ inputState.guessing--;
 			case LITERAL_prop:
 			case LITERAL_property:
 			{
+				opt_semi();
 				if ( inputState.guessing==0 ) {
 					fb=new FunctionBodyEmpty();
 				}
