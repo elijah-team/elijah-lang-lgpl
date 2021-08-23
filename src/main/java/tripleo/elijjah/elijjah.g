@@ -119,15 +119,17 @@ classStatement [OS_Element parent, Context cctx, List<AnnotationClause> as] retu
     RCURLY {cls.postConstruct();cur=ctx.getParent();}
 	;
 classScope[ClassStatement cr]
-        {AccessNotation acs=null;TypeAliasStatement tal=null;}
+        {AccessNotation acs=null;TypeAliasStatement tal=null;BaseFunctionDef fd=null;
+        List<AnnotationClause> as=new ArrayList<AnnotationClause>();AnnotationClause a=null;}
     : docstrings[cr]
     ( constructorDef[cr]
     | destructorDef[cr]
-    | functionDef[cr.funcDef()]
+    | (a=annotation_clause      {as.add(a);})*
+      fd=function_definition[cr, cr.getContext(), as]
     | defFunctionDef[cr.defFuncDef()]
     | varStmt[cr.statementClosure(), cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
-    | tal=typeAlias[cr]     {cr.add(tal);} //[cr.typeAlias()]
+    | tal=typeAlias[cr]     {cr.add(tal);}
     | programStatement[cr.XXX(), cr]
     | propertyStatement[cr.prop()]
     | acs=accessNotation {cr.addAccess(acs);}
@@ -228,14 +230,21 @@ destructorDef[ClassStatement cr]
 					{dd.postConstruct();}
 	;
 namespaceScope[NamespaceStatement cr]
-        {AccessNotation acs=null;TypeAliasStatement tal=null;}
+        {AccessNotation acs=null;TypeAliasStatement tal=null;BaseFunctionDef fd=null;
+        List<AnnotationClause> as=new ArrayList<AnnotationClause>();AnnotationClause a=null;}
     : docstrings[cr]
-    (( functionDef[cr.funcDef()]
-    | varStmt[cr.statementClosure(), cr]
-    | tal=typeAlias[cr]						{cr.add(tal);} //[cr.typeAlias()]
-    | programStatement[cr.XXX(), cr]
-    | acs=accessNotation 					{cr.addAccess(acs);}) opt_semi )*
-    (invariantStatement[cr.invariantStatement()])?
+    (
+    	(
+    		(a=annotation_clause      {as.add(a);})*
+    		fd=function_definition[cr, cr.getContext(), as]
+		| varStmt[cr.statementClosure(), cr]
+		| tal=typeAlias[cr]						{cr.add(tal);}
+		| programStatement[cr.XXX(), cr]
+		| acs=accessNotation 					{cr.addAccess(acs);}
+		)
+		opt_semi
+	)*
+	(invariantStatement[cr.invariantStatement()])?
     ;
 scope3[OS_Element parent] returns [Scope3 sc]
 		{sc=new Scope3(parent);ClassStatement cls=null;}
@@ -316,8 +325,10 @@ postcondition returns [Postcondition postc]
 		{postc = new Postcondition();IdentExpression id=null;}
 	: (id=ident TOK_COLON {postc.id(id);})? expr=expression {postc.expr(expr);}
 	;
+/*
 functionDef[FunctionDef fd]
-    	{AnnotationClause a=null;FunctionContext ctx=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;}
+    	{AnnotationClause a=null;FunctionContext ctx=null;IdentExpression i1=null;TypeName tn=null;FormalArgList fal=null;
+    	fd=null;}
     : (a=annotation_clause      {fd.addAnnotation(a);})*
     i1=ident                    {fd.setName(i1);}
     ( "const"                   {fd.set(FunctionModifiers.CONST);}
@@ -328,39 +339,38 @@ functionDef[FunctionDef fd]
     sco=functionScope[fd] 		{fd.scope(sco);}
     							{fd.setType(FunctionDef.Species.REG_FUN);fd.postConstruct();cur=ctx.getParent();}
     ;
-
-function_definition [List<AnnotationClause> as] returns [BaseFunctionDef fd]
+*/
+function_definition [OS_Element parent, Context ctx, List<AnnotationClause> as] returns [BaseFunctionDef fd]
 		{fd=null;}
-	: fd=def_function_definition[as]
-	| fd=normal_function_definition[as]
+	: fd=def_function_definition[parent, ctx, as]		{fd.setType(BaseFunctionDef.Species.DEF_FUN);}
+	| fd=normal_function_definition[parent, ctx, as]	{fd.setType(BaseFunctionDef.Species.REG_FUN);}
 	;
-normal_function_definition [List<AnnotationClause> as] returns [FunctionDef fd]
+normal_function_definition [OS_Element parent, Context ctx, List<AnnotationClause> as] returns [FunctionDef fd]
 		{fd=null;FunctionHeader fh=null;FunctionBody fb=null;}
-	: fh=function_header
-	  fb=function_body
-	  {fd=new FunctionDef(parent, ctx);fd.setAnnotations(as);fd.setHeader(fh);fd.setBody(fb);} // TODO parent, ctx
+	: fh=function_header	{fd=new FunctionDef(parent, ctx);cur=fd.getContext();}
+	  fb=function_body[fd]	{fd.setAnnotations(as);fd.setHeader(fh);fd.setBody(fb);cur=ctx.getParent();}
 	;
-def_function_definition [List<AnnotationClause> as] returns [DefFunctionDef fd]
+def_function_definition [OS_Element parent, Context ctx, List<AnnotationClause> as] returns [DefFunctionDef fd]
 		{fd=null;FunctionHeader fh=null;IExpression fb=null;}
 	: "def"
-	  fh=function_header
-	  fb=expression (opt_semi)?
-	  {fd=new DefFunctionDef(parent, ctx);fd.setAnnotations(as);fd.setHeader(fh);fd.setBody(fb);} // TODO named docstrings
+	  fh=function_header		{fd=new DefFunctionDef(parent, ctx);cur=fd.getContext();}
+	  fb=expression (opt_semi)?	{fd.setAnnotations(as);fd.setHeader(fh);fd.setBody(fb);cur=ctx.getParent();} // TODO named docstrings
 	;
 function_header returns [FunctionHeader fh]
 		{fh=new FunctionHeader();IdentExpression i1=null;FormalArgList fal=null;TypeName tn=null;}
 	: i1=ident                  {fh.setName(i1);}
       ( "const"                 {fh.setModifier(FunctionModifiers.CONST);}
-      | "immutable"             {fh.setModifier(FunctionModifiers.IMMUTABLE);})?
+      | "immutable"             {fh.setModifier(FunctionModifiers.IMMUTABLE);}
+      )?
       fal=opfal 				{fh.setFal(fal);}
       (TOK_ARROW tn=typeName2 	{fh.setReturnType(tn);})?
 	;
-function_body returns [FunctionBody fb]
+function_body [OS_Element parent] returns [FunctionBody fb]
 		{fb=null;}
-	: fb=function_body_mandatory
+	: fb=function_body_mandatory[parent]
 	| 		{fb=new FunctionBodyEmpty();}
 	;
-function_body_mandatory returns [FunctionBody fb]
+function_body_mandatory [OS_Element parent] returns [FunctionBody fb]
 		{fb=new FunctionBody();Scope3 sc=new Scope3(parent);ClassStatement cls=null;fb.scope3=sc;} // TODO: parent
 	: LCURLY docstrings[sc]
       (preConditionSegment[sc])?

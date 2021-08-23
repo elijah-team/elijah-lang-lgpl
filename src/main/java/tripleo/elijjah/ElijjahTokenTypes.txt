@@ -47,9 +47,9 @@ LITERAL_pre="pre"=47
 LITERAL_requires="requires"=48
 LITERAL_post="post"=49
 LITERAL_ensures="ensures"=50
-LITERAL_immutable="immutable"=51
-TOK_ARROW=52
-LITERAL_def="def"=53
+LITERAL_def="def"=51
+LITERAL_immutable="immutable"=52
+TOK_ARROW=53
 LITERAL_var="var"=54
 LITERAL_val="val"=55
 LITERAL_alias="alias"=56

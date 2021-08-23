@@ -52,9 +52,9 @@ public interface ElijjahTokenTypes {
 	int LITERAL_requires = 48;
 	int LITERAL_post = 49;
 	int LITERAL_ensures = 50;
-	int LITERAL_immutable = 51;
-	int TOK_ARROW = 52;
-	int LITERAL_def = 53;
+	int LITERAL_def = 51;
+	int LITERAL_immutable = 52;
+	int TOK_ARROW = 53;
 	int LITERAL_var = 54;
 	int LITERAL_val = 55;
 	int LITERAL_alias = 56;
