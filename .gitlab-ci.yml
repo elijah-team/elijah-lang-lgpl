@@ -29,9 +29,6 @@ deploy:
   only:
     - master
 
-include:
-  - template: SAST.gitlab-ci.yml
-
 #sast:
 #  image: docker:stable
 #  variables:
@@ -49,13 +46,6 @@ include:
 #  artifacts:
 #    reports:
 #      sast: gl-sast-report.json
-
-include:
-  - template: Security/SAST.gitlab-ci.yml
-
-spotbugs-sast:
-  variables:
-    SAST_ANALYZER_IMAGE_TAG: "2.28.1"
 
 pages:
   image: python:latest
