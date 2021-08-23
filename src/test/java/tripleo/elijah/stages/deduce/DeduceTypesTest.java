@@ -20,6 +20,8 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.util.Helpers;
 
+import static tripleo.elijah.util.Helpers.List_of;
+
 /**
  * Useless tests. We really want to know if a TypeName will resolve to the same types
  */
@@ -34,7 +36,9 @@ public class DeduceTypesTest {
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		final ClassStatement cs = new ClassStatement(mod, mctx);
-		cs.setName(Helpers.string_to_ident("Test"));
+		final ClassHeader ch = new ClassHeader(false, List_of());
+		ch.setName(Helpers.string_to_ident("Test"));
+		cs.setHeader(ch);
 		final FunctionDef fd = cs.funcDef();
 		fd.setName(Helpers.string_to_ident("test"));
 		Scope3 scope3 = new Scope3(fd);
