@@ -60,11 +60,12 @@ public class WritePipeline implements PipelineMember {
 		sys.verbose = false; // TODO flag? ie CompilationOptions
 		sys.setCompilation(c);
 		sys.setOutputStrategy(os);
-		sys.generateOutputs(gr);
 	}
 
 	@Override
 	public void run() throws Exception {
+		sys.generateOutputs(gr);
+
 		write_files();
 		// TODO flag?
 		write_buffers();
@@ -85,6 +86,7 @@ public class WritePipeline implements PipelineMember {
 
 		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
 			final String key = entry.getKey();
+			assert key != null;
 			Path path = FileSystems.getDefault().getPath(prefix, key);
 //			BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
 
