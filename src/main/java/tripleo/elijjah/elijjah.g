@@ -305,13 +305,13 @@ returnExpressionFunctionDefScope [FunctionDefScope sc]
 			)
 	;
 */
-preConditionSegment [Scope3 sc]
+preConditionSegment [FunctionBody sc]
 		{Precondition p=null;}
 	: ("pre"|"requires") LCURLY
 	    (p=precondition 					{sc.addPreCondition(p);})*
 	  RCURLY
 	;
-postConditionSegment [Scope3 sc]
+postConditionSegment [FunctionBody sc]
 		{Postcondition po=null;}
 	: ("post"|"ensures")
 		LCURLY (po=postcondition {sc.addPostCondition(po);})* ((RCURLY RCURLY)=> RCURLY)
@@ -373,7 +373,7 @@ function_body [OS_Element parent] returns [FunctionBody fb]
 function_body_mandatory [OS_Element parent] returns [FunctionBody fb]
 		{fb=new FunctionBody();Scope3 sc=new Scope3(parent);ClassStatement cls=null;fb.scope3=sc;} // TODO: parent
 	: LCURLY docstrings[sc]
-      (preConditionSegment[sc])?
+      (preConditionSegment[fb])?
 		(
 		  (
 			  ( statement[sc.statementClosure(), sc.getParent()]
@@ -387,7 +387,7 @@ function_body_mandatory [OS_Element parent] returns [FunctionBody fb]
 		  ("return" ((expression) => (expr=expression)|) )?
 		| "abstract" opt_semi {fb.setAbstract(true);}
 		)
-  	  (postConditionSegment[sc])?
+  	  (postConditionSegment[fb])?
 	  RCURLY
 	;
 

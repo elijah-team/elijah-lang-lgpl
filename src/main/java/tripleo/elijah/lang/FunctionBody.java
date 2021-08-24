@@ -8,6 +8,9 @@
  */
 package tripleo.elijah.lang;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created 8/23/21 2:36 AM
  */
@@ -15,12 +18,27 @@ public class FunctionBody {
 	public Scope3 scope3;
 	private boolean isAbstract;
 
+	private List<Postcondition> postconditions;
+	private List<Precondition> preconditions;
+
 	public void setAbstract(boolean aAbstract) {
 		isAbstract = aAbstract;
 	}
 
 	public boolean getAbstract() {
 		return isAbstract;
+	}
+
+	public void addPreCondition(Precondition aPrecondition) {
+		if (preconditions == null)
+			preconditions = new ArrayList<Precondition>();
+		preconditions.add(aPrecondition);
+	}
+
+	public void addPostCondition(Postcondition aPostcondition) {
+		if (postconditions == null)
+			postconditions = new ArrayList<Postcondition>();
+		postconditions.add(aPostcondition);
 	}
 }
 

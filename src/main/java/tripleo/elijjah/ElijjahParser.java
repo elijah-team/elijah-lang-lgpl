@@ -2829,7 +2829,7 @@ inputState.guessing--;
 	}
 	
 	public final void preConditionSegment(
-		Scope3 sc
+		FunctionBody sc
 	) throws RecognitionException, TokenStreamException {
 		
 		Precondition p=null;
@@ -2919,7 +2919,7 @@ inputState.guessing--;
 	}
 	
 	public final void postConditionSegment(
-		Scope3 sc
+		FunctionBody sc
 	) throws RecognitionException, TokenStreamException {
 		
 		Postcondition po=null;
@@ -3322,7 +3322,7 @@ inputState.guessing--;
 			case LITERAL_pre:
 			case LITERAL_requires:
 			{
-				preConditionSegment(sc);
+				preConditionSegment(fb);
 				break;
 			}
 			case IDENT:
@@ -3545,7 +3545,7 @@ inputState.guessing--;
 			case LITERAL_post:
 			case LITERAL_ensures:
 			{
-				postConditionSegment(sc);
+				postConditionSegment(fb);
 				break;
 			}
 			case RCURLY:
