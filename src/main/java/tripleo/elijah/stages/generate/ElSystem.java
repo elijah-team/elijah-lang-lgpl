@@ -32,9 +32,9 @@ public class ElSystem {
 		final OutputStrategyC outputStrategyC = new OutputStrategyC(this.outputStrategy);
 
 		for (GenerateResultItem ab : gr.results()) {
-			String s = generateOutputs_Internal(ab.node, ab.ty, outputStrategyC);
-			assert s != null;
-			ab.output = s;
+			String filename = getFilenameForNode(ab.node, ab.ty, outputStrategyC);
+			assert filename != null;
+			ab.output = filename;
 			gr.completeItem(ab);
 		}
 
@@ -48,14 +48,14 @@ public class ElSystem {
 		gr.signalDone();
 	}
 
-	String generateOutputs_Internal(GeneratedNode node, GenerateResult.TY ty, OutputStrategyC outputStrategyC) {
+	String getFilenameForNode(GeneratedNode node, GenerateResult.TY ty, OutputStrategyC outputStrategyC) {
 		String s, ss;
 		if (node instanceof GeneratedNamespace) {
 			final GeneratedNamespace generatedNamespace = (GeneratedNamespace) node;
 			s = outputStrategyC.nameForNamespace(generatedNamespace, ty);
 //			System.out.println("41 "+generatedNamespace+" "+s);
 			for (GeneratedFunction gf : generatedNamespace.functionMap.values()) {
-				ss = generateOutputs_Internal(gf, ty, outputStrategyC);
+				ss = getFilenameForNode(gf, ty, outputStrategyC);
 				gfm_map.put(gf, ss);
 			}
 		} else if (node instanceof GeneratedClass) {
@@ -63,7 +63,7 @@ public class ElSystem {
 			s = outputStrategyC.nameForClass(generatedClass, ty);
 //			System.out.println("48 "+generatedClass+" "+s);
 			for (GeneratedFunction gf : generatedClass.functionMap.values()) {
-				ss = generateOutputs_Internal(gf, ty, outputStrategyC);
+				ss = getFilenameForNode(gf, ty, outputStrategyC);
 				gfm_map.put(gf, ss);
 			}
 		} else if (node instanceof GeneratedFunction) {
