@@ -35,6 +35,7 @@ public class ElSystem {
 			String s = generateOutputs_Internal(ab.node, ab.ty, outputStrategyC);
 			assert s != null;
 			ab.output = s;
+			gr.completeItem(ab);
 		}
 
 		if (verbose) {
@@ -43,6 +44,8 @@ public class ElSystem {
 				System.out.println("** "+ab.node+" "+ab.output);
 			}
 		}
+
+		gr.signalDone();
 	}
 
 	String generateOutputs_Internal(GeneratedNode node, GenerateResult.TY ty, OutputStrategyC outputStrategyC) {

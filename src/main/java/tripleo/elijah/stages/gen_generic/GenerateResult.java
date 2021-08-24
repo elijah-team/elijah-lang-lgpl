@@ -8,6 +8,9 @@
  */
 package tripleo.elijah.stages.gen_generic;
 
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.Subject;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
@@ -26,12 +29,14 @@ public class GenerateResult {
 
 	final List<GenerateResultItem> res = new ArrayList<GenerateResultItem>();
 
-	public void add(Buffer b, GeneratedNode n, TY ty) {
-		res.add(new GenerateResultItem(ty, b, n, ++bufferCounter));
-	}
-
 	public List<GenerateResultItem> results() {
 		return res;
+	}
+
+	public void add(Buffer b, GeneratedNode n, TY ty) {
+		final GenerateResultItem item = new GenerateResultItem(ty, b, n, ++bufferCounter);
+		res.add(item);
+//		items.onNext(item);
 	}
 
 	public void addFunction(BaseGeneratedFunction aGeneratedFunction, Buffer aBuffer, TY aTY) {
@@ -42,10 +47,6 @@ public class GenerateResult {
 		addFunction(aGeneratedFunction, aBuffer, aTY);
 	}
 
-	public enum TY {
-		HEADER, IMPL, PRIVATE_HEADER
-	}
-
 	public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf) {
 		add(aBuf, aClass, ty);
 	}
@@ -54,6 +55,27 @@ public class GenerateResult {
 		add(aBuf, aNamespace, ty);
 	}
 
+	public enum TY {
+		HEADER, IMPL, PRIVATE_HEADER
+	}
+
+	// region REACTIVE
+
+	private final Subject<GenerateResultItem> completedItems = ReplaySubject.<GenerateResultItem>create();
+
+	public void subscribeCompletedItems(Observer<GenerateResultItem> aGenerateResultItemObserver) {
+		completedItems.subscribe(aGenerateResultItemObserver);
+	}
+
+	public void completeItem(GenerateResultItem aGenerateResultItem) {
+		completedItems.onNext(aGenerateResultItem);
+	}
+
+	public void signalDone() {
+		completedItems.onComplete();
+	}
+
+	// endregion
 }
 
 //

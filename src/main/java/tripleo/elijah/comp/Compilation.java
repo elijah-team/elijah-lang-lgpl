@@ -33,6 +33,7 @@ import tripleo.elijjah.EzParser;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -300,6 +301,46 @@ public class Compilation {
 			e.printStackTrace(System.err);
 			s.close();
 			return null;
+		}
+	}
+
+	public static class QueryElijahModuleForString {
+		private Exception exc;
+		private OS_Module mod;
+
+		void parseString(String sourceText, String filename, Compilation compilation) {
+			ElijjahParser parser = null;
+			boolean do_out = false;
+			final StringReader stringReader = new StringReader(sourceText);
+			try {
+				final ElijjahLexer lexer = new ElijjahLexer(stringReader);
+				lexer.setFilename(filename);
+				parser = new ElijjahParser(lexer);
+				parser.out = new Out(filename, compilation, do_out);
+				parser.setFilename(filename);
+				try {
+					parser.program();
+				} catch (RecognitionException aE) {
+					exc = aE;
+					return;
+				} catch (TokenStreamException aE) {
+					exc = aE;
+					return;
+				}
+				mod = parser.out.module();
+			} finally {
+				if (parser != null)
+					parser.out = null;
+				stringReader.close();
+			}
+		}
+
+		OS_Module getResult() {
+			return mod;
+		}
+
+		Exception getError() {
+			return exc;
 		}
 	}
 

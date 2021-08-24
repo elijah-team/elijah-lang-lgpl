@@ -10,6 +10,9 @@ package tripleo.elijah.comp;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
@@ -47,6 +50,8 @@ public class WritePipeline implements PipelineMember {
 
 	private final File file_prefix;
 
+	private final Multimap<String, Buffer> mmb;
+
 	public WritePipeline(Compilation aCompilation, GenerateResult aGr) {
 		c = aCompilation;
 		gr = aGr;
@@ -56,17 +61,49 @@ public class WritePipeline implements PipelineMember {
 		os = new OutputStrategy();
 		os.per(OutputStrategy.Per.PER_CLASS); // TODO this needs to be configured per lsp
 
+		mmb = ArrayListMultimap.create();
+
 		sys = new ElSystem();
 		sys.verbose = false; // TODO flag? ie CompilationOptions
 		sys.setCompilation(c);
 		sys.setOutputStrategy(os);
+		gr.subscribeCompletedItems(new Observer<GenerateResultItem>() {
+			@Override
+			public void onSubscribe(@NonNull Disposable d) {
+
+			}
+
+			@Override
+			public void onNext(@NonNull GenerateResultItem ab) {
+				mmb.put(ab.output, ab.buffer);
+			}
+
+			@Override
+			public void onError(@NonNull Throwable e) {
+
+			}
+
+			@Override
+			public void onComplete() {
+				try {
+					write_files_helper(mmb);
+				} catch (IOException aE) {
+					c.getErrSink().exception(aE);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void run() throws Exception {
 		sys.generateOutputs(gr);
 
-		write_files();
+		file_prefix.mkdirs();
+		// TODO flag?
+		write_inputs();
+
+//		write_files();
+
 		// TODO flag?
 		write_buffers();
 	}
@@ -78,11 +115,13 @@ public class WritePipeline implements PipelineMember {
 			mb.put(ab.output, ab.buffer);
 		}
 
-		file_prefix.mkdirs();
-		String prefix = file_prefix.toString();
+		assert mmb.equals(mb);
 
-		// TODO flag?
-		write_inputs(file_prefix);
+		write_files_helper(mb);
+	}
+
+	private void write_files_helper(Multimap<String, Buffer> mb) throws IOException {
+		String prefix = file_prefix.toString();
 
 		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
 			final String key = entry.getKey();
@@ -102,7 +141,7 @@ public class WritePipeline implements PipelineMember {
 		}
 	}
 
-	private void write_inputs(File file_prefix) throws IOException {
+	private void write_inputs() throws IOException {
 		final String fn1 = new File(file_prefix, "inputs.txt").toString();
 
 		DefaultBuffer buf = new DefaultBuffer("");
