@@ -29,7 +29,7 @@ public class WlGenerateNamespace implements WorkJob {
 	private final NamespaceInvocation namespaceInvocation;
 	private final List<GeneratedNode> coll;
 	private boolean _isDone = false;
-	private GeneratedNamespace Result;
+	private GeneratedNamespace result;
 
 	public WlGenerateNamespace(@NotNull GenerateFunctions aGenerateFunctions,
 							   @NotNull NamespaceInvocation aNamespaceInvocation,
@@ -51,13 +51,13 @@ public class WlGenerateNamespace implements WorkJob {
 				coll.add(ns);
 
 			resolvePromise.resolve(ns);
-			Result = ns;
+			result = ns;
 			break;
 		case RESOLVED:
 			resolvePromise.then(new DoneCallback<GeneratedNamespace>() {
 				@Override
 				public void onDone(GeneratedNamespace result) {
-					Result = result;
+					WlGenerateNamespace.this.result = result;
 				}
 			});
 			break;
