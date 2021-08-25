@@ -31,11 +31,11 @@ public class DeduceTypesTest {
 
 	@Before
 	public void setUp() throws ResolveError {
-		final OS_Module mod = new OS_Module();
-		mod.parent = new Compilation(new StdErrSink(), new IO());
-		final ModuleContext mctx = new ModuleContext(mod);
-		mod.setContext(mctx);
-		final ClassStatement cs = new ClassStatement(mod, mctx);
+		final Compilation c = new Compilation(new StdErrSink(), new IO());
+		final OS_Module mod = c.moduleBuilder()
+					.setContext()
+					.build();
+		final ClassStatement cs = new ClassStatement(mod, mod.getContext());
 		final ClassHeader ch = new ClassHeader(false, List_of());
 		ch.setName(Helpers.string_to_ident("Test"));
 		cs.setHeader(ch);
