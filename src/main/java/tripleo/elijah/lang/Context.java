@@ -72,7 +72,7 @@ public abstract class Context {
 
 	public Compilation compilation() {
 		OS_Module module = module();
-		return module.parent;
+		return module.getCompilation();
 	}
 }
 

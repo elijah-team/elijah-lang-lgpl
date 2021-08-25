@@ -44,7 +44,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	public @NotNull Attached _a = new Attached();
 	public OS_Module prelude;
 
-	public Compilation parent;
+	private Compilation parent;
 	private LibraryStatementPart lsp;
 	private String _fileName;
 	public @NotNull List<EntryPoint> entryPoints = new ArrayList<EntryPoint>();
@@ -311,6 +311,10 @@ public class OS_Module implements OS_Element, OS_Container {
 	
 	public void setIndexingStatement(final IndexingStatement i) {
 		indexingStatement = i;
+	}
+
+	public Compilation getCompilation() {
+		return parent;
 	}
 }
 

@@ -50,7 +50,7 @@ public class PipelineLogic {
 		dp.finish();
 		lgc.addAll(dp.generatedClasses);
 		for (OS_Module mod : mods) {
-			PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
+			PostDeduce pd = new PostDeduce(mod.getCompilation().getErrSink(), dp);
 			pd.analyze();
 		}
 	}
@@ -59,7 +59,7 @@ public class PipelineLogic {
 		GenerateResult ggr = null;
 		final WorkManager wm = new WorkManager();
 		// README use any errSink, they should all be the same
-		final GenerateC generateC = new GenerateC(mods.get(0).parent.getErrSink());
+		final GenerateC generateC = new GenerateC(mods.get(0).getCompilation().getErrSink());
 		for (OS_Module mod : mods) {
 			ggr = run3(mod, lgc, wm, generateC);
 			wm.drain();
@@ -114,13 +114,13 @@ public class PipelineLogic {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				if (generatedFunction.getCode() == 0)
-					generatedFunction.setCode(mod.parent.nextFunctionCode());
+					generatedFunction.setCode(mod.getCompilation().nextFunctionCode());
 			} else if (generatedNode instanceof GeneratedClass) {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 //				if (generatedClass.getCode() == 0)
-//					generatedClass.setCode(mod.parent.nextClassCode());
+//					generatedClass.setCode(mod.getCompilation().nextClassCode());
 				for (GeneratedClass generatedClass2 : generatedClass.classMap.values()) {
-					generatedClass2.setCode(mod.parent.nextClassCode());
+					generatedClass2.setCode(mod.getCompilation().nextClassCode());
 				}
 				for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
@@ -133,9 +133,9 @@ public class PipelineLogic {
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
 				if (generatedNamespace.getCode() == 0)
-					generatedNamespace.setCode(mod.parent.nextClassCode());
+					generatedNamespace.setCode(mod.getCompilation().nextClassCode());
 				for (GeneratedClass generatedClass : generatedNamespace.classMap.values()) {
-					generatedClass.setCode(mod.parent.nextClassCode());
+					generatedClass.setCode(mod.getCompilation().nextClassCode());
 				}
 				for (GeneratedFunction generatedFunction : generatedNamespace.functionMap.values()) {
 					for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
@@ -152,15 +152,15 @@ public class PipelineLogic {
 			if (generatedNode instanceof GeneratedFunction) {
 				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 				if (generatedFunction.getCode() == 0)
-					generatedFunction.setCode(mod.parent.nextFunctionCode());
+					generatedFunction.setCode(mod.getCompilation().nextFunctionCode());
 			} else if (generatedNode instanceof GeneratedClass) {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 				if (generatedClass.getCode() == 0)
-					generatedClass.setCode(mod.parent.nextClassCode());
+					generatedClass.setCode(mod.getCompilation().nextClassCode());
 			} else if (generatedNode instanceof GeneratedNamespace) {
 				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
 				if (generatedNamespace.getCode() == 0)
-					generatedNamespace.setCode(mod.parent.nextClassCode());
+					generatedNamespace.setCode(mod.getCompilation().nextClassCode());
 			}
 		}
 

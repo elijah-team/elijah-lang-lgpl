@@ -33,7 +33,7 @@ public class TranslateModule {
 					} else
 						System.out.println("8000 "+item);
 				} catch (final IOException e) {
-					module.parent.getErrSink().exception(e);
+					module.getCompilation().getErrSink().exception(e);
 				}
 			}
 		} finally {
@@ -41,7 +41,7 @@ public class TranslateModule {
 //				try {
 //					w.close();
 //				} catch (IOException e) {
-//					module.parent.eee.exception(e);
+//					module.getCompilation().eee.exception(e);
 //				}
 //			}
 		}
@@ -220,7 +220,7 @@ public class TranslateModule {
 			w = new TabbedOutputStream(Files.newOutputStream(p));
 			return w;
 		} catch (final IOException e) {
-			module.parent.eee.exception(e);
+			module.getCompilation().eee.exception(e);
 		}
 		return null;
 	}*/

@@ -46,7 +46,7 @@ public class WlGenerateNamespace implements WorkJob {
 		switch (resolvePromise.state()) {
 		case PENDING:
 			@NotNull GeneratedNamespace ns = generateFunctions.generateNamespace(namespaceStatement);
-			ns.setCode(generateFunctions.module.parent.nextClassCode());
+			ns.setCode(generateFunctions.module.getCompilation().nextClassCode());
 			if (coll != null)
 				coll.add(ns);
 
