@@ -52,10 +52,10 @@ public class DeduceTypes2 {
 	private final ErrSink errSink;
 	WorkManager wm = new WorkManager();
 
-	public DeduceTypes2(OS_Module module, DeducePhase phase) {
-		this.module = module;
-		this.phase = phase;
-		this.errSink = module.getCompilation().getErrSink();
+	public DeduceTypes2(OS_Module aModule, DeducePhase aDeducePhase) {
+		this.module = aModule;
+		this.phase = aDeducePhase;
+		this.errSink = aModule.getCompilation().getErrSink();
 	}
 
 	public void deduceFunctions(final @NotNull Iterable<GeneratedNode> lgf) {
