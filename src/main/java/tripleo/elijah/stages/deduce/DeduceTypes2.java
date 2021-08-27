@@ -2587,7 +2587,7 @@ public class DeduceTypes2 {
 		}
 		final ConstantTableEntry cte = generatedFunction.getConstTableEntry(i2.getIndex());
 		if (cte.type.getAttached() == null) {
-			LOG.info("*** ERROR: Null type in CTE "+cte);
+			LOG.err("*** ERROR: Null type in CTE "+cte);
 		}
 		// idte.type may be null, but we still addPotentialType here
 		idte.addPotentialType(instruction.getIndex(), cte.type);
