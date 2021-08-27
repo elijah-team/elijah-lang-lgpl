@@ -153,7 +153,7 @@ public class Compilation {
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
-					pipeline = new PipelineLogic(gitlabCIVerbosity());
+					pipeline = new PipelineLogic(silent ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE);
 					pipeline.verbose = !silent;
 
 					ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
