@@ -12,6 +12,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.comp.ErrSink;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialVariables;
@@ -52,9 +53,11 @@ public class GenerateC implements CodeGenerator {
 	private final ErrSink errSink;
 	private final ElLog LOG;
 
-	public GenerateC(OS_Module aM, ErrSink aErrSink, ElLog.Verbosity verbosity) {
+	public GenerateC(OS_Module aM, ErrSink aErrSink, ElLog.Verbosity verbosity, PipelineLogic pipelineLogic) {
 		errSink = aErrSink;
 		LOG = new ElLog(aM.getFileName(), verbosity, PHASE);
+		//
+		pipelineLogic.addLog(LOG);
 	}
 
 	@NotNull

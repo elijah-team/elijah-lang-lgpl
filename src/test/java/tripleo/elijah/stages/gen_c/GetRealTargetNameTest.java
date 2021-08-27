@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.IdentExpression;
@@ -58,7 +60,8 @@ public class GetRealTargetNameTest {
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		ident_ia.setPrev(new IntegerIA(int_index, gf));
 		//
-		GenerateC c = new GenerateC(mod, new StdErrSink(), ElLog.Verbosity.SILENT); // TODO do we want silent?
+		PipelineLogic pipelineLogic = new PipelineLogic(Compilation.gitlabCIVerbosity());
+		GenerateC c = new GenerateC(mod, new StdErrSink(), ElLog.Verbosity.SILENT, pipelineLogic); // TODO do we want silent?
 		//
 		Emit.emitting = false;
 		String x = c.getRealTargetName(gf, ident_ia);

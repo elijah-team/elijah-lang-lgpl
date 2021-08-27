@@ -276,7 +276,8 @@ public class TestGenFunction {
 			}
 		}
 
-		GenerateC ggc = new GenerateC(m, eee, c.gitlabCIVerbosity());
+		PipelineLogic pipelineLogic = new PipelineLogic(Compilation.gitlabCIVerbosity());
+		GenerateC ggc = new GenerateC(m, eee, c.gitlabCIVerbosity(), pipelineLogic);
 		ggc.generateCode(lgf, wm);
 
 		GenerateResult gr = new GenerateResult();
