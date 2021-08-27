@@ -276,7 +276,7 @@ public class TestGenFunction {
 			}
 		}
 
-		GenerateC ggc = new GenerateC(/*m*/eee);
+		GenerateC ggc = new GenerateC(m, eee, c.gitlabCIVerbosity());
 		ggc.generateCode(lgf, wm);
 
 		GenerateResult gr = new GenerateResult();

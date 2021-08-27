@@ -24,6 +24,7 @@ import tripleo.elijah.stages.gen_fn.TypeTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 
 import static org.easymock.EasyMock.mock;
@@ -57,7 +58,7 @@ public class GetRealTargetNameTest {
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		ident_ia.setPrev(new IntegerIA(int_index, gf));
 		//
-		GenerateC c = new GenerateC(/*mod,*/ new StdErrSink());
+		GenerateC c = new GenerateC(mod, new StdErrSink(), ElLog.Verbosity.SILENT); // TODO do we want silent?
 		//
 		Emit.emitting = false;
 		String x = c.getRealTargetName(gf, ident_ia);
