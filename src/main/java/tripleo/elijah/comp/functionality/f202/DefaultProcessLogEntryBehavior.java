@@ -29,10 +29,10 @@ public class DefaultProcessLogEntryBehavior implements ProcessLogEntryBehavior {
 	}
 
 	@Override
-	public void initialize(File psf, String aS1, ErrSink aErrSink) {
+	public void initialize(File aLogFile, String aElLogFileName, ErrSink aErrSink) {
 		try {
-			ps = new PrintStream(psf);
-			s1 = aS1;
+			ps = new PrintStream(aLogFile);
+			s1 = aElLogFileName;
 		} catch (FileNotFoundException exception) {
 			aErrSink.exception(exception);
 		}

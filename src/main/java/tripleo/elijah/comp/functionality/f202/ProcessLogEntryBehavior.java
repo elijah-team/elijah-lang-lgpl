@@ -20,7 +20,7 @@ import java.io.File;
 public interface ProcessLogEntryBehavior {
 	void processLogEntry(LogEntry aLogEntry);
 
-	void initialize(File aPsf, String aS1, ErrSink aErrSink);
+	void initialize(File aLogFile, String aElLogFileName, ErrSink aErrSink);
 
 	void start();
 
