@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.contexts.ModuleContext;
@@ -59,8 +60,9 @@ public class DeduceTypesTest {
 		//
 		//
 		final ElLog.Verbosity verbosity = mod.parent.gitlabCIVerbosity();
-		final GeneratePhase generatePhase = new GeneratePhase(verbosity);
-		DeducePhase dp = new DeducePhase(generatePhase);
+		final PipelineLogic pl = new PipelineLogic(verbosity);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity, pl);
+		DeducePhase dp = new DeducePhase(generatePhase, pl);
 		DeduceTypes2 d = dp.deduceModule(mod, verbosity);
 //		final DeduceTypes d = new DeduceTypes(mod);
 		this.x = DeduceLookupUtils.deduceExpression(d, x1, fc);

@@ -65,9 +65,10 @@ public class TestGenFunction {
 		List<FunctionMapHook> ran_hooks = new ArrayList<>();
 
 		final ElLog.Verbosity verbosity1 = c.gitlabCIVerbosity();
-		final GeneratePhase generatePhase1 = new GeneratePhase(verbosity1);
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase1 = new GeneratePhase(verbosity1, pl);
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
-		DeducePhase dp = new DeducePhase(generatePhase1);
+		DeducePhase dp = new DeducePhase(generatePhase1, pl);
 		gfm.generateFromEntryPoints(m.entryPoints, dp);
 
 		final List<GeneratedNode> lgc = dp.generatedClasses; //new ArrayList<>();
@@ -232,12 +233,13 @@ public class TestGenFunction {
 		}
 
 		final ElLog.Verbosity verbosity1 = c.gitlabCIVerbosity();
-		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
-		final GenerateFunctions gfm = new GenerateFunctions(generatePhase, m);
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
 		final List<GeneratedNode> lgc = new ArrayList<>();
 		gfm.generateAllTopLevelClasses(lgc);
 
-		DeducePhase dp = new DeducePhase(generatePhase);
+		DeducePhase dp = new DeducePhase(generatePhase, pl);
 
 		WorkManager wm = new WorkManager();
 

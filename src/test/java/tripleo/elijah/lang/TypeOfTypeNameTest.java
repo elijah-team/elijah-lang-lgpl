@@ -13,6 +13,7 @@ import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.IO;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
@@ -69,8 +70,9 @@ public class TypeOfTypeNameTest {
 		// VERIFY EXPECTATIONS
 		//
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
-		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
-		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase));
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase, pl));
 		TypeName tn = t.resolve(ctx, deduceTypes2);
 //		System.out.println(tn);
 		verify(ctx, mod, c);
@@ -121,8 +123,9 @@ public class TypeOfTypeNameTest {
 		// VERIFY EXPECTATIONS
 		//
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
-		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
-		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase));
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase, pl));
 		TypeName tn = t.resolve(ctx, deduceTypes2);
 //		System.out.println(tn);
 		verify(ctx, mod, c);
@@ -250,8 +253,9 @@ public class TypeOfTypeNameTest {
 		//
 //		OS_Module mod = mock(OS_Module.class);
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
-		final GeneratePhase generatePhase = new GeneratePhase(verbosity1);
-		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase));
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase, pl));
 //		expect(mod.getFileName()).andReturn("foo.elijah");
 		expect(ctx.lookup("x")).andReturn(lrl);
 //		expect(ctx.lookup("y")).andReturn(lrl4);

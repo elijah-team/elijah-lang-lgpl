@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_c.CReference;
@@ -92,7 +93,9 @@ public class GetIdentIAPathTest_ForC {
 		//		el1.add(vsq);
 		//
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
-		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(verbosity1), mod);
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		GenerateFunctions gen = generatePhase.getGenerateFunctions(mod);
 		Context ctx = mock(Context.class);
 		//
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
@@ -116,7 +119,9 @@ public class GetIdentIAPathTest_ForC {
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");
 		//
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
-		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(verbosity1), mod);
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		GenerateFunctions gen = generatePhase.getGenerateFunctions(mod);
 		Context ctx = mock(Context.class);
 		//
 		OS_Type type = null;
@@ -194,7 +199,9 @@ public class GetIdentIAPathTest_ForC {
 		DotExpression expr = new DotExpression(x_ident, foo_ident);
 		//
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
-		GenerateFunctions gen = new GenerateFunctions(new GeneratePhase(verbosity1), mod);
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		GenerateFunctions gen = generatePhase.getGenerateFunctions(mod);
 		InstructionArgument xx = gen.simplify_expression(expr, gf, ctx);
 
 		//
