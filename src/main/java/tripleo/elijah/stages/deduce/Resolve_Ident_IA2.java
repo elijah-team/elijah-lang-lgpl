@@ -18,6 +18,7 @@ import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.ProcIA;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -33,7 +34,9 @@ class Resolve_Ident_IA2 {
 	private DeducePhase phase;
 	private BaseGeneratedFunction generatedFunction;
 	private FoundElement foundElement;
-
+	
+	private final ElLog LOG;
+	
 	public Resolve_Ident_IA2(final DeduceTypes2 aDeduceTypes2,
 							 ErrSink aErrSink,
 							 DeducePhase aPhase,
@@ -44,6 +47,8 @@ class Resolve_Ident_IA2 {
 		phase = aPhase;
 		generatedFunction = aGeneratedFunction;
 		foundElement = aFoundElement;
+		//
+		LOG = deduceTypes2.LOG;
 	}
 
 	OS_Element el = null;
@@ -90,7 +95,7 @@ class Resolve_Ident_IA2 {
 							return;
 					}
 				} else if (ia2 instanceof ProcIA) {
-					System.err.println("1373 ProcIA");
+					LOG.err("1373 ProcIA");
 //						@NotNull ProcTableEntry pte = ((ProcIA) ia2).getEntry(); // README ectx seems to be set up already
 				} else
 					throw new NotImplementedException();
@@ -181,7 +186,7 @@ class Resolve_Ident_IA2 {
 					if (resolveError.resultsList().size() > 1)
 						errSink.reportDiagnostic(resolveError);
 					else
-						System.out.println("1089 Can't attach type to " + idte2.type.getAttached());
+						LOG.info("1089 Can't attach type to " + idte2.type.getAttached());
 //					resolveError.printStackTrace(); // TODO print diagnostic
 					return RIA_STATE.CONTINUE;
 				}
@@ -222,12 +227,12 @@ class Resolve_Ident_IA2 {
 				TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 				idte.type = tte;
 			} else {
-				System.err.println("Empty Variable Expression");
+				LOG.err("Empty Variable Expression");
 				throw new IllegalStateException("Empty Variable Expression");
 //				return; // TODO call noFoundElement, raise exception
 			}
 		} catch (ResolveError aResolveError) {
-			System.err.println("1937 resolve error " + vs.getName());
+			LOG.err("1937 resolve error " + vs.getName());
 //			aResolveError.printStackTrace();
 			errSink.reportDiagnostic(aResolveError);
 		}
@@ -256,7 +261,7 @@ class Resolve_Ident_IA2 {
 							ectx = attached.getTypeName().getContext();
 							break;
 						default:
-							System.err.println("1098 " + attached.getType());
+							LOG.err("1098 " + attached.getType());
 							throw new IllegalStateException("Can't be here.");
 					}
 				}
@@ -277,7 +282,7 @@ class Resolve_Ident_IA2 {
 						@NotNull OS_Type ty = deduceTypes2.resolve_type(attached, ctx);
 						ectx = ty.getClassOf().getContext();
 					} catch (ResolveError resolveError) {
-						System.err.println("1300 Can't resolve " + attached);
+						LOG.err("1300 Can't resolve " + attached);
 						resolveError.printStackTrace();
 					}
 					break;
@@ -355,7 +360,7 @@ class Resolve_Ident_IA2 {
 			case 1:
 				break;
 			default:
-				System.out.println("1006 Can't find type of " + aText);
+				LOG.info("1006 Can't find type of " + aText);
 				break;
 		}
 	}
@@ -388,7 +393,7 @@ class Resolve_Ident_IA2 {
 					fd = (FunctionDef) best;
 				} else {
 					fd = null;
-					System.err.println("1195 Can't find match");
+					LOG.err("1195 Can't find match");
 				}
 			}
 			if (fd != null) {

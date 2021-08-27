@@ -53,7 +53,7 @@ public class DeduceTypes2 {
 	private final OS_Module module;
 	private final DeducePhase phase;
 	private final ErrSink errSink;
-	private final ElLog LOG;
+	final ElLog LOG;
 	WorkManager wm = new WorkManager();
 
 	public DeduceTypes2(OS_Module module, DeducePhase phase) {

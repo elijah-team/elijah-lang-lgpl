@@ -19,6 +19,7 @@ import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.ProcIA;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
@@ -37,6 +38,8 @@ class Resolve_Ident_IA {
 
 	private final DeduceTypes2 deduceTypes2;
 	private final DeducePhase phase;
+	
+	private final ElLog LOG;
 
 	@Contract(pure = true)
 	public Resolve_Ident_IA(final @NotNull DeduceTypes2 aDeduceTypes2,
@@ -53,6 +56,8 @@ class Resolve_Ident_IA {
 		generatedFunction = aGeneratedFunction;
 		foundElement = aFoundElement;
 		errSink = aErrSink;
+		//
+		LOG = deduceTypes2.LOG;
 	}
 
 	OS_Element el;
@@ -114,14 +119,14 @@ class Resolve_Ident_IA {
 					public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 						if (newStatus == BaseTableEntry.Status.KNOWN) {
 //								assert el2 != eh.getElement();
-							System.out.println("1424 Found for " + normal_path);
+							LOG.info("1424 Found for " + normal_path);
 							foundElement.doFoundElement(eh.getElement());
 						}
 					}
 				});
 			}
 		} else {
-//			System.out.println("1431 Found for " + normal_path);
+//			LOG.info("1431 Found for " + normal_path);
 			foundElement.doFoundElement(el);
 		}
 	}
@@ -216,7 +221,7 @@ class Resolve_Ident_IA {
 		ConstructorDef selected_constructor = null;
 		if (pte.getArgs().size() == 0 && cs.size() == 0) {
 			// TODO use a virtual default ctor
-			System.out.println("2262 use a virtual default ctor for " + pte.expression);
+			LOG.info("2262 use a virtual default ctor for " + pte.expression);
 			selected_constructor = ConstructorDef.defaultVirtualCtor;
 		} else {
 			// TODO find a ctor that matches prte.getArgs()
@@ -245,7 +250,7 @@ class Resolve_Ident_IA {
 	private RIA_STATE action_IdentIA(List<InstructionArgument> aS, IdentIA ia) {
 		final IdentTableEntry idte = ia.getEntry();
 		if (idte.getStatus() == BaseTableEntry.Status.UNKNOWN) {
-			System.out.println("1257 Not found for " + generatedFunction.getIdentIAPathNormal(ia));
+			LOG.info("1257 Not found for " + generatedFunction.getIdentIAPathNormal(ia));
 			// No need checking more than once
 			foundElement.doNoFoundElement();
 			return RIA_STATE.RETURN;
@@ -323,7 +328,7 @@ class Resolve_Ident_IA {
 					@Override
 					public void noFoundElement() {
 						foundElement.noFoundElement();
-						System.out.println("2002 Cant resolve " + z);
+						LOG.info("2002 Cant resolve " + z);
 						idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 					}
 				});
@@ -429,7 +434,7 @@ class Resolve_Ident_IA {
 			}
 			case FUNCTION: {
 				int yy = 2;
-				System.err.println("1005");
+				LOG.err("1005");
 				FunctionDef x = (FunctionDef) aAttached.getElement();
 				ectx = x.getContext();
 				break;
@@ -443,7 +448,7 @@ class Resolve_Ident_IA {
 						ectx = ty.getElement().getContext();
 					} catch (ResolveError resolveError) {
 						resolveError.printStackTrace();
-						System.err.println("1182 Can't resolve " + tn);
+						LOG.err("1182 Can't resolve " + tn);
 						throw new IllegalStateException("ResolveError.");
 					}
 //						ectx = el.getContext();
@@ -456,7 +461,7 @@ class Resolve_Ident_IA {
 				break;
 			}
 			default:
-				System.err.println("1010 " + aAttached.getType());
+				LOG.err("1010 " + aAttached.getType());
 				throw new IllegalStateException("Don't know what you're doing here.");
 		}
 	}
