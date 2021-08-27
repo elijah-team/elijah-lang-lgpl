@@ -13,6 +13,7 @@ import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.entrypoints.ArbitraryFunctionEntryPoint;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.entrypoints.MainClassEntryPoint;
@@ -41,14 +42,17 @@ import static tripleo.elijah.util.Helpers.List_of;
  * Created 9/10/20 2:28 PM
  */
 public class GenerateFunctions {
+	private static final String PHASE = "GenerateFunctions";
 	private final GeneratePhase phase;
 	final OS_Module module;
 	private final ElLog LOG;
 
-	public GenerateFunctions(final GeneratePhase aPhase, final OS_Module aModule) {
+	public GenerateFunctions(final GeneratePhase aPhase, final OS_Module aModule, PipelineLogic aPipelineLogic) {
 		phase = aPhase;
 		module = aModule;
-		LOG = new ElLog(module.getFileName(), aPhase.getVerbosity());
+		LOG = new ElLog(module.getFileName(), aPhase.getVerbosity(), PHASE);
+		//
+		aPipelineLogic.addLog(LOG);
 	}
 
 	public @NotNull GeneratedConstructor generateConstructor(ConstructorDef aConstructorDef,

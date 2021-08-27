@@ -49,6 +49,7 @@ import java.util.regex.Pattern;
  * Created 9/15/20 12:51 PM
  */
 public class DeduceTypes2 {
+	private static final String PHASE = "DeduceTypes2";
 	private final OS_Module module;
 	private final DeducePhase phase;
 	private final ErrSink errSink;
@@ -63,9 +64,9 @@ public class DeduceTypes2 {
 		this.module = module;
 		this.phase = phase;
 		this.errSink = module.getCompilation().getErrSink();
-		this.LOG = new ElLog(module.getFileName(), verbosity);
+		this.LOG = new ElLog(module.getFileName(), verbosity, PHASE);
 		//
-		phase.addDeduceLog(LOG);
+		phase.addLog(LOG);
 	}
 
 	public void deduceFunctions(final @NotNull Iterable<GeneratedNode> lgf) {

@@ -49,6 +49,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -60,13 +61,13 @@ public class PipelineLogic {
 	final DeducePhase dp;
 
 	public PipelineLogic(ElLog.Verbosity aVerbosity) {
-		generatePhase = new GeneratePhase(aVerbosity);
-		dp = new DeducePhase(generatePhase);
+		generatePhase = new GeneratePhase(aVerbosity, this);
+		dp = new DeducePhase(generatePhase, this);
 	}
 
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
 	public GenerateResult gr = new GenerateResult();
-	public List<ElLog> deduceLogs = null;
+	public List<ElLog> elLogs = new LinkedList<ElLog>();
 	public boolean verbose = true;
 
 	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
@@ -81,7 +82,7 @@ public class PipelineLogic {
 //			pd.analyze();
 //		}
 		//
-		deduceLogs = dp.deduceLogs;
+//		elLogs = dp.deduceLogs;
 	}
 
 	public void generate(List<GeneratedNode> lgc) {
@@ -349,6 +350,11 @@ public class PipelineLogic {
 	public ElLog.Verbosity getVerbosity() {
 		return verbose ? ElLog.Verbosity.VERBOSE : ElLog.Verbosity.SILENT;
 	}
+
+	public void addLog(ElLog aLog) {
+		elLogs.add(aLog);
+	}
+
 }
 
 //

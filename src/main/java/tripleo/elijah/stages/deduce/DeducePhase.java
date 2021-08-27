@@ -12,6 +12,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
@@ -45,8 +46,11 @@ public class DeducePhase {
 	public List<GeneratedNode> generatedClasses = new ArrayList<GeneratedNode>();
 	public final GeneratePhase generatePhase;
 
-	public DeducePhase(GeneratePhase aGeneratePhase) {
+	final PipelineLogic pipelineLogic;
+
+	public DeducePhase(GeneratePhase aGeneratePhase, PipelineLogic aPipelineLogic) {
 		generatePhase = aGeneratePhase;
+		pipelineLogic = aPipelineLogic;
 	}
 
 	public void addFunction(GeneratedFunction generatedFunction, FunctionDef fd) {
@@ -164,10 +168,11 @@ public class DeducePhase {
 		deferredMembers.add(aDeferredMember);
 	}
 
-	public List<ElLog> deduceLogs = new ArrayList<ElLog>();
+//	public List<ElLog> deduceLogs = new ArrayList<ElLog>();
 
-	public void addDeduceLog(ElLog aLog) {
-		deduceLogs.add(aLog);
+	public void addLog(ElLog aLog) {
+		//deduceLogs.add(aLog);
+		pipelineLogic.addLog(aLog);
 	}
 
 	static class ResolvedVariables {

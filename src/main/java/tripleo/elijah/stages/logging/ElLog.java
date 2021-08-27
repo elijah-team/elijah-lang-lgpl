@@ -17,15 +17,17 @@ import java.util.List;
 public class ElLog {
 	private final String fileName;
 	private final Verbosity verbose;
+	private final String phase;
 	private final List<LogEntry> entries = new ArrayList<>();
 
 	public enum Verbosity {
 		SILENT, VERBOSE
 	}
 
-	public ElLog(String aFileName, Verbosity aVerbose) {
+	public ElLog(String aFileName, Verbosity aVerbose, String aPhase) {
 		fileName = aFileName;
 		verbose = aVerbose;
+		phase = aPhase;
 	}
 
 	public void err(String aMessage) {
@@ -48,6 +50,10 @@ public class ElLog {
 
 	public List<LogEntry> getEntries() {
 		return entries;
+	}
+
+	public String getPhase() {
+		return phase;
 	}
 }
 

@@ -180,7 +180,7 @@ public class Compilation {
 					pipeline.write_files(this);
 					pipeline.write_buffers(this);
 
-					writeLogs(silent, pipeline.deduceLogs);
+					writeLogs(silent, pipeline.elLogs);
 
 					if (ez_file != null)
 						System.out.println(String.format("*** %d errors for %s", errorCount(), ez_file.getFilename()));
