@@ -220,7 +220,7 @@ public class GetIdentIAPathTest_ForC {
 
 		verify(mod, ctx, mockContext);
 
-		Assert.assertEquals("Z0foo(vvx)", x);
+		Assert.assertEquals("Z-1foo(vvx)", x);
 	}
 
 	String getIdentIAPath(final IdentIA ia2, GeneratedFunction generatedFunction) {
