@@ -72,7 +72,7 @@ public class TypeOfTypeNameTest {
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
 		final PipelineLogic pl = new PipelineLogic(verbosity1);
 		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
-		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase, pl));
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase, pl, verbosity1));
 		TypeName tn = t.resolve(ctx, deduceTypes2);
 //		System.out.println(tn);
 		verify(ctx, mod, c);
@@ -125,7 +125,7 @@ public class TypeOfTypeNameTest {
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
 		final PipelineLogic pl = new PipelineLogic(verbosity1);
 		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
-		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase, pl));
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase, pl, verbosity1));
 		TypeName tn = t.resolve(ctx, deduceTypes2);
 //		System.out.println(tn);
 		verify(ctx, mod, c);
@@ -255,7 +255,7 @@ public class TypeOfTypeNameTest {
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
 		final PipelineLogic pl = new PipelineLogic(verbosity1);
 		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
-		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase, pl));
+		DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, new DeducePhase(generatePhase, pl, verbosity1));
 //		expect(mod.getFileName()).andReturn("foo.elijah");
 		expect(ctx.lookup("x")).andReturn(lrl);
 //		expect(ctx.lookup("y")).andReturn(lrl4);

@@ -48,9 +48,13 @@ public class DeducePhase {
 
 	final PipelineLogic pipelineLogic;
 
-	public DeducePhase(GeneratePhase aGeneratePhase, PipelineLogic aPipelineLogic) {
+	private final ElLog LOG;
+
+	public DeducePhase(GeneratePhase aGeneratePhase, PipelineLogic aPipelineLogic, ElLog.Verbosity verbosity) {
 		generatePhase = aGeneratePhase;
 		pipelineLogic = aPipelineLogic;
+		//
+		LOG = new ElLog("(DEDUCE_PHASE)", verbosity, "DeducePhase");
 	}
 
 	public void addFunction(GeneratedFunction generatedFunction, FunctionDef fd) {
@@ -193,7 +197,7 @@ public class DeducePhase {
 
 	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf, ElLog.Verbosity verbosity) {
 		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this, verbosity);
-//		System.err.println("196 DeduceTypes "+deduceTypes2.getFileName());
+//		LOG.err("196 DeduceTypes "+deduceTypes2.getFileName());
 		deduceTypes2.deduceFunctions(lgf);
 		return deduceTypes2;
 	}
@@ -262,7 +266,7 @@ public class DeducePhase {
 	}
 
 	public void forFunction(DeduceTypes2 deduceTypes2, FunctionInvocation fi, ForFunction forFunction) {
-//		System.err.println("272 forFunction\n\t"+fi.getFunction()+"\n\t"+fi.pte);
+//		LOG.err("272 forFunction\n\t"+fi.getFunction()+"\n\t"+fi.pte);
 		fi.generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {
 			@Override
 			public void onDone(BaseGeneratedFunction result) {
@@ -481,21 +485,21 @@ public class DeducePhase {
 				switch (identTableEntry.getStatus()) {
 					case UNKNOWN:
 						assert identTableEntry.resolved_element == null;
-						System.err.println(String.format("250 UNKNOWN idte %s in %s", identTableEntry, generatedFunction));
+						LOG.err(String.format("250 UNKNOWN idte %s in %s", identTableEntry, generatedFunction));
 						break;
 					case KNOWN:
 						assert identTableEntry.resolved_element != null;
 						if (identTableEntry.type == null) {
-							System.err.println(String.format("258 null type in KNOWN idte %s in %s", identTableEntry, generatedFunction));
+							LOG.err(String.format("258 null type in KNOWN idte %s in %s", identTableEntry, generatedFunction));
 						}
 						break;
 					case UNCHECKED:
-						System.err.println(String.format("255 UNCHECKED idte %s in %s", identTableEntry, generatedFunction));
+						LOG.err(String.format("255 UNCHECKED idte %s in %s", identTableEntry, generatedFunction));
 						break;
 				}
 				for (TypeTableEntry pot_tte : identTableEntry.potentialTypes()) {
 					if (pot_tte.getAttached() == null) {
-						System.err.println(String.format("267 null potential attached in %s in %s in %s", pot_tte, identTableEntry, generatedFunction));
+						LOG.err(String.format("267 null potential attached in %s in %s in %s", pot_tte, identTableEntry, generatedFunction));
 					}
 				}
 			}

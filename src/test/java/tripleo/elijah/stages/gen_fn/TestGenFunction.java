@@ -68,7 +68,7 @@ public class TestGenFunction {
 		final PipelineLogic pl = new PipelineLogic(verbosity1);
 		final GeneratePhase generatePhase1 = new GeneratePhase(verbosity1, pl);
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
-		DeducePhase dp = new DeducePhase(generatePhase1, pl);
+		DeducePhase dp = new DeducePhase(generatePhase1, pl, verbosity1);
 		gfm.generateFromEntryPoints(m.entryPoints, dp);
 
 		final List<GeneratedNode> lgc = dp.generatedClasses; //new ArrayList<>();
@@ -239,7 +239,7 @@ public class TestGenFunction {
 		final List<GeneratedNode> lgc = new ArrayList<>();
 		gfm.generateAllTopLevelClasses(lgc);
 
-		DeducePhase dp = new DeducePhase(generatePhase, pl);
+		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity1);
 
 		WorkManager wm = new WorkManager();
 

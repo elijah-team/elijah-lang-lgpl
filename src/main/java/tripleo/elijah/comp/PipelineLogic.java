@@ -64,7 +64,7 @@ public class PipelineLogic {
 	public PipelineLogic(ElLog.Verbosity aVerbosity) {
 		verbosity = aVerbosity;
 		generatePhase = new GeneratePhase(aVerbosity, this);
-		dp = new DeducePhase(generatePhase, this);
+		dp = new DeducePhase(generatePhase, this, verbosity);
 	}
 
 	final List<OS_Module> mods = new ArrayList<OS_Module>();

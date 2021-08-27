@@ -76,7 +76,7 @@ public class TestIdentNormal {
 
 		IdentIA identIA = new IdentIA(1, generatedFunction);
 
-		DeducePhase phase = new DeducePhase(generatePhase, pl);
+		DeducePhase phase = new DeducePhase(generatePhase, pl, verbosity1);
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
 		final List<InstructionArgument> ss = generatedFunction._getIdentIAPathList(identIA);
@@ -104,7 +104,7 @@ public class TestIdentNormal {
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
 		final PipelineLogic pl = new PipelineLogic(verbosity1);
 		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
-		DeducePhase phase = new DeducePhase(generatePhase, pl);
+		DeducePhase phase = new DeducePhase(generatePhase, pl, verbosity1);
 
 		GenerateFunctions generateFunctions = generatePhase.getGenerateFunctions(mod);
 
