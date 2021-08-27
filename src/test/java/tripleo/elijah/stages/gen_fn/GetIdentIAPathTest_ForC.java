@@ -162,6 +162,7 @@ public class GetIdentIAPathTest_ForC {
 		LookupResultList lrl2 = new LookupResultList();
 
 		expect(mod.pullPackageName()).andReturn(OS_Package.default_package);
+		expect(mod.getFileName()).andReturn("filename.elijah");
 //		expect(mod.add(classStatement)); // really want this but cant mock void functions
 		mod.add(anyObject(ClassStatement.class));
 		replay(mod);
