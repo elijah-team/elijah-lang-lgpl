@@ -58,9 +58,11 @@ import java.util.Map;
  */
 public class PipelineLogic {
 	final GeneratePhase generatePhase;
+	private final ElLog.Verbosity verbosity;
 	final DeducePhase dp;
 
 	public PipelineLogic(ElLog.Verbosity aVerbosity) {
+		verbosity = aVerbosity;
 		generatePhase = new GeneratePhase(aVerbosity, this);
 		dp = new DeducePhase(generatePhase, this);
 	}
