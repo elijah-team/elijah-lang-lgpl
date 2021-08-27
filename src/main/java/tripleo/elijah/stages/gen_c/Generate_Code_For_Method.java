@@ -24,6 +24,7 @@ import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.instructions.*;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.BufferTabbedOutputStream;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
@@ -40,8 +41,11 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
  * Created 6/21/21 5:53 AM
  */
 public class Generate_Code_For_Method {
-	public Generate_Code_For_Method(@NotNull GenerateC aGenerateC) {
+	private final ElLog LOG;
+
+	public Generate_Code_For_Method(@NotNull GenerateC aGenerateC, ElLog aLog) {
 		gc = aGenerateC;
+		LOG = aLog; // use log from GenerateC
 	}
 
 	GenerateC gc;
@@ -57,10 +61,10 @@ public class Generate_Code_For_Method {
 		tosHdr.flush();
 		tosHdr.close();
 		Buffer buf = tos.getBuffer();
-//		System.out.println(buf.getText());
+//		LOG.info(buf.getText());
 		gr.addFunction(gf, buf, GenerateResult.TY.IMPL);
 		Buffer bufHdr = tosHdr.getBuffer();
-//		System.out.println(bufHdr.getText());
+//		LOG.info(bufHdr.getText());
 		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER);
 	}
 
@@ -72,17 +76,17 @@ public class Generate_Code_For_Method {
 		tosHdr.flush();
 		tosHdr.close();
 		Buffer buf = tos.getBuffer();
-//		System.out.println(buf.getText());
+//		LOG.info(buf.getText());
 		gr.addConstructor(gf, buf, GenerateResult.TY.IMPL);
 		Buffer bufHdr = tosHdr.getBuffer();
-//		System.out.println(bufHdr.getText());
+//		LOG.info(bufHdr.getText());
 		gr.addConstructor(gf, bufHdr, GenerateResult.TY.HEADER);
 	}
 
 	boolean is_constructor = false, is_unit_type = false;
 
 	private void action(BaseGeneratedFunction gf) {
-		Generate_Method_Header gmh = new Generate_Method_Header(gf, gc);
+		Generate_Method_Header gmh = new Generate_Method_Header(gf, gc, LOG);
 
 		tos.put_string_ln(String.format("%s {", gmh.header_string));
 		tosHdr.put_string_ln(String.format("%s;", gmh.header_string));
@@ -92,7 +96,7 @@ public class Generate_Code_For_Method {
 		@NotNull List<Instruction> instructions = gf.instructions();
 		for (int instruction_index = 0; instruction_index < instructions.size(); instruction_index++) {
 			Instruction instruction = instructions.get(instruction_index);
-//			System.err.println("8999 "+instruction);
+//			LOG.err("8999 "+instruction);
 			final Label label = gf.findLabel(instruction.getIndex());
 			if (label != null) {
 				tos.put_string_ln_no_tabs(label.getName() + ":");
@@ -268,7 +272,7 @@ public class Generate_Code_For_Method {
 					xxx = gc.getRealTargetName(gf, (IntegerIA) xx);
 				} else {
 					xxx = text;
-					System.err.println("xxx is null " + text);
+					LOG.err("xxx is null " + text);
 				}
 				sb.append(Emit.emit("/*460*/")+xxx);
 			} else {
@@ -292,7 +296,7 @@ public class Generate_Code_For_Method {
 
 	private void action_CALL(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final StringBuilder sb = new StringBuilder();
-// 					System.err.println("9000 "+inst.getName());
+// 					LOG.err("9000 "+inst.getName());
 		final InstructionArgument x = aInstruction.getArg(0);
 		assert x instanceof ProcIA;
 		final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) x).getIndex());
@@ -481,9 +485,9 @@ public class Generate_Code_For_Method {
 		final OS_Type x = vte.type.getAttached();
 		if (x == null) {
 			if (vte.vtt == VariableTableType.TEMP) {
-				System.err.println("8884 temp variable has no type "+vte+" "+gf);
+				LOG.err("8884 temp variable has no type "+vte+" "+gf);
 			} else {
-				System.err.println("8885 x is null (No typename specified) for " + vte.getName());
+				LOG.err("8885 x is null (No typename specified) for " + vte.getName());
 			}
 			return;
 		}
@@ -515,7 +519,7 @@ public class Generate_Code_For_Method {
 				//
 				// VARIABLE WASN'T FULLY DEDUCED YET
 				//
-				System.err.println("8885 "+y.getClass().getName());
+				LOG.err("8885 "+y.getClass().getName());
 				return;
 			}
 		} else if (x.getType() == OS_Type.Type.BUILT_IN) {
@@ -526,7 +530,7 @@ public class Generate_Code_For_Method {
 				// TODO still should not happen
 				tos.put_string_ln(String.format("/*%s is declared as the Unit type*/", target_name));
 			} else {
-//				System.err.println("Bad potentialTypes size " + type);
+//				LOG.err("Bad potentialTypes size " + type);
 				final String z = gc.getTypeName(type);
 				tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
 			}
@@ -540,7 +544,7 @@ public class Generate_Code_For_Method {
 		final List<TypeTableEntry> pt = new ArrayList<TypeTableEntry>(pt_);
 		if (pt.size() == 1) {
 			final TypeTableEntry ty = pt.get(0);
-//			System.err.println("8885 " +ty.attached);
+//			LOG.err("8885 " +ty.attached);
 			final OS_Type attached = ty.getAttached();
 			final String z;
 			if (attached != null)
@@ -549,7 +553,7 @@ public class Generate_Code_For_Method {
 				z = Emit.emit("/*763*/")+"Unknown";
 			tos.put_string_ln(String.format("/*8890*/Z<%s> %s;", z, target_name));
 		}
-		System.err.println("8886 y is null (No typename specified)");
+		LOG.err("8886 y is null (No typename specified)");
 	}
 
 	static class Generate_Method_Header {
@@ -562,16 +566,16 @@ public class Generate_Code_For_Method {
 		OS_Type type;
 		TypeTableEntry tte;
 
-		public Generate_Method_Header(BaseGeneratedFunction gf, @NotNull GenerateC aGenerateC) {
+		public Generate_Method_Header(BaseGeneratedFunction gf, @NotNull GenerateC aGenerateC, ElLog LOG) {
 			gc            = aGenerateC;
 			name          = gf.getFD().name();
 			//
-			return_type   = find_return_type(gf);
+			return_type   = find_return_type(gf, LOG);
 			args_string   = find_args_string(gf);
-			header_string = find_header_string(gf);
+			header_string = find_header_string(gf, LOG);
 		}
 
-		String find_header_string(BaseGeneratedFunction gf) {
+		String find_header_string(BaseGeneratedFunction gf, ElLog LOG) {
 			GeneratedContainerNC parent = gf.getParent();
 			if (parent == null)
 				parent = (GeneratedContainerNC) gf.getGenClass(); // TODO might not type check, but why not?
@@ -579,13 +583,13 @@ public class Generate_Code_For_Method {
 			if (parent instanceof GeneratedClass) {
 				GeneratedClass st = (GeneratedClass) parent;
 				final String class_name = gc.getTypeName(st);
-//				System.out.println("234 class_name >> " + class_name);
+//				LOG.info("234 class_name >> " + class_name);
 				final String if_args = args_string.length() == 0 ? "" : ", ";
 				return String.format("%s %s%s(%s* vsc%s%s)", return_type, class_name, name, class_name, if_args, args_string);
 			} else if (parent instanceof GeneratedNamespace) {
 				GeneratedNamespace st = (GeneratedNamespace) parent;
 				final String class_name = gc.getTypeName(st);
-				System.out.println(String.format("240 (namespace) %s -> %s", st.getName(), class_name));
+				LOG.info(String.format("240 (namespace) %s -> %s", st.getName(), class_name));
 				final String if_args = args_string.length() == 0 ? "" : ", ";
 				// TODO vsi for namespace instance??
 //				tos.put_string_ln(String.format("%s %s%s(%s* vsi%s%s) {", returnType, class_name, name, class_name, if_args, args));
@@ -626,7 +630,7 @@ public class Generate_Code_For_Method {
 			return args;
 		}
 
-		@NotNull String find_return_type(BaseGeneratedFunction gf) {
+		@NotNull String find_return_type(BaseGeneratedFunction gf, ElLog LOG) {
 			String returnType = null;
 			if (gf instanceof GeneratedConstructor) {
 				@Nullable InstructionArgument result_index = gf.vte_lookup("self");
@@ -645,13 +649,13 @@ public class Generate_Code_For_Method {
 				// Get it from type.attached
 				type = tte.getAttached();
 
-				System.out.println("228-1 "+ type);
+				LOG.info("228-1 "+ type);
 				if (type.isUnitType()) {
 					assert false;
 				} else if (type != null) {
 					returnType = String.format("/*267*/%s*", gc.getTypeName(type));
 				} else {
-					System.err.println("655 Shouldn't be here (type is null)");
+					LOG.err("655 Shouldn't be here (type is null)");
 					returnType = "void/*2*/";
 				}
 			} else {
@@ -679,14 +683,14 @@ public class Generate_Code_For_Method {
 				// Get it from type.attached
 				type = tte.getAttached();
 
-				System.out.println("228 "+ type);
+				LOG.info("228 "+ type);
 				if (type.isUnitType()) {
 					returnType = "void/*Unit*/";
 				} else if (type != null) {
 					returnType = String.format("/*267*/%s*", gc.getTypeName(type));
 				} else {
 	//				throw new IllegalStateException();
-					System.err.println("655 Shouldn't be here (type is null)");
+					LOG.err("655 Shouldn't be here (type is null)");
 					returnType = "void/*2*/";
 				}
 			}
