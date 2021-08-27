@@ -47,6 +47,21 @@ public class DefaultProcessLogEntryBehavior implements ProcessLogEntryBehavior {
 	public void finish() {
 
 	}
+
+	@Override
+	public void processPhase(String aPhase) {
+		ps.println(aPhase);
+		StringBuilder sb = new StringBuilder(aPhase.length());
+		for (int i = 0; i < aPhase.length(); i++) {
+			sb.append('=');
+		}
+		ps.println(sb.toString());
+	}
+
+	@Override
+	public void donePhase() {
+		ps.println();
+	}
 }
 
 //

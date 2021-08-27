@@ -25,6 +25,10 @@ public interface ProcessLogEntryBehavior {
 	void start();
 
 	void finish();
+
+	void processPhase(String aPhase);
+
+	void donePhase();
 }
 
 //

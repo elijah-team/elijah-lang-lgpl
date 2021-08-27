@@ -14,6 +14,7 @@ import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.stages.logging.LogEntry;
 
 import java.io.File;
+import java.util.Collection;
 
 /**
  * Created 8/11/21 5:46 AM
@@ -33,18 +34,28 @@ public class F202 {
 		pre = new DefaultProgressBehavior();
 	}
 
-	public void processLog(ElLog deduceLog) {
-		final String s2  = gln.getLogName(deduceLog);
+	public void processLogs(Collection<ElLog> aElLogs) {
+		if (aElLogs.size() == 0) return; // TODO progress message? should be impossible anyway
+
+		ElLog firstLog = aElLogs.iterator().next();
+
+		final String s2  = gln.getLogName(firstLog);
 		final File file2 = gld.getLogDirectory();
 
 		final File psf   = new File(file2, s2);
-		final String s1  = deduceLog.getFileName();
+		final String s1  = firstLog.getFileName();
 		pre.reportProgress(psf.toString());
 
 		ple.initialize(psf, s1, errSink);
 		ple.start();
-		for (LogEntry entry : deduceLog.getEntries()) {
-			ple.processLogEntry(entry);
+		for (ElLog elLog : aElLogs) {
+			ple.processPhase(elLog.getPhase());
+
+			for (LogEntry entry : elLog.getEntries()) {
+				ple.processLogEntry(entry);
+			}
+
+			ple.donePhase();
 		}
 		ple.finish();
 	}
