@@ -1440,7 +1440,7 @@ public class DeduceTypes2 {
 				@Override
 				public void noFoundElement() {
 					ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-					errSink.reportError("1004 Can't find element for "+ x);
+					//errSink.reportError("1004 Can't find element for "+ x); // Already reported by 1179
 				}
 			});
 		}
