@@ -55,6 +55,7 @@ public class DeducePhase {
 		pipelineLogic = aPipelineLogic;
 		//
 		LOG = new ElLog("(DEDUCE_PHASE)", verbosity, "DeducePhase");
+		pipelineLogic.addLog(LOG);
 	}
 
 	public void addFunction(GeneratedFunction generatedFunction, FunctionDef fd) {
