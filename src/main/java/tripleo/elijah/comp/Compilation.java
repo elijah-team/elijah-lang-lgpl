@@ -11,6 +11,8 @@ package tripleo.elijah.comp;
 import antlr.ANTLRException;
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -19,11 +21,13 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.Out;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.LibraryStatementPart;
+import tripleo.elijah.comp.functionality.f202.F202;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
 import tripleo.elijjah.ElijjahParser;
@@ -34,6 +38,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,13 +90,14 @@ public class Compilation {
 	public String stage = "O"; // Output
 
 	public void main(final List<String> args, final ErrSink errSink) {
-		boolean do_out = false;
+		boolean do_out = false, silent = false;
 		try {
 			if (args.size() > 0) {
 				final Options options = new Options();
 				options.addOption("s", true, "stage: E: parse; O: output");
 				options.addOption("showtree", false, "show tree");
 				options.addOption("out", false, "make debug files");
+				options.addOption("silent", false, "suppress DeduceType output to console");
 				final CommandLineParser clp = new DefaultParser();
 				final CommandLine cmd = clp.parse(options, args.toArray(new String[args.size()]));
 
@@ -104,7 +110,11 @@ public class Compilation {
 				if (cmd.hasOption("out")) {
 					do_out = true;
 				}
+				if (isGitlab_ci() || cmd.hasOption("silent")) {
+					silent = true;
+				}
 
+				CompilerInstructions ez_file = null;
 				final String[] args2 = cmd.getArgs();
 
 				for (int i = 0; i < args2.length; i++) {
@@ -124,7 +134,8 @@ public class Compilation {
 							} else if (ezs.size() == 0) {
 								eee.reportError("9999 No .ez files found.");
 							} else {
-								add_ci(ezs.get(0));
+								ez_file = ezs.get(0);
+								add_ci(ez_file);
 							}
 						} else
 							eee.reportError("9995 Not a directory "+f.getAbsolutePath());
@@ -142,8 +153,11 @@ public class Compilation {
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
-					pipeline = new PipelineLogic();
+					pipeline = new PipelineLogic(silent ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE);
+					pipeline.verbose = !silent;
+
 					ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
+
 					for (final OS_Module module : modules) {
 						if (false) {
 /*
@@ -168,12 +182,39 @@ public class Compilation {
 
 					pipeline.write_files(this);
 					pipeline.write_buffers(this);
+
+					writeLogs(silent, pipeline.elLogs);
+
+					if (ez_file != null)
+						System.out.println(String.format("*** %d errors for %s", errorCount(), ez_file.getFilename()));
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
 			}
 		} catch (final Exception e) {
 			errSink.exception(e);
+		}
+	}
+
+	public static ElLog.Verbosity gitlabCIVerbosity() {
+		final boolean gitlab_ci = isGitlab_ci();
+		return gitlab_ci ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE;
+	}
+
+	public static boolean isGitlab_ci() {
+		return System.getenv("GITLAB_CI") != null;
+	}
+
+	private void writeLogs(boolean aSilent, List<ElLog> aLogs) {
+		Multimap<String, ElLog> logMap = ArrayListMultimap.create();
+		if (true || aSilent) {
+			for (ElLog deduceLog : aLogs) {
+				logMap.put(deduceLog.getFileName(), deduceLog);
+			}
+			for (Map.Entry<String, Collection<ElLog>> stringCollectionEntry : logMap.asMap().entrySet()) {
+				final F202 f202 = new F202(getErrSink(), this);
+				f202.processLogs(stringCollectionEntry.getValue());
+			}
 		}
 	}
 

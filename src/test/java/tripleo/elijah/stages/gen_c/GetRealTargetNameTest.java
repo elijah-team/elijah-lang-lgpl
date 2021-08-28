@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.IdentExpression;
@@ -24,6 +26,7 @@ import tripleo.elijah.stages.gen_fn.TypeTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 
 import static org.easymock.EasyMock.mock;
@@ -57,7 +60,8 @@ public class GetRealTargetNameTest {
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		ident_ia.setPrev(new IntegerIA(int_index, gf));
 		//
-		GenerateC c = new GenerateC(/*mod,*/ new StdErrSink());
+		PipelineLogic pipelineLogic = new PipelineLogic(Compilation.gitlabCIVerbosity());
+		GenerateC c = new GenerateC(mod, new StdErrSink(), ElLog.Verbosity.SILENT, pipelineLogic); // TODO do we want silent?
 		//
 		Emit.emitting = false;
 		String x = c.getRealTargetName(gf, ident_ia);

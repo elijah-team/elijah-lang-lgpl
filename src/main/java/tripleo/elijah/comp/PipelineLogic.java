@@ -16,14 +16,20 @@ import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
-import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.gen_fn.GenerateFunctions;
+import tripleo.elijah.stages.gen_fn.GeneratePhase;
+import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
+import tripleo.elijah.stages.gen_fn.GeneratedFunction;
+import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.generate.ElSystem;
 import tripleo.elijah.stages.generate.OutputStrategy;
-import tripleo.elijah.stages.post_deduce.PostDeduce;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
-import tripleo.elijah.work.WorkList;
 import tripleo.elijah.work.WorkManager;
 import tripleo.util.buffer.Buffer;
 import tripleo.util.buffer.DefaultBuffer;
@@ -43,6 +49,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,11 +57,20 @@ import java.util.Map;
  * Created 12/30/20 2:14 AM
  */
 public class PipelineLogic {
-	final GeneratePhase generatePhase = new GeneratePhase();
-	final DeducePhase dp = new DeducePhase(generatePhase);
+	final GeneratePhase generatePhase;
+	private final ElLog.Verbosity verbosity;
+	final DeducePhase dp;
+
+	public PipelineLogic(ElLog.Verbosity aVerbosity) {
+		verbosity = aVerbosity;
+		generatePhase = new GeneratePhase(aVerbosity, this);
+		dp = new DeducePhase(generatePhase, this, verbosity);
+	}
 
 	final List<OS_Module> mods = new ArrayList<OS_Module>();
 	public GenerateResult gr = new GenerateResult();
+	public List<ElLog> elLogs = new LinkedList<ElLog>();
+	public boolean verbose = true;
 
 	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
 		for (OS_Module mod : mods) {
@@ -63,18 +79,20 @@ public class PipelineLogic {
 //		List<List<EntryPoint>> entryPoints = mods.stream().map(mod -> mod.entryPoints).collect(Collectors.toList());
 		dp.finish();
 		lgc.addAll(dp.generatedClasses);
-		for (OS_Module mod : mods) {
-			PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
-			pd.analyze();
-		}
+//		for (OS_Module mod : mods) {
+//			PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
+//			pd.analyze();
+//		}
+		//
+//		elLogs = dp.deduceLogs;
 	}
 
 	public void generate(List<GeneratedNode> lgc) {
 		GenerateResult ggr = null;
 		final WorkManager wm = new WorkManager();
 		// README use any errSink, they should all be the same
-		final GenerateC generateC = new GenerateC(mods.get(0).parent.getErrSink());
 		for (OS_Module mod : mods) {
+			final GenerateC generateC = new GenerateC(mod, mod.parent.getErrSink(), verbosity, this);
 			ggr = run3(mod, lgc, wm, generateC);
 			wm.drain();
 			gr.results().addAll(ggr.results());
@@ -97,31 +115,10 @@ public class PipelineLogic {
 		final GenerateFunctions gfm = getGenerateFunctions(mod);
 		gfm.generateFromEntryPoints(epl, dp);
 
-		WorkManager wm = new WorkManager();
-		WorkList wl = new WorkList();
+//		WorkManager wm = new WorkManager();
+//		WorkList wl = new WorkList();
 
-//		for (final GeneratedNode gn : lgc) {
-//			if (gn instanceof GeneratedFunction) {
-//				GeneratedFunction gf = (GeneratedFunction) gn;
-//				for (final Instruction instruction : gf.instructions()) {
-//					System.out.println("8100 " + instruction);
-//				}
-//			}
-//		}
-
-/*
-		for (EntryPoint entryPoint : epl) {
-			for (GenType dependentType : entryPoint.dependentTypes()) {
-//				dependentType.
-				System.err.println(dependentType);
-			}
-			for (FunctionInvocation dependentFunction : entryPoint.dependentFunctions()) {
-				System.err.println(dependentFunction);
-			}
-		}
-*/
-
-		List<GeneratedNode> lgc = dp.generatedClasses; //new ArrayList<GeneratedNode>();
+		List<GeneratedNode> lgc = dp.generatedClasses;
 		List<GeneratedNode> resolved_nodes = new ArrayList<GeneratedNode>();
 
 		for (final GeneratedNode generatedNode : lgc) {
@@ -178,7 +175,7 @@ public class PipelineLogic {
 			}
 		}
 
-		dp.deduceModule(mod, lgc, true);
+		dp.deduceModule(mod, lgc, true, getVerbosity());
 
 		resolveCheck(lgc);
 
@@ -351,6 +348,15 @@ public class PipelineLogic {
 		PrintStream db_stream = new PrintStream(new File(file1, "buffers.txt"));
 		debug_buffers(gr, db_stream);
 	}
+
+	public ElLog.Verbosity getVerbosity() {
+		return verbose ? ElLog.Verbosity.VERBOSE : ElLog.Verbosity.SILENT;
+	}
+
+	public void addLog(ElLog aLog) {
+		elLogs.add(aLog);
+	}
+
 }
 
 //

@@ -10,8 +10,10 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.lang.GenericTypeName;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.lang.TypeName;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 
 import java.util.ArrayList;
@@ -55,9 +57,11 @@ public class TypeTableEntry {
 	private void _settingAttached(@NotNull OS_Type aAttached) {
 		switch (aAttached.getType()) {
 		case USER:
-			if (genType.typeName != null)
-				genType.nonGenericTypeName = aAttached.getTypeName();
-			else
+			if (genType.typeName != null) {
+				final TypeName typeName = aAttached.getTypeName();
+				if (!(typeName instanceof GenericTypeName))
+					genType.nonGenericTypeName = typeName;
+			} else
 				genType.typeName = aAttached/*.getTypeName()*/;
 			break;
 		case USER_CLASS:

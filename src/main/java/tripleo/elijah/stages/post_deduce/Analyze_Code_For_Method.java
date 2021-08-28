@@ -234,7 +234,7 @@ public class Analyze_Code_For_Method {
 					xxx = pd.getRealTargetName(gf, (IntegerIA) xx);
 				} else {
 					xxx = text;
-					System.err.println("xxx is null " + text);
+					pd.log.error("xxx is null " + text);
 				}
 				sb.append(Emit.emit("/*460*/")+xxx);
 			} else {
@@ -258,7 +258,7 @@ public class Analyze_Code_For_Method {
 
 	private void action_CALL(GeneratedFunction gf, Instruction aInstruction) {
 		final StringBuilder sb = new StringBuilder();
-// 					System.err.println("9000 "+inst.getName());
+// 					pd.log.error("9000 "+inst.getName());
 		final InstructionArgument x = aInstruction.getArg(0);
 		assert x instanceof ProcIA;
 		final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) x).getIndex());
@@ -476,7 +476,7 @@ public class Analyze_Code_For_Method {
 				// TODO still should not happen
 				pd.log.warn("481 {} is declared as the Unit type", target_name);
 			} else {
-//				System.err.println("Bad potentialTypes size " + type);
+//				pd.log.error("Bad potentialTypes size " + type);
 				final String z = pd.getTypeName(type);
 				pd.log.info("485 Z<{}> {};", z, target_name);
 			}
@@ -490,7 +490,7 @@ public class Analyze_Code_For_Method {
 		final List<TypeTableEntry> pt = new ArrayList<TypeTableEntry>(pt_);
 		if (pt.size() == 1) {
 			final TypeTableEntry ty = pt.get(0);
-//			System.err.println("8885 " +ty.attached);
+//			pd.log.error("8885 " +ty.attached);
 			final OS_Type attached = ty.getAttached();
 			final String z;
 			if (attached != null)
@@ -570,7 +570,7 @@ public class Analyze_Code_For_Method {
 			// Get it from type.attached
 			OS_Type type = tte.getAttached();
 
-			System.out.println("228 "+ type);
+			pd.log.info("228 "+ type);
 			if (type != null) {
 				pd.log.warn("function {} returns typename {}", gf, type);
 			} else {

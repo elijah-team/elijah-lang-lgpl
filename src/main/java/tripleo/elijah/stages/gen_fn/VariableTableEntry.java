@@ -65,15 +65,17 @@ public class VariableTableEntry extends BaseTableEntry implements Constructable,
 			potentialTypes.put(instructionIndex, tte);
 		else {
 			TypeTableEntry v = potentialTypes.get(instructionIndex);
-			if (v.getAttached() == null)
+			if (v.getAttached() == null) {
 				v.setAttached(tte.getAttached());
-			else if (tte.lifetime == TypeTableEntry.Type.TRANSIENT && v.lifetime == TypeTableEntry.Type.SPECIFIED) {
+				type.genType.copy(tte.genType); // README don't lose information
+			} else if (tte.lifetime == TypeTableEntry.Type.TRANSIENT && v.lifetime == TypeTableEntry.Type.SPECIFIED) {
 				//v.attached = v.attached; // leave it as is
 			} else if (tte.lifetime == v.lifetime && v.getAttached() == tte.getAttached()) {
 				// leave as is
 			} else if (v.getAttached().equals(tte.getAttached())) {
 				// leave as is
 			} else {
+				assert false;
 				//
 				// Make sure you check the differences between USER and USER_CLASS types
 				// May not be any

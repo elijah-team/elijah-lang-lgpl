@@ -180,10 +180,8 @@ public class CReference {
 			if (aResolved != null) {
 				code = ((GeneratedContainerNC)aResolved).getCode();
 			} else {
-				code = ((ClassStatement) resolved_element)._a.getCode();
-			}
-			if (code == 0) {
-				System.err.println("** 31116 ClassStatement with 0 code "+resolved_element);
+				code = -1;
+				System.err.println("** 31116 not resolved "+resolved_element);
 			}
 			// README might be calling reflect or Type or Name
 			// TODO what about named constructors -- should be called with construct keyword
@@ -215,9 +213,12 @@ public class CReference {
 			}
 		} else if (resolved_element instanceof ConstructorDef) {
 			assert i == sSize - 1; // Make sure we are ending with a constructor call
-			int code = ((ClassStatement) resolved_element.getParent())._a.getCode();
-			if (code == 0) {
-				System.err.println("** 31161 ClassStatement with 0 code " + resolved_element.getParent());
+			int code;
+			if (aResolved != null) {
+				code = ((BaseGeneratedFunction) aResolved).getCode();
+			} else {
+				code = -1;
+				System.err.println("** 31161 not resolved " + resolved_element);
 			}
 			// README Assuming this is for named constructors
 			String text = ((ConstructorDef) resolved_element).name();
@@ -235,14 +236,7 @@ public class CReference {
 				else
 					code = -2;
 			} else {
-				if (parent instanceof ClassStatement) {
-					code = ((ClassStatement) parent)._a.getCode();
-				} else if (parent instanceof NamespaceStatement) {
-					code = ((NamespaceStatement) parent)._a.getCode();
-				} else {
-					// TODO what about FunctionDef, etc
-					code = -1;
-				}
+				code = -1;
 			}
 			// TODO what about overloaded functions
 			assert i == sSize-1; // Make sure we are ending with a ProcedureCall
