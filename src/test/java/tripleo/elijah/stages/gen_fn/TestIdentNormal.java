@@ -9,9 +9,9 @@
 package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.ClassInvocation;
@@ -19,11 +19,9 @@ import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FoundElement;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
-import tripleo.elijah.stages.deduce.IInvocation;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
-import tripleo.elijah.stages.instructions.IntegerIA;
-import tripleo.elijah.stages.instructions.VariableTableType;
+import tripleo.elijah.stages.logging.ElLog;
 
 import java.util.List;
 
@@ -43,7 +41,11 @@ public class TestIdentNormal {
 		Context ctx1 = mock(Context.class);
 		Context ctx2 = mock(Context.class);
 
-		GenerateFunctions generateFunctions = new GenerateFunctions(new GeneratePhase(), mod);
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+//		GenerateFunctions generateFunctions = new GenerateFunctions(generatePhase, mod, pl);
+		GenerateFunctions generateFunctions = generatePhase.getGenerateFunctions(mod);
 		GeneratedFunction generatedFunction = new GeneratedFunction(fd);
 		VariableSequence seq = new VariableSequence(ctx1);
 		VariableStatement vs = new VariableStatement(seq);
@@ -74,8 +76,7 @@ public class TestIdentNormal {
 
 		IdentIA identIA = new IdentIA(1, generatedFunction);
 
-		final GeneratePhase generatePhase = new GeneratePhase();
-		DeducePhase phase = new DeducePhase(generatePhase);
+		DeducePhase phase = new DeducePhase(generatePhase, pl, verbosity1);
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
 		final List<InstructionArgument> ss = generatedFunction._getIdentIAPathList(identIA);
@@ -100,10 +101,12 @@ public class TestIdentNormal {
 //		FunctionDef fd = mock(FunctionDef.class);
 		Context ctx2 = mock(Context.class);
 
-		final GeneratePhase generatePhase = new GeneratePhase();
-		DeducePhase phase = new DeducePhase(generatePhase);
+		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		DeducePhase phase = new DeducePhase(generatePhase, pl, verbosity1);
 
-		GenerateFunctions generateFunctions = new GenerateFunctions(generatePhase, mod);
+		GenerateFunctions generateFunctions = generatePhase.getGenerateFunctions(mod);
 
 		//
 		//
@@ -204,7 +207,7 @@ public class TestIdentNormal {
 
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
-		(new IntegerIA(0, generatedFunction)).getEntry().setConstructable(generatedFunction.getProcTableEntry(0));
+		generatedFunction.getVarTableEntry(0).setConstructable(generatedFunction.getProcTableEntry(0));
 		identIA.getEntry().setCallablePTE(generatedFunction.getProcTableEntry(1));
 
 		d2.resolveIdentIA2_(ctx2, identIA, generatedFunction, new FoundElement(phase) {

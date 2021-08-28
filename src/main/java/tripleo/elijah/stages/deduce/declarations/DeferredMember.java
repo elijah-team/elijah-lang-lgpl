@@ -16,6 +16,7 @@ import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.deduce.IInvocation;
 import tripleo.elijah.stages.gen_fn.GenType;
+import tripleo.elijah.stages.gen_fn.GeneratedNode;
 
 /**
  * Created 6/27/21 1:41 AM
@@ -25,6 +26,7 @@ public class DeferredMember {
 	private final IInvocation invocation;
 	private final VariableStatement variableStatement;
 	private final DeferredObject<GenType, Diagnostic, Void> typePromise = new DeferredObject<GenType, Diagnostic, Void>();
+	private final DeferredObject<GeneratedNode, Void, Void> externalRef = new DeferredObject<GeneratedNode, Void, Void>();
 
 	public DeferredMember(OS_Element aParent, IInvocation aInvocation, VariableStatement aVariableStatement) {
 		parent = aParent;
@@ -51,6 +53,22 @@ public class DeferredMember {
 	// for DeducePhase
 	public DeferredObject<GenType, Diagnostic, Void> typeResolved() {
 		return typePromise;
+	}
+
+	public Promise<GeneratedNode, Void, Void> externalRef() {
+		return externalRef.promise();
+	}
+
+	public DeferredObject<GeneratedNode, Void, Void> externalRefDeferred() {
+		return externalRef;
+	}
+
+	@Override
+	public String toString() {
+		return "DeferredMember{" +
+				"parent=" + parent +
+				", variableName=" + variableStatement.getName() +
+				'}';
 	}
 }
 

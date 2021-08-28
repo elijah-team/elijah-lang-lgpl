@@ -21,20 +21,17 @@ public class IndexingStatement {
 
 	private Token name;
 	private ExpressionList exprs;
-	private final OS_Module parent;
-
-	public IndexingStatement(final OS_Module module) {
-		this.parent = module;
-	}
+	private OS_Module parent;
 
 	public void setName(final Token i1) {
-		this.name = i1;
+		name = i1;
 	}
 
 	public void setExprs(final ExpressionList el) {
-		this.exprs = el;
+		exprs = el;
 	}
 
+	public void setModule(final OS_Module module) { parent = module;}
 }
 
 //

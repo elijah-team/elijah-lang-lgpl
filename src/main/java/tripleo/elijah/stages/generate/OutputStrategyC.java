@@ -146,48 +146,48 @@ public class OutputStrategyC {
 			sb.append("/");
 		}
 		switch (outputStrategy.per()) {
-			case PER_CLASS:
-				{
-					if (generatedClass.isGeneric())
-						sb.append(generatedClass.getNumberedName());
-					else
-						sb.append(generatedClass.getName());
-				}
-				break;
-			case PER_MODULE:
-				{
+		case PER_CLASS:
+			{
+				if (generatedClass.isGeneric())
+					sb.append(generatedClass.getNumberedName());
+				else
+					sb.append(generatedClass.getName());
+			}
+			break;
+		case PER_MODULE:
+			{
 //					mod = generatedClass.getKlass().getContext().module();
-					OS_Module mod = generatedClass.module();
-					File f = new File(mod.getFileName());
-					String ff = f.getName();
-					int y=2;
-					ff = strip_elijah_extension(ff);
-					sb.append(ff);
+				OS_Module mod = generatedClass.module();
+				File f = new File(mod.getFileName());
+				String ff = f.getName();
+				int y=2;
+				ff = strip_elijah_extension(ff);
+				sb.append(ff);
 //					sb.append('/');
-				}
-				break;
-			case PER_PACKAGE:
-				{
-					final OS_Package pkg2 = generatedClass.getKlass().getPackageName();
-					String pkgName;
-					if (pkg2 != OS_Package.default_package) {
-						pkgName = "$default_package";
-					} else
-						pkgName = pkg2.getName();
-					sb.append(pkgName);
+			}
+			break;
+		case PER_PACKAGE:
+			{
+				final OS_Package pkg2 = generatedClass.getKlass().getPackageName();
+				String pkgName;
+				if (pkg2 != OS_Package.default_package) {
+					pkgName = "$default_package";
+				} else
+					pkgName = pkg2.getName();
+				sb.append(pkgName);
 //					sb.append('/');
-				}
-				break;
-			case PER_PROGRAM:
-				{
-					CompilerInstructions xx = lsp.getInstructions();
-					String n = xx.getName();
-					sb.append(n);
+			}
+			break;
+		case PER_PROGRAM:
+			{
+				CompilerInstructions xx = lsp.getInstructions();
+				String n = xx.getName();
+				sb.append(n);
 //					sb.append('/');
-				}
-				break;
-			default:
-				throw new IllegalStateException("Unexpected value: " + outputStrategy.per());
+			}
+			break;
+		default:
+			throw new IllegalStateException("Unexpected value: " + outputStrategy.per());
 		}
 		appendExtension(aTy, sb);
 		return sb.toString();

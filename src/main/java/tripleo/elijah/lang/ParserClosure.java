@@ -44,7 +44,9 @@ public class ParserClosure extends ProgramClosure {
 	public final OS_Module module;
 
 	public IndexingStatement indexingStatement() {
-		return new IndexingStatement(module());
+		final IndexingStatement indexingStatement = new IndexingStatement();
+		indexingStatement.setModule(module());
+		return indexingStatement;
 	}
 
 }

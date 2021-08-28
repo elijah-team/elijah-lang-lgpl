@@ -29,9 +29,6 @@ deploy:
   only:
     - master
 
-include:
-  - template: SAST.gitlab-ci.yml
-
 #sast:
 #  image: docker:stable
 #  variables:

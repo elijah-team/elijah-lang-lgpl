@@ -26,6 +26,7 @@ import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionName;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.work.WorkManager;
 
 import java.io.File;
@@ -63,7 +64,9 @@ public class TestGenFunction {
 
 		List<FunctionMapHook> ran_hooks = new ArrayList<>();
 
-		c.pipelineLogic = new PipelineLogic();
+
+		final ElLog.Verbosity verbosity1 = c.gitlabCIVerbosity();
+		c.pipelineLogic = new PipelineLogic(verbosity1);
 		final GeneratePhase generatePhase1 = c.pipelineLogic.generatePhase;//new GeneratePhase();
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
 		DeducePhase dp = c.pipelineLogic.dp;//new DeducePhase(generatePhase1);
@@ -196,11 +199,11 @@ public class TestGenFunction {
 			}
 		});
 
-		dp.deduceModule(m, lgc, false);
+		dp.deduceModule(m, lgc, false, c.gitlabCIVerbosity());
 		dp.finish();
 
 		Assert.assertEquals("Not all hooks ran", 4, ran_hooks.size());
-		Assert.assertEquals(13, c.errorCount());
+		Assert.assertEquals(11, c.errorCount());
 	}
 
 	@Test
@@ -230,12 +233,14 @@ public class TestGenFunction {
 			c.use(ci, false);
 		}
 
-		final GenerateFunctions gfm = new GenerateFunctions(new GeneratePhase(), m);
+		final ElLog.Verbosity verbosity1 = c.gitlabCIVerbosity();
+		final PipelineLogic pl = new PipelineLogic(verbosity1);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
 		final List<GeneratedNode> lgc = new ArrayList<>();
 		gfm.generateAllTopLevelClasses(lgc);
 
-		final GeneratePhase generatePhase = new GeneratePhase();
-		DeducePhase dp = new DeducePhase(generatePhase);
+		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity1);
 
 		WorkManager wm = new WorkManager();
 
@@ -257,7 +262,7 @@ public class TestGenFunction {
 			}
 		}
 
-		dp.deduceModule(m, lgc, false);
+		dp.deduceModule(m, lgc, false, c.gitlabCIVerbosity());
 		dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);
 
@@ -272,7 +277,8 @@ public class TestGenFunction {
 			}
 		}
 
-		GenerateC ggc = new GenerateC(/*m*/eee);
+		PipelineLogic pipelineLogic = new PipelineLogic(Compilation.gitlabCIVerbosity());
+		GenerateC ggc = new GenerateC(m, eee, c.gitlabCIVerbosity(), pipelineLogic);
 		ggc.generateCode(lgf, wm);
 
 		GenerateResult gr = new GenerateResult();

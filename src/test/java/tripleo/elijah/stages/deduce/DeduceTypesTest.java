@@ -13,11 +13,13 @@ import org.junit.Before;
 import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 
 /**
@@ -57,11 +59,13 @@ public class DeduceTypesTest {
 		//
 		//
 		//
-		final GeneratePhase generatePhase = new GeneratePhase();
-		DeducePhase dp = new DeducePhase(generatePhase);
-		DeduceTypes2 d = dp.deduceModule(mod);
+		final ElLog.Verbosity verbosity = mod.parent.gitlabCIVerbosity();
+		final PipelineLogic pl = new PipelineLogic(verbosity);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity, pl);
+		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity);
+		DeduceTypes2 d = dp.deduceModule(mod, verbosity);
 //		final DeduceTypes d = new DeduceTypes(mod);
-		this.x = DeduceLookupUtils.deduceExpression(x1, fc);
+		this.x = DeduceLookupUtils.deduceExpression(d, x1, fc);
 		System.out.println(this.x);
 	}
 	/** TODO This test fails beacause we are comparing a BUILT_IN vs a USER OS_Type.

@@ -312,6 +312,10 @@ public class OS_Module implements OS_Element, OS_Container {
 	public void setLsp(LibraryStatementPart aLsp) {
 		lsp = aLsp;
 	}
+
+	public Compilation getCompilation() {
+		return parent;
+	}
 }
 
 //

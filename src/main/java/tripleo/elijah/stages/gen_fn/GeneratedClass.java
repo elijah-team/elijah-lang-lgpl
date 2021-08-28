@@ -130,7 +130,7 @@ public class GeneratedClass extends GeneratedContainerNC {
 							OS_Element best = lrl.chooseBest(null);
 							if (best != null) {
 								if (best instanceof AliasStatement)
-									best = DeduceLookupUtils._resolveAlias((AliasStatement) best);
+									best = DeduceLookupUtils._resolveAlias((AliasStatement) best, null);
 								assert best instanceof ClassStatement;
 								varTableEntry.varType = new OS_Type((ClassStatement) best);
 							} else {

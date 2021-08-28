@@ -12,6 +12,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
@@ -23,6 +24,7 @@ import tripleo.elijah.lang.OS_UnknownType;
 import tripleo.elijah.lang.TypeName;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
 import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
@@ -44,8 +46,16 @@ public class DeducePhase {
 	public List<GeneratedNode> generatedClasses = new ArrayList<GeneratedNode>();
 	public final GeneratePhase generatePhase;
 
-	public DeducePhase(GeneratePhase aGeneratePhase) {
+	final PipelineLogic pipelineLogic;
+
+	private final ElLog LOG;
+
+	public DeducePhase(GeneratePhase aGeneratePhase, PipelineLogic aPipelineLogic, ElLog.Verbosity verbosity) {
 		generatePhase = aGeneratePhase;
+		pipelineLogic = aPipelineLogic;
+		//
+		LOG = new ElLog("(DEDUCE_PHASE)", verbosity, "DeducePhase");
+		pipelineLogic.addLog(LOG);
 	}
 
 	public void addFunction(GeneratedFunction generatedFunction, FunctionDef fd) {
@@ -163,6 +173,13 @@ public class DeducePhase {
 		deferredMembers.add(aDeferredMember);
 	}
 
+//	public List<ElLog> deduceLogs = new ArrayList<ElLog>();
+
+	public void addLog(ElLog aLog) {
+		//deduceLogs.add(aLog);
+		pipelineLogic.addLog(aLog);
+	}
+
 	static class ResolvedVariables {
 		final IdentTableEntry identTableEntry;
 		final OS_Element parent; // README tripleo.elijah.lang._CommonNC, but that's package-private
@@ -179,19 +196,20 @@ public class DeducePhase {
 
 	private final Multimap<FunctionDef, GeneratedFunction> functionMap = ArrayListMultimap.create();
 
-	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf) {
-		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this);
-//		System.err.println("196 DeduceTypes "+deduceTypes2.getFileName());
+	public DeduceTypes2 deduceModule(OS_Module m, Iterable<GeneratedNode> lgf, ElLog.Verbosity verbosity) {
+		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this, verbosity);
+//		LOG.err("196 DeduceTypes "+deduceTypes2.getFileName());
 		deduceTypes2.deduceFunctions(lgf);
 		return deduceTypes2;
 	}
 
-	public DeduceTypes2 deduceModule(OS_Module m) {
+	public DeduceTypes2 deduceModule(OS_Module m, ElLog.Verbosity verbosity) {
 		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
-		List<GeneratedNode> lgc = new ArrayList<>();
 
 		@NotNull List<EntryPoint> epl = m.entryPoints;
 		gfm.generateFromEntryPoints(epl, this);
+
+		List<GeneratedNode> lgc = generatedClasses;
 
 		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 		for (GeneratedNode lgci : lgc) {
@@ -213,7 +231,7 @@ public class DeducePhase {
 
 //		generatedClasses = lgc;
 
-		return deduceModule(m, lgf);
+		return deduceModule(m, lgf, verbosity);
 	}
 
 	/**
@@ -221,8 +239,9 @@ public class DeducePhase {
 	 * @param m the module
 	 * @param lgc the result of generateAllTopLevelClasses
 	 * @param _unused is unused
+	 * @param verbosity
 	 */
-	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgc, boolean _unused) {
+	public void deduceModule(OS_Module m, Iterable<GeneratedNode> lgc, boolean _unused, ElLog.Verbosity verbosity) {
 		final List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 
 		for (GeneratedNode lgci : lgc) {
@@ -244,11 +263,11 @@ public class DeducePhase {
 			}
 		}
 
-		deduceModule(m, lgf);
+		deduceModule(m, lgf, verbosity);
 	}
 
 	public void forFunction(DeduceTypes2 deduceTypes2, FunctionInvocation fi, ForFunction forFunction) {
-		System.err.println("272 "+fi.getFunction()+" "+fi.pte);
+//		LOG.err("272 forFunction\n\t"+fi.getFunction()+"\n\t"+fi.pte);
 		fi.generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {
 			@Override
 			public void onDone(BaseGeneratedFunction result) {
@@ -407,6 +426,17 @@ public class DeducePhase {
 								final OS_Type varType = v.varType;
 								final GenType genType = new GenType();
 								genType.set(varType);
+
+//								if (deferredMember.getInvocation() instanceof NamespaceInvocation) {
+//									((NamespaceInvocation) deferredMember.getInvocation()).resolveDeferred().done(new DoneCallback<GeneratedNamespace>() {
+//										@Override
+//										public void onDone(GeneratedNamespace result) {
+//											result;
+//										}
+//									});
+//								}
+
+								deferredMember.externalRefDeferred().resolve(result);
 /*
 								if (genType.resolved == null) {
 									// HACK need to resolve, but this shouldn't be here
@@ -456,21 +486,21 @@ public class DeducePhase {
 				switch (identTableEntry.getStatus()) {
 					case UNKNOWN:
 						assert identTableEntry.resolved_element == null;
-						System.err.println(String.format("250 UNKNOWN idte %s in %s", identTableEntry, generatedFunction));
+						LOG.err(String.format("250 UNKNOWN idte %s in %s", identTableEntry, generatedFunction));
 						break;
 					case KNOWN:
 						assert identTableEntry.resolved_element != null;
 						if (identTableEntry.type == null) {
-							System.err.println(String.format("258 null type in KNOWN idte %s in %s", identTableEntry, generatedFunction));
+							LOG.err(String.format("258 null type in KNOWN idte %s in %s", identTableEntry, generatedFunction));
 						}
 						break;
 					case UNCHECKED:
-						System.err.println(String.format("255 UNCHECKED idte %s in %s", identTableEntry, generatedFunction));
+						LOG.err(String.format("255 UNCHECKED idte %s in %s", identTableEntry, generatedFunction));
 						break;
 				}
 				for (TypeTableEntry pot_tte : identTableEntry.potentialTypes()) {
 					if (pot_tte.getAttached() == null) {
-						System.err.println(String.format("267 null potential attached in %s in %s in %s", pot_tte, identTableEntry, generatedFunction));
+						LOG.err(String.format("267 null potential attached in %s in %s in %s", pot_tte, identTableEntry, generatedFunction));
 					}
 				}
 			}

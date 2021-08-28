@@ -19,6 +19,7 @@ import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.ProcIA;
+import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
@@ -37,6 +38,8 @@ class Resolve_Ident_IA {
 
 	private final DeduceTypes2 deduceTypes2;
 	private final DeducePhase phase;
+	
+	private final ElLog LOG;
 
 	@Contract(pure = true)
 	public Resolve_Ident_IA(final @NotNull DeduceTypes2 aDeduceTypes2,
@@ -46,13 +49,15 @@ class Resolve_Ident_IA {
 							final BaseGeneratedFunction aGeneratedFunction,
 							final @NotNull FoundElement aFoundElement,
 							final @NotNull ErrSink aErrSink) {
+		deduceTypes2 = aDeduceTypes2;
+		phase = aPhase;
 		context = aContext;
 		identIA = aIdentIA;
 		generatedFunction = aGeneratedFunction;
 		foundElement = aFoundElement;
 		errSink = aErrSink;
-		deduceTypes2 = aDeduceTypes2;
-		phase = aPhase;
+		//
+		LOG = deduceTypes2.LOG;
 	}
 
 	OS_Element el;
@@ -105,23 +110,23 @@ class Resolve_Ident_IA {
 			InstructionArgument x = s.get(s.size() - 1);
 			if (x instanceof IntegerIA) {
 				assert false;
-				@NotNull VariableTableEntry y = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(x));
+				@NotNull VariableTableEntry y = ((IntegerIA) x).getEntry();
 				y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else if (x instanceof IdentIA) {
-				@NotNull IdentTableEntry y = generatedFunction.getIdentTableEntry(DeduceTypes2.to_int(x));
+				@NotNull IdentTableEntry y = ((IdentIA) x).getEntry();
 				y.addStatusListener(new BaseTableEntry.StatusListener() {
 					@Override
 					public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 						if (newStatus == BaseTableEntry.Status.KNOWN) {
 //								assert el2 != eh.getElement();
-							System.out.println("1424 Found for " + normal_path);
+							LOG.info("1424 Found for " + normal_path);
 							foundElement.doFoundElement(eh.getElement());
 						}
 					}
 				});
 			}
 		} else {
-//				System.out.println("1431 Found for " + normal_path);
+//			LOG.info("1431 Found for " + normal_path);
 			foundElement.doFoundElement(el);
 		}
 	}
@@ -136,9 +141,9 @@ class Resolve_Ident_IA {
 			assert y.getStatus() == BaseTableEntry.Status.KNOWN;
 //				y.setStatus(BaseTableEntry.Status.KNOWN, el);
 		} else if (x instanceof ProcIA) {
-			@NotNull ProcTableEntry y = /*((ProcIA) x).getEntry()*/generatedFunction.getProcTableEntry(DeduceTypes2.to_int(x));
+			@NotNull ProcTableEntry y = ((ProcIA) x).getEntry();
 			assert y.getStatus() == BaseTableEntry.Status.KNOWN;
-			//y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
+			y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 		} else
 			throw new NotImplementedException();
 	}
@@ -155,7 +160,7 @@ class Resolve_Ident_IA {
 					throw new IllegalArgumentException("double pce!");
 			}
 			try {
-				LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx);
+				LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx, deduceTypes2);
 				el = lrl.chooseBest(null);
 				ectx = el.getContext();
 //					prte.setResolvedElement(el);
@@ -216,7 +221,7 @@ class Resolve_Ident_IA {
 		ConstructorDef selected_constructor = null;
 		if (pte.getArgs().size() == 0 && cs.size() == 0) {
 			// TODO use a virtual default ctor
-			System.out.println("2262 use a virtual default ctor for " + pte.expression);
+			LOG.info("2262 use a virtual default ctor for " + pte.expression);
 			selected_constructor = ConstructorDef.defaultVirtualCtor;
 		} else {
 			// TODO find a ctor that matches prte.getArgs()
@@ -245,7 +250,7 @@ class Resolve_Ident_IA {
 	private RIA_STATE action_IdentIA(List<InstructionArgument> aS, IdentIA ia) {
 		final IdentTableEntry idte = ia.getEntry();
 		if (idte.getStatus() == BaseTableEntry.Status.UNKNOWN) {
-			System.out.println("1257 Not found for " + generatedFunction.getIdentIAPathNormal(ia));
+			LOG.info("1257 Not found for " + generatedFunction.getIdentIAPathNormal(ia));
 			// No need checking more than once
 			foundElement.doNoFoundElement();
 			return RIA_STATE.RETURN;
@@ -266,21 +271,32 @@ class Resolve_Ident_IA {
 						final FunctionDef functionDef = (FunctionDef) el;
 						final OS_Element parent = functionDef.getParent();
 						GenType genType = null;
+						IInvocation invocation = null;
 						switch (DecideElObjectType.getElObjectType(parent)) {
-							case UNKNOWN:
-								break;
-							case CLASS:
-								genType = new GenType((ClassStatement) parent);
-								break;
-							case NAMESPACE:
-								genType = new GenType((NamespaceStatement) parent);
-								break;
-							default:
-								// do nothing
-								break;
+						case UNKNOWN:
+							break;
+						case CLASS:
+							genType = new GenType((ClassStatement) parent);
+							ClassInvocation ci = new ClassInvocation((ClassStatement) parent, null);
+							invocation = phase.registerClassInvocation(ci);
+							break;
+						case NAMESPACE:
+							genType = new GenType((NamespaceStatement) parent);
+							invocation = phase.registerNamespaceInvocation((NamespaceStatement) parent);
+							break;
+						default:
+							// do nothing
+							break;
 						}
-						if (genType != null)
+						if (genType != null) {
 							generatedFunction.addDependentType(genType);
+
+							// TODO might not be needed
+							if (invocation != null) {
+								FunctionInvocation fi = new FunctionInvocation((BaseFunctionDef) el, null, invocation, phase.generatePhase);
+//								generatedFunction.addDependentFunction(fi); // README program fails if this is included
+							}
+						}
 					} else if (el instanceof ClassStatement) {
 						GenType genType = new GenType((ClassStatement) el);
 						generatedFunction.addDependentType(genType);
@@ -288,11 +304,11 @@ class Resolve_Ident_IA {
 				}
 				if (el != null) {
 					idte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
-					if (el.getContext() != null)
-						ectx = el.getContext();
-					else {
+
+					if (el.getContext() == null)
 						throw new IllegalStateException("2468 null context");
-					}
+
+					ectx = el.getContext();
 				} else {
 					errSink.reportError("1179 Can't resolve " + text);
 					idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
@@ -312,7 +328,7 @@ class Resolve_Ident_IA {
 					@Override
 					public void noFoundElement() {
 						foundElement.noFoundElement();
-						System.out.println("2002 Cant resolve " + z);
+						LOG.info("2002 Cant resolve " + z);
 						idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 					}
 				});
@@ -376,7 +392,7 @@ class Resolve_Ident_IA {
 						final OS_Element resolvedElement = backlink.getResolvedElement();
 						assert resolvedElement != null;
 						try {
-							LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), resolvedElement.getContext());
+							LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), resolvedElement.getContext(), deduceTypes2);
 							@Nullable OS_Element best = lrl2.chooseBest(null);
 							assert best != null;
 							y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
@@ -418,7 +434,7 @@ class Resolve_Ident_IA {
 			}
 			case FUNCTION: {
 				int yy = 2;
-				System.err.println("1005");
+				LOG.err("1005");
 				FunctionDef x = (FunctionDef) aAttached.getElement();
 				ectx = x.getContext();
 				break;
@@ -432,7 +448,7 @@ class Resolve_Ident_IA {
 						ectx = ty.getElement().getContext();
 					} catch (ResolveError resolveError) {
 						resolveError.printStackTrace();
-						System.err.println("1182 Can't resolve " + tn);
+						LOG.err("1182 Can't resolve " + tn);
 						throw new IllegalStateException("ResolveError.");
 					}
 //						ectx = el.getContext();
@@ -445,7 +461,7 @@ class Resolve_Ident_IA {
 				break;
 			}
 			default:
-				System.err.println("1010 " + aAttached.getType());
+				LOG.err("1010 " + aAttached.getType());
 				throw new IllegalStateException("Don't know what you're doing here.");
 		}
 	}
