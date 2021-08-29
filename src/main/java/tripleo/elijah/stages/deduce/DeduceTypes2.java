@@ -746,7 +746,7 @@ public class DeduceTypes2 {
 					if (e instanceof ClassStatement) {
 						ci = new ClassInvocation((ClassStatement) e, null);
 						ci = phase.registerClassInvocation(ci);
-						fi = newFunctionInvocation(ConstructorDef.defaultVirtualCtor, pte, ci, phase);
+						fi = newFunctionInvocation(ConstructorDef.defaultVirtualCtor, pte, ci, phase); // TODO might not be virtual ctor, so check
 						pte.setFunctionInvocation(fi);
 
 						if (co != null) {
