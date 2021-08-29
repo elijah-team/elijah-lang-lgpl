@@ -28,7 +28,7 @@ public class FuncExpr implements IExpression, OS_Element {
 	private TypeName _returnType;
 	private OS_Type _type;
 	private FuncExprContext _ctx;
-	private Scope3 scope3;
+//	private Scope3 scope3;
 
 	public void type(final TypeModifiers modifier) {
 		assert modifier == TypeModifiers.FUNCTION ||
@@ -137,8 +137,13 @@ public class FuncExpr implements IExpression, OS_Element {
 		return _ctx;
 	}
 
-	public void scope(Scope3 sco) {
-		scope3 = sco;
+//	@Override
+//	public void scope(Scope3 sco) {
+//		scope3 = sco;
+//	}
+
+	public Scope3 getScope() {
+		return scope3;
 	}
 }
 
