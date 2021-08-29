@@ -1537,10 +1537,24 @@ public class DeduceTypes2 {
 //							vte.setCallablePTE(pte1);
 
 							GenType gt = pot.genType;
-							if (e instanceof ClassStatement)
-								gt.resolved = new OS_Type((ClassStatement) e);
-							else if (e instanceof NamespaceStatement)
+//							FunctionInvocation fi;
+							if (e instanceof NamespaceStatement) {
+								final NamespaceStatement namespaceStatement = (NamespaceStatement) e;
 								gt.resolvedn = (NamespaceStatement) e;
+								final NamespaceInvocation nsi = phase.registerNamespaceInvocation(namespaceStatement);
+//										pte.setNamespaceInvocation(nsi);
+								gt.ci = nsi;
+//								fi = newFunctionInvocation(fd, pte, nsi, phase);
+							} else if (e instanceof ClassStatement) {
+								final ClassStatement classStatement = (ClassStatement) e;
+								gt.resolved = new OS_Type((ClassStatement) e);
+								ClassInvocation ci = new ClassInvocation(classStatement, null);
+								ci = phase.registerClassInvocation(ci);
+								gt.ci = ci;
+//								pte.setClassInvocation(ci);
+//								fi = newFunctionInvocation(fd, pte, ci, phase);
+							} else // TODO will fail on FunctionDef's
+								throw new IllegalStateException("Unknown parent");
 
 							gt.node = vte.genType.node;
 
