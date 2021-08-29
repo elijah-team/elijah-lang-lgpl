@@ -1535,7 +1535,8 @@ public class DeduceTypes2 {
 
 	public NamespaceStatement lookup_module_namespace(OS_Module aModule) {
 		try {
-			OS_Element e = DeduceLookupUtils.lookup(IdentExpression.forString("__MODULE__"), aModule.getContext(), this);
+			final IdentExpression module_ident = IdentExpression.forString("__MODULE__");
+			OS_Element e = DeduceLookupUtils.lookup(module_ident, aModule.getContext(), this);
 			if (e != null) {
 				if (e instanceof NamespaceStatement) {
 					return (NamespaceStatement) e;
@@ -1546,7 +1547,7 @@ public class DeduceTypes2 {
 			} else {
 				// not found, so add. this is where AST would come in handy
 				NamespaceStatement ns = new NamespaceStatement(aModule, aModule.getContext());
-				ns.setName(IdentExpression.forString("__MODULE__"));
+				ns.setName(module_ident);
 				return ns;
 			}
 		} catch (ResolveError aResolveError) {
