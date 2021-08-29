@@ -194,8 +194,11 @@ public abstract class BaseFunctionDef implements Documentable, ClassItem, OS_Con
 	}
 
 	public enum Species {
+		REG_FUN,
 		DEF_FUN,
-		PROP_SET, PROP_GET, REG_FUN, CTOR, DTOR
+		CTOR, DTOR,
+		PROP_SET, PROP_GET,
+		FUNC_EXPR
 	}
 
 	// endregion
