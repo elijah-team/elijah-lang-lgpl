@@ -226,7 +226,7 @@ public class DeduceLookupUtils {
 					aResolveError.printStackTrace();
 				}
 				return new OS_Type(vs.typeName());
-			} else if (vs.initialValue() != IExpression.UNASSIGNED) {
+			} else if (vs.initialValue() == IExpression.UNASSIGNED) {
 				return new OS_UnknownType(vs);
 //				return deduceExpression(vs.initialValue(), ctx); // infinite recursion
 			}
