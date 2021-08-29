@@ -598,7 +598,7 @@ public class DeduceTypes2 {
 				{
 					final IdentIA identIA = (IdentIA) pte.expression_num;
 					final String x = generatedFunction.getIdentIAPathNormal(identIA);
-					LOG.err("298 Calling "+x);
+					LOG.info("298 Calling "+x);
 					resolveIdentIA_(context, identIA, generatedFunction, new FoundElement(phase) {
 
 						@SuppressWarnings("unused") final String xx = x;
