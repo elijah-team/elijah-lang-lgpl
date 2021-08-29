@@ -163,11 +163,11 @@ public abstract class BaseFunctionDef implements Documentable, ClassItem, OS_Con
 
 	// endregion
 
-	public Species getType() {
+	public Species getSpecies() {
 		return _species;
 	}
 
-	public void setType(final Species aSpecies) {
+	public void setSpecies(final Species aSpecies) {
 		_species = aSpecies;
 	}
 

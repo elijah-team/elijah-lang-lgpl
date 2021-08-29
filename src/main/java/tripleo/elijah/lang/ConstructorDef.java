@@ -40,7 +40,7 @@ public class ConstructorDef extends BaseFunctionDef {
 			setName(aConstructorName);
 		else
 			setName(emptyConstructorName); // hack for Context#lookup
-		setType(Species.CTOR);
+		setSpecies(Species.CTOR);
 	}
 
 	@Override

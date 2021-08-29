@@ -49,7 +49,7 @@ public class MainClassEntryPoint implements EntryPoint {
 	}
 
 	public static boolean is_main_function_with_no_args(@NotNull FunctionDef aFunctionDef) {
-		switch (aFunctionDef.getType()) {
+		switch (aFunctionDef.getSpecies()) {
 			case REG_FUN:
 			case DEF_FUN:
 				if (aFunctionDef.name().equals("main")) {

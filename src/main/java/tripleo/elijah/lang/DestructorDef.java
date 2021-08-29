@@ -28,7 +28,7 @@ public class DestructorDef extends BaseFunctionDef {
 			throw new IllegalStateException("adding DestructorDef to " + aClassStatement.getClass().getName());
 		}
 		_a.setContext(new FunctionContext(context, this));
-		setType(Species.DTOR);
+		setSpecies(Species.DTOR);
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class DefFunctionDef extends BaseFunctionDef {
 			throw new IllegalStateException("adding DefFunctionDef to " + aElement.getClass().getName());
 		}
 		_a.setContext(new FunctionContext(aContext, this));
-		setType(Species.DEF_FUN);
+		setSpecies(Species.DEF_FUN);
 	}
 
 	private TypeName _returnType = null;
