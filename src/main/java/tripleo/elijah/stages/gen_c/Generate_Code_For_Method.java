@@ -544,14 +544,24 @@ public class Generate_Code_For_Method {
 		final List<TypeTableEntry> pt = new ArrayList<TypeTableEntry>(pt_);
 		if (pt.size() == 1) {
 			final TypeTableEntry ty = pt.get(0);
-//			LOG.err("8885 " +ty.attached);
-			final OS_Type attached = ty.getAttached();
-			final String z;
-			if (attached != null)
-				z = gc.getTypeName(attached);
-			else
-				z = Emit.emit("/*763*/")+"Unknown";
-			tos.put_string_ln(String.format("/*8890*/Z<%s> %s;", z, target_name));
+			if (ty.genType.node != null) {
+				GeneratedNode node = ty.genType.node;
+				if (node instanceof GeneratedFunction) {
+					int y=2;
+					// get signature
+					String z = Emit.emit("/*552*/") + "void (*)()";
+					tos.put_string_ln(String.format("/*8889*/%s %s;", z, target_name));
+				}
+			} else {
+//				LOG.err("8885 " +ty.attached);
+				final OS_Type attached = ty.getAttached();
+				final String z;
+				if (attached != null)
+					z = gc.getTypeName(attached);
+				else
+					z = Emit.emit("/*763*/") + "Unknown";
+				tos.put_string_ln(String.format("/*8890*/Z<%s> %s;", z, target_name));
+			}
 		}
 		LOG.err("8886 y is null (No typename specified)");
 	}
