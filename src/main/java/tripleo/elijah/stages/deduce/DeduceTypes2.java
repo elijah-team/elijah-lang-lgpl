@@ -370,6 +370,12 @@ public class DeduceTypes2 {
 					//
 					add_proc_table_listeners(generatedFunction);
 					//
+					// resolve arguments table
+					//
+					for (VariableTableEntry vte : generatedFunction.vte_list) {
+						resolve_arguments_table_entry(vte, generatedFunction, context);
+					}
+					//
 					// resolve ident table
 					//
 					for (IdentTableEntry ite : generatedFunction.idte_list) {
