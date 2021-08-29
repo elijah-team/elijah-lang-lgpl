@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created 8/21/20 11:53 PM
  */
-public class FuncExprContext extends Context {
+public class FuncExprContext extends FunctionContext {
 
 	private final FuncExpr carrier;
 	private final Context _parent;
@@ -25,6 +25,7 @@ public class FuncExprContext extends Context {
 	private int functionPrelimInstructionsNumber = 1;
 
 	public FuncExprContext(final Context cur, final FuncExpr pc) {
+		super(cur, pc);
 		_parent = cur;
 		carrier = pc;
 	}
