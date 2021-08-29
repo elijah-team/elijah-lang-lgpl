@@ -63,14 +63,14 @@ public abstract class Context {
 //		return this.nameTable ;
 //	}
 
-	public OS_Module module() {
+	public @NotNull OS_Module module() {
 		Context ctx = this;//getParent();
 		while (!(ctx instanceof ModuleContext))
 			ctx = ctx.getParent();
 		return ((ModuleContext) ctx).getCarrier();
 	}
 
-	public Compilation compilation() {
+	public @NotNull Compilation compilation() {
 		OS_Module module = module();
 		return module.parent;
 	}
