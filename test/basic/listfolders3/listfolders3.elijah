@@ -10,6 +10,7 @@ class Main ( Arguments ) {
 package wpkotlin_c.demo.list_folders
 
 import std.io.Directory
+import std.collections
 
 class MainLogic {
   main(args: List[String]) {
