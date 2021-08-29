@@ -42,6 +42,12 @@ public class ImportContext extends Context {
 						final NamespaceContext namespaceContext = (NamespaceContext) element.getContext();
 						alreadySearched.add(namespaceContext);
 						namespaceContext.lookup(name, level, Result, alreadySearched, true);
+					} else if (element instanceof OS_Element2) {
+						final OS_Element2 element2 = (OS_Element2) element;
+						if (element2.name().equals(name)) {
+							Result.add(name, level, element, this);
+							break; // shortcut: should only have one in scope
+						}
 					}
 				}
 			} else {
