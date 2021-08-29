@@ -31,7 +31,7 @@ public class DestructorDefBuilder extends BaseFunctionDefBuilder {
 			destructorDef.add(item.build());
 		}
 //		assert _species == FunctionDef.Species.DTOR;
-		destructorDef.setType(FunctionDef.Species.DTOR);
+		destructorDef.setSpecies(FunctionDef.Species.DTOR);
 		destructorDef.postConstruct();
 		return destructorDef;
 	}

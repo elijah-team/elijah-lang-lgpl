@@ -799,7 +799,7 @@ public class GenerateC implements CodeGenerator {
 		if (!name.equals("Value")) return false;
 		//
 		FunctionDef fd = (FunctionDef) gf.getFD();
-		switch (fd.getType()) {
+		switch (fd.getSpecies()) {
 		case REG_FUN:
 		case DEF_FUN:
 			if (!(fd.getParent() instanceof ClassStatement)) return false;
@@ -813,7 +813,7 @@ public class GenerateC implements CodeGenerator {
 		case PROP_SET:
 			return true;
 		default:
-			throw new IllegalStateException("Unexpected value: " + fd.getType());
+			throw new IllegalStateException("Unexpected value: " + fd.getSpecies());
 		}
 	}
 

@@ -39,7 +39,7 @@ public class ConstructorDefBuilder extends BaseFunctionDefBuilder {
 			cd.add(item.build());
 		}
 //		assert _species == FunctionDef.Species.CTOR;
-		cd.setType(FunctionDef.Species.CTOR);
+		cd.setSpecies(FunctionDef.Species.CTOR);
 		cd.postConstruct();
 		return cd;
 	}

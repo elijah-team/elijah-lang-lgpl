@@ -59,7 +59,7 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 			if (!(functionDef.hasItem(built))) // already added by constructor
 				functionDef.add(built);
 		}
-		functionDef.setType(_species);
+		functionDef.setSpecies(_species);
 		functionDef.postConstruct();
 		return functionDef;
 	}
