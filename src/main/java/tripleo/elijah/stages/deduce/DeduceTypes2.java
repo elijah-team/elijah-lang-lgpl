@@ -784,7 +784,7 @@ public class DeduceTypes2 {
 						return;
 					}
 
-					if (co != null)
+					if (co != null && genType != null)
 						co.setGenType(genType);
 
 					if (depTracker != null) {
