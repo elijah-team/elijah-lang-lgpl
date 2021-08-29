@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.contexts.ClassContext;
+import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
@@ -1445,6 +1446,113 @@ public class DeduceTypes2 {
 					errSink.reportError("165 Can't resolve "+path);
 				}
 			});
+		}
+	}
+
+	public void resolve_arguments_table_entry(VariableTableEntry vte, BaseGeneratedFunction generatedFunction, Context ctx) {
+		switch (vte.vtt) {
+		case ARG:
+
+			TypeTableEntry tte = vte.type;
+			final OS_Type attached = tte.getAttached();
+			if (attached.getType() == OS_Type.Type.USER) {
+				if (tte.genType.typeName == null)
+					tte.genType.typeName = attached;
+				try {
+					tte.genType.resolved = resolve_type(attached, ctx);
+					tte.setAttached(tte.genType.resolved); // TODO probably not necessary, but let's leave it for now
+				} catch (ResolveError aResolveError) {
+//				aResolveError.printStackTrace();
+					errSink.reportDiagnostic(aResolveError);
+					LOG.err("Can't resolve argument type " + attached);
+					return;
+				}
+			}
+			break;
+		case VAR:
+			if (vte.type.getAttached() == null && vte.potentialTypes.size() == 1) {
+				TypeTableEntry pot = new ArrayList<>(vte.potentialTypes()).get(0);
+				if (pot.getAttached() instanceof OS_FuncExprType) {
+					final OS_FuncExprType funcExprType = (OS_FuncExprType) pot.getAttached();
+
+					pot.genType.typeName = funcExprType;
+
+					final FuncExpr fe = (FuncExpr) funcExprType.getElement();
+
+					// add namespace
+					OS_Module mod1 = fe.getContext().module();
+					NamespaceStatement mod_ns = lookup_module_namespace(mod1);
+
+					ProcTableEntry callable_pte = null;
+
+					if (mod_ns != null) {
+						// add func_expr to namespace
+						FunctionDef fd1 = new FunctionDef(mod_ns, mod_ns.getContext());
+						fd1.setFal(fe.fal());
+						fd1.setContext((FunctionContext) fe.getContext());
+						fd1.scope(fe.getScope());
+						fd1.setSpecies(BaseFunctionDef.Species.FUNC_EXPR);
+						fd1.setName(IdentExpression.forString(String.format("$%d", mod_ns.getItems().size()+1)));
+
+						WorkList wl=new WorkList();
+						@NotNull GenerateFunctions gen = phase.generatePhase.getGenerateFunctions(mod1);
+						NamespaceInvocation modi = new NamespaceInvocation(mod_ns);
+						final ProcTableEntry pte = findProcTableEntry(generatedFunction, pot.expression);
+						assert pte != null;
+						callable_pte = pte;
+						FunctionInvocation fi = new FunctionInvocation(fd1, pte, modi, phase.generatePhase);
+						wl.addJob(new WlGenerateNamespace(gen, modi, phase.generatedClasses)); // TODO hope this works (for more than one)
+						final WlGenerateFunction wlgf = new WlGenerateFunction(gen, fi);
+						wl.addJob(wlgf);
+						wm.addJobs(wl);
+						wm.drain(); // TODO here?
+
+						pot.genType.ci = modi;
+						pot.genType.node = wlgf.getResult();
+					}
+
+					// more...
+					int y=2;
+
+					if (callable_pte != null)
+						vte.setCallablePTE(callable_pte);
+				} else if (pot.getAttached() != null && pot.getAttached().getType() == OS_Type.Type.USER_CLASS) {
+					int y=1;
+					vte.type = pot;
+				}
+			}
+			break;
+		}
+	}
+
+	private @Nullable ProcTableEntry findProcTableEntry(BaseGeneratedFunction aGeneratedFunction, IExpression aExpression) {
+		for (ProcTableEntry procTableEntry : aGeneratedFunction.prte_list) {
+			if (procTableEntry.expression == aExpression)
+				return procTableEntry;
+		}
+		return null;
+	}
+
+	public NamespaceStatement lookup_module_namespace(OS_Module aModule) {
+		try {
+			OS_Element e = DeduceLookupUtils.lookup(IdentExpression.forString("__MODULE__"), aModule.getContext(), this);
+			if (e != null) {
+				if (e instanceof NamespaceStatement) {
+					return (NamespaceStatement) e;
+				} else {
+					LOG.err("__MODULE__ should be namespace");
+					return null;
+				}
+			} else {
+				// not found, so add. this is where AST would come in handy
+				NamespaceStatement ns = new NamespaceStatement(aModule, aModule.getContext());
+				ns.setName(IdentExpression.forString("__MODULE__"));
+				return ns;
+			}
+		} catch (ResolveError aResolveError) {
+//			LOG.err("__MODULE__ should be namespace");
+			errSink.reportDiagnostic(aResolveError);
+			return null;
 		}
 	}
 
