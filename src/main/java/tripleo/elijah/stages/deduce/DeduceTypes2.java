@@ -1521,14 +1521,36 @@ public class DeduceTypes2 {
 						vte.typeDeferred().resolve(pot.genType);
 					}
 
-					// more...
-					int y=2;
-
 					if (callable_pte != null)
 						vte.setCallablePTE(callable_pte);
 				} else if (pot.getAttached() != null && pot.getAttached().getType() == OS_Type.Type.USER_CLASS) {
 					int y=1;
 					vte.type = pot;
+					vte.typeDeferred().resolve(pot.genType);
+				} else {
+					try {
+						if (pot.tableEntry instanceof ProcTableEntry) {
+							final ProcTableEntry pte1 = (ProcTableEntry) pot.tableEntry;
+							OS_Element e = DeduceLookupUtils.lookup(pte1.expression, ctx, this);
+							vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
+							pte1.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, vte));
+//							vte.setCallablePTE(pte1);
+
+							GenType gt = pot.genType;
+							if (e instanceof ClassStatement)
+								gt.resolved = new OS_Type((ClassStatement) e);
+							else if (e instanceof NamespaceStatement)
+								gt.resolvedn = (NamespaceStatement) e;
+
+							gt.node = vte.genType.node;
+
+							int y=2;
+						} else
+							throw new NotImplementedException();
+						int y=2;
+					} catch (ResolveError aResolveError) {
+						errSink.reportDiagnostic(aResolveError);
+					}
 				}
 			}
 			break;
