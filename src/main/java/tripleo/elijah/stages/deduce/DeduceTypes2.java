@@ -710,7 +710,7 @@ public class DeduceTypes2 {
 	}
 
 	private void add_proc_table_listeners(BaseGeneratedFunction generatedFunction) {
-		for (ProcTableEntry pte : generatedFunction.prte_list) {
+		for (final ProcTableEntry pte : generatedFunction.prte_list) {
 			pte.addStatusListener(new BaseTableEntry.StatusListener() {
 				@Override
 				public void onChange(final IElementHolder eh, final BaseTableEntry.Status newStatus) {
