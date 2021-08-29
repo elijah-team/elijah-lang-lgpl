@@ -91,6 +91,11 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 			type.resolve(gn); // TODO maybe this obviates the above?
 	}
 
+	@Override
+	public void setGenType(GenType aGenType) {
+		type.genType.copy(aGenType);
+	}
+
 	public boolean isResolved() {
 		return resolvedType != null;
 	}

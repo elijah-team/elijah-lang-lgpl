@@ -16,6 +16,8 @@ public interface Constructable {
 	void setConstructable(ProcTableEntry aPte);
 
 	void resolveType(GeneratedNode aNode);
+
+	void setGenType(GenType aGenType);
 }
 
 //

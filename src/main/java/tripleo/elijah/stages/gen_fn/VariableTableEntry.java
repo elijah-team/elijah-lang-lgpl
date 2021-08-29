@@ -124,6 +124,11 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 		type.resolve(aNode); // TODO maybe this obviates above
 	}
 
+	@Override
+	public void setGenType(GenType aGenType) {
+		genType.copy(aGenType);
+	}
+
 	public GeneratedNode resolvedType() {
 		return _resolvedType;
 	}
