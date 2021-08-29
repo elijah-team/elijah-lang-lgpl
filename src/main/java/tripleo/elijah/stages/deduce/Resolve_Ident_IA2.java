@@ -146,6 +146,14 @@ class Resolve_Ident_IA2 {
 								}
 							} else if (bl instanceof IdentIA) {
 								assert false;
+							} else if (bl instanceof ProcIA) {
+								final ProcIA procIA = (ProcIA) bl;
+								FunctionInvocation bl_fi = procIA.getEntry().getFunctionInvocation();
+								if (bl_fi.getClassInvocation() != null) {
+									invocation = bl_fi.getClassInvocation();
+								} else if (bl_fi.getNamespaceInvocation() != null) {
+									invocation = bl_fi.getNamespaceInvocation();
+								}
 							}
 
 							fi = new FunctionInvocation((BaseFunctionDef) el, pte, invocation, phase.generatePhase);
