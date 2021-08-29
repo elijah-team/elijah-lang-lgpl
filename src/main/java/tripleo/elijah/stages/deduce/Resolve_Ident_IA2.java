@@ -72,11 +72,26 @@ class Resolve_Ident_IA2 {
 			// ia2 is not == equals to identIA, but functionally equivalent
 			if (ia2 instanceof IdentIA) {
 				final @NotNull IdentTableEntry ite = ((IdentIA) ia2).getEntry();
-				if (!ite.hasResolvedElement()) {
-					int y = 2;
-					ia2_IdentIA((IdentIA) ia2, ectx);
+				if (ite.backlink != null) {
+					InstructionArgument backlink = ite.backlink;
+					if (backlink instanceof IntegerIA) {
+						final IntegerIA integerIA = (IntegerIA) backlink;
+						@NotNull VariableTableEntry vte = integerIA.getEntry();
+						vte.typePromise().then(new DoneCallback<GenType>() {
+							@Override
+							public void onDone(GenType result) {
+								ectx = result.resolved.getClassOf().getContext();
+								ia2_IdentIA((IdentIA) ia2, ectx);
+								foundElement.doFoundElement(el);
+							}
+						});
+					}
+				} else {
+					if (!ite.hasResolvedElement()) {
+						ia2_IdentIA((IdentIA) ia2, ectx);
+						foundElement.doFoundElement(el);
+					}
 				}
-				int y = 2;
 			}
 //			el = dp.getElement(dp.size()-1);
 		} else {
