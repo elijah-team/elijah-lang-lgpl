@@ -20,10 +20,8 @@ import java.util.List;
  *
  * Created 	Mar 30, 2020 at 7:41:52 AM
  */
-public class FuncExpr implements IExpression, OS_Element {
+public class FuncExpr extends BaseFunctionDef implements IExpression, OS_Element {
 
-//	private final List<FunctionItem> items = new ArrayList<FunctionItem>();
-	//	private final TypeNameList argList = new TypeNameList();
 	private FormalArgList argList = new FormalArgList();
 	private TypeName _returnType;
 	private OS_Type _type;
@@ -47,24 +45,26 @@ public class FuncExpr implements IExpression, OS_Element {
 		_returnType = tn;
 	}
 
-	public List<FunctionItem> getItems() {
-		List<FunctionItem> collection = new ArrayList<FunctionItem>();
-		for (OS_Element element : scope3.items()) {
-			if (element instanceof FunctionItem)
-				collection.add((FunctionItem) element);
-		}
-		return collection;
-//		return items;
-	}
+//	public List<FunctionItem> getItems() {
+//		List<FunctionItem> collection = new ArrayList<FunctionItem>();
+//		for (OS_Element element : scope3.items()) {
+//			if (element instanceof FunctionItem)
+//				collection.add((FunctionItem) element);
+//		}
+//		return collection;
+////		return items;
+//	}
 
 	public void setContext(final FuncExprContext ctx) {
 		_ctx = ctx;
 	}
 
+	@Override
 	public void postConstruct() {
 		// nop
 	}
 
+	@Override
 	public List<FormalArgListItem> getArgs() {
 		return argList.falis;
 	}
@@ -75,6 +75,7 @@ public class FuncExpr implements IExpression, OS_Element {
 
 	private final FormalArgList formalArgList = new FormalArgList();
 
+	@Override
 	public FormalArgList fal() {
 		return formalArgList;
 	}
@@ -128,8 +129,8 @@ public class FuncExpr implements IExpression, OS_Element {
 
 	@Override
 	public OS_Element getParent() {
-		throw new NotImplementedException();
-//		return null; // getContext().getParent().carrier() except if it is an Expression; but Expression is not an Element
+//		throw new NotImplementedException();
+		return null; // getContext().getParent().carrier() except if it is an Expression; but Expression is not an Element
 	}
 
 	@Override
