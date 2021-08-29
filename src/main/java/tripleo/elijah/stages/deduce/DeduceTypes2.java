@@ -719,11 +719,25 @@ public class DeduceTypes2 {
 						final ConstructableElementHolder constructableElementHolder = (ConstructableElementHolder) eh;
 						co = constructableElementHolder.getConstructable();
 					}
-					if (newStatus != BaseTableEntry.Status.UNKNOWN) // means eh is null
-						set_resolved_element_pte(co, eh.getElement(), pte);
+					if (newStatus != BaseTableEntry.Status.UNKNOWN) { // means eh is null
+						AbstractDependencyTracker depTracker;
+						if (co instanceof IdentIA) {
+							final IdentIA identIA = (IdentIA) co;
+							depTracker = identIA.gf;
+						} else if (co instanceof IntegerIA) {
+							final IntegerIA integerIA = (IntegerIA) co;
+							depTracker = integerIA.gf;
+						} else
+							depTracker = null;
+
+						set_resolved_element_pte(co, eh.getElement(), pte, depTracker);
+					}
 				}
 
-				void set_resolved_element_pte(final Constructable co, final OS_Element e, final ProcTableEntry pte) {
+				void set_resolved_element_pte(final Constructable co,
+											  final OS_Element e,
+											  final ProcTableEntry pte,
+											  final AbstractDependencyTracker depTracker) {
 					ClassInvocation ci;
 					FunctionInvocation fi;
 					GenType genType = null;
@@ -769,26 +783,20 @@ public class DeduceTypes2 {
 						LOG.err("845 Unknown element for ProcTableEntry "+e);
 						return;
 					}
-					if (co != null) { // TODO really should pass in a param
-						AbstractDependencyTracker depTracker = null;
-						if (co instanceof IdentIA) {
-							final IdentIA identIA = (IdentIA) co;
-							depTracker = identIA.gf;
-						} else if (co instanceof IntegerIA) {
-							final IntegerIA integerIA = (IntegerIA) co;
-							depTracker = integerIA.gf;
-						}
-						if (depTracker != null) {
-							if (genType == null && fi.getFunction() == null) {
-								// README Assume constructor
-								final ClassStatement c = fi.getClassInvocation().getKlass();
-								final GenType genType2 = new GenType(c);
-								depTracker.addDependentType(genType2);
-							} else {
-								depTracker.addDependentFunction(fi);
-								if (genType != null)
-									depTracker.addDependentType(genType);
-							}
+
+					if (co != null)
+						co.setGenType(genType);
+
+					if (depTracker != null) {
+						if (genType == null && fi.getFunction() == null) {
+							// README Assume constructor
+							final ClassStatement c = fi.getClassInvocation().getKlass();
+							final GenType genType2 = new GenType(c);
+							depTracker.addDependentType(genType2);
+						} else {
+							depTracker.addDependentFunction(fi);
+							if (genType != null)
+								depTracker.addDependentType(genType);
 						}
 					}
 				}
