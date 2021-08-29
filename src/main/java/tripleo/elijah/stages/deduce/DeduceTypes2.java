@@ -1563,7 +1563,6 @@ public class DeduceTypes2 {
 							int y=2;
 						} else
 							throw new NotImplementedException();
-						int y=2;
 					} catch (ResolveError aResolveError) {
 						errSink.reportDiagnostic(aResolveError);
 					}
