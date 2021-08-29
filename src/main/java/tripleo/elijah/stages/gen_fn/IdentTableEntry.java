@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Created 9/12/20 10:27 PM
  */
-public class IdentTableEntry extends BaseTableEntry implements Constructable, TableEntryIV {
+public class IdentTableEntry extends BaseTableEntry1 implements Constructable, TableEntryIV {
     private final int index;
     private final IdentExpression ident;
 	private final Context pc;

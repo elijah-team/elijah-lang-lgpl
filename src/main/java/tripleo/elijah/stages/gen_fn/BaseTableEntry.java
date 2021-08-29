@@ -19,7 +19,6 @@ import java.util.List;
 public abstract class BaseTableEntry {
 	protected Status status = Status.UNCHECKED;
 	private final List<StatusListener> statusListenerList = new ArrayList<StatusListener>();
-	private ProcTableEntry callable_pte;
 
 	public Status getStatus() {
 		return status;
@@ -36,15 +35,6 @@ public abstract class BaseTableEntry {
 
 	public void addStatusListener(StatusListener sl) {
 		statusListenerList.add(sl);
-	}
-
-	public void setCallablePTE(ProcTableEntry aProcTableEntry) {
-		assert !(this instanceof ProcTableEntry);
-		callable_pte = aProcTableEntry;
-	}
-
-	public @Nullable ProcTableEntry getCallablePTE() {
-		return callable_pte;
 	}
 
 	public enum Status {
