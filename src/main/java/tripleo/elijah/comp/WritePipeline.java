@@ -60,11 +60,12 @@ public class WritePipeline implements PipelineMember {
 		sys.verbose = false; // TODO flag? ie CompilationOptions
 		sys.setCompilation(c);
 		sys.setOutputStrategy(os);
-		sys.generateOutputs(gr);
 	}
 
 	@Override
 	public void run() throws Exception {
+		sys.generateOutputs(gr);
+
 		write_files();
 		// TODO flag?
 		write_buffers();
