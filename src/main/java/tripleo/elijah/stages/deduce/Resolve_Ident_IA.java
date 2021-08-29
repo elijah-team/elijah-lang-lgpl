@@ -264,6 +264,7 @@ class Resolve_Ident_IA {
 					final LookupResultList lrl = ectx.lookup(text);
 					el = lrl.chooseBest(null);
 				} else {
+					assert false;
 					el = idte.resolved_element;
 				}
 				{
