@@ -164,9 +164,9 @@ public class Compilation {
 					final WritePipeline wpl = new WritePipeline(this, pipelineLogic.gr);
 					pipelines.add(wpl);
 
-					writeLogs(silent, pipelineLogic.elLogs);
-
 					pipelines.run();
+
+					writeLogs(silent, pipelineLogic.elLogs);
 				}
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
