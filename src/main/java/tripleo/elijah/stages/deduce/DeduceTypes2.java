@@ -1572,7 +1572,9 @@ public class DeduceTypes2 {
 					itex = ((IdentTableEntry) x).backlink;
 				} else if (itee.backlink instanceof ProcIA) {
 					x = ((ProcIA) itee.backlink).getEntry();
-					itee.setCallablePTE((ProcTableEntry) x);
+					if (itee.getCallablePTE() == null)
+						// turned out to be wrong (by double calling), so let's wrap it
+						itee.setCallablePTE((ProcTableEntry) x);
 					itex = null; //((ProcTableEntry) x).backlink;
 				} else if (itee.backlink == null) {
 					itex = null;
