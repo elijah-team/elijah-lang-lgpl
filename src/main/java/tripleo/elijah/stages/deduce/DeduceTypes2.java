@@ -422,9 +422,9 @@ public class DeduceTypes2 {
 										GenType genType = new GenType();
 										genType.typeName = attached;
 										genType.resolved = new OS_Type((ClassStatement) best);
-										genType.copy(vte.type.genType);
-										genType.ci = genCI(genType);
-										vte.type.setAttached(genType);
+//										genType.copy(vte.type.genType);
+										genType.ci = genCI(genType, x);
+										vte.type.genType.copy(genType);
 										// set node when available
 										((ClassInvocation) vte.type.genType.ci).resolvePromise().done(new DoneCallback<GeneratedClass>() {
 											@Override
