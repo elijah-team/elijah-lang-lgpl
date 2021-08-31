@@ -93,7 +93,9 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 
 	@Override
 	public void setGenType(GenType aGenType) {
-		type.genType.copy(aGenType);
+		if (type != null) {
+			type.genType.copy(aGenType);
+		}
 	}
 
 	public boolean isResolved() {
