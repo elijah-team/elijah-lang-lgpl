@@ -532,7 +532,7 @@ public class Generate_Code_For_Method {
 			} else {
 //				LOG.err("Bad potentialTypes size " + type);
 				final String z = gc.getTypeName(type);
-				tos.put_string_ln(String.format("Z<%s> %s;", z, target_name));
+				tos.put_string_ln(String.format("/*535*/Z<%s> %s; /*%s*/", z, target_name, type.getClassOf()));
 			}
 		}
 
