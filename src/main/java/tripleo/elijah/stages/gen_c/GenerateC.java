@@ -386,6 +386,8 @@ public class GenerateC implements CodeGenerator {
 
 		static String forVTE(@NotNull VariableTableEntry input) {
 			OS_Type attached = input.type.getAttached();
+			if (attached == null)
+				return Emit.emit("/*390*/")+"Z__Unresolved*"; // TODO remove this ASAP
 			if (input.getStatus() == BaseTableEntry.Status.UNCHECKED)
 				return "Error_UNCHECKED_Type";
 			if (attached.getType() == OS_Type.Type.USER_CLASS) {
