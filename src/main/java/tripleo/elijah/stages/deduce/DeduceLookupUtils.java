@@ -229,6 +229,8 @@ public class DeduceLookupUtils {
 			} else if (vs.initialValue() == IExpression.UNASSIGNED) {
 				return new OS_UnknownType(vs);
 //				return deduceExpression(vs.initialValue(), ctx); // infinite recursion
+			} else {
+				return deduceExpression(aDeduceTypes2, vs.initialValue(), vs.getContext());
 			}
 		} else if (best instanceof FunctionDef) {
 			final FunctionDef functionDef = (FunctionDef) best;
