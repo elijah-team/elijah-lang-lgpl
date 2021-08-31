@@ -133,14 +133,14 @@ public class DeducePhase {
 		return Result;
 	}
 
-	public boolean equivalentGenericPart(ClassInvocation ci0, ClassInvocation ci) {
-		Map<TypeName, OS_Type> map = ci0.genericPart;
-		Map<TypeName, OS_Type> gp = ci.genericPart;
-		if (gp == null && (map == null || map.size() == 0)) return true;
+	public boolean equivalentGenericPart(ClassInvocation first, ClassInvocation second) {
+		Map<TypeName, OS_Type> firstGenericPart = first.genericPart;
+		Map<TypeName, OS_Type> secondGenericPart = second.genericPart;
+		if (secondGenericPart == null && (firstGenericPart == null || firstGenericPart.size() == 0)) return true;
 		//
-		int i = gp.entrySet().size();
-		for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
-			final OS_Type entry_type = map.get(entry.getKey());
+		int i = secondGenericPart.entrySet().size();
+		for (Map.Entry<TypeName, OS_Type> entry : secondGenericPart.entrySet()) {
+			final OS_Type entry_type = firstGenericPart.get(entry.getKey());
 			assert !(entry_type instanceof OS_UnknownType);
 			if (entry_type.equals(entry.getValue()))
 				i--;
