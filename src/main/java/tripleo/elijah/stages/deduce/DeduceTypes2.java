@@ -3366,13 +3366,22 @@ public class DeduceTypes2 {
 						try {
 							lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), klass.getContext(), DeduceTypes2.this);
 							OS_Element best = lrl.chooseBest(null);
-//									ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+//							ite.setStatus(BaseTableEntry.Status.KNOWN, best);
 							assert best != null;
 							ite.setResolvedElement(best);
 
-							resolve_vte_for_class(vte, klass);
+							GenType genType = new GenType(klass);
+							TypeName typeName = null;
+							ClassInvocation ci = genCI(genType, vte.type.genType.nonGenericTypeName);
+//							resolve_vte_for_class(vte, klass);
+							ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+								@Override
+								public void onDone(GeneratedClass result) {
+									vte.resolveType(result);
+								}
+							});
 						} catch (ResolveError aResolveError) {
-							aResolveError.printStackTrace();
+							errSink.reportDiagnostic(aResolveError);
 						}
 					}
 				} else {
