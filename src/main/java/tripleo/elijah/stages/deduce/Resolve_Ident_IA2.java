@@ -68,7 +68,8 @@ class Resolve_Ident_IA2 {
 
 		if (identIA != null) {
 			DeducePath dp = identIA.getEntry().buildDeducePath(generatedFunction);
-			InstructionArgument ia2 = dp.getIA(dp.size() - 1);
+			int index = dp.size() - 1;
+			InstructionArgument ia2 = dp.getIA(index);
 			// ia2 is not == equals to identIA, but functionally equivalent
 			if (ia2 instanceof IdentIA) {
 				final @NotNull IdentTableEntry ite = ((IdentIA) ia2).getEntry();
