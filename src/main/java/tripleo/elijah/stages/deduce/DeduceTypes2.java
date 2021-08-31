@@ -3420,9 +3420,9 @@ public class DeduceTypes2 {
 							assert best != null;
 							ite.setResolvedElement(best);
 
-							GenType genType = new GenType(klass);
-							TypeName typeName = null;
-							ClassInvocation ci = genCI(genType, vte.type.genType.nonGenericTypeName);
+							final GenType genType = new GenType(klass);
+							final TypeName typeName = vte.type.genType.nonGenericTypeName;
+							final ClassInvocation ci = genCI(genType, typeName);
 //							resolve_vte_for_class(vte, klass);
 							ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
 								@Override
