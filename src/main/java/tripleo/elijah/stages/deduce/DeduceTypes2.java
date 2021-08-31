@@ -894,10 +894,11 @@ public class DeduceTypes2 {
 			List<String> l = new ArrayList<String>();
 
 			for (TypeTableEntry typeTableEntry : pte.getArgs()) {
-				if (typeTableEntry.getAttached() == null)
-					LOG.err("267 attached == null");
-
 				OS_Type attached = typeTableEntry.getAttached();
+
+				if (attached == null)
+					LOG.err("267 attached == null for "+typeTableEntry);
+
 				if (attached != null)
 					l.add(attached.toString());
 				else {
