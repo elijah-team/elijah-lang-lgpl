@@ -92,25 +92,17 @@ public class DeducePath {
 
 	@Nullable
 	public BaseTableEntry getEntry(int aIndex) {
-//		if (elements[aIndex] == null) {
-			InstructionArgument ia2 = getIA(aIndex);
-			OS_Element el;
-			if (ia2 instanceof IntegerIA) {
-				@NotNull VariableTableEntry vte = ((IntegerIA) ia2).getEntry();
-				return vte;
-			} else if (ia2 instanceof IdentIA) {
-				@NotNull IdentTableEntry identTableEntry = ((IdentIA) ia2).getEntry();
-				return identTableEntry;
-			} else if (ia2 instanceof ProcIA) {
-				final @NotNull ProcTableEntry procTableEntry = ((ProcIA) ia2).getEntry();
-				return procTableEntry;
-			} else
-				el = null; // README shouldn't be calling for other subclasses
-//			elements[aIndex] = el;
-//			return el;
-//		} else {
-//			return elements[aIndex];
-//		}
+		InstructionArgument ia2 = getIA(aIndex);
+		if (ia2 instanceof IntegerIA) {
+			@NotNull VariableTableEntry vte = ((IntegerIA) ia2).getEntry();
+			return vte;
+		} else if (ia2 instanceof IdentIA) {
+			@NotNull IdentTableEntry identTableEntry = ((IdentIA) ia2).getEntry();
+			return identTableEntry;
+		} else if (ia2 instanceof ProcIA) {
+			final @NotNull ProcTableEntry procTableEntry = ((ProcIA) ia2).getEntry();
+			return procTableEntry;
+		}
 		return null;
 	}
 
