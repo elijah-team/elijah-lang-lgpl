@@ -115,8 +115,8 @@ class Resolve_Ident_IA2 {
 					return;
 				} else
 					throw new NotImplementedException();
-				foundElement.doFoundElement(el);
 			}
+			foundElement.doFoundElement(el);
 		}
 	}
 
