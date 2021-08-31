@@ -1764,8 +1764,36 @@ public class DeduceTypes2 {
 				vte.type.setAttached(attached);
 			}
 			vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(vte.el));
+			{
+				final GenType genType = vte.type.genType;
+				if (genType.resolved != null && genType.node == null) {
+					genCI(genType, genType.nonGenericTypeName);
+//					genType.node = makeNode(genType);
+					//
+					// registerClassInvocation does the job of makeNode, so results should be immediately available
+					//
+					((ClassInvocation) genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
+						@Override
+						public void onDone(GeneratedClass result) {
+							genType.node = result;
+							vte.typeDeferred().resolve(genType);
+						}
+					});
+				}
+			}
 		}
 	}
+
+//	private GeneratedNode makeNode(GenType aGenType) {
+//		if (aGenType.ci instanceof ClassInvocation) {
+//			final ClassInvocation ci = (ClassInvocation) aGenType.ci;
+//			@NotNull GenerateFunctions gen = phase.generatePhase.getGenerateFunctions(ci.getKlass().getContext().module());
+//			WlGenerateClass wlgc = new WlGenerateClass(gen, ci, phase.generatedClasses);
+//			wlgc.run(null);
+//			return wlgc.getResult();
+//		}
+//		return null;
+//	}
 
 	class Implement_construct {
 
