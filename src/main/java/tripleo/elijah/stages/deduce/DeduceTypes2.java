@@ -1043,7 +1043,7 @@ public class DeduceTypes2 {
 		return null;
 	}
 
-	private ClassInvocation genCI(GenType genType) {
+	private ClassInvocation genCI(GenType genType, TypeName aTypeName) {
 		if (genType.nonGenericTypeName != null) {
 			NormalTypeName aTyn1 = (NormalTypeName) genType.nonGenericTypeName;
 			String constructorName = null; // TODO this comes from nowhere
@@ -1077,23 +1077,23 @@ public class DeduceTypes2 {
 			ClassInvocation clsinv;
 			if (genType.ci == null) {
 				clsinv = new ClassInvocation(best, constructorName);
-				assert best.getGenericPart().size() == 0;
-/*
-			if (gp.size() > 0) {
-				TypeNameList gp2 = aTyn1.getGenericPart();
-				for (int i = 0; i < gp.size(); i++) {
-					final TypeName typeName = gp2.get(i);
-					@NotNull OS_Type typeName2;
-					try {
-						typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
-						clsinv.set(i, gp.get(i), typeName2);
-					} catch (ResolveError aResolveError) {
-						aResolveError.printStackTrace();
-						return null;
+				if (gp.size() > 0) {
+					if (aTypeName instanceof NormalTypeName) {
+						final NormalTypeName tn = (NormalTypeName) aTypeName;
+						TypeNameList tngp = tn.getGenericPart();
+						for (int i = 0; i < gp.size(); i++) {
+							final TypeName typeName = tngp.get(i);
+							@NotNull OS_Type typeName2;
+							try {
+								typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
+								clsinv.set(i, gp.get(i), typeName2);
+							} catch (ResolveError aResolveError) {
+								aResolveError.printStackTrace();
+								return null;
+							}
+						}
 					}
 				}
-			}
-*/
 				clsinv = phase.registerClassInvocation(clsinv);
 				genType.ci = clsinv;
 			} else
