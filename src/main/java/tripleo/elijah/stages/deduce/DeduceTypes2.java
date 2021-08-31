@@ -1973,7 +1973,7 @@ public class DeduceTypes2 {
 											if (ite.type == null)
 												ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
 											assert result.resolved != null;
-											ite.type.setAttached(result.resolved);
+											ite.setGenType(result);
 										}
 									});
 						}
