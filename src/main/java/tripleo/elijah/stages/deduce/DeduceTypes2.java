@@ -3055,9 +3055,31 @@ public class DeduceTypes2 {
 					assert false;
 			}
 		} else {
-			final int y=2;
 			assert Pattern.matches("__.*__", pn);
-			LOG.err(String.format("i2 is not IntegerIA (%s)",i2.getClass().getName()));
+//			LOG.err(String.format("i2 is not IntegerIA (%s)",i2.getClass().getName()));
+			//
+			// try to get dunder method from class
+			//
+			IExpression exp = pte.getArgs().get(0).expression;
+			if (exp instanceof IdentExpression) {
+				final IdentExpression identExpression = (IdentExpression) exp;
+				@Nullable InstructionArgument vte_ia = gf.vte_lookup(identExpression.getText());
+				if (vte_ia != null) {
+					((IntegerIA) vte_ia).getEntry().typePromise().then(new DoneCallback<GenType>() {
+						@Override
+						public void onDone(GenType result) {
+							boolean found1 = lookup_name_calls(result.resolved.getClassOf().getContext(), pn, pte);
+							if (found1) {
+								int y=2;
+								System.out.println("3071");
+							} else {
+								int y=3;
+								System.out.println("3074");
+							}
+						}
+					});
+				}
+			}
 		}
 
 		pte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
