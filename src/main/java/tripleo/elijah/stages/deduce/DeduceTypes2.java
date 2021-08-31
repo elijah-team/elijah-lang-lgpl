@@ -896,12 +896,11 @@ public class DeduceTypes2 {
 			for (TypeTableEntry typeTableEntry : pte.getArgs()) {
 				OS_Type attached = typeTableEntry.getAttached();
 
-				if (attached == null)
-					LOG.err("267 attached == null for "+typeTableEntry);
-
 				if (attached != null)
 					l.add(attached.toString());
 				else {
+					LOG.err("267 attached == null for "+typeTableEntry);
+
 					if (typeTableEntry.expression != null)
 						l.add(String.format("<Unknown expression: %s>", typeTableEntry.expression));
 					else
