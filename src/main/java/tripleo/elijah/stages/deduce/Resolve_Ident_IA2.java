@@ -54,8 +54,8 @@ class Resolve_Ident_IA2 {
 	OS_Element el = null;
 	Context ectx;
 
-	public void resolveIdentIA2_(@NotNull final Context ctx,
-								 @Nullable IdentIA identIA,
+	public void resolveIdentIA2_(final @NotNull Context ctx,
+								 final @Nullable IdentIA identIA,
 								 @Nullable List<InstructionArgument> s) {
 		el = null;
 		ectx = ctx;
