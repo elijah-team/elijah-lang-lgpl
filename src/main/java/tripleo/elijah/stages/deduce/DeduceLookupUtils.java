@@ -175,7 +175,7 @@ public class DeduceLookupUtils {
 	 */
 	@Nullable
 	private static OS_Type deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx, DeduceTypes2 deduceTypes2) {
-		System.err.println("979 Skipping deduceProcedureCall "+pce);
+		System.err.println("979 During deduceProcedureCall "+pce);
 		OS_Element best = null;
 		try {
 			best = lookup(pce.getLeft(), ctx, deduceTypes2);
