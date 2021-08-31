@@ -86,6 +86,13 @@ class Resolve_Ident_IA2 {
 								foundElement.doFoundElement(el);
 							}
 						});
+					} else if (backlink instanceof IdentIA) {
+						IdentIA identIA3 = (IdentIA)dp.getIA(--index);
+						@Nullable OS_Element el3 = dp.getElement(index);
+						assert el3 != null;
+						ectx = el3.getContext();
+						ia2_IdentIA((IdentIA) ia2, ectx);
+						foundElement.doFoundElement(el);
 					}
 				} else {
 					if (!ite.hasResolvedElement()) {
