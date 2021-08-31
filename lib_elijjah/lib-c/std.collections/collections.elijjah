@@ -23,6 +23,8 @@ class interface Collection[T] < Iterable[T] {
 }
 
 class interface List[T] < Collection[T] {
+	__getitem__(index: CollectionSize) -> T // throws ...
+
 	findFirst(item: T) 	
 	insert(index: CollectionSize, item: T)
 	//remove(item: T) 	
