@@ -2522,7 +2522,8 @@ public class DeduceTypes2 {
 				@Override
 				public void onDone(GenType result) {
 					assert vte != vte1;
-					aTte.setAttached(result.resolved != null ? result.resolved : result.typeName);
+//					aTte.setAttached(result.resolved != null ? result.resolved : result.typeName);
+					aTte.genType.copy(result);
 //					vte.addPotentialType(aInstructionIndex, result); // TODO!!
 				}
 			});
