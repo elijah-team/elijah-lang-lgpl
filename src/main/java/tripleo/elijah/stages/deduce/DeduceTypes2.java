@@ -2527,7 +2527,7 @@ public class DeduceTypes2 {
 								public void typeDecided(GenType aType) {
 									if (!vte.typeDeferred().isPending()) {
 										if (vte.resolvedType() == null) {
-											final ClassInvocation ci = genCI(aType);
+											final ClassInvocation ci = genCI(aType, null);
 											vte.type.genTypeCI(ci);
 											ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
 												@Override
