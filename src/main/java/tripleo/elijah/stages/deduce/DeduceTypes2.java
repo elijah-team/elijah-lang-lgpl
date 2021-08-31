@@ -579,12 +579,10 @@ public class DeduceTypes2 {
 			case AGNT:
 				break;
 			case AGNF:
-				LOG.err("292 Encountered AGNF");
+				LOG.info("292 Encountered AGNF");
 				break;
 			case JE:
-				{
-					LOG.err("296 Encountered JE");
-				}
+				LOG.info("296 Encountered JE");
 				break;
 			case JNE:
 				break;
