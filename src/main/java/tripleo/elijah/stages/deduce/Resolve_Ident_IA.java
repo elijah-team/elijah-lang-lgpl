@@ -83,7 +83,7 @@ class Resolve_Ident_IA {
 						throw new IllegalStateException("Can't be here");
 				}
 			} else if (ia instanceof IdentIA) {
-				RIA_STATE state = action_IdentIA(s, (IdentIA) ia);
+				RIA_STATE state = action_IdentIA((IdentIA) ia);
 				switch (state) {
 					case CONTINUE:
 						continue; // never happens here
@@ -247,7 +247,7 @@ class Resolve_Ident_IA {
 			generatedFunction.addDependentFunction(fi);
 	}
 
-	private RIA_STATE action_IdentIA(List<InstructionArgument> aS, IdentIA ia) {
+	private RIA_STATE action_IdentIA(IdentIA ia) {
 		final IdentTableEntry idte = ia.getEntry();
 		if (idte.getStatus() == BaseTableEntry.Status.UNKNOWN) {
 			LOG.info("1257 Not found for " + generatedFunction.getIdentIAPathNormal(ia));
