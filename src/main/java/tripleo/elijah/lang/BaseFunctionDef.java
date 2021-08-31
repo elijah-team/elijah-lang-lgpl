@@ -25,7 +25,7 @@ public abstract class BaseFunctionDef implements Documentable, ClassItem, OS_Con
 	protected Species _species;
 	List<AnnotationClause> annotations = null;
 	protected Scope3 scope3;
-	private FormalArgList mFal = new FormalArgList(); // remove final for FunctionDefBuilder
+	protected FormalArgList mFal = new FormalArgList(); // remove final for FunctionDefBuilder
 	private IdentExpression funName;
 	private AccessNotation access_note;
 	private El_Category category;

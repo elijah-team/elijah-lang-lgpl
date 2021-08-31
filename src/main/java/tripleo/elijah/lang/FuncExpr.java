@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class FuncExpr extends BaseFunctionDef implements IExpression, OS_Element {
 
-	private FormalArgList argList = new FormalArgList();
+//	private FormalArgList argList = new FormalArgList();
 	private TypeName _returnType;
 	private OS_Type _type;
 	private FuncExprContext _ctx;
@@ -31,10 +31,6 @@ public class FuncExpr extends BaseFunctionDef implements IExpression, OS_Element
 	public void type(final TypeModifiers modifier) {
 		assert modifier == TypeModifiers.FUNCTION ||
 				modifier == TypeModifiers.PROCEDURE;
-	}
-
-	public FormalArgList argList() {
-		return argList;
 	}
 
 	public TypeName returnType() {
@@ -64,21 +60,18 @@ public class FuncExpr extends BaseFunctionDef implements IExpression, OS_Element
 		// nop
 	}
 
+	// region arglist
+
 	@Override
 	public List<FormalArgListItem> getArgs() {
-		return argList.falis;
+		return mFal.falis;
 	}
 
 	public void setArgList(FormalArgList argList) {
-		this.argList = argList;
+		mFal = argList;
 	}
 
-	private final FormalArgList formalArgList = new FormalArgList();
-
-	@Override
-	public FormalArgList fal() {
-		return formalArgList;
-	}
+	// endregion
 
 	/****** FOR IEXPRESSION ******/
 	@Override
