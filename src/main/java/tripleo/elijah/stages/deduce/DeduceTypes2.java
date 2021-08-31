@@ -1529,18 +1529,22 @@ public class DeduceTypes2 {
 
 			TypeTableEntry tte = vte.type;
 			final OS_Type attached = tte.getAttached();
-			if (attached.getType() == OS_Type.Type.USER) {
-				if (tte.genType.typeName == null)
-					tte.genType.typeName = attached;
-				try {
-					tte.genType.resolved = resolve_type(attached, ctx);
-					tte.setAttached(tte.genType.resolved); // TODO probably not necessary, but let's leave it for now
-				} catch (ResolveError aResolveError) {
-//				aResolveError.printStackTrace();
-					errSink.reportDiagnostic(aResolveError);
-					LOG.err("Can't resolve argument type " + attached);
-					return;
+			if (attached != null) {
+				if (attached.getType() == OS_Type.Type.USER) {
+					if (tte.genType.typeName == null)
+						tte.genType.typeName = attached;
+					try {
+						tte.genType.resolved = resolve_type(attached, ctx);
+						tte.setAttached(tte.genType.resolved); // TODO probably not necessary, but let's leave it for now
+					} catch (ResolveError aResolveError) {
+	//				aResolveError.printStackTrace();
+						errSink.reportDiagnostic(aResolveError);
+						LOG.err("Can't resolve argument type " + attached);
+						return;
+					}
 				}
+			} else {
+				int y=2;
 			}
 			break;
 		case VAR:
