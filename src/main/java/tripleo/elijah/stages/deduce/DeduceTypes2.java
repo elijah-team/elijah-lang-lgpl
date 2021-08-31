@@ -1532,34 +1532,56 @@ public class DeduceTypes2 {
 						if (pot.tableEntry instanceof ProcTableEntry) {
 							final ProcTableEntry pte1 = (ProcTableEntry) pot.tableEntry;
 							OS_Element e = DeduceLookupUtils.lookup(pte1.expression, ctx, this);
-							vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
-							pte1.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, vte));
-//							vte.setCallablePTE(pte1);
+							assert e != null;
+							if (e instanceof FunctionDef) {
+								final FunctionDef fd = (FunctionDef) e;
+								@NotNull IdentTableEntry ite1 = ((IdentIA) pte1.expression_num).getEntry();
+								DeducePath dp = ite1.buildDeducePath(generatedFunction);
+								GenType t = dp.getType(dp.size() - 1);
+								ite1.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
+								pte1.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
+								pte1.typePromise().then(new DoneCallback<GenType>() {
+									@Override
+									public void onDone(GenType result) {
+										if (t == null) {
+											ite1.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved);
+											ite1.setGenType(result);
+										} else {
+											assert false; // we don't expect this, but note there is no problem if it happens
+											t.copy(result);
+										}
+									}
+								});
+								int y=2;
+							} else {
+								vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
+								pte1.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, vte));
+//								vte.setCallablePTE(pte1);
 
-							GenType gt = pot.genType;
-//							FunctionInvocation fi;
-							if (e instanceof NamespaceStatement) {
-								final NamespaceStatement namespaceStatement = (NamespaceStatement) e;
-								gt.resolvedn = (NamespaceStatement) e;
-								final NamespaceInvocation nsi = phase.registerNamespaceInvocation(namespaceStatement);
+								GenType gt = pot.genType;
+//								FunctionInvocation fi;
+								if (e instanceof NamespaceStatement) {
+									final NamespaceStatement namespaceStatement = (NamespaceStatement) e;
+									gt.resolvedn = (NamespaceStatement) e;
+									final NamespaceInvocation nsi = phase.registerNamespaceInvocation(namespaceStatement);
 //										pte.setNamespaceInvocation(nsi);
-								gt.ci = nsi;
-//								fi = newFunctionInvocation(fd, pte, nsi, phase);
-							} else if (e instanceof ClassStatement) {
-								final ClassStatement classStatement = (ClassStatement) e;
-								gt.resolved = new OS_Type((ClassStatement) e);
-								ClassInvocation ci = new ClassInvocation(classStatement, null);
-								ci = phase.registerClassInvocation(ci);
-								gt.ci = ci;
-//								pte.setClassInvocation(ci);
-//								fi = newFunctionInvocation(fd, pte, ci, phase);
-							} else // TODO will fail on FunctionDef's
-								throw new IllegalStateException("Unknown parent");
+									gt.ci = nsi;
+//									fi = newFunctionInvocation(fd, pte, nsi, phase);
+								} else if (e instanceof ClassStatement) {
+									final ClassStatement classStatement = (ClassStatement) e;
+									gt.resolved = new OS_Type((ClassStatement) e);
+									ClassInvocation ci = new ClassInvocation(classStatement, null);
+									ci = phase.registerClassInvocation(ci);
+									gt.ci = ci;
+//									pte.setClassInvocation(ci);
+//									fi = newFunctionInvocation(fd, pte, ci, phase);
+								} else // TODO will fail on FunctionDef's
+									throw new IllegalStateException("Unknown parent");
 
-							gt.node = vte.genType.node;
+								gt.node = vte.genType.node;
 
-							vte.genType.copy(gt);
-
+								vte.genType.copy(gt);
+							}
 							int y=2;
 						} else
 							throw new NotImplementedException();
