@@ -167,8 +167,12 @@ public class DeducePath {
 				assert gt != null;
 			} else if (ia2 instanceof IdentIA) {
 				@NotNull IdentTableEntry identTableEntry = ((IdentIA) ia2).getEntry();
-				gt = identTableEntry.type.genType;
-				assert gt != null;
+				if (identTableEntry.type != null) {
+					gt = identTableEntry.type.genType;
+					assert gt != null;
+				} else {
+					gt = null;
+				}
 			} else if (ia2 instanceof ProcIA) {
 				final @NotNull ProcTableEntry procTableEntry = ((ProcIA) ia2).getEntry();
 				gt = null;//procTableEntry.getResolvedElement(); // .expression?
