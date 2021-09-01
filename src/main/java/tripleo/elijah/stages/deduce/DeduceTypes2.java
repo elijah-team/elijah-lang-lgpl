@@ -1469,7 +1469,7 @@ public class DeduceTypes2 {
 							use_user_class(ite.type.getAttached(), ite);
 							break;
 						default:
-							throw new NotImplementedException();
+							throw new IllegalStateException("Unexpected value: " + ite.type.getAttached().getType());
 						}
 					} else {
 						int yy=2;
