@@ -1487,7 +1487,7 @@ public class DeduceTypes2 {
 												ite.type.setAttached(xx);
 											} catch (ResolveError resolveError) { // TODO double catch
 												LOG.info("210 Can't attach type to "+ite.getIdent());
-//												resolveError.printStackTrace(); // TODO print diagnostic
+												errSink.reportDiagnostic(resolveError);
 //												continue;
 											}
 										}
