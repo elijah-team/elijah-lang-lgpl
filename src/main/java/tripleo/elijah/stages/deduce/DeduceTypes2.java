@@ -1507,10 +1507,10 @@ public class DeduceTypes2 {
 				}
 
 				private void use_user_class(OS_Type aType, IdentTableEntry aEntry) {
-					int yy=2;
 					final ClassStatement cs = aType.getClassOf();
 					if (aEntry.constructable_pte != null) {
 						int yyy=3;
+						System.out.println("use_user_class: "+cs);
 					}
 				}
 
