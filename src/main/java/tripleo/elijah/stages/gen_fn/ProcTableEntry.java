@@ -39,7 +39,7 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 	private ClassInvocation classInvocation;
 	private FunctionInvocation functionInvocation;
 	private DeferredObject<ProcTableEntry, Void, Void> completeDeferred = new DeferredObject<ProcTableEntry, Void, Void>();
-	private DeferredObject<FunctionInvocation, Void, Void> onFunctionInvocations = new DeferredObject<FunctionInvocation, Void, Void>();
+	private DeferredObject2<FunctionInvocation, Void, Void> onFunctionInvocations = new DeferredObject2<FunctionInvocation, Void, Void>();
 
 	public ProcTableEntry(final int index, final IExpression aExpression, final InstructionArgument expression_num, final List<TypeTableEntry> args) {
 		this.index = index;
@@ -138,10 +138,9 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 	}
 
 	public void setFunctionInvocation(FunctionInvocation aFunctionInvocation) {
-		// NOTE if called more than once, will lose old callbacks
 		if (functionInvocation != aFunctionInvocation) {
 			functionInvocation = aFunctionInvocation;
-			onFunctionInvocations = new DeferredObject<FunctionInvocation, Void, Void>(); // TODO loses callbacks
+			onFunctionInvocations.reset();
 			onFunctionInvocations.resolve(functionInvocation);
 		}
 	}
