@@ -483,7 +483,7 @@ public class Generate_Code_For_Method {
 		final VariableTableEntry vte = gf.getVarTableEntry(vte_num.getIndex());
 
 		final OS_Type x = vte.type.getAttached();
-		if (x == null) {
+		if (x == null && vte.potentialTypes().size() == 0) {
 			if (vte.vtt == VariableTableType.TEMP) {
 				LOG.err("8884 temp variable has no type "+vte+" "+gf);
 			} else {
@@ -499,40 +499,42 @@ public class Generate_Code_For_Method {
 			return;
 		}
 
-		if (x.getType() == OS_Type.Type.USER_CLASS) {
-			final String z = gc.getTypeName(x);
-			tos.put_string_ln(String.format("%s* %s;", z, target_name));
-			return;
-		} else if (x.getType() == OS_Type.Type.USER) {
-			final TypeName y = x.getTypeName();
-			if (y instanceof NormalTypeName) {
-				final String z;
-				if (((NormalTypeName) y).getName().equals("Any"))
-					z = "void *";  // TODO Technically this is wrong
-				else
-					z = gc.getTypeName(y);
-				tos.put_string_ln(String.format("%s %s;", z, target_name));
+		if (x != null) {
+			if (x.getType() == OS_Type.Type.USER_CLASS) {
+				final String z = gc.getTypeName(x);
+				tos.put_string_ln(String.format("%s* %s;", z, target_name));
 				return;
-			}
+			} else if (x.getType() == OS_Type.Type.USER) {
+				final TypeName y = x.getTypeName();
+				if (y instanceof NormalTypeName) {
+					final String z;
+					if (((NormalTypeName) y).getName().equals("Any"))
+						z = "void *";  // TODO Technically this is wrong
+					else
+						z = gc.getTypeName(y);
+					tos.put_string_ln(String.format("%s %s;", z, target_name));
+					return;
+				}
 
-			if (y != null) {
-				//
-				// VARIABLE WASN'T FULLY DEDUCED YET
-				//
-				LOG.err("8885 "+y.getClass().getName());
-				return;
-			}
-		} else if (x.getType() == OS_Type.Type.BUILT_IN) {
-			final Context context = gf.getFD().getContext();
-			assert context != null;
-			final OS_Type type = x.resolve(context);
-			if (type.isUnitType()) {
-				// TODO still should not happen
-				tos.put_string_ln(String.format("/*%s is declared as the Unit type*/", target_name));
-			} else {
-//				LOG.err("Bad potentialTypes size " + type);
-				final String z = gc.getTypeName(type);
-				tos.put_string_ln(String.format("/*535*/Z<%s> %s; /*%s*/", z, target_name, type.getClassOf()));
+				if (y != null) {
+					//
+					// VARIABLE WASN'T FULLY DEDUCED YET
+					//
+					LOG.err("8885 "+y.getClass().getName());
+					return;
+				}
+			} else if (x.getType() == OS_Type.Type.BUILT_IN) {
+				final Context context = gf.getFD().getContext();
+				assert context != null;
+				final OS_Type type = x.resolve(context);
+				if (type.isUnitType()) {
+					// TODO still should not happen
+					tos.put_string_ln(String.format("/*%s is declared as the Unit type*/", target_name));
+				} else {
+	//				LOG.err("Bad potentialTypes size " + type);
+					final String z = gc.getTypeName(type);
+					tos.put_string_ln(String.format("/*535*/Z<%s> %s; /*%s*/", z, target_name, type.getClassOf()));
+				}
 			}
 		}
 
