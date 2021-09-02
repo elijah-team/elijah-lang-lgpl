@@ -498,6 +498,8 @@ public class DeduceTypes2 {
 						}
 						wm.drain();
 					}
+
+					expectations.check();
 				}
 				break;
 			case ES:
