@@ -786,7 +786,8 @@ public class DeduceTypes2 {
 							}
 						} else
 							throw new IllegalStateException("Unknown parent");
-						pte.setFunctionInvocation(fi);
+						if (fi != null)
+							pte.setFunctionInvocation(fi);
 						return this;
 					}
 				}
