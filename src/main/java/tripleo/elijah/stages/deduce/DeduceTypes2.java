@@ -2754,7 +2754,7 @@ public class DeduceTypes2 {
 			p.done(new DoneCallback<GenType>() {
 				@Override
 				public void onDone(GenType result) {
-					assert vte != vte1;
+//					assert vte != vte1;
 //					aTte.setAttached(result.resolved != null ? result.resolved : result.typeName);
 					aTte.genType.copy(result);
 //					vte.addPotentialType(aInstructionIndex, result); // TODO!!
