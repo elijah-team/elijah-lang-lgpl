@@ -374,6 +374,7 @@ public class DeduceTypes2 {
 					// resolve ident table
 					//
 					for (IdentTableEntry ite : generatedFunction.idte_list) {
+						ite.resolveExpectation = promiseExpectation(ite, "Element Resolved");
 						resolve_ident_table_entry(ite, generatedFunction, context);
 					}
 					//
