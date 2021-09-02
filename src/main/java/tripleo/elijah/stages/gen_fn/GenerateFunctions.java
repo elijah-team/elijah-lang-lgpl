@@ -1413,7 +1413,7 @@ public class GenerateFunctions {
 
 	private @NotNull InstructionArgument simplify_dot_expression(final DotExpression dotExpression, final @NotNull BaseGeneratedFunction gf, Context cctx) {
 		@NotNull InstructionArgument x = gf.get_assignment_path(dotExpression, this, cctx);
-		LOG.err("1117 " + x);
+		LOG.info("1117 " + x);
 		return x;
 	}
 
