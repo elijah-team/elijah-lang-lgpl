@@ -779,6 +779,11 @@ public class DeduceTypes2 {
 							ci = genCI(genType, typeName);
 							pte.setClassInvocation(ci);
 							fi = newFunctionInvocation(fd, pte, ci, phase);
+						} else if (parent instanceof FunctionDef) {
+							if (pte.expression_num == null) {
+								// TODO need the instruction to get args from FnCallArgs
+								fi = null;
+							}
 						} else
 							throw new IllegalStateException("Unknown parent");
 						pte.setFunctionInvocation(fi);
@@ -812,12 +817,48 @@ public class DeduceTypes2 {
 						}
 					} else if (e instanceof FunctionDef) {
 						FunctionDef fd = (FunctionDef) e;
-						DeducePath dp = ((IdentIA)pte.expression_num).getEntry().buildDeducePath(generatedFunction);
+						if (pte.expression_num != null) {
+							DeducePath dp = ((IdentIA)pte.expression_num).getEntry().buildDeducePath(generatedFunction);
 
-						if (dp.size() > 1) {
-							@Nullable OS_Element el_self = dp.getElement(dp.size() - 2);
+							if (dp.size() > 1) {
+								@Nullable OS_Element el_self = dp.getElement(dp.size() - 2);
 
-							final OS_Element parent = el_self;
+								final OS_Element parent = el_self;
+								if (parent instanceof IdentExpression) {
+									@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(((IdentExpression) parent).getText());
+									assert vte_ia != null;
+									final VariableTableEntry variableTableEntry = ((IntegerIA) vte_ia).getEntry();
+									variableTableEntry.typePromise().then(new DoneCallback<GenType>() {
+										@Override
+										public void onDone(GenType result) {
+											assert result.resolved.getClassOf() == fd.getParent();
+
+											E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, fd.getParent()).invoke(variableTableEntry.type.genType.nonGenericTypeName);
+											FunctionInvocation fi1 = e_Is_FunctionDef.getFi();
+											GenType genType1 = e_Is_FunctionDef.getGenType();
+											finish(co, depTracker, fi1, genType1);
+										}
+									});
+								} else {
+									E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(null);
+									fi = e_Is_FunctionDef.getFi();
+									if (fi != null) { // TODO
+										genType = e_Is_FunctionDef.getGenType();
+										finish(co, depTracker, fi, genType);
+									}
+								}
+							} else {
+								final OS_Element parent = fd.getParent();
+								E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(null);
+								fi = e_Is_FunctionDef.getFi();
+								genType = e_Is_FunctionDef.getGenType();
+								finish(co, depTracker, fi, genType);
+							}
+						} else {
+							final OS_Element parent = pte.getResolvedElement(); // for dunder methods
+
+							assert parent != null;
+
 							if (parent instanceof IdentExpression) {
 								@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(((IdentExpression) parent).getText());
 								assert vte_ia != null;
@@ -839,12 +880,6 @@ public class DeduceTypes2 {
 								genType = e_Is_FunctionDef.getGenType();
 								finish(co, depTracker, fi, genType);
 							}
-						} else {
-							final OS_Element parent = fd.getParent();
-							E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(null);
-							fi = e_Is_FunctionDef.getFi();
-							genType = e_Is_FunctionDef.getGenType();
-							finish(co, depTracker, fi, genType);
 						}
 					} else {
 						LOG.err("845 Unknown element for ProcTableEntry "+e);
@@ -1470,6 +1505,28 @@ public class DeduceTypes2 {
 							break;
 						case USER_CLASS:
 							use_user_class(ite.type.getAttached(), ite);
+							break;
+						case FUNCTION:
+							{
+								// TODO All this for nothing
+								//  the ite points to a function, not a function call,
+								//  so there is no point in resolving it
+								if (ite.type.tableEntry instanceof ProcTableEntry) {
+									final ProcTableEntry pte = (ProcTableEntry) ite.type.tableEntry;
+
+								} else if (ite.type.tableEntry instanceof IdentTableEntry) {
+									final IdentTableEntry identTableEntry = (IdentTableEntry) ite.type.tableEntry;
+									if (identTableEntry.getCallablePTE() != null) {
+										@Nullable ProcTableEntry cpte = identTableEntry.getCallablePTE();
+										cpte.typePromise().then(new DoneCallback<GenType>() {
+											@Override
+											public void onDone(GenType result) {
+												System.out.println("1483 "+result.resolved+" "+result.node);
+											}
+										});
+									}
+								}
+							}
 							break;
 						default:
 							throw new IllegalStateException("Unexpected value: " + ite.type.getAttached().getType());
