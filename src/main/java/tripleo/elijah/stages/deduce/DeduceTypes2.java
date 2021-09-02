@@ -856,7 +856,7 @@ public class DeduceTypes2 {
 								finish(co, depTracker, fi, genType);
 							}
 						} else {
-							final OS_Element parent = pte.getResolvedElement(); // for dunder methods
+							OS_Element parent = pte.getResolvedElement(); // for dunder methods
 
 							assert parent != null;
 
@@ -876,7 +876,21 @@ public class DeduceTypes2 {
 									}
 								});
 							} else {
-								E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(null);
+								TypeName typeName = null;
+
+								if (fd == parent) {
+									parent = fd.getParent();
+									TypeTableEntry x = pte.getArgs().get(0);
+									// TODO highly specialized condition...
+									if (x.getAttached() == null && x.tableEntry == null) {
+										String text = ((IdentExpression) x.expression).getText();
+										@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(text);
+										GenType gt = ((IntegerIA) vte_ia).getEntry().type.genType;
+										typeName = gt.nonGenericTypeName != null ? gt.nonGenericTypeName : gt.typeName.getTypeName();
+									}
+								}
+
+								E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(typeName, null);
 								fi = e_Is_FunctionDef.getFi();
 								genType = e_Is_FunctionDef.getGenType();
 								finish(co, depTracker, fi, genType);
