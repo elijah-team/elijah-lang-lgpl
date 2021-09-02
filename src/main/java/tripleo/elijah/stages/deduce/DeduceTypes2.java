@@ -3529,14 +3529,10 @@ public class DeduceTypes2 {
 
 				final ClassStatement klass = (ClassStatement) ele;
 
-				resolve_vte_for_class(vte, klass);
+				register_and_resolve(vte, klass);
 			} catch (ResolveError resolveError) {
 				errSink.reportDiagnostic(resolveError);
 			}
-		}
-
-		public void resolve_vte_for_class(VariableTableEntry aVte, ClassStatement aKlass) {
-			register_and_resolve(aVte, aKlass);
 		}
 	}
 
