@@ -401,29 +401,66 @@ class Resolve_Ident_IA {
 							errSink.reportDiagnostic(aResolveError);
 							assert false;
 						}
+						action_002_1(pte, y);
+					} else if (y.backlink instanceof IntegerIA) {
+						final IntegerIA backlink_ = (IntegerIA) y.backlink;
+						@NotNull VariableTableEntry backlink = backlink_.getEntry();
+						final OS_Element resolvedElement = backlink.el;
+						assert resolvedElement != null;
+						try {
+							if (resolvedElement instanceof IdentExpression) {
+								backlink.typePromise().then(new DoneCallback<GenType>() {
+									@Override
+									public void onDone(GenType result) {
+										try {
+											final Context context = result.resolved.getClassOf().getContext();
+											LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), context, deduceTypes2);
+											@Nullable OS_Element best = lrl2.chooseBest(null);
+											assert best != null;
+											y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+											action_002_1(pte, y);
+										} catch (ResolveError aResolveError) {
+											errSink.reportDiagnostic(aResolveError);
+										}
+									}
+								});
+							} else {
+								LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), resolvedElement.getContext(), deduceTypes2);
+								@Nullable OS_Element best = lrl2.chooseBest(null);
+								assert best != null;
+								y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+								action_002_1(pte, y);
+							}
+						} catch (ResolveError aResolveError) {
+							errSink.reportDiagnostic(aResolveError);
+							assert false;
+						}
 					} else
 						assert false;
 				}
-				FunctionInvocation fi = null;
-				if (y.resolved_element instanceof ClassStatement) {
-					// assuming no constructor name or generic parameters based on function syntax
-					ClassInvocation ci = new ClassInvocation((ClassStatement) y.resolved_element, null);
-					ci = phase.registerClassInvocation(ci);
-					fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
-				} else if (y.resolved_element instanceof FunctionDef) {
-					final IInvocation invocation = deduceTypes2.getInvocation((GeneratedFunction) generatedFunction);
-					fi = new FunctionInvocation((FunctionDef) y.resolved_element, pte, invocation, phase.generatePhase);
-				} else
-					assert false;
-				if (fi != null) {
-					if (pte.getFunctionInvocation() == null) {
-						pte.setFunctionInvocation(fi);
-					}
-				}
-				el = y.resolved_element;
-				ectx = el.getContext();
 			}
 		}
+	}
+
+	private void action_002_1(ProcTableEntry aPte, @NotNull IdentTableEntry aY) {
+		FunctionInvocation fi = null;
+		if (aY.resolved_element instanceof ClassStatement) {
+			// assuming no constructor name or generic parameters based on function syntax
+			ClassInvocation ci = new ClassInvocation((ClassStatement) aY.resolved_element, null);
+			ci = phase.registerClassInvocation(ci);
+			fi = new FunctionInvocation(null, aPte, ci, phase.generatePhase);
+		} else if (aY.resolved_element instanceof FunctionDef) {
+			final IInvocation invocation = deduceTypes2.getInvocation((GeneratedFunction) generatedFunction);
+			fi = new FunctionInvocation((FunctionDef) aY.resolved_element, aPte, invocation, phase.generatePhase);
+		} else
+			assert false;
+		if (fi != null) {
+			if (aPte.getFunctionInvocation() == null) {
+				aPte.setFunctionInvocation(fi);
+			}
+		}
+		el = aY.resolved_element;
+		ectx = el.getContext();
 	}
 
 	private void action_001(OS_Type aAttached) {
