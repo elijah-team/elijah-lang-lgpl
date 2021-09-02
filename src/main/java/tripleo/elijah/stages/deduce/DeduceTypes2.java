@@ -3204,7 +3204,10 @@ public class DeduceTypes2 {
 							boolean found1 = lookup_name_calls(result.resolved.getClassOf().getContext(), pn, pte);
 							if (found1) {
 								int y=2;
-								System.out.println("3071");
+								System.out.println("3071 "+pte.getStatus());
+								IInvocation invocation = result.ci;
+								FunctionInvocation fi = newFunctionInvocation(gf.getFD(), pte, invocation, phase);
+								pte.setFunctionInvocation(fi);
 							} else {
 								int y=3;
 								System.out.println("3074");
