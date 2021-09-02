@@ -2365,6 +2365,7 @@ public class DeduceTypes2 {
 							result.generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
 								@Override
 								public void onDone(BaseGeneratedFunction bgf) {
+									PromiseExpectation<GenType> pe = promiseExpectation(bgf, "Function Result type");
 									bgf.typePromise().then(new DoneCallback<GenType>() {
 										@Override
 										public void onDone(GenType result) {
@@ -2380,6 +2381,7 @@ public class DeduceTypes2 {
 										if (vte.type.getAttached() == null)
 											vte.type.setAttached(result.resolved != null ? result.resolved : result.typeName);
 									}*/
+											pe.satisfy(result);
 											@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved); // TODO there has to be a better way
 											tte.genType.copy(result);
 											vte.addPotentialType(instructionIndex, tte);
@@ -2598,6 +2600,71 @@ public class DeduceTypes2 {
 				});
 			}
 		}
+	}
+
+	PromiseExpectations expectations = new PromiseExpectations();
+
+	static class PromiseExpectations {
+		static long counter = 0;
+
+		List<PromiseExpectation> exp = new ArrayList<>();
+
+		public void add(PromiseExpectation aExpectation) {
+			counter++;
+			aExpectation.setCounter(counter);
+			exp.add(aExpectation);
+		}
+
+		public void check() {
+			for (PromiseExpectation promiseExpectation : exp) {
+				if (!promiseExpectation.isSatisfied())
+					promiseExpectation.fail();
+			}
+		}
+	}
+
+	public interface ExpectationBase {
+		String expectationString();
+	}
+
+	public class PromiseExpectation<B> {
+
+		private final ExpectationBase base;
+		private B result;
+		private long counter;
+		private final String desc;
+		private boolean satisfied;
+
+		public PromiseExpectation(ExpectationBase aBase, String aDesc) {
+			base = aBase;
+			desc = aDesc;
+		}
+
+		public void satisfy(B aResult) {
+			result = aResult;
+			satisfied = true;
+			LOG.info(String.format("Expectation (%s, %d) met: %s %s", DeduceTypes2.this, counter, desc, base.expectationString()));
+		}
+
+		public void fail() {
+			LOG.err(String.format("Expectation (%s, %d) not met", DeduceTypes2.this, counter));
+		}
+
+		public boolean isSatisfied() {
+			return satisfied;
+		}
+
+		public void setCounter(long aCounter) {
+			counter = aCounter;
+
+			LOG.info(String.format("Expectation (%s, %d) set: %s %s", DeduceTypes2.this, counter, desc, base.expectationString()));
+		}
+	}
+
+	public <B> PromiseExpectation<B> promiseExpectation(ExpectationBase base, String desc) {
+		final PromiseExpectation<B> promiseExpectation = new PromiseExpectation<>(base, desc);
+		expectations.add(promiseExpectation);
+		return promiseExpectation;
 	}
 
 	public IInvocation getInvocation(@NotNull GeneratedFunction generatedFunction) {

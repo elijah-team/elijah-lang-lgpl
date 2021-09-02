@@ -30,7 +30,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 /**
  * Created 9/10/20 2:57 PM
  */
-public abstract class BaseGeneratedFunction extends AbstractDependencyTracker implements GeneratedNode {
+public abstract class BaseGeneratedFunction extends AbstractDependencyTracker implements GeneratedNode, DeduceTypes2.ExpectationBase {
 	public boolean deducedAlready;
 	public FunctionInvocation fi;
 	private int code = 0;
@@ -441,6 +441,13 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	public DeferredObject<GenType, Void, Void> typeDeferred() {
 		return typeDeferred;
 	}
+
+	@Override
+	public String expectationString() {
+		return toString();
+	}
+
+
 }
 
 //
