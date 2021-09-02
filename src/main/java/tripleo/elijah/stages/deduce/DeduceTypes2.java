@@ -3467,7 +3467,8 @@ public class DeduceTypes2 {
 
 					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext(), DeduceTypes2.this);
 					OS_Element best = lrl.chooseBest(null);
-					if (best != ele2) LOG.err(String.format("2824 Divergent for %s, %s and %s", ite, best, ele2));;
+					// README commented out because only firing for dir.listFiles, and we always use `best'
+//					if (best != ele2) LOG.err(String.format("2824 Divergent for %s, %s and %s", ite, best, ele2));;
 					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 				} catch (ResolveError aResolveError) {
 					aResolveError.printStackTrace();
