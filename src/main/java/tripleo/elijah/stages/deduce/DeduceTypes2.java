@@ -952,6 +952,7 @@ public class DeduceTypes2 {
 								if (identIA2 != null) {
 									@NotNull IdentTableEntry idte2 = identIA.getEntry();
 									ProcTableEntry procTableEntry = idte2.getCallablePTE();
+									if (procTableEntry == pte) System.err.println("940 procTableEntry == pte");
 									if (procTableEntry != null) {
 										// TODO doesn't seem like we need this
 										procTableEntry.onFunctionInvocation(new DoneCallback<FunctionInvocation>() {
