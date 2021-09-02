@@ -964,6 +964,17 @@ public class DeduceTypes2 {
 												if (ci == null && nsi == null)
 													assert false;
 												FunctionInvocation fi = newFunctionInvocation((FunctionDef) el, pte, ci != null ? ci : nsi, phase);
+
+												{
+													if (functionInvocation.getClassInvocation() == fi.getClassInvocation() &&
+														functionInvocation.getFunction() == fi.getFunction() &&
+														functionInvocation.pte == fi.pte)
+														System.err.println("955 It seems like we are generating the same thing...");
+													else {
+														int ok=2;
+													}
+
+												}
 												generatedFunction.addDependentFunction(fi);
 											}
 										});
