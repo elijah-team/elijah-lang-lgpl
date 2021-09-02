@@ -13,6 +13,7 @@ import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.VariableTableType;
 
 import java.util.Collection;
@@ -22,7 +23,7 @@ import java.util.Map;
 /**
  * Created 9/10/20 4:51 PM
  */
-public class VariableTableEntry extends BaseTableEntry1 implements Constructable, TableEntryIV {
+public class VariableTableEntry extends BaseTableEntry1 implements Constructable, TableEntryIV, DeduceTypes2.ExpectationBase {
 	private final int index;
 	private final String name;
 	public final OS_Element el;
@@ -131,6 +132,14 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 
 	public GeneratedNode resolvedType() {
 		return _resolvedType;
+	}
+
+	@Override
+	public String expectationString() {
+		return "VariableTableEntry{" +
+				"index=" + index +
+				", name='" + name + '\'' +
+				"}";
 	}
 }
 
