@@ -2359,12 +2359,15 @@ public class DeduceTypes2 {
 					assert e == resolved_element;
 //					set_resolved_element_pte(identIA, e, pte);
 					pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
-					pte.getFunctionInvocation().generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
+					pte.onFunctionInvocation(new DoneCallback<FunctionInvocation>() {
 						@Override
-						public void onDone(BaseGeneratedFunction bgf) {
-							bgf.typePromise().then(new DoneCallback<GenType>() {
+						public void onDone(FunctionInvocation result) {
+							result.generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
 								@Override
-								public void onDone(GenType result) {
+								public void onDone(BaseGeneratedFunction bgf) {
+									bgf.typePromise().then(new DoneCallback<GenType>() {
+										@Override
+										public void onDone(GenType result) {
 									/*if (!vte.typeDeferred().isPending()) {
 										vte.typePromise().then(new DoneCallback<GenType>() {
 											@Override
@@ -2377,9 +2380,11 @@ public class DeduceTypes2 {
 										if (vte.type.getAttached() == null)
 											vte.type.setAttached(result.resolved != null ? result.resolved : result.typeName);
 									}*/
-									@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved); // TODO there has to be a better way
-									tte.genType.copy(result);
-									vte.addPotentialType(instructionIndex, tte);
+											@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved); // TODO there has to be a better way
+											tte.genType.copy(result);
+											vte.addPotentialType(instructionIndex, tte);
+										}
+									});
 								}
 							});
 						}
