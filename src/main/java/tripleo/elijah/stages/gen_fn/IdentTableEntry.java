@@ -15,6 +15,7 @@ import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.deduce.DeducePath;
 import tripleo.elijah.stages.deduce.DeducePhase;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.OnType;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
@@ -28,7 +29,7 @@ import java.util.Map;
 /**
  * Created 9/12/20 10:27 PM
  */
-public class IdentTableEntry extends BaseTableEntry1 implements Constructable, TableEntryIV {
+public class IdentTableEntry extends BaseTableEntry1 implements Constructable, TableEntryIV, DeduceTypes2.ExpectationBase {
     private final int index;
     private final IdentExpression ident;
 	private final Context pc;
@@ -43,6 +44,8 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	private GeneratedNode resolvedType;
 	public OS_Element resolved_element;
 	public ProcTableEntry constructable_pte;
+
+	public DeduceTypes2.PromiseExpectation<String> resolveExpectation;
 
 	public IdentTableEntry(final int index, final IdentExpression ident, Context pc) {
         this.index  = index;
@@ -135,6 +138,15 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	public DeducePath buildDeducePath(BaseGeneratedFunction generatedFunction) {
 		@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(new IdentIA(index, generatedFunction));
 		return new DeducePath(this, x);
+	}
+
+	@Override
+	public String expectationString() {
+		return "IdentTableEntry{" +
+				"index=" + index +
+				", ident=" + ident +
+				", backlink=" + backlink +
+				"}";
 	}
 }
 
