@@ -1630,6 +1630,7 @@ public class DeduceTypes2 {
 						fd1.setContext((FunctionContext) fe.getContext());
 						fd1.scope(fe.getScope());
 						fd1.setSpecies(BaseFunctionDef.Species.FUNC_EXPR);
+//						System.out.println("1630 "+mod_ns.getItems()); // element 0 is ctor$0
 						fd1.setName(IdentExpression.forString(String.format("$%d", mod_ns.getItems().size()+1)));
 
 						WorkList wl=new WorkList();
