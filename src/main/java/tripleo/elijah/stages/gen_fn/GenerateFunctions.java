@@ -434,7 +434,7 @@ public class GenerateFunctions {
 //				int i = addTempTableEntry(x.getType(), gf);
 				switch (expressionKind) {
 				case ASSIGNMENT:
-					LOG.err(String.format("703.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
+//					LOG.err(String.format("703.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
 					generate_item_assignment(x, gf, cctx);
 					break;
 				case AUG_MULT:
