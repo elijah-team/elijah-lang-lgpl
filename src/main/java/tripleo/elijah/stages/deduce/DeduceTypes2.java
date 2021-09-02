@@ -1790,7 +1790,7 @@ public class DeduceTypes2 {
 		}
 		if (ite.resolved_element != null)
 			return;
-		if (ite.backlink == null) {
+		if (true || ite.backlink == null) {
 			final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
 			resolveIdentIA_(ite.getPC(), identIA, generatedFunction, new FoundElement(phase) {
 
