@@ -2794,6 +2794,11 @@ public class DeduceTypes2 {
 							}
 							break;
 						case 0:
+							// README moved up here to elimiate work
+							if (p.isResolved()) {
+								System.out.printf("890-1 Already resolved type: vte1.type = %s, gf = %s %n", vte1.type, generatedFunction);
+								break;
+							}
 							LookupResultList lrl = ctx.lookup(e_text);
 							OS_Element best = lrl.chooseBest(null);
 							if (best instanceof FormalArgListItem) {
@@ -2802,9 +2807,9 @@ public class DeduceTypes2 {
 								if (!osType.equals(vte.type.getAttached())) {
 									@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
 											TypeTableEntry.Type.SPECIFIED, osType, fali.getNameToken(), vte1);
-									if (p.isResolved())
+									/*if (p.isResolved())
 										System.out.printf("890 Already resolved type: vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
-									else {
+									else*/ {
 										final OS_Type attached = tte1.getAttached();
 										switch (attached.getType()) {
 											case USER:
