@@ -3458,49 +3458,60 @@ public class DeduceTypes2 {
 				TypeTableEntry tte = pot.get(0);
 				@Nullable OS_Type ty = tte.getAttached();
 				if (ty != null) {
-					if (ty.getType() == OS_Type.Type.USER) {
-						try {
-							@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
-							// TODO ite.setAttached(ty2) ??
-							OS_Element ele = ty2.getElement();
-							LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext(), DeduceTypes2.this);
-							OS_Element best = lrl.chooseBest(null);
-							ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
-//									ite.setResolvedElement(best);
-
-							final ClassStatement klass = (ClassStatement) ele;
-
-							resolve_vte_for_class(vte, klass);
-						} catch (ResolveError resolveError) {
-							errSink.reportDiagnostic(resolveError);
-						}
-					} else if (ty.getType() == OS_Type.Type.USER_CLASS) {
-						ClassStatement klass = ty.getClassOf();
-						LookupResultList lrl = null;
-						try {
-							lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), klass.getContext(), DeduceTypes2.this);
-							OS_Element best = lrl.chooseBest(null);
-//							ite.setStatus(BaseTableEntry.Status.KNOWN, best);
-							assert best != null;
-							ite.setResolvedElement(best);
-
-							final GenType genType = new GenType(klass);
-							final TypeName typeName = vte.type.genType.nonGenericTypeName;
-							final ClassInvocation ci = genCI(genType, typeName);
-//							resolve_vte_for_class(vte, klass);
-							ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-								@Override
-								public void onDone(GeneratedClass result) {
-									vte.resolveType(result);
-								}
-							});
-						} catch (ResolveError aResolveError) {
-							errSink.reportDiagnostic(aResolveError);
-						}
+					switch (ty.getType()) {
+					case USER:
+						vte_pot_size_is_1_USER_TYPE(vte, ty);
+						break;
+					case USER_CLASS:
+						vte_pot_size_is_1_USER_CLASS_TYPE(vte, ty);
+						break;
 					}
 				} else {
 					LOG.err("1696");
 				}
+			}
+		}
+
+		private void vte_pot_size_is_1_USER_CLASS_TYPE(VariableTableEntry vte, @Nullable OS_Type aTy) {
+			ClassStatement klass = aTy.getClassOf();
+			LookupResultList lrl = null;
+			try {
+				lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), klass.getContext(), DeduceTypes2.this);
+				OS_Element best = lrl.chooseBest(null);
+//							ite.setStatus(BaseTableEntry.Status.KNOWN, best);
+				assert best != null;
+				ite.setResolvedElement(best);
+
+				final GenType genType = new GenType(klass);
+				final TypeName typeName = vte.type.genType.nonGenericTypeName;
+				final ClassInvocation ci = genCI(genType, typeName);
+//							resolve_vte_for_class(vte, klass);
+				ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(GeneratedClass result) {
+						vte.resolveType(result);
+					}
+				});
+			} catch (ResolveError aResolveError) {
+				errSink.reportDiagnostic(aResolveError);
+			}
+		}
+
+		private void vte_pot_size_is_1_USER_TYPE(VariableTableEntry vte, @Nullable OS_Type aTy) {
+			try {
+				@NotNull OS_Type ty2 = resolve_type(aTy, aTy.getTypeName().getContext());
+				// TODO ite.setAttached(ty2) ??
+				OS_Element ele = ty2.getElement();
+				LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext(), DeduceTypes2.this);
+				OS_Element best = lrl.chooseBest(null);
+				ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+//									ite.setResolvedElement(best);
+
+				final ClassStatement klass = (ClassStatement) ele;
+
+				resolve_vte_for_class(vte, klass);
+			} catch (ResolveError resolveError) {
+				errSink.reportDiagnostic(resolveError);
 			}
 		}
 
