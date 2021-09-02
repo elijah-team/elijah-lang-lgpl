@@ -119,7 +119,8 @@ class Resolve_Ident_IA {
 					public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 						if (newStatus == BaseTableEntry.Status.KNOWN) {
 //								assert el2 != eh.getElement();
-							LOG.info("1424 Found for " + normal_path);
+							y.resolveExpectation.satisfy(normal_path);
+//							LOG.info("1424 Found for " + normal_path);
 							foundElement.doFoundElement(eh.getElement());
 						}
 					}
