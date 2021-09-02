@@ -398,7 +398,7 @@ class Resolve_Ident_IA {
 							assert best != null;
 							y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 						} catch (ResolveError aResolveError) {
-							aResolveError.printStackTrace();
+							errSink.reportDiagnostic(aResolveError);
 							assert false;
 						}
 					} else
