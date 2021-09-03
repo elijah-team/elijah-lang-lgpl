@@ -2128,137 +2128,38 @@ public class DeduceTypes2 {
 		}
 	}
 
-	class Found_Element_For_ITE {
+	class DeduceClient1 {
+		private final DeduceTypes2 dt2;
 
-		private final BaseGeneratedFunction generatedFunction;
-		private final Context ctx;
-
-		public Found_Element_For_ITE(BaseGeneratedFunction aGeneratedFunction, Context aCtx) {
-			generatedFunction = aGeneratedFunction;
-			ctx = aCtx;
+		public DeduceClient1(DeduceTypes2 aDeduceTypes2) {
+			dt2 = aDeduceTypes2;
 		}
 
-		public void action(IdentTableEntry ite) {
-			final OS_Element y = ite.resolved_element;
-
-			if (y instanceof VariableStatement) {
-				action_VariableStatement(ite, (VariableStatement) y);
-			} else if (y instanceof ClassStatement) {
-				action_ClassStatement(ite, (ClassStatement) y);
-			} else if (y instanceof FunctionDef) {
-				action_FunctionDef(ite, (FunctionDef) y);
-			} else if (y instanceof PropertyStatement) {
-				action_PropertyStatement(ite, (PropertyStatement) y);
-			} else if (y instanceof AliasStatement) {
-				action_AliasStatement(ite, (AliasStatement) y);
-			} else {
-				//LookupResultList exp = lookupExpression();
-				LOG.info("2009 "+y);
-			}
+		public OS_Element _resolveAlias(AliasStatement aAliasStatement) {
+			return DeduceLookupUtils._resolveAlias(aAliasStatement, dt2);
 		}
 
-		public void action_AliasStatement(IdentTableEntry ite, AliasStatement y) {
-			LOG.err("396 AliasStatement");
-			OS_Element x = DeduceLookupUtils._resolveAlias(y, DeduceTypes2.this);
-			if (x == null) {
-				ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-				errSink.reportError("399 resolveAlias returned null");
-			} else {
-				ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
-				found_element_for_ite(generatedFunction, ite, x, ctx);
-			}
+		public void found_element_for_ite(BaseGeneratedFunction aGeneratedFunction, IdentTableEntry aIte, OS_Element aX, Context aCtx) {
+			dt2.found_element_for_ite(aGeneratedFunction, aIte, aX, aCtx);
 		}
 
-		public void action_PropertyStatement(IdentTableEntry ite, PropertyStatement ps) {
-			OS_Type attached;
-			switch (ps.getTypeName().kindOfType()) {
-				case GENERIC:
-					attached = new OS_Type(ps.getTypeName());
-					break;
-				case NORMAL:
-					try {
-						attached = new OS_Type(resolve_type(new OS_Type(ps.getTypeName()), ctx).getClassOf());
-					} catch (ResolveError resolveError) {
-						LOG.err("378 resolveError");
-						resolveError.printStackTrace();
-						return;
-					}
-					break;
-				default:
-					throw new IllegalStateException("Unexpected value: " + ps.getTypeName().kindOfType());
-			}
-			if (ite.type == null) {
-				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
-			} else
-				ite.type.setAttached(attached);
-			int yy = 2;
+		public OS_Type resolve_type(OS_Type aType, Context aCtx) throws ResolveError {
+			return dt2.resolve_type(aType, aCtx);
 		}
 
-		public void action_FunctionDef(IdentTableEntry ite, FunctionDef functionDef) {
-			OS_Type attached = new OS_FuncType(functionDef);
-			if (ite.type == null) {
-				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
-			} else
-				ite.type.setAttached(attached);
+		public IInvocation getInvocationFromBacklink(InstructionArgument aInstructionArgument) {
+			return dt2.getInvocationFromBacklink(aInstructionArgument);
 		}
 
-		public void action_ClassStatement(IdentTableEntry ite, ClassStatement classStatement) {
-			OS_Type attached = new OS_Type(classStatement);
-			if (ite.type == null) {
-				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
-			} else
-				ite.type.setAttached(attached);
-		}
-
-		public void action_VariableStatement(IdentTableEntry ite, VariableStatement vs) {
-			TypeName typeName = vs.typeName();
-			if (ite.type == null || ite.type.getAttached() == null) {
-				if (!(typeName.isNull())) {
-					if (ite.type == null)
-						ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
-					ite.type.setAttached(new OS_Type(typeName));
-				} else {
-					final OS_Element parent = vs.getParent().getParent();
-					if (parent instanceof NamespaceStatement || parent instanceof ClassStatement) {
-						boolean state;
-						if (generatedFunction instanceof GeneratedFunction) {
-							final GeneratedFunction generatedFunction1 = (GeneratedFunction) generatedFunction;
-							state = (parent != generatedFunction1.getFD().getParent());
-						} else {
-							state = (parent != ((GeneratedConstructor) generatedFunction).getFD().getParent());
-						}
-						if (state) {
-							DeferredMember dm = deferred_member(parent, getInvocationFromBacklink(ite.backlink), vs, ite);
-							dm.typePromise().
-									done(new DoneCallback<GenType>() {
-										@Override
-										public void onDone(GenType result) {
-											if (ite.type == null)
-												ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
-											assert result.resolved != null;
-											ite.setGenType(result);
-										}
-									});
-						}
-
-						GenType genType = null;
-						if (parent instanceof NamespaceStatement)
-							genType = new GenType((NamespaceStatement) parent);
-						else if (parent instanceof ClassStatement)
-							genType = new GenType((ClassStatement) parent);
-
-						generatedFunction.addDependentType(genType);
-					}
-					LOG.err("394 typename is null "+ vs.getName());
-				}
-			}
+		public DeferredMember deferred_member(OS_Element aParent, IInvocation aInvocation, VariableStatement aVariableStatement, IdentTableEntry aIdentTableEntry) {
+			return dt2.deferred_member(aParent, aInvocation, aVariableStatement, aIdentTableEntry);
 		}
 	}
 
 	void found_element_for_ite(BaseGeneratedFunction generatedFunction, IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
 		assert y == ite.resolved_element;
 
-		Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx);
+		Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx, LOG, errSink, new DeduceClient1(this));
 		fefi.action(ite);
 	}
 
