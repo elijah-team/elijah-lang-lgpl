@@ -2490,18 +2490,6 @@ public class DeduceTypes2 {
 									bgf.typePromise().then(new DoneCallback<GenType>() {
 										@Override
 										public void onDone(GenType result) {
-									/*if (!vte.typeDeferred().isPending()) {
-										vte.typePromise().then(new DoneCallback<GenType>() {
-											@Override
-											public void onDone(GenType result1) {
-												assert result == result1;
-											}
-										});
-									} else*/ /*{
-										vte.typeDeferred().resolve(result);
-										if (vte.type.getAttached() == null)
-											vte.type.setAttached(result.resolved != null ? result.resolved : result.typeName);
-									}*/
 											pe.satisfy(result);
 											@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved); // TODO there has to be a better way
 											tte.genType.copy(result);
