@@ -3264,7 +3264,9 @@ public class DeduceTypes2 {
 								int y=2;
 								System.out.println("3071 "+pte.getStatus());
 								IInvocation invocation = result.ci;
-								FunctionInvocation fi = newFunctionInvocation(gf.getFD(), pte, invocation, phase);
+//								final BaseFunctionDef fd = gf.getFD();
+								final BaseFunctionDef fd = pte.getFunctionInvocation().getFunction();
+								FunctionInvocation fi = newFunctionInvocation(fd, pte, invocation, phase);
 								pte.setFunctionInvocation(fi);
 							} else {
 								int y=3;
