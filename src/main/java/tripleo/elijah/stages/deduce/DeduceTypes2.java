@@ -2128,11 +2128,89 @@ public class DeduceTypes2 {
 		}
 	}
 
-	void found_element_for_ite(BaseGeneratedFunction generatedFunction, IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
-		assert y == ite.resolved_element;
+	class Found_Element_For_ITE {
 
-		if (y instanceof VariableStatement) {
-			final VariableStatement vs = (VariableStatement) y;
+		private final BaseGeneratedFunction generatedFunction;
+		private final Context ctx;
+
+		public Found_Element_For_ITE(BaseGeneratedFunction aGeneratedFunction, Context aCtx) {
+			generatedFunction = aGeneratedFunction;
+			ctx = aCtx;
+		}
+
+		public void action(IdentTableEntry ite) {
+			final OS_Element y = ite.resolved_element;
+
+			if (y instanceof VariableStatement) {
+				action_VariableStatement(ite, (VariableStatement) y);
+			} else if (y instanceof ClassStatement) {
+				action_ClassStatement(ite, (ClassStatement) y);
+			} else if (y instanceof FunctionDef) {
+				action_FunctionDef(ite, (FunctionDef) y);
+			} else if (y instanceof PropertyStatement) {
+				action_PropertyStatement(ite, (PropertyStatement) y);
+			} else if (y instanceof AliasStatement) {
+				action_AliasStatement(ite, (AliasStatement) y);
+			} else {
+				//LookupResultList exp = lookupExpression();
+				LOG.info("2009 "+y);
+			}
+		}
+
+		public void action_AliasStatement(IdentTableEntry ite, AliasStatement y) {
+			LOG.err("396 AliasStatement");
+			OS_Element x = DeduceLookupUtils._resolveAlias(y, DeduceTypes2.this);
+			if (x == null) {
+				ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+				errSink.reportError("399 resolveAlias returned null");
+			} else {
+				ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
+				found_element_for_ite(generatedFunction, ite, x, ctx);
+			}
+		}
+
+		public void action_PropertyStatement(IdentTableEntry ite, PropertyStatement ps) {
+			OS_Type attached;
+			switch (ps.getTypeName().kindOfType()) {
+				case GENERIC:
+					attached = new OS_Type(ps.getTypeName());
+					break;
+				case NORMAL:
+					try {
+						attached = new OS_Type(resolve_type(new OS_Type(ps.getTypeName()), ctx).getClassOf());
+					} catch (ResolveError resolveError) {
+						LOG.err("378 resolveError");
+						resolveError.printStackTrace();
+						return;
+					}
+					break;
+				default:
+					throw new IllegalStateException("Unexpected value: " + ps.getTypeName().kindOfType());
+			}
+			if (ite.type == null) {
+				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
+			} else
+				ite.type.setAttached(attached);
+			int yy = 2;
+		}
+
+		public void action_FunctionDef(IdentTableEntry ite, FunctionDef functionDef) {
+			OS_Type attached = new OS_FuncType(functionDef);
+			if (ite.type == null) {
+				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
+			} else
+				ite.type.setAttached(attached);
+		}
+
+		public void action_ClassStatement(IdentTableEntry ite, ClassStatement classStatement) {
+			OS_Type attached = new OS_Type(classStatement);
+			if (ite.type == null) {
+				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
+			} else
+				ite.type.setAttached(attached);
+		}
+
+		public void action_VariableStatement(IdentTableEntry ite, VariableStatement vs) {
 			TypeName typeName = vs.typeName();
 			if (ite.type == null || ite.type.getAttached() == null) {
 				if (!(typeName.isNull())) {
@@ -2174,58 +2252,14 @@ public class DeduceTypes2 {
 					LOG.err("394 typename is null "+ vs.getName());
 				}
 			}
-		} else if (y instanceof ClassStatement) {
-			ClassStatement classStatement = ((ClassStatement) y);
-			OS_Type attached = new OS_Type(classStatement);
-			if (ite.type == null) {
-				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
-			} else
-				ite.type.setAttached(attached);
-		} else if (y instanceof FunctionDef) {
-			FunctionDef functionDef = ((FunctionDef) y);
-			OS_Type attached = new OS_FuncType(functionDef);
-			if (ite.type == null) {
-				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
-			} else
-				ite.type.setAttached(attached);
-		} else if (y instanceof PropertyStatement) {
-			PropertyStatement ps = (PropertyStatement) y;
-			OS_Type attached;
-			switch (ps.getTypeName().kindOfType()) {
-			case GENERIC:
-				attached = new OS_Type(ps.getTypeName());
-				break;
-			case NORMAL:
-				try {
-					attached = new OS_Type(resolve_type(new OS_Type(ps.getTypeName()), ctx).getClassOf());
-				} catch (ResolveError resolveError) {
-					LOG.err("378 resolveError");
-					resolveError.printStackTrace();
-					return;
-				}
-				break;
-			default:
-				throw new IllegalStateException("Unexpected value: " + ps.getTypeName().kindOfType());
-			}
-			if (ite.type == null) {
-				ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
-			} else
-				ite.type.setAttached(attached);
-			int yy = 2;
-		} else if (y instanceof AliasStatement) {
-			LOG.err("396 AliasStatement");
-			OS_Element x = DeduceLookupUtils._resolveAlias((AliasStatement) y, this);
-			if (x == null) {
-				ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-				errSink.reportError("399 resolveAlias returned null");
-			} else {
-				ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
-				found_element_for_ite(generatedFunction, ite, x, ctx);
-			}
-		} else {
-			//LookupResultList exp = lookupExpression();
-			LOG.info("2009 "+y);
 		}
+	}
+
+	void found_element_for_ite(BaseGeneratedFunction generatedFunction, IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
+		assert y == ite.resolved_element;
+
+		Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx);
+		fefi.action(ite);
 	}
 
 	private IInvocation getInvocationFromBacklink(InstructionArgument aBacklink) {
