@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.contexts.ClassContext;
-import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
@@ -52,8 +51,8 @@ import java.util.regex.Pattern;
 public class DeduceTypes2 {
 	private static final String PHASE = "DeduceTypes2";
 	private final OS_Module module;
-	private final DeducePhase phase;
-	private final ErrSink errSink;
+	final DeducePhase phase;
+	final ErrSink errSink;
 	final ElLog LOG;
 	WorkManager wm = new WorkManager();
 
@@ -380,8 +379,9 @@ public class DeduceTypes2 {
 					//
 					// resolve arguments table
 					//
+					Resolve_Variable_Table_Entry rvte = new Resolve_Variable_Table_Entry(generatedFunction, context, this);
 					for (VariableTableEntry vte : generatedFunction.vte_list) {
-						resolve_arguments_table_entry(vte, generatedFunction, context);
+						rvte.action(vte);
 					}
 				}
 				break;
