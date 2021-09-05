@@ -2128,9 +2128,10 @@ public class DeduceTypes2 {
 		}
 	}
 
-	class DeduceClient1 {
+	static class DeduceClient1 {
 		private final DeduceTypes2 dt2;
 
+		@Contract(pure = true)
 		public DeduceClient1(DeduceTypes2 aDeduceTypes2) {
 			dt2 = aDeduceTypes2;
 		}
