@@ -106,7 +106,8 @@ class Resolve_Variable_Table_Entry {
 
 					GenType gt = aPot.genType;
 					setup_GenType(e, gt);
-					gt.node = vte.genType.node;
+					if (gt.node == null)
+						gt.node = vte.genType.node;
 
 					vte.genType.copy(gt);
 				}
