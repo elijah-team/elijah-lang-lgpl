@@ -273,17 +273,26 @@ class Resolve_Variable_Table_Entry {
 		TypeTableEntry tte = vte.type;
 		final OS_Type attached = tte.getAttached();
 		if (attached != null) {
-			if (attached.getType() == OS_Type.Type.USER) {
-				if (tte.genType.typeName == null)
-					tte.genType.typeName = attached;
-				try {
-					tte.genType.resolved = deduceTypes2.resolve_type(attached, ctx);
-					tte.setAttached(tte.genType.resolved); // TODO probably not necessary, but let's leave it for now
-				} catch (ResolveError aResolveError) {
-					errSink.reportDiagnostic(aResolveError);
-					LOG.err("Can't resolve argument type " + attached);
-					return;
-				}
+			switch (attached.getType()) {
+				case USER:
+					if (tte.genType.typeName == null)
+						tte.genType.typeName = attached;
+					try {
+						tte.genType.resolved = deduceTypes2.resolve_type(attached, ctx);
+						tte.setAttached(tte.genType.resolved); // TODO probably not necessary, but let's leave it for now
+					} catch (ResolveError aResolveError) {
+						errSink.reportDiagnostic(aResolveError);
+						LOG.err("Can't resolve argument type " + attached);
+						return;
+					}
+					vte.typeDeferred().resolve(tte.genType);
+					break;
+				case USER_CLASS:
+					if (tte.genType.resolved == null)
+						tte.genType.resolved = attached;
+					// TODO genCI and all that -- Incremental?? (.increment())
+					vte.typeDeferred().resolve(tte.genType);
+					break;
 			}
 		} else {
 			int y = 2;
