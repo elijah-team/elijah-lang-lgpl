@@ -39,7 +39,7 @@ program
 library_statement
 		{LibraryStatementPart lsp=null;}
 	: ("lib"|"libraries")
-		(lsp=library_statement_part {ci.add(lsp);})+
+		(lsp=library_statement_part {ci.add(lsp);})*
 	;
 library_statement_part returns [LibraryStatementPart lsp]
 		{lsp=new LibraryStatementPart();}

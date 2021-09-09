@@ -189,7 +189,6 @@ public EzParser(ParserSharedInputState state) {
 			}
 			}
 			{
-			int _cnt7=0;
 			_loop7:
 			do {
 				if ((LA(1)==IDENT||LA(1)==STRING_LITERAL)) {
@@ -199,10 +198,9 @@ public EzParser(ParserSharedInputState state) {
 					}
 				}
 				else {
-					if ( _cnt7>=1 ) { break _loop7; } else {throw new NoViableAltException(LT(1), getFilename());}
+					break _loop7;
 				}
 				
-				_cnt7++;
 			} while (true);
 			}
 		}
