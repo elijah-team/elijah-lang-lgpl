@@ -840,6 +840,22 @@ public class DeduceTypes2 {
 											finish(co, depTracker, fi1, genType1);
 										}
 									});
+								} else if (parent instanceof FormalArgListItem) {
+									final FormalArgListItem fali = (FormalArgListItem) parent;
+									@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(fali.name());
+									assert vte_ia != null;
+									final VariableTableEntry variableTableEntry = ((IntegerIA) vte_ia).getEntry();
+									variableTableEntry.typePromise().then(new DoneCallback<GenType>() {
+										@Override
+										public void onDone(GenType result) {
+											assert result.resolved.getClassOf() == fd.getParent();
+
+											E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, fd.getParent()).invoke(variableTableEntry.type.genType.nonGenericTypeName);
+											FunctionInvocation fi1 = e_Is_FunctionDef.getFi();
+											GenType genType1 = e_Is_FunctionDef.getGenType();
+											finish(co, depTracker, fi1, genType1);
+										}
+									});
 								} else {
 									E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(null);
 									fi = e_Is_FunctionDef.getFi();
