@@ -26,7 +26,6 @@ import java.util.Map;
 public class VariableTableEntry extends BaseTableEntry1 implements Constructable, TableEntryIV, DeduceTypes2.ExpectationBase {
 	private final int index;
 	private final String name;
-	public final OS_Element el;
 	public TypeTableEntry type;
 	public final VariableTableType vtt;
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
@@ -35,12 +34,12 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	public GenType genType = new GenType();
 	private GeneratedNode _resolvedType;
 
-	public VariableTableEntry(final int index, final VariableTableType var1, final String name, final TypeTableEntry type, final OS_Element el) {
-		this.index = index;
-		this.name = name;
-		this.vtt = var1;
-		this.type = type;
-		this.el = el;
+	public VariableTableEntry(final int aIndex, final VariableTableType aVtt, final String aName, final TypeTableEntry aTTE, final OS_Element el) {
+		this.index = aIndex;
+		this.name = aName;
+		this.vtt = aVtt;
+		this.type = aTTE;
+		this.setResolvedElement(el);
 	}
 
 	@Override

@@ -42,7 +42,6 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	public TypeTableEntry type;
 	public GeneratedNode externalRef;
 	private GeneratedNode resolvedType;
-	public OS_Element resolved_element;
 	public ProcTableEntry constructable_pte;
 
 	public DeduceTypes2.PromiseExpectation<String> resolveExpectation;
@@ -107,11 +106,6 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 
 	public GeneratedNode resolvedType() {
 		return resolvedType;
-	}
-
-	public void setResolvedElement(OS_Element el) {
-		assert el != null;
-		resolved_element = el;
 	}
 
 	public boolean hasResolvedElement() {

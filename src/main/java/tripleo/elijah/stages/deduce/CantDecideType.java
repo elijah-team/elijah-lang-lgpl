@@ -47,7 +47,7 @@ public class CantDecideType implements Diagnostic {
 
 	@Override
 	public @NotNull Locatable primary() {
-		VariableStatement vs = (VariableStatement) vte.el;
+		VariableStatement vs = (VariableStatement) vte.getResolvedElement();
 		return vs;
 	}
 

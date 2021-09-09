@@ -66,13 +66,18 @@ public class DeducePath {
 			OS_Element el;
 			if (ia2 instanceof IntegerIA) {
 				@NotNull VariableTableEntry vte = ((IntegerIA) ia2).getEntry();
-				el = vte.el;
+				el = vte.getResolvedElement();
 				assert el != null;
 				// set this to set resolved_elements of remaining entries
 				vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else if (ia2 instanceof IdentIA) {
 				@NotNull IdentTableEntry identTableEntry = ((IdentIA) ia2).getEntry();
-				el = identTableEntry.resolved_element;
+				el = identTableEntry.getResolvedElement();
+//				if (el == null) {
+//					if (aIndex == 0) throw new IllegalStateException();
+//					getEntry(aIndex-1).setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(getElement(aIndex-1)));
+//					el = identTableEntry.resolved_element;
+//				}
 				assert el != null;
 				if (aIndex == 0)
 					identTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el)); // TODO ??

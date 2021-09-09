@@ -80,7 +80,7 @@ public class CReference {
 				addRef(vte.getName(), Ref.LOCAL);
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = ((IdentIA)ia).getEntry();
-				OS_Element resolved_element = idte.resolved_element;
+				OS_Element resolved_element = idte.getResolvedElement();
 				if (resolved_element != null) {
 					GeneratedNode resolved = null;
 					if (resolved_element instanceof ClassStatement) {

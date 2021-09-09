@@ -261,12 +261,12 @@ class Resolve_Ident_IA {
 		if (idte.getStatus() == BaseTableEntry.Status.UNCHECKED) {
 			if (idte.backlink == null) {
 				final String text = idte.getIdent().getText();
-				if (idte.resolved_element == null) {
+				if (idte.getResolvedElement() == null) {
 					final LookupResultList lrl = ectx.lookup(text);
 					el = lrl.chooseBest(null);
 				} else {
 					assert false;
-					el = idte.resolved_element;
+					el = idte.getResolvedElement();
 				}
 				{
 					if (el instanceof FunctionDef) {
@@ -337,7 +337,7 @@ class Resolve_Ident_IA {
 			}
 //				assert idte.getStatus() != BaseTableEntry.Status.UNCHECKED;
 		} else if (idte.getStatus() == BaseTableEntry.Status.KNOWN) {
-			el = idte.resolved_element;
+			el = idte.getResolvedElement();
 			ectx = el.getContext();
 		}
 		return RIA_STATE.NEXT;
@@ -387,7 +387,7 @@ class Resolve_Ident_IA {
 				ProcTableEntry pte = (ProcTableEntry) tte.tableEntry;
 				IdentIA x = (IdentIA) pte.expression_num;
 				@NotNull IdentTableEntry y = x.getEntry();
-				if (y.resolved_element == null) {
+				if (y.getResolvedElement() == null) {
 					if (y.backlink instanceof ProcIA) {
 						final ProcIA backlink_ = (ProcIA) y.backlink;
 						@NotNull ProcTableEntry backlink = generatedFunction.getProcTableEntry(backlink_.getIndex());
@@ -406,7 +406,7 @@ class Resolve_Ident_IA {
 					} else if (y.backlink instanceof IntegerIA) {
 						final IntegerIA backlink_ = (IntegerIA) y.backlink;
 						@NotNull VariableTableEntry backlink = backlink_.getEntry();
-						final OS_Element resolvedElement = backlink.el;
+						final OS_Element resolvedElement = backlink.getResolvedElement();
 						assert resolvedElement != null;
 						try {
 							if (resolvedElement instanceof IdentExpression) {
@@ -445,14 +445,14 @@ class Resolve_Ident_IA {
 
 	private void action_002_1(ProcTableEntry aPte, @NotNull IdentTableEntry aY) {
 		FunctionInvocation fi = null;
-		if (aY.resolved_element instanceof ClassStatement) {
+		if (aY.getResolvedElement() instanceof ClassStatement) {
 			// assuming no constructor name or generic parameters based on function syntax
-			ClassInvocation ci = new ClassInvocation((ClassStatement) aY.resolved_element, null);
+			ClassInvocation ci = new ClassInvocation((ClassStatement) aY.getResolvedElement(), null);
 			ci = phase.registerClassInvocation(ci);
 			fi = new FunctionInvocation(null, aPte, ci, phase.generatePhase);
-		} else if (aY.resolved_element instanceof FunctionDef) {
+		} else if (aY.getResolvedElement() instanceof FunctionDef) {
 			final IInvocation invocation = deduceTypes2.getInvocation((GeneratedFunction) generatedFunction);
-			fi = new FunctionInvocation((FunctionDef) aY.resolved_element, aPte, invocation, phase.generatePhase);
+			fi = new FunctionInvocation((FunctionDef) aY.getResolvedElement(), aPte, invocation, phase.generatePhase);
 		} else
 			assert false;
 		if (fi != null) {
@@ -460,7 +460,7 @@ class Resolve_Ident_IA {
 				aPte.setFunctionInvocation(fi);
 			}
 		}
-		el = aY.resolved_element;
+		el = aY.getResolvedElement();
 		ectx = el.getContext();
 	}
 

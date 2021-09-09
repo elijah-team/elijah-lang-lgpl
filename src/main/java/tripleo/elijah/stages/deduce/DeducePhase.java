@@ -492,11 +492,11 @@ public class DeducePhase {
 			for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 				switch (identTableEntry.getStatus()) {
 					case UNKNOWN:
-						assert identTableEntry.resolved_element == null;
+						assert identTableEntry.getResolvedElement() == null;
 						LOG.err(String.format("250 UNKNOWN idte %s in %s", identTableEntry, generatedFunction));
 						break;
 					case KNOWN:
-						assert identTableEntry.resolved_element != null;
+						assert identTableEntry.getResolvedElement() != null;
 						if (identTableEntry.type == null) {
 							LOG.err(String.format("258 null type in KNOWN idte %s in %s", identTableEntry, generatedFunction));
 						}

@@ -181,8 +181,8 @@ public class DeduceTypes2 {
 		deduce_generated_function(aGeneratedFunction);
 		aGeneratedFunction.deducedAlready = true;
 		for (IdentTableEntry identTableEntry : aGeneratedFunction.idte_list) {
-			if (identTableEntry.resolved_element instanceof VariableStatement) {
-				final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
+			if (identTableEntry.getResolvedElement() instanceof VariableStatement) {
+				final VariableStatement vs = (VariableStatement) identTableEntry.getResolvedElement();
 				OS_Element el = vs.getParent().getParent();
 				OS_Element el2 = aGeneratedFunction.getFD().getParent();
 				if (el != el2) {
@@ -248,8 +248,8 @@ public class DeduceTypes2 {
 		deduce_generated_function_base(aGeneratedConstructor, aGeneratedConstructor.getFD());
 		aGeneratedConstructor.deducedAlready = true;
 		for (IdentTableEntry identTableEntry : aGeneratedConstructor.idte_list) {
-			if (identTableEntry.resolved_element instanceof VariableStatement) {
-				final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
+			if (identTableEntry.getResolvedElement() instanceof VariableStatement) {
+				final VariableStatement vs = (VariableStatement) identTableEntry.getResolvedElement();
 				OS_Element el = vs.getParent().getParent();
 				OS_Element el2 = aGeneratedConstructor.getFD().getParent();
 				if (el != el2) {
@@ -438,7 +438,7 @@ public class DeduceTypes2 {
 									//vte.el = best;
 									// NOTE we called resolve_var_table_entry above
 									LOG.err("200 "+best);
-									if (vte.el != null)
+									if (vte.getResolvedElement() != null)
 										assert vte.getStatus() == BaseTableEntry.Status.KNOWN;
 //									vte.setStatus(BaseTableEntry.Status.KNOWN, best/*vte.el*/);
 								} else {
@@ -524,7 +524,7 @@ public class DeduceTypes2 {
 						} else if (i2 instanceof IdentIA) {
 							IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(i2));
 							assert idte.type != null;
-							assert idte.resolved_element != null;
+							assert idte.getResolvedElement() != null;
 							vte.addPotentialType(instruction.getIndex(), idte.type);
 						} else if (i2 instanceof ProcIA) {
 							throw new NotImplementedException();
@@ -1659,7 +1659,7 @@ public class DeduceTypes2 {
 				}
 			}
 		}
-		if (ite.resolved_element != null)
+		if (ite.getResolvedElement() != null)
 			return;
 		if (true || ite.backlink == null) {
 			final IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
@@ -1683,7 +1683,7 @@ public class DeduceTypes2 {
 	}
 
 	public void resolve_var_table_entry(VariableTableEntry vte, BaseGeneratedFunction generatedFunction, Context ctx) {
-		if (vte.el == null)
+		if (vte.getResolvedElement() == null)
 			return;
 		{
 			if (vte.type.getAttached() == null && vte.constructable_pte != null) {
@@ -1695,7 +1695,7 @@ public class DeduceTypes2 {
 				vte.type.genType.resolved = attached;
 				vte.type.setAttached(attached);
 			}
-			vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(vte.el));
+			vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(vte.getResolvedElement()));
 			{
 				final GenType genType = vte.type.genType;
 				if (genType.resolved != null && genType.node == null) {
@@ -2002,7 +2002,7 @@ public class DeduceTypes2 {
 	}
 
 	void found_element_for_ite(BaseGeneratedFunction generatedFunction, IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
-		assert y == ite.resolved_element;
+		assert y == ite.getResolvedElement();
 
 		Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx, LOG, errSink, new DeduceClient1(this));
 		fefi.action(ite);
@@ -2196,13 +2196,13 @@ public class DeduceTypes2 {
 					vte.typeDeferred().resolve(result);
 				}
 			});
-			if (vte.el != null) {
+			if (vte.getResolvedElement() != null) {
 				try {
 					OS_Element el;
-					if (vte.el instanceof IdentExpression)
-						el = DeduceLookupUtils.lookup((IdentExpression) vte.el, ctx, this);
+					if (vte.getResolvedElement() instanceof IdentExpression)
+						el = DeduceLookupUtils.lookup((IdentExpression) vte.getResolvedElement(), ctx, this);
 					else
-						el = DeduceLookupUtils.lookup(((VariableStatement) vte.el).getNameToken(), ctx, this);
+						el = DeduceLookupUtils.lookup(((VariableStatement) vte.getResolvedElement()).getNameToken(), ctx, this);
 					vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 				} catch (ResolveError aResolveError) {
 					errSink.reportDiagnostic(aResolveError);
@@ -2222,7 +2222,7 @@ public class DeduceTypes2 {
 				public void foundElement(OS_Element e) {
 //					LOG.info(String.format("600 %s %s", xx ,e));
 //					LOG.info("601 "+identIA.getEntry().getStatus());
-					final OS_Element resolved_element = identIA.getEntry().resolved_element;
+					final OS_Element resolved_element = identIA.getEntry().getResolvedElement();
 					assert e == resolved_element;
 //					set_resolved_element_pte(identIA, e, pte);
 					pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
@@ -3242,7 +3242,7 @@ public class DeduceTypes2 {
 
 		private void onChangeVTE(VariableTableEntry vte) {
 			@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(vte);
-			if (vte.getStatus() == BaseTableEntry.Status.KNOWN && vte.type.getAttached() != null && vte.el != null) {
+			if (vte.getStatus() == BaseTableEntry.Status.KNOWN && vte.type.getAttached() != null && vte.getResolvedElement() != null) {
 
 				final OS_Type ty = vte.type.getAttached();
 

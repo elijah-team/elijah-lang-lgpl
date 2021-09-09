@@ -64,7 +64,7 @@ public class CtorReference {
 				addRef(vte.getName(), CReference.Ref.LOCAL);
 			} else if (ia instanceof IdentIA) {
 				final IdentTableEntry idte = gf.getIdentTableEntry(to_int(ia));
-				OS_Element resolved_element = idte.resolved_element;
+				OS_Element resolved_element = idte.getResolvedElement();
 				if (idte.resolvedType() != null) {
 					_resolved = idte.resolvedType();
 					ctorName = ((ConstructorDef) resolved_element).name();

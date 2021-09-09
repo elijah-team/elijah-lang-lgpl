@@ -695,8 +695,8 @@ public class PostDeduce implements IPostDeduce {
 		// TODO in Deduce set property lookupType to denote what type of lookup it is: MEMBER, LOCAL, or CLOSURE
 		InstructionArgument backlink = identTableEntry.backlink;
 		if (backlink == null) {
-			if (identTableEntry.resolved_element instanceof VariableStatement) {
-				final VariableStatement vs = (VariableStatement) identTableEntry.resolved_element;
+			if (identTableEntry.getResolvedElement() instanceof VariableStatement) {
+				final VariableStatement vs = (VariableStatement) identTableEntry.getResolvedElement();
 				OS_Element parent = vs.getParent().getParent();
 				if (parent != gf.getFD()) {
 					// we want identTableEntry.resolved which will be a GeneratedMember
@@ -730,7 +730,7 @@ public class PostDeduce implements IPostDeduce {
 		System.out.println("932 "+path);
 		String s = Helpers.String_join("->", ls);
 		System.out.println("933 "+s);
-		if (identTableEntry.resolved_element instanceof ConstructorDef)
+		if (identTableEntry.getResolvedElement() instanceof ConstructorDef)
 			return path;
 		else
 			return s;

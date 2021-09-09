@@ -42,7 +42,7 @@ class Found_Element_For_ITE {
 	}
 
 	public void action(IdentTableEntry ite) {
-		final OS_Element y = ite.resolved_element;
+		final OS_Element y = ite.getResolvedElement();
 
 		if (y instanceof VariableStatement) {
 			action_VariableStatement(ite, (VariableStatement) y);

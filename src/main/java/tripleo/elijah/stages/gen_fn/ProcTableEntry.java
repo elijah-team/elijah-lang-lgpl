@@ -35,7 +35,6 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 	 */
 	public final IExpression expression;
 	public final InstructionArgument expression_num;
-	private OS_Element resolved_element;
 	private ClassInvocation classInvocation;
 	private FunctionInvocation functionInvocation;
 	private DeferredObject<ProcTableEntry, Void, Void> completeDeferred = new DeferredObject<ProcTableEntry, Void, Void>();
@@ -127,14 +126,6 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 
 	public ClassInvocation getClassInvocation() {
 		return classInvocation;
-	}
-
-	public void setResolvedElement(OS_Element aResolvedElement) {
-		resolved_element = aResolvedElement;
-	}
-
-	public OS_Element getResolvedElement() {
-		return resolved_element;
 	}
 
 	public void setFunctionInvocation(FunctionInvocation aFunctionInvocation) {
