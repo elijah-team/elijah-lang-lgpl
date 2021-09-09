@@ -119,25 +119,55 @@ class Resolve_Variable_Table_Entry {
 		}
 	}
 
-	public void setup_GenType(OS_Element aE, GenType aGt) {
-		if (aE instanceof NamespaceStatement) {
-			final NamespaceStatement namespaceStatement = (NamespaceStatement) aE;
-			aGt.resolvedn = (NamespaceStatement) aE;
+	public void setup_GenType(OS_Element element, GenType aGt) {
+		if (element instanceof NamespaceStatement) {
+			final NamespaceStatement namespaceStatement = (NamespaceStatement) element;
+			aGt.resolvedn = (NamespaceStatement) element;
 			final NamespaceInvocation nsi = phase.registerNamespaceInvocation(namespaceStatement);
 //			pte.setNamespaceInvocation(nsi);
 			aGt.ci = nsi;
 //			fi = newFunctionInvocation(fd, pte, nsi, phase);
-		} else if (aE instanceof ClassStatement) {
-			final ClassStatement classStatement = (ClassStatement) aE;
-			aGt.resolved = new OS_Type((ClassStatement) aE);
+		} else if (element instanceof ClassStatement) {
+			final ClassStatement classStatement = (ClassStatement) element;
+			aGt.resolved = new OS_Type((ClassStatement) element);
 			// TODO genCI ??
 			ClassInvocation ci = new ClassInvocation(classStatement, null);
 			ci = phase.registerClassInvocation(ci);
 			aGt.ci = ci;
 //			pte.setClassInvocation(ci);
 //			fi = newFunctionInvocation(fd, pte, ci, phase);
-		} else if (aE instanceof AliasStatement) {
-			OS_Element el = aE;
+		} else if (element instanceof FunctionDef) {
+			// TODO this seems to be an elaborate copy of the above with no differentiation for functionDef
+			final FunctionDef functionDef = (FunctionDef) element;
+			OS_Element parent = functionDef.getParent();
+			IInvocation inv;
+			switch (DecideElObjectType.getElObjectType(parent)) {
+			case CLASS:
+				aGt.resolved = new OS_Type((ClassStatement) parent);
+				inv = phase.registerClassInvocation((ClassStatement) parent, null);
+				((ClassInvocation)inv).resolveDeferred().then(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(GeneratedClass result) {
+						aGt.node = result;
+					}
+				});
+				break;
+			case NAMESPACE:
+				aGt.resolvedn = (NamespaceStatement) parent;
+				inv = phase.registerNamespaceInvocation((NamespaceStatement) parent);
+				((NamespaceInvocation)inv).resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+					@Override
+					public void onDone(GeneratedNamespace result) {
+						aGt.node = result;
+					}
+				});
+				break;
+			default:
+				throw new NotImplementedException();
+			}
+			aGt.ci = inv;
+		} else if (element instanceof AliasStatement) {
+			OS_Element el = element;
 			while (el instanceof AliasStatement) {
 				el = DeduceLookupUtils._resolveAlias((AliasStatement) el, deduceTypes2);
 			}
