@@ -8,9 +8,12 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jdeferred2.DoneCallback;
+import org.jdeferred2.FailCallback;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.diagnostic.Diagnostic;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.OS_Element;
@@ -25,7 +28,6 @@ import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.ProcIA;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -119,6 +121,10 @@ public class DeducePath {
 		} else
 			return contexts[aIndex];
 
+	}
+
+	public void getElementPromise(int aIndex, DoneCallback<OS_Element> aOS_elementDoneCallback, FailCallback<Diagnostic> aDiagnosticFailCallback) {
+		getEntry(aIndex).elementPromise(aOS_elementDoneCallback, aDiagnosticFailCallback);
 	}
 
 	static class MemberContext extends Context {

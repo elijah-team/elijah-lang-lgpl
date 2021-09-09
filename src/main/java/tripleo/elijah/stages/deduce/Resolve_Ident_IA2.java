@@ -9,9 +9,11 @@
 package tripleo.elijah.stages.deduce;
 
 import org.jdeferred2.DoneCallback;
+import org.jdeferred2.FailCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
+import tripleo.elijah.diagnostic.Diagnostic;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.IdentIA;
@@ -88,11 +90,20 @@ class Resolve_Ident_IA2 {
 						});
 					} else if (backlink instanceof IdentIA) {
 						IdentIA identIA3 = (IdentIA)dp.getIA(--index);
-						@Nullable OS_Element el3 = dp.getElement(index);
-						assert el3 != null;
-						ectx = el3.getContext();
-						ia2_IdentIA((IdentIA) ia2, ectx);
-						foundElement.doFoundElement(el);
+						dp.getElementPromise(index+1, new DoneCallback<OS_Element>() {
+							@Override
+							public void onDone(OS_Element result) {
+								el = result;
+								ectx = result.getContext();
+								ia2_IdentIA((IdentIA) ia2, ectx);
+								foundElement.doFoundElement(el);
+							}
+						}, new FailCallback<Diagnostic>() {
+							@Override
+							public void onFail(Diagnostic result) {
+								foundElement.doNoFoundElement();
+							}
+						});
 					}
 				} else {
 					if (!ite.hasResolvedElement()) {
