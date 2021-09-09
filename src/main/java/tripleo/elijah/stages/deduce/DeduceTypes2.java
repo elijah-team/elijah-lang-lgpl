@@ -906,7 +906,7 @@ public class DeduceTypes2 {
 									}
 								}
 
-								E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(typeName, null);
+								E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(typeName);
 								fi = e_Is_FunctionDef.getFi();
 								genType = e_Is_FunctionDef.getGenType();
 								finish(co, depTracker, fi, genType);
