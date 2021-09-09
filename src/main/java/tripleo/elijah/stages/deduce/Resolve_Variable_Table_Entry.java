@@ -112,6 +112,8 @@ class Resolve_Variable_Table_Entry {
 					vte.genType.copy(gt);
 				}
 				int y = 2;
+			} else if (aPot.tableEntry == null) {
+				int y=2;
 			} else
 				throw new NotImplementedException();
 		} catch (ResolveError aResolveError) {
