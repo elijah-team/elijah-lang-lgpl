@@ -459,7 +459,7 @@ public class GenerateC implements CodeGenerator {
 					if (s.equals("Unit"))
 						z = "void";
 					else
-						z = String.format("Z<%s>", s);
+						z = String.format("Z<Unknown_USER_Type /*%s*/>", s);
 					break;
 				case BUILT_IN:
 					LOG.err("Warning: BUILT_IN TypeName in GenerateC");
