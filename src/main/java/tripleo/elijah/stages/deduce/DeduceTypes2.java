@@ -1628,9 +1628,10 @@ public class DeduceTypes2 {
 
 	public void resolve_ident_table_entry(IdentTableEntry ite, BaseGeneratedFunction generatedFunction, Context ctx) {
 		InstructionArgument itex = new IdentIA(ite.getIndex(), generatedFunction);
-		while (itex != null) {
-			IdentTableEntry itee = ((IdentIA) itex).getEntry();
-			while (itex != null) {
+		{
+			while (itex != null && itex instanceof IdentIA) {
+				IdentTableEntry itee = ((IdentIA) itex).getEntry();
+
 				BaseTableEntry x = null;
 				if (itee.backlink instanceof IntegerIA) {
 					@NotNull VariableTableEntry vte = ((IntegerIA) itee.backlink).getEntry();
@@ -1653,6 +1654,7 @@ public class DeduceTypes2 {
 
 				if (x != null) {
 //					LOG.err("162 Adding FoundParent for "+itee);
+//					LOG.err(String.format("1656 %s \n\t %s \n\t%s", x, itee, itex));
 					x.addStatusListener(new FoundParent(x, itee, itee.getIdent().getContext(), generatedFunction)); // TODO context??
 				}
 			}
