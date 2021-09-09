@@ -180,6 +180,13 @@ public class DeducePhase {
 		pipelineLogic.addLog(aLog);
 	}
 
+	// helper function. no generics!
+	public ClassInvocation registerClassInvocation(ClassStatement aParent, String aO) {
+		ClassInvocation ci = new ClassInvocation((ClassStatement) aParent, aO);
+		ci = registerClassInvocation(ci);
+		return ci;
+	}
+
 	static class ResolvedVariables {
 		final IdentTableEntry identTableEntry;
 		final OS_Element parent; // README tripleo.elijah.lang._CommonNC, but that's package-private
