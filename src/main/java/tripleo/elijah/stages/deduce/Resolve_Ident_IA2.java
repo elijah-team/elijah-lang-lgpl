@@ -89,8 +89,7 @@ class Resolve_Ident_IA2 {
 							}
 						});
 					} else if (backlink instanceof IdentIA) {
-						IdentIA identIA3 = (IdentIA)dp.getIA(--index);
-						dp.getElementPromise(index+1, new DoneCallback<OS_Element>() {
+						dp.getElementPromise(index, new DoneCallback<OS_Element>() {
 							@Override
 							public void onDone(OS_Element result) {
 								el = result;
@@ -104,6 +103,13 @@ class Resolve_Ident_IA2 {
 								foundElement.doNoFoundElement();
 							}
 						});
+						dp.getElementPromise(index - 1, new DoneCallback<OS_Element>() {
+							@Override
+							public void onDone(OS_Element result) {
+								ia2_IdentIA((IdentIA) dp.getIA(index-1), result.getContext()); // might fail
+							}
+						}, null);
+
 					}
 				} else {
 					if (!ite.hasResolvedElement()) {
