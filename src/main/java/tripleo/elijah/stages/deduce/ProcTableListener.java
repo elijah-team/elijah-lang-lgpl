@@ -65,7 +65,7 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 		FunctionInvocation fi;
 		GenType genType = null;
 
-//								pte.setResolvedElement(e); // README already done
+//		pte.setResolvedElement(e); // README already done
 		if (e instanceof ClassStatement) {
 			ci = new ClassInvocation((ClassStatement) e, null);
 			ci = dc.registerClassInvocation(ci);
@@ -126,41 +126,51 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 
 			assert parent != null;
 
-			if (parent instanceof IdentExpression) {
-				@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(((IdentExpression) parent).getText());
-				assert vte_ia != null;
-				final VariableTableEntry variableTableEntry = ((IntegerIA) vte_ia).getEntry();
-				variableTableEntry.typePromise().then(new DoneCallback<GenType>() {
-					@Override
-					public void onDone(GenType result) {
-						assert result.resolved.getClassOf() == fd.getParent();
+			resolved_element_pte_FunctionDef_dunder(co, depTracker, pte, fd, parent);
+		}
+	}
 
-						E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, fd.getParent()).invoke(variableTableEntry.type.genType.nonGenericTypeName);
-						FunctionInvocation fi1 = e_Is_FunctionDef.getFi();
-						GenType genType1 = e_Is_FunctionDef.getGenType();
-						finish(co, depTracker, fi1, genType1);
-					}
-				});
-			} else {
-				TypeName typeName = null;
+	private void resolved_element_pte_FunctionDef_dunder(Constructable co,
+														 AbstractDependencyTracker depTracker,
+														 ProcTableEntry pte,
+														 FunctionDef fd,
+														 OS_Element parent) {
+		FunctionInvocation fi;
+		GenType genType;
+		if (parent instanceof IdentExpression) {
+			@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(((IdentExpression) parent).getText());
+			assert vte_ia != null;
+			final VariableTableEntry variableTableEntry = ((IntegerIA) vte_ia).getEntry();
+			variableTableEntry.typePromise().then(new DoneCallback<GenType>() {
+				@Override
+				public void onDone(GenType result) {
+					assert result.resolved.getClassOf() == fd.getParent();
 
-				if (fd == parent) {
-					parent = fd.getParent();
-					TypeTableEntry x = pte.getArgs().get(0);
-					// TODO highly specialized condition...
-					if (x.getAttached() == null && x.tableEntry == null) {
-						String text = ((IdentExpression) x.expression).getText();
-						@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(text);
-						GenType gt = ((IntegerIA) vte_ia).getEntry().type.genType;
-						typeName = gt.nonGenericTypeName != null ? gt.nonGenericTypeName : gt.typeName.getTypeName();
-					}
+					E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, fd.getParent()).invoke(variableTableEntry.type.genType.nonGenericTypeName);
+					FunctionInvocation fi1 = e_Is_FunctionDef.getFi();
+					GenType genType1 = e_Is_FunctionDef.getGenType();
+					finish(co, depTracker, fi1, genType1);
 				}
+			});
+		} else {
+			TypeName typeName = null;
 
-				E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(typeName);
-				fi = e_Is_FunctionDef.getFi();
-				genType = e_Is_FunctionDef.getGenType();
-				finish(co, depTracker, fi, genType);
+			if (fd == parent) {
+				parent = fd.getParent();
+				TypeTableEntry x = pte.getArgs().get(0);
+				// TODO highly specialized condition...
+				if (x.getAttached() == null && x.tableEntry == null) {
+					String text = ((IdentExpression) x.expression).getText();
+					@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(text);
+					GenType gt = ((IntegerIA) vte_ia).getEntry().type.genType;
+					typeName = gt.nonGenericTypeName != null ? gt.nonGenericTypeName : gt.typeName.getTypeName();
+				}
 			}
+
+			E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(typeName);
+			fi = e_Is_FunctionDef.getFi();
+			genType = e_Is_FunctionDef.getGenType();
+			finish(co, depTracker, fi, genType);
 		}
 	}
 
