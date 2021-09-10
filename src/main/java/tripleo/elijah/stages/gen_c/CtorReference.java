@@ -8,10 +8,8 @@
  */
 package tripleo.elijah.stages.gen_c;
 
-import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
