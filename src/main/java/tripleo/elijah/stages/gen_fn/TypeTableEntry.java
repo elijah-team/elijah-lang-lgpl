@@ -76,6 +76,10 @@ public class TypeTableEntry {
 			else
 				genType.typeName = aAttached;
 			break;
+		case FUNCTION:
+			assert genType.resolved == null;
+			genType.resolved = aAttached;
+			break;
 		default:
 //			throw new NotImplementedException();
 			System.err.println("73 "+aAttached);
