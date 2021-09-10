@@ -3115,6 +3115,9 @@ public class DeduceTypes2 {
 				} else if (bte instanceof ProcTableEntry) {
 					final ProcTableEntry pte = (ProcTableEntry) bte;
 					onChangePTE(pte);
+				} else if (bte instanceof IdentTableEntry) {
+					final IdentTableEntry ite = (IdentTableEntry) bte;
+					onChangeITE(ite);
 				}
 				postOnChange(eh);
 			}
@@ -3333,6 +3336,58 @@ public class DeduceTypes2 {
 					LOG.err("1696");
 				}
 			}
+		}
+
+		private void onChangeITE(IdentTableEntry identTableEntry) {
+//			@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(identTableEntry);
+//			if (identTableEntry.getStatus() == BaseTableEntry.Status.KNOWN && identTableEntry.type.getAttached() != null && identTableEntry.getResolvedElement() != null) {
+
+				final OS_Type ty = identTableEntry.type.getAttached();
+
+				OS_Element ele2 = null;
+
+				try {
+					if (ty.getType() == OS_Type.Type.USER) {
+						@NotNull OS_Type ty2 = resolve_type(ty, ty.getTypeName().getContext());
+						OS_Element ele;
+						if (identTableEntry.type.genType.resolved == null) {
+							if (ty2.getType() == OS_Type.Type.USER_CLASS) {
+								identTableEntry.type.genType.resolved = ty2;
+							}
+						}
+						ele = ty2.getElement();
+						LookupResultList lrl = DeduceLookupUtils.lookupExpression(this.ite.getIdent(), ele.getContext(), DeduceTypes2.this);
+						ele2 = lrl.chooseBest(null);
+					} else
+						ele2 = ty.getClassOf(); // TODO might fail later (use getElement?)
+
+					LookupResultList lrl = null;
+
+					lrl = DeduceLookupUtils.lookupExpression(this.ite.getIdent(), ele2.getContext(), DeduceTypes2.this);
+					OS_Element best = lrl.chooseBest(null);
+					// README commented out because only firing for dir.listFiles, and we always use `best'
+//					if (best != ele2) LOG.err(String.format("2824 Divergent for %s, %s and %s", identTableEntry, best, ele2));;
+					this.ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+				} catch (ResolveError aResolveError) {
+					aResolveError.printStackTrace();
+					errSink.reportDiagnostic(aResolveError);
+				}
+//			} else if (pot.size() == 1) {
+//				TypeTableEntry tte = pot.get(0);
+//				@Nullable OS_Type ty = tte.getAttached();
+//				if (ty != null) {
+//					switch (ty.getType()) {
+//					case USER:
+//						vte_pot_size_is_1_USER_TYPE(identTableEntry, ty);
+//						break;
+//					case USER_CLASS:
+//						vte_pot_size_is_1_USER_CLASS_TYPE(identTableEntry, ty);
+//						break;
+//					}
+//				} else {
+//					LOG.err("1696");
+//				}
+//			}
 		}
 
 		private void vte_pot_size_is_1_USER_CLASS_TYPE(VariableTableEntry vte, @Nullable OS_Type aTy) {
