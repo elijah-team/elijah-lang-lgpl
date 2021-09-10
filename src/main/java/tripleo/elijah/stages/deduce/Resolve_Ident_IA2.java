@@ -143,106 +143,133 @@ class Resolve_Ident_IA2 {
 		final IdentTableEntry idte2 = ia2.getEntry();
 		final String text = idte2.getIdent().getText();
 
-		final LookupResultList lrl = ectx.lookup(text);
-		el = lrl.chooseBest(null);
-		if (el == null) {
-			errSink.reportError("1007 Can't resolve " + text);
-			foundElement.doNoFoundElement();
-			return RIA_STATE.RETURN;
+		if (idte2.getStatus() == BaseTableEntry.Status.KNOWN) {
+			el = idte2.getResolvedElement();
+			assert el != null;
 		} else {
-			if (!idte2.hasResolvedElement()) {
-				idte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
+			final LookupResultList lrl = ectx.lookup(text);
+			el = lrl.chooseBest(null);
+
+			if (el == null) {
+				errSink.reportDiagnostic(new ResolveError(idte2.getIdent(), lrl));
+//				errSink.reportError("1007 Can't resolve " + text);
+				foundElement.doNoFoundElement();
+				return RIA_STATE.RETURN;
 			}
-			if (idte2.type == null) {
-				if (el instanceof VariableStatement) {
-					VariableStatement vs = (VariableStatement) el;
-					ia2_IdentIA_VariableStatement(ectx, idte2, vs);
-				} else if (el instanceof FunctionDef) {
-					OS_Type attached = new OS_UnknownType(el);
-					TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, idte2);
-					idte2.type = tte;
+		}
 
-					// Set type to something other than Unknown when found
-					@Nullable ProcTableEntry pte = idte2.getCallablePTE();
-					if (pte == null) {
+		if (!idte2.hasResolvedElement()) {
+			idte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
+		}
+		if (idte2.type == null) {
+			if (el instanceof VariableStatement) {
+				VariableStatement vs = (VariableStatement) el;
+				ia2_IdentIA_VariableStatement(idte2, vs, ectx);
+			} else if (el instanceof FunctionDef) {
+				OS_Type attached = new OS_UnknownType(el);
+				TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, idte2);
+				idte2.type = tte;
 
-					} else {
-						assert pte != null;
-						FunctionInvocation fi = pte.getFunctionInvocation();
-						if (fi == null) {
-							InstructionArgument bl = idte2.backlink;
-							IInvocation invocation = null;
-							if (bl instanceof IntegerIA) {
-								final IntegerIA integerIA = (IntegerIA) bl;
-								@NotNull VariableTableEntry vte = integerIA.getEntry();
-								if (vte.constructable_pte != null) {
-									ProcTableEntry cpte = vte.constructable_pte;
-									invocation = cpte.getFunctionInvocation().getClassInvocation();
-								}
-							} else if (bl instanceof IdentIA) {
-								assert false;
-							} else if (bl instanceof ProcIA) {
-								final ProcIA procIA = (ProcIA) bl;
-								FunctionInvocation bl_fi = procIA.getEntry().getFunctionInvocation();
-								if (bl_fi.getClassInvocation() != null) {
-									invocation = bl_fi.getClassInvocation();
-								} else if (bl_fi.getNamespaceInvocation() != null) {
-									invocation = bl_fi.getNamespaceInvocation();
-								}
+				// Set type to something other than Unknown when found
+				@Nullable ProcTableEntry pte = idte2.getCallablePTE();
+				if (pte == null) {
+					int y=2;
+				} else {
+					assert pte != null;
+					FunctionInvocation fi = pte.getFunctionInvocation();
+					if (fi == null) {
+						InstructionArgument bl = idte2.backlink;
+						IInvocation invocation = null;
+						if (bl instanceof IntegerIA) {
+							final IntegerIA integerIA = (IntegerIA) bl;
+							@NotNull VariableTableEntry vte = integerIA.getEntry();
+							if (vte.constructable_pte != null) {
+								ProcTableEntry cpte = vte.constructable_pte;
+								invocation = cpte.getFunctionInvocation().getClassInvocation();
 							}
-
-							fi = new FunctionInvocation((BaseFunctionDef) el, pte, invocation, phase.generatePhase);
-							pte.setFunctionInvocation(fi);
+						} else if (bl instanceof IdentIA) {
+							final IdentIA identIA = (IdentIA) bl;
+							@NotNull IdentTableEntry ite = identIA.getEntry();
+							if (ite.type.genType.ci != null)
+								invocation = ite.type.genType.ci;
+							else if (ite.type.getAttached() != null) {
+								@NotNull OS_Type attached1 = ite.type.getAttached();
+								assert attached1.getType() == OS_Type.Type.USER_CLASS;
+								invocation = phase.registerClassInvocation(attached1.getClassOf(), null); // TODO will fail one day
+							}
+						} else if (bl instanceof ProcIA) {
+							final ProcIA procIA = (ProcIA) bl;
+							FunctionInvocation bl_fi = procIA.getEntry().getFunctionInvocation();
+							if (bl_fi.getClassInvocation() != null) {
+								invocation = bl_fi.getClassInvocation();
+							} else if (bl_fi.getNamespaceInvocation() != null) {
+								invocation = bl_fi.getNamespaceInvocation();
+							}
 						}
 
-						pte.getFunctionInvocation().generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {
-							@Override
-							public void onDone(BaseGeneratedFunction result) {
-								result.typePromise().then(new DoneCallback<GenType>() {
-									@Override
-									public void onDone(GenType result) {
-										// NOTE there is no Promise-type notification for when type changes
-										idte2.type.setAttached(result);
-									}
-								});
-							}
-						});
+						fi = new FunctionInvocation((BaseFunctionDef) el, pte, invocation, phase.generatePhase);
+						pte.setFunctionInvocation(fi);
 					}
-				}
-			}
-			if (idte2.type != null) {
-				assert idte2.type.getAttached() != null;
-				try {
-					if (!(idte2.type.getAttached() instanceof OS_UnknownType)) { // TODO
-						OS_Type rtype = deduceTypes2.resolve_type(idte2.type.getAttached(), ectx);
-						switch (rtype.getType()) {
-							case USER_CLASS:
-								ectx = rtype.getClassOf().getContext();
-								break;
-							case FUNCTION:
-								ectx = ((OS_FuncType) rtype).getElement().getContext();
-								break;
+
+					pte.getFunctionInvocation().generatePromise().then(new DoneCallback<BaseGeneratedFunction>() {
+						@Override
+						public void onDone(BaseGeneratedFunction result) {
+							result.typePromise().then(new DoneCallback<GenType>() {
+								@Override
+								public void onDone(GenType result) {
+									// NOTE there is no Promise-type notification for when type changes
+									idte2.type.setAttached(result);
+								}
+							});
 						}
-						idte2.type.setAttached(rtype); // TODO may be losing alias information here
-					}
-				} catch (ResolveError resolveError) {
-					if (resolveError.resultsList().size() > 1)
-						errSink.reportDiagnostic(resolveError);
-					else
-						LOG.info("1089 Can't attach type to " + idte2.type.getAttached());
-//					resolveError.printStackTrace(); // TODO print diagnostic
-					return RIA_STATE.CONTINUE;
+					});
 				}
-			} else {
-//				throw new IllegalStateException("who knows");
-				errSink.reportWarning("2010 idte2.type == null for " + text);
 			}
+		}
+		if (idte2.type != null) {
+			assert idte2.type.getAttached() != null;
+			if (findResolved(idte2, ectx)) return RIA_STATE.CONTINUE;
+		} else {
+//			throw new IllegalStateException("who knows");
+			errSink.reportWarning("2010 idte2.type == null for " + text);
 		}
 
 		return RIA_STATE.NEXT;
 	}
 
-	private void ia2_IdentIA_VariableStatement(Context ectx, IdentTableEntry idte, VariableStatement vs) {
+	/* @requires idte2.type.getAttached() != null; */
+	private boolean findResolved(IdentTableEntry idte2, Context ctx) {
+		try {
+			if (idte2.type.getAttached() instanceof OS_UnknownType) // TODO ??
+				return false;
+
+			final OS_Type attached = idte2.type.getAttached();
+			if (attached.getType() == OS_Type.Type.USER_CLASS) {
+				if (idte2.type.genType.resolved == null) {
+					OS_Type rtype = deduceTypes2.resolve_type(attached, ctx);
+					switch (rtype.getType()) {
+					case USER_CLASS:
+						ctx = rtype.getClassOf().getContext();
+						break;
+					case FUNCTION:
+						ctx = ((OS_FuncType) rtype).getElement().getContext();
+						break;
+					}
+					idte2.type.setAttached(rtype); // TODO may be losing alias information here
+				}
+			}
+		} catch (ResolveError resolveError) {
+			if (resolveError.resultsList().size() > 1)
+				errSink.reportDiagnostic(resolveError);
+			else
+				LOG.info("1089 Can't attach type to " + idte2.type.getAttached());
+//				resolveError.printStackTrace(); // TODO print diagnostic
+			return true;
+		}
+		return false;
+	}
+
+	private void ia2_IdentIA_VariableStatement(IdentTableEntry idte, VariableStatement vs, Context ctx) {
 		try {
 			final boolean has_initial_value = vs.initialValue() != IExpression.UNASSIGNED;
 			if (!vs.typeName().isNull()) {

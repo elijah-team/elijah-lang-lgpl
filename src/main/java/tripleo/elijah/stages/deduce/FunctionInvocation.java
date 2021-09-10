@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.BaseFunctionDef;
@@ -121,6 +122,10 @@ public class FunctionInvocation {
 
 	public DeferredObject<BaseGeneratedFunction, Void, Void> generateDeferred() {
 		return generateDeferred;
+	}
+
+	public Promise<BaseGeneratedFunction, Void, Void> generatePromise() {
+		return generateDeferred.promise();
 	}
 
 	public void setGenerated(BaseGeneratedFunction aGeneratedFunction) {
