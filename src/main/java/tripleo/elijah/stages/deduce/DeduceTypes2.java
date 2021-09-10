@@ -3227,7 +3227,7 @@ public class DeduceTypes2 {
 		});
 	}
 
-	public static class DeduceClient2 {
+	static class DeduceClient2 {
 		private DeduceTypes2 deduceTypes2;
 
 		public DeduceClient2(DeduceTypes2 deduceTypes2) {
