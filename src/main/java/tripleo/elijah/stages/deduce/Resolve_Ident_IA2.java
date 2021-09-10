@@ -282,7 +282,7 @@ class Resolve_Ident_IA2 {
 				TypeTableEntry tte;
 				OS_Type attached;
 				if (has_initial_value) {
-					attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ectx);
+					attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ctx);
 				} else { // if (vs.typeName() != null) {
 					attached = new OS_Type(vs.typeName());
 				}
@@ -299,7 +299,7 @@ class Resolve_Ident_IA2 {
 				tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, initialValue);
 				idte.type = tte;
 			} else if (has_initial_value) {
-				OS_Type attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ectx);
+				OS_Type attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ctx);
 				TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
 				idte.type = tte;
 			} else {
