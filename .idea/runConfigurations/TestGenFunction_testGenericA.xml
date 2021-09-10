@@ -4,7 +4,6 @@
     <useClassPathOnly />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="tripleo.elijah.stages.gen_fn.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
