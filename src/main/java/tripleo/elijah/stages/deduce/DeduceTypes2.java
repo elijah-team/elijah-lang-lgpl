@@ -3157,16 +3157,28 @@ public class DeduceTypes2 {
 				return ty2;
 			}
 
-			final OS_Type attached = ((VariableTableEntry) bte).type.getAttached();
-			if (attached == null) {
-				type_is_null_and_attached_is_null();
-			} else
-				ty2 = attached;
+			if (bte instanceof VariableTableEntry) {
+				final OS_Type attached = ((VariableTableEntry) bte).type.getAttached();
+				if (attached == null) {
+					type_is_null_and_attached_is_null_vte();
+				} else
+					ty2 = attached;
+			} else if (bte instanceof IdentTableEntry) {
+				final TypeTableEntry tte = ((IdentTableEntry) bte).type;
+				if (tte != null) {
+					final OS_Type attached = tte.getAttached();
+
+					if (attached == null) {
+						type_is_null_and_attached_is_null_ite((IdentTableEntry) bte);
+					} else
+						ty2 = attached;
+				}
+			}
 
 			return ty2;
 		}
 
-		private void type_is_null_and_attached_is_null() {
+		private void type_is_null_and_attached_is_null_vte() {
 			//LOG.err("2842 attached == null for "+((VariableTableEntry) bte).type);
 			PromiseExpectation<GenType> pe = promiseExpectation((VariableTableEntry) bte, "Null USER type attached resolved");
 			((VariableTableEntry) bte).typePromise().done(new DoneCallback<GenType>() {
@@ -3196,6 +3208,37 @@ public class DeduceTypes2 {
 					}
 				}
 			});
+		}
+
+		private void type_is_null_and_attached_is_null_ite(IdentTableEntry ite) {
+//			PromiseExpectation<GenType> pe = promiseExpectation(ite, "Null USER type attached resolved");
+//			ite.typePromise().done(new DoneCallback<GenType>() {
+//				@Override
+//				public void onDone(GenType result) {
+//					pe.satisfy(result);
+//					final OS_Type attached1 = result.resolved != null ? result.resolved : result.typeName;
+//					if (attached1 != null) {
+//						switch (attached1.getType()) {
+//						case USER_CLASS:
+//							FoundParent.this.ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached1);
+//							break;
+//						case USER:
+//							try {
+//								OS_Type ty3 = resolve_type(attached1, attached1.getTypeName().getContext());
+//								// no expression or TableEntryIV below
+//								@NotNull TypeTableEntry tte4 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null);
+//								// README trying to keep genType up to date
+//								tte4.setAttached(attached1);
+//								tte4.setAttached(ty3);
+//								FoundParent.this.ite.type = tte4; // or ty2?
+//							} catch (ResolveError aResolveError) {
+//								aResolveError.printStackTrace();
+//							}
+//							break;
+//						}
+//					}
+//				}
+//			});
 		}
 
 		private void onChangePTE(ProcTableEntry aPte) {
