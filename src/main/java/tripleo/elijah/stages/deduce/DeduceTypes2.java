@@ -906,7 +906,7 @@ public class DeduceTypes2 {
 		return null;
 	}
 
-	private ClassInvocation genCI(GenType genType, TypeName aTypeName) {
+	private ClassInvocation genCI(GenType genType, TypeName aGenericTypeName) {
 		if (genType.nonGenericTypeName != null) {
 			NormalTypeName aTyn1 = (NormalTypeName) genType.nonGenericTypeName;
 			String constructorName = null; // TODO this comes from nowhere
@@ -941,8 +941,8 @@ public class DeduceTypes2 {
 			if (genType.ci == null) {
 				clsinv = new ClassInvocation(best, constructorName);
 				if (gp.size() > 0) {
-					if (aTypeName instanceof NormalTypeName) {
-						final NormalTypeName tn = (NormalTypeName) aTypeName;
+					if (aGenericTypeName instanceof NormalTypeName) {
+						final NormalTypeName tn = (NormalTypeName) aGenericTypeName;
 						TypeNameList tngp = tn.getGenericPart();
 						for (int i = 0; i < gp.size(); i++) {
 							final TypeName typeName = tngp.get(i);
