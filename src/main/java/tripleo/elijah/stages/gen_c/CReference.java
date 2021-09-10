@@ -135,27 +135,7 @@ public class CReference {
 				}
 			} else if (ia instanceof ProcIA) {
 				final ProcTableEntry prte = generatedFunction.getProcTableEntry(to_int(ia));
-				final BaseGeneratedFunction generated = prte.getFunctionInvocation().getGenerated();
-				if (generated == null) {
-					throw new IllegalStateException();
-				} else {
-					if (generated instanceof GeneratedConstructor) {
-						int y = 2;
-						final GeneratedContainerNC genClass = (GeneratedContainerNC) generated.getGenClass();
-						final IdentExpression constructorName = generated.getFD().getNameNode();
-						final String constructorNameText;
-						if (constructorName == ConstructorDef.emptyConstructorName) {
-							constructorNameText = "";
-						} else {
-							constructorNameText = constructorName.getText();
-						}
-						text = String.format("ZC%d%s", genClass.getCode(), constructorNameText);
-					} else {
-						final GeneratedContainerNC genClass = (GeneratedContainerNC) generated.getGenClass();
-						text = String.format("Z%d%s", genClass.getCode(), generated.getFD().getNameNode().getText());
-					}
-				}
-				addRef(text, Ref.FUNCTION); // TODO needs to use name of resolved function
+				text = getIdentIAPath_Proc(prte);
 			} else {
 				throw new NotImplementedException();
 			}
@@ -164,6 +144,33 @@ public class CReference {
 		}
 		rtext = Helpers.String_join(".", sl);
 		return rtext;
+	}
+
+	public String getIdentIAPath_Proc(ProcTableEntry aPrte) {
+		String text;
+		final BaseGeneratedFunction generated = aPrte.getFunctionInvocation().getGenerated();
+
+		if (generated == null)
+			throw new IllegalStateException();
+
+		if (generated instanceof GeneratedConstructor) {
+			int y = 2;
+			final GeneratedContainerNC genClass = (GeneratedContainerNC) generated.getGenClass();
+			final IdentExpression constructorName = generated.getFD().getNameNode();
+			final String constructorNameText;
+			if (constructorName == ConstructorDef.emptyConstructorName) {
+				constructorNameText = "";
+			} else {
+				constructorNameText = constructorName.getText();
+			}
+			text = String.format("ZC%d%s", genClass.getCode(), constructorNameText);
+			addRef(text, Ref.CONSTRUCTOR);
+		} else {
+			final GeneratedContainerNC genClass = (GeneratedContainerNC) generated.getGenClass();
+			text = String.format("Z%d%s", genClass.getCode(), generated.getFD().getNameNode().getText());
+			addRef(text, Ref.FUNCTION);
+		}
+		return text;
 	}
 
 	boolean _getIdentIAPath_IdentIAHelper(InstructionArgument ia_next,
@@ -380,9 +387,10 @@ public class CReference {
 				final String s = sb.toString();
 				text = String.format("%s(%s", ref.text, s);
 				sb = new StringBuilder();
-				open = true;
+				open = false;
 				if (!s.equals("")) needs_comma = true;
 				sb.append(text);
+				sb.append(")");
 				break;
 			}
 			case PROPERTY: {
