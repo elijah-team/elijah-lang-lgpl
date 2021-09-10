@@ -441,6 +441,7 @@ class Resolve_Ident_IA2 {
 		}
 	}
 
+	/* @requires pot.get(0).getAttached() == null; */
 	private void ia2_IntegerIA_null_attached(Context ctx, List<TypeTableEntry> pot) {
 		try {
 			FunctionDef fd = null;
