@@ -26,19 +26,19 @@ public class ParserClosure extends ProgramClosure {
 			.build();
 	}
 
-	private OS_Module module() {
-		return module;
-	}
-
 	public OS_Package defaultPackageName(final Qualident aPackageName) {
 //		assert module.packageName == null;
 		return module.pushPackageNamed(aPackageName);
 	}
 
-	public void packageName(final Qualident aPackageName) {
-		//assert module.packageName ==null;
-		module.pushPackageName(aPackageName);
-	}
+//	public void packageName(final Qualident aPackageName) {
+//		//assert module.packageName ==null;
+//		module.pushPackageNamed(aPackageName);
+//	}
+
+//	private OS_Module module() {
+//		return module;
+//	}
 
 	public final OS_Module module;
 }
