@@ -170,8 +170,9 @@ public class OS_Module implements OS_Element, OS_Container {
 		return parent.makePackage(packageNames_q.peek());
 	}
 
-	public void pushPackageName(final Qualident xyz) {
-		packageNames_q.push(xyz);
+	public OS_Package pushPackageNamed(final Qualident aPackageName) {
+		packageNames_q.push(aPackageName);
+		return parent.makePackage(aPackageName);
 	}
 
 	/**

@@ -32,8 +32,7 @@ public class ParserClosure extends ProgramClosure {
 
 	public OS_Package defaultPackageName(final Qualident aPackageName) {
 //		assert module.packageName == null;
-		module.pushPackageName(aPackageName);
-		return module.getCompilation().makePackage(aPackageName);
+		return module.pushPackageNamed(aPackageName);
 	}
 
 	public void packageName(final Qualident aPackageName) {
