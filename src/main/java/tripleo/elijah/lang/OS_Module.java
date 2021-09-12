@@ -167,6 +167,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	@NotNull public OS_Package pullPackageName() {
 		if (packageNames_q.empty())
 			return OS_Package.default_package;
+		// Dont know if this is correct behavior
 		return parent.makePackage(packageNames_q.peek());
 	}
 
