@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.BaseFunctionDef;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 
 /**
@@ -61,6 +62,11 @@ public class GeneratedFunction extends BaseGeneratedFunction {
 	@Override
 	public String identityString() {
 		return ""+fd;
+	}
+
+	@Override
+	public OS_Module module() {
+        return getFD().getContext().module();
 	}
 
 }

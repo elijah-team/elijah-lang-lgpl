@@ -401,12 +401,6 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 		return vte.getIndex();
 	}
 
-    @Override
-    public OS_Module module() {
-		throw new NotImplementedException();
-//        return fd.getContext().module();
-    }
-
 	public int getCode() {
 		return code;
 	}
