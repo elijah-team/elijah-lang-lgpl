@@ -15,6 +15,8 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.ci.CompilerInstructions;
+import tripleo.elijah.stages.gen_c.CDependencyRef;
+import tripleo.elijah.stages.gen_generic.Dependency;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.generate.ElSystem;
@@ -80,6 +82,8 @@ public class WritePipeline implements PipelineMember {
 		sys.setCompilation(c);
 		sys.setOutputStrategy(os);
 		gr.subscribeCompletedItems(new Observer<GenerateResultItem>() {
+			Multimap<Dependency, GenerateResultItem> gris = ArrayListMultimap.create();
+
 			@Override
 			public void onSubscribe(@NonNull Disposable d) {
 
@@ -88,8 +92,20 @@ public class WritePipeline implements PipelineMember {
 			@Override
 			public void onNext(@NonNull GenerateResultItem ab) {
 				// OutputFileCommand (somewhere...)
-				mmb.put(ab.output, ab.buffer);
-				lsp_outputs.put(ab.lsp.getInstructions(), ab.output);
+				final Dependency dependency = ab.getDependency();
+				if (dependency.getRef() == null) {
+					gris.put(dependency, ab);
+				} else {
+					final String output = ((CDependencyRef) dependency.getRef()).getHeaderFile();
+					mmb.put(output, ab.buffer);
+					lsp_outputs.put(ab.lsp.getInstructions(), output);
+					for (GenerateResultItem generateResultItem : gris.get(dependency)) {
+						final String output1 = generateResultItem.output;
+						mmb.put(output1, generateResultItem.buffer);
+						lsp_outputs.put(generateResultItem.lsp.getInstructions(), output1);
+					}
+					gris.removeAll(dependency);
+				}
 			}
 
 			@Override
@@ -128,7 +144,7 @@ public class WritePipeline implements PipelineMember {
 		Multimap<String, Buffer> mb = ArrayListMultimap.create();
 
 		for (GenerateResultItem ab : gr.results()) {
-			mb.put(ab.output, ab.buffer);
+			mb.put(((CDependencyRef)ab.getDependency().getRef()).getHeaderFile(), ab.buffer); // TODO see above
 		}
 
 		assert mmb.equals(mb);
