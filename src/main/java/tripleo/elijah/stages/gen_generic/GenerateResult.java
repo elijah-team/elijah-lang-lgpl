@@ -48,8 +48,8 @@ public class GenerateResult {
 		addFunction(aGeneratedFunction, aBuffer, aTY, aLsp);
 	}
 
-	public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf) {
-		add(aBuf, aClass, ty);
+	public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf, LibraryStatementPart aLsp) {
+		add(aBuf, aClass, ty, aLsp);
 	}
 
 	public void addNamespace(TY ty, GeneratedNamespace aNamespace, Buffer aBuf, LibraryStatementPart aLsp) {
