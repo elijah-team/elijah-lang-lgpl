@@ -78,12 +78,12 @@ public class ElSystem {
 		return s;
 	}
 
-	public void setOutputStrategy(OutputStrategy outputStrategy) {
-		this.outputStrategy = outputStrategy;
+	public void setOutputStrategy(OutputStrategy aOutputStrategy) {
+		outputStrategy = aOutputStrategy;
 	}
 
-	public void setCompilation(Compilation compilation) {
-		this.compilation = compilation;
+	public void setCompilation(Compilation aCompilation) {
+		compilation = aCompilation;
 	}
 }
 
