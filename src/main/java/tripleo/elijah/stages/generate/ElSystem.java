@@ -13,6 +13,7 @@ import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_c.CDependencyRef;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 
@@ -35,13 +36,15 @@ public class ElSystem {
 			String filename = getFilenameForNode(ab.node, ab.ty, outputStrategyC);
 			assert filename != null;
 			ab.output = filename;
+			if (ab.ty == GenerateResult.TY.HEADER)
+				ab.getDependency().setRef(new CDependencyRef(filename));
 			gr.completeItem(ab);
 		}
 
 		if (verbose) {
 			for (GenerateResultItem ab : gr.results()) {
 				if (ab.node instanceof GeneratedFunction) continue;
-				System.out.println("** "+ab.node+" "+ab.output);
+				System.out.println("** "+ab.node+" "+ ab.output/*((CDependencyRef)ab.getDependency().getRef()).getHeaderFile()*/);
 			}
 		}
 
