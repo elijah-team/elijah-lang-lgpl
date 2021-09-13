@@ -11,6 +11,7 @@ package tripleo.elijah.stages.gen_generic;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.subjects.ReplaySubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
@@ -33,26 +34,26 @@ public class GenerateResult {
 		return res;
 	}
 
-	public void add(Buffer b, GeneratedNode n, TY ty) {
-		final GenerateResultItem item = new GenerateResultItem(ty, b, n, ++bufferCounter);
+	public void add(Buffer b, GeneratedNode n, TY ty, LibraryStatementPart aLsp) {
+		final GenerateResultItem item = new GenerateResultItem(ty, b, n, aLsp, ++bufferCounter);
 		res.add(item);
 //		items.onNext(item);
 	}
 
-	public void addFunction(BaseGeneratedFunction aGeneratedFunction, Buffer aBuffer, TY aTY) {
-		add(aBuffer, aGeneratedFunction, aTY);
+	public void addFunction(BaseGeneratedFunction aGeneratedFunction, Buffer aBuffer, TY aTY, LibraryStatementPart aLsp) {
+		add(aBuffer, aGeneratedFunction, aTY, aLsp);
 	}
 
-	public void addConstructor(GeneratedConstructor aGeneratedFunction, Buffer aBuffer, TY aTY) {
-		addFunction(aGeneratedFunction, aBuffer, aTY);
+	public void addConstructor(GeneratedConstructor aGeneratedFunction, Buffer aBuffer, TY aTY, LibraryStatementPart aLsp) {
+		addFunction(aGeneratedFunction, aBuffer, aTY, aLsp);
 	}
 
 	public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf) {
 		add(aBuf, aClass, ty);
 	}
 
-	public void addNamespace(TY ty, GeneratedNamespace aNamespace, Buffer aBuf) {
-		add(aBuf, aNamespace, ty);
+	public void addNamespace(TY ty, GeneratedNamespace aNamespace, Buffer aBuf, LibraryStatementPart aLsp) {
+		add(aBuf, aNamespace, ty, aLsp);
 	}
 
 	public enum TY {

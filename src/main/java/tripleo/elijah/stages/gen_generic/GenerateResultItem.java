@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.stages.gen_generic;
 
+import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.util.buffer.Buffer;
 
@@ -15,16 +17,22 @@ import tripleo.util.buffer.Buffer;
  * Created 4/27/21 1:12 AM
  */
 public class GenerateResultItem {
+	public final @NotNull GenerateResult.TY ty;
+	public final @NotNull Buffer buffer;
+	public final @NotNull GeneratedNode node;
+	public final @NotNull LibraryStatementPart lsp;
 	public final int counter;
-	public final GenerateResult.TY ty;
-	public final Buffer buffer;
-	public final GeneratedNode node;
 	public String output;
 
-	public GenerateResultItem(GenerateResult.TY aTy, Buffer aBuffer, GeneratedNode aNode, int aCounter) {
+	public GenerateResultItem(final @NotNull GenerateResult.TY aTy,
+							  final @NotNull Buffer aBuffer,
+							  final @NotNull GeneratedNode aNode,
+							  final @NotNull LibraryStatementPart aLsp,
+							  final int aCounter) {
 		ty = aTy;
 		buffer = aBuffer;
 		node = aNode;
+		lsp = aLsp;
 		counter = aCounter;
 	}
 }

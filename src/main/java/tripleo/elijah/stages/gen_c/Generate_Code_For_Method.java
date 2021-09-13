@@ -58,10 +58,10 @@ public class Generate_Code_For_Method {
 		tosHdr.close();
 		Buffer buf = tos.getBuffer();
 //		System.out.println(buf.getText());
-		gr.addFunction(gf, buf, GenerateResult.TY.IMPL);
+		gr.addFunction(gf, buf, GenerateResult.TY.IMPL, gf.module().getLsp());
 		Buffer bufHdr = tosHdr.getBuffer();
 //		System.out.println(bufHdr.getText());
-		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER);
+		gr.addFunction(gf, bufHdr, GenerateResult.TY.HEADER, gf.module().getLsp());
 	}
 
 	void generateCodeForConstructor(GeneratedConstructor gf, GenerateResult gr, WorkList aWorkList) {
@@ -73,10 +73,10 @@ public class Generate_Code_For_Method {
 		tosHdr.close();
 		Buffer buf = tos.getBuffer();
 //		System.out.println(buf.getText());
-		gr.addConstructor(gf, buf, GenerateResult.TY.IMPL);
+		gr.addConstructor(gf, buf, GenerateResult.TY.IMPL, gf.module().getLsp());
 		Buffer bufHdr = tosHdr.getBuffer();
 //		System.out.println(bufHdr.getText());
-		gr.addConstructor(gf, bufHdr, GenerateResult.TY.HEADER);
+		gr.addConstructor(gf, bufHdr, GenerateResult.TY.HEADER, gf.module().getLsp());
 	}
 
 	boolean is_constructor = false, is_unit_type = false;
