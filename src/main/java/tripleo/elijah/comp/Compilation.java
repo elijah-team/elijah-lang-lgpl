@@ -54,6 +54,8 @@ public class Compilation {
 	private int _packageCode = 1;
 	public final List<CompilerInstructions> cis = new ArrayList<CompilerInstructions>();
 
+	CompilerInstructions rootCI;
+
 	//
 	//
 	//
@@ -134,7 +136,8 @@ public class Compilation {
 					}
 				}
 
-				System.err.println("130 GEN_LANG: "+cis.get(0).genLang());
+				rootCI = cis.get(0);
+				System.err.println("130 GEN_LANG: "+ rootCI.genLang());
 				findStdLib("c"); // TODO find a better place for this
 
 				for (final CompilerInstructions ci : cis) {
