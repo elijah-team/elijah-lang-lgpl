@@ -21,6 +21,7 @@ public class GenerateResultItem {
 	public final @NotNull Buffer buffer;
 	public final @NotNull GeneratedNode node;
 	public final @NotNull LibraryStatementPart lsp;
+	private final Dependency dependency;
 	public final int counter;
 	public String output;
 
@@ -28,12 +29,18 @@ public class GenerateResultItem {
 							  final @NotNull Buffer aBuffer,
 							  final @NotNull GeneratedNode aNode,
 							  final @NotNull LibraryStatementPart aLsp,
+							  final @NotNull Dependency aDependency,
 							  final int aCounter) {
 		ty = aTy;
 		buffer = aBuffer;
 		node = aNode;
 		lsp = aLsp;
+		dependency = aDependency;
 		counter = aCounter;
+	}
+
+	public Dependency getDependency() {
+		return dependency;
 	}
 }
 
