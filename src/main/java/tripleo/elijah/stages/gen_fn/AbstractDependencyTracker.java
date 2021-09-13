@@ -10,6 +10,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
+import tripleo.elijah.stages.gen_generic.Dependency;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,10 @@ public abstract class AbstractDependencyTracker implements DependencyTracker {
 
 	public void addDependentFunction(@NotNull FunctionInvocation aFunction) {
 		dependentFunctions.add(aFunction);
+	}
+
+	public void noteDependencies(final Dependency d) {
+		d.noteDependencies(this, dependentFunctions, dependentTypes);
 	}
 }
 
