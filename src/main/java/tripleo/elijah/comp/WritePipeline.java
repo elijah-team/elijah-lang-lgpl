@@ -41,6 +41,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static tripleo.elijah.util.Helpers.List_of;
@@ -288,15 +290,16 @@ public class WritePipeline implements PipelineMember {
 		}
 	}
 
-//	final Pattern pullPat = Pattern.compile("/[^/]+/(.*)");
+	final Pattern pullPat = Pattern.compile("/[^/]+/(.+)");
 	private String pullFileName(String aFilename) {
-		return aFilename.substring(aFilename.lastIndexOf('/')+1);
-//		Matcher x = pullPat.matcher(aFilename);
-//		try {
-//			return x.group(1);
-//		} catch (IllegalStateException aE) {
-//			return aFilename;
-//		}
+		//return aFilename.substring(aFilename.lastIndexOf('/')+1);
+		Matcher x = pullPat.matcher(aFilename);
+		try {
+			if (x.matches())
+				return x.group(1);
+		} catch (IllegalStateException aE) {
+		}
+		return null;
 	}
 }
 
