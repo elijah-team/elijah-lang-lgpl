@@ -36,8 +36,13 @@ public class ElSystem {
 			String filename = getFilenameForNode(ab.node, ab.ty, outputStrategyC);
 			assert filename != null;
 			ab.output = filename;
+			final Dependency dependency1 = ab.getDependency();
 			if (ab.ty == GenerateResult.TY.HEADER)
-				ab.getDependency().setRef(new CDependencyRef(filename));
+				dependency1.setRef(new CDependencyRef(filename));
+			for (Dependency dependency : dependency1.deps) {
+				String filename1 = getFilenameForNode((GeneratedNode) dependency.referent, GenerateResult.TY.HEADER, outputStrategyC);
+				dependency.setRef(new CDependencyRef(filename1));
+			}
 			gr.completeItem(ab);
 		}
 
