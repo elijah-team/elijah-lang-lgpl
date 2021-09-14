@@ -155,6 +155,8 @@ public class Compilation {
 					pipelines.add(gpl);
 					final WritePipeline wpl = new WritePipeline(this, pipelineLogic.gr);
 					pipelines.add(wpl);
+					final WriteMesonPipeline wmpl = new WriteMesonPipeline(this, pipelineLogic.gr, wpl);
+					pipelines.add(wmpl);
 
 					pipelines.run();
 				}
