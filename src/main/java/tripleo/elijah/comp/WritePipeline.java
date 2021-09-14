@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.stages.gen_c.CDependencyRef;
+import tripleo.elijah.stages.gen_c.OutputFileC;
 import tripleo.elijah.stages.gen_generic.Dependency;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
@@ -38,17 +39,10 @@ import java.io.PrintStream;
 import java.io.Writer;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import static tripleo.elijah.util.Helpers.List_of;
-import static tripleo.elijah.util.Helpers.String_join;
 
 /**
  * Created 8/21/21 10:19 PM
@@ -89,9 +83,12 @@ public class WritePipeline implements PipelineMember {
 
 			}
 
+			final List<GenerateResultItem> abs = new ArrayList<>();
+
 			@Override
 			public void onNext(@NonNull GenerateResultItem ab) {
-				// OutputFileCommand (somewhere...)
+				abs.add(ab);
+
 				final Dependency dependency = ab.getDependency();
 				if (dependency.getRef() == null) {
 					gris.put(dependency, ab);
@@ -116,7 +113,8 @@ public class WritePipeline implements PipelineMember {
 			@Override
 			public void onComplete() {
 				try {
-					write_files_helper(mmb);
+//					write_files_helper(mmb);
+					write_files_helper2(abs);
 				} catch (IOException aE) {
 					c.getErrSink().exception(aE);
 				}
@@ -169,6 +167,25 @@ public class WritePipeline implements PipelineMember {
 			for (Buffer buffer : entry.getValue()) {
 				x.accept(buffer.getText());
 			}
+			((FileCharSink)x).close();
+		}
+	}
+
+	private void write_files_helper2(List<GenerateResultItem> abs) throws IOException {
+		String prefix = file_prefix.toString();
+
+		for (Map.Entry<String, OutputFileC> entry : gr.outputFiles.entrySet()) {
+			final String key = entry.getKey();
+			assert key != null;
+			Path path = FileSystems.getDefault().getPath(prefix, key);
+
+			path.getParent().toFile().mkdirs();
+
+			// TODO functionality
+			System.out.println("201a Writing path: "+path);
+			CharSink x = c.getIO().openWrite(path);
+			x.accept(entry.getValue().getOutput());
+
 			((FileCharSink)x).close();
 		}
 	}

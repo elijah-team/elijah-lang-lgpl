@@ -9,12 +9,14 @@
 package tripleo.elijah.stages.generate;
 
 import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.stages.gen_c.OutputFileC;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.gen_c.CDependencyRef;
+import tripleo.elijah.stages.gen_generic.Dependency;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 
@@ -53,6 +55,30 @@ public class ElSystem {
 				System.out.println("** "+ab.node+" "+ ab.output/*((CDependencyRef)ab.getDependency().getRef()).getHeaderFile()*/);
 			}
 		}
+
+		Map<String, OutputFileC> outputFiles = new HashMap<>();
+
+		for (GenerateResultItem ab : gr.results()) {
+			OutputFileC outputFileC = new OutputFileC(ab.output);
+			outputFiles.put(ab.output, outputFileC);
+		}
+
+		for (GenerateResultItem ab : gr.results()) {
+			final OutputFileC outputFileC = outputFiles.get(ab.output);
+			outputFileC.putDependencies(ab.dependencies());
+		}
+
+		for (GenerateResultItem ab : gr.results()) {
+			final OutputFileC outputFileC = outputFiles.get(ab.output);
+			outputFileC.putBuffer(ab.buffer);
+		}
+
+		for (GenerateResultItem ab : gr.results()) {
+			final OutputFileC outputFileC = outputFiles.get(ab.output);
+			ab.outputFile = outputFileC;
+		}
+
+		gr.outputFiles = outputFiles;
 
 		gr.signalDone();
 	}
