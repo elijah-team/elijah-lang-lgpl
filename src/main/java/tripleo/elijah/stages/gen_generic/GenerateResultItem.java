@@ -24,6 +24,7 @@ public class GenerateResultItem {
 	private final Dependency dependency;
 	public final int counter;
 	public String output;
+	public IOutputFile outputFile;
 
 	public GenerateResultItem(final @NotNull GenerateResult.TY aTy,
 							  final @NotNull Buffer aBuffer,

@@ -13,6 +13,7 @@ import io.reactivex.rxjava3.subjects.ReplaySubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.ci.LibraryStatementPart;
+import tripleo.elijah.stages.gen_c.OutputFileC;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
@@ -22,11 +23,14 @@ import tripleo.util.buffer.Buffer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created 4/27/21 1:11 AM
  */
 public class GenerateResult {
+	public Map<String, OutputFileC> outputFiles;
+
 	private int bufferCounter = 0;
 
 	final List<GenerateResultItem> res = new ArrayList<GenerateResultItem>();
