@@ -13,6 +13,9 @@ import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.util.buffer.Buffer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created 4/27/21 1:12 AM
  */
@@ -42,6 +45,20 @@ public class GenerateResultItem {
 
 	public Dependency getDependency() {
 		return dependency;
+	}
+
+	public List<DependencyRef> dependencies() {
+//		List<DependencyRef> x = Lists.transform(new ArrayList<>(dependency.deps), new Function<Dependency, DependencyRef>() {
+//			@Override
+//			public DependencyRef apply(@Nullable Dependency input) {
+//				assert input != null;
+//				return input.dref;
+//			}
+//		});
+		List<DependencyRef> x = dependency.deps.stream()
+				.map(dep -> dep.dref)
+				.collect(Collectors.toList());
+		return x;
 	}
 }
 
