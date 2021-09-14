@@ -21,10 +21,10 @@ import java.util.Set;
  * Created 9/13/21 4:00 AM
  */
 public class Dependency {
-	private final IDependencyReferent referent;
-	private final Set<Dependency> deps = new HashSet<>();
+	public final IDependencyReferent referent;
+	public final Set<Dependency> deps = new HashSet<>();
 
-	private DependencyRef dref;
+	DependencyRef dref;
 
 	public Dependency(IDependencyReferent aReferent) {
 		referent = aReferent;
