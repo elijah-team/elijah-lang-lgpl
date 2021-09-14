@@ -57,7 +57,7 @@ public class WritePipeline implements PipelineMember {
 	private final File file_prefix;
 
 	private final Multimap<String, Buffer> mmb;
-	private final Multimap<CompilerInstructions, String> lsp_outputs;
+	final Multimap<CompilerInstructions, String> lsp_outputs;
 
 	public WritePipeline(Compilation aCompilation, GenerateResult aGr) {
 		c = aCompilation;
