@@ -134,8 +134,6 @@ public class WritePipeline implements PipelineMember {
 
 		// TODO flag?
 		write_buffers();
-
-		write_makefiles();
 	}
 
 	public void write_files() throws IOException {
