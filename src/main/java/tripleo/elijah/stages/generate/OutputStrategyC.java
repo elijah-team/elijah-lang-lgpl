@@ -20,6 +20,7 @@ import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
@@ -113,6 +114,16 @@ public class OutputStrategyC {
 	public String nameForFunction(GeneratedFunction generatedFunction, GenerateResult.TY aTy) {
 		GeneratedNode c = generatedFunction.getGenClass();
 		if (c == null) c = generatedFunction.getParent(); // TODO fixme
+		if (c instanceof GeneratedClass)
+			return nameForClass((GeneratedClass) c, aTy);
+		else if (c instanceof GeneratedNamespace)
+			return nameForNamespace((GeneratedNamespace) c, aTy);
+		return null;
+	}
+
+	public String nameForConstructor(GeneratedConstructor generatedConstructor, GenerateResult.TY aTy) {
+		GeneratedNode c = generatedConstructor.getGenClass();
+		if (c == null) c = generatedConstructor.getParent(); // TODO fixme
 		if (c instanceof GeneratedClass)
 			return nameForClass((GeneratedClass) c, aTy);
 		else if (c instanceof GeneratedNamespace)
