@@ -17,7 +17,8 @@ public enum ElObjectType {
 	NAMESPACE,
 	FUNCTION,
 	VAR_SEQ,
-	VAR
+	VAR,
+	FORMAL_ARG_LIST_ITEM
 }
 
 //

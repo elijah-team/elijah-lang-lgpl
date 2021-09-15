@@ -26,6 +26,8 @@ public class DecideElObjectType {
 			return ElObjectType.VAR;
 		else if (input instanceof FunctionDef)
 			return ElObjectType.FUNCTION;
+		else if (input instanceof FormalArgListItem)
+			return ElObjectType.FORMAL_ARG_LIST_ITEM;
 		return ElObjectType.UNKNOWN;
 	}
 
