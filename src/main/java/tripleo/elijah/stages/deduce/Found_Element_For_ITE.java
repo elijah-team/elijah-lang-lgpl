@@ -80,7 +80,7 @@ class Found_Element_For_ITE {
 				break;
 			case NORMAL:
 				try {
-					attached = new OS_Type(dc.resolve_type(new OS_Type(ps.getTypeName()), ctx).getClassOf());
+					attached = new OS_Type(dc.resolve_type(new OS_Type(ps.getTypeName()), ctx).resolved.getClassOf());
 				} catch (ResolveError resolveError) {
 					LOG.err("378 resolveError");
 					resolveError.printStackTrace();
