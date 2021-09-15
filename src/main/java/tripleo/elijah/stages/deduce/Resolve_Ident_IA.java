@@ -115,7 +115,7 @@ class Resolve_Ident_IA {
 				@NotNull IdentTableEntry y = ((IdentIA) x).getEntry();
 				y.addStatusListener(new BaseTableEntry.StatusListener() {
 					@Override
-					public void onChange(@NotNull IElementHolder eh, BaseTableEntry.Status newStatus) {
+					public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 						if (newStatus == BaseTableEntry.Status.KNOWN) {
 //								assert el2 != eh.getElement();
 							y.resolveExpectation.satisfy(normal_path);

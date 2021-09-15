@@ -730,7 +730,7 @@ public class DeduceTypes2 {
 					@NotNull IdentTableEntry idte = identIA.getEntry();
 					idte.addStatusListener(new BaseTableEntry.StatusListener() {
 						@Override
-						public void onChange(@NotNull IElementHolder eh, BaseTableEntry.Status newStatus) {
+						public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 							if (newStatus != BaseTableEntry.Status.KNOWN)
 								return;
 
@@ -795,7 +795,7 @@ public class DeduceTypes2 {
 					@NotNull VariableTableEntry vte = integerIA.getEntry();
 					vte.addStatusListener(new BaseTableEntry.StatusListener() {
 						@Override
-						public void onChange(@NotNull IElementHolder eh, BaseTableEntry.Status newStatus) {
+						public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 							if (newStatus != BaseTableEntry.Status.KNOWN)
 								return;
 
@@ -2905,7 +2905,7 @@ public class DeduceTypes2 {
 		}
 
 		@Override
-		public void onChange(@NotNull IElementHolder eh, BaseTableEntry.Status newStatus) {
+		public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
 			if (newStatus == BaseTableEntry.Status.KNOWN) {
 				if (bte instanceof VariableTableEntry) {
 					final @NotNull VariableTableEntry vte = (VariableTableEntry) bte;
