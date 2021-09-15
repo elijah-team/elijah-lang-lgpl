@@ -1825,7 +1825,7 @@ public class DeduceTypes2 {
 		return resolve_type(module, type, ctx);
 	}
 
-	/*static*/ @NotNull GenType resolve_type(final @NotNull OS_Module module, final @NotNull OS_Type type, final Context ctx) throws ResolveError {
+	/*static*/ @NotNull GenType resolve_type(final OS_Module module, final @NotNull OS_Type type, final Context ctx) throws ResolveError {
 		@NotNull GenType R = new GenType();
 		R.typeName = type;
 
