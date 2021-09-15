@@ -10,8 +10,8 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.jdeferred2.DoneCallback;
 import org.jdeferred2.FailCallback;
-import org.jdeferred2.impl.DeferredObject;
 import tripleo.elijah.diagnostic.Diagnostic;
+import tripleo.elijah.lang.AliasStatement;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.deduce.ResolveUnknown;
 
@@ -26,7 +26,7 @@ public abstract class BaseTableEntry {
 
 	protected OS_Element resolved_element;
 
-	private DeferredObject<OS_Element, Diagnostic, Void> elementPromise = new DeferredObject<OS_Element, Diagnostic, Void>();
+	private DeferredObject2<OS_Element, Diagnostic, Void> elementPromise = new DeferredObject2<OS_Element, Diagnostic, Void>();
 
 	public void elementPromise(DoneCallback<OS_Element> dc, FailCallback<Diagnostic> fc) {
 		if (dc != null)
@@ -41,8 +41,12 @@ public abstract class BaseTableEntry {
 
 	public void setResolvedElement(OS_Element aResolved_element) {
 		if (elementPromise.isResolved()) {
-			assert resolved_element == aResolved_element;
-			return;
+			if (resolved_element instanceof AliasStatement) {
+				elementPromise.reset();
+			} else {
+				assert resolved_element == aResolved_element;
+				return;
+			}
 		}
 		resolved_element = aResolved_element;
 		elementPromise.resolve(resolved_element);
@@ -66,7 +70,8 @@ public abstract class BaseTableEntry {
 			statusListener.onChange(eh, newStatus);
 		}
 		if (newStatus == Status.UNKNOWN)
-			elementPromise.reject(new ResolveUnknown());
+			if (!elementPromise.isRejected())
+				elementPromise.reject(new ResolveUnknown());
 	}
 
 	public void addStatusListener(StatusListener sl) {
