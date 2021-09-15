@@ -256,16 +256,18 @@ class Resolve_Ident_IA2 {
 			final OS_Type attached = idte2.type.getAttached();
 			if (attached.getType() == OS_Type.Type.USER_CLASS) {
 				if (idte2.type.genType.resolved == null) {
-					OS_Type rtype = deduceTypes2.resolve_type(attached, ctx);
-					switch (rtype.getType()) {
-					case USER_CLASS:
-						ctx = rtype.getClassOf().getContext();
-						break;
-					case FUNCTION:
-						ctx = ((OS_FuncType) rtype).getElement().getContext();
-						break;
+					@NotNull GenType rtype = deduceTypes2.resolve_type(attached, ctx);
+					if (rtype.resolved != null) {
+						switch (rtype.resolved.getType()) {
+						case USER_CLASS:
+							ctx = rtype.resolved.getClassOf().getContext();
+							break;
+						case FUNCTION:
+							ctx = ((OS_FuncType) rtype.resolved).getElement().getContext();
+							break;
+						}
+						idte2.type.setAttached(rtype); // TODO may be losing alias information here
 					}
-					idte2.type.setAttached(rtype); // TODO may be losing alias information here
 				}
 			}
 		} catch (ResolveError resolveError) {
@@ -284,11 +286,12 @@ class Resolve_Ident_IA2 {
 			final boolean has_initial_value = vs.initialValue() != IExpression.UNASSIGNED;
 			if (!vs.typeName().isNull()) {
 				TypeTableEntry tte;
-				OS_Type attached;
+				GenType attached;
 				if (has_initial_value) {
 					attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ctx);
 				} else { // if (vs.typeName() != null) {
-					attached = new OS_Type(vs.typeName());
+					attached = new GenType();
+					attached.set(new OS_Type(vs.typeName()));
 				}
 
 				IExpression initialValue;
@@ -300,11 +303,13 @@ class Resolve_Ident_IA2 {
 					initialValue = null; // README presumably there is none, ie when generated
 				}
 
-				tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, initialValue);
+				final OS_Type resolvedOrTypename = attached.resolved != null ? attached.resolved : attached.typeName;
+				tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, resolvedOrTypename, initialValue);
 				idte.type = tte;
 			} else if (has_initial_value) {
-				OS_Type attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ctx);
-				TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, vs.initialValue());
+				GenType attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ctx);
+				final OS_Type resolvedOrTypename = attached.resolved != null ? attached.resolved : attached.typeName;
+				TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, resolvedOrTypename, vs.initialValue());
 				idte.type = tte;
 			} else {
 				LOG.err("Empty Variable Expression");
@@ -359,8 +364,8 @@ class Resolve_Ident_IA2 {
 					break;
 				case USER:
 					try {
-						@NotNull OS_Type ty = deduceTypes2.resolve_type(attached, ctx);
-						ectx = ty.getClassOf().getContext();
+						@NotNull GenType ty = deduceTypes2.resolve_type(attached, ctx);
+						ectx = ty.resolved.getClassOf().getContext();
 					} catch (ResolveError resolveError) {
 						LOG.err("1300 Can't resolve " + attached);
 						resolveError.printStackTrace();
