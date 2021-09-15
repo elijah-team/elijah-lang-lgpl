@@ -77,7 +77,7 @@ public class TypeTableEntry {
 				genType.typeName = aAttached;
 			break;
 		case FUNCTION:
-			assert genType.resolved == null;
+			assert genType.resolved == null || genType.resolved == aAttached;
 			genType.resolved = aAttached;
 			break;
 		default:
