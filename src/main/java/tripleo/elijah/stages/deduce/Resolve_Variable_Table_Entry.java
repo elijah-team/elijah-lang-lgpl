@@ -280,7 +280,7 @@ class Resolve_Variable_Table_Entry {
 					if (tte.genType.typeName == null)
 						tte.genType.typeName = attached;
 					try {
-						tte.genType.resolved = deduceTypes2.resolve_type(attached, ctx);
+						tte.genType.copy(deduceTypes2.resolve_type(attached, ctx));
 						tte.setAttached(tte.genType.resolved); // TODO probably not necessary, but let's leave it for now
 					} catch (ResolveError aResolveError) {
 						errSink.reportDiagnostic(aResolveError);
