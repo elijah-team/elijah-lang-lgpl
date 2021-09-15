@@ -172,64 +172,7 @@ class Resolve_Ident_IA2 {
 				VariableStatement vs = (VariableStatement) el;
 				ia2_IdentIA_VariableStatement(idte2, vs, ectx);
 			} else if (el instanceof FunctionDef) {
-				OS_Type attached = new OS_UnknownType(el);
-				TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, idte2);
-				idte2.type = tte;
-
-				// Set type to something other than Unknown when found
-				@Nullable ProcTableEntry pte = idte2.getCallablePTE();
-				if (pte == null) {
-					int y=2;
-				} else {
-					assert pte != null;
-					FunctionInvocation fi = pte.getFunctionInvocation();
-					if (fi == null) {
-						InstructionArgument bl = idte2.backlink;
-						IInvocation invocation = null;
-						if (bl instanceof IntegerIA) {
-							final IntegerIA integerIA = (IntegerIA) bl;
-							@NotNull VariableTableEntry vte = integerIA.getEntry();
-							if (vte.constructable_pte != null) {
-								ProcTableEntry cpte = vte.constructable_pte;
-								invocation = cpte.getFunctionInvocation().getClassInvocation();
-							}
-						} else if (bl instanceof IdentIA) {
-							final IdentIA identIA = (IdentIA) bl;
-							@NotNull IdentTableEntry ite = identIA.getEntry();
-							if (ite.type.genType.ci != null)
-								invocation = ite.type.genType.ci;
-							else if (ite.type.getAttached() != null) {
-								@NotNull OS_Type attached1 = ite.type.getAttached();
-								assert attached1.getType() == OS_Type.Type.USER_CLASS;
-								invocation = phase.registerClassInvocation(attached1.getClassOf(), null); // TODO will fail one day
-							}
-						} else if (bl instanceof ProcIA) {
-							final ProcIA procIA = (ProcIA) bl;
-							FunctionInvocation bl_fi = procIA.getEntry().getFunctionInvocation();
-							if (bl_fi.getClassInvocation() != null) {
-								invocation = bl_fi.getClassInvocation();
-							} else if (bl_fi.getNamespaceInvocation() != null) {
-								invocation = bl_fi.getNamespaceInvocation();
-							}
-						}
-
-						fi = new FunctionInvocation((BaseFunctionDef) el, pte, invocation, phase.generatePhase);
-						pte.setFunctionInvocation(fi);
-					}
-
-					pte.getFunctionInvocation().generatePromise().then(new DoneCallback<BaseGeneratedFunction>() {
-						@Override
-						public void onDone(BaseGeneratedFunction result) {
-							result.typePromise().then(new DoneCallback<GenType>() {
-								@Override
-								public void onDone(GenType result) {
-									// NOTE there is no Promise-type notification for when type changes
-									idte2.type.setAttached(result);
-								}
-							});
-						}
-					});
-				}
+				ia2_IdentIA_FunctionDef(idte2);
 			}
 		}
 		if (idte2.type != null) {
@@ -241,6 +184,67 @@ class Resolve_Ident_IA2 {
 		}
 
 		return RIA_STATE.NEXT;
+	}
+
+	private void ia2_IdentIA_FunctionDef(IdentTableEntry idte2) {
+		OS_Type attached = new OS_UnknownType(el);
+		TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, idte2);
+		idte2.type = tte;
+
+		// Set type to something other than Unknown when found
+		@Nullable ProcTableEntry pte = idte2.getCallablePTE();
+		if (pte == null) {
+			int y=2;
+		} else {
+			assert pte != null;
+			FunctionInvocation fi = pte.getFunctionInvocation();
+			if (fi == null) {
+				InstructionArgument bl = idte2.backlink;
+				IInvocation invocation = null;
+				if (bl instanceof IntegerIA) {
+					final IntegerIA integerIA = (IntegerIA) bl;
+					@NotNull VariableTableEntry vte = integerIA.getEntry();
+					if (vte.constructable_pte != null) {
+						ProcTableEntry cpte = vte.constructable_pte;
+						invocation = cpte.getFunctionInvocation().getClassInvocation();
+					}
+				} else if (bl instanceof IdentIA) {
+					final IdentIA identIA = (IdentIA) bl;
+					@NotNull IdentTableEntry ite = identIA.getEntry();
+					if (ite.type.genType.ci != null)
+						invocation = ite.type.genType.ci;
+					else if (ite.type.getAttached() != null) {
+						@NotNull OS_Type attached1 = ite.type.getAttached();
+						assert attached1.getType() == OS_Type.Type.USER_CLASS;
+						invocation = phase.registerClassInvocation(attached1.getClassOf(), null); // TODO will fail one day
+					}
+				} else if (bl instanceof ProcIA) {
+					final ProcIA procIA = (ProcIA) bl;
+					FunctionInvocation bl_fi = procIA.getEntry().getFunctionInvocation();
+					if (bl_fi.getClassInvocation() != null) {
+						invocation = bl_fi.getClassInvocation();
+					} else if (bl_fi.getNamespaceInvocation() != null) {
+						invocation = bl_fi.getNamespaceInvocation();
+					}
+				}
+
+				fi = new FunctionInvocation((BaseFunctionDef) el, pte, invocation, phase.generatePhase);
+				pte.setFunctionInvocation(fi);
+			}
+
+			pte.getFunctionInvocation().generatePromise().then(new DoneCallback<BaseGeneratedFunction>() {
+				@Override
+				public void onDone(BaseGeneratedFunction result) {
+					result.typePromise().then(new DoneCallback<GenType>() {
+						@Override
+						public void onDone(GenType result) {
+							// NOTE there is no Promise-type notification for when type changes
+							idte2.type.setAttached(result);
+						}
+					});
+				}
+			});
+		}
 	}
 
 	/* @requires idte2.type.getAttached() != null; */
