@@ -180,7 +180,7 @@ public class DeduceLookupUtils {
 	 * @return the deduced type or {@code null}. Do not {@code pce.setType}
 	 */
 	private static @Nullable GenType deduceProcedureCall(final @NotNull ProcedureCallExpression pce, final @NotNull Context ctx, @NotNull DeduceTypes2 deduceTypes2) {
-		@Nullable GenType result = null;
+		@Nullable GenType result = new GenType();
 		boolean finished = false;
 		System.err.println("979 During deduceProcedureCall " + pce);
 		@Nullable OS_Element best = null;
