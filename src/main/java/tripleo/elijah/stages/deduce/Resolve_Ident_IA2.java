@@ -31,11 +31,11 @@ import java.util.List;
  * Created 7/21/21 7:33 PM
  */
 class Resolve_Ident_IA2 {
-	private DeduceTypes2 deduceTypes2;
-	private ErrSink errSink;
-	private DeducePhase phase;
-	private BaseGeneratedFunction generatedFunction;
-	private FoundElement foundElement;
+	private final DeduceTypes2 deduceTypes2;
+	private final ErrSink errSink;
+	private final DeducePhase phase;
+	private final BaseGeneratedFunction generatedFunction;
+	private final FoundElement foundElement;
 	
 	private final ElLog LOG;
 	
