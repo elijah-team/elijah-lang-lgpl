@@ -9,6 +9,7 @@
 package tripleo.elijah.stages.deduce;
 
 import org.jdeferred2.impl.DeferredObject;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 
@@ -24,7 +25,7 @@ public class NamespaceInvocation implements IInvocation {
 		namespaceStatement = aNamespaceStatement;
 	}
 
-	public DeferredObject<GeneratedNamespace, Void, Void> resolveDeferred() {
+	public @NotNull DeferredObject<GeneratedNamespace, Void, Void> resolveDeferred() {
 		return resolveDeferred;
 	}
 
@@ -33,7 +34,7 @@ public class NamespaceInvocation implements IInvocation {
 	}
 
 	@Override
-	public void setForFunctionInvocation(FunctionInvocation aFunctionInvocation) {
+	public void setForFunctionInvocation(@NotNull FunctionInvocation aFunctionInvocation) {
 		aFunctionInvocation.setNamespaceInvocation(this);
 	}
 }

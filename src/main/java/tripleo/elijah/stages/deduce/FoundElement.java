@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.OS_Element;
 
 /**
@@ -17,7 +18,7 @@ public abstract class FoundElement {
 	private boolean _didntFind;
 	private boolean _called;
 
-	public FoundElement(DeducePhase aPhase) {
+	public FoundElement(@NotNull DeducePhase aPhase) {
 		aPhase.registerFound(this);
 	}
 

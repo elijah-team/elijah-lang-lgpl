@@ -23,7 +23,7 @@ import java.util.Stack;
  * Created 3/7/21 1:13 AM
  */
 public class DeduceLookupUtils {
-	public static LookupResultList lookupExpression(final IExpression left, final Context ctx, DeduceTypes2 deduceTypes2) throws ResolveError {
+	public static LookupResultList lookupExpression(final @NotNull IExpression left, final @NotNull Context ctx, @NotNull DeduceTypes2 deduceTypes2) throws ResolveError {
 		switch (left.getKind()) {
 		case QIDENT:
 			final IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
@@ -32,7 +32,7 @@ public class DeduceLookupUtils {
 			return lookup_dot_expression(ctx, (DotExpression) left, deduceTypes2);
 		case IDENT:
 			{
-				final IdentExpression ident = (IdentExpression) left;
+				final @NotNull IdentExpression ident = (IdentExpression) left;
 				final LookupResultList lrl = ctx.lookup(ident.getText());
 				if (lrl.results().size() == 0) {
 					throw new ResolveError(ident,  lrl);
@@ -46,7 +46,7 @@ public class DeduceLookupUtils {
 	}
 
 	@Nullable
-	public static OS_Element _resolveAlias(final AliasStatement aliasStatement, DeduceTypes2 deduceTypes2) {
+	public static OS_Element _resolveAlias(final @NotNull AliasStatement aliasStatement, @NotNull DeduceTypes2 deduceTypes2) {
 		LookupResultList lrl2;
 		if (aliasStatement.getExpression() instanceof Qualident) {
 			final IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
@@ -77,7 +77,7 @@ public class DeduceLookupUtils {
 	}
 
 	@Nullable
-	public static OS_Element _resolveAlias2(final AliasStatement aliasStatement, DeduceTypes2 deduceTypes2) throws ResolveError {
+	public static OS_Element _resolveAlias2(final @NotNull AliasStatement aliasStatement, @NotNull DeduceTypes2 deduceTypes2) throws ResolveError {
 		LookupResultList lrl2;
 		if (aliasStatement.getExpression() instanceof Qualident) {
 			final IExpression de = Helpers.qualidentToDotExpression2(((Qualident) aliasStatement.getExpression()));
@@ -97,9 +97,9 @@ public class DeduceLookupUtils {
 		return lrl2.chooseBest(null);
 	}
 
-	private static LookupResultList lookup_dot_expression(Context ctx, final DotExpression de, DeduceTypes2 deduceTypes2) throws ResolveError {
-		final Stack<IExpression> s = dot_expression_to_stack(de);
-		GenType t = null;
+	private static LookupResultList lookup_dot_expression(Context ctx, final @NotNull DotExpression de, @NotNull DeduceTypes2 deduceTypes2) throws ResolveError {
+		final @NotNull Stack<IExpression> s = dot_expression_to_stack(de);
+		@Nullable GenType t = null;
 		IExpression ss = s.peek();
 		while (/*!*/s.size() > 1/*isEmpty()*/) {
 			ss = s.peek();
@@ -133,8 +133,8 @@ public class DeduceLookupUtils {
 	 * @return a "flat" {@link Stack<IExpression>} of expressions
 	 */
 	@NotNull
-	static Stack<IExpression> dot_expression_to_stack(final DotExpression de) {
-		final Stack<IExpression> right_stack = new Stack<IExpression>();
+	static Stack<IExpression> dot_expression_to_stack(final @NotNull DotExpression de) {
+		final @NotNull Stack<IExpression> right_stack = new Stack<IExpression>();
 		IExpression right = de.getRight();
 		right_stack.push(de.getLeft());
 		while (right instanceof DotExpression) {
@@ -146,19 +146,19 @@ public class DeduceLookupUtils {
 		return right_stack;
 	}
 
-	public static GenType deduceExpression(DeduceTypes2 aDeduceTypes2, @NotNull final IExpression n, final Context context) throws ResolveError {
+	public static @Nullable GenType deduceExpression(@NotNull DeduceTypes2 aDeduceTypes2, @NotNull final IExpression n, final @NotNull Context context) throws ResolveError {
 		switch (n.getKind()) {
 		case IDENT:
 			return deduceIdentExpression(aDeduceTypes2, (IdentExpression) n, context);
 		case NUMERIC:
-			final GenType genType = new GenType();
+			final @NotNull GenType genType = new GenType();
 			genType.resolved = new OS_Type(BuiltInTypes.SystemInteger);
 			return genType;
 		case DOT_EXP:
-			final DotExpression de = (DotExpression) n;
+			final @NotNull DotExpression de = (DotExpression) n;
 			final LookupResultList lrl = lookup_dot_expression(context, de, aDeduceTypes2);
-			final GenType left_type = deduceExpression(aDeduceTypes2, de.getLeft(), context);
-			final GenType right_type = deduceExpression(aDeduceTypes2, de.getRight(), left_type.resolved.getClassOf().getContext());
+			final @Nullable GenType left_type = deduceExpression(aDeduceTypes2, de.getLeft(), context);
+			final @Nullable GenType right_type = deduceExpression(aDeduceTypes2, de.getRight(), left_type.resolved.getClassOf().getContext());
 			NotImplementedException.raise();
 			break;
 		case PROCEDURE_CALL:
@@ -179,11 +179,11 @@ public class DeduceLookupUtils {
 	 * @param deduceTypes2
 	 * @return the deduced type or {@code null}. Do not {@code pce.setType}
 	 */
-	private static @Nullable GenType deduceProcedureCall(final ProcedureCallExpression pce, final Context ctx, DeduceTypes2 deduceTypes2) {
+	private static @Nullable GenType deduceProcedureCall(final @NotNull ProcedureCallExpression pce, final @NotNull Context ctx, @NotNull DeduceTypes2 deduceTypes2) {
 		@Nullable GenType result = null;
 		boolean finished = false;
 		System.err.println("979 During deduceProcedureCall " + pce);
-		OS_Element best = null;
+		@Nullable OS_Element best = null;
 		try {
 			best = lookup(pce.getLeft(), ctx, deduceTypes2);
 		} catch (ResolveError aResolveError) {
@@ -195,14 +195,14 @@ public class DeduceLookupUtils {
 				if (best instanceof ClassStatement) {
 					result.resolved = new OS_Type((ClassStatement) best);
 				} else if (best instanceof FunctionDef) {
-					final FunctionDef fd = (FunctionDef) best;
+					final @Nullable FunctionDef fd = (FunctionDef) best;
 					if (fd.returnType() != null && !fd.returnType().isNull()) {
 						result.resolved = new OS_Type(fd.returnType());
 					} else {
 						result.resolved = new OS_UnknownType(fd);// TODO still must register somewhere
 					}
 				} else if (best instanceof FuncExpr) {
-					final FuncExpr funcExpr = (FuncExpr) best;
+					final @NotNull FuncExpr funcExpr = (FuncExpr) best;
 					if (funcExpr.returnType() != null && !funcExpr.returnType().isNull()) {
 						result.resolved = new OS_Type(funcExpr.returnType());
 					} else {
@@ -217,13 +217,13 @@ public class DeduceLookupUtils {
 		return result;
 	}
 
-	private static GenType deduceIdentExpression(DeduceTypes2 aDeduceTypes2, final IdentExpression ident, final Context ctx) throws ResolveError {
-		GenType result = null;
-		GenType R = new GenType();
+	private static @Nullable GenType deduceIdentExpression(@NotNull DeduceTypes2 aDeduceTypes2, final @NotNull IdentExpression ident, final @NotNull Context ctx) throws ResolveError {
+		@Nullable GenType result = null;
+		@Nullable GenType R = new GenType();
 
 		// is this right?
 		LookupResultList lrl = ctx.lookup(ident.getText());
-		OS_Element best = lrl.chooseBest(null);
+		@Nullable OS_Element best = lrl.chooseBest(null);
 		while (best instanceof AliasStatement) {
 			best = _resolveAlias((AliasStatement) best, aDeduceTypes2);
 		}
@@ -233,10 +233,10 @@ public class DeduceLookupUtils {
 		} else {
 			switch (DecideElObjectType.getElObjectType(best)) {
 			case VAR:
-				final VariableStatement vs = (VariableStatement) best;
+				final @Nullable VariableStatement vs = (VariableStatement) best;
 				if (!vs.typeName().isNull()) {
 					try {
-						OS_Module lets_hope_we_dont_need_this = null;
+						@Nullable OS_Module lets_hope_we_dont_need_this = null;
 						@NotNull GenType ty = aDeduceTypes2.resolve_type(lets_hope_we_dont_need_this, new OS_Type(vs.typeName()), ctx);
 						result = ty;
 					} catch (ResolveError aResolveError) {
@@ -259,15 +259,15 @@ public class DeduceLookupUtils {
 				}
 				break;
 			case FUNCTION:
-				final FunctionDef functionDef = (FunctionDef) best;
+				final @NotNull FunctionDef functionDef = (FunctionDef) best;
 				R.resolved = new OS_FuncType(functionDef);
 				result = R;
 				break;
 			case FORMAL_ARG_LIST_ITEM:
-				final FormalArgListItem fali = (FormalArgListItem) best;
+				final @NotNull FormalArgListItem fali = (FormalArgListItem) best;
 				if (!fali.typeName().isNull()) {
 					try {
-						OS_Module lets_hope_we_dont_need_this = null;
+						@Nullable OS_Module lets_hope_we_dont_need_this = null;
 						@NotNull GenType ty = aDeduceTypes2.resolve_type(lets_hope_we_dont_need_this, new OS_Type(fali.typeName()), ctx);
 						result = ty;
 					} catch (ResolveError aResolveError) {
@@ -293,19 +293,19 @@ public class DeduceLookupUtils {
 		return result;
 	}
 
-	static OS_Element lookup(IExpression expression, Context ctx, DeduceTypes2 deduceTypes2) throws ResolveError {
+	static @Nullable OS_Element lookup(@NotNull IExpression expression, @NotNull Context ctx, @NotNull DeduceTypes2 deduceTypes2) throws ResolveError {
 		switch (expression.getKind()) {
 		case IDENT:
 			LookupResultList lrl = ctx.lookup(((IdentExpression)expression).getText());
-			OS_Element best = lrl.chooseBest(null);
+			@Nullable OS_Element best = lrl.chooseBest(null);
 			return best;
 		case PROCEDURE_CALL:
 			LookupResultList lrl2 = lookupExpression(expression.getLeft(), ctx, deduceTypes2);
-			OS_Element best2 = lrl2.chooseBest(null);
+			@Nullable OS_Element best2 = lrl2.chooseBest(null);
 			return best2;
 		case DOT_EXP:
 			LookupResultList lrl3 = lookupExpression(expression, ctx, deduceTypes2);
-			OS_Element best3 = lrl3.chooseBest(null);
+			@Nullable OS_Element best3 = lrl3.chooseBest(null);
 			return best3;
 //		default:
 //			System.err.println("1242 "+expression);

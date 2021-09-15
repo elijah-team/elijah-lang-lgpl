@@ -28,9 +28,9 @@ import java.util.List;
  * Created 12/26/20 5:08 AM
  */
 public class ResolveError extends Exception implements Diagnostic {
-	private final TypeName typeName;
+	private final @org.jetbrains.annotations.Nullable TypeName typeName;
 	private final LookupResultList lrl;
-	private final IdentExpression ident;
+	private final @org.jetbrains.annotations.Nullable IdentExpression ident;
 
 	public ResolveError(TypeName typeName, LookupResultList lrl) {
 		this.typeName = typeName;
@@ -45,12 +45,12 @@ public class ResolveError extends Exception implements Diagnostic {
 	}
 
 	@Override
-	public String code() {
+	public @NotNull String code() {
 		return "S1000";
 	}
 
 	@Override
-	public Severity severity() {
+	public @NotNull Severity severity() {
 		return Severity.ERROR;
 	}
 
@@ -64,7 +64,7 @@ public class ResolveError extends Exception implements Diagnostic {
 
 	@Override
 	public @NotNull List<Locatable> secondary() {
-		Collection<Locatable> x = Collections2.transform(resultsList(), new Function<LookupResult, Locatable>() {
+		@NotNull Collection<Locatable> x = Collections2.transform(resultsList(), new Function<LookupResult, Locatable>() {
 			@Nullable
 			@Override
 			public Locatable apply(@Nullable LookupResult input) {
@@ -78,7 +78,7 @@ public class ResolveError extends Exception implements Diagnostic {
 	}
 
 	@Override
-	public void report(PrintStream stream) {
+	public void report(@NotNull PrintStream stream) {
 		stream.println(String.format("---[%s]---: %s", code(), message()));
 		// linecache.print(primary);
 		for (Locatable sec : secondary()) {
@@ -87,7 +87,7 @@ public class ResolveError extends Exception implements Diagnostic {
 		stream.flush();
 	}
 
-	private String message() {
+	private @NotNull String message() {
 		if (resultsList().size() > 1)
 			return "Can't choose between alternatives";
 		else

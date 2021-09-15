@@ -10,6 +10,7 @@ package tripleo.elijah.stages.deduce.declarations;
 
 import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.diagnostic.Diagnostic;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Type;
@@ -34,7 +35,7 @@ public class DeferredMember {
 		variableStatement = aVariableStatement;
 	}
 
-	public Promise<GenType, Diagnostic, Void> typePromise() {
+	public @NotNull Promise<GenType, Diagnostic, Void> typePromise() {
 		return typePromise;
 	}
 
@@ -51,7 +52,7 @@ public class DeferredMember {
 	}
 
 	// for DeducePhase
-	public DeferredObject<GenType, Diagnostic, Void> typeResolved() {
+	public @NotNull DeferredObject<GenType, Diagnostic, Void> typeResolved() {
 		return typePromise;
 	}
 
@@ -59,12 +60,12 @@ public class DeferredMember {
 		return externalRef.promise();
 	}
 
-	public DeferredObject<GeneratedNode, Void, Void> externalRefDeferred() {
+	public @NotNull DeferredObject<GeneratedNode, Void, Void> externalRefDeferred() {
 		return externalRef;
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "DeferredMember{" +
 				"parent=" + parent +
 				", variableName=" + variableStatement.getName() +

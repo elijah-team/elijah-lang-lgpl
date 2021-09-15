@@ -31,9 +31,9 @@ class Resolve_Variable_Table_Entry {
 	private final Context ctx;
 
 	private final DeduceTypes2 deduceTypes2;
-	private final ElLog LOG;
-	private final WorkManager wm;
-	private final DeducePhase phase;
+	private final @NotNull ElLog LOG;
+	private final @NotNull WorkManager wm;
+	private final @NotNull DeducePhase phase;
 	private final ErrSink errSink;
 
 	public Resolve_Variable_Table_Entry(BaseGeneratedFunction aGeneratedFunction, Context aCtx, DeduceTypes2 aDeduceTypes2) {
@@ -47,7 +47,7 @@ class Resolve_Variable_Table_Entry {
 		phase = deduceTypes2.phase;
 	}
 
-	public void action(final VariableTableEntry vte) {
+	public void action(final @NotNull VariableTableEntry vte) {
 		switch (vte.vtt) {
 		case ARG:
 			action_ARG(vte);
@@ -58,7 +58,7 @@ class Resolve_Variable_Table_Entry {
 		}
 	}
 
-	public void action_VAR(VariableTableEntry vte) {
+	public void action_VAR(@NotNull VariableTableEntry vte) {
 		if (vte.type.getAttached() == null && vte.potentialTypes.size() == 1) {
 			TypeTableEntry pot = new ArrayList<>(vte.potentialTypes()).get(0);
 			if (pot.getAttached() instanceof OS_FuncExprType) {
@@ -73,22 +73,22 @@ class Resolve_Variable_Table_Entry {
 		}
 	}
 
-	public void action_VAR_potsize_1_other(VariableTableEntry vte, TypeTableEntry aPot) {
+	public void action_VAR_potsize_1_other(@NotNull VariableTableEntry vte, @NotNull TypeTableEntry aPot) {
 		try {
 			if (aPot.tableEntry instanceof ProcTableEntry) {
-				final ProcTableEntry pte1 = (ProcTableEntry) aPot.tableEntry;
-				OS_Element e = DeduceLookupUtils.lookup(pte1.expression, ctx, deduceTypes2);
+				final @NotNull ProcTableEntry pte1 = (ProcTableEntry) aPot.tableEntry;
+				@Nullable OS_Element e = DeduceLookupUtils.lookup(pte1.expression, ctx, deduceTypes2);
 				assert e != null;
 				if (e instanceof FunctionDef) {
 //						final FunctionDef fd = (FunctionDef) e;
 					@NotNull IdentTableEntry ite1 = ((IdentIA) pte1.expression_num).getEntry();
 					DeducePath dp = ite1.buildDeducePath(generatedFunction);
-					GenType t = dp.getType(dp.size() - 1);
+					@Nullable GenType t = dp.getType(dp.size() - 1);
 					ite1.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
 					pte1.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
 					pte1.typePromise().then(new DoneCallback<GenType>() {
 						@Override
-						public void onDone(GenType result) {
+						public void onDone(@NotNull GenType result) {
 							if (t == null) {
 								ite1.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved);
 								ite1.setGenType(result);
@@ -121,28 +121,28 @@ class Resolve_Variable_Table_Entry {
 		}
 	}
 
-	public void setup_GenType(OS_Element element, GenType aGt) {
+	public void setup_GenType(OS_Element element, @NotNull GenType aGt) {
 		if (element instanceof NamespaceStatement) {
-			final NamespaceStatement namespaceStatement = (NamespaceStatement) element;
+			final @NotNull NamespaceStatement namespaceStatement = (NamespaceStatement) element;
 			aGt.resolvedn = (NamespaceStatement) element;
 			final NamespaceInvocation nsi = phase.registerNamespaceInvocation(namespaceStatement);
 //			pte.setNamespaceInvocation(nsi);
 			aGt.ci = nsi;
 //			fi = newFunctionInvocation(fd, pte, nsi, phase);
 		} else if (element instanceof ClassStatement) {
-			final ClassStatement classStatement = (ClassStatement) element;
+			final @NotNull ClassStatement classStatement = (ClassStatement) element;
 			aGt.resolved = new OS_Type((ClassStatement) element);
 			// TODO genCI ??
-			ClassInvocation ci = new ClassInvocation(classStatement, null);
+			@Nullable ClassInvocation ci = new ClassInvocation(classStatement, null);
 			ci = phase.registerClassInvocation(ci);
 			aGt.ci = ci;
 //			pte.setClassInvocation(ci);
 //			fi = newFunctionInvocation(fd, pte, ci, phase);
 		} else if (element instanceof FunctionDef) {
 			// TODO this seems to be an elaborate copy of the above with no differentiation for functionDef
-			final FunctionDef functionDef = (FunctionDef) element;
+			final @NotNull FunctionDef functionDef = (FunctionDef) element;
 			OS_Element parent = functionDef.getParent();
-			IInvocation inv;
+			@Nullable IInvocation inv;
 			switch (DecideElObjectType.getElObjectType(parent)) {
 			case CLASS:
 				aGt.resolved = new OS_Type((ClassStatement) parent);
@@ -169,7 +169,7 @@ class Resolve_Variable_Table_Entry {
 			}
 			aGt.ci = inv;
 		} else if (element instanceof AliasStatement) {
-			OS_Element el = element;
+			@Nullable OS_Element el = element;
 			while (el instanceof AliasStatement) {
 				el = DeduceLookupUtils._resolveAlias((AliasStatement) el, deduceTypes2);
 			}
@@ -178,23 +178,23 @@ class Resolve_Variable_Table_Entry {
 			throw new IllegalStateException("Unknown parent");
 	}
 
-	public void action_VAR_potsize_1_and_FuncExprType(VariableTableEntry vte,
-													  OS_FuncExprType funcExprType,
-													  GenType aGenType,
+	public void action_VAR_potsize_1_and_FuncExprType(@NotNull VariableTableEntry vte,
+													  @NotNull OS_FuncExprType funcExprType,
+													  @NotNull GenType aGenType,
 													  IExpression aPotentialExpression) {
 		aGenType.typeName = funcExprType;
 
-		final FuncExpr fe = (FuncExpr) funcExprType.getElement();
+		final @NotNull FuncExpr fe = (FuncExpr) funcExprType.getElement();
 
 		// add namespace
-		OS_Module mod1 = fe.getContext().module();
-		NamespaceStatement mod_ns = lookup_module_namespace(mod1);
+		@NotNull OS_Module mod1 = fe.getContext().module();
+		@Nullable NamespaceStatement mod_ns = lookup_module_namespace(mod1);
 
-		ProcTableEntry callable_pte = null;
+		@Nullable ProcTableEntry callable_pte = null;
 
 		if (mod_ns != null) {
 			// add func_expr to namespace
-			FunctionDef fd1 = new FunctionDef(mod_ns, mod_ns.getContext());
+			@NotNull FunctionDef fd1 = new FunctionDef(mod_ns, mod_ns.getContext());
 			fd1.setFal(fe.fal());
 			fd1.setContext((FunctionContext) fe.getContext());
 			fd1.scope(fe.getScope());
@@ -202,15 +202,15 @@ class Resolve_Variable_Table_Entry {
 //			System.out.println("1630 "+mod_ns.getItems()); // element 0 is ctor$0
 			fd1.setName(IdentExpression.forString(String.format("$%d", mod_ns.getItems().size() + 1)));
 
-			WorkList wl = new WorkList();
+			@NotNull WorkList wl = new WorkList();
 			@NotNull GenerateFunctions gen = phase.generatePhase.getGenerateFunctions(mod1);
-			NamespaceInvocation modi = new NamespaceInvocation(mod_ns);
-			final ProcTableEntry pte = findProcTableEntry(generatedFunction, aPotentialExpression);
+			@NotNull NamespaceInvocation modi = new NamespaceInvocation(mod_ns);
+			final @Nullable ProcTableEntry pte = findProcTableEntry(generatedFunction, aPotentialExpression);
 			assert pte != null;
 			callable_pte = pte;
-			FunctionInvocation fi = new FunctionInvocation(fd1, pte, modi, phase.generatePhase);
+			@NotNull FunctionInvocation fi = new FunctionInvocation(fd1, pte, modi, phase.generatePhase);
 			wl.addJob(new WlGenerateNamespace(gen, modi, phase.generatedClasses)); // TODO hope this works (for more than one)
-			final WlGenerateFunction wlgf = new WlGenerateFunction(gen, fi);
+			final @Nullable WlGenerateFunction wlgf = new WlGenerateFunction(gen, fi);
 			wl.addJob(wlgf);
 			wm.addJobs(wl);
 			wm.drain(); // TODO here?
@@ -218,9 +218,9 @@ class Resolve_Variable_Table_Entry {
 			aGenType.ci = modi;
 			aGenType.node = wlgf.getResult();
 
-			DeduceTypes2.PromiseExpectation<GenType> pe = deduceTypes2.promiseExpectation(/*pot.genType.node*/new DeduceTypes2.ExpectationBase() {
+			DeduceTypes2.@NotNull PromiseExpectation<GenType> pe = deduceTypes2.promiseExpectation(/*pot.genType.node*/new DeduceTypes2.ExpectationBase() {
 				@Override
-				public String expectationString() {
+				public @NotNull String expectationString() {
 					return "FuncType..."; // TODO
 				}
 			}, "FuncType Result");
@@ -239,18 +239,18 @@ class Resolve_Variable_Table_Entry {
 			vte.setCallablePTE(callable_pte);
 	}
 
-	private @Nullable ProcTableEntry findProcTableEntry(BaseGeneratedFunction aGeneratedFunction, IExpression aExpression) {
-		for (ProcTableEntry procTableEntry : aGeneratedFunction.prte_list) {
+	private @Nullable ProcTableEntry findProcTableEntry(@NotNull BaseGeneratedFunction aGeneratedFunction, IExpression aExpression) {
+		for (@NotNull ProcTableEntry procTableEntry : aGeneratedFunction.prte_list) {
 			if (procTableEntry.expression == aExpression)
 				return procTableEntry;
 		}
 		return null;
 	}
 
-	public NamespaceStatement lookup_module_namespace(OS_Module aModule) {
+	public @Nullable NamespaceStatement lookup_module_namespace(@NotNull OS_Module aModule) {
 		try {
-			final IdentExpression module_ident = IdentExpression.forString("__MODULE__");
-			OS_Element e = DeduceLookupUtils.lookup(module_ident, aModule.getContext(), deduceTypes2);
+			final @NotNull IdentExpression module_ident = IdentExpression.forString("__MODULE__");
+			@Nullable OS_Element e = DeduceLookupUtils.lookup(module_ident, aModule.getContext(), deduceTypes2);
 			if (e != null) {
 				if (e instanceof NamespaceStatement) {
 					return (NamespaceStatement) e;
@@ -260,7 +260,7 @@ class Resolve_Variable_Table_Entry {
 				}
 			} else {
 				// not found, so add. this is where AST would come in handy
-				NamespaceStatement ns = new NamespaceStatement(aModule, aModule.getContext());
+				@NotNull NamespaceStatement ns = new NamespaceStatement(aModule, aModule.getContext());
 				ns.setName(module_ident);
 				return ns;
 			}
@@ -271,7 +271,7 @@ class Resolve_Variable_Table_Entry {
 		}
 	}
 
-	public void action_ARG(VariableTableEntry vte) {
+	public void action_ARG(@NotNull VariableTableEntry vte) {
 		TypeTableEntry tte = vte.type;
 		final OS_Type attached = tte.getAttached();
 		if (attached != null) {

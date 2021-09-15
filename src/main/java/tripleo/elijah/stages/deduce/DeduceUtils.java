@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.util.NotImplementedException;
 
@@ -50,15 +51,15 @@ public class DeduceUtils {
 		}
 
 		@Override
-		public boolean test(final Object o) {
+		public boolean test(final @NotNull Object o) {
 			final ExpressionList args = pce.getArgs();
 			// See if candidate matches args
 			if (((LookupResult)o).getElement() instanceof ClassStatement) {
 				//o filter isCtor each (each args isCompat)
-				final ClassStatement klass = (ClassStatement) ((LookupResult)o).getElement();
+				final @NotNull ClassStatement klass = (ClassStatement) ((LookupResult)o).getElement();
 
-				final Iterable<ClassItem> ctors = Iterables.filter(klass.getItems(), new IsConstructor());
-				final Iterable<ClassItem> ctors2 = Iterables.filter(ctors, new MatchFunctionArgs(pce));
+				final @NotNull Iterable<ClassItem> ctors = Iterables.filter(klass.getItems(), new IsConstructor());
+				final @NotNull Iterable<ClassItem> ctors2 = Iterables.filter(ctors, new MatchFunctionArgs(pce));
 //				return ctors.iterator().hasNext();
 				return Lists.newArrayList(ctors2).size() > 0;
 
@@ -86,7 +87,7 @@ public class DeduceUtils {
 			// See if candidate matches args
 			/*if (((LookupResult)o).getElement() instanceof FunctionDef)*/ {
 				//o filter isCtor each (each args isCompat)
-				final FunctionDef fd = (FunctionDef) (/*(LookupResult)*/o)/*.getElement()*/;
+				final @NotNull FunctionDef fd = (FunctionDef) (/*(LookupResult)*/o)/*.getElement()*/;
 				final List<OS_Element2> matching_functions = fd.items()
 						                                       .stream()
 						                                       .filter(new MatchArgs(pce.getArgs()))

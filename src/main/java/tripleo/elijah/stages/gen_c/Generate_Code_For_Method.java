@@ -550,6 +550,7 @@ public class Generate_Code_For_Method {
 				GeneratedNode node = ty.genType.node;
 				if (node instanceof GeneratedFunction) {
 					int y=2;
+//					((GeneratedFunction)node).typeDeferred()
 					// get signature
 					String z = Emit.emit("/*552*/") + "void (*)()";
 					tos.put_string_ln(String.format("/*8889*/%s %s;", z, target_name));

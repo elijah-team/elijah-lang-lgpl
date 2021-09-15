@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class CantDecideType implements Diagnostic {
 	private final VariableTableEntry vte;
-	private final Collection<TypeTableEntry> types;
+	private final @NotNull Collection<TypeTableEntry> types;
 
 	public CantDecideType(VariableTableEntry aVte, @NotNull Collection<TypeTableEntry> aTypes) {
 		vte = aVte;
@@ -36,24 +36,24 @@ public class CantDecideType implements Diagnostic {
 	}
 
 	@Override
-	public String code() {
+	public @NotNull String code() {
 		return "E1001";
 	}
 
 	@Override
-	public Severity severity() {
+	public @NotNull Severity severity() {
 		return Severity.ERROR;
 	}
 
 	@Override
 	public @NotNull Locatable primary() {
-		VariableStatement vs = (VariableStatement) vte.getResolvedElement();
+		@NotNull VariableStatement vs = (VariableStatement) vte.getResolvedElement();
 		return vs;
 	}
 
 	@Override
 	public @NotNull List<Locatable> secondary() {
-		Collection<Locatable> c = Collections2.transform(types, new Function<TypeTableEntry, Locatable>() {
+		@NotNull Collection<Locatable> c = Collections2.transform(types, new Function<TypeTableEntry, Locatable>() {
 
 			@Nullable
 			@Override
@@ -68,7 +68,7 @@ public class CantDecideType implements Diagnostic {
 	}
 
 	@Override
-	public void report(PrintStream stream) {
+	public void report(@NotNull PrintStream stream) {
 		stream.println(String.format("---[%s]---: %s", code(), message()));
 		// linecache.print(primary);
 		for (Locatable sec : secondary()) {
@@ -77,7 +77,7 @@ public class CantDecideType implements Diagnostic {
 		stream.flush();
 	}
 
-	private String message() {
+	private @NotNull String message() {
 		return "Can't decide type";
 	}
 }

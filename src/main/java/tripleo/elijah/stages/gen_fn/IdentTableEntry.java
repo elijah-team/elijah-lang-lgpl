@@ -120,7 +120,7 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 		return pc;
 	}
 
-	public void onType(DeducePhase phase, OnType callback) {
+	public void onType(@NotNull DeducePhase phase, OnType callback) {
 		phase.onType(this, callback);
 	}
 

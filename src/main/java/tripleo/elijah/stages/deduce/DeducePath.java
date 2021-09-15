@@ -34,11 +34,11 @@ import java.util.List;
  * Created 7/9/21 6:10 AM
  */
 public class DeducePath {
-	private final List<InstructionArgument> ias;
+	private final @NotNull List<InstructionArgument> ias;
 	private final IdentTableEntry           base;
-	private final OS_Element[]              elements;  // arrays because they never need to be resized
-	private final GenType[]                 types;
-	private final MemberContext[]           contexts;
+	private final OS_Element @NotNull []              elements;  // arrays because they never need to be resized
+	private final GenType @NotNull []                 types;
+	private final MemberContext @NotNull []           contexts;
 
 	@Contract(pure = true)
 	public DeducePath(IdentTableEntry aIdentTableEntry, @NotNull List<InstructionArgument> aX) {
@@ -65,7 +65,7 @@ public class DeducePath {
 	public OS_Element getElement(int aIndex) {
 		if (elements[aIndex] == null) {
 			InstructionArgument ia2 = getIA(aIndex);
-			OS_Element el;
+			@Nullable OS_Element el;
 			if (ia2 instanceof IntegerIA) {
 				@NotNull VariableTableEntry vte = ((IntegerIA) ia2).getEntry();
 				el = vte.getResolvedElement();
@@ -113,9 +113,9 @@ public class DeducePath {
 		return null;
 	}
 
-	public Context getContext(int aIndex) {
+	public @Nullable Context getContext(int aIndex) {
 		if (contexts[aIndex] == null) {
-			final MemberContext memberContext = new MemberContext(this, aIndex, getElement(aIndex));
+			final @Nullable MemberContext memberContext = new MemberContext(this, aIndex, getElement(aIndex));
 			contexts[aIndex] = memberContext;
 			return memberContext;
 		} else
@@ -132,7 +132,7 @@ public class DeducePath {
 		private final DeducePath deducePath;
 		private final int index;
 		private final OS_Element element;
-		private final GenType type;
+		private final @Nullable GenType type;
 
 		public MemberContext(DeducePath aDeducePath, int aIndex, OS_Element aElement) {
 			assert aIndex >= 0;
@@ -153,17 +153,17 @@ public class DeducePath {
 		}
 
 		@Override
-		public Context getParent() {
+		public @Nullable Context getParent() {
 			if (index == 0)
 				return element.getContext().getParent();
 			return deducePath.getContext(index - 1);
 		}
 	}
 
-	public GenType getType(int aIndex) {
+	public @Nullable GenType getType(int aIndex) {
 		if (types[aIndex] == null) {
 			InstructionArgument ia2 = getIA(aIndex);
-			GenType gt;
+			@Nullable GenType gt;
 			if (ia2 instanceof IntegerIA) {
 				@NotNull VariableTableEntry vte = ((IntegerIA) ia2).getEntry();
 				gt = vte.type.genType;

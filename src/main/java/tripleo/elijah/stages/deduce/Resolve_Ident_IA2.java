@@ -34,10 +34,10 @@ class Resolve_Ident_IA2 {
 	private final DeduceTypes2 deduceTypes2;
 	private final ErrSink errSink;
 	private final DeducePhase phase;
-	private final BaseGeneratedFunction generatedFunction;
-	private final FoundElement foundElement;
+	private final @NotNull BaseGeneratedFunction generatedFunction;
+	private final @NotNull FoundElement foundElement;
 	
-	private final ElLog LOG;
+	private final @NotNull ElLog LOG;
 	
 	public Resolve_Ident_IA2(final DeduceTypes2 aDeduceTypes2,
 							 ErrSink aErrSink,
@@ -53,7 +53,7 @@ class Resolve_Ident_IA2 {
 		LOG = deduceTypes2.LOG;
 	}
 
-	OS_Element el = null;
+	@Nullable OS_Element el = null;
 	Context ectx;
 
 	public void resolveIdentIA2_(final @NotNull Context ctx,
@@ -78,11 +78,11 @@ class Resolve_Ident_IA2 {
 				if (ite.backlink != null) {
 					InstructionArgument backlink = ite.backlink;
 					if (backlink instanceof IntegerIA) {
-						final IntegerIA integerIA = (IntegerIA) backlink;
+						final @NotNull IntegerIA integerIA = (IntegerIA) backlink;
 						@NotNull VariableTableEntry vte = integerIA.getEntry();
 						vte.typePromise().then(new DoneCallback<GenType>() {
 							@Override
-							public void onDone(GenType result) {
+							public void onDone(@NotNull GenType result) {
 								ectx = result.resolved.getClassOf().getContext();
 								ia2_IdentIA((IdentIA) ia2, ectx);
 								foundElement.doFoundElement(el);
@@ -91,7 +91,7 @@ class Resolve_Ident_IA2 {
 					} else if (backlink instanceof IdentIA) {
 						dp.getElementPromise(index, new DoneCallback<OS_Element>() {
 							@Override
-							public void onDone(OS_Element result) {
+							public void onDone(@NotNull OS_Element result) {
 								el = result;
 								ectx = result.getContext();
 								ia2_IdentIA((IdentIA) ia2, ectx);
@@ -105,7 +105,7 @@ class Resolve_Ident_IA2 {
 						});
 						dp.getElementPromise(index - 1, new DoneCallback<OS_Element>() {
 							@Override
-							public void onDone(OS_Element result) {
+							public void onDone(@NotNull OS_Element result) {
 								ia2_IdentIA((IdentIA) dp.getIA(index-1), result.getContext()); // might fail
 							}
 						}, null);
@@ -124,7 +124,7 @@ class Resolve_Ident_IA2 {
 				if (ia2 instanceof IntegerIA) {
 					ia2_IntegerIA((IntegerIA) ia2, ectx);
 				} else if (ia2 instanceof IdentIA) {
-					RIA_STATE st = ia2_IdentIA((IdentIA) ia2, ectx);
+					@NotNull RIA_STATE st = ia2_IdentIA((IdentIA) ia2, ectx);
 
 					switch (st) {
 						case CONTINUE:
@@ -145,8 +145,8 @@ class Resolve_Ident_IA2 {
 		}
 	}
 
-	private RIA_STATE ia2_IdentIA(IdentIA ia2, Context ectx) {
-		final IdentTableEntry idte2 = ia2.getEntry();
+	private @NotNull RIA_STATE ia2_IdentIA(@NotNull IdentIA ia2, @NotNull Context ectx) {
+		final @NotNull IdentTableEntry idte2 = ia2.getEntry();
 		final String text = idte2.getIdent().getText();
 
 		if (idte2.getStatus() == BaseTableEntry.Status.KNOWN) {
@@ -169,7 +169,7 @@ class Resolve_Ident_IA2 {
 		}
 		if (idte2.type == null) {
 			if (el instanceof VariableStatement) {
-				VariableStatement vs = (VariableStatement) el;
+				@NotNull VariableStatement vs = (VariableStatement) el;
 				ia2_IdentIA_VariableStatement(idte2, vs, ectx);
 			} else if (el instanceof FunctionDef) {
 				ia2_IdentIA_FunctionDef(idte2);
@@ -186,9 +186,9 @@ class Resolve_Ident_IA2 {
 		return RIA_STATE.NEXT;
 	}
 
-	private void ia2_IdentIA_FunctionDef(IdentTableEntry idte2) {
-		OS_Type attached = new OS_UnknownType(el);
-		TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, idte2);
+	private void ia2_IdentIA_FunctionDef(@NotNull IdentTableEntry idte2) {
+		@Nullable OS_Type attached = new OS_UnknownType(el);
+		@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, idte2);
 		idte2.type = tte;
 
 		// Set type to something other than Unknown when found
@@ -197,19 +197,19 @@ class Resolve_Ident_IA2 {
 			int y=2;
 		} else {
 			assert pte != null;
-			FunctionInvocation fi = pte.getFunctionInvocation();
+			@Nullable FunctionInvocation fi = pte.getFunctionInvocation();
 			if (fi == null) {
 				InstructionArgument bl = idte2.backlink;
-				IInvocation invocation = null;
+				@Nullable IInvocation invocation = null;
 				if (bl instanceof IntegerIA) {
-					final IntegerIA integerIA = (IntegerIA) bl;
+					final @NotNull IntegerIA integerIA = (IntegerIA) bl;
 					@NotNull VariableTableEntry vte = integerIA.getEntry();
 					if (vte.constructable_pte != null) {
 						ProcTableEntry cpte = vte.constructable_pte;
 						invocation = cpte.getFunctionInvocation().getClassInvocation();
 					}
 				} else if (bl instanceof IdentIA) {
-					final IdentIA identIA = (IdentIA) bl;
+					final @NotNull IdentIA identIA = (IdentIA) bl;
 					@NotNull IdentTableEntry ite = identIA.getEntry();
 					if (ite.type.genType.ci != null)
 						invocation = ite.type.genType.ci;
@@ -219,7 +219,7 @@ class Resolve_Ident_IA2 {
 						invocation = phase.registerClassInvocation(attached1.getClassOf(), null); // TODO will fail one day
 					}
 				} else if (bl instanceof ProcIA) {
-					final ProcIA procIA = (ProcIA) bl;
+					final @NotNull ProcIA procIA = (ProcIA) bl;
 					FunctionInvocation bl_fi = procIA.getEntry().getFunctionInvocation();
 					if (bl_fi.getClassInvocation() != null) {
 						invocation = bl_fi.getClassInvocation();
@@ -234,7 +234,7 @@ class Resolve_Ident_IA2 {
 
 			pte.getFunctionInvocation().generatePromise().then(new DoneCallback<BaseGeneratedFunction>() {
 				@Override
-				public void onDone(BaseGeneratedFunction result) {
+				public void onDone(@NotNull BaseGeneratedFunction result) {
 					result.typePromise().then(new DoneCallback<GenType>() {
 						@Override
 						public void onDone(GenType result) {
@@ -248,7 +248,7 @@ class Resolve_Ident_IA2 {
 	}
 
 	/* @requires idte2.type.getAttached() != null; */
-	private boolean findResolved(IdentTableEntry idte2, Context ctx) {
+	private boolean findResolved(@NotNull IdentTableEntry idte2, Context ctx) {
 		try {
 			if (idte2.type.getAttached() instanceof OS_UnknownType) // TODO ??
 				return false;
@@ -281,12 +281,12 @@ class Resolve_Ident_IA2 {
 		return false;
 	}
 
-	private void ia2_IdentIA_VariableStatement(IdentTableEntry idte, VariableStatement vs, Context ctx) {
+	private void ia2_IdentIA_VariableStatement(@NotNull IdentTableEntry idte, @NotNull VariableStatement vs, @NotNull Context ctx) {
 		try {
 			final boolean has_initial_value = vs.initialValue() != IExpression.UNASSIGNED;
 			if (!vs.typeName().isNull()) {
 				TypeTableEntry tte;
-				GenType attached;
+				@Nullable GenType attached;
 				if (has_initial_value) {
 					attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ctx);
 				} else { // if (vs.typeName() != null) {
@@ -294,7 +294,7 @@ class Resolve_Ident_IA2 {
 					attached.set(new OS_Type(vs.typeName()));
 				}
 
-				IExpression initialValue;
+				@Nullable IExpression initialValue;
 
 				if (has_initial_value) {
 					initialValue = vs.initialValue();
@@ -307,9 +307,9 @@ class Resolve_Ident_IA2 {
 				tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, resolvedOrTypename, initialValue);
 				idte.type = tte;
 			} else if (has_initial_value) {
-				GenType attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ctx);
+				@Nullable GenType attached = DeduceLookupUtils.deduceExpression(deduceTypes2, vs.initialValue(), ctx);
 				final OS_Type resolvedOrTypename = attached.resolved != null ? attached.resolved : attached.typeName;
-				TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, resolvedOrTypename, vs.initialValue());
+				@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, resolvedOrTypename, vs.initialValue());
 				idte.type = tte;
 			} else {
 				LOG.err("Empty Variable Expression");
@@ -323,12 +323,12 @@ class Resolve_Ident_IA2 {
 		}
 	}
 
-	private void ia2_IntegerIA(IntegerIA ia2, Context ctx) {
-		VariableTableEntry vte = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(ia2));
+	private void ia2_IntegerIA(@NotNull IntegerIA ia2, @NotNull Context ctx) {
+		@NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(ia2));
 		final String text = vte.getName();
 
 		{
-			List<TypeTableEntry> pot = deduceTypes2.getPotentialTypesVte(vte);
+			@NotNull List<TypeTableEntry> pot = deduceTypes2.getPotentialTypesVte(vte);
 			if (pot.size() == 1) {
 				final OS_Type attached = pot.get(0).getAttached();
 				if (attached == null) {
@@ -381,17 +381,17 @@ class Resolve_Ident_IA2 {
 		}
 	}
 
-	private void ia2_IntegerIA_potentialTypes_equals_1(VariableTableEntry aVte, String aText) {
+	private void ia2_IntegerIA_potentialTypes_equals_1(@NotNull VariableTableEntry aVte, String aText) {
 		int state = 0;
-		final ArrayList<TypeTableEntry> pot = deduceTypes2.getPotentialTypesVte(aVte);
+		final @NotNull ArrayList<TypeTableEntry> pot = deduceTypes2.getPotentialTypesVte(aVte);
 		final OS_Type attached1 = pot.get(0).getAttached();
 		TableEntryIV te = pot.get(0).tableEntry;
 		if (te instanceof ProcTableEntry) {
-			final ProcTableEntry procTableEntry = (ProcTableEntry) te;
+			final @NotNull ProcTableEntry procTableEntry = (ProcTableEntry) te;
 			// This is how it should be done, with an Incremental
 			procTableEntry.getFunctionInvocation().generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
 				@Override
-				public void onDone(BaseGeneratedFunction result) {
+				public void onDone(@NotNull BaseGeneratedFunction result) {
 					result.typePromise().then(new DoneCallback<GenType>() {
 						@Override
 						public void onDone(GenType result) {
@@ -404,7 +404,7 @@ class Resolve_Ident_IA2 {
 			// but for now, just set ectx
 			InstructionArgument en = procTableEntry.expression_num;
 			if (en instanceof IdentIA) {
-				final IdentIA identIA2 = (IdentIA) en;
+				final @NotNull IdentIA identIA2 = (IdentIA) en;
 				DeducePath ded = identIA2.getEntry().buildDeducePath(generatedFunction);
 				@Nullable OS_Element el2 = ded.getElement(ded.size() - 1);
 				if (el2 != null) {
@@ -451,18 +451,18 @@ class Resolve_Ident_IA2 {
 	}
 
 	/* @requires pot.get(0).getAttached() == null; */
-	private void ia2_IntegerIA_null_attached(Context ctx, List<TypeTableEntry> pot) {
+	private void ia2_IntegerIA_null_attached(@NotNull Context ctx, @NotNull List<TypeTableEntry> pot) {
 		try {
-			FunctionDef fd = null;
-			ProcTableEntry pte = null;
+			@Nullable FunctionDef fd = null;
+			@Nullable ProcTableEntry pte = null;
 			TableEntryIV xx = pot.get(0).tableEntry;
 			if (xx != null) {
 				if (xx instanceof ProcTableEntry) {
-					final ProcTableEntry procTableEntry = (ProcTableEntry) xx;
+					final @NotNull ProcTableEntry procTableEntry = (ProcTableEntry) xx;
 					pte = procTableEntry;
 					InstructionArgument xxx = procTableEntry.expression_num;
 					if (xxx instanceof IdentIA) {
-						final IdentIA identIA2 = (IdentIA) xxx;
+						final @NotNull IdentIA identIA2 = (IdentIA) xxx;
 						@NotNull IdentTableEntry ite = identIA2.getEntry();
 						DeducePath deducePath = ite.buildDeducePath(generatedFunction);
 						@Nullable OS_Element el5 = deducePath.getElement(deducePath.size() - 1);
@@ -472,7 +472,7 @@ class Resolve_Ident_IA2 {
 				}
 			} else {
 				LookupResultList lrl = DeduceLookupUtils.lookupExpression(pot.get(0).expression.getLeft(), ctx, deduceTypes2);
-				OS_Element best = lrl.chooseBest(Helpers.List_of(
+				@Nullable OS_Element best = lrl.chooseBest(Helpers.List_of(
 						new DeduceUtils.MatchFunctionArgs(
 								(ProcedureCallExpression) pot.get(0).expression)));
 				if (best instanceof FunctionDef) {
@@ -484,10 +484,10 @@ class Resolve_Ident_IA2 {
 			}
 			if (fd != null) {
 				final IInvocation invocation = deduceTypes2.getInvocation((GeneratedFunction) generatedFunction);
-				final FunctionDef fd2 = fd;
+				final @Nullable FunctionDef fd2 = fd;
 				deduceTypes2.forFunction(deduceTypes2.newFunctionInvocation(fd2, pte, invocation, phase), new ForFunction() {
 					@Override
-					public void typeDecided(GenType aType) {
+					public void typeDecided(@NotNull GenType aType) {
 						assert fd2 == generatedFunction.getFD();
 						//
 						pot.get(0).setAttached(deduceTypes2.gt(aType));

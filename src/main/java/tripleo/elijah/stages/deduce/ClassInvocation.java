@@ -10,6 +10,8 @@ package tripleo.elijah.stages.deduce;
 
 import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.OS_UnknownType;
@@ -24,14 +26,14 @@ import java.util.Map;
  * Created 3/5/21 3:51 AM
  */
 public class ClassInvocation implements IInvocation {
-	private final ClassStatement cls;
-	public final Map<TypeName, OS_Type> genericPart;
+	private final @NotNull ClassStatement cls;
+	public final @Nullable Map<TypeName, OS_Type> genericPart;
 	private final String constructorName;
 	private final DeferredObject<GeneratedClass, Void, Void> resolvePromise = new DeferredObject<GeneratedClass, Void, Void>();
 
-	public ClassInvocation(ClassStatement aClassStatement, String aConstructorName) {
+	public ClassInvocation(@NotNull ClassStatement aClassStatement, String aConstructorName) {
 		cls = aClassStatement;
-		final List<TypeName> genericPart1 = aClassStatement.getGenericPart();
+		final @NotNull List<TypeName> genericPart1 = aClassStatement.getGenericPart();
 		if (genericPart1.size() > 0) {
 			genericPart = new HashMap<TypeName, OS_Type>(genericPart1.size());
 			for (TypeName typeName : genericPart1) {
@@ -43,20 +45,20 @@ public class ClassInvocation implements IInvocation {
 		constructorName = aConstructorName;
 	}
 
-	public DeferredObject<GeneratedClass, Void, Void> resolveDeferred() {
+	public @NotNull DeferredObject<GeneratedClass, Void, Void> resolveDeferred() {
 		return resolvePromise;
 	}
 
-	public void set(int aIndex, TypeName aTypeName, OS_Type aType) {
+	public void set(int aIndex, TypeName aTypeName, @NotNull OS_Type aType) {
 		assert aType.getType() == OS_Type.Type.USER_CLASS;
 		genericPart.put(aTypeName, aType);
 	}
 
-	public ClassStatement getKlass() {
+	public @NotNull ClassStatement getKlass() {
 		return cls;
 	}
 
-	public Promise<GeneratedClass, Void, Void> promise() {
+	public @NotNull Promise<GeneratedClass, Void, Void> promise() {
 		return resolvePromise;
 	}
 
@@ -69,7 +71,7 @@ public class ClassInvocation implements IInvocation {
 	}
 
 	@Override
-	public void setForFunctionInvocation(FunctionInvocation aFunctionInvocation) {
+	public void setForFunctionInvocation(@NotNull FunctionInvocation aFunctionInvocation) {
 		aFunctionInvocation.setClassInvocation(this);
 	}
 }

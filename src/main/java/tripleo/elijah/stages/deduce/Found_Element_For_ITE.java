@@ -9,6 +9,8 @@
 package tripleo.elijah.stages.deduce;
 
 import org.jdeferred2.DoneCallback;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
@@ -41,7 +43,7 @@ class Found_Element_For_ITE {
 		dc = aDeduceClient1;
 	}
 
-	public void action(IdentTableEntry ite) {
+	public void action(@NotNull IdentTableEntry ite) {
 		final OS_Element y = ite.getResolvedElement();
 
 		if (y instanceof VariableStatement) {
@@ -60,9 +62,9 @@ class Found_Element_For_ITE {
 		}
 	}
 
-	public void action_AliasStatement(IdentTableEntry ite, AliasStatement y) {
+	public void action_AliasStatement(@NotNull IdentTableEntry ite, @NotNull AliasStatement y) {
 		LOG.err("396 AliasStatement");
-		OS_Element x = dc._resolveAlias(y);
+		@Nullable OS_Element x = dc._resolveAlias(y);
 		if (x == null) {
 			ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 			errSink.reportError("399 resolveAlias returned null");
@@ -72,7 +74,7 @@ class Found_Element_For_ITE {
 		}
 	}
 
-	public void action_PropertyStatement(IdentTableEntry ite, PropertyStatement ps) {
+	public void action_PropertyStatement(@NotNull IdentTableEntry ite, @NotNull PropertyStatement ps) {
 		OS_Type attached;
 		switch (ps.getTypeName().kindOfType()) {
 			case GENERIC:
@@ -97,24 +99,24 @@ class Found_Element_For_ITE {
 		int yy = 2;
 	}
 
-	public void action_FunctionDef(IdentTableEntry ite, FunctionDef functionDef) {
-		OS_Type attached = new OS_FuncType(functionDef);
+	public void action_FunctionDef(@NotNull IdentTableEntry ite, FunctionDef functionDef) {
+		@NotNull OS_Type attached = new OS_FuncType(functionDef);
 		if (ite.type == null) {
 			ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 		} else
 			ite.type.setAttached(attached);
 	}
 
-	public void action_ClassStatement(IdentTableEntry ite, ClassStatement classStatement) {
-		OS_Type attached = new OS_Type(classStatement);
+	public void action_ClassStatement(@NotNull IdentTableEntry ite, ClassStatement classStatement) {
+		@NotNull OS_Type attached = new OS_Type(classStatement);
 		if (ite.type == null) {
 			ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 		} else
 			ite.type.setAttached(attached);
 	}
 
-	public void action_VariableStatement(IdentTableEntry ite, VariableStatement vs) {
-		TypeName typeName = vs.typeName();
+	public void action_VariableStatement(@NotNull IdentTableEntry ite, @NotNull VariableStatement vs) {
+		@NotNull TypeName typeName = vs.typeName();
 		if (ite.type == null || ite.type.getAttached() == null) {
 			if (!(typeName.isNull())) {
 				if (ite.type == null)
@@ -125,17 +127,17 @@ class Found_Element_For_ITE {
 				if (parent instanceof NamespaceStatement || parent instanceof ClassStatement) {
 					boolean state;
 					if (generatedFunction instanceof GeneratedFunction) {
-						final GeneratedFunction generatedFunction1 = (GeneratedFunction) generatedFunction;
+						final @NotNull GeneratedFunction generatedFunction1 = (GeneratedFunction) generatedFunction;
 						state = (parent != generatedFunction1.getFD().getParent());
 					} else {
 						state = (parent != ((GeneratedConstructor) generatedFunction).getFD().getParent());
 					}
 					if (state) {
-						DeferredMember dm = dc.deferred_member(parent, dc.getInvocationFromBacklink(ite.backlink), vs, ite);
+						@NotNull DeferredMember dm = dc.deferred_member(parent, dc.getInvocationFromBacklink(ite.backlink), vs, ite);
 						dm.typePromise().
 								done(new DoneCallback<GenType>() {
 									@Override
-									public void onDone(GenType result) {
+									public void onDone(@NotNull GenType result) {
 										if (ite.type == null)
 											ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
 										assert result.resolved != null;
@@ -144,7 +146,7 @@ class Found_Element_For_ITE {
 								});
 					}
 
-					GenType genType = null;
+					@Nullable GenType genType = null;
 					if (parent instanceof NamespaceStatement)
 						genType = new GenType((NamespaceStatement) parent);
 					else if (parent instanceof ClassStatement)
