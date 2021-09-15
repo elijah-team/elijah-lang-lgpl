@@ -17,6 +17,7 @@ import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.gen_fn.GenType;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
@@ -60,7 +61,7 @@ public class DeduceTypesTest2 {
 		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity1);
 		DeduceTypes2 d = dp.deduceModule(mod, verbosity1);
 //		final DeduceTypes d = new DeduceTypes(mod);
-		final OS_Type x = DeduceLookupUtils.deduceExpression(d, x1, fc);
+		final GenType x = DeduceLookupUtils.deduceExpression(d, x1, fc);
 		System.out.println(x);
 //		Assert.assertEquals(new OS_Type(BuiltInTypes.SystemInteger).getBType(), x.getBType());
 //		final RegularTypeName tn = new RegularTypeName();

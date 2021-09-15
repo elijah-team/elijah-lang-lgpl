@@ -18,6 +18,7 @@ import tripleo.elijah.comp.StdErrSink;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.gen_fn.GenType;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
@@ -27,7 +28,7 @@ import tripleo.elijah.util.Helpers;
  */
 public class DeduceTypesTest {
 
-	private OS_Type x;
+	private GenType x;
 
 	@Before
 	public void setUp() throws ResolveError {
@@ -92,7 +93,7 @@ public class DeduceTypesTest {
 		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
-		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
+		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.typeName);
 		Assert.assertEquals(new OS_Type(tn), x);
 	}
 	@Test
@@ -101,7 +102,7 @@ public class DeduceTypesTest {
 		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
-		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
+		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.typeName);
 		Assert.assertEquals(new OS_Type(tn), x);
 		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());
 	}
