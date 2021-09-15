@@ -106,7 +106,6 @@ class Resolve_Ident_IA {
 	private void preUpdateStatus(final @NotNull List<InstructionArgument> s) {
 		final String normal_path = generatedFunction.getIdentIAPathNormal(identIA);
 		if (s.size() > 1) {
-			final OS_Element el2 = el;
 			InstructionArgument x = s.get(s.size() - 1);
 			if (x instanceof IntegerIA) {
 				assert false;
@@ -151,7 +150,6 @@ class Resolve_Ident_IA {
 
 	private void action_ProcIA(InstructionArgument ia) {
 		ProcTableEntry prte = generatedFunction.getProcTableEntry(DeduceTypes2.to_int(ia));
-		int y = 2;
 		if (prte.getResolvedElement() == null) {
 			IExpression exp = prte.expression;
 			if (exp instanceof ProcedureCallExpression) {
@@ -172,7 +170,6 @@ class Resolve_Ident_IA {
 				}
 			} catch (ResolveError aResolveError) {
 				aResolveError.printStackTrace();
-				int yyy = 2;
 				throw new NotImplementedException();
 			}
 		} else {
@@ -483,8 +480,8 @@ class Resolve_Ident_IA {
 					// for example from match conditional
 					final TypeName tn = ((MatchConditional.MatchArm_TypeMatch) el).getTypeName();
 					try {
-						@NotNull final OS_Type ty = deduceTypes2.resolve_type(new OS_Type(tn), tn.getContext());
-						ectx = ty.getElement().getContext();
+						final @NotNull GenType ty = deduceTypes2.resolve_type(new OS_Type(tn), tn.getContext());
+						ectx = ty.resolved.getElement().getContext();
 					} catch (ResolveError resolveError) {
 						resolveError.printStackTrace();
 						LOG.err("1182 Can't resolve " + tn);
