@@ -116,7 +116,12 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 		return typeDeferred.isPending();
 	}
 
-	public void resolveType(final GenType aGenType) {
+	GenType _resolveTypeCalled = null;
+	public void resolveType(final @NotNull GenType aGenType) {
+		if (_resolveTypeCalled != null) { // TODO what a hack
+			assert aGenType == _resolveTypeCalled;
+			return;
+		}
 		typeDeferred.resolve(aGenType);
 	}
 
