@@ -2514,30 +2514,32 @@ public class DeduceTypes2 {
 									errSink.reportError("Cant resolve " + ty); // TODO print better diagnostic
 									return;
 								}
-								LookupResultList lrl2 = rtype.getClassOf().getContext().lookup("__getitem__");
-								OS_Element best2 = lrl2.chooseBest(null);
-								if (best2 != null) {
-									if (best2 instanceof FunctionDef) {
-										FunctionDef fd = (FunctionDef) best2;
-										ProcTableEntry pte = null;
-										final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
-										forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
-											@Override
-											public void typeDecided(final GenType aType) {
-												assert fd == generatedFunction.getFD();
-												//
-												if (idte.type == null) {
-													@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, gt(aType), idte); // TODO expression?
-													idte.type = tte1;
-												} else
-													idte.type.setAttached(gt(aType));
-											}
-										});
+								if (rtype.resolved != null && rtype.resolved.getType() == OS_Type.Type.USER_CLASS) {
+									LookupResultList lrl2 = rtype.resolved.getClassOf().getContext().lookup("__getitem__");
+									OS_Element best2 = lrl2.chooseBest(null);
+									if (best2 != null) {
+										if (best2 instanceof FunctionDef) {
+											FunctionDef fd = (FunctionDef) best2;
+											ProcTableEntry pte = null;
+											final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
+											forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
+												@Override
+												public void typeDecided(final GenType aType) {
+													assert fd == generatedFunction.getFD();
+													//
+													if (idte.type == null) {
+														@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, gt(aType), idte); // TODO expression?
+														idte.type = tte1;
+													} else
+														idte.type.setAttached(gt(aType));
+												}
+											});
+										} else {
+											throw new NotImplementedException();
+										}
 									} else {
 										throw new NotImplementedException();
 									}
-								} else {
-									throw new NotImplementedException();
 								}
 							}
 
@@ -2578,27 +2580,29 @@ public class DeduceTypes2 {
 									errSink.reportError("Cant resolve " + ty2); // TODO print better diagnostic
 									return;
 								}
-								LookupResultList lrl2 = rtype.getClassOf().getContext().lookup("__getitem__");
-								OS_Element best2 = lrl2.chooseBest(null);
-								if (best2 != null) {
-									if (best2 instanceof FunctionDef) {
-										FunctionDef fd = (FunctionDef) best2;
-										ProcTableEntry pte = null;
-										final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
-										forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
-											@Override
-											public void typeDecided(final GenType aType) {
-												assert fd == generatedFunction.getFD();
-												//
-												@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, gt(aType), vte2); // TODO expression?
-												vte2.type = tte1;
-											}
-										});
+								if (rtype.resolved != null && rtype.resolved.getType() == OS_Type.Type.USER_CLASS) {
+									LookupResultList lrl2 = rtype.resolved.getClassOf().getContext().lookup("__getitem__");
+									OS_Element best2 = lrl2.chooseBest(null);
+									if (best2 != null) {
+										if (best2 instanceof FunctionDef) {
+											FunctionDef fd = (FunctionDef) best2;
+											ProcTableEntry pte = null;
+											final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
+											forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
+												@Override
+												public void typeDecided(final GenType aType) {
+													assert fd == generatedFunction.getFD();
+													//
+													@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, gt(aType), vte2); // TODO expression?
+													vte2.type = tte1;
+												}
+											});
+										} else {
+											throw new NotImplementedException();
+										}
 									} else {
 										throw new NotImplementedException();
 									}
-								} else {
-									throw new NotImplementedException();
 								}
 							}
 						});
