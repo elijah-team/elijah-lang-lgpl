@@ -88,7 +88,7 @@ class Resolve_Ident_IA {
 					case CONTINUE:
 						continue; // never happens here
 					case RETURN:
-						return;
+						return;  // element notFound. short-circuit and exit. callback already called.
 					case NEXT:
 						break;
 					default:
