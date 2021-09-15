@@ -62,8 +62,8 @@ public class IdentIA implements InstructionArgument, Constructable {
 	}
 
 	@Override
-	public void resolveType(GeneratedNode aNode) {
-		getEntry().resolveType(aNode);
+	public void resolveTypeToClass(GeneratedNode aNode) {
+		getEntry().resolveTypeToClass(aNode);
 	}
 
 	@Override

@@ -15,7 +15,7 @@ package tripleo.elijah.stages.gen_fn;
 public interface Constructable {
 	void setConstructable(ProcTableEntry aPte);
 
-	void resolveType(GeneratedNode aNode);
+	void resolveTypeToClass(GeneratedNode aNode);
 
 	void setGenType(GenType aGenType);
 }

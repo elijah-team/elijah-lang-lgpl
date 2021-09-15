@@ -387,7 +387,7 @@ class Resolve_Ident_IA2 {
 						@Override
 						public void onDone(GenType result) {
 							int y = 2;
-							aVte.typeDeferred().resolve(result); // save for later
+							aVte.resolveType(result); // save for later
 						}
 					});
 				}

@@ -586,7 +586,7 @@ public class GenerateC implements CodeGenerator {
 						} else {
 							final BaseGeneratedFunction pte_generated = functionInvocation.getGenerated();
 							if (idte.resolvedType() == null && pte_generated != null)
-								idte.resolveType(pte_generated);
+								idte.resolveTypeToClass(pte_generated);
 							reference.getIdentIAPath(ia2, gf);
 							final List<String> sll = getAssignmentValueArgs(inst, gf, LOG);
 							reference.args(sll);

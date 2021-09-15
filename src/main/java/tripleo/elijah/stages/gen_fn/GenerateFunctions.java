@@ -515,7 +515,7 @@ public class GenerateFunctions {
 			GeneratedClass gc = generateClass((ClassStatement) item);
 			int ite_index = gf.addIdentTableEntry(((ClassStatement) item).getNameNode(), cctx);
 			IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
-			ite.resolveType(gc);
+			ite.resolveTypeToClass(gc);
 		} else if (item instanceof StatementWrapper) {
 			final IExpression x = ((StatementWrapper) item).getExpr();
 			final ExpressionKind expressionKind = x.getKind();

@@ -108,8 +108,16 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 		return typeDeferred.promise();
 	}
 
-	public DeferredObject<GenType, Void, Void> typeDeferred() {
-		return typeDeferred;
+//	public DeferredObject<GenType, Void, Void> typeDeferred() {
+//		return typeDeferred;
+//	}
+
+	public boolean typeDeferred_isPending() {
+		return typeDeferred.isPending();
+	}
+
+	public void resolveType(final GenType aGenType) {
+		typeDeferred.resolve(aGenType);
 	}
 
 	@Override
@@ -118,19 +126,20 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	}
 
 	@Override
-	public void resolveType(GeneratedNode aNode) {
+	public void resolveTypeToClass(GeneratedNode aNode) {
 		_resolvedType = aNode;
 		genType.node = aNode;
 		type.resolve(aNode); // TODO maybe this obviates above
 	}
 
+	public GeneratedNode resolvedType() {
+		return _resolvedType;
+	}
+
 	@Override
 	public void setGenType(GenType aGenType) {
 		genType.copy(aGenType);
-	}
-
-	public GeneratedNode resolvedType() {
-		return _resolvedType;
+		resolveType(aGenType);
 	}
 
 	@Override

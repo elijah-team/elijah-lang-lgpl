@@ -87,7 +87,7 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	}
 
 	@Override
-	public void resolveType(GeneratedNode gn) {
+	public void resolveTypeToClass(GeneratedNode gn) {
 		resolvedType = gn;
 		if (type != null) // TODO maybe find a more robust solution to this, like another Promise? or just setType? or onPossiblesResolve?
 			type.resolve(gn); // TODO maybe this obviates the above?

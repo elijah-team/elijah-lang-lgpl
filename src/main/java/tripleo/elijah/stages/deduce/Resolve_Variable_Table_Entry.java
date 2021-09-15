@@ -66,7 +66,7 @@ class Resolve_Variable_Table_Entry {
 			} else if (pot.getAttached() != null && pot.getAttached().getType() == OS_Type.Type.USER_CLASS) {
 				int y = 1;
 				vte.type = pot;
-				vte.typeDeferred().resolve(pot.genType);
+				vte.resolveType(pot.genType);
 			} else {
 				action_VAR_potsize_1_other(vte, pot);
 			}
@@ -228,7 +228,7 @@ class Resolve_Variable_Table_Entry {
 				@Override
 				public void onDone(GenType result) {
 					pe.satisfy(result);
-					vte.typeDeferred().resolve(result);
+					vte.resolveType(result);
 				}
 			});
 
@@ -287,13 +287,13 @@ class Resolve_Variable_Table_Entry {
 						LOG.err("Can't resolve argument type " + attached);
 						return;
 					}
-					vte.typeDeferred().resolve(tte.genType);
+					vte.resolveType(tte.genType);
 					break;
 				case USER_CLASS:
 					if (tte.genType.resolved == null)
 						tte.genType.resolved = attached;
 					// TODO genCI and all that -- Incremental?? (.increment())
-					vte.typeDeferred().resolve(tte.genType);
+					vte.resolveType(tte.genType);
 					break;
 			}
 		} else {

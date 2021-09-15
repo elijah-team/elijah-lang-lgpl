@@ -77,7 +77,7 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 				ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
 					@Override
 					public void onDone(GeneratedClass result) {
-						co.resolveType(result);
+						co.resolveTypeToClass(result);
 					}
 				});
 			}
