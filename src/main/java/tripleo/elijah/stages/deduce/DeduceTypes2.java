@@ -2819,7 +2819,7 @@ public class DeduceTypes2 {
 					pot_types_size_is_1_USER_CLASS(pn, pn2, x);
 					return true;
 				case BUILT_IN:
-					final Context ctx2 = x.getClassOf().getContext();
+					final Context ctx2 = context;//x.getTypeName().getContext();
 					try {
 						@NotNull GenType ty2 = resolve_type(x, ctx2);
 						pot_types_size_is_1_USER_CLASS(pn, pn2, ty2.resolved);
