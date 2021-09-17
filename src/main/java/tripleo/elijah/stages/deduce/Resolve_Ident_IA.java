@@ -153,7 +153,7 @@ class Resolve_Ident_IA {
 	}
 
 	private void updateStatus(@NotNull List<InstructionArgument> aS) {
-		InstructionArgument x = aS.get(0);
+		InstructionArgument x = aS.get(/*aS.size()-1*/0);
 		if (x instanceof IntegerIA) {
 			@NotNull VariableTableEntry y = ((IntegerIA) x).getEntry();
 			y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
