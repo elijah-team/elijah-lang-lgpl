@@ -69,6 +69,7 @@ class Resolve_Ident_IA {
 		ectx = context;
 		el = null;
 
+/*
 		for (final InstructionArgument ia : s) {
 			if (ia instanceof IntegerIA) {
 				@NotNull RIA_STATE state = action_IntegerIA(ia);
@@ -98,9 +99,29 @@ class Resolve_Ident_IA {
 				action_ProcIA(ia);
 			} else
 				throw new IllegalStateException("Really cant be here");
-		}
+*/
+		if (!process(s.get(0))) return;
+
 		preUpdateStatus(s);
 		updateStatus(s);
+	}
+
+	private boolean process(InstructionArgument ia) {
+		if (ia instanceof IntegerIA) {
+			@NotNull RIA_STATE state = action_IntegerIA(ia);
+			if (state == RIA_STATE.RETURN) {
+				return false;
+			}
+		} else if (ia instanceof IdentIA) {
+			@NotNull RIA_STATE state = action_IdentIA((IdentIA) ia);
+			if (state == RIA_STATE.RETURN) {
+				return false;
+			}
+		} else if (ia instanceof ProcIA) {
+			action_ProcIA(ia);
+		} else
+			throw new IllegalStateException("Really cant be here");
+		return true;
 	}
 
 	private void preUpdateStatus(final @NotNull List<InstructionArgument> s) {
