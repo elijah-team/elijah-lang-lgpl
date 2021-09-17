@@ -58,6 +58,8 @@ public class DeduceTypesTest {
 		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
 		//
+		mod.prelude = mod.parent.findPrelude("c");
+		//
 		//
 		//
 		final ElLog.Verbosity verbosity = mod.parent.gitlabCIVerbosity();
