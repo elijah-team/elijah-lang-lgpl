@@ -163,8 +163,15 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 				if (x.getAttached() == null && x.tableEntry == null) {
 					String text = ((IdentExpression) x.expression).getText();
 					@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(text);
-					GenType gt = ((IntegerIA) vte_ia).getEntry().type.genType;
-					typeName = gt.nonGenericTypeName != null ? gt.nonGenericTypeName : gt.typeName.getTypeName();
+					if (vte_ia != null) {
+						GenType gt = ((IntegerIA) vte_ia).getEntry().type.genType;
+						typeName = gt.nonGenericTypeName != null ? gt.nonGenericTypeName : gt.typeName.getTypeName();
+					} else {
+						if (parent instanceof ClassStatement) {
+							// TODO might be wrong in the case of generics. check.
+							typeName = null;//new OS_Type((ClassStatement) parent);
+						}
+					}
 				}
 			}
 
