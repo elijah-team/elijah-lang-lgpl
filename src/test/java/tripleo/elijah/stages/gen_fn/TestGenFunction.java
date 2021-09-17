@@ -161,6 +161,7 @@ public class TestGenFunction {
 
 				GeneratedFunction gf = aGeneratedFunctions.iterator().next();
 
+				System.out.println("main\n====");
 				for (int i = 0; i < gf.vte_list.size(); i++) {
 					final VariableTableEntry vte = gf.getVarTableEntry(i);
 					System.out.println(String.format("8007 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
@@ -169,6 +170,7 @@ public class TestGenFunction {
 						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
 					}
 				}
+				System.out.println();
 
 				ran_hooks.add(this);
 			}
@@ -187,6 +189,7 @@ public class TestGenFunction {
 
 				GeneratedFunction gf = aGeneratedFunctions.iterator().next();
 
+				System.out.println("factorial\n=========");
 				for (int i = 0; i < gf.vte_list.size(); i++) {
 					final VariableTableEntry vte = gf.getVarTableEntry(i);
 					System.out.println(String.format("8008 %s %s %s", vte.getName(), vte.type, vte.potentialTypes()));
@@ -195,6 +198,7 @@ public class TestGenFunction {
 						Assert.assertNotEquals(OS_Type.Type.USER, vte.type.getAttached().getType());
 					}
 				}
+				System.out.println();
 
 				ran_hooks.add(this);
 			}
