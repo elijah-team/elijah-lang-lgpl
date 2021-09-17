@@ -17,6 +17,7 @@ import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.logging.ElLog;
+import tripleo.elijah.stages.post_deduce.PostDeduce;
 import tripleo.elijah.work.WorkManager;
 
 import java.io.File;
@@ -32,19 +33,23 @@ import java.util.List;
  */
 public class PipelineLogic {
 	public final GeneratePhase generatePhase;
-	private final ElLog.Verbosity verbosity;
 	public final DeducePhase dp;
+
+	public GenerateResult gr = new GenerateResult();
+	public List<ElLog> elLogs = new LinkedList<ElLog>();
+	public boolean verbose = true;
+
+	private final ElLog.Verbosity verbosity;
+
+	final List<OS_Module> mods = new ArrayList<OS_Module>();
+
+	public boolean postDeduceEnabled = false;
 
 	public PipelineLogic(ElLog.Verbosity aVerbosity) {
 		verbosity = aVerbosity;
 		generatePhase = new GeneratePhase(aVerbosity, this);
 		dp = new DeducePhase(generatePhase, this, verbosity);
 	}
-
-	final List<OS_Module> mods = new ArrayList<OS_Module>();
-	public GenerateResult gr = new GenerateResult();
-	public List<ElLog> elLogs = new LinkedList<ElLog>();
-	public boolean verbose = true;
 
 	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
 		for (OS_Module mod : mods) {
@@ -55,11 +60,13 @@ public class PipelineLogic {
 
 		dp.generatedClasses.addAll(lgc);
 
-//		for (OS_Module mod : mods) {
-//			PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
-//			pd.analyze();
-//		}
-		//
+		if (postDeduceEnabled) {
+			for (OS_Module mod : mods) {
+				PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
+				pd.analyze();
+			}
+		}
+
 //		elLogs = dp.deduceLogs;
 	}
 
