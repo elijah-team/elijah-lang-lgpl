@@ -76,15 +76,16 @@ public class DeduceTypes2 {
 				deduceOneFunction(generatedFunction, phase);
 			}
 		}
-		@NotNull List<GeneratedNode> generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
+		@NotNull List<GeneratedNode> generatedClasses = (phase.generatedClasses.copy());
+		// TODO consider using reactive here
 		int size;
 		do {
 			size = df_helper(generatedClasses, new dfhi_functions());
-			generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
+			generatedClasses = phase.generatedClasses.copy();
 		} while (size > 0);
 		do {
 			size = df_helper(generatedClasses, new dfhi_constructors());
-			generatedClasses = new ArrayList<GeneratedNode>(phase.generatedClasses);
+			generatedClasses = phase.generatedClasses.copy();
 		} while (size > 0);
 	}
 

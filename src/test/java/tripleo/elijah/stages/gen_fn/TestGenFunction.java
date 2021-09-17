@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 import tripleo.elijah.ci.CompilerInstructions;
@@ -72,7 +73,7 @@ public class TestGenFunction {
 		DeducePhase dp = c.pipelineLogic.dp;//new DeducePhase(generatePhase1);
 		gfm.generateFromEntryPoints(m.entryPoints, dp);
 
-		final List<GeneratedNode> lgc = dp.generatedClasses; //new ArrayList<>();
+		final DeducePhase.@NotNull GeneratedClasses lgc = dp.generatedClasses; //new ArrayList<>();
 
 /*
 		List<GeneratedNode> lgf = new ArrayList<>();

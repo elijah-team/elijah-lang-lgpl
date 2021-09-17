@@ -52,7 +52,9 @@ public class PipelineLogic {
 		}
 //		List<List<EntryPoint>> entryPoints = mods.stream().map(mod -> mod.entryPoints).collect(Collectors.toList());
 		dp.finish();
-		lgc.addAll(dp.generatedClasses);
+
+		dp.generatedClasses.addAll(lgc);
+
 //		for (OS_Module mod : mods) {
 //			PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
 //			pd.analyze();
@@ -92,7 +94,7 @@ public class PipelineLogic {
 //		WorkManager wm = new WorkManager();
 //		WorkList wl = new WorkList();
 
-		List<GeneratedNode> lgc = dp.generatedClasses;
+		DeducePhase.@NotNull GeneratedClasses lgc = dp.generatedClasses;
 		List<GeneratedNode> resolved_nodes = new ArrayList<GeneratedNode>();
 
 		for (final GeneratedNode generatedNode : lgc) {
@@ -199,7 +201,7 @@ public class PipelineLogic {
 		mods.add(m);
 	}
 
-	private void resolveCheck(List<GeneratedNode> lgc) {
+	private void resolveCheck(DeducePhase.GeneratedClasses lgc) {
 		for (final GeneratedNode generatedNode : lgc) {
 			if (generatedNode instanceof GeneratedFunction) {
 

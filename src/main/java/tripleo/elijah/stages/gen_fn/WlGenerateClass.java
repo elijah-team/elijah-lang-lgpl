@@ -13,6 +13,7 @@ import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkJob;
@@ -27,13 +28,13 @@ public class WlGenerateClass implements WorkJob {
 	private final ClassStatement classStatement;
 	private final GenerateFunctions generateFunctions;
 	private final ClassInvocation classInvocation;
-	private final List<GeneratedNode> coll;
+	private final DeducePhase.GeneratedClasses coll;
 	private boolean _isDone = false;
 	private GeneratedClass Result;
 
 	public WlGenerateClass(GenerateFunctions aGenerateFunctions,
 						   ClassInvocation aClassInvocation,
-						   List<GeneratedNode> coll) {
+						   DeducePhase.GeneratedClasses coll) {
 		classStatement = aClassInvocation.getKlass();
 		generateFunctions = aGenerateFunctions;
 		classInvocation = aClassInvocation;

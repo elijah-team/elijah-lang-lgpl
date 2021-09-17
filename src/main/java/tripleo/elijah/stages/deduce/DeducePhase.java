@@ -29,11 +29,7 @@ import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static tripleo.elijah.util.Helpers.List_of;
 
@@ -44,7 +40,7 @@ public class DeducePhase {
 
 	private final List<FoundElement> foundElements = new ArrayList<FoundElement>();
 	private final Map<IdentTableEntry, OnType> idte_type_callbacks = new HashMap<IdentTableEntry, OnType>();
-	public @NotNull List<GeneratedNode> generatedClasses = new ArrayList<GeneratedNode>();
+	public @NotNull GeneratedClasses generatedClasses = new GeneratedClasses();
 	public final GeneratePhase generatePhase;
 
 	final PipelineLogic pipelineLogic;
@@ -217,7 +213,7 @@ public class DeducePhase {
 		@NotNull List<EntryPoint> epl = m.entryPoints;
 		gfm.generateFromEntryPoints(epl, this);
 
-		@NotNull List<GeneratedNode> lgc = generatedClasses;
+		@NotNull GeneratedClasses lgc = generatedClasses;
 
 		final @NotNull List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
 		for (GeneratedNode lgci : lgc) {
@@ -413,7 +409,7 @@ public class DeducePhase {
 		boolean all_resolve_var_table_entries = false;
 		while (!all_resolve_var_table_entries) {
 			if (generatedClasses.size() == 0) break;
-			for (GeneratedNode generatedNode : new ArrayList<>(generatedClasses)) {
+			for (GeneratedNode generatedNode : generatedClasses.copy()) {
 				if (generatedNode instanceof GeneratedClass) {
 					final @NotNull GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 					all_resolve_var_table_entries = generatedClass.resolve_var_table_entries(this); // TODO use a while loop to get all classes
@@ -515,6 +511,31 @@ public class DeducePhase {
 		}
 	}
 
+	public static class GeneratedClasses implements Iterable<GeneratedNode> {
+		@NotNull List<GeneratedNode> generatedClasses = new ArrayList<GeneratedNode>();
+
+		public void add(GeneratedNode aClass) {
+			generatedClasses.add(aClass);
+		}
+
+		@Override
+		public Iterator<GeneratedNode> iterator() {
+			return generatedClasses.iterator();
+		}
+
+		public int size() {
+			return generatedClasses.size();
+		}
+
+		public List<GeneratedNode> copy() {
+			return new ArrayList<GeneratedNode>(generatedClasses);
+		}
+
+		public void addAll(List<GeneratedNode> lgc) {
+			// TODO is this method really needed
+			generatedClasses.addAll(lgc);
+		}
+	}
 }
 
 //

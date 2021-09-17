@@ -13,6 +13,7 @@ import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.NamespaceStatement;
+import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.NamespaceInvocation;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkJob;
@@ -27,13 +28,13 @@ public class WlGenerateNamespace implements WorkJob {
 	private final GenerateFunctions generateFunctions;
 	private final NamespaceStatement namespaceStatement;
 	private final NamespaceInvocation namespaceInvocation;
-	private final List<GeneratedNode> coll;
+	private final DeducePhase.@Nullable GeneratedClasses coll;
 	private boolean _isDone = false;
 	private GeneratedNamespace Result;
 
 	public WlGenerateNamespace(@NotNull GenerateFunctions aGenerateFunctions,
 							   @NotNull NamespaceInvocation aNamespaceInvocation,
-							   @Nullable List<GeneratedNode> aColl) {
+							   @Nullable DeducePhase.GeneratedClasses aColl) {
 		generateFunctions = aGenerateFunctions;
 		namespaceStatement = aNamespaceInvocation.getNamespace();
 		namespaceInvocation = aNamespaceInvocation;
