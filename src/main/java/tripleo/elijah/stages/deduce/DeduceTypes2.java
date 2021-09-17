@@ -2757,7 +2757,7 @@ public class DeduceTypes2 {
 
 		private boolean action_dunder(String pn) {
 			assert Pattern.matches("__.*__", pn);
-//			LOG.err(String.format("i2 is not IntegerIA (%s)",i2.getClass().getName()));
+//			LOG.info(String.format("i2 is not IntegerIA (%s)",i2.getClass().getName()));
 			//
 			// try to get dunder method from class
 			//
