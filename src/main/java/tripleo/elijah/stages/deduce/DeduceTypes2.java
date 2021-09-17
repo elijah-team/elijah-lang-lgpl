@@ -2740,7 +2740,7 @@ public class DeduceTypes2 {
 
 			final @Nullable String pn2 = SpecialFunctions.reverse_name(pn);
 			if (pn2 != null) {
-//			LOG.info("7002 "+pn2);
+//				LOG.info("7002 "+pn2);
 				found = lookup_name_calls(context, pn2, pte);
 				if (found) return;
 			}
@@ -2780,7 +2780,7 @@ public class DeduceTypes2 {
 							int y=2;
 							System.out.println("3071 "+pte.getStatus());
 							IInvocation invocation = result.ci;
-//								final BaseFunctionDef fd = gf.getFD();
+//							final BaseFunctionDef fd = gf.getFD();
 							final BaseFunctionDef fd = pte.getFunctionInvocation().getFunction();
 							@NotNull FunctionInvocation fi = newFunctionInvocation(fd, pte, invocation, phase);
 							pte.setFunctionInvocation(fi);
