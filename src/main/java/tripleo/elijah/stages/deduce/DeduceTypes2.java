@@ -2370,7 +2370,7 @@ public class DeduceTypes2 {
 //							tte.attached = ll.get(0).attached;
 //							vte.addPotentialType(instructionIndex, ll.get(0));
 							if (p.isResolved())
-								LOG.info(String.format("1047 (vte already resolved) vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, potentialTypes.get(0)));
+								LOG.info(String.format("1047 (vte already resolved) %s vte1.type = %s, gf = %s, tte1 = %s %n", vte1.getName(), vte1.type, generatedFunction, potentialTypes.get(0)));
 							else {
 								final OS_Type attached = potentialTypes.get(0).getAttached();
 								if (attached == null) return;
