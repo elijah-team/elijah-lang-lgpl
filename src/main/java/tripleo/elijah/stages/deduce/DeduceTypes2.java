@@ -437,6 +437,7 @@ public class DeduceTypes2 {
 											public void onDone(GeneratedClass result) {
 												vte.type.genType.node = result;
 												vte.resolveTypeToClass(result);
+												vte.genType = vte.type.genType; // TODO who knows if this is necessary?
 											}
 										});
 									}
