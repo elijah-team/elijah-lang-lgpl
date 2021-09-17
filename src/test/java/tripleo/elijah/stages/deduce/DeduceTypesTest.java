@@ -87,7 +87,7 @@ public class DeduceTypesTest {
 		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
-		Assert.assertEquals(new OS_Type(tn), x/*.getTypeName()*/);
+		Assert.assertTrue(genTypeTypenameEquals(new OS_Type(tn), x/*.getTypeName()*/));
 	}
 	@Test
 	public void testDeduceIdentExpression3() {
@@ -95,8 +95,8 @@ public class DeduceTypesTest {
 		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
-		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.typeName);
-		Assert.assertEquals(new OS_Type(tn), x);
+		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.typeName.getTypeName());
+		Assert.assertTrue(genTypeTypenameEquals(new OS_Type(tn), x));
 	}
 	@Test
 	public void testDeduceIdentExpression4() {
@@ -104,9 +104,13 @@ public class DeduceTypesTest {
 		final Qualident tnq = new Qualident();
 		tnq.append(Helpers.string_to_ident("Integer"));
 		tn.setName(tnq);
-		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.typeName);
-		Assert.assertEquals(new OS_Type(tn), x);
-		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());
+		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.typeName.getTypeName());
+		Assert.assertTrue(genTypeTypenameEquals(new OS_Type(tn), x));
+		Assert.assertEquals(new OS_Type(tn).toString(), x.typeName.toString());
+	}
+
+	private boolean genTypeTypenameEquals(OS_Type aType, GenType genType) {
+		return genType.typeName.equals(aType);
 	}
 
 }

@@ -72,8 +72,13 @@ public class DeduceTypesTest2 {
 		tn.setContext(fd.getContext());
 
 //		Assert.assertEquals(new OS_Type(tn).getTypeName(), x.getTypeName());
-		Assert.assertEquals(d.resolve_type(new OS_Type(tn), tn.getContext()), x);
+		Assert.assertTrue(genTypeEquals(d.resolve_type(new OS_Type(tn), tn.getContext()), x));
 //		Assert.assertEquals(new OS_Type(tn).toString(), x.toString());
 	}
 
+	private boolean genTypeEquals(GenType a, GenType b) {
+		// TODO hack
+		return a.typeName.equals(b.typeName) &&
+				a.resolved.equals(b.resolved);
+	}
 }
