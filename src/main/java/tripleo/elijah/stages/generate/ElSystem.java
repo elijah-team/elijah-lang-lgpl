@@ -42,9 +42,13 @@ public class ElSystem {
 			final Dependency dependency1 = ab.getDependency();
 			if (ab.ty == GenerateResult.TY.HEADER)
 				dependency1.setRef(new CDependencyRef(filename));
-			for (Dependency dependency : dependency1.deps) {
-				String filename1 = getFilenameForNode((GeneratedNode) dependency.referent, GenerateResult.TY.HEADER, outputStrategyC);
-				dependency.setRef(new CDependencyRef(filename1));
+			for (Dependency dependency : dependency1.getNotedDeps()) {
+				if (dependency.referent != null) {
+					String filename1 = getFilenameForNode((GeneratedNode) dependency.referent, GenerateResult.TY.HEADER, outputStrategyC);
+					dependency.setRef(new CDependencyRef(filename1));
+				} else {
+					int y=2;
+				}
 			}
 			gr.completeItem(ab);
 		}
