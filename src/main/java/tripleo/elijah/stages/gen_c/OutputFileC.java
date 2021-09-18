@@ -8,20 +8,24 @@
  */
 package tripleo.elijah.stages.gen_c;
 
+import tripleo.elijah.stages.gen_generic.Dependency;
 import tripleo.elijah.stages.gen_generic.DependencyRef;
 import tripleo.elijah.stages.gen_generic.IOutputFile;
 import tripleo.util.buffer.Buffer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created 9/13/21 10:50 PM
  */
 public class OutputFileC implements IOutputFile {
 	private final String output;
-	private List<DependencyRef> dependencies = new ArrayList<>();
-	private List<Buffer> buffers = new ArrayList<>(); // LinkedList??
+	private final List<DependencyRef> dependencies = new ArrayList<>();
+	private final List<Dependency> notedDeps = new ArrayList<>();
+	private final List<Buffer> buffers = new ArrayList<>(); // LinkedList??
 
 	public OutputFileC(String aOutput) {
 		output = aOutput;
@@ -40,16 +44,44 @@ public class OutputFileC implements IOutputFile {
 	@Override
 	public String getOutput() {
 		StringBuilder sb = new StringBuilder();
+
+		List<Dependency> wnd = new ArrayList<Dependency>(notedDeps);
+		Iterator<Dependency> iterator = wnd.iterator();
+		while (iterator.hasNext()) {
+			Dependency next = iterator.next();
+			for (DependencyRef dependency : dependencies) {
+				if (next.dref == dependency) {
+					iterator.remove();
+				}
+			}
+		}
+
 		for (DependencyRef dependencyRaw : dependencies) {
 			CDependencyRef dependency = (CDependencyRef) dependencyRaw;
 			String headerFile = dependency.getHeaderFile();
 			String output = String.format("#include \"%s\"\n", headerFile.substring(1));
 			sb.append(output);
 		}
+
+		sb.append('\n');
+
+		for (Dependency dependency : wnd) {
+			String resolvedString = ""+dependency.resolved;
+			String output = String.format("//#include \"%s\" // for %s\n", "nothing.h", resolvedString);
+			sb.append(output);
+		}
+
+		sb.append('\n');
+
 		for (Buffer buffer : buffers) {
 			sb.append(buffer.getText());
+			sb.append('\n');
 		}
 		return sb.toString();
+	}
+
+	public void putDependencies(Set<Dependency> aNotedDeps) {
+		notedDeps.addAll(aNotedDeps);
 	}
 }
 
