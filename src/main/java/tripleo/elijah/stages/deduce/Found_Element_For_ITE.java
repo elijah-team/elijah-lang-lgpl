@@ -23,6 +23,7 @@ import tripleo.elijah.stages.gen_fn.GenericElementHolder;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.TypeTableEntry;
 import tripleo.elijah.stages.logging.ElLog;
+import tripleo.elijah.stages.logging.LogEntry;
 
 /**
  * Created 9/2/21 11:36 PM
