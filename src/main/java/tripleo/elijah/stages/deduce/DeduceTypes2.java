@@ -2816,31 +2816,31 @@ public class DeduceTypes2 {
 		}
 
 		private boolean action_i2_IntegerIA_vteName_is_not_null(String pn, @Nullable String pn2, @NotNull VariableTableEntry vte) {
-			boolean found;
 			final @NotNull List<TypeTableEntry> tt = getPotentialTypesVte(vte);
-			if (tt.size() == 1) {
-				final OS_Type x = tt.get(0).getAttached();
-				assert x != null;
-				switch (x.getType()) {
-				case USER_CLASS:
-					pot_types_size_is_1_USER_CLASS(pn, pn2, x);
+			if (tt.size() != 1) {
+				return false;
+			}
+			final OS_Type x = tt.get(0).getAttached();
+			assert x != null;
+			switch (x.getType()) {
+			case USER_CLASS:
+				pot_types_size_is_1_USER_CLASS(pn, pn2, x);
+				return true;
+			case BUILT_IN:
+				final Context ctx2 = context;//x.getTypeName().getContext();
+				try {
+					@NotNull GenType ty2 = resolve_type(x, ctx2);
+					pot_types_size_is_1_USER_CLASS(pn, pn2, ty2.resolved);
 					return true;
-				case BUILT_IN:
-					final Context ctx2 = context;//x.getTypeName().getContext();
-					try {
-						@NotNull GenType ty2 = resolve_type(x, ctx2);
-						pot_types_size_is_1_USER_CLASS(pn, pn2, ty2.resolved);
-					} catch (ResolveError resolveError) {
-						resolveError.printStackTrace();
-						errSink.reportDiagnostic(resolveError);
-					}
-					return true;
-				default:
-					assert false;
+				} catch (ResolveError resolveError) {
+					resolveError.printStackTrace();
+					errSink.reportDiagnostic(resolveError);
 					return false;
 				}
-			} else
+			default:
+				assert false;
 				return false;
+			}
 		}
 
 		private void pot_types_size_is_1_USER_CLASS(String pn, @Nullable String pn2, OS_Type x) {
