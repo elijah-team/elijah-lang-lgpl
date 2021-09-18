@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_generic;
 
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.gen_fn.AbstractDependencyTracker;
 import tripleo.elijah.stages.gen_fn.GenType;
@@ -24,7 +25,8 @@ public class Dependency {
 	public final IDependencyReferent referent;
 	public final Set<Dependency> deps = new HashSet<>();
 
-	DependencyRef dref;
+	public DependencyRef dref;
+	public OS_Element resolved;
 
 	public Dependency(IDependencyReferent aReferent) {
 		referent = aReferent;
@@ -48,8 +50,12 @@ public class Dependency {
 			final GeneratedContainerNC node = (GeneratedContainerNC) dependentType.node;
 			if (node != null)
 				deps.add(node.getDependency());
-			else
-				System.err.println("46 node is null "+(dependentType.resolved != null ? dependentType.resolved : dependentType.resolvedn));
+			else {
+				System.err.println("46 node is null " + (dependentType.resolved != null ? dependentType.resolved : dependentType.resolvedn));
+				final Dependency d = new Dependency(null);
+				d.resolved = dependentType.resolved != null ? dependentType.resolved.getClassOf() : dependentType.resolvedn;
+				deps.add(d);
+			}
 		}
 	}
 
