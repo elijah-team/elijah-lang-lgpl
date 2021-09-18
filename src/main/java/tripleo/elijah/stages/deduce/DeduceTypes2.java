@@ -2723,12 +2723,16 @@ public class DeduceTypes2 {
 		private final ProcTableEntry pte;
 		private final int pc;
 
-		public Implement_Calls_(BaseGeneratedFunction gf, Context context, InstructionArgument i2, ProcTableEntry pte, int pc) {
-			this.gf = gf;
-			this.context = context;
-			this.i2 = i2;
-			this.pte = pte;
-			this.pc = pc;
+		public Implement_Calls_(final @NotNull BaseGeneratedFunction aGf,
+								final @NotNull Context aContext,
+								final @NotNull InstructionArgument aI2,
+								final @NotNull ProcTableEntry aPte,
+								final int aPc) {
+			gf = aGf;
+			context = aContext;
+			i2 = aI2;
+			pte = aPte;
+			pc = aPc;
 		}
 
 		void action() {
