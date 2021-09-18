@@ -28,6 +28,8 @@ public class TypeNameList {
 		return p.get(index);
 	}
 
+	public int size() { return p.size(); }
+
 	@Override
 	public String toString() {
 		return Helpers.String_join(", ", Collections2.transform(p, new Function<TypeName, String>() {

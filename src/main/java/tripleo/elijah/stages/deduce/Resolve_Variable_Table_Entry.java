@@ -287,6 +287,7 @@ class Resolve_Variable_Table_Entry {
 						LOG.err("Can't resolve argument type " + attached);
 						return;
 					}
+					genCIForGenType(tte.genType);
 					vte.resolveType(tte.genType);
 					break;
 				case USER_CLASS:
@@ -299,6 +300,36 @@ class Resolve_Variable_Table_Entry {
 		} else {
 			int y = 2;
 		}
+	}
+
+	/**
+	 * Sets the invocation ({@code genType#ci}) and the node for a GenType
+	 *
+	 * @param aGenType the GenType to modify. must be set to a nonGenericTypeName that is non-null and generic
+	 */
+	public void genCIForGenType(final GenType aGenType) {
+		assert aGenType.nonGenericTypeName != null ;//&& ((NormalTypeName) aGenType.nonGenericTypeName).getGenericPart().size() > 0;
+
+		deduceTypes2.genCI(aGenType, aGenType.nonGenericTypeName);
+		final IInvocation invocation = aGenType.ci;
+		if (invocation instanceof NamespaceInvocation) {
+			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
+			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+				@Override
+				public void onDone(final GeneratedNamespace result) {
+					aGenType.node = result;
+				}
+			});
+		} else if (invocation instanceof ClassInvocation) {
+			final ClassInvocation classInvocation = (ClassInvocation) invocation;
+			classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(final GeneratedClass result) {
+					aGenType.node = result;
+				}
+			});
+		} else
+			throw new IllegalStateException("invalid invocation");
 	}
 }
 

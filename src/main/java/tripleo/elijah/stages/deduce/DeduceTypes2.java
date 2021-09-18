@@ -912,7 +912,7 @@ public class DeduceTypes2 {
 		return null;
 	}
 
-	private @Nullable ClassInvocation genCI(@NotNull GenType genType, TypeName aGenericTypeName) {
+	@Nullable ClassInvocation genCI(@NotNull GenType genType, TypeName aGenericTypeName) {
 		if (genType.nonGenericTypeName != null) {
 			@NotNull NormalTypeName aTyn1 = (NormalTypeName) genType.nonGenericTypeName;
 			@Nullable String constructorName = null; // TODO this comes from nowhere
