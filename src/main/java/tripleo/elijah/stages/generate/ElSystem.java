@@ -65,7 +65,7 @@ public class ElSystem {
 
 		for (GenerateResultItem ab : gr.results()) {
 			final OutputFileC outputFileC = outputFiles.get(ab.output);
-			outputFileC.putDependencies(ab.dependencies());
+			outputFileC.putDependencies(ab.getDependency().getNotedDeps/*dependencies*/());
 		}
 
 		for (GenerateResultItem ab : gr.results()) {
