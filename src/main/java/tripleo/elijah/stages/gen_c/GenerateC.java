@@ -226,7 +226,7 @@ public class GenerateC implements CodeGenerator {
 			tosHdr.put_string_ln("int _tag;");
 			if (!decl.prim) {
 				for (GeneratedClass.VarTableEntry o : x.varTable){
-					final String typeName = getTypeNameForVarTableEntry(o);
+					final String typeName = getTypeNameGNCForVarTableEntry(o);
 					tosHdr.put_string_ln(String.format("%s vm%s;", typeName, o.nameToken));
 				}
 			} else {
@@ -279,7 +279,7 @@ public class GenerateC implements CodeGenerator {
 		x.generatedAlready = true;
 	}
 
-	@NotNull public String getTypeNameForVarTableEntry(GeneratedContainer.VarTableEntry o) {
+	@NotNull public String getTypeNameGNCForVarTableEntry(GeneratedContainer.VarTableEntry o) {
 		final String typeName;
 		if (o.resolvedType() != null) {
 			GeneratedNode xx = o.resolvedType();
@@ -310,7 +310,7 @@ public class GenerateC implements CodeGenerator {
 				tosHdr.incr_tabs();
 //				tosHdr.put_string_ln("int _tag;");
 				for (GeneratedNamespace.VarTableEntry o : x.varTable) {
-					final String typeName = getTypeNameForVarTableEntry(o);
+					final String typeName = getTypeNameGNCForVarTableEntry(o);
 
 					tosHdr.put_string_ln(String.format("%s* vm%s;", o.varType == null ? "void " : typeName, o.nameToken));
 				}
