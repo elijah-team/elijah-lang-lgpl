@@ -460,6 +460,31 @@ public class DeducePhase {
 						});
 			} else if (deferredMember.getParent() instanceof ClassStatement) {
 				// TODO do something
+				final ClassStatement parent = (ClassStatement) deferredMember.getParent();
+				final String name = deferredMember.getVariableStatement().getName();
+
+				// because deferredMember.invocation is null, we must create one here
+				final @Nullable ClassInvocation ci = registerClassInvocation(parent, null);
+				ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(final GeneratedClass result) {
+						final List<GeneratedContainer.VarTableEntry> vt = result.varTable;
+						for (GeneratedContainer.VarTableEntry gc_vte : vt) {
+							if (gc_vte.nameToken.getText().equals(name)) {
+								// check connections
+								// unify pot. types (prol. shuld be done already -- we don't want to be reporting errors here)
+								// call typePromises and externalRefPromisess
+
+								// TODO just getting first element here (without processing of any kind); HACK
+								final GenType ty = gc_vte.connectionPairs.get(0).vte.type.genType;
+								assert ty.resolved != null;
+								gc_vte.varType = ty.resolved; // TODO make sure this is right in all cases
+								deferredMember.typeResolved().resolve(ty);
+								break;
+							}
+						}
+					}
+				});
 			} else
 				throw new NotImplementedException();
 		}
