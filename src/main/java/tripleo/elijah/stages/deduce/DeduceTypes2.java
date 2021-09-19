@@ -446,8 +446,14 @@ public class DeduceTypes2 {
 					// resolve arguments table
 					//
 					@NotNull Resolve_Variable_Table_Entry rvte = new Resolve_Variable_Table_Entry(generatedFunction, context, this);
+					@NotNull IVariableConnector connector;
+					if (generatedFunction instanceof GeneratedConstructor) {
+						connector = new CtorConnector((GeneratedConstructor) generatedFunction);
+					} else {
+						connector = new NullConnector();
+					}
 					for (@NotNull VariableTableEntry vte : generatedFunction.vte_list) {
-						rvte.action(vte);
+						rvte.action(vte, connector);
 					}
 				}
 				break;
@@ -779,6 +785,34 @@ public class DeduceTypes2 {
 					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
 				}
 			}
+		}
+	}
+
+	interface IVariableConnector {
+		void connect(VariableTableEntry aVte, String aName);
+	}
+
+	class CtorConnector implements IVariableConnector {
+		private final GeneratedConstructor generatedConstructor;
+
+		public CtorConnector(final GeneratedConstructor aGeneratedConstructor) {
+			generatedConstructor = aGeneratedConstructor;
+		}
+
+		@Override
+		public void connect(final VariableTableEntry aVte, final String aName) {
+			final List<GeneratedContainer.VarTableEntry> vt = ((GeneratedClass) generatedConstructor.getGenClass()).varTable;
+			for (GeneratedContainer.VarTableEntry gc_vte : vt) {
+				if (gc_vte.nameToken.getText().equals(aName)) {
+					gc_vte.connect(aVte, generatedConstructor);
+				}
+			}
+		}
+	}
+
+	class NullConnector implements IVariableConnector {
+		@Override
+		public void connect(final VariableTableEntry aVte, final String aName) {
 		}
 	}
 

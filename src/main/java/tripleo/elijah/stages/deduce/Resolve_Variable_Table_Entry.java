@@ -47,7 +47,7 @@ class Resolve_Variable_Table_Entry {
 		phase = deduceTypes2.phase;
 	}
 
-	public void action(final @NotNull VariableTableEntry vte) {
+	public void action(final @NotNull VariableTableEntry vte, final @NotNull DeduceTypes2.IVariableConnector aConnector) {
 		switch (vte.vtt) {
 		case ARG:
 			action_ARG(vte);
@@ -56,6 +56,7 @@ class Resolve_Variable_Table_Entry {
 			action_VAR(vte);
 			break;
 		}
+		aConnector.connect(vte, vte.getName());
 	}
 
 	public void action_VAR(@NotNull VariableTableEntry vte) {

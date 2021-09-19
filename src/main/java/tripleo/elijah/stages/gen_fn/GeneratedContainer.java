@@ -64,6 +64,22 @@ public interface GeneratedContainer extends GeneratedNode {
         public @NotNull OS_Element getParent() {
             return parent;
         }
+
+        public void connect(final VariableTableEntry aVte, final GeneratedConstructor aConstructor) {
+            connectionPairs.add(new ConnectionPair(aVte, aConstructor));
+        }
+
+        public List<ConnectionPair> connectionPairs = new ArrayList<>();
+
+        public static class ConnectionPair {
+            public final VariableTableEntry vte;
+            final GeneratedConstructor constructor;
+
+            public ConnectionPair(final VariableTableEntry aVte, final GeneratedConstructor aConstructor) {
+                vte = aVte;
+                constructor = aConstructor;
+            }
+        }
     }
 }
 
