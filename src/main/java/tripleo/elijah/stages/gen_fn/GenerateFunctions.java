@@ -428,14 +428,18 @@ public class GenerateFunctions {
 			}
 		}
 
-		private void generate_statement_wrapper(IExpression x, ExpressionKind expressionKind, @NotNull BaseGeneratedFunction gf, Context cctx) {
+		private void generate_statement_wrapper(final StatementWrapper aStatementWrapper,
+												IExpression x,
+												ExpressionKind expressionKind,
+												@NotNull BaseGeneratedFunction gf,
+												Context cctx) {
 //			LOG.err("106-1 "+x.getKind()+" "+x);
 			if (x.is_simple()) {
 //				int i = addTempTableEntry(x.getType(), gf);
 				switch (expressionKind) {
 				case ASSIGNMENT:
 //					LOG.err(String.format("703.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
-					generate_item_assignment(x, gf, cctx);
+					generate_item_assignment(aStatementWrapper, x, gf, cctx);
 					break;
 				case AUG_MULT:
 				{
@@ -470,7 +474,7 @@ public class GenerateFunctions {
 				switch (expressionKind) {
 				case ASSIGNMENT:
 //					LOG.err(String.format("803.2 %s %s", x.getLeft(), ((BasicBinaryExpression)x).getRight()));
-					generate_item_assignment(x, gf, cctx);
+					generate_item_assignment(aStatementWrapper, x, gf, cctx);
 					break;
 //				case IS_A:
 //					break;
@@ -517,9 +521,10 @@ public class GenerateFunctions {
 			IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
 			ite.resolveTypeToClass(gc);
 		} else if (item instanceof StatementWrapper) {
-			final IExpression x = ((StatementWrapper) item).getExpr();
+			final StatementWrapper sw = (StatementWrapper) item;
+			final IExpression x = sw.getExpr();
 			final ExpressionKind expressionKind = x.getKind();
-			gi.generate_statement_wrapper(x, expressionKind, gf, cctx);
+			gi.generate_statement_wrapper(sw, x, expressionKind, gf, cctx);
 		} else if (item instanceof IfConditional) {
 			gi.generate_if((IfConditional)item, gf);
 		} else if (item instanceof Loop) {
@@ -698,7 +703,7 @@ public class GenerateFunctions {
 
 	class Generate_item_assignment {
 
-		public void procedure_call(@NotNull BaseGeneratedFunction gf, BasicBinaryExpression bbe, ProcedureCallExpression pce, Context cctx) {
+		public void procedure_call(final StatementWrapper aStatementWrapper, @NotNull BaseGeneratedFunction gf, BasicBinaryExpression bbe, ProcedureCallExpression pce, Context cctx) {
 			final IExpression left = bbe.getLeft();
 
 			final InstructionArgument lookup = simplify_expression(left, gf, cctx);
@@ -714,8 +719,12 @@ public class GenerateFunctions {
 			} else {
 				if (left instanceof IdentExpression) {
 					final String text = ((IdentExpression) left).getText();
-					final int vte_num = addVariableTableEntry(text, tte, gf, (IdentExpression) left);
-
+					final int vte_num;
+					if (aStatementWrapper instanceof WrappedStatementWrapper) {
+						vte_num = addVariableTableEntry(text, tte, gf, ((WrappedStatementWrapper) aStatementWrapper).getVariableStatement());
+					} else {
+						vte_num = addVariableTableEntry(text, tte, gf, (IdentExpression) left);
+					}
 					add_i(gf, InstructionName.DECL, List_of(new SymbolIA("tmp"), new IntegerIA(vte_num, gf)), cctx);
 					// TODO should be AGNC
 					final int instruction_number = add_i(gf, InstructionName.AGN, List_of(new IntegerIA(vte_num, gf),
@@ -821,14 +830,14 @@ public class GenerateFunctions {
 		}
 	}
 
-	private void generate_item_assignment(@NotNull final IExpression x, @NotNull final BaseGeneratedFunction gf, final Context cctx) {
+	private void generate_item_assignment(final StatementWrapper aStatementWrapper, @NotNull final IExpression x, @NotNull final BaseGeneratedFunction gf, final Context cctx) {
 //		LOG.err(String.format("801 %s %s", x.getLeft(), ((BasicBinaryExpression) x).getRight()));
 		final BasicBinaryExpression bbe = (BasicBinaryExpression) x;
 		final IExpression right1 = bbe.getRight();
 		final Generate_item_assignment gia = new Generate_item_assignment();
 		switch (right1.getKind()) {
 		case PROCEDURE_CALL:
-			gia.procedure_call(gf, bbe, (ProcedureCallExpression) right1, cctx);
+			gia.procedure_call(aStatementWrapper, gf, bbe, (ProcedureCallExpression) right1, cctx);
 			break;
 		case IDENT:
 			gia.ident(gf, (IdentExpression) bbe.getLeft(), (IdentExpression) right1, cctx);
