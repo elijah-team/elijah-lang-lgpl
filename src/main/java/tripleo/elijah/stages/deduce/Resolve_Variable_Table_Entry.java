@@ -114,7 +114,32 @@ class Resolve_Variable_Table_Entry {
 				}
 				int y = 2;
 			} else if (aPot.tableEntry == null) {
-				int y=2;
+				final OS_Element el = vte.getResolvedElement();
+				if (el instanceof VariableStatement) {
+					final VariableStatement variableStatement = (VariableStatement) el;
+					final @NotNull IExpression iv = variableStatement.initialValue();
+					if (iv != IExpression.UNASSIGNED) {
+						if (iv instanceof ProcedureCallExpression) {
+							final ProcedureCallExpression procedureCallExpression = (ProcedureCallExpression) iv;
+							final IExpression name_exp = procedureCallExpression.getLeft();
+							assert name_exp instanceof IdentExpression;
+
+							final IdentExpression name2 = (IdentExpression) name_exp;
+							final LookupResultList lrl2 = ((IdentExpression) name_exp).getContext().lookup(name2.getText());
+							final @Nullable OS_Element el2 = lrl2.chooseBest(null);
+
+							if (el2 != null) {
+								if (el2 instanceof ClassStatement) {
+									final ClassStatement classStatement = (ClassStatement) el2;
+									GenType genType = new GenType(classStatement);
+									//deferredMember.typeResolved().resolve(genType);
+									genCIForGenType2(genType);
+								}
+							}
+						}
+					}
+
+				}
 			} else
 				throw new NotImplementedException();
 		} catch (ResolveError aResolveError) {
@@ -311,6 +336,34 @@ class Resolve_Variable_Table_Entry {
 	public void genCIForGenType(final GenType aGenType) {
 		assert aGenType.nonGenericTypeName != null ;//&& ((NormalTypeName) aGenType.nonGenericTypeName).getGenericPart().size() > 0;
 
+		deduceTypes2.genCI(aGenType, aGenType.nonGenericTypeName);
+		final IInvocation invocation = aGenType.ci;
+		if (invocation instanceof NamespaceInvocation) {
+			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
+			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+				@Override
+				public void onDone(final GeneratedNamespace result) {
+					aGenType.node = result;
+				}
+			});
+		} else if (invocation instanceof ClassInvocation) {
+			final ClassInvocation classInvocation = (ClassInvocation) invocation;
+			classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(final GeneratedClass result) {
+					aGenType.node = result;
+				}
+			});
+		} else
+			throw new IllegalStateException("invalid invocation");
+	}
+
+	/**
+	 * Sets the invocation ({@code genType#ci}) and the node for a GenType
+	 *
+	 * @param aGenType the GenType to modify. doesn;t care about  nonGenericTypeName
+	 */
+	public void genCIForGenType2(final GenType aGenType) {
 		deduceTypes2.genCI(aGenType, aGenType.nonGenericTypeName);
 		final IInvocation invocation = aGenType.ci;
 		if (invocation instanceof NamespaceInvocation) {
