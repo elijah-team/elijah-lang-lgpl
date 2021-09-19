@@ -1883,6 +1883,10 @@ public class DeduceTypes2 {
 		public @NotNull DeferredMember deferred_member(OS_Element aParent, IInvocation aInvocation, VariableStatement aVariableStatement, @NotNull IdentTableEntry aIdentTableEntry) {
 			return dt2.deferred_member(aParent, aInvocation, aVariableStatement, aIdentTableEntry);
 		}
+
+		public void genCI(final GenType aResult, final TypeName aNonGenericTypeName) {
+			dt2.genCI(aResult, aNonGenericTypeName);
+		}
 	}
 
 	void found_element_for_ite(BaseGeneratedFunction generatedFunction, @NotNull IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
