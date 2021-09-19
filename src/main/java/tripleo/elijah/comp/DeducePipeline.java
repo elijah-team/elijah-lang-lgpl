@@ -12,13 +12,14 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created 8/21/21 10:10 PM
  */
 public class DeducePipeline implements PipelineMember {
 	private final Compilation c;
-	ArrayList<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
+	List<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 
 	public DeducePipeline(Compilation aCompilation) {
 		c = aCompilation;
@@ -47,6 +48,7 @@ public class DeducePipeline implements PipelineMember {
 	@Override
 	public void run() {
 		c.pipelineLogic.everythingBeforeGenerate(lgc);
+		lgc = c.pipelineLogic.dp.generatedClasses.copy();
 	}
 }
 
