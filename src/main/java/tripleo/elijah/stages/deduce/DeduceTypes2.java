@@ -3313,9 +3313,7 @@ public class DeduceTypes2 {
 		}
 
 		private void onChangeITE(@NotNull IdentTableEntry identTableEntry) {
-//			@NotNull ArrayList<TypeTableEntry> pot = getPotentialTypesVte(identTableEntry);
-//			if (identTableEntry.getStatus() == BaseTableEntry.Status.KNOWN && identTableEntry.type.getAttached() != null && identTableEntry.getResolvedElement() != null) {
-
+			if (identTableEntry.type != null) {
 				final OS_Type ty = identTableEntry.type.getAttached();
 
 				@Nullable OS_Element ele2 = null;
@@ -3346,22 +3344,53 @@ public class DeduceTypes2 {
 					aResolveError.printStackTrace();
 					errSink.reportDiagnostic(aResolveError);
 				}
-//			} else if (pot.size() == 1) {
-//				TypeTableEntry tte = pot.get(0);
-//				@Nullable OS_Type ty = tte.getAttached();
-//				if (ty != null) {
-//					switch (ty.getType()) {
-//					case USER:
-//						vte_pot_size_is_1_USER_TYPE(identTableEntry, ty);
-//						break;
-//					case USER_CLASS:
-//						vte_pot_size_is_1_USER_CLASS_TYPE(identTableEntry, ty);
-//						break;
-//					}
-//				} else {
-//					LOG.err("1696");
-//				}
-//			}
+			} else {
+				int y=2;
+				final Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx, LOG, errSink, new DeduceClient1(DeduceTypes2.this));
+				fefi.action(identTableEntry);
+				// TODO we want to setStatus but have no USER or USER_CLASS to perform lookup with
+/*
+				if (identTableEntry.getStatus() == BaseTableEntry.Status.KNOWN) {
+					final ClassStatement ele2 = identTableEntry.getResolvedElement();
+
+					@Nullable LookupResultList lrl = null;
+
+					try {
+						lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext(), DeduceTypes2.this);
+						@Nullable OS_Element best = lrl.chooseBest(null);
+						ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+					} catch (ResolveError aResolveError) {
+						errSink.reportDiagnostic(aResolveError);
+					}
+
+					return;
+				}
+
+				if (identTableEntry.backlink instanceof ProcIA) {
+					final ProcIA backlink = (ProcIA) identTableEntry.backlink;
+					final @NotNull ProcTableEntry pte = backlink.getEntry();
+					pte.typePromise().then(new DoneCallback<GenType>() {
+						@Override
+						public void onDone(final GenType result) {
+							assert result.resolved != null;
+
+							final ClassStatement ele2 = result.resolved.getClassOf();
+
+							@Nullable LookupResultList lrl = null;
+
+							try {
+								lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext(), DeduceTypes2.this);
+								@Nullable OS_Element best = lrl.chooseBest(null);
+								ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+							} catch (ResolveError aResolveError) {
+								errSink.reportDiagnostic(aResolveError);
+							}
+						}
+					});
+				}
+*/
+//				identTableEntry.
+			}
 		}
 
 		private void vte_pot_size_is_1_USER_CLASS_TYPE(@NotNull VariableTableEntry vte, @Nullable OS_Type aTy) {
