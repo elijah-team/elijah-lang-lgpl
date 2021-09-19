@@ -1414,7 +1414,8 @@ public class DeduceTypes2 {
 
 				@Override
 				public void foundElement(OS_Element x) {
-					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
+					if (ite.getResolvedElement() != x)
+						ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(x));
 					if (ite.type != null && ite.type.getAttached() != null) {
 						switch (ite.type.getAttached().getType()) {
 						case USER:
