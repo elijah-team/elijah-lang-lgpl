@@ -9,20 +9,14 @@
 package tripleo.elijah.stages.deduce;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.entrypoints.EntryPoint;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.NamespaceStatement;
-import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.lang.OS_Type;
-import tripleo.elijah.lang.OS_UnknownType;
-import tripleo.elijah.lang.TypeName;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.logging.ElLog;
@@ -30,6 +24,7 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static tripleo.elijah.util.Helpers.List_of;
 
@@ -203,7 +198,15 @@ public class DeducePhase {
 	public @NotNull DeduceTypes2 deduceModule(@NotNull OS_Module m, @NotNull Iterable<GeneratedNode> lgf, ElLog.Verbosity verbosity) {
 		final @NotNull DeduceTypes2 deduceTypes2 = new DeduceTypes2(m, this, verbosity);
 //		LOG.err("196 DeduceTypes "+deduceTypes2.getFileName());
+		{
+			final ArrayList<GeneratedNode> p = new ArrayList<GeneratedNode>();
+			Iterables.addAll(p, lgf);
+			LOG.info("197 lgf.size " + p.size());
+		}
 		deduceTypes2.deduceFunctions(lgf);
+		deduceTypes2.deduceClasses(generatedClasses.copy().stream()
+				.filter(c -> c.module() == m)
+				.collect(Collectors.toList()));
 		return deduceTypes2;
 	}
 

@@ -114,6 +114,67 @@ public class DeduceTypes2 {
 		return size;
 	}
 
+	public void deduceClasses(final List<GeneratedNode> lgc) {
+		for (GeneratedNode generatedNode : lgc) {
+			if (!(generatedNode instanceof GeneratedClass)) continue;
+
+			final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+			for (GeneratedContainer.VarTableEntry entry : generatedClass.varTable) {
+				final OS_Type vt = entry.varType;
+				GenType genType = makeGenTypeFromOSType(vt);
+				entry.resolve(genType.node);
+				int y=2;
+			}
+		}
+	}
+
+	private GenType makeGenTypeFromOSType(final OS_Type aType) {
+		GenType gt = new GenType();
+		gt.typeName = aType;
+		if (aType.getType() == OS_Type.Type.USER) {
+			final TypeName tn1 = aType.getTypeName();
+			assert tn1 instanceof NormalTypeName;
+			final NormalTypeName tn = (NormalTypeName) tn1;
+			final LookupResultList lrl = tn.getContext().lookup(tn.getName());
+			final @Nullable OS_Element el = lrl.chooseBest(null);
+			if (el != null) {
+				if (el instanceof ClassStatement) {
+					final ClassStatement classStatement = (ClassStatement) el;
+					gt.resolved = new OS_Type(classStatement);
+				} else {
+					LOG.err("143 "+el);
+					throw new NotImplementedException();
+				}
+			}
+			if (gt.resolved.getClassOf().getGenericPart().size() != 0) {
+				//throw new AssertionError();
+				LOG.info("149 non-generic type "+tn1);
+			}
+			genCI(gt, null);
+			assert gt.ci != null;
+			if (gt.ci instanceof NamespaceInvocation) {
+				final NamespaceInvocation nsi = (NamespaceInvocation) gt.ci;
+				nsi.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+					@Override
+					public void onDone(final GeneratedNamespace result) {
+						gt.node = result;
+					}
+				});
+			} else if (gt.ci instanceof ClassInvocation) {
+				final ClassInvocation ci = (ClassInvocation) gt.ci;
+				ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(final GeneratedClass result) {
+						gt.node = result;
+					}
+				});
+			} else
+				throw new NotImplementedException();
+		} else
+			throw new AssertionError("Not a USER Type");
+		return gt;
+	}
+
 	interface df_helper_i<T> {
 		@Nullable df_helper<T> get(GeneratedContainerNC generatedClass);
 	}
