@@ -11,11 +11,7 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.lang.IdentExpression;
-import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.OS_Type;
-import tripleo.elijah.lang.TypeName;
+import tripleo.elijah.lang.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +26,7 @@ public interface GeneratedContainer extends GeneratedNode {
     VarTableEntry getVariable(String aVarName);
 
     public class VarTableEntry {
+        public final VariableStatement vs;
         public final IdentExpression nameToken;
         public final IExpression initialValue;
         private final OS_Element parent;
@@ -38,10 +35,12 @@ public interface GeneratedContainer extends GeneratedNode {
         List<TypeTableEntry> potentialTypes = new ArrayList<TypeTableEntry>();
         private GeneratedNode _resolvedType;
 
-        public VarTableEntry(@NotNull IdentExpression aNameToken,
-                             IExpression aInitialValue,
-                             @NotNull TypeName aTypeName,
-                             @NotNull OS_Element aElement) {
+        public VarTableEntry(final VariableStatement aVs,
+                             final @NotNull IdentExpression aNameToken,
+                             final IExpression aInitialValue,
+                             final @NotNull TypeName aTypeName,
+                             final @NotNull OS_Element aElement) {
+            vs              = aVs;
             nameToken       = aNameToken;
             initialValue    = aInitialValue;
             typeName        = aTypeName;
