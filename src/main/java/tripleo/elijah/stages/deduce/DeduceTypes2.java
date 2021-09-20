@@ -233,7 +233,7 @@ public class DeduceTypes2 {
 					@Nullable OS_Element best = el;
 					try {
 						while (best instanceof AliasStatement) {
-							best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
+							best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, DeduceTypes2.this);
 						}
 						assert best != null;
 						return best;
