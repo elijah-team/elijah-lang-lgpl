@@ -129,6 +129,20 @@ public class DeduceTypes2 {
 		}
 	}
 
+	interface IElementProcessor {
+		void elementIsNull();
+		void hasElement(OS_Element el);
+	}
+
+	static class ProcessElement {
+		static void processElement(OS_Element el, IElementProcessor ep) {
+			if (el == null)
+				ep.elementIsNull();
+			else
+				ep.hasElement(el);
+		}
+	}
+
 	private GenType makeGenTypeFromOSType(final OS_Type aType, final @Nullable Map<TypeName, OS_Type> aGenericPart) {
 		GenType gt = new GenType();
 		gt.typeName = aType;
@@ -138,83 +152,98 @@ public class DeduceTypes2 {
 			final NormalTypeName tn = (NormalTypeName) tn1;
 			final LookupResultList lrl = tn.getContext().lookup(tn.getName());
 			final @Nullable OS_Element el = lrl.chooseBest(null);
-			if (el != null) {
-				if (el instanceof ClassStatement) {
-					final ClassStatement classStatement = (ClassStatement) el;
-					gt.resolved = new OS_Type(classStatement);
-				} else if (el instanceof AliasStatement) {
+
+			ProcessElement.processElement(el, new IElementProcessor() {
+				@Override
+				public void elementIsNull() {
+					int y=2;
+				}
+
+				@Override
+				public void hasElement(final OS_Element el) {
+					final @Nullable OS_Element best = preprocess(el);
+					if (best == null) return;
+
+					if (best instanceof ClassStatement) {
+						final ClassStatement classStatement = (ClassStatement) best;
+						gt.resolved = new OS_Type(classStatement);
+					} else if (best instanceof ClassContext.OS_TypeNameElement) {
+						final ClassContext.OS_TypeNameElement typeNameElement = (ClassContext.OS_TypeNameElement) best;
+						assert aGenericPart != null;
+						final OS_Type x = aGenericPart.get(typeNameElement.getTypeName());
+						switch (x.getType()) {
+						case USER_CLASS:
+							final OS_Element best2 = x.getClassOf(); // always a ClassStatement
+
+							// TODO test next 4 lines are copies of above
+							if (best2 instanceof ClassStatement) {
+								final ClassStatement classStatement = (ClassStatement) best2;
+								gt.resolved = new OS_Type(classStatement);
+							}
+							break;
+						case USER:
+							final NormalTypeName tn2 = (NormalTypeName) x.getTypeName();
+							final LookupResultList lrl2 = tn.getContext().lookup(tn2.getName());
+							final @Nullable OS_Element el2 = lrl2.chooseBest(null);
+
+							// TODO test next 4 lines are copies of above
+							if (el2 instanceof ClassStatement) {
+								final ClassStatement classStatement = (ClassStatement) el2;
+								gt.resolved = new OS_Type(classStatement);
+							} else
+								throw new NotImplementedException();
+							break;
+						}
+					} else {
+						LOG.err("143 "+el);
+						throw new NotImplementedException();
+					}
+
+					gotResolved(gt);
+				}
+
+				private void gotResolved(final GenType gt) {
+					if (gt.resolved.getClassOf().getGenericPart().size() != 0) {
+						//throw new AssertionError();
+						LOG.info("149 non-generic type "+tn1);
+					}
+					genCI(gt, null); // TODO aGenericPart
+					assert gt.ci != null;
+					if (gt.ci instanceof NamespaceInvocation) {
+						final NamespaceInvocation nsi = (NamespaceInvocation) gt.ci;
+						nsi.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+							@Override
+							public void onDone(final GeneratedNamespace result) {
+								gt.node = result;
+							}
+						});
+					} else if (gt.ci instanceof ClassInvocation) {
+						final ClassInvocation ci = (ClassInvocation) gt.ci;
+						ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+							@Override
+							public void onDone(final GeneratedClass result) {
+								gt.node = result;
+							}
+						});
+					} else
+						throw new NotImplementedException();
+				}
+
+				private OS_Element preprocess(final OS_Element el) {
 					@Nullable OS_Element best = el;
 					try {
 						while (best instanceof AliasStatement) {
 							best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
 						}
 						assert best != null;
-						// TODO test next 4 lines are copies of above
-						if (best instanceof ClassStatement) {
-							final ClassStatement classStatement = (ClassStatement) best;
-							gt.resolved = new OS_Type(classStatement);
-						}
+						return best;
 					} catch (ResolveError aResolveError) {
 						LOG.err("152 Can't resolve Alias statement "+best);
 						errSink.reportDiagnostic(aResolveError);
 						return null;
 					}
-				} else if (el instanceof ClassContext.OS_TypeNameElement) {
-					final ClassContext.OS_TypeNameElement typeNameElement = (ClassContext.OS_TypeNameElement) el;
-					assert aGenericPart != null;
-					final OS_Type x = aGenericPart.get(typeNameElement.getTypeName());
-					switch (x.getType()) {
-					case USER_CLASS:
-						final OS_Element best = x.getClassOf(); // always a ClassStatement
-
-						// TODO test next 4 lines are copies of above
-						if (best instanceof ClassStatement) {
-							final ClassStatement classStatement = (ClassStatement) best;
-							gt.resolved = new OS_Type(classStatement);
-						}
-						break;
-					case USER:
-						final NormalTypeName tn2 = (NormalTypeName) x.getTypeName();
-						final LookupResultList lrl2 = tn.getContext().lookup(tn2.getName());
-						final @Nullable OS_Element el2 = lrl2.chooseBest(null);
-
-						// TODO test next 4 lines are copies of above
-						if (el2 instanceof ClassStatement) {
-							final ClassStatement classStatement = (ClassStatement) el2;
-							gt.resolved = new OS_Type(classStatement);
-						} else
-							throw new NotImplementedException();
-						break;
-					}
-				} else {
-					LOG.err("143 "+el);
-					throw new NotImplementedException();
 				}
-			}
-			if (gt.resolved.getClassOf().getGenericPart().size() != 0) {
-				//throw new AssertionError();
-				LOG.info("149 non-generic type "+tn1);
-			}
-			genCI(gt, null);
-			assert gt.ci != null;
-			if (gt.ci instanceof NamespaceInvocation) {
-				final NamespaceInvocation nsi = (NamespaceInvocation) gt.ci;
-				nsi.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
-					@Override
-					public void onDone(final GeneratedNamespace result) {
-						gt.node = result;
-					}
-				});
-			} else if (gt.ci instanceof ClassInvocation) {
-				final ClassInvocation ci = (ClassInvocation) gt.ci;
-				ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
-					@Override
-					public void onDone(final GeneratedClass result) {
-						gt.node = result;
-					}
-				});
-			} else
-				throw new NotImplementedException();
+			});
 		} else
 			throw new AssertionError("Not a USER Type");
 		return gt;
