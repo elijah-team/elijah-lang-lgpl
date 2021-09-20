@@ -225,7 +225,7 @@ public class DeduceLookupUtils {
 		LookupResultList lrl = ctx.lookup(ident.getText());
 		@Nullable OS_Element best = lrl.chooseBest(null);
 		while (best instanceof AliasStatement) {
-			best = _resolveAlias((AliasStatement) best, aDeduceTypes2);
+			best = _resolveAlias2((AliasStatement) best, aDeduceTypes2);
 		}
 		if (best instanceof ClassStatement) {
 			R.resolved = new OS_Type((ClassStatement) best);
