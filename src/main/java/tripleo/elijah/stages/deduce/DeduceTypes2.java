@@ -1126,7 +1126,8 @@ public class DeduceTypes2 {
 								typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
 								clsinv.set(i, gp.get(i), typeName2.resolved);
 							} catch (ResolveError aResolveError) {
-								aResolveError.printStackTrace();
+//								aResolveError.printStackTrace();
+								errSink.reportDiagnostic(aResolveError);
 								return null;
 							}
 						}
