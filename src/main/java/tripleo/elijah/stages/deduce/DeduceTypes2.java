@@ -3423,51 +3423,12 @@ public class DeduceTypes2 {
 					errSink.reportDiagnostic(aResolveError);
 				}
 			} else {
-				int y=2;
-				final Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx, LOG, errSink, new DeduceClient1(DeduceTypes2.this));
-				fefi.action(identTableEntry);
+				if (!identTableEntry.fefi) {
+					final Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx, LOG, errSink, new DeduceClient1(DeduceTypes2.this));
+					fefi.action(identTableEntry);
+					identTableEntry.fefi = true;
+				}
 				// TODO we want to setStatus but have no USER or USER_CLASS to perform lookup with
-/*
-				if (identTableEntry.getStatus() == BaseTableEntry.Status.KNOWN) {
-					final ClassStatement ele2 = identTableEntry.getResolvedElement();
-
-					@Nullable LookupResultList lrl = null;
-
-					try {
-						lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext(), DeduceTypes2.this);
-						@Nullable OS_Element best = lrl.chooseBest(null);
-						ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
-					} catch (ResolveError aResolveError) {
-						errSink.reportDiagnostic(aResolveError);
-					}
-
-					return;
-				}
-
-				if (identTableEntry.backlink instanceof ProcIA) {
-					final ProcIA backlink = (ProcIA) identTableEntry.backlink;
-					final @NotNull ProcTableEntry pte = backlink.getEntry();
-					pte.typePromise().then(new DoneCallback<GenType>() {
-						@Override
-						public void onDone(final GenType result) {
-							assert result.resolved != null;
-
-							final ClassStatement ele2 = result.resolved.getClassOf();
-
-							@Nullable LookupResultList lrl = null;
-
-							try {
-								lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext(), DeduceTypes2.this);
-								@Nullable OS_Element best = lrl.chooseBest(null);
-								ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
-							} catch (ResolveError aResolveError) {
-								errSink.reportDiagnostic(aResolveError);
-							}
-						}
-					});
-				}
-*/
-//				identTableEntry.
 			}
 		}
 

@@ -41,6 +41,7 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public TypeTableEntry type;
 	public GeneratedNode externalRef;
+	public boolean fefi = false;
 	private GeneratedNode resolvedType;
 	public ProcTableEntry constructable_pte;
 
