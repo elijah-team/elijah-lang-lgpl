@@ -440,7 +440,12 @@ public class GenerateC implements CodeGenerator {
 			switch (ty.getType()) {
 				case USER_CLASS:
 					final ClassStatement el = ty.getClassOf();
-					z = String.format("Z%d", el._a.getCode());//.getName();
+					final String name;
+					if (ty instanceof NormalTypeName)
+						name = ((NormalTypeName) ty).getName();
+					else
+						name = el.getName();
+					z = Emit.emit("/*443*/")+String.format("Z%d/*%s*/", el._a.getCode(), name);//.getName();
 					break;
 				case FUNCTION:
 					z = "<function>";
