@@ -121,14 +121,15 @@ public class DeduceTypes2 {
 			final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 			for (GeneratedContainer.VarTableEntry entry : generatedClass.varTable) {
 				final OS_Type vt = entry.varType;
-				GenType genType = makeGenTypeFromOSType(vt);
-				entry.resolve(genType.node);
+				GenType genType = makeGenTypeFromOSType(vt, generatedClass.ci.genericPart);
+				if (genType != null)
+					entry.resolve(genType.node);
 				int y=2;
 			}
 		}
 	}
 
-	private GenType makeGenTypeFromOSType(final OS_Type aType) {
+	private GenType makeGenTypeFromOSType(final OS_Type aType, final @Nullable Map<TypeName, OS_Type> aGenericPart) {
 		GenType gt = new GenType();
 		gt.typeName = aType;
 		if (aType.getType() == OS_Type.Type.USER) {
@@ -141,6 +142,50 @@ public class DeduceTypes2 {
 				if (el instanceof ClassStatement) {
 					final ClassStatement classStatement = (ClassStatement) el;
 					gt.resolved = new OS_Type(classStatement);
+				} else if (el instanceof AliasStatement) {
+					@Nullable OS_Element best = el;
+					try {
+						while (best instanceof AliasStatement) {
+							best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
+						}
+						assert best != null;
+						// TODO test next 4 lines are copies of above
+						if (best instanceof ClassStatement) {
+							final ClassStatement classStatement = (ClassStatement) best;
+							gt.resolved = new OS_Type(classStatement);
+						}
+					} catch (ResolveError aResolveError) {
+						LOG.err("152 Can't resolve Alias statement "+best);
+						errSink.reportDiagnostic(aResolveError);
+						return null;
+					}
+				} else if (el instanceof ClassContext.OS_TypeNameElement) {
+					final ClassContext.OS_TypeNameElement typeNameElement = (ClassContext.OS_TypeNameElement) el;
+					assert aGenericPart != null;
+					final OS_Type x = aGenericPart.get(typeNameElement.getTypeName());
+					switch (x.getType()) {
+					case USER_CLASS:
+						final OS_Element best = x.getClassOf(); // always a ClassStatement
+
+						// TODO test next 4 lines are copies of above
+						if (best instanceof ClassStatement) {
+							final ClassStatement classStatement = (ClassStatement) best;
+							gt.resolved = new OS_Type(classStatement);
+						}
+						break;
+					case USER:
+						final NormalTypeName tn2 = (NormalTypeName) x.getTypeName();
+						final LookupResultList lrl2 = tn.getContext().lookup(tn2.getName());
+						final @Nullable OS_Element el2 = lrl2.chooseBest(null);
+
+						// TODO test next 4 lines are copies of above
+						if (el2 instanceof ClassStatement) {
+							final ClassStatement classStatement = (ClassStatement) el2;
+							gt.resolved = new OS_Type(classStatement);
+						} else
+							throw new NotImplementedException();
+						break;
+					}
 				} else {
 					LOG.err("143 "+el);
 					throw new NotImplementedException();
