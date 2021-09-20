@@ -71,12 +71,11 @@ public class PipelineLogic {
 	}
 
 	public void generate(List<GeneratedNode> lgc) {
-		GenerateResult ggr = null;
 		final WorkManager wm = new WorkManager();
 		// README use any errSink, they should all be the same
 		for (OS_Module mod : mods) {
 			final GenerateC generateC = new GenerateC(mod, mod.parent.getErrSink(), verbosity, this);
-			ggr = run3(mod, lgc, wm, generateC);
+			final GenerateResult ggr = run3(mod, lgc, wm, generateC);
 			wm.drain();
 			gr.results().addAll(ggr.results());
 		}
