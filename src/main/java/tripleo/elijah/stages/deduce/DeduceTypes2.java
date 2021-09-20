@@ -148,6 +148,8 @@ public class DeduceTypes2 {
 		gt.typeName = aType;
 		if (aType.getType() == OS_Type.Type.USER) {
 			final TypeName tn1 = aType.getTypeName();
+			if (tn1.isNull()) return null; // TODO Unknown, needs to resolve somewhere
+
 			assert tn1 instanceof NormalTypeName;
 			final NormalTypeName tn = (NormalTypeName) tn1;
 			final LookupResultList lrl = tn.getContext().lookup(tn.getName());
