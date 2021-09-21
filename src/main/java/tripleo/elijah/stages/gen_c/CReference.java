@@ -12,15 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
-import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
-import tripleo.elijah.stages.gen_fn.BaseTableEntry;
-import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
-import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
-import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
-import tripleo.elijah.stages.gen_fn.IdentTableEntry;
-import tripleo.elijah.stages.gen_fn.ProcTableEntry;
-import tripleo.elijah.stages.gen_fn.VariableTableEntry;
+import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
@@ -101,6 +93,8 @@ public class CReference {
 						if (resolved == null) {
 							GeneratedNode resolved1 = idte.resolvedType();
 							if (resolved1 instanceof GeneratedFunction)
+								resolved = resolved1;
+							else if (resolved1 instanceof GeneratedClass)
 								resolved = resolved1;
 						}
 					}
@@ -233,17 +227,19 @@ public class CReference {
 			addRef(text2, Ref.CONSTRUCTOR);
 		} else if (resolved_element instanceof FunctionDef) {
 			OS_Element parent = resolved_element.getParent();
-			int code;
+			int code = -1;
 			if (aResolved != null) {
-				assert aResolved instanceof BaseGeneratedFunction;
-				final BaseGeneratedFunction rf = (BaseGeneratedFunction) aResolved;
-				GeneratedNode gc = rf.getGenClass();
-				if (gc instanceof GeneratedContainerNC) // and not another function
-					code = ((GeneratedContainerNC) gc).getCode();
-				else
-					code = -2;
-			} else {
-				code = -1;
+				if (aResolved instanceof BaseGeneratedFunction) {
+					final BaseGeneratedFunction rf = (BaseGeneratedFunction) aResolved;
+					GeneratedNode gc = rf.getGenClass();
+					if (gc instanceof GeneratedContainerNC) // and not another function
+						code = ((GeneratedContainerNC) gc).getCode();
+					else
+						code = -2;
+				} else if (aResolved instanceof GeneratedClass) {
+					final GeneratedClass generatedClass = (GeneratedClass) aResolved;
+					code = generatedClass.getCode();
+				}
 			}
 			// TODO what about overloaded functions
 			assert i == sSize-1; // Make sure we are ending with a ProcedureCall
