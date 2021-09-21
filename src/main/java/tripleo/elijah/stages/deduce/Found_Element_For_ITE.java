@@ -143,6 +143,31 @@ class Found_Element_For_ITE {
 										}
 									}
 								});
+					} else {
+						IInvocation invocation;
+						if (ite.backlink == null) {
+							if (parent instanceof ClassStatement) {
+								final ClassStatement classStatement = (ClassStatement) parent;
+								final @Nullable ClassInvocation ci = dc.registerClassInvocation(classStatement, null);
+								assert ci != null;
+								invocation = ci;
+							} else {
+								invocation = null; // TODO shouldn't be null
+							}
+						} else {
+							invocation = dc.getInvocationFromBacklink(ite.backlink);
+						}
+						DeferredMember dm = dc.deferred_member(parent, invocation, vs, ite);
+						dm.typePromise().then(new DoneCallback<GenType>() {
+							@Override
+							public void onDone(final GenType result) {
+								if (ite.type == null)
+									ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+								assert result.resolved != null;
+								ite.setGenType(result);
+//								ite.resolveTypeToClass(result.node); // TODO setting this has no effect on output
+							}
+						});
 					}
 
 					@Nullable GenType genType = null;

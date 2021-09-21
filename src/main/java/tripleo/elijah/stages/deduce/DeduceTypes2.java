@@ -1965,6 +1965,10 @@ public class DeduceTypes2 {
 		public void genCI(final GenType aResult, final TypeName aNonGenericTypeName) {
 			dt2.genCI(aResult, aNonGenericTypeName);
 		}
+
+		public @Nullable ClassInvocation registerClassInvocation(final ClassStatement aClassStatement, final String aS) {
+			return dt2.phase.registerClassInvocation(aClassStatement, aS);
+		}
 	}
 
 	void found_element_for_ite(BaseGeneratedFunction generatedFunction, @NotNull IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
@@ -3438,6 +3442,7 @@ public class DeduceTypes2 {
 
 								if (ele2 != null) {
 									ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(ele2));
+									ite.resolveTypeToClass(result.node);
 								}
 							} catch (ResolveError aResolveError) {
 								aResolveError.printStackTrace();
