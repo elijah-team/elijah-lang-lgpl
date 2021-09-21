@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /*
  * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
  *
@@ -9,10 +10,11 @@
 package tripleo.elijah.stages.gen_fn;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.jdeferred2.DoneCallback;
+import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.IdentExpression;
-import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.deduce.DeducePath;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
@@ -143,8 +145,18 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 				", backlink=" + backlink +
 				"}";
 	}
+
+	private DeferredObject<GenType, Void, Void> fefiDone = new DeferredObject<GenType, Void, Void>();
+
+	public void fefiDone(final GenType aGenType) {
+		fefiDone.resolve(aGenType);
+	}
+
+	public void onFefiDone(DoneCallback<GenType> aCallback) {
+		fefiDone.then(aCallback);
+	}
 }
 
 //
-//
+// vim:set shiftwidth=4 softtabstop=0 noexpandtab:
 //

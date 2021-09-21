@@ -138,6 +138,9 @@ class Found_Element_For_ITE {
 											genCIForGenType(result);
 										}
 										ite.setGenType(result);
+										if (ite.fefi) {
+											ite.fefiDone(result);
+										}
 									}
 								});
 					}
