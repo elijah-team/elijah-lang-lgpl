@@ -149,7 +149,8 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	private DeferredObject<GenType, Void, Void> fefiDone = new DeferredObject<GenType, Void, Void>();
 
 	public void fefiDone(final GenType aGenType) {
-		fefiDone.resolve(aGenType);
+		if (fefiDone.isPending())
+			fefiDone.resolve(aGenType);
 	}
 
 	public void onFefiDone(DoneCallback<GenType> aCallback) {
