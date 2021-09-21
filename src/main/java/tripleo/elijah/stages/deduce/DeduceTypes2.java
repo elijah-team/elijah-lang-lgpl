@@ -3427,6 +3427,23 @@ public class DeduceTypes2 {
 					final Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx, LOG, errSink, new DeduceClient1(DeduceTypes2.this));
 					fefi.action(identTableEntry);
 					identTableEntry.fefi = true;
+					identTableEntry.onFefiDone(new DoneCallback<GenType>() {
+						@Override
+						public void onDone(final GenType result) {
+							LookupResultList lrl = null;
+							OS_Element ele2;
+							try {
+								lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), result.resolved.getClassOf().getContext(), DeduceTypes2.this);
+								ele2 = lrl.chooseBest(null);
+
+								if (ele2 != null) {
+									ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(ele2));
+								}
+							} catch (ResolveError aResolveError) {
+								aResolveError.printStackTrace();
+							}
+						}
+					});
 				}
 				// TODO we want to setStatus but have no USER or USER_CLASS to perform lookup with
 			}
