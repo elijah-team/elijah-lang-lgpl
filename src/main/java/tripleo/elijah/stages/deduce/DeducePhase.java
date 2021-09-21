@@ -479,7 +479,8 @@ public class DeducePhase {
 								final GenType ty = gc_vte.connectionPairs.get(0).vte.type.genType;
 								assert ty.resolved != null;
 								gc_vte.varType = ty.resolved; // TODO make sure this is right in all cases
-								deferredMember.typeResolved().resolve(ty);
+								if (deferredMember.typeResolved().isPending())
+									deferredMember.typeResolved().resolve(ty);
 								break;
 							}
 						}
