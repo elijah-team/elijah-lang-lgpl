@@ -16,6 +16,7 @@ import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
 import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.logging.ElLog;
 
 /**
@@ -53,7 +54,11 @@ class Found_Element_For_ITE {
 		} else {
 			//LookupResultList exp = lookupExpression();
 			LOG.info("2009 " + y);
+			return;
 		}
+
+		final String normal_path = generatedFunction.getIdentIAPathNormal(new IdentIA(ite.getIndex(), generatedFunction));
+		ite.resolveExpectation.satisfy(normal_path);
 	}
 
 	public void action_AliasStatement(@NotNull IdentTableEntry ite, @NotNull AliasStatement y) {
@@ -142,6 +147,9 @@ class Found_Element_For_ITE {
 										if (ite.fefi) {
 											ite.fefiDone(result);
 										}
+
+										final String normal_path = generatedFunction.getIdentIAPathNormal(new IdentIA(ite.getIndex(), generatedFunction));
+										ite.resolveExpectation.satisfy(normal_path);
 									}
 								});
 					} else {
@@ -167,6 +175,9 @@ class Found_Element_For_ITE {
 								assert result.resolved != null;
 								ite.setGenType(result);
 //								ite.resolveTypeToClass(result.node); // TODO setting this has no effect on output
+
+								final String normal_path = generatedFunction.getIdentIAPathNormal(new IdentIA(ite.getIndex(), generatedFunction));
+								ite.resolveExpectation.satisfy(normal_path);
 							}
 						});
 					}

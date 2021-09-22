@@ -271,6 +271,7 @@ class Resolve_Ident_IA {
 		if (idte.getStatus() == BaseTableEntry.Status.UNKNOWN) {
 			LOG.info("1257 Not found for " + generatedFunction.getIdentIAPathNormal(ia));
 			// No need checking more than once
+			idte.resolveExpectation.fail();
 			foundElement.doNoFoundElement();
 			return RIA_STATE.RETURN;
 		}
@@ -354,7 +355,12 @@ class Resolve_Ident_IA {
 				});
 			}
 //				assert idte.getStatus() != BaseTableEntry.Status.UNCHECKED;
+			final String normal_path = generatedFunction.getIdentIAPathNormal(identIA);
+			idte.resolveExpectation.satisfy(normal_path);
 		} else if (idte.getStatus() == BaseTableEntry.Status.KNOWN) {
+			final String normal_path = generatedFunction.getIdentIAPathNormal(identIA);
+			idte.resolveExpectation.satisfy(normal_path);
+
 			el = idte.getResolvedElement();
 			ectx = el.getContext();
 		}
