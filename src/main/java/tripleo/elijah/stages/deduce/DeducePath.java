@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /*
  * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
  *
@@ -82,7 +83,7 @@ public class DeducePath {
 //				}
 				assert el != null;
 				if (aIndex == 0)
-					identTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el)); // TODO ??
+					identTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el)); // TODO why reset status to same value??
 			} else if (ia2 instanceof ProcIA) {
 				final @NotNull ProcTableEntry procTableEntry = ((ProcIA) ia2).getEntry();
 				el = procTableEntry.getResolvedElement(); // .expression?
@@ -191,5 +192,5 @@ public class DeducePath {
 }
 
 //
-//
+// vim:set shiftwidth=4 softtabstop=0 noexpandtab:
 //
