@@ -179,7 +179,7 @@ class Found_Element_For_ITE {
 
 					generatedFunction.addDependentType(genType);
 				}
-				LOG.err("394 typename is null " + vs.getName());
+//				LOG.err("394 typename is null " + vs.getName());
 			}
 		}
 	}
