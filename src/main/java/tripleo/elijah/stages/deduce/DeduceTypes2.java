@@ -875,7 +875,7 @@ public class DeduceTypes2 {
 		void connect(VariableTableEntry aVte, String aName);
 	}
 
-	class CtorConnector implements IVariableConnector {
+	static class CtorConnector implements IVariableConnector {
 		private final GeneratedConstructor generatedConstructor;
 
 		public CtorConnector(final GeneratedConstructor aGeneratedConstructor) {
@@ -893,7 +893,7 @@ public class DeduceTypes2 {
 		}
 	}
 
-	class NullConnector implements IVariableConnector {
+	static class NullConnector implements IVariableConnector {
 		@Override
 		public void connect(final VariableTableEntry aVte, final String aName) {
 		}
