@@ -3376,6 +3376,7 @@ public class DeduceTypes2 {
 								try {
 									LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext(), DeduceTypes2.this);
 									@Nullable OS_Element best = lrl.chooseBest(null);
+									assert best != null;
 									ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 								} catch (ResolveError aResolveError) {
 									aResolveError.printStackTrace();
