@@ -169,7 +169,7 @@ class Resolve_Ident_IA {
 	}
 
 	private void action_ProcIA(@NotNull InstructionArgument ia) {
-		@NotNull ProcTableEntry prte = generatedFunction.getProcTableEntry(DeduceTypes2.to_int(ia));
+		@NotNull ProcTableEntry prte = ((ProcIA)ia).getEntry();
 		if (prte.getResolvedElement() == null) {
 			IExpression exp = prte.expression;
 			if (exp instanceof ProcedureCallExpression) {
