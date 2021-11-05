@@ -1245,6 +1245,12 @@ public class DeduceTypes2 {
 				final @NotNull GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
 				NamespaceInvocation ni = phase.registerNamespaceInvocation(genType.resolvedn);
 				@NotNull WlGenerateNamespace gen = new WlGenerateNamespace(gf, ni, phase.generatedClasses);
+
+				assert genType.ci == null;
+				genType.ci = ni;
+
+				ni.resolveDeferred().done(result -> genType.node = result);
+
 				wl.addJob(gen);
 			} else if (genType.resolved != null) {
 				final ClassStatement c = genType.resolved.getClassOf();
@@ -1254,11 +1260,21 @@ public class DeduceTypes2 {
 				if (genType.ci == null) {
 					ci = new ClassInvocation(c, null);
 					ci = phase.registerClassInvocation(ci);
+
+					genType.ci = ci;
 				} else {
 					assert genType.ci instanceof ClassInvocation;
 					ci = (ClassInvocation) genType.ci;
 				}
 				@Nullable WlGenerateClass gen = new WlGenerateClass(gf, ci, phase.generatedClasses);
+
+				ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(final GeneratedClass result) {
+						genType.node = result;
+					}
+				});
+
 				wl.addJob(gen);
 			}
 			//
