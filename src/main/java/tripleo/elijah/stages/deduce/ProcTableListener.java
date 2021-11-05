@@ -106,7 +106,16 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 				} else if (parent instanceof FormalArgListItem) {
 					resolved_element_pte_FunctionDef_FormalArgListItem(co, pte, depTracker, fd, (FormalArgListItem) parent);
 				} else if (parent instanceof VariableStatement) {
-					resolved_element_pte_FunctionDef_VariableStatement(co, pte, depTracker, fd, (VariableStatement) parent);
+					@Nullable OS_Element p;
+					@Nullable InstructionArgument ia;
+					if (dp.size() > 2) {
+						p = dp.getElement(dp.size() - 3);
+						ia = dp.getIA(dp.size() - 3);
+					} else {
+						p = null;
+						ia = null;
+					}
+					resolved_element_pte_FunctionDef_VariableStatement(co, depTracker, pte, fd, p, ia, (VariableStatement) parent);
 				} else {
 					@NotNull E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(null);
 					fi = e_Is_FunctionDef.getFi();
@@ -182,8 +191,22 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 		}
 	}
 
-	private void resolved_element_pte_FunctionDef_VariableStatement(Constructable co, ProcTableEntry pte, AbstractDependencyTracker depTracker, FunctionDef fd, VariableStatement parent) {
-		final VariableStatement variableStatement = parent;
+	private void resolved_element_pte_FunctionDef_VariableStatement(final Constructable co,
+																	final AbstractDependencyTracker depTracker,
+																	final ProcTableEntry pte,
+																	final @NotNull FunctionDef fd,
+																	final @Nullable OS_Element parent,
+																	final @Nullable InstructionArgument ia,
+																	final @NotNull VariableStatement variableStatement) {
+		if (ia != null) {
+			if (ia instanceof IdentIA) {
+				@NotNull IdentTableEntry identTableEntry = ((IdentIA) ia).getEntry();
+				int y = 2;
+			} else {
+				int y=2;
+			}
+			return;
+		}
 		// TODO lookupVariableStatement?
 		//  we really want DeduceVariableStatement < DeduceElement (with type/promise)
 		@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(variableStatement.getName());
