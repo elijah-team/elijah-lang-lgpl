@@ -305,7 +305,7 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 		/* @ensures genType != null && genType.ci != null; */
 		/* @ ///// ensures fi != null ; */
 		public @NotNull E_Is_FunctionDef invoke(TypeName typeName) {
-			@Nullable ClassInvocation ci;
+			@NotNull ClassInvocation ci;
 			if (parent instanceof NamespaceStatement) {
 				final @NotNull NamespaceStatement namespaceStatement = (NamespaceStatement) parent;
 				genType = new GenType(namespaceStatement);

@@ -78,52 +78,56 @@ public class DeducePhase {
 //	Multimap<GeneratedClass, ClassInvocation> generatedClasses1 = ArrayListMultimap.create();
 @NotNull Multimap<ClassStatement, ClassInvocation> classInvocationMultimap = ArrayListMultimap.create();
 
-	public @Nullable ClassInvocation registerClassInvocation(@NotNull ClassInvocation aClassInvocation) {
-		boolean put = false;
-		@Nullable ClassInvocation Result = null;
+	class RegisterClassInvocation {
+		public @NotNull ClassInvocation registerClassInvocation(@NotNull ClassInvocation aClassInvocation) {
 
-		// 1. select which to return
-		ClassStatement c = aClassInvocation.getKlass();
-		Collection<ClassInvocation> cis = classInvocationMultimap.get(c);
-		for (@NotNull ClassInvocation ci : cis) {
-			// don't lose information
-			if (ci.getConstructorName() != null)
-				if (!(ci.getConstructorName().equals(aClassInvocation.getConstructorName())))
-					continue;
+			// 1. select which to return
+			ClassStatement c = aClassInvocation.getKlass();
+			Collection<ClassInvocation> cis = classInvocationMultimap.get(c);
+			for (@NotNull ClassInvocation ci : cis) {
+				// don't lose information
+				if (ci.getConstructorName() != null)
+					if (!(ci.getConstructorName().equals(aClassInvocation.getConstructorName())))
+						continue;
 
-			boolean i = equivalentGenericPart(aClassInvocation, ci);
-			if (i) {
-				Result = ci;
-				break;
+				boolean i = equivalentGenericPart(aClassInvocation, ci);
+				if (i) {
+					return ci;
+//					return part2(ci, false);
+				}
 			}
+
+			return part2(aClassInvocation, true);
 		}
 
-		if (Result == null) {
-			put = true;
-			Result = aClassInvocation;
-		}
-
-		// 2. Check and see if already done
-		Collection<ClassInvocation> cls = classInvocationMultimap.get(Result.getKlass());
-		for (@NotNull ClassInvocation ci : cls) {
-			if (equivalentGenericPart(ci, Result)) {
-				return ci;
+		private ClassInvocation part2(final ClassInvocation aClassInvocation, boolean put) {
+			// 2. Check and see if already done
+			Collection<ClassInvocation> cls = classInvocationMultimap.get(aClassInvocation.getKlass());
+			for (@NotNull ClassInvocation ci : cls) {
+				if (equivalentGenericPart(ci, aClassInvocation)) {
+					return ci;
+				}
 			}
+
+			if (put) {
+				classInvocationMultimap.put(aClassInvocation.getKlass(), aClassInvocation);
+			}
+
+			// 3. Generate new GeneratedClass
+			final @NotNull WorkList wl = new WorkList();
+			final @NotNull OS_Module mod = aClassInvocation.getKlass().getContext().module();
+			wl.addJob(new WlGenerateClass(generatePhase.getGenerateFunctions(mod), aClassInvocation, generatedClasses)); // TODO why add now?
+			generatePhase.wm.addJobs(wl);
+			generatePhase.wm.drain(); // TODO find a better place to put this
+
+			// 4. Return it
+			return aClassInvocation;
 		}
+	}
 
-		if (put) {
-			classInvocationMultimap.put(aClassInvocation.getKlass(), aClassInvocation);
-		}
-
-		// 3. Generate new GeneratedClass
-		final @NotNull WorkList wl = new WorkList();
-		final @NotNull OS_Module mod = Result.getKlass().getContext().module();
-		wl.addJob(new WlGenerateClass(generatePhase.getGenerateFunctions(mod), Result, generatedClasses)); // TODO why add now?
-		generatePhase.wm.addJobs(wl);
-		generatePhase.wm.drain(); // TODO find a better place to put this
-
-		// 4. Return it
-		return Result;
+	public @NotNull ClassInvocation registerClassInvocation(@NotNull ClassInvocation aClassInvocation) {
+		RegisterClassInvocation rci = new RegisterClassInvocation();
+		return rci.registerClassInvocation(aClassInvocation);
 	}
 
 	public boolean equivalentGenericPart(@NotNull ClassInvocation first, @NotNull ClassInvocation second) {

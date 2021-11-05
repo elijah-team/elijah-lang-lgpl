@@ -1090,7 +1090,7 @@ public class DeduceTypes2 {
 		return null;
 	}
 
-	@Nullable ClassInvocation genCI(@NotNull GenType genType, TypeName aGenericTypeName) {
+	@NotNull ClassInvocation genCI(@NotNull GenType genType, TypeName aGenericTypeName) {
 		if (genType.nonGenericTypeName != null) {
 			@NotNull NormalTypeName aTyn1 = (NormalTypeName) genType.nonGenericTypeName;
 			@Nullable String constructorName = null; // TODO this comes from nowhere
@@ -3613,7 +3613,7 @@ public class DeduceTypes2 {
 			return deduceTypes2.phase.registerNamespaceInvocation(namespaceStatement);
 		}
 
-		public @Nullable ClassInvocation genCI(@NotNull GenType genType, TypeName typeName) {
+		public @NotNull ClassInvocation genCI(@NotNull GenType genType, TypeName typeName) {
 			return deduceTypes2.genCI(genType, typeName);
 		}
 
