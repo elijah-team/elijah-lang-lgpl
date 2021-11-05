@@ -176,8 +176,9 @@ class Resolve_Ident_IA {
 				final @NotNull ProcedureCallExpression pce = (ProcedureCallExpression) exp;
 				exp = pce.getLeft(); // TODO might be another pce??!!
 				if (exp instanceof ProcedureCallExpression)
-					throw new IllegalArgumentException("double pce!");
-			}
+					throw new IllegalStateException("double pce!");
+			} else
+				throw new IllegalStateException("prte resolvedElement not ProcCallExpression");
 			try {
 				LookupResultList lrl = dc.lookupExpression(exp, ectx);
 				el = lrl.chooseBest(null);
