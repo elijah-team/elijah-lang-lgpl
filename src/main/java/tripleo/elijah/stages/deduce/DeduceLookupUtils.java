@@ -23,7 +23,9 @@ import java.util.Stack;
  * Created 3/7/21 1:13 AM
  */
 public class DeduceLookupUtils {
-	public static LookupResultList lookupExpression(final @NotNull IExpression left, final @NotNull Context ctx, @NotNull DeduceTypes2 deduceTypes2) throws ResolveError {
+	public static LookupResultList lookupExpression(final @NotNull IExpression left,
+													final @NotNull Context ctx,
+													final @NotNull DeduceTypes2 deduceTypes2) throws ResolveError {
 		switch (left.getKind()) {
 		case QIDENT:
 			final IExpression de = Helpers.qualidentToDotExpression2((Qualident) left);
