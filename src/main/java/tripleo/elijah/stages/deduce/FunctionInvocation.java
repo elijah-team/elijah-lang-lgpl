@@ -39,16 +39,6 @@ public class FunctionInvocation {
 		this.pte = aProcTableEntry;
 		assert invocation != null;
 		invocation.setForFunctionInvocation(this);
-/*
-		if (invocation instanceof ClassInvocation)
-			setClassInvocation((ClassInvocation) invocation);
-		else if (invocation instanceof NamespaceInvocation)
-			setNamespaceInvocation((NamespaceInvocation) invocation);
-		else if (invocation == null)
-			throw new NotImplementedException();
-		else
-			throw new IllegalArgumentException("Unknown invocation");
-*/
 //		setPhase(phase);
 	}
 
