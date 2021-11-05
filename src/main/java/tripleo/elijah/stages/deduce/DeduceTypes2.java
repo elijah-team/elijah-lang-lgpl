@@ -3162,7 +3162,7 @@ public class DeduceTypes2 {
 	}
 
 	public void resolveIdentIA_(@NotNull Context context, @NotNull IdentIA identIA, BaseGeneratedFunction generatedFunction, @NotNull FoundElement foundElement) {
-		@NotNull Resolve_Ident_IA ria = new Resolve_Ident_IA(this, phase, context, identIA, generatedFunction, foundElement, errSink);
+		@NotNull Resolve_Ident_IA ria = new Resolve_Ident_IA(new DeduceClient3(this), context, identIA, generatedFunction, foundElement, errSink);
 		ria.action();
 	}
 
@@ -3602,6 +3602,54 @@ public class DeduceTypes2 {
 
 		public @NotNull ElLog getLOG() {
 			return deduceTypes2.LOG;
+		}
+	}
+
+	public static class DeduceClient3 {
+		private final DeduceTypes2 deduceTypes2;
+
+		public DeduceClient3(final DeduceTypes2 aDeduceTypes2) {
+			deduceTypes2 = aDeduceTypes2;
+		}
+
+		public ElLog getLOG() {
+			return deduceTypes2.LOG;
+		}
+
+		public LookupResultList lookupExpression(final IExpression aExp, final Context aContext) throws ResolveError {
+			return DeduceLookupUtils.lookupExpression(aExp, aContext, deduceTypes2);
+		}
+
+		public GenerateFunctions getGenerateFunctions(final OS_Module aModule) {
+			return deduceTypes2.getGenerateFunctions(aModule);
+		}
+
+		public void resolveIdentIA2_(final Context aEctx,
+									 final IdentIA aIdentIA,
+									 final @Nullable List<InstructionArgument> aInstructionArgumentList,
+									 final BaseGeneratedFunction aGeneratedFunction,
+									 final FoundElement aFoundElement) {
+			deduceTypes2.resolveIdentIA2_(aEctx, aIdentIA, aInstructionArgumentList, aGeneratedFunction, aFoundElement);
+		}
+
+		public List<TypeTableEntry> getPotentialTypesVte(final VariableTableEntry aVte) {
+			return deduceTypes2.getPotentialTypesVte(aVte);
+		}
+
+		public IInvocation getInvocation(final GeneratedFunction aGeneratedFunction) {
+			return deduceTypes2.getInvocation(aGeneratedFunction);
+		}
+
+		public GenType resolve_type(final OS_Type aType, final Context aContext) throws ResolveError {
+			return deduceTypes2.resolve_type(aType, aContext);
+		}
+
+		public DeducePhase getPhase() {
+			return deduceTypes2.phase;
+		}
+
+		public void addJobs(final WorkList aWl) {
+			deduceTypes2.wm.addJobs(aWl);
 		}
 	}
 }

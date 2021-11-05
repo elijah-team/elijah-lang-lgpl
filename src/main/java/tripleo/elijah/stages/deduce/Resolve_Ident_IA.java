@@ -36,28 +36,27 @@ class Resolve_Ident_IA {
 	private final @NotNull FoundElement foundElement;
 	private final @NotNull ErrSink errSink;
 
-	private final @NotNull DeduceTypes2 deduceTypes2;
+	private final @NotNull DeduceTypes2.DeduceClient3 dc;
 	private final @NotNull DeducePhase phase;
-	
+
 	private final @NotNull ElLog LOG;
 
 	@Contract(pure = true)
-	public Resolve_Ident_IA(final @NotNull DeduceTypes2 aDeduceTypes2,
-							final @NotNull DeducePhase aPhase,
+	public Resolve_Ident_IA(final @NotNull DeduceTypes2.DeduceClient3 aDeduceClient3,
 							final @NotNull Context aContext,
 							final @NotNull IdentIA aIdentIA,
 							final BaseGeneratedFunction aGeneratedFunction,
 							final @NotNull FoundElement aFoundElement,
 							final @NotNull ErrSink aErrSink) {
-		deduceTypes2 = aDeduceTypes2;
-		phase = aPhase;
+		dc = aDeduceClient3;
+		phase = dc.getPhase();
 		context = aContext;
 		identIA = aIdentIA;
 		generatedFunction = aGeneratedFunction;
 		foundElement = aFoundElement;
 		errSink = aErrSink;
 		//
-		LOG = deduceTypes2.LOG;
+		LOG = dc.getLOG();
 	}
 
 	@Nullable OS_Element el;
@@ -180,7 +179,7 @@ class Resolve_Ident_IA {
 					throw new IllegalArgumentException("double pce!");
 			}
 			try {
-				LookupResultList lrl = DeduceLookupUtils.lookupExpression(exp, ectx, deduceTypes2);
+				LookupResultList lrl = dc.lookupExpression(exp, ectx);
 				el = lrl.chooseBest(null);
 				ectx = el.getContext();
 //					prte.setResolvedElement(el);
@@ -219,12 +218,12 @@ class Resolve_Ident_IA {
 				});
 				final @NotNull WorkList wl = new WorkList();
 				final @NotNull OS_Module module = ci.getKlass().getContext().module();
-				final @NotNull GenerateFunctions generateFunctions = deduceTypes2.getGenerateFunctions(module);
+				final @NotNull GenerateFunctions generateFunctions = dc.getGenerateFunctions(module);
 				if (pte.getFunctionInvocation().getFunction() == ConstructorDef.defaultVirtualCtor)
 					wl.addJob(new WlGenerateDefaultCtor(generateFunctions, fi));
 				else
 					wl.addJob(new WlGenerateCtor(generateFunctions, fi, null));
-				deduceTypes2.wm.addJobs(wl);
+				dc.addJobs(wl);
 //				generatedFunction.addDependentType(genType);
 //				generatedFunction.addDependentFunction(fi);
 			}
@@ -337,7 +336,7 @@ class Resolve_Ident_IA {
 					return RIA_STATE.RETURN;
 				}
 			} else /*if (false)*/ {
-				deduceTypes2.resolveIdentIA2_(ectx/*context*/, ia, null, generatedFunction, new FoundElement(phase) {
+				dc.resolveIdentIA2_(ectx/*context*/, ia, null, generatedFunction, new FoundElement(phase) {
 					final String z = generatedFunction.getIdentIAPathNormal(ia);
 
 					@Override
@@ -386,7 +385,7 @@ class Resolve_Ident_IA {
 			//
 			// OTHERWISE TYPE INFORMATION MAY BE IN POTENTIAL_TYPES
 			//
-			@NotNull List<TypeTableEntry> pot = deduceTypes2.getPotentialTypesVte(vte);
+			@NotNull List<TypeTableEntry> pot = dc.getPotentialTypesVte(vte);
 			if (pot.size() == 1) {
 				OS_Type attached = pot.get(0).getAttached();
 				if (attached != null) {
@@ -418,7 +417,7 @@ class Resolve_Ident_IA {
 						final OS_Element resolvedElement = backlink.getResolvedElement();
 						assert resolvedElement != null;
 						try {
-							LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), resolvedElement.getContext(), deduceTypes2);
+							LookupResultList lrl2 = dc.lookupExpression(y.getIdent(), resolvedElement.getContext());
 							@Nullable OS_Element best = lrl2.chooseBest(null);
 							assert best != null;
 							y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
@@ -439,7 +438,7 @@ class Resolve_Ident_IA {
 									public void onDone(@NotNull GenType result) {
 										try {
 											final Context context = result.resolved.getClassOf().getContext();
-											LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), context, deduceTypes2);
+											LookupResultList lrl2 = dc.lookupExpression(y.getIdent(), context);
 											@Nullable OS_Element best = lrl2.chooseBest(null);
 											assert best != null;
 											y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
@@ -450,7 +449,7 @@ class Resolve_Ident_IA {
 									}
 								});
 							} else {
-								LookupResultList lrl2 = DeduceLookupUtils.lookupExpression(y.getIdent(), resolvedElement.getContext(), deduceTypes2);
+								LookupResultList lrl2 = dc.lookupExpression(y.getIdent(), resolvedElement.getContext());
 								@Nullable OS_Element best = lrl2.chooseBest(null);
 								assert best != null;
 								y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
@@ -475,7 +474,7 @@ class Resolve_Ident_IA {
 			ci = phase.registerClassInvocation(ci);
 			fi = new FunctionInvocation(null, aPte, ci, phase.generatePhase);
 		} else if (aY.getResolvedElement() instanceof FunctionDef) {
-			final IInvocation invocation = deduceTypes2.getInvocation((GeneratedFunction) generatedFunction);
+			final IInvocation invocation = dc.getInvocation((GeneratedFunction) generatedFunction);
 			fi = new FunctionInvocation((FunctionDef) aY.getResolvedElement(), aPte, invocation, phase.generatePhase);
 		} else
 			assert false;
@@ -507,7 +506,7 @@ class Resolve_Ident_IA {
 					// for example from match conditional
 					final TypeName tn = ((MatchConditional.MatchArm_TypeMatch) el).getTypeName();
 					try {
-						final @NotNull GenType ty = deduceTypes2.resolve_type(new OS_Type(tn), tn.getContext());
+						final @NotNull GenType ty = dc.resolve_type(new OS_Type(tn), tn.getContext());
 						ectx = ty.resolved.getElement().getContext();
 					} catch (ResolveError resolveError) {
 						resolveError.printStackTrace();
