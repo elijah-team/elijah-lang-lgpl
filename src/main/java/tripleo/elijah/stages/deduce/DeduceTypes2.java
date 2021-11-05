@@ -3444,6 +3444,14 @@ public class DeduceTypes2 {
 								if (ele2 != null) {
 									ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(ele2));
 									ite.resolveTypeToClass(result.node);
+
+									if (ite.getCallablePTE() != null) {
+										final @Nullable ProcTableEntry pte = ite.getCallablePTE();
+										final @NotNull  IInvocation invocation = result.ci;
+										final @NotNull  FunctionInvocation fi = newFunctionInvocation((BaseFunctionDef) ele2, pte, invocation, phase);
+
+										generatedFunction.addDependentFunction(fi);
+									}
 								}
 							} catch (ResolveError aResolveError) {
 								aResolveError.printStackTrace();
