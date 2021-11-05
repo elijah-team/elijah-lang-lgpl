@@ -64,9 +64,7 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 								  final AbstractDependencyTracker depTracker) {
 		@Nullable ClassInvocation ci;
 		FunctionInvocation fi;
-		@Nullable GenType genType = null;
 
-//		pte.setResolvedElement(e); // README already done
 		if (e instanceof ClassStatement) {
 			ci = new ClassInvocation((ClassStatement) e, null);
 			ci = dc.registerClassInvocation(ci);
@@ -87,7 +85,6 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 			resolved_element_pte_FunctionDef(co, pte, depTracker, fd);
 		} else {
 			LOG.err("845 Unknown element for ProcTableEntry " + e);
-			return;
 		}
 	}
 
