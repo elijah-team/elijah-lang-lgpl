@@ -11,6 +11,10 @@ package tripleo.elijah.stages.deduce;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.subjects.Subject;
 import org.jdeferred2.DoneCallback;
 import org.jdeferred2.Promise;
 import org.jetbrains.annotations.Contract;
@@ -625,13 +629,15 @@ public class DeduceTypes2 {
 					}
 					{
 						final @NotNull WorkManager workManager = wm;//new WorkManager();
-						@NotNull Dependencies deps = new Dependencies(/*phase, this, errSink*/);
-						for (@NotNull GenType genType : generatedFunction.dependentTypes()) {
-							deps.action_type(genType, workManager);
-						}
-						for (@NotNull FunctionInvocation dependentFunction : generatedFunction.dependentFunctions()) {
-							deps.action_function(dependentFunction, workManager);
-						}
+						@NotNull Dependencies deps = new Dependencies(/*phase, this, errSink*/workManager);
+						deps.subscribeTypes(generatedFunction.dependentTypesSubject());
+						deps.subscribeFunctions(generatedFunction.dependentFunctionSubject());
+//						for (@NotNull GenType genType : generatedFunction.dependentTypes()) {
+//							deps.action_type(genType, workManager);
+//						}
+//						for (@NotNull FunctionInvocation dependentFunction : generatedFunction.dependentFunctions()) {
+//							deps.action_function(dependentFunction, workManager);
+//						}
 						workManager.drain();
 					}
 					//
@@ -1226,6 +1232,11 @@ public class DeduceTypes2 {
 
 	class Dependencies {
 		final WorkList wl = new WorkList();
+		final WorkManager wm;
+
+		Dependencies(final WorkManager aWm) {
+			wm = aWm;
+		}
 
 		public void action_type(@NotNull GenType genType, @NotNull WorkManager aWorkManager) {
 			// TODO work this out further
@@ -1277,6 +1288,54 @@ public class DeduceTypes2 {
 			}
 			wl.addJob(gen);
 			aWorkManager.addJobs(wl);
+		}
+
+		public void subscribeTypes(final Subject<GenType> aDependentTypesSubject) {
+			aDependentTypesSubject.subscribe(new Observer<GenType>() {
+				@Override
+				public void onSubscribe(@NonNull final Disposable d) {
+
+				}
+
+				@Override
+				public void onNext(final GenType aGenType) {
+					action_type(aGenType, wm);
+				}
+
+				@Override
+				public void onError(final Throwable aThrowable) {
+
+				}
+
+				@Override
+				public void onComplete() {
+
+				}
+			});
+		}
+
+		public void subscribeFunctions(final Subject<FunctionInvocation> aDependentFunctionSubject) {
+			aDependentFunctionSubject.subscribe(new Observer<FunctionInvocation>() {
+				@Override
+				public void onSubscribe(@NonNull final Disposable d) {
+
+				}
+
+				@Override
+				public void onNext(@NonNull final FunctionInvocation aFunctionInvocation) {
+					action_function(aFunctionInvocation, wm);
+				}
+
+				@Override
+				public void onError(@NonNull final Throwable e) {
+
+				}
+
+				@Override
+				public void onComplete() {
+
+				}
+			});
 		}
 	}
 
