@@ -888,6 +888,7 @@ public class DeduceTypes2 {
 			for (GeneratedContainer.VarTableEntry gc_vte : vt) {
 				if (gc_vte.nameToken.getText().equals(aName)) {
 					gc_vte.connect(aVte, generatedConstructor);
+					break;
 				}
 			}
 		}
