@@ -1247,7 +1247,7 @@ public class DeduceTypes2 {
 				NamespaceInvocation ni = phase.registerNamespaceInvocation(genType.resolvedn);
 				@NotNull WlGenerateNamespace gen = new WlGenerateNamespace(gf, ni, phase.generatedClasses);
 
-				assert genType.ci == null;
+				assert genType.ci == null || genType.ci == ni;
 				genType.ci = ni;
 
 				ni.resolveDeferred().done(result -> genType.node = result);
