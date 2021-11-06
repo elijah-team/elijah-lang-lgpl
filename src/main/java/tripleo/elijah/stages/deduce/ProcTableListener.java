@@ -16,6 +16,7 @@ import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
+import tripleo.elijah.stages.instructions.ProcIA;
 import tripleo.elijah.stages.logging.ElLog;
 
 /**
@@ -199,6 +200,33 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 			if (ia instanceof IdentIA) {
 				@NotNull IdentTableEntry identTableEntry = ((IdentIA) ia).getEntry();
 				int y = 2;
+			} else if (ia instanceof ProcIA) {
+				final ProcIA procIA = (ProcIA) ia;
+				final @NotNull ProcTableEntry procTableEntry = procIA.getEntry();
+
+				final ClassInvocation ci = procTableEntry.getFunctionInvocation().getClassInvocation();
+				if (ci != null) {
+					ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+						@Override
+						public void onDone(final GeneratedClass result) {
+							for (GeneratedContainer.VarTableEntry varTableEntry : result.varTable) {
+								if (varTableEntry.nameToken.getText().equals(variableStatement.getName())) {
+//									varTableEntry.
+									assert varTableEntry.varType.getClassOf() == fd.getParent();
+
+									@NotNull E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(procTableEntry, fd, fd.getParent()).invoke(null/*variableTableEntry.type.genType.nonGenericTypeName*/);
+									@Nullable FunctionInvocation fi1 = e_Is_FunctionDef.getFi();
+									GenType genType1 = e_Is_FunctionDef.getGenType();
+									finish(co, depTracker, fi1, genType1);
+
+									break;
+								}
+							}
+						}
+					});
+				} else {
+					assert false;
+				}
 			} else {
 				int y=2;
 			}
