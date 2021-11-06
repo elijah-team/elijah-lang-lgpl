@@ -412,79 +412,94 @@ class Resolve_Ident_IA {
 				@NotNull IdentIA x = (IdentIA) pte.expression_num;
 				@NotNull IdentTableEntry y = x.getEntry();
 				if (y.getResolvedElement() == null) {
-					if (y.backlink instanceof ProcIA) {
-						final @NotNull ProcIA backlink_ = (ProcIA) y.backlink;
-						@NotNull ProcTableEntry backlink = generatedFunction.getProcTableEntry(backlink_.getIndex());
-						final OS_Element resolvedElement = backlink.getResolvedElement();
-						assert resolvedElement != null;
-						try {
-							LookupResultList lrl2 = dc.lookupExpression(y.getIdent(), resolvedElement.getContext());
-							@Nullable OS_Element best = lrl2.chooseBest(null);
-							assert best != null;
-							y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
-						} catch (ResolveError aResolveError) {
-							errSink.reportDiagnostic(aResolveError);
-							assert false;
-						}
-						action_002_1(pte, y);
-					} else if (y.backlink instanceof IntegerIA) {
-						final @NotNull IntegerIA backlink_ = (IntegerIA) y.backlink;
-						@NotNull VariableTableEntry backlink = backlink_.getEntry();
-						final OS_Element resolvedElement = backlink.getResolvedElement();
-						assert resolvedElement != null;
-						try {
-							if (resolvedElement instanceof IdentExpression) {
-								backlink.typePromise().then(new DoneCallback<GenType>() {
-									@Override
-									public void onDone(@NotNull GenType result) {
-										try {
-											final Context context = result.resolved.getClassOf().getContext();
-											LookupResultList lrl2 = dc.lookupExpression(y.getIdent(), context);
-											@Nullable OS_Element best = lrl2.chooseBest(null);
-											assert best != null;
-											y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
-											action_002_1(pte, y);
-										} catch (ResolveError aResolveError) {
-											errSink.reportDiagnostic(aResolveError);
-										}
-									}
-								});
-							} else {
-								LookupResultList lrl2 = dc.lookupExpression(y.getIdent(), resolvedElement.getContext());
-								@Nullable OS_Element best = lrl2.chooseBest(null);
-								assert best != null;
-								y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
-								action_002_1(pte, y);
-							}
-						} catch (ResolveError aResolveError) {
-							errSink.reportDiagnostic(aResolveError);
-							assert false;
-						}
-					} else
-						assert false;
+					action_002_no_resolved_element(pte, y);
+				} else {
+					final OS_Element res = y.getResolvedElement();
+					int yy=2;
 				}
 			}
 		}
 	}
 
-	private void action_002_1(@NotNull ProcTableEntry aPte, @NotNull IdentTableEntry aY) {
-		@Nullable FunctionInvocation fi = null;
-		if (aY.getResolvedElement() instanceof ClassStatement) {
-			// assuming no constructor name or generic parameters based on function syntax
-			@Nullable ClassInvocation ci = new ClassInvocation((ClassStatement) aY.getResolvedElement(), null);
-			ci = phase.registerClassInvocation(ci);
-			fi = new FunctionInvocation(null, aPte, ci, phase.generatePhase);
-		} else if (aY.getResolvedElement() instanceof FunctionDef) {
-			final IInvocation invocation = dc.getInvocation((GeneratedFunction) generatedFunction);
-			fi = new FunctionInvocation((FunctionDef) aY.getResolvedElement(), aPte, invocation, phase.generatePhase);
+	private void action_002_no_resolved_element(final @NotNull ProcTableEntry pte, final @NotNull IdentTableEntry ite) {
+		if (ite.backlink instanceof ProcIA) {
+			final @NotNull ProcIA backlink_ = (ProcIA) ite.backlink;
+			@NotNull ProcTableEntry backlink = generatedFunction.getProcTableEntry(backlink_.getIndex());
+			final OS_Element resolvedElement = backlink.getResolvedElement();
+			assert resolvedElement != null;
+			try {
+				LookupResultList lrl2 = dc.lookupExpression(ite.getIdent(), resolvedElement.getContext());
+				@Nullable OS_Element best = lrl2.chooseBest(null);
+				assert best != null;
+				ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+			} catch (ResolveError aResolveError) {
+				errSink.reportDiagnostic(aResolveError);
+				assert false;
+			}
+			action_002_1(pte, ite);
+		} else if (ite.backlink instanceof IntegerIA) {
+			final @NotNull IntegerIA backlink_ = (IntegerIA) ite.backlink;
+			@NotNull VariableTableEntry backlink = backlink_.getEntry();
+			final OS_Element resolvedElement = backlink.getResolvedElement();
+			assert resolvedElement != null;
+
+			if (resolvedElement instanceof IdentExpression) {
+				backlink.typePromise().then(new DoneCallback<GenType>() {
+					@Override
+					public void onDone(@NotNull GenType result) {
+						try {
+							final Context context = result.resolved.getClassOf().getContext();
+							action_002_2(pte, ite, context);
+						} catch (ResolveError aResolveError) {
+							errSink.reportDiagnostic(aResolveError);
+						}
+					}
+				});
+			} else {
+				try {
+					final Context context = resolvedElement.getContext();
+					action_002_2(pte, ite, context);
+				} catch (ResolveError aResolveError) {
+					errSink.reportDiagnostic(aResolveError);
+					assert false;
+				}
+			}
 		} else
 			assert false;
-		if (fi != null) {
-			if (aPte.getFunctionInvocation() == null) {
-				aPte.setFunctionInvocation(fi);
+	}
+
+	private void action_002_2(final @NotNull ProcTableEntry pte, final @NotNull IdentTableEntry ite, final Context aAContext) throws ResolveError {
+		LookupResultList lrl2 = dc.lookupExpression(ite.getIdent(), aAContext);
+		@Nullable OS_Element best = lrl2.chooseBest(null);
+		assert best != null;
+		ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+		action_002_1(pte, ite);
+	}
+
+	private void action_002_1(@NotNull ProcTableEntry pte, @NotNull IdentTableEntry ite) {
+		final OS_Element resolvedElement = ite.getResolvedElement();
+
+		assert resolvedElement != null;
+
+		if (pte.getFunctionInvocation() == null) {
+			@NotNull FunctionInvocation fi;
+
+			if (resolvedElement instanceof ClassStatement) {
+				// assuming no constructor name or generic parameters based on function syntax
+				@Nullable ClassInvocation ci = new ClassInvocation((ClassStatement) resolvedElement, null);
+				ci = phase.registerClassInvocation(ci);
+				fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
+			} else if (resolvedElement instanceof FunctionDef) {
+				final IInvocation invocation = dc.getInvocation((GeneratedFunction) generatedFunction);
+				fi = new FunctionInvocation((FunctionDef) resolvedElement, pte, invocation, phase.generatePhase);
+			} else {
+				throw new IllegalStateException();
 			}
+
+			pte.setFunctionInvocation(fi);
 		}
-		el = aY.getResolvedElement();
+
+		el = resolvedElement;
 		ectx = el.getContext();
 	}
 
