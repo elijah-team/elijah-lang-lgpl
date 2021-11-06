@@ -553,7 +553,7 @@ public class DeducePhase {
 		}
 
 		@Override
-		public Iterator<GeneratedNode> iterator() {
+		public @NotNull Iterator<GeneratedNode> iterator() {
 			return generatedClasses.iterator();
 		}
 
