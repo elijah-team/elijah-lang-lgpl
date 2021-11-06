@@ -128,12 +128,18 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 		return classInvocation;
 	}
 
+	// have no idea what this is for
 	public void setFunctionInvocation(FunctionInvocation aFunctionInvocation) {
 		if (functionInvocation != aFunctionInvocation) {
 			functionInvocation = aFunctionInvocation;
 			onFunctionInvocations.reset();
 			onFunctionInvocations.resolve(functionInvocation);
 		}
+	}
+
+	// have no idea what this is for
+	public void onFunctionInvocation(final DoneCallback<FunctionInvocation> callback) {
+		onFunctionInvocations.then(callback);
 	}
 
 	public FunctionInvocation getFunctionInvocation() {
@@ -144,11 +150,7 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 		return completeDeferred;
 	}
 
-	public void onFunctionInvocation(final DoneCallback<FunctionInvocation> callback) {
-		onFunctionInvocations.then(callback);
-	}
-
-	private DeferredObject<GenType, Void, Void> typeDeferred = new DeferredObject<GenType, Void, Void>();
+	private final DeferredObject<GenType, Void, Void> typeDeferred = new DeferredObject<GenType, Void, Void>();
 
 	public DeferredObject<GenType, Void, Void> typeDeferred() {
 		return typeDeferred;
