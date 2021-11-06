@@ -505,158 +505,10 @@ public class DeduceTypes2 {
 //			LOG.info("8006 " + instruction);
 			switch (instruction.getName()) {
 			case E:
-				{
-					//
-					// resolve all cte expressions
-					//
-					for (final @NotNull ConstantTableEntry cte : generatedFunction.cte_list) {
-						resolve_cte_expression(cte, context);
-					}
-					//
-					// add proc table listeners
-					//
-					add_proc_table_listeners(generatedFunction);
-					//
-					// resolve ident table
-					//
-					for (@NotNull IdentTableEntry ite : generatedFunction.idte_list) {
-						ite.resolveExpectation = promiseExpectation(ite, "Element Resolved");
-						resolve_ident_table_entry(ite, generatedFunction, context);
-					}
-					//
-					// resolve arguments table
-					//
-					@NotNull Resolve_Variable_Table_Entry rvte = new Resolve_Variable_Table_Entry(generatedFunction, context, this);
-					@NotNull IVariableConnector connector;
-					if (generatedFunction instanceof GeneratedConstructor) {
-						connector = new CtorConnector((GeneratedConstructor) generatedFunction);
-					} else {
-						connector = new NullConnector();
-					}
-					for (@NotNull VariableTableEntry vte : generatedFunction.vte_list) {
-						rvte.action(vte, connector);
-					}
-				}
+				onEnterFunction(generatedFunction, context);
 				break;
 			case X:
-				{
-					//
-					// resolve var table. moved from `E'
-					//
-					for (@NotNull VariableTableEntry vte : generatedFunction.vte_list) {
-						resolve_var_table_entry(vte, generatedFunction, context);
-					}
-					for (@NotNull Runnable runnable : onRunnables) {
-						runnable.run();
-					}
-//					LOG.info("167 "+generatedFunction);
-					//
-					// ATTACH A TYPE TO VTE'S
-					// CONVERT USER TYPES TO USER_CLASS TYPES
-					//
-					for (final @NotNull VariableTableEntry vte : generatedFunction.vte_list) {
-//						LOG.info("704 "+vte.type.attached+" "+vte.potentialTypes());
-						final OS_Type attached = vte.type.getAttached();
-						if (attached != null && attached.getType() == OS_Type.Type.USER) {
-							final TypeName x = attached.getTypeName();
-							if (x instanceof NormalTypeName) {
-								final String tn = ((NormalTypeName) x).getName();
-								final LookupResultList lrl = x.getContext().lookup(tn);
-								@Nullable OS_Element best = lrl.chooseBest(null);
-								if (best != null) {
-									while (best instanceof AliasStatement) {
-										best = DeduceLookupUtils._resolveAlias((AliasStatement) best, this);
-									}
-									if (!(OS_Type.isConcreteType(best))) {
-										errSink.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
-									} else {
-	//									LOG.info("705 " + best);
-										// NOTE that when we set USER_CLASS from USER generic information is
-										// still contained in constructable_pte
-										@NotNull GenType genType = new GenType();
-										genType.typeName = attached;
-										genType.resolved = new OS_Type((ClassStatement) best);
-//										genType.copy(vte.type.genType);
-										genType.ci = genCI(genType, x);
-										vte.type.genType.copy(genType);
-										// set node when available
-										((ClassInvocation) vte.type.genType.ci).resolvePromise().done(new DoneCallback<GeneratedClass>() {
-											@Override
-											public void onDone(GeneratedClass result) {
-												vte.type.genType.node = result;
-												vte.resolveTypeToClass(result);
-												vte.genType = vte.type.genType; // TODO who knows if this is necessary?
-											}
-										});
-									}
-									//vte.el = best;
-									// NOTE we called resolve_var_table_entry above
-									LOG.err("200 "+best);
-									if (vte.getResolvedElement() != null)
-										assert vte.getStatus() == BaseTableEntry.Status.KNOWN;
-//									vte.setStatus(BaseTableEntry.Status.KNOWN, best/*vte.el*/);
-								} else {
-									errSink.reportDiagnostic(new ResolveError(x, lrl));
-								}
-							}
-						}
-					}
-					for (final @NotNull VariableTableEntry vte : generatedFunction.vte_list) {
-						if (vte.vtt == VariableTableType.ARG) {
-							final OS_Type attached = vte.type.getAttached();
-							if (attached != null) {
-								if (attached.getType() == OS_Type.Type.USER)
-									//throw new AssertionError();
-									errSink.reportError("369 ARG USER type (not deduced) "+vte);
-							} else {
-								errSink.reportError("457 ARG type not deduced/attached "+vte);
-							}
-						}
-					}
-					//
-					// ATTACH A TYPE TO IDTE'S
-					//
-					for (@NotNull IdentTableEntry ite : generatedFunction.idte_list) {
-						int y=2;
-						assign_type_to_idte(ite, generatedFunction, fd_ctx, context);
-					}
-					{
-						// TODO why are we doing this?
-//						Resolve_each_typename ret = new Resolve_each_typename(phase, this, errSink);
-//						for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
-//							ret.action(typeTableEntry);
-//						}
-					}
-					{
-						final @NotNull WorkManager workManager = wm;//new WorkManager();
-						@NotNull Dependencies deps = new Dependencies(/*phase, this, errSink*/workManager);
-						deps.subscribeTypes(generatedFunction.dependentTypesSubject());
-						deps.subscribeFunctions(generatedFunction.dependentFunctionSubject());
-//						for (@NotNull GenType genType : generatedFunction.dependentTypes()) {
-//							deps.action_type(genType, workManager);
-//						}
-//						for (@NotNull FunctionInvocation dependentFunction : generatedFunction.dependentFunctions()) {
-//							deps.action_function(dependentFunction, workManager);
-//						}
-						workManager.drain();
-					}
-					//
-					// RESOLVE FUNCTION RETURN TYPES
-					//
-					resolve_function_return_type(generatedFunction);
-					//
-					// LOOKUP FUNCTIONS
-					//
-					{
-						@NotNull Lookup_function_on_exit lfoe = new Lookup_function_on_exit();
-						for (@NotNull ProcTableEntry pte : generatedFunction.prte_list) {
-							lfoe.action(pte);
-						}
-						wm.drain();
-					}
-
-					expectations.check();
-				}
+				onExitFunction(generatedFunction, fd_ctx, context);
 				break;
 			case ES:
 				break;
@@ -869,6 +721,158 @@ public class DeduceTypes2 {
 				}
 			}
 		}
+	}
+
+	public void onEnterFunction(final @NotNull BaseGeneratedFunction generatedFunction, final Context aContext) {
+		//
+		// resolve all cte expressions
+		//
+		for (final @NotNull ConstantTableEntry cte : generatedFunction.cte_list) {
+			resolve_cte_expression(cte, aContext);
+		}
+		//
+		// add proc table listeners
+		//
+		add_proc_table_listeners(generatedFunction);
+		//
+		// resolve ident table
+		//
+		for (@NotNull IdentTableEntry ite : generatedFunction.idte_list) {
+			ite.resolveExpectation = promiseExpectation(ite, "Element Resolved");
+			resolve_ident_table_entry(ite, generatedFunction, aContext);
+		}
+		//
+		// resolve arguments table
+		//
+		@NotNull Resolve_Variable_Table_Entry rvte = new Resolve_Variable_Table_Entry(generatedFunction, aContext, this);
+		@NotNull DeduceTypes2.IVariableConnector connector;
+		if (generatedFunction instanceof GeneratedConstructor) {
+			connector = new CtorConnector((GeneratedConstructor) generatedFunction);
+		} else {
+			connector = new NullConnector();
+		}
+		for (@NotNull VariableTableEntry vte : generatedFunction.vte_list) {
+			rvte.action(vte, connector);
+		}
+	}
+
+	public void onExitFunction(final @NotNull BaseGeneratedFunction generatedFunction, final Context aFd_ctx, final Context aContext) {
+		//
+		// resolve var table. moved from `E'
+		//
+		for (@NotNull VariableTableEntry vte : generatedFunction.vte_list) {
+			resolve_var_table_entry(vte, generatedFunction, aContext);
+		}
+		for (@NotNull Runnable runnable : onRunnables) {
+			runnable.run();
+		}
+//					LOG.info("167 "+generatedFunction);
+		//
+		// ATTACH A TYPE TO VTE'S
+		// CONVERT USER TYPES TO USER_CLASS TYPES
+		//
+		for (final @NotNull VariableTableEntry vte : generatedFunction.vte_list) {
+//						LOG.info("704 "+vte.type.attached+" "+vte.potentialTypes());
+			final OS_Type attached = vte.type.getAttached();
+			if (attached != null && attached.getType() == OS_Type.Type.USER) {
+				final TypeName x = attached.getTypeName();
+				if (x instanceof NormalTypeName) {
+					final String tn = ((NormalTypeName) x).getName();
+					final LookupResultList lrl = x.getContext().lookup(tn);
+					@Nullable OS_Element best = lrl.chooseBest(null);
+					if (best != null) {
+						while (best instanceof AliasStatement) {
+							best = DeduceLookupUtils._resolveAlias((AliasStatement) best, this);
+						}
+						if (!(OS_Type.isConcreteType(best))) {
+							errSink.reportError(String.format("Not a concrete type %s for (%s)", best, tn));
+						} else {
+//									LOG.info("705 " + best);
+							// NOTE that when we set USER_CLASS from USER generic information is
+							// still contained in constructable_pte
+							@NotNull GenType genType = new GenType();
+							genType.typeName = attached;
+							genType.resolved = new OS_Type((ClassStatement) best);
+//										genType.copy(vte.type.genType);
+							genType.ci = genCI(genType, x);
+							vte.type.genType.copy(genType);
+							// set node when available
+							((ClassInvocation) vte.type.genType.ci).resolvePromise().done(new DoneCallback<GeneratedClass>() {
+								@Override
+								public void onDone(GeneratedClass result) {
+									vte.type.genType.node = result;
+									vte.resolveTypeToClass(result);
+									vte.genType = vte.type.genType; // TODO who knows if this is necessary?
+								}
+							});
+						}
+						//vte.el = best;
+						// NOTE we called resolve_var_table_entry above
+						LOG.err("200 "+best);
+						if (vte.getResolvedElement() != null)
+							assert vte.getStatus() == BaseTableEntry.Status.KNOWN;
+//									vte.setStatus(BaseTableEntry.Status.KNOWN, best/*vte.el*/);
+					} else {
+						errSink.reportDiagnostic(new ResolveError(x, lrl));
+					}
+				}
+			}
+		}
+		for (final @NotNull VariableTableEntry vte : generatedFunction.vte_list) {
+			if (vte.vtt == VariableTableType.ARG) {
+				final OS_Type attached = vte.type.getAttached();
+				if (attached != null) {
+					if (attached.getType() == OS_Type.Type.USER)
+						//throw new AssertionError();
+						errSink.reportError("369 ARG USER type (not deduced) "+vte);
+				} else {
+					errSink.reportError("457 ARG type not deduced/attached "+vte);
+				}
+			}
+		}
+		//
+		// ATTACH A TYPE TO IDTE'S
+		//
+		for (@NotNull IdentTableEntry ite : generatedFunction.idte_list) {
+			int y=2;
+			assign_type_to_idte(ite, generatedFunction, aFd_ctx, aContext);
+		}
+		{
+			// TODO why are we doing this?
+//						Resolve_each_typename ret = new Resolve_each_typename(phase, this, errSink);
+//						for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
+//							ret.action(typeTableEntry);
+//						}
+		}
+		{
+			final @NotNull WorkManager workManager = wm;//new WorkManager();
+			@NotNull DeduceTypes2.Dependencies deps = new Dependencies(/*phase, this, errSink*/workManager);
+			deps.subscribeTypes(generatedFunction.dependentTypesSubject());
+			deps.subscribeFunctions(generatedFunction.dependentFunctionSubject());
+//						for (@NotNull GenType genType : generatedFunction.dependentTypes()) {
+//							deps.action_type(genType, workManager);
+//						}
+//						for (@NotNull FunctionInvocation dependentFunction : generatedFunction.dependentFunctions()) {
+//							deps.action_function(dependentFunction, workManager);
+//						}
+			workManager.drain();
+		}
+		//
+		// RESOLVE FUNCTION RETURN TYPES
+		//
+		resolve_function_return_type(generatedFunction);
+		//
+		// LOOKUP FUNCTIONS
+		//
+		{
+			@NotNull DeduceTypes2.Lookup_function_on_exit lfoe = new Lookup_function_on_exit();
+			for (@NotNull ProcTableEntry pte : generatedFunction.prte_list) {
+				lfoe.action(pte);
+			}
+			wm.drain();
+		}
+
+		expectations.check();
 	}
 
 	interface IVariableConnector {
