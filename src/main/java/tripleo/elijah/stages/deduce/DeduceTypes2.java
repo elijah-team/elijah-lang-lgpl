@@ -496,7 +496,7 @@ public class DeduceTypes2 {
 		{
 			ProcTableEntry pte = generatedFunction.fi.pte;
 			final @NotNull String pte_string = getPTEString(pte);
-			LOG.err("** deduce_generated_function "+ fd.name()+" "+pte_string);//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
+			LOG.info("** deduce_generated_function "+ fd.name()+" "+pte_string);//+" "+((OS_Container)((FunctionDef)fd).getParent()).name());
 		}
 		//
 		//
