@@ -159,10 +159,13 @@ public class Compilation {
 					pipelineLogic = new PipelineLogic(silent ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE);
 					final DeducePipeline dpl = new DeducePipeline(this);
 					pipelines.add(dpl);
-					final GeneratePipeline gpl = new GeneratePipeline(this, dpl);
-					pipelines.add(gpl);
-					final WritePipeline wpl = new WritePipeline(this, pipelineLogic.gr);
-					pipelines.add(wpl);
+					if (stage.equals("O")) {
+						final GeneratePipeline gpl = new GeneratePipeline(this, dpl);
+						pipelines.add(gpl);
+						final WritePipeline wpl = new WritePipeline(this, pipelineLogic.gr);
+						pipelines.add(wpl);
+					} else
+						assert stage.equals("D");
 
 					pipelines.run();
 
