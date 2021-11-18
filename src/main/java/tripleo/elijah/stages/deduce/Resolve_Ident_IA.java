@@ -182,6 +182,7 @@ class Resolve_Ident_IA {
 			try {
 				LookupResultList lrl = dc.lookupExpression(exp, ectx);
 				el = lrl.chooseBest(null);
+				assert el != null;
 				ectx = el.getContext();
 //					prte.setResolvedElement(el);
 				prte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
