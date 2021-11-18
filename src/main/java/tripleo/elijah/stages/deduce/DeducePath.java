@@ -83,7 +83,8 @@ public class DeducePath {
 //				}
 				assert el != null;
 				if (aIndex == 0)
-					identTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el)); // TODO why reset status to same value??
+					if (identTableEntry.getResolvedElement() != el)
+						identTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else if (ia2 instanceof ProcIA) {
 				final @NotNull ProcTableEntry procTableEntry = ((ProcIA) ia2).getEntry();
 				el = procTableEntry.getResolvedElement(); // .expression?
