@@ -99,17 +99,37 @@ class Resolve_Ident_IA {
 			} else
 				throw new IllegalStateException("Really cant be here");
 */
-		if (!process(s.get(0))) return;
+		if (!process(s.get(0), s)) return;
 
 		preUpdateStatus(s);
 		updateStatus(s);
 	}
 
-	private boolean process(InstructionArgument ia) {
+	private boolean process(InstructionArgument ia, final @NotNull List<InstructionArgument> aS) {
 		if (ia instanceof IntegerIA) {
 			@NotNull RIA_STATE state = action_IntegerIA(ia);
 			if (state == RIA_STATE.RETURN) {
 				return false;
+			} else if (state == RIA_STATE.NEXT) {
+				final IdentIA identIA2 = identIA; //(IdentIA) aS.get(1);
+				final @NotNull IdentTableEntry idte = identIA2.getEntry();
+
+				dc.resolveIdentIA2_(context, identIA2, aS, generatedFunction, new FoundElement(phase) {
+					final String z = generatedFunction.getIdentIAPathNormal(identIA2);
+
+					@Override
+					public void foundElement(OS_Element e) {
+						idte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
+						foundElement.doFoundElement(e);
+					}
+
+					@Override
+					public void noFoundElement() {
+						foundElement.noFoundElement();
+						LOG.info("2002 Cant resolve " + z);
+						idte.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+					}
+				});
 			}
 		} else if (ia instanceof IdentIA) {
 			@NotNull RIA_STATE state = action_IdentIA((IdentIA) ia);
