@@ -19,9 +19,14 @@ import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
+import tripleo.elijah.stages.gen_fn.TypeTableEntry;
 import tripleo.elijah.stages.gen_fn.WlGenerateDefaultCtor;
 import tripleo.elijah.stages.gen_fn.WlGenerateFunction;
 import tripleo.elijah.stages.gen_fn.WlGenerateNamespace;
+
+import java.util.List;
+
+import static tripleo.elijah.util.Helpers.List_of;
 
 /**
  * Created 1/21/21 9:04 PM
@@ -121,6 +126,12 @@ public class FunctionInvocation {
 
 	public void setGenerated(BaseGeneratedFunction aGeneratedFunction) {
 		_generated = aGeneratedFunction;
+	}
+
+	public List<TypeTableEntry> getArgs() {
+		if (pte == null)
+			return List_of();
+		return pte.args;
 	}
 }
 

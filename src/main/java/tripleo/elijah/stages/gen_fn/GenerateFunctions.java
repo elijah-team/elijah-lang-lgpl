@@ -83,7 +83,20 @@ public class GenerateFunctions {
 		return gf;
 	}
 
-	@NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd, final OS_Element parent) {
+	class VTEShim {
+		String name;
+//		TypeTableEntry tte;
+		FormalArgListItem fali;
+
+		public VTEShim(final String aName, final FormalArgListItem aFali) {
+			name = aName;
+			fali = aFali;
+		}
+	}
+
+	@NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd,
+												final OS_Element parent,
+												@NotNull FunctionInvocation aFunctionInvocation) {
 //		LOG.err("601.1 fn "+fd.name() + " " + parent);
 		final GeneratedFunction gf = new GeneratedFunction(fd);
 		if (parent instanceof ClassStatement)
@@ -101,16 +114,36 @@ public class GenerateFunctions {
 				VariableTableType.RESULT,
 				gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, returnType, IdentExpression.forString("Result")),
 				null); // TODO what about Unit returns?
-		for (final FormalArgListItem fali : fd.fal().falis) {
-			final TypeName typeName = fali.typeName();
-			final OS_Type type;
-			if (typeName != null)
-				type = new OS_Type(typeName);
-			else
-				type = null;
-			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, fali.getNameToken());
-			gf.addVariableTableEntry(fali.name(), VariableTableType.ARG, tte, fali);
-		} // TODO Exception !!??
+
+		{
+			List<VTEShim> vte_list = new ArrayList<>(fd.fal().falis.size());
+
+			for (final FormalArgListItem fali : fd.fal().falis) {
+				final TypeName typeName = fali.typeName(); // TODO GenType
+//				final OS_Type type;
+//				if (typeName != null)
+//					type = new OS_Type(typeName);
+//				else
+//					type = null;
+//				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, fali.getNameToken());
+
+				vte_list.add(new VTEShim(fali.name(), fali));
+			}
+
+			final List<TypeTableEntry> fi_args = aFunctionInvocation.getArgs();
+
+			for (int i = 0; i < vte_list.size(); i++) {
+				final VTEShim vteShim = vte_list.get(i);
+
+				final TypeTableEntry type = fi_args.get(i);
+				assert type != null;
+
+				gf.addVariableTableEntry(vteShim.name, VariableTableType.ARG, type, vteShim.fali);
+			}
+		}
+
+		// TODO Exception !!??
+
 		//
 		final Context cctx = fd.getContext();
 		final int e1 = add_i(gf, InstructionName.E, null, cctx);
@@ -125,6 +158,8 @@ public class GenerateFunctions {
 //			LOG.info(instruction);
 //		}
 //		GeneratedFunction.printTables(gf);
+
+		gf.fi = aFunctionInvocation;
 		return gf;
 	}
 
@@ -141,21 +176,21 @@ public class GenerateFunctions {
 		return Result;
 	}
 
-	/**
-	 * See {@link WlGenerateFunction#run(WorkManager)}
-	 *
-	 * @param aFunctionDef
-	 * @param aClassStatement
-	 * @param aFunctionInvocation
-	 * @return
-	 */
-	public GeneratedFunction generateFunction(@NotNull FunctionDef aFunctionDef,
-											  @NotNull OS_Element aClassStatement,
-											  @NotNull FunctionInvocation aFunctionInvocation) {
-		@NotNull GeneratedFunction Result = generateFunction(aFunctionDef, aClassStatement);
-		Result.fi = aFunctionInvocation;
-		return Result;
-	}
+//	/**
+//	 * See {@link WlGenerateFunction#run(WorkManager)}
+//	 *
+//	 * @param aFunctionDef
+//	 * @param aClassStatement
+//	 * @param aFunctionInvocation
+//	 * @return
+//	 */
+//	public GeneratedFunction generateFunction(@NotNull FunctionDef aFunctionDef,
+//											  @NotNull OS_Element aClassStatement,
+//											  @NotNull FunctionInvocation aFunctionInvocation) {
+//		@NotNull GeneratedFunction Result = generateFunction(aFunctionDef, aClassStatement);
+//		Result.fi = aFunctionInvocation;
+//		return Result;
+//	}
 
 	class Generate_Item {
 		void generate_alias_statement(AliasStatement as) {
