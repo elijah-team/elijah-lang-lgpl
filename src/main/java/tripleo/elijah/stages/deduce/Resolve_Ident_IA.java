@@ -368,7 +368,7 @@ class Resolve_Ident_IA {
 	}
 
 	private @NotNull RIA_STATE action_IntegerIA(@NotNull InstructionArgument ia) {
-		@NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(DeduceTypes2.to_int(ia));
+		@NotNull VariableTableEntry vte = ((IntegerIA)ia).getEntry();
 		final String text = vte.getName();
 		final LookupResultList lrl = ectx.lookup(text);
 		el = lrl.chooseBest(null);
@@ -392,7 +392,7 @@ class Resolve_Ident_IA {
 				if (attached != null) {
 					action_001(attached);
 				} else {
-					action_002(pot);
+					action_002(pot.get(0));
 				}
 			}
 		} else {
@@ -403,8 +403,12 @@ class Resolve_Ident_IA {
 		return RIA_STATE.NEXT;
 	}
 
-	private void action_002(@NotNull List<TypeTableEntry> aPot) {
-		TypeTableEntry tte = aPot.get(0);
+	private void action_002(final TypeTableEntry tte) {
+		//>ENTRY
+		//assert vte.potentailTypes().size() == 1;
+		assert tte.getAttached() == null;
+		//<ENTRY
+
 		if (tte.expression instanceof ProcedureCallExpression) {
 			if (tte.tableEntry != null) {
 				assert tte.tableEntry instanceof ProcTableEntry;
