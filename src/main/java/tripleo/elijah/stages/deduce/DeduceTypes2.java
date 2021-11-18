@@ -3600,7 +3600,7 @@ public class DeduceTypes2 {
 	}
 
 	static class DeduceClient2 {
-		private DeduceTypes2 deduceTypes2;
+		private final DeduceTypes2 deduceTypes2;
 
 		public DeduceClient2(DeduceTypes2 deduceTypes2) {
 			this.deduceTypes2 = deduceTypes2;
