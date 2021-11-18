@@ -83,17 +83,6 @@ public class GenerateFunctions {
 		return gf;
 	}
 
-	class VTEShim {
-		String name;
-//		TypeTableEntry tte;
-		FormalArgListItem fali;
-
-		public VTEShim(final String aName, final FormalArgListItem aFali) {
-			name = aName;
-			fali = aFali;
-		}
-	}
-
 	@NotNull GeneratedFunction generateFunction(@NotNull final FunctionDef fd,
 												final OS_Element parent,
 												@NotNull FunctionInvocation aFunctionInvocation) {
@@ -116,29 +105,26 @@ public class GenerateFunctions {
 				null); // TODO what about Unit returns?
 
 		{
-			List<VTEShim> vte_list = new ArrayList<>(fd.fal().falis.size());
-
-			for (final FormalArgListItem fali : fd.fal().falis) {
-				final TypeName typeName = fali.typeName(); // TODO GenType
-//				final OS_Type type;
-//				if (typeName != null)
-//					type = new OS_Type(typeName);
-//				else
-//					type = null;
-//				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, fali.getNameToken());
-
-				vte_list.add(new VTEShim(fali.name(), fali));
-			}
-
+			final List<FormalArgListItem> fali_args = fd.fal().falis;
 			final List<TypeTableEntry> fi_args = aFunctionInvocation.getArgs();
 
-			for (int i = 0; i < vte_list.size(); i++) {
-				final VTEShim vteShim = vte_list.get(i);
+			for (int i = 0; i < fali_args.size(); i++) {
+				final FormalArgListItem fali = fali_args.get(i);
 
-				final TypeTableEntry type = fi_args.get(i);
-				assert type != null;
+				final TypeTableEntry tte1 = fi_args.get(i);
+				final OS_Type attached = tte1.getAttached();
 
-				gf.addVariableTableEntry(vteShim.name, VariableTableType.ARG, type, vteShim.fali);
+				// TODO for reference now...
+				final GenType genType = new GenType();
+				final TypeName typeName = fali.typeName();
+				if (typeName != null)
+					genType.typeName = new OS_Type(typeName);
+				genType.resolved = attached;
+
+				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, attached, fali.getNameToken());
+//				assert attached != null; // TODO this fails
+
+				gf.addVariableTableEntry(fali.name(), VariableTableType.ARG, tte, fali);
 			}
 		}
 
