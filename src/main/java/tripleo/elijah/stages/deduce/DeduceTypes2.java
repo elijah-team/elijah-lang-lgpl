@@ -703,6 +703,16 @@ public class DeduceTypes2 {
 					if (/*vte.getName() != null &&*/ !(vte.vtt == VariableTableType.RESULT || vte.vtt == VariableTableType.SELF))
 						errSink.reportDiagnostic(new CantDecideType(vte, vte.potentialTypes()));
 				}
+			} else if (vte.vtt == VariableTableType.RESULT) {
+				final OS_Type attached = vte.type.getAttached();
+				if (attached.getType() == OS_Type.Type.USER) {
+					try {
+						vte.type.setAttached(resolve_type(attached, fd_ctx));
+					} catch (ResolveError aResolveError) {
+						aResolveError.printStackTrace();
+						assert false;
+					}
+				}
 			}
 		}
 		{
