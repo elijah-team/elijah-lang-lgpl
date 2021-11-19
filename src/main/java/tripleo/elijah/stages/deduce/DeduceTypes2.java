@@ -1982,21 +1982,21 @@ public class DeduceTypes2 {
 			if (co instanceof IdentTableEntry) {
 				final @Nullable IdentTableEntry idte3 = (IdentTableEntry) co;
 				idte3.type.genTypeCI(aClsinv);
-				aClsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
-					@Override
-					public void onDone(GeneratedClass result) {
-						idte3.resolveTypeToClass(result);
-					}
-				});
+//				aClsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+//					@Override
+//					public void onDone(GeneratedClass result) {
+//						idte3.resolveTypeToClass(result);
+//					}
+//				});
 			} else if (co instanceof VariableTableEntry) {
 				final @NotNull VariableTableEntry vte = (VariableTableEntry) co;
 				vte.type.genTypeCI(aClsinv);
-				aClsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
-					@Override
-					public void onDone(GeneratedClass result) {
-						vte.resolveTypeToClass(result);
-					}
-				});
+//				aClsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+//					@Override
+//					public void onDone(GeneratedClass result) {
+//						vte.resolveTypeToClass(result);
+//					}
+//				});
 			}
 		}
 	}
