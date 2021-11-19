@@ -37,7 +37,7 @@ public class IdentIA implements InstructionArgument, Constructable {
 	}
 
 	public void setPrev(final InstructionArgument ia) {
-		gf.getIdentTableEntry(id).backlink = ia;
+		gf.getIdentTableEntry(id).setBacklink(ia);
 	}
 
 	@Override

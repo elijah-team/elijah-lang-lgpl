@@ -132,7 +132,7 @@ class Found_Element_For_ITE {
 						state = (parent != ((GeneratedConstructor) generatedFunction).getFD().getParent());
 					}
 					if (state) {
-						@NotNull DeferredMember dm = dc.deferred_member(parent, dc.getInvocationFromBacklink(ite.backlink), vs, ite);
+						@NotNull DeferredMember dm = dc.deferred_member(parent, dc.getInvocationFromBacklink(ite.getBacklink()), vs, ite);
 						dm.typePromise().
 								done(new DoneCallback<GenType>() {
 									@Override
@@ -154,7 +154,7 @@ class Found_Element_For_ITE {
 								});
 					} else {
 						IInvocation invocation;
-						if (ite.backlink == null) {
+						if (ite.getBacklink() == null) {
 							if (parent instanceof ClassStatement) {
 								final ClassStatement classStatement = (ClassStatement) parent;
 								final @Nullable ClassInvocation ci = dc.registerClassInvocation(classStatement, null);
@@ -164,7 +164,7 @@ class Found_Element_For_ITE {
 								invocation = null; // TODO shouldn't be null
 							}
 						} else {
-							invocation = dc.getInvocationFromBacklink(ite.backlink);
+							invocation = dc.getInvocationFromBacklink(ite.getBacklink());
 						}
 						DeferredMember dm = dc.deferred_member(parent, invocation, vs, ite);
 						dm.typePromise().then(new DoneCallback<GenType>() {

@@ -58,7 +58,7 @@ public class GetIdentIAPathTest_ForC {
 		int ite_index = gf.addIdentTableEntry(foo_ident, null);
 		IdentTableEntry ite = gf.getIdentTableEntry(ite_index);
 		ite.setResolvedElement(foo_vs);
-		ite.backlink = new IntegerIA(int_index, gf);
+		ite.setBacklink(new IntegerIA(int_index, gf));
 		IdentIA ident_ia = new IdentIA(ite_index, gf);
 		String x = getIdentIAPath(ident_ia, gf);
 		Assert.assertEquals("vvx->vmfoo", x);

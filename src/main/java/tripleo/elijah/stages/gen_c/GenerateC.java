@@ -835,7 +835,7 @@ public class GenerateC implements CodeGenerator {
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		LinkedList<String> ls = new LinkedList<String>();
 		// TODO in Deduce set property lookupType to denote what type of lookup it is: MEMBER, LOCAL, or CLOSURE
-		InstructionArgument backlink = identTableEntry.backlink;
+		InstructionArgument backlink = identTableEntry.getBacklink();
 		final String text = identTableEntry.getIdent().getText();
 		if (backlink == null) {
 			if (identTableEntry.getResolvedElement() instanceof VariableStatement) {
@@ -881,7 +881,7 @@ public class GenerateC implements CodeGenerator {
 				IdentTableEntry identTableEntry1 = gf.getIdentTableEntry(identIAIndex);
 				String identTableEntryName = identTableEntry1.getIdent().getText();
 				ls.addFirst(Emit.emit("/*885*/")+"vm"+identTableEntryName); // TODO blindly adding "vm" might not always be right
-				backlink = identTableEntry1.backlink;
+				backlink = identTableEntry1.getBacklink();
 			} else
 				throw new IllegalStateException("Invalid InstructionArgument for backlink");
 		}

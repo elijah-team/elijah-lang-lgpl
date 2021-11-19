@@ -75,8 +75,8 @@ class Resolve_Ident_IA2 {
 			// ia2 is not == equals to identIA, but functionally equivalent
 			if (ia2 instanceof IdentIA) {
 				final @NotNull IdentTableEntry ite = ((IdentIA) ia2).getEntry();
-				if (ite.backlink != null) {
-					InstructionArgument backlink = ite.backlink;
+				if (ite.getBacklink() != null) {
+					InstructionArgument backlink = ite.getBacklink();
 					if (backlink instanceof IntegerIA) {
 						final @NotNull IntegerIA integerIA = (IntegerIA) backlink;
 						@NotNull VariableTableEntry vte = integerIA.getEntry();
@@ -199,7 +199,7 @@ class Resolve_Ident_IA2 {
 			assert pte != null;
 			@Nullable FunctionInvocation fi = pte.getFunctionInvocation();
 			if (fi == null) {
-				InstructionArgument bl = idte2.backlink;
+				InstructionArgument bl = idte2.getBacklink();
 				@Nullable IInvocation invocation = null;
 				if (bl instanceof IntegerIA) {
 					final @NotNull IntegerIA integerIA = (IntegerIA) bl;

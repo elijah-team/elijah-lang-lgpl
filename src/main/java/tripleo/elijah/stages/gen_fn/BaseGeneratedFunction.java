@@ -85,7 +85,7 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 			} else if (oo instanceof IdentIA) {
 				final IdentTableEntry ite1 = ((IdentIA) oo).getEntry();
 				s.addFirst(oo);
-				oo = ite1.backlink;
+				oo = ite1.getBacklink();
 			} else if (oo instanceof ProcIA) {
 				s.addFirst(oo);
 				oo = null;
@@ -378,7 +378,7 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	public IdentTableEntry getIdentTableEntryFor(IExpression expression) {
 		for (IdentTableEntry identTableEntry : idte_list) {
 			// TODO make this work for Qualidents and DotExpressions
-			if (identTableEntry.getIdent().getText().equals(((IdentExpression) expression).getText()) && identTableEntry.backlink == null) {
+			if (identTableEntry.getIdent().getText().equals(((IdentExpression) expression).getText()) && identTableEntry.getBacklink() == null) {
 				return identTableEntry;
 			}
 		}

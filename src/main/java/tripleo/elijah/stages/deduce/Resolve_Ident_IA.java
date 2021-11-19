@@ -299,7 +299,7 @@ class Resolve_Ident_IA {
 		//assert idte.backlink == null;
 
 		if (idte.getStatus() == BaseTableEntry.Status.UNCHECKED) {
-			if (idte.backlink == null) {
+			if (idte.getBacklink() == null) {
 				final String text = idte.getIdent().getText();
 				if (idte.getResolvedElement() == null) {
 					final LookupResultList lrl = ectx.lookup(text);
@@ -447,8 +447,8 @@ class Resolve_Ident_IA {
 	}
 
 	private void action_002_no_resolved_element(final @NotNull ProcTableEntry pte, final @NotNull IdentTableEntry ite) {
-		if (ite.backlink instanceof ProcIA) {
-			final @NotNull ProcIA backlink_ = (ProcIA) ite.backlink;
+		if (ite.getBacklink() instanceof ProcIA) {
+			final @NotNull ProcIA backlink_ = (ProcIA) ite.getBacklink();
 			@NotNull ProcTableEntry backlink = generatedFunction.getProcTableEntry(backlink_.getIndex());
 			final OS_Element resolvedElement = backlink.getResolvedElement();
 			assert resolvedElement != null;
@@ -462,8 +462,8 @@ class Resolve_Ident_IA {
 				assert false;
 			}
 			action_002_1(pte, ite);
-		} else if (ite.backlink instanceof IntegerIA) {
-			final @NotNull IntegerIA backlink_ = (IntegerIA) ite.backlink;
+		} else if (ite.getBacklink() instanceof IntegerIA) {
+			final @NotNull IntegerIA backlink_ = (IntegerIA) ite.getBacklink();
 			@NotNull VariableTableEntry backlink = backlink_.getEntry();
 			final OS_Element resolvedElement = backlink.getResolvedElement();
 			assert resolvedElement != null;

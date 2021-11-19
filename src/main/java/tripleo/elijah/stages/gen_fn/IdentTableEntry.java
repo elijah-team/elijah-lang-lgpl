@@ -35,11 +35,7 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
     private final int index;
     private final IdentExpression ident;
 	private final Context pc;
-	/**
-	 * Either an {@link IntegerIA} which is a vte
-	 * or a {@link IdentIA} which is an idte
-	 */
-	public InstructionArgument backlink;
+	private InstructionArgument backlink;
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public TypeTableEntry type;
 	public GeneratedNode externalRef;
@@ -155,6 +151,19 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 
 	public void onFefiDone(DoneCallback<GenType> aCallback) {
 		fefiDone.then(aCallback);
+	}
+
+	/**
+	 * Either an {@link IntegerIA} which is a vte
+	 * or a {@link IdentIA} which is an idte
+	 */
+	public InstructionArgument getBacklink() {
+		return backlink;
+	}
+
+	public void setBacklink(InstructionArgument aBacklink) {
+		backlink = aBacklink;
+		backlinkSet.resolve(backlink);
 	}
 }
 

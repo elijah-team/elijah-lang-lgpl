@@ -336,7 +336,7 @@ public class CReference {
 			} else if (oo instanceof IdentIA) {
 				final IdentTableEntry ite1 = ((IdentIA) oo).getEntry();
 				s.add(0, oo);
-				oo = ite1.backlink;
+				oo = ite1.getBacklink();
 			} else if (oo instanceof ProcIA) {
 //				final ProcTableEntry prte = ((ProcIA)oo).getEntry();
 				s.add(0, oo);
