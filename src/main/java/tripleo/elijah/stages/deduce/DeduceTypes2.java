@@ -1132,36 +1132,23 @@ public class DeduceTypes2 {
 			return clsinv;
 		}
 		if (genType.resolved != null) {
-			ClassStatement best = genType.resolved.getClassOf();
-			@Nullable String constructorName = null; // TODO what to do about this, nothing I guess
+			if (genType.resolved.getType() == OS_Type.Type.USER_CLASS) {
+				ClassStatement best = genType.resolved.getClassOf();
+				@Nullable String constructorName = null; // TODO what to do about this, nothing I guess
 
-			@NotNull List<TypeName> gp = best.getGenericPart();
-			@Nullable ClassInvocation clsinv;
-			if (genType.ci == null) {
-				clsinv = new ClassInvocation(best, constructorName);
-				if (gp.size() > 0) {
-					if (aGenericTypeName instanceof NormalTypeName) {
-						final @NotNull NormalTypeName tn = (NormalTypeName) aGenericTypeName;
-						TypeNameList tngp = tn.getGenericPart();
-						for (int i = 0; i < gp.size(); i++) {
-							final TypeName typeName = tngp.get(i);
-							@NotNull GenType typeName2;
-							try {
-								typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
-								clsinv.set(i, gp.get(i), typeName2.resolved);
-							} catch (ResolveError aResolveError) {
-//								aResolveError.printStackTrace();
-								errSink.reportDiagnostic(aResolveError);
-								return null;
-							}
-						}
-					}
-				}
-				clsinv = phase.registerClassInvocation(clsinv);
-				genType.ci = clsinv;
-			} else
-				clsinv = (ClassInvocation) genType.ci;
-			return clsinv;
+				@NotNull List<TypeName> gp = best.getGenericPart();
+				@Nullable ClassInvocation clsinv;
+				if (genType.ci == null) {
+					clsinv = ClassInvocationMake.withGenericPart2(best, constructorName, aGenericTypeName, this, errSink);
+					if (clsinv == null) return null;
+					clsinv = phase.registerClassInvocation(clsinv);
+					genType.ci = clsinv;
+				} else
+					clsinv = (ClassInvocation) genType.ci;
+				return clsinv;
+			} else if (genType.resolved.getType() == OS_Type.Type.FUNCTION) {
+
+			}
 		}
 		return null;
 	}
@@ -1807,6 +1794,36 @@ public class DeduceTypes2 {
 						clsinv.set(i, gp.get(i), typeName2.resolved);
 					} catch (ResolveError aResolveError) {
 						aResolveError.printStackTrace();
+					}
+				}
+			}
+			return clsinv;
+		}
+
+		public static ClassInvocation withGenericPart2(ClassStatement best,
+													   String constructorName,
+													   TypeName aGenericTypeName,
+													   DeduceTypes2 dt2,
+													   ErrSink errSink) {
+			@NotNull List<TypeName> gp = best.getGenericPart();
+			@Nullable ClassInvocation clsinv = new ClassInvocation(best, constructorName);
+
+			clsinv = new ClassInvocation(best, constructorName);
+			if (gp.size() > 0) {
+				if (aGenericTypeName instanceof NormalTypeName) {
+					final @NotNull NormalTypeName tn = (NormalTypeName) aGenericTypeName;
+					TypeNameList tngp = tn.getGenericPart();
+					for (int i = 0; i < gp.size(); i++) {
+						final TypeName typeName = tngp.get(i);
+						@NotNull GenType typeName2;
+						try {
+							typeName2 = dt2.resolve_type(new OS_Type(typeName), typeName.getContext());
+							clsinv.set(i, gp.get(i), typeName2.resolved);
+						} catch (ResolveError aResolveError) {
+//							aResolveError.printStackTrace();
+							errSink.reportDiagnostic(aResolveError);
+							return null;
+						}
 					}
 				}
 			}
