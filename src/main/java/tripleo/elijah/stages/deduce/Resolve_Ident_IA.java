@@ -436,16 +436,18 @@ class Resolve_Ident_IA {
 
 		if (tte.expression instanceof ProcedureCallExpression) {
 			if (tte.tableEntry != null) {
-				assert tte.tableEntry instanceof ProcTableEntry;
-				@NotNull ProcTableEntry pte = (ProcTableEntry) tte.tableEntry;
-				@NotNull IdentIA x = (IdentIA) pte.expression_num;
-				@NotNull IdentTableEntry y = x.getEntry();
-				if (y.getResolvedElement() == null) {
-					action_002_no_resolved_element(pte, y);
-				} else {
-					final OS_Element res = y.getResolvedElement();
-					int yy=2;
-				}
+				if (tte.tableEntry instanceof ProcTableEntry) {
+					@NotNull ProcTableEntry pte = (ProcTableEntry) tte.tableEntry;
+					@NotNull IdentIA x = (IdentIA) pte.expression_num;
+					@NotNull IdentTableEntry y = x.getEntry();
+					if (y.getResolvedElement() == null) {
+						action_002_no_resolved_element(pte, y);
+					} else {
+						final OS_Element res = y.getResolvedElement();
+						int yy = 2;
+					}
+				} else
+					throw new IllegalStateException("tableEntry must be ProcTableEntry");
 			}
 		}
 	}
