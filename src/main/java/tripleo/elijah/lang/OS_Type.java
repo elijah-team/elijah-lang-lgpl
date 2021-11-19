@@ -89,10 +89,15 @@ public class OS_Type {
 				case SystemInteger:
 					{
 						final LookupResultList r;
-						final OS_Element best;
+						OS_Element best;
 
 						r = ctx.lookup("SystemInteger");
 						best = r.chooseBest(null);
+						while (best instanceof AliasStatement) {
+							final AliasStatement aliasStatement = (AliasStatement) best;
+							final LookupResultList lrl = aliasStatement.getContext().lookup(((Qualident) aliasStatement.getExpression()).toString());
+							best = lrl.chooseBest(null);
+						}
 						return new OS_Type((ClassStatement) best);
 					}
 				case Boolean:
