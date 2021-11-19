@@ -1932,9 +1932,9 @@ public class DeduceTypes2 {
 
 			if (co != null) {
 				co.setConstructable(pte);
-				ClassInvocation best = pte.getClassInvocation();
-				assert best != null;
-				best.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+				ClassInvocation clsinv = pte.getClassInvocation();
+				assert clsinv != null;
+				clsinv.resolvePromise().done(new DoneCallback<GeneratedClass>() {
 					@Override
 					public void onDone(GeneratedClass result) {
 						co.resolveTypeToClass(result);
