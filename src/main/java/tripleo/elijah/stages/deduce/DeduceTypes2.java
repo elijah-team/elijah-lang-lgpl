@@ -3360,7 +3360,7 @@ public class DeduceTypes2 {
 						LookupResultList lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele.getContext(), DeduceTypes2.this);
 						ele2 = lrl.chooseBest(null);
 					} else
-						ele2 = ty.getClassOf(); // TODO might fail later (use getElement?)
+						ele2 = ty.getElement();
 
 					@Nullable LookupResultList lrl = null;
 
