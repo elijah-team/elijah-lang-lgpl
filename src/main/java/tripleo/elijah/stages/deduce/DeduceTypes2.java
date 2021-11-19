@@ -2299,8 +2299,9 @@ public class DeduceTypes2 {
 		for (int i = 0; i < args.size(); i++) {
 			final TypeTableEntry tte = args.get(i); // TODO this looks wrong
 //			LOG.info("770 "+tte);
-			final IExpression e = tte.expression;
+			IExpression e = tte.expression;
 			if (e == null) continue;
+			if (e instanceof SubExpression) e = ((SubExpression) e).getExpression();
 			switch (e.getKind()) {
 			case NUMERIC:
 				tte.setAttached(new OS_Type(BuiltInTypes.SystemInteger));
