@@ -2353,9 +2353,11 @@ public class DeduceTypes2 {
 							throw new NotImplementedException();
 						}
 					} catch (ResolveError aResolveError) {
-						aResolveError.printStackTrace();
-						int y=2;
-						throw new NotImplementedException();
+//						aResolveError.printStackTrace();
+//						int y=2;
+//						throw new NotImplementedException();
+						errSink.reportDiagnostic(aResolveError);
+						tte.setAttached(new OS_UnknownType(new StatementWrapper(pce.getLeft(), null, null)));
 					}
 				}
 				break;
