@@ -149,12 +149,27 @@ public class DeduceTypeResolve {
 						}
 
 						@Override
+						public void visitPropertyStatement(final PropertyStatement aPropertyStatement) {
+							int y=2;
+						}
+
+						@Override
 						public void visitConstructorDef(final ConstructorDef aConstructorDef) {
 							int y=2;
 						}
 
 						@Override
+						public void visitMC1(final MatchConditional.MC1 aMC1) {
+							int y=2;
+							if (aMC1 instanceof MatchConditional.MatchArm_TypeMatch) {
+								final MatchConditional.MatchArm_TypeMatch typeMatch = (MatchConditional.MatchArm_TypeMatch) aMC1;
+								int yy=2;
+							}
+						}
+
+						@Override
 						public void defaultAction(final OS_Element anElement) {
+							System.err.println("158 "+anElement);
 							throw new IllegalStateException();
 						}
 
