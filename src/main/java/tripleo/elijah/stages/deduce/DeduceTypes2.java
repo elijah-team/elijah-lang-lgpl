@@ -1908,7 +1908,7 @@ public class DeduceTypes2 {
 		}
 
 		public void action_IntegerIA() {
-			@NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
+			@NotNull VariableTableEntry vte = ((IntegerIA) expression).getEntry();
 			final @Nullable OS_Type attached = vte.type.getAttached();
 //			assert attached != null; // TODO will fail when empty variable expression
 			if (attached != null && attached.getType() == OS_Type.Type.USER) {
@@ -1920,16 +1920,16 @@ public class DeduceTypes2 {
 			}
 		}
 
-		private void implement_construct_type(@Nullable Constructable co, @Nullable OS_Type aTy, String constructorName) {
-			assert aTy != null;
-			if (aTy.getType() == OS_Type.Type.USER) {
-				TypeName tyn = aTy.getTypeName();
-				if (tyn instanceof NormalTypeName) {
-					final @NotNull NormalTypeName tyn1 = (NormalTypeName) tyn;
-					_implement_construct_type(co, constructorName, (NormalTypeName) tyn);
-				}
-			} else
-				throw new NotImplementedException();
+		private void implement_construct_type(@Nullable Constructable co, @NotNull OS_Type aTy, String constructorName) {
+			if (aTy.getType() != OS_Type.Type.USER)
+				throw new IllegalStateException("must be USER type");
+
+			TypeName tyn = aTy.getTypeName();
+			if (tyn instanceof NormalTypeName) {
+				final @NotNull NormalTypeName tyn1 = (NormalTypeName) tyn;
+				_implement_construct_type(co, constructorName, (NormalTypeName) tyn);
+			}
+
 			if (co != null) {
 				co.setConstructable(pte);
 				ClassInvocation best = pte.getClassInvocation();
