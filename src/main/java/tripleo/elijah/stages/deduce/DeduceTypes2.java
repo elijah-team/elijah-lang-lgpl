@@ -1968,7 +1968,9 @@ public class DeduceTypes2 {
 				}
 				// TODO also check arguments
 				{
+					// TODO is cc ever null (default_constructor)
 					if (cc == null) assert pte.getArgs().size() == 0;
+					// TODO do we still want to do this if cc is null?
 					@NotNull FunctionInvocation fi = newFunctionInvocation(cc, pte, clsinv, phase);
 					pte.setFunctionInvocation(fi);
 				}
