@@ -149,6 +149,11 @@ public class DeduceTypeResolve {
 						}
 
 						@Override
+						public void visitConstructorDef(final ConstructorDef aConstructorDef) {
+							int y=2;
+						}
+
+						@Override
 						public void defaultAction(final OS_Element anElement) {
 							throw new IllegalStateException();
 						}
