@@ -678,6 +678,7 @@ public class DeduceTypes2 {
 				// README for GenerateC, etc: marks the spot where a declaration should go. Wouldn't be necessary if we had proper Range's
 				break;
 			case IS_A:
+				implement_is_a(generatedFunction, instruction);
 				break;
 			case NOP:
 				break;
@@ -731,6 +732,42 @@ public class DeduceTypes2 {
 				}
 			}
 		}
+	}
+
+	private void implement_is_a(final @NotNull BaseGeneratedFunction gf, final @NotNull Instruction instruction) {
+		final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
+		final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
+		final Label target_label      = ((LabelIA) instruction.getArg(2)).label;
+
+		final VariableTableEntry testing_var    = gf.getVarTableEntry(testing_var_.getIndex());
+		final TypeTableEntry     testing_type__ = gf.getTypeTableEntry(testing_type_.getIndex());
+
+		GenType genType = testing_type__.genType;
+		if (genType.resolved == null) {
+			try {
+				genType.resolved = resolve_type(genType.typeName, gf.getFD().getContext()).resolved;
+			} catch (ResolveError aResolveError) {
+//				aResolveError.printStackTrace();
+				errSink.reportDiagnostic(aResolveError);
+				return;
+			}
+		}
+		if (genType.ci == null) {
+			genCI(genType, genType.nonGenericTypeName);
+		}
+		if (genType.node == null) {
+			if (genType.ci instanceof ClassInvocation) {
+				WlGenerateClass gen = new WlGenerateClass(getGenerateFunctions(module), (ClassInvocation) genType.ci, phase.generatedClasses);
+				gen.run(null);
+				genType.node = gen.getResult();
+			} else if (genType.ci instanceof NamespaceInvocation) {
+				WlGenerateNamespace gen = new WlGenerateNamespace(getGenerateFunctions(module), (NamespaceInvocation) genType.ci, phase.generatedClasses);
+				gen.run(null);
+				genType.node = gen.getResult();
+			}
+		}
+		GeneratedNode testing_type = testing_type__.resolved();
+		assert testing_type != null;
 	}
 
 	public void onEnterFunction(final @NotNull BaseGeneratedFunction generatedFunction, final Context aContext) {
