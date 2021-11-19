@@ -75,7 +75,11 @@ public class Compilation {
 	}
 
 	public void feedCmdLine(final List<String> args) {
-		main(args, eee == null ? new StdErrSink() : eee);
+		try {
+			main(args, eee == null ? new StdErrSink() : eee);
+		} catch (Exception aE) {
+			throw new RuntimeException(aE);
+		}
 	}
 
 	public IO getIO() {
@@ -92,7 +96,7 @@ public class Compilation {
 
 	public String stage = "O"; // Output
 
-	public void main(final List<String> args, final ErrSink errSink) {
+	public void main(final List<String> args, final ErrSink errSink) throws Exception {
 		boolean do_out = false, silent = false;
 		try {
 			if (args.size() > 0) {
@@ -176,6 +180,7 @@ public class Compilation {
 			}
 		} catch (final Exception e) {
 			errSink.exception(e);
+			throw e;
 		}
 	}
 

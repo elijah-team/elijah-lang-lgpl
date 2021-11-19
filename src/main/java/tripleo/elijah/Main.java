@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Main {
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws Exception {
 		final StdErrSink errSink = new StdErrSink();
 		final Compilation cc = new Compilation(errSink, new IO());
 		final List<String> ls = new ArrayList<String>();
