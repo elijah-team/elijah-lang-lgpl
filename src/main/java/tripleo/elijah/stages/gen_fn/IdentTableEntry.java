@@ -149,6 +149,12 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 		if (fefiDone.isPending())
 			fefiDone.resolve(aGenType);
 	}
+	protected DeferredObject<InstructionArgument, Void, Void> backlinkSet = new DeferredObject<InstructionArgument, Void, Void>();
+
+	public Promise<InstructionArgument, Void, Void> backlinkSet() {
+		return backlinkSet.promise();
+	}
+
 
 	public void onFefiDone(DoneCallback<GenType> aCallback) {
 		fefiDone.then(aCallback);
