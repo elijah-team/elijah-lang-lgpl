@@ -57,6 +57,16 @@ public class GenType {
 		if (ci == null) ci = aGenType.ci;
 		if (node == null) node = aGenType.node;
 	}
+
+	public boolean isNull() {
+		if (resolvedn != null) return false;
+		if (typeName != null) return false;
+		if (nonGenericTypeName != null) return false;
+		if (resolved != null) return false;
+		if (ci != null) return false;
+		if (node != null) return false;
+		return true;
+	}
 }
 
 //
