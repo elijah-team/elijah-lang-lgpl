@@ -1909,12 +1909,13 @@ public class DeduceTypes2 {
 
 		public void action_IntegerIA() {
 			@NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
-			assert vte.type.getAttached() != null; // TODO will fail when empty variable expression
-			@Nullable OS_Type ty = vte.type.getAttached();
-			if (ty.getType() == OS_Type.Type.USER) {
-				implement_construct_type(vte, ty, null);
+			final @Nullable OS_Type attached = vte.type.getAttached();
+//			assert attached != null; // TODO will fail when empty variable expression
+			if (attached != null && attached.getType() == OS_Type.Type.USER) {
+				implement_construct_type(vte, attached, null);
 			} else {
 				final OS_Type ty2 = vte.type.genType.typeName;
+				assert ty2 != null;
 				implement_construct_type(vte, ty2, null);
 			}
 		}
