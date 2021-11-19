@@ -165,13 +165,18 @@ public class GeneratedClass extends GeneratedContainerNC {
 							}
 						}
 						//
-						ClassInvocation xci = new ClassInvocation(varType1.getAttached().getClassOf(), null);
-						xci = aDeducePhase.registerClassInvocation(xci);
-						@NotNull GenerateFunctions gf = aDeducePhase.generatePhase.getGenerateFunctions(xci.getKlass().getContext().module());
-						WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses);
-						wgc.run(null); // !
-						varType1.resolve(wgc.getResult());
-						Result = true;
+						if (varType1.getAttached().getType() == OS_Type.Type.USER_CLASS) {
+							ClassInvocation xci = new ClassInvocation(varType1.getAttached().getClassOf(), null);
+							xci = aDeducePhase.registerClassInvocation(xci);
+							@NotNull GenerateFunctions gf = aDeducePhase.generatePhase.getGenerateFunctions(xci.getKlass().getContext().module());
+							WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses);
+							wgc.run(null); // !
+							varType1.resolve(wgc.getResult());
+							Result = true;
+						} else {
+							int y=2;
+							System.err.println("177 not a USER_CLASS "+varType1.getAttached());
+						}
 					}
 					if (varType1.resolved() != null)
 						varTableEntry.resolve(varType1.resolved());
