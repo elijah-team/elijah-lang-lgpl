@@ -175,17 +175,15 @@ public class DeduceTypeResolve {
 							variableTableEntry.type.setAttached(result);
 						}
 					});
-
 				} else if (backlink instanceof ProcTableEntry) {
 					final ProcTableEntry procTableEntry = (ProcTableEntry) backlink;
 					procTableEntry.typeResolvePromise().done(new DoneCallback<GenType>() {
 						@Override
 						public void onDone(final GenType result) {
-							//					procTableEntry.type.setAttached(result);
+//							procTableEntry.type.setAttached(result);
 							int y=2;
 						}
 					});
-
 				}
 			}
 		});
