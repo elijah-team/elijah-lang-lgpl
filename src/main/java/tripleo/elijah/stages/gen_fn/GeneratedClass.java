@@ -153,12 +153,14 @@ public class GeneratedClass extends GeneratedContainerNC {
 						//
 						if (varType1.getAttached().getType() != OS_Type.Type.USER_CLASS) {
 							final TypeName t = varType1.getAttached().getTypeName();
-							for (Map.Entry<TypeName, OS_Type> typeEntry : ci.genericPart.entrySet()) {
-								if (typeEntry.getKey().equals(t)) {
-									final OS_Type v = typeEntry.getValue();
-									varType1.setAttached(v);
-									assert varType1.getAttached().getType() == OS_Type.Type.USER_CLASS;
-									break;
+							if (ci.genericPart != null) {
+								for (Map.Entry<TypeName, OS_Type> typeEntry : ci.genericPart.entrySet()) {
+									if (typeEntry.getKey().equals(t)) {
+										final OS_Type v = typeEntry.getValue();
+										varType1.setAttached(v);
+										assert varType1.getAttached().getType() == OS_Type.Type.USER_CLASS;
+										break;
+									}
 								}
 							}
 						}
