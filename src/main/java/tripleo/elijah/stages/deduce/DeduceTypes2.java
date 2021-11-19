@@ -35,6 +35,8 @@ import tripleo.elijah.stages.instructions.Instruction;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.InstructionName;
 import tripleo.elijah.stages.instructions.IntegerIA;
+import tripleo.elijah.stages.instructions.Label;
+import tripleo.elijah.stages.instructions.LabelIA;
 import tripleo.elijah.stages.instructions.ProcIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
 import tripleo.elijah.stages.logging.ElLog;
