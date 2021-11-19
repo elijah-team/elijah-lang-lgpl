@@ -88,6 +88,16 @@ public abstract class BaseTableEntry {
 
 	// endregion status
 
+	DeduceTypeResolve typeResolve;
+
+	public Promise<GenType, ResolveError, Void> typeResolvePromise() {
+		return typeResolve.typeResolution();
+	}
+
+	protected void setupResolve() {
+		typeResolve = new DeduceTypeResolve(this);
+	}
+
 
 }
 

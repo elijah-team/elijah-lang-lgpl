@@ -57,6 +57,7 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 				}
 			}
 		});
+        setupResolve();
     }
 
 	public void addPotentialType(final int instructionIndex, final TypeTableEntry tte) {

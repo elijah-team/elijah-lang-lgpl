@@ -63,6 +63,8 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 				}
 			});
 		}
+
+		setupResolve();
 	}
 
 	@Override @NotNull

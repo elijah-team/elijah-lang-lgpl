@@ -40,6 +40,7 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 		this.vtt = aVtt;
 		this.type = aTTE;
 		this.setResolvedElement(el);
+		setupResolve();
 	}
 
 	@Override
