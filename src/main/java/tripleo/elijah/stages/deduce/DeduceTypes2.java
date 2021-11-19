@@ -2394,7 +2394,10 @@ public class DeduceTypes2 {
 					}
 				}
 				break;
-
+			case ADDITION: case MODULO: case SUBTRACTION:
+				int y=2;
+				System.err.println("2363");
+				break;
 			case GET_ITEM:
 				{
 					final @NotNull GetItemExpression gie = (GetItemExpression) e;
