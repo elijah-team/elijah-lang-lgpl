@@ -41,7 +41,8 @@ public class FunctionDefBuilder extends BaseFunctionDefBuilder {
 		functionDef.setName(_name);
 		functionDef.setFal(mFal == null ? new FormalArgList() : mFal);
 		functionDef.setReturnType(_returnType);
-		_returnType.setContext(_context); // HACK for types
+		if (_returnType != null)
+			_returnType.setContext(_context); // HACK for types
 		for (FunctionModifiers mod : _mods) {
 			functionDef.set(mod);
 		}
