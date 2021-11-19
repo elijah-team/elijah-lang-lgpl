@@ -1105,7 +1105,7 @@ public class DeduceTypes2 {
 		return null;
 	}
 
-	@NotNull ClassInvocation genCI(@NotNull GenType genType, TypeName aGenericTypeName) {
+	ClassInvocation genCI(@NotNull GenType genType, TypeName aGenericTypeName) {
 		if (genType.nonGenericTypeName != null) {
 			@NotNull NormalTypeName aTyn1 = (NormalTypeName) genType.nonGenericTypeName;
 			@Nullable String constructorName = null; // TODO this comes from nowhere
@@ -1147,7 +1147,8 @@ public class DeduceTypes2 {
 					clsinv = (ClassInvocation) genType.ci;
 				return clsinv;
 			} else if (genType.resolved.getType() == OS_Type.Type.FUNCTION) {
-
+				// TODO what to do here?
+				int y=2;
 			}
 		}
 		return null;
@@ -1752,14 +1753,16 @@ public class DeduceTypes2 {
 					//
 					// registerClassInvocation does the job of makeNode, so results should be immediately available
 					//
-					((ClassInvocation) genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
-						@Override
-						public void onDone(GeneratedClass result) {
-							genType.node = result;
-							if (!vte.typePromise().isResolved()) // HACK
-								vte.resolveType(genType);
-						}
-					});
+					if (genType.ci != null) { // TODO we may need this call...
+						((ClassInvocation) genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
+							@Override
+							public void onDone(GeneratedClass result) {
+								genType.node = result;
+								if (!vte.typePromise().isResolved()) // HACK
+									vte.resolveType(genType);
+							}
+						});
+					}
 				}
 			}
 		}
