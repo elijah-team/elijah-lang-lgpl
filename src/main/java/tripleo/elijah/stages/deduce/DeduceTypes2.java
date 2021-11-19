@@ -1751,6 +1751,15 @@ public class DeduceTypes2 {
 			{
 				final GenType genType = vte.type.genType;
 				if (genType.resolved != null && genType.node == null) {
+					if (genType.resolved.getType() != OS_Type.Type.USER_CLASS) {
+						try {
+							genType.resolved = resolve_type(genType.resolved, ctx).resolved;
+						} catch (ResolveError aResolveError) {
+							aResolveError.printStackTrace();
+							assert false;
+						}
+					}
+
 					genCI(genType, genType.nonGenericTypeName);
 //					genType.node = makeNode(genType);
 					//
