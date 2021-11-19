@@ -1780,6 +1780,31 @@ public class DeduceTypes2 {
 //		return null;
 //	}
 
+	static class ClassInvocationMake {
+		public static ClassInvocation withGenericPart(ClassStatement best,
+													  String constructorName,
+													  NormalTypeName aTyn1,
+													  DeduceTypes2 dt2) {
+			@NotNull List<TypeName> gp = best.getGenericPart();
+			@Nullable ClassInvocation clsinv = new ClassInvocation(best, constructorName);
+			if (gp.size() > 0) {
+				TypeNameList gp2 = aTyn1.getGenericPart();
+				for (int i = 0; i < gp.size(); i++) {
+					final TypeName typeName = gp2.get(i);
+					@NotNull GenType typeName2;
+					try {
+						// TODO transition to GenType
+						typeName2 = dt2.resolve_type(new OS_Type(typeName), typeName.getContext());
+						clsinv.set(i, gp.get(i), typeName2.resolved);
+					} catch (ResolveError aResolveError) {
+						aResolveError.printStackTrace();
+					}
+				}
+			}
+			return clsinv;
+		}
+	}
+
 	class Implement_construct {
 
 		private final BaseGeneratedFunction generatedFunction;
@@ -1922,43 +1947,10 @@ public class DeduceTypes2 {
 			LookupResultList lrl = aTyn1.getContext().lookup(s);
 			@Nullable OS_Element best = lrl.chooseBest(null);
 			assert best instanceof ClassStatement;
-			@NotNull List<TypeName> gp = ((ClassStatement) best).getGenericPart();
-			@Nullable ClassInvocation clsinv = new ClassInvocation((ClassStatement) best, constructorName);
-			if (gp.size() > 0) {
-				TypeNameList gp2 = aTyn1.getGenericPart();
-				for (int i = 0; i < gp.size(); i++) {
-					final TypeName typeName = gp2.get(i);
-					@NotNull GenType typeName2;
-					try {
-						// TODO transition to GenType
-						typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
-						clsinv.set(i, gp.get(i), typeName2.resolved);
-					} catch (ResolveError aResolveError) {
-						aResolveError.printStackTrace();
-					}
-				}
-			}
+			ClassInvocation clsinv = ClassInvocationMake.withGenericPart((ClassStatement) best, constructorName, aTyn1, DeduceTypes2.this);
 			clsinv = phase.registerClassInvocation(clsinv);
 			if (co != null) {
-				if (co instanceof IdentTableEntry) {
-					final @Nullable IdentTableEntry idte3 = (IdentTableEntry) co;
-					idte3.type.genTypeCI(clsinv);
-					clsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
-						@Override
-						public void onDone(GeneratedClass result) {
-							idte3.resolveTypeToClass(result);
-						}
-					});
-				} else if (co instanceof VariableTableEntry) {
-					final @NotNull VariableTableEntry vte = (VariableTableEntry) co;
-					vte.type.genTypeCI(clsinv);
-					clsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
-						@Override
-						public void onDone(GeneratedClass result) {
-							vte.resolveTypeToClass(result);
-						}
-					});
-				}
+				genTypeCI_and_ResolveTypeToClass(co, clsinv);
 			}
 			pte.setClassInvocation(clsinv);
 			pte.setResolvedElement(best);
@@ -1980,6 +1972,28 @@ public class DeduceTypes2 {
 					@NotNull FunctionInvocation fi = newFunctionInvocation(cc, pte, clsinv, phase);
 					pte.setFunctionInvocation(fi);
 				}
+			}
+		}
+
+		private void genTypeCI_and_ResolveTypeToClass(@NotNull final Constructable co, final ClassInvocation aClsinv) {
+			if (co instanceof IdentTableEntry) {
+				final @Nullable IdentTableEntry idte3 = (IdentTableEntry) co;
+				idte3.type.genTypeCI(aClsinv);
+				aClsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(GeneratedClass result) {
+						idte3.resolveTypeToClass(result);
+					}
+				});
+			} else if (co instanceof VariableTableEntry) {
+				final @NotNull VariableTableEntry vte = (VariableTableEntry) co;
+				vte.type.genTypeCI(aClsinv);
+				aClsinv.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(GeneratedClass result) {
+						vte.resolveTypeToClass(result);
+					}
+				});
 			}
 		}
 	}
