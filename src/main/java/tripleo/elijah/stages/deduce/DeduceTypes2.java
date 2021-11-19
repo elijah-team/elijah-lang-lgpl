@@ -1810,7 +1810,7 @@ public class DeduceTypes2 {
 			} else if (expression instanceof IdentIA) {
 				action_IdentIA();
 			} else {
-				throw new NotImplementedException();
+				throw new IllegalStateException("this.expression is of the wrong type");
 			}
 		}
 
