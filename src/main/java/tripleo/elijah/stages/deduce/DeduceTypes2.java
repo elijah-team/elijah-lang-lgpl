@@ -1886,7 +1886,12 @@ public class DeduceTypes2 {
 			@NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(((IntegerIA) expression).getIndex());
 			assert vte.type.getAttached() != null; // TODO will fail when empty variable expression
 			@Nullable OS_Type ty = vte.type.getAttached();
-			implement_construct_type(vte, ty, null);
+			if (ty.getType() == OS_Type.Type.USER) {
+				implement_construct_type(vte, ty, null);
+			} else {
+				final OS_Type ty2 = vte.type.genType.typeName;
+				implement_construct_type(vte, ty2, null);
+			}
 		}
 
 		private void implement_construct_type(@Nullable Constructable co, @Nullable OS_Type aTy, String constructorName) {
