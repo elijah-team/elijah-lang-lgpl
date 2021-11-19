@@ -3468,7 +3468,7 @@ public class DeduceTypes2 {
 					@Nullable OS_Element best = lrl.chooseBest(null);
 					// README commented out because only firing for dir.listFiles, and we always use `best'
 //					if (best != ele2) LOG.err(String.format("2824 Divergent for %s, %s and %s", ite, best, ele2));;
-					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolderWithType(best, ty, DeduceTypes2.this));
 				} catch (ResolveError aResolveError) {
 					aResolveError.printStackTrace();
 					errSink.reportDiagnostic(aResolveError);
@@ -3687,6 +3687,10 @@ public class DeduceTypes2 {
 
 		public void addJobs(final WorkList aWl) {
 			deduceTypes2.wm.addJobs(aWl);
+		}
+
+		public IElementHolder newGenericElementHolderWithType(final OS_Element aElement, final TypeName aTypeName) {
+			return new GenericElementHolderWithType(aElement, new OS_Type(aTypeName), deduceTypes2);
 		}
 	}
 }

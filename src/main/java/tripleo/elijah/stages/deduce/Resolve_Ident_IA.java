@@ -175,6 +175,10 @@ class Resolve_Ident_IA {
 		InstructionArgument x = aS.get(/*aS.size()-1*/0);
 		if (x instanceof IntegerIA) {
 			@NotNull VariableTableEntry y = ((IntegerIA) x).getEntry();
+			if (el instanceof VariableStatement) {
+				final VariableStatement vs = (VariableStatement) el;
+				y.setStatus(BaseTableEntry.Status.KNOWN, dc.newGenericElementHolderWithType(el, vs.typeName()));
+			}
 			y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 		} else if (x instanceof IdentIA) {
 			@NotNull IdentTableEntry y = ((IdentIA) x).getEntry();
