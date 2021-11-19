@@ -134,6 +134,21 @@ public class DeduceTypeResolve {
 						}
 
 						@Override
+						public void visitAliasStatement(final AliasStatement aAliasStatement) {
+							int y=2;
+						}
+
+						@Override
+						public void visitDefFunction(final DefFunctionDef aDefFunctionDef) {
+							int y=2;
+						}
+
+						@Override
+						public void visitIdentExpression(final IdentExpression aIdentExpression) {
+							int y=2;
+						}
+
+						@Override
 						public void defaultAction(final OS_Element anElement) {
 							throw new IllegalStateException();
 						}
