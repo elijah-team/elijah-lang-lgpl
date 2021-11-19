@@ -99,6 +99,10 @@ public class ClassContext extends Context {
 		return _parent;
 	}
 
+	public ClassStatement getCarrier() {
+		return carrier;
+	}
+
 	public class OS_TypeNameElement implements OS_Element {
 		private TypeName typeName;
 

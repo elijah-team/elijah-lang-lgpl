@@ -25,6 +25,7 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.lang.TypeName;
+import tripleo.elijah.lang.TypeOfTypeName;
 import tripleo.elijah.stages.gen_fn.GenType;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
@@ -157,8 +158,20 @@ public class ResolveType {
 			}
 			case FUNCTION:
 			case GENERIC:
-			case TYPE_OF:
 				throw new NotImplementedException();
+			case TYPE_OF:
+				{
+					final TypeOfTypeName type_of = (TypeOfTypeName) tn1;
+					final Qualident q = type_of.typeOf();
+					if (q.parts().size() == 1 && q.parts().get(0).equals("self")) {
+						assert type_of.getContext() instanceof ClassContext;
+						R.resolved = new OS_Type(((ClassContext) type_of.getContext()).getCarrier());
+					}
+					int y=2;
+
+				}
+//				throw new NotImplementedException();
+				break;
 			default:
 				throw new IllegalStateException("414 Unexpected value: " + tn1.kindOfType());
 			}
