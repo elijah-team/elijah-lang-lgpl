@@ -1143,6 +1143,14 @@ public class GenerateFunctions {
 					return new IntegerIA(tmp, gf);
 				}
 			}
+		case SUBEXPRESSION:
+			{
+				final SubExpression subexpression = (SubExpression) expression;
+				final IExpression exp = subexpression.getExpression();
+
+				final InstructionArgument ia = simplify_expression(exp, gf, cctx);
+				return ia;
+			}
 		case LT_: case GT: case GE:
 		case ADDITION: case MULTIPLY: // TODO all BinaryExpressions go here
 		case NOT_EQUAL: case EQUAL:
