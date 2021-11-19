@@ -1970,7 +1970,23 @@ public class DeduceTypes2 {
 				// TODO also check arguments
 				{
 					// TODO is cc ever null (default_constructor)
-					if (cc == null) assert pte.getArgs().size() == 0;
+					if (cc == null) {
+						//assert pte.getArgs().size() == 0;
+						for (ClassItem item : ((ClassStatement) best).getItems()) {
+							if (item instanceof ConstructorDef) {
+								final ConstructorDef constructorDef = (ConstructorDef) item;
+								if (constructorDef.getArgs().size() == pte.getArgs().size()) {
+									// TODO we now have to find a way to check arg matching of two different types
+									//  of arglists. This is complicated by the fact that constructorDef doesn't have
+									//  to specify the argument types and currently, pte args is underspecified
+
+									// TODO this is explicitly wrong, but it works for now
+									cc = constructorDef;
+									break;
+								}
+							}
+						}
+					}
 					// TODO do we still want to do this if cc is null?
 					@NotNull FunctionInvocation fi = newFunctionInvocation(cc, pte, clsinv, phase);
 					pte.setFunctionInvocation(fi);
