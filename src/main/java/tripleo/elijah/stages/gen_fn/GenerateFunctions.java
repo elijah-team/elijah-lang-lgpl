@@ -1153,7 +1153,9 @@ public class GenerateFunctions {
 			}
 		case LT_: case GT: case GE:
 		case ADDITION: case MULTIPLY: // TODO all BinaryExpressions go here
+		case SUBTRACTION: case DIVIDE:
 		case NOT_EQUAL: case EQUAL:
+		case MODULO:
 			{
 				final BasicBinaryExpression bbe = (BasicBinaryExpression) expression;
 				final IExpression left = bbe.getLeft();
@@ -1165,9 +1167,12 @@ public class GenerateFunctions {
 						left_instruction = simplify_expression(left, gf, cctx);
 					} else {
 						// a constant
-						assert IExpression.isConstant(right);
-						final int left_constant_num = addConstantTableEntry2(null, left, left.getType(), gf);
-						left_instruction = new ConstTableIA(left_constant_num, gf);
+						if (IExpression.isConstant(left)) {
+							final int left_constant_num = addConstantTableEntry2(null, left, left.getType(), gf);
+							left_instruction = new ConstTableIA(left_constant_num, gf);
+						} else {
+							left_instruction = simplify_expression(left, gf, cctx);
+						}
 					}
 				} else {
 					// create a tmp var
@@ -1178,9 +1183,12 @@ public class GenerateFunctions {
 						right_instruction = simplify_expression(right, gf, cctx);
 					} else {
 						// a constant
-						assert IExpression.isConstant(right);
-						final int right_constant_num = addConstantTableEntry2(null, right, right.getType(), gf);
-						right_instruction = new ConstTableIA(right_constant_num, gf);
+						if (IExpression.isConstant(right)) {
+							final int right_constant_num = addConstantTableEntry2(null, right, right.getType(), gf);
+							right_instruction = new ConstTableIA(right_constant_num, gf);
+						} else {
+							right_instruction = simplify_expression(right, gf, cctx);
+						}
 					}
 				} else {
 					// create a tmp var
