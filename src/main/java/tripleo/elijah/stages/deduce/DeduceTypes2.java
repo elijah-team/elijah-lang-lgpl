@@ -1934,7 +1934,7 @@ public class DeduceTypes2 {
 				co.setConstructable(pte);
 				ClassInvocation best = pte.getClassInvocation();
 				assert best != null;
-				best.promise().done(new DoneCallback<GeneratedClass>() {
+				best.resolvePromise().done(new DoneCallback<GeneratedClass>() {
 					@Override
 					public void onDone(GeneratedClass result) {
 						co.resolveTypeToClass(result);
