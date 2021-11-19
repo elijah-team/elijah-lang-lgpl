@@ -1738,7 +1738,7 @@ public class DeduceTypes2 {
 			{
 				final GenType genType = vte.type.genType;
 				if (genType.resolved != null && genType.node == null) {
-					if (genType.resolved.getType() != OS_Type.Type.USER_CLASS) {
+					if (genType.resolved.getType() != OS_Type.Type.USER_CLASS && genType.resolved.getType() != OS_Type.Type.FUNCTION) {
 						try {
 							genType.resolved = resolve_type(genType.resolved, ctx).resolved;
 						} catch (ResolveError aResolveError) {
