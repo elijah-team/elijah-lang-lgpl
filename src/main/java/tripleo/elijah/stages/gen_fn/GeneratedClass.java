@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * Created 10/29/20 4:26 AM
  */
-public class GeneratedClass extends GeneratedContainerNC {
+public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 	private final OS_Module module;
 	private final ClassStatement klass;
 	public Map<ConstructorDef, GeneratedConstructor> constructors = new HashMap<ConstructorDef, GeneratedConstructor>();
@@ -208,6 +208,11 @@ public class GeneratedClass extends GeneratedContainerNC {
 	@NotNull
 	public String getNumberedName() {
 		return getKlass().getName()+"_"+ getCode();
+	}
+
+	@Override
+	public Role getRole() {
+		return Role.CLASS;
 	}
 }
 

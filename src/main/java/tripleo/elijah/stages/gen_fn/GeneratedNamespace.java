@@ -19,7 +19,7 @@ import tripleo.elijah.util.NotImplementedException;
 /**
  * Created 12/22/20 5:39 PM
  */
-public class GeneratedNamespace extends GeneratedContainerNC {
+public class GeneratedNamespace extends GeneratedContainerNC implements GNCoded {
 	public GeneratedNamespace(NamespaceStatement namespace1, OS_Module module) {
 		this.namespaceStatement = namespace1;
 		this.module = module;
@@ -100,6 +100,10 @@ public class GeneratedNamespace extends GeneratedContainerNC {
 		aPostDeduce.analyze_namespace(this);
 	}
 
+	@Override
+	public Role getRole() {
+		return Role.NAMESPACE;
+	}
 }
 
 //

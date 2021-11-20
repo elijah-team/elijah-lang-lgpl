@@ -20,7 +20,7 @@ import tripleo.elijah.lang.OS_Type;
 /**
  * Created 6/27/21 9:40 AM
  */
-public class GeneratedFunction extends BaseGeneratedFunction {
+public class GeneratedFunction extends BaseGeneratedFunction implements GNCoded {
 	public final @Nullable FunctionDef fd;
 
 	public GeneratedFunction(final @Nullable FunctionDef functionDef) {
@@ -63,6 +63,10 @@ public class GeneratedFunction extends BaseGeneratedFunction {
 		return ""+fd;
 	}
 
+	@Override
+	public Role getRole() {
+		return Role.FUNCTION;
+	}
 }
 
 //
