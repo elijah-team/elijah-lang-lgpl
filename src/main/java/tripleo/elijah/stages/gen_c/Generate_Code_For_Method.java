@@ -697,14 +697,17 @@ public class Generate_Code_For_Method {
 				type = tte.getAttached();
 
 				LOG.info("228 "+ type);
-				if (type.isUnitType()) {
+				if (type == null) {
+					LOG.err("655 Shouldn't be here (type is null)");
+					returnType = "ERR_type_attached_is_null/*2*/";
+				} else if (type.isUnitType()) {
 					returnType = "void/*Unit*/";
 				} else if (type != null) {
 					returnType = String.format("/*267*/%s*", gc.getTypeName(type));
 				} else {
-	//				throw new IllegalStateException();
-					LOG.err("655 Shouldn't be here (type is null)");
-					returnType = "void/*2*/";
+					throw new IllegalStateException();
+//					LOG.err("656 Shouldn't be here (can't reason about type)");
+//					returnType = "void/*656*/";
 				}
 			}
 			return returnType;
