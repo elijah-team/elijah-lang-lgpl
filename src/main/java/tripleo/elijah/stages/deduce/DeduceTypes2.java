@@ -1345,7 +1345,52 @@ public class DeduceTypes2 {
 				gen = new WlGenerateFunction(gf, aDependentFunction);
 			}
 			wl.addJob(gen);
+			List<BaseGeneratedFunction> coll = new ArrayList<>();
+			wl.addJob(new WlDeduceFunction(gen, coll));
 			aWorkManager.addJobs(wl);
+		}
+
+		class WlDeduceFunction implements WorkJob {
+			private final WorkJob workJob;
+			private final List<BaseGeneratedFunction> coll;
+			private boolean _isDone;
+
+			public WlDeduceFunction(final WorkJob aWorkJob, List<BaseGeneratedFunction> aColl) {
+				workJob = aWorkJob;
+				coll = aColl;
+			}
+
+			@Override
+			public void run(final WorkManager aWorkManager) {
+				// TODO assumes result is in the same file as this (DeduceTypes2)
+
+				if (workJob instanceof WlGenerateFunction) {
+					final GeneratedFunction generatedFunction1 = ((WlGenerateFunction) workJob).getResult();
+					if (!coll.contains(generatedFunction1)) {
+						coll.add(generatedFunction1);
+						if (!generatedFunction1.deducedAlready) {
+							deduce_generated_function(generatedFunction1);
+						}
+						generatedFunction1.deducedAlready= true;
+					}
+				} else if (workJob instanceof WlGenerateDefaultCtor) {
+					final GeneratedFunction generatedFunction1 = (GeneratedFunction) ((WlGenerateDefaultCtor) workJob).getResult();
+					if (!coll.contains(generatedFunction1)) {
+						coll.add(generatedFunction1);
+						if (!generatedFunction1.deducedAlready) {
+							deduce_generated_constructor(generatedFunction1);
+						}
+						generatedFunction1.deducedAlready= true;
+					}
+				} else
+					throw new NotImplementedException();
+				_isDone = true;
+			}
+
+			@Override
+			public boolean isDone() {
+				return _isDone;
+			}
 		}
 
 		public void subscribeTypes(final Subject<GenType> aDependentTypesSubject) {
