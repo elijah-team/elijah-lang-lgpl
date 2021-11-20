@@ -26,6 +26,7 @@ public class WlGenerateDefaultCtor implements WorkJob {
 	private final GenerateFunctions generateFunctions;
 	private final FunctionInvocation functionInvocation;
 	private boolean _isDone = false;
+	private BaseGeneratedFunction Result;
 
 	@Contract(pure = true)
 	public WlGenerateDefaultCtor(@NotNull GenerateFunctions aGenerateFunctions, FunctionInvocation aFunctionInvocation) {
@@ -83,6 +84,14 @@ public class WlGenerateDefaultCtor implements WorkJob {
 
 			functionInvocation.generateDeferred().resolve(gf);
 			functionInvocation.setGenerated(gf);
+			Result = gf;
+		} else {
+			functionInvocation.generatePromise().then(new DoneCallback<BaseGeneratedFunction>() {
+				@Override
+				public void onDone(final BaseGeneratedFunction result) {
+					Result = result;
+				}
+			});
 		}
 
 		_isDone = true;
@@ -95,6 +104,10 @@ public class WlGenerateDefaultCtor implements WorkJob {
 	@Override
 	public boolean isDone() {
 		return _isDone;
+	}
+
+	public BaseGeneratedFunction getResult() {
+		return Result;
 	}
 }
 
