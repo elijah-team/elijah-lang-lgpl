@@ -177,6 +177,7 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 						if (parent instanceof ClassStatement) {
 							// TODO might be wrong in the case of generics. check.
 							typeName = null;//new OS_Type((ClassStatement) parent);
+							System.err.println("NOTE ineresting in genericA/__preinc__");
 						}
 					}
 				}
