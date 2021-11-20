@@ -1025,6 +1025,8 @@ public class DeduceTypes2 {
 						}
 					});
 				} else if (en instanceof IntegerIA) {
+					// TODO this code does nothing so commented out
+/*
 					final @NotNull IntegerIA integerIA = (IntegerIA) en;
 					@NotNull VariableTableEntry vte = integerIA.getEntry();
 					vte.addStatusListener(new BaseTableEntry.StatusListener() {
@@ -1047,6 +1049,7 @@ public class DeduceTypes2 {
 							}
 						}
 					});
+*/
 				} else
 					throw new NotImplementedException();
 			}
