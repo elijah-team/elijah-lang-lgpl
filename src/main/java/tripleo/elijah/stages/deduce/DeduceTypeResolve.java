@@ -87,6 +87,8 @@ public class DeduceTypeResolve {
 
 										genType.nonGenericTypeName = normalTypeName;
 
+										assert normalTypeName == type.getTypeName();
+
 										OS_Type typeName = new OS_Type(normalTypeName);
 										try {
 											final @NotNull GenType resolved = dt2.resolve_type(typeName, variableStatement.getContext());
@@ -125,6 +127,8 @@ public class DeduceTypeResolve {
 											genType.typeName = new OS_Type(normalTypeName);
 									}
 								}
+							} else {
+								throw new IllegalStateException();
 							}
 						}
 
