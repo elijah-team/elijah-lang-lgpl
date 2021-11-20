@@ -133,11 +133,6 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	}
 
 	@Override
-	public void setConstructable(ProcTableEntry aPte) {
-		constructable_pte = aPte;
-	}
-
-	@Override
 	public void resolveTypeToClass(GeneratedNode aNode) {
 		_resolvedType = aNode;
 		genType.node = aNode;
@@ -153,6 +148,25 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 		genType.copy(aGenType);
 		resolveType(aGenType);
 	}
+
+	// region constructable
+
+	@Override
+	public void setConstructable(ProcTableEntry aPte) {
+		if (constructable_pte != aPte) {
+			constructable_pte = aPte;
+			constructableDeferred.resolve(constructable_pte);
+		}
+	}
+
+	@Override
+	public Promise<ProcTableEntry, Void, Void> constructablePromise() {
+		return constructableDeferred.promise();
+	}
+
+	DeferredObject<ProcTableEntry, Void, Void> constructableDeferred = new DeferredObject<>();
+
+	// endregion constructable
 
 	@Override
 	public String expectationString() {

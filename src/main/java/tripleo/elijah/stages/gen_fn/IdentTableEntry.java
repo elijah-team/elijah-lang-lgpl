@@ -125,10 +125,22 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 		phase.onType(this, callback);
 	}
 
+	// region constructable
+
 	@Override
 	public void setConstructable(ProcTableEntry aPte) {
 		constructable_pte = aPte;
+		constructableDeferred.resolve(constructable_pte);
 	}
+
+	@Override
+	public Promise<ProcTableEntry, Void, Void> constructablePromise() {
+		return constructableDeferred.promise();
+	}
+
+	DeferredObject<ProcTableEntry, Void, Void> constructableDeferred = new DeferredObject<>();
+
+	// endregion constructable
 
 	public DeducePath buildDeducePath(BaseGeneratedFunction generatedFunction) {
 		@NotNull List<InstructionArgument> x = generatedFunction._getIdentIAPathList(new IdentIA(index, generatedFunction));

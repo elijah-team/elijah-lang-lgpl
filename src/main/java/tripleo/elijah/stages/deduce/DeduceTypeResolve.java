@@ -13,12 +13,15 @@ import org.jdeferred2.DoneCallback;
 import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.ProcIA;
+
+import java.util.Map;
 
 /**
  * Created 11/18/21 12:02 PM
@@ -112,8 +115,22 @@ public class DeduceTypeResolve {
 												if (resolved.resolved.getType() == OS_Type.Type.GENERIC_TYPENAME) {
 													backlink.typeResolvePromise().then(new DoneCallback<GenType>() {
 														@Override
-														public void onDone(final GenType result) {
-															int y=2;
+														public void onDone(final GenType result_gt) {
+															((Constructable) backlink).constructablePromise().then(new DoneCallback<ProcTableEntry>() {
+																@Override
+																public void onDone(final ProcTableEntry result_pte) {
+																	final ClassInvocation ci = result_pte.getClassInvocation();
+																	assert ci != null;
+																	final @Nullable Map<TypeName, OS_Type> gp = ci.genericPart;
+																	final TypeName sch = resolved.typeName.getTypeName();
+																	for (Map.Entry<TypeName, OS_Type> entrySet : gp.entrySet()) {
+																		if (entrySet.getKey().equals(sch)) {
+																			genType.resolved = entrySet.getValue();
+																			break;
+																		}
+																	}
+																}
+															});
 														}
 													});
 												} else {
