@@ -156,7 +156,7 @@ public class DeduceTypeResolve {
 
 						@Override
 						public void visitAliasStatement(final AliasStatement aAliasStatement) {
-							int y=2;
+							System.err.println(String.format("** AliasStatement %s points to %s", aAliasStatement.name(), aAliasStatement.getExpression()));
 						}
 
 						@Override
