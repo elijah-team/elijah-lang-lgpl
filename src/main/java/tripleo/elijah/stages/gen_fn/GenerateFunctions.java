@@ -121,7 +121,13 @@ public class GenerateFunctions {
 					genType.typeName = new OS_Type(typeName);
 				genType.resolved = attached;
 
-				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, attached, fali.getNameToken());
+				final OS_Type attached1;
+				if (attached == null && typeName != null)
+					attached1 = genType.typeName;
+				else
+					attached1 = attached;
+
+				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, attached1, fali.getNameToken());
 //				assert attached != null; // TODO this fails
 
 				gf.addVariableTableEntry(fali.name(), VariableTableType.ARG, tte, fali);
