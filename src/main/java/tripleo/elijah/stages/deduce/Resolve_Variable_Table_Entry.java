@@ -157,7 +157,7 @@ class Resolve_Variable_Table_Entry {
 //			fi = newFunctionInvocation(fd, pte, nsi, phase);
 		} else if (element instanceof ClassStatement) {
 			final @NotNull ClassStatement classStatement = (ClassStatement) element;
-			aGt.resolved = new OS_Type((ClassStatement) element);
+			aGt.resolved = ((ClassStatement) element).getOS_Type();
 			// TODO genCI ??
 			@Nullable ClassInvocation ci = new ClassInvocation(classStatement, null);
 			ci = phase.registerClassInvocation(ci);
@@ -171,7 +171,7 @@ class Resolve_Variable_Table_Entry {
 			@Nullable IInvocation inv;
 			switch (DecideElObjectType.getElObjectType(parent)) {
 			case CLASS:
-				aGt.resolved = new OS_Type((ClassStatement) parent);
+				aGt.resolved = ((ClassStatement) parent).getOS_Type();
 				inv = phase.registerClassInvocation((ClassStatement) parent, null);
 				((ClassInvocation)inv).resolveDeferred().then(new DoneCallback<GeneratedClass>() {
 					@Override

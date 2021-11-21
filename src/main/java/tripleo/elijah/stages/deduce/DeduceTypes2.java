@@ -175,7 +175,7 @@ public class DeduceTypes2 {
 
 					if (best instanceof ClassStatement) {
 						final ClassStatement classStatement = (ClassStatement) best;
-						gt.resolved = new OS_Type(classStatement);
+						gt.resolved = classStatement.getOS_Type();
 					} else if (best instanceof ClassContext.OS_TypeNameElement) {
 						final ClassContext.OS_TypeNameElement typeNameElement = (ClassContext.OS_TypeNameElement) best;
 						assert aGenericPart != null;
@@ -187,7 +187,7 @@ public class DeduceTypes2 {
 							// TODO test next 4 lines are copies of above
 							if (best2 instanceof ClassStatement) {
 								final ClassStatement classStatement = (ClassStatement) best2;
-								gt.resolved = new OS_Type(classStatement);
+								gt.resolved = classStatement.getOS_Type();
 							}
 							break;
 						case USER:
@@ -198,7 +198,7 @@ public class DeduceTypes2 {
 							// TODO test next 4 lines are copies of above
 							if (el2 instanceof ClassStatement) {
 								final ClassStatement classStatement = (ClassStatement) el2;
-								gt.resolved = new OS_Type(classStatement);
+								gt.resolved = classStatement.getOS_Type();
 							} else
 								throw new NotImplementedException();
 							break;
@@ -841,7 +841,7 @@ public class DeduceTypes2 {
 							// still contained in constructable_pte
 							@NotNull GenType genType = new GenType();
 							genType.typeName = attached;
-							genType.resolved = new OS_Type((ClassStatement) best);
+							genType.resolved = ((ClassStatement) best).getOS_Type();
 //										genType.copy(vte.type.genType);
 							genType.ci = genCI(genType, x);
 							vte.type.genType.copy(genType);
@@ -1815,7 +1815,7 @@ public class DeduceTypes2 {
 		{
 			if (vte.type.getAttached() == null && vte.constructable_pte != null) {
 				ClassStatement c = vte.constructable_pte.getFunctionInvocation().getClassInvocation().getKlass();
-				final @NotNull OS_Type attached = new OS_Type(c);
+				final @NotNull OS_Type attached = c.getOS_Type();
 				// TODO this should have been set somewhere already
 				//  typeName and nonGenericTypeName are not set
 				//  but at this point probably wont be needed
@@ -2425,7 +2425,7 @@ public class DeduceTypes2 {
 								tte.setAttached(new OS_FuncType((FunctionDef) best));
 								//vte.addPotentialType(instructionIndex, tte);
 							} else if (best instanceof ClassStatement) {
-								tte.setAttached(new OS_Type((ClassStatement) best));
+								tte.setAttached(((ClassStatement) best).getOS_Type());
 							} else if (best instanceof VariableStatement) {
 								final @NotNull VariableStatement vs = (VariableStatement) best;
 								@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(vs.getName());
@@ -2533,7 +2533,7 @@ public class DeduceTypes2 {
 							});
 						} else if (el instanceof ClassStatement) {
 							@NotNull ClassStatement kl = (ClassStatement) el;
-							@NotNull OS_Type type = new OS_Type(kl);
+							@NotNull OS_Type type = kl.getOS_Type();
 							@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression, pte);
 							vte.addPotentialType(instructionIndex, tte);
 							vte.setConstructable(pte);

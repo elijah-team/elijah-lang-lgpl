@@ -61,7 +61,7 @@ public class GenerateFunctions {
 		final GeneratedConstructor gf = new GeneratedConstructor(aConstructorDef);
 		gf.setFunctionInvocation(aFunctionInvocation);
 		if (parent instanceof ClassStatement) {
-			final OS_Type parentType = new OS_Type((ClassStatement) parent);
+			final OS_Type parentType = ((ClassStatement) parent).getOS_Type();
 			final IdentExpression selfIdent = IdentExpression.forString("self");
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, parentType, selfIdent);
 			gf.addVariableTableEntry("self", VariableTableType.SELF, tte, null);
@@ -91,7 +91,7 @@ public class GenerateFunctions {
 		if (parent instanceof ClassStatement)
 			gf.addVariableTableEntry("self",
 					VariableTableType.SELF,
-					gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, new OS_Type((ClassStatement) parent), IdentExpression.forString("self")),
+					gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, ((ClassStatement) parent).getOS_Type(), IdentExpression.forString("self")),
 					null);
 		final OS_Type returnType;
 		final TypeName returnType1 = fd.returnType();

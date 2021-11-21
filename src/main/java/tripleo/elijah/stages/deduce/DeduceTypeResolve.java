@@ -68,7 +68,7 @@ public class DeduceTypeResolve {
 					eh.getElement().visitGen(new AbstractCodeGen() {
 						@Override
 						public void addClass(final ClassStatement klass) {
-							genType.resolved = new OS_Type(klass);
+							genType.resolved = klass.getOS_Type();
 						}
 
 						@Override

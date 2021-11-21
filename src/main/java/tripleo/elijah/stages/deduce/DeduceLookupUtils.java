@@ -195,7 +195,7 @@ public class DeduceLookupUtils {
 			if (best != null) {
 				int y = 2;
 				if (best instanceof ClassStatement) {
-					result.resolved = new OS_Type((ClassStatement) best);
+					result.resolved = ((ClassStatement) best).getOS_Type();
 				} else if (best instanceof FunctionDef) {
 					final @Nullable FunctionDef fd = (FunctionDef) best;
 					if (fd.returnType() != null && !fd.returnType().isNull()) {
@@ -230,7 +230,7 @@ public class DeduceLookupUtils {
 			best = _resolveAlias2((AliasStatement) best, aDeduceTypes2);
 		}
 		if (best instanceof ClassStatement) {
-			R.resolved = new OS_Type((ClassStatement) best);
+			R.resolved = ((ClassStatement) best).getOS_Type();
 			result = R;
 		} else {
 			switch (DecideElObjectType.getElObjectType(best)) {

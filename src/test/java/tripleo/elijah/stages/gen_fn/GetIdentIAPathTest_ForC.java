@@ -193,7 +193,7 @@ public class GetIdentIAPathTest_ForC {
 		//
 
 		//
-		final OS_Type type = new OS_Type(classStatement);
+		final OS_Type type = classStatement.getOS_Type();
 		TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, type, x_ident);
 		int int_index = gf.addVariableTableEntry("x", VariableTableType.VAR, tte, mock(VariableStatement.class));
 		//

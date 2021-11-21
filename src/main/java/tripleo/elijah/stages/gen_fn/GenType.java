@@ -30,7 +30,7 @@ public class GenType {
 	}
 
 	public GenType(ClassStatement aClassStatement) {
-		resolved = new OS_Type(aClassStatement);
+		resolved = aClassStatement.getOS_Type();
 	}
 
 	public GenType() {

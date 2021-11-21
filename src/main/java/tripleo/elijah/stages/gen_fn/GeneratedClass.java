@@ -132,7 +132,7 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 								if (best instanceof AliasStatement)
 									best = DeduceLookupUtils._resolveAlias((AliasStatement) best, null);
 								assert best instanceof ClassStatement;
-								varTableEntry.varType = new OS_Type((ClassStatement) best);
+								varTableEntry.varType = ((ClassStatement) best).getOS_Type();
 							} else {
 								// TODO shouldn't this already be calculated?
 							}

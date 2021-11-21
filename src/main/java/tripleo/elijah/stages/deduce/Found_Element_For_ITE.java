@@ -81,7 +81,7 @@ class Found_Element_For_ITE {
 				break;
 			case NORMAL:
 				try {
-					attached = new OS_Type(dc.resolve_type(new OS_Type(ps.getTypeName()), ctx).resolved.getClassOf());
+					attached = (dc.resolve_type(new OS_Type(ps.getTypeName()), ctx).resolved.getClassOf()).getOS_Type();
 				} catch (ResolveError resolveError) {
 					LOG.err("378 resolveError");
 					resolveError.printStackTrace();
@@ -107,7 +107,7 @@ class Found_Element_For_ITE {
 	}
 
 	public void action_ClassStatement(@NotNull IdentTableEntry ite, ClassStatement classStatement) {
-		@NotNull OS_Type attached = new OS_Type(classStatement);
+		@NotNull OS_Type attached = classStatement.getOS_Type();
 		if (ite.type == null) {
 			ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 		} else

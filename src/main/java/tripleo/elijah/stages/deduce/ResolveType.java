@@ -67,7 +67,7 @@ public class ResolveType {
 				if (best == null) {
 					throw new ResolveError(IdentExpression.forString(typeName), lrl);
 				}
-				R.resolved = new OS_Type((ClassStatement) best);
+				R.resolved = ((ClassStatement) best).getOS_Type();
 				break;
 			}
 			case String_:
@@ -90,7 +90,7 @@ public class ResolveType {
 				if (best == null) {
 					throw new ResolveError(IdentExpression.forString(typeName), lrl);
 				}
-				R.resolved = new OS_Type((ClassStatement) best);
+				R.resolved = ((ClassStatement) best).getOS_Type();
 				break;
 			}
 			case SystemCharacter:
@@ -113,7 +113,7 @@ public class ResolveType {
 				if (best == null) {
 					throw new ResolveError(IdentExpression.forString(typeName), lrl);
 				}
-				R.resolved = new OS_Type((ClassStatement) best);
+				R.resolved = ((ClassStatement) best).getOS_Type();
 				break;
 			}
 			case Boolean:
@@ -123,7 +123,7 @@ public class ResolveType {
 					prelude = module;
 				final LookupResultList lrl = prelude.getContext().lookup("Boolean");
 				final @Nullable OS_Element best = lrl.chooseBest(null);
-				R.resolved = new OS_Type((ClassStatement) best); // TODO might change to Type
+				R.resolved = ((ClassStatement) best).getOS_Type(); // TODO might change to Type
 				break;
 			}
 			default:
@@ -153,7 +153,7 @@ public class ResolveType {
 				if (best instanceof ClassContext.OS_TypeNameElement) {
 					/*return*/R.resolved = new OS_GenericTypeNameType((ClassContext.OS_TypeNameElement) best); // TODO not a class
 				} else
-					R.resolved = new OS_Type((ClassStatement) best);
+					R.resolved = ((ClassStatement) best).getOS_Type();
 				break;
 			}
 			case FUNCTION:
@@ -165,7 +165,7 @@ public class ResolveType {
 					final Qualident q = type_of.typeOf();
 					if (q.parts().size() == 1 && q.parts().get(0).equals("self")) {
 						assert type_of.getContext() instanceof ClassContext;
-						R.resolved = new OS_Type(((ClassContext) type_of.getContext()).getCarrier());
+						R.resolved = (((ClassContext) type_of.getContext()).getCarrier()).getOS_Type();
 					}
 					int y=2;
 

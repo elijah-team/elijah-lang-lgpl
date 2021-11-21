@@ -98,7 +98,7 @@ public class OS_Type {
 							final LookupResultList lrl = aliasStatement.getContext().lookup(((Qualident) aliasStatement.getExpression()).toString());
 							best = lrl.chooseBest(null);
 						}
-						return new OS_Type((ClassStatement) best);
+						return ((ClassStatement) best).getOS_Type();
 					}
 				case Boolean:
 					{
@@ -107,7 +107,7 @@ public class OS_Type {
 
 						r = ctx.lookup("Boolean");
 						best = r.chooseBest(null);
-						return new OS_Type((ClassStatement) best);
+						return ((ClassStatement) best).getOS_Type();
 					}
 				case Unit:
 					{
@@ -120,7 +120,7 @@ public class OS_Type {
 
 						r = ctx.lookup("String8"); // TODO not sure about this
 						best = r.chooseBest(null);
-						return new OS_Type((ClassStatement) best);
+						return ((ClassStatement) best).getOS_Type();
 					}
 				default:
 					throw new IllegalStateException("Unexpected value: " + getBType());
@@ -130,7 +130,7 @@ public class OS_Type {
 			{
 				final LookupResultList r = ctx.lookup(getTypeName().toString()); // TODO
 				final OS_Element best = r.chooseBest(null);
-				return new OS_Type((ClassStatement) best);
+				return ((ClassStatement) best).getOS_Type();
 			}
 		case USER_CLASS:
 		case FUNCTION:
