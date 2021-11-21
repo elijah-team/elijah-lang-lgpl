@@ -392,7 +392,7 @@ public class GenerateC implements CodeGenerator {
 			// special case
 			//
 			if (input.type.genType.node != null)
-				return Emit.emit("/*395*/")+getTypeNameForGenClass(input.type.genType.node);
+				return Emit.emit("/*395*/")+getTypeNameForGenClass(input.type.genType.node)+"*";
 			//
 			if (input.getStatus() == BaseTableEntry.Status.UNCHECKED)
 				return "Error_UNCHECKED_Type";
