@@ -37,6 +37,7 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	private TypeNameList genericPart;
 
 	static final List<TypeName> emptyTypeNameList = ImmutableList.<TypeName>of();
+	private OS_Type osType;
 
 	public ClassStatement(final OS_Element parentElement, final Context parentContext) {
 		parent = parentElement; // setParent
@@ -222,6 +223,12 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 				return (ConstructorDef) input;
 			}
 		});
+	}
+
+	public OS_Type getOS_Type() {
+		if (osType == null)
+			osType = new OS_Type(this);
+		return osType;
 	}
 }
 
