@@ -6,8 +6,16 @@ import std.collections.List
 class Directory {
 	listFiles() -> List[File] {
 	}
+
+	isDirectory() -> Boolean {
+		Result = True
+	}
 }
 
 class File {
+
+	isDirectory() -> Boolean {
+		Result = False
+	}
 }
 
