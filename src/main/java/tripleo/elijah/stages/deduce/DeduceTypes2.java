@@ -51,6 +51,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created 9/15/20 12:51 PM
@@ -1821,6 +1822,39 @@ public class DeduceTypes2 {
 				//  but at this point probably wont be needed
 				vte.type.genType.resolved = attached;
 				vte.type.setAttached(attached);
+			}
+			if (vte.type.getAttached() == null && vte.potentialTypes().size() > 0) {
+				final List<TypeTableEntry> pot_List = vte.potentialTypes().stream().
+						filter(x -> x.getAttached() != null).
+						collect(Collectors.toList());
+
+				// TODO choose another heuristic if this fails
+				if (pot_List.size() == 1) {
+					final TypeTableEntry pot = pot_List.get(0);
+					vte.type.setAttached(pot.getAttached());
+					genCI(vte.type.genType, null);
+					((ClassInvocation) vte.type.genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
+						@Override
+						public void onDone(final GeneratedClass result) {
+							vte.type.genType.node = result;
+							vte.resolveTypeToClass(result);
+							vte.genType = vte.type.genType; // TODO who knows if this is necessary?
+						}
+					});
+				} else {
+					if (vte.potentialTypes().size() == 1) {
+						final TypeTableEntry tte1 = vte.potentialTypes().iterator().next();
+						if (tte1.tableEntry instanceof ProcTableEntry) {
+							final ProcTableEntry procTableEntry = (ProcTableEntry) tte1.tableEntry;
+							procTableEntry.typePromise().then(new DoneCallback<GenType>() {
+								@Override
+								public void onDone(final GenType result) {
+									vte.type.setAttached(result);
+								}
+							});
+						}
+					}
+				}
 			}
 			vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(vte.getResolvedElement()));
 			{
