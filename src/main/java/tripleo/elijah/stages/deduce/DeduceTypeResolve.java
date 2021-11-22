@@ -151,7 +151,15 @@ public class DeduceTypeResolve {
 
 						@Override
 						public void visitFormalArgListItem(final FormalArgListItem aFormalArgListItem) {
-							int y=2;
+							final OS_Type attached = ((VariableTableEntry) bte).type.getAttached();
+							if (attached != null)
+								System.err.println(
+										String.format("** FormalArgListItem %s attached is not null. Type is %s. Points to %s",
+												aFormalArgListItem.name(), aFormalArgListItem.typeName(), attached));
+							else
+								System.err.println(
+										String.format("** FormalArgListItem %s attached is null. Type is %s.",
+												aFormalArgListItem.name(), aFormalArgListItem.typeName()));
 						}
 
 						@Override
