@@ -33,7 +33,8 @@ public class GeneratedFunction extends BaseGeneratedFunction implements GNCoded 
 
 	@Override
 	public String toString() {
-		return String.format("<GeneratedFunction %s>", fd);
+		String pte_string = fd.getArgs().toString(); // TODO wanted PTE.getLoggingString
+		return String.format("<GeneratedFunction %s %s %s>", fd.getParent(), fd.name(), pte_string);
 	}
 
 	public String name() {

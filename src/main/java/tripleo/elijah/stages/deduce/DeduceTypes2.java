@@ -65,7 +65,7 @@ public class DeduceTypes2 {
 	private final @NotNull OS_Module module;
 	final @NotNull DeducePhase phase;
 	final ErrSink errSink;
-	final @NotNull ElLog LOG;
+	public final @NotNull ElLog LOG;
 	@NotNull WorkManager wm = new WorkManager();
 
 	public DeduceTypes2(@NotNull OS_Module module, @NotNull DeducePhase phase) {
@@ -139,6 +139,17 @@ public class DeduceTypes2 {
 				int y=2;
 			}
 		}
+	}
+
+	@NotNull
+	public String getPTEString(final ProcTableEntry aProcTableEntry) {
+		String pte_string;
+		if (aProcTableEntry == null)
+			pte_string = "[]";
+		else {
+			pte_string = aProcTableEntry.getLoggingString(this);
+		}
+		return pte_string;
 	}
 
 	interface IElementProcessor {
@@ -1059,37 +1070,6 @@ public class DeduceTypes2 {
 					throw new NotImplementedException();
 			}
 		}
-	}
-
-	private @NotNull String getPTEString(@Nullable ProcTableEntry pte) {
-		String pte_string;
-		if (pte == null)
-			pte_string = "[]";
-		else {
-			@NotNull List<String> l = new ArrayList<String>();
-
-			for (@NotNull TypeTableEntry typeTableEntry : pte.getArgs()) {
-				OS_Type attached = typeTableEntry.getAttached();
-
-				if (attached != null)
-					l.add(attached.toString());
-				else {
-					LOG.err("267 attached == null for "+typeTableEntry);
-
-					if (typeTableEntry.expression != null)
-						l.add(String.format("<Unknown expression: %s>", typeTableEntry.expression));
-					else
-						l.add("<Unknkown>");
-				}
-			}
-
-			@NotNull StringBuilder sb2 = new StringBuilder();
-			sb2.append("[");
-			sb2.append(Helpers.String_join(", ", l));
-			sb2.append("]");
-			pte_string = sb2.toString();
-		}
-		return pte_string;
 	}
 
 	/**

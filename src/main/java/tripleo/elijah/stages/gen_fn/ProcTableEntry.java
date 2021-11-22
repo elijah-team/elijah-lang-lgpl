@@ -12,14 +12,17 @@ import org.jdeferred2.DoneCallback;
 import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.IExpression;
-import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.instructions.InstructionArgument;
+import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -160,6 +163,35 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 
 	public Promise<GenType, Void, Void> typePromise() {
 		return typeDeferred.promise();
+	}
+
+	@NotNull
+	public String getLoggingString(final @Nullable DeduceTypes2 aDeduceTypes2) {
+		final String pte_string;
+		@NotNull List<String> l = new ArrayList<String>();
+
+		for (@NotNull TypeTableEntry typeTableEntry : getArgs()) {
+			OS_Type attached = typeTableEntry.getAttached();
+
+			if (attached != null)
+				l.add(attached.toString());
+			else {
+				if (aDeduceTypes2 != null)
+					aDeduceTypes2.LOG.err("267 attached == null for "+typeTableEntry);
+
+				if (typeTableEntry.expression != null)
+					l.add(String.format("<Unknown expression: %s>", typeTableEntry.expression));
+				else
+					l.add("<Unknkown>");
+			}
+		}
+
+		@NotNull StringBuilder sb2 = new StringBuilder();
+		sb2.append("[");
+		sb2.append(Helpers.String_join(", ", l));
+		sb2.append("]");
+		pte_string = sb2.toString();
+		return pte_string;
 	}
 }
 
