@@ -19,6 +19,7 @@ import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
+import tripleo.elijah.stages.deduce.declarations.DeferredMemberFunction;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
@@ -76,7 +77,13 @@ public class DeducePhase {
 	}
 
 //	Multimap<GeneratedClass, ClassInvocation> generatedClasses1 = ArrayListMultimap.create();
-@NotNull Multimap<ClassStatement, ClassInvocation> classInvocationMultimap = ArrayListMultimap.create();
+	@NotNull Multimap<ClassStatement, ClassInvocation> classInvocationMultimap = ArrayListMultimap.create();
+
+	private List<DeferredMemberFunction> deferredMemberFunctions = new ArrayList<>();
+
+	public void addDeferredMember(final DeferredMemberFunction aDeferredMemberFunction) {
+		deferredMemberFunctions.add(aDeferredMemberFunction);
+	}
 
 	class RegisterClassInvocation {
 		public @NotNull ClassInvocation registerClassInvocation(@NotNull ClassInvocation aClassInvocation) {
@@ -301,23 +308,8 @@ public class DeducePhase {
 	}
 
 	public void finish() {
-		// TODO all GeneratedFunction nodes have a genClass member
-		for (GeneratedNode generatedNode : generatedClasses) {
-			if (generatedNode instanceof GeneratedClass) {
-				final @NotNull GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-				@NotNull Collection<GeneratedFunction> functions = generatedClass.functionMap.values();
-				for (@NotNull GeneratedFunction generatedFunction : functions) {
-					generatedFunction.setParent(generatedClass);
-				}
-			} else if (generatedNode instanceof GeneratedNamespace) {
-				final @NotNull GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
-				@NotNull Collection<GeneratedFunction> functions = generatedNamespace.functionMap.values();
-				for (@NotNull GeneratedFunction generatedFunction : functions) {
-					generatedFunction.setParent(generatedNamespace);
-				}
-			}
-		}
-/*
+		setGeneratedClassParents();
+		/*
 		for (GeneratedNode generatedNode : generatedClasses) {
 			if (generatedNode instanceof GeneratedClass) {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
@@ -338,6 +330,49 @@ public class DeducePhase {
 			}
 		}
 */
+		handleOnClassCallbacks();
+		handleIdteTypeCallbacks();
+/*
+		for (Map.Entry<GeneratedFunction, OS_Type> entry : typeDecideds.entrySet()) {
+			for (Triplet triplet : forFunctions) {
+				if (triplet.gf.getGenerated() == entry.getKey()) {
+					synchronized (triplet.deduceTypes2) {
+						triplet.forFunction.typeDecided(entry.getValue());
+					}
+				}
+			}
+		}
+*/
+/*
+		for (Map.Entry<FunctionDef, GeneratedFunction> entry : functionMap.entries()) {
+			FunctionInvocation fi = new FunctionInvocation(entry.getKey(), null);
+			for (Triplet triplet : forFunctions) {
+//				Collection<GeneratedFunction> x = functionMap.get(fi);
+				triplet.forFunction.finish();
+			}
+		}
+*/
+		handleFoundElements();
+		handleResolvedVariables();
+		resolveAllVariableTableEntries();
+		handleDeferredMemberFunctions();
+		handleDeferredMembers();
+		sanityChecks();
+		handleFunctionMapHooks();
+	}
+
+	public void handleIdteTypeCallbacks() {
+		for (Map.@NotNull Entry<IdentTableEntry, OnType> entry : idte_type_callbacks.entrySet()) {
+			IdentTableEntry idte = entry.getKey();
+			if (idte.type !=null && // TODO make a stage where this gets set (resolvePotentialTypes)
+					idte.type.getAttached() != null)
+				entry.getValue().typeDeduced(idte.type.getAttached());
+			else
+				entry.getValue().noTypeFound();
+		}
+	}
+
+	public void handleOnClassCallbacks() {
 		// TODO rewrite with classInvocationMultimap
 		for (ClassStatement classStatement : onclasses.keySet()) {
 			for (GeneratedNode generatedNode : generatedClasses) {
@@ -362,34 +397,28 @@ public class DeducePhase {
 				}
 			}
 		}
-		for (Map.@NotNull Entry<IdentTableEntry, OnType> entry : idte_type_callbacks.entrySet()) {
-			IdentTableEntry idte = entry.getKey();
-			if (idte.type !=null && // TODO make a stage where this gets set (resolvePotentialTypes)
-					idte.type.getAttached() != null)
-				entry.getValue().typeDeduced(idte.type.getAttached());
-			else
-				entry.getValue().noTypeFound();
-		}
-/*
-		for (Map.Entry<GeneratedFunction, OS_Type> entry : typeDecideds.entrySet()) {
-			for (Triplet triplet : forFunctions) {
-				if (triplet.gf.getGenerated() == entry.getKey()) {
-					synchronized (triplet.deduceTypes2) {
-						triplet.forFunction.typeDecided(entry.getValue());
-					}
+	}
+
+	public void setGeneratedClassParents() {
+		// TODO all GeneratedFunction nodes have a genClass member
+		for (GeneratedNode generatedNode : generatedClasses) {
+			if (generatedNode instanceof GeneratedClass) {
+				final @NotNull GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				@NotNull Collection<GeneratedFunction> functions = generatedClass.functionMap.values();
+				for (@NotNull GeneratedFunction generatedFunction : functions) {
+					generatedFunction.setParent(generatedClass);
+				}
+			} else if (generatedNode instanceof GeneratedNamespace) {
+				final @NotNull GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+				@NotNull Collection<GeneratedFunction> functions = generatedNamespace.functionMap.values();
+				for (@NotNull GeneratedFunction generatedFunction : functions) {
+					generatedFunction.setParent(generatedNamespace);
 				}
 			}
 		}
-*/
-/*
-		for (Map.Entry<FunctionDef, GeneratedFunction> entry : functionMap.entries()) {
-			FunctionInvocation fi = new FunctionInvocation(entry.getKey(), null);
-			for (Triplet triplet : forFunctions) {
-//				Collection<GeneratedFunction> x = functionMap.get(fi);
-				triplet.forFunction.finish();
-			}
-		}
-*/
+	}
+
+	public void handleFoundElements() {
 		for (@NotNull FoundElement foundElement : foundElements) {
 			// TODO As we are using this, didntFind will never fail because
 			//  we call doFoundElement manually in resolveIdentIA
@@ -399,11 +428,14 @@ public class DeducePhase {
 				foundElement.doNoFoundElement();
 			}
 		}
+	}
+
+	public void handleResolvedVariables() {
 		for (GeneratedNode generatedNode : generatedClasses) {
 			if (generatedNode instanceof GeneratedContainer) {
 				final @NotNull GeneratedContainer generatedContainer = (GeneratedContainer) generatedNode;
 				Collection<ResolvedVariables> x = resolved_variables.get(generatedContainer.getElement());
-				for (@NotNull ResolvedVariables resolvedVariables : x) {
+				for (@NotNull DeducePhase.ResolvedVariables resolvedVariables : x) {
 					final GeneratedContainer.VarTableEntry variable = generatedContainer.getVariable(resolvedVariables.varName);
 					assert variable != null;
 					final TypeTableEntry type = resolvedVariables.identTableEntry.type;
@@ -413,6 +445,9 @@ public class DeducePhase {
 				}
 			}
 		}
+	}
+
+	public void resolveAllVariableTableEntries() {
 		@NotNull List<GeneratedClass> gcs = new ArrayList<GeneratedClass>();
 		boolean all_resolve_var_table_entries = false;
 		while (!all_resolve_var_table_entries) {
@@ -424,7 +459,20 @@ public class DeducePhase {
 				}
 			}
 		}
-		for (@NotNull DeferredMember deferredMember : deferredMembers) {
+	}
+
+	public void handleFunctionMapHooks() {
+		for (Map.@NotNull Entry<FunctionDef, Collection<GeneratedFunction>> entry : functionMap.asMap().entrySet()) {
+			for (@NotNull FunctionMapHook functionMapHook : functionMapHooks) {
+				if (functionMapHook.matches(entry.getKey())) {
+					functionMapHook.apply(entry.getValue());
+				}
+			}
+		}
+	}
+
+	public void handleDeferredMembers() {
+		for (@NotNull final DeferredMember deferredMember : deferredMembers) {
 			if (deferredMember.getParent() instanceof NamespaceStatement) {
 				final @NotNull NamespaceStatement parent = (NamespaceStatement) deferredMember.getParent();
 				final NamespaceInvocation nsi = registerNamespaceInvocation(parent);
@@ -494,12 +542,84 @@ public class DeducePhase {
 			} else
 				throw new NotImplementedException();
 		}
-		sanityChecks();
-		for (Map.@NotNull Entry<FunctionDef, Collection<GeneratedFunction>> entry : functionMap.asMap().entrySet()) {
-			for (@NotNull FunctionMapHook functionMapHook : functionMapHooks) {
-				if (functionMapHook.matches(entry.getKey())) {
-					functionMapHook.apply(entry.getValue());
-				}
+	}
+
+	public void handleDeferredMemberFunctions() {
+		for (@NotNull final DeferredMemberFunction deferredMemberFunction : deferredMemberFunctions) {
+			int y=2;
+			final OS_Element parent = deferredMemberFunction.getParent().getParent().getParent();
+
+			if (parent instanceof ClassStatement) {
+//				final ClassStatement classStatement = (ClassStatement) deferredMemberFunction.getParent();
+				final ClassInvocation classInvocation = (ClassInvocation) deferredMemberFunction.getInvocation();
+				classInvocation.resolvePromise().
+						then(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(final GeneratedClass result) {
+						final OS_Element p = deferredMemberFunction.getParent();
+
+						if (p instanceof DeduceTypes2.OS_SpecialVariable) {
+							final DeduceTypes2.OS_SpecialVariable specialVariable = (DeduceTypes2.OS_SpecialVariable) p;
+							final DeduceTypes2.MemberInvocation mi = specialVariable.memberInvocation;
+
+							switch (mi.role) {
+							case INHERITED:
+								final FunctionInvocation functionInvocation = deferredMemberFunction.functionInvocation();
+								functionInvocation.generatePromise().
+										then(new DoneCallback<BaseGeneratedFunction>() {
+											@Override
+											public void onDone(final BaseGeneratedFunction gf) {
+												deferredMemberFunction.externalRefDeferred().resolve(gf);
+												gf.typePromise().
+														then(new DoneCallback<GenType>() {
+															@Override
+															public void onDone(final GenType result) {
+																deferredMemberFunction.typeResolved().resolve(result);
+															}
+														});
+											}
+										});
+								break;
+							case DIRECT:
+								classInvocation.resolvePromise().
+										then(new DoneCallback<GeneratedClass>() {
+											@Override
+											public void onDone(final GeneratedClass element_generated) {
+												// once again we need GeneratedFunction, not FunctionDef
+												// we seem to have it below, but there can be multiple
+												// specializations of each function
+												final GeneratedFunction gf = element_generated.functionMap.get(deferredMemberFunction.getFunctionDef());
+												deferredMemberFunction.externalRefDeferred().resolve(gf);
+												gf.typePromise().
+														then(new DoneCallback<GenType>() {
+															@Override
+															public void onDone(final GenType result) {
+																deferredMemberFunction.typeResolved().resolve(result);
+															}
+														});
+											}
+										});
+								break;
+							default:
+								throw new IllegalStateException("Unexpected value: " + mi.role);
+							}
+							int y=2;
+						} else
+							throw new IllegalStateException("unknown parent");
+					}
+				});
+			} else if (parent instanceof NamespaceStatement) {
+//				final ClassStatement classStatement = (ClassStatement) deferredMemberFunction.getParent();
+				final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) deferredMemberFunction.getInvocation();
+				namespaceInvocation.resolvePromise().
+						then(new DoneCallback<GeneratedNamespace>() {
+					@Override
+					public void onDone(final GeneratedNamespace result) {
+						final NamespaceInvocation x = namespaceInvocation;
+						final @NotNull DeferredMemberFunction z = deferredMemberFunction;
+						int y=2;
+					}
+				});
 			}
 		}
 	}

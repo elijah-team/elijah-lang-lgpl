@@ -27,6 +27,7 @@ import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
+import tripleo.elijah.stages.deduce.declarations.DeferredMemberFunction;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.ConstTableIA;
 import tripleo.elijah.stages.instructions.FnCallArgs;
@@ -52,6 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static tripleo.elijah.stages.deduce.DeduceTypes2.MemberInvocation.Role.INHERITED;
 
 /**
  * Created 9/15/20 12:51 PM
@@ -1846,10 +1849,70 @@ public class DeduceTypes2 {
 						final TypeTableEntry tte1 = vte.potentialTypes().iterator().next();
 						if (tte1.tableEntry instanceof ProcTableEntry) {
 							final ProcTableEntry procTableEntry = (ProcTableEntry) tte1.tableEntry;
+							// TODO for argument, we need a DeduceExpression (DeduceProcCall) which is bounud to self
+							//  (inherited), so we can extract the invocation
+							final InstructionArgument ia = procTableEntry.expression_num;
+							final DeducePath dp = (((IdentIA) ia).getEntry()).buildDeducePath(generatedFunction);
+							final OS_Element Self;
+							if (dp.size() == 1) {
+								final @Nullable OS_Element e = dp.getElement(0);
+								final OS_Element self_class = generatedFunction.getFD().getParent();
+
+								assert e != null;
+								final OS_Element e_parent = e.getParent();
+
+								short state = 0;
+								ClassStatement b = null;
+
+								if (e_parent == self_class) {
+									state = 1;
+								} else {
+									b = class_inherits((ClassStatement) self_class, e_parent);
+									if (b != null)
+										state = 3;
+									else
+										state = 2;
+								}
+
+								switch (state) {
+								case 1:
+									final InstructionArgument self1 = generatedFunction.vte_lookup("self");
+									assert self1 instanceof IntegerIA;
+									Self = new OS_SpecialVariable(((IntegerIA) self1).getEntry(), VariableTableType.SELF, generatedFunction);
+									break;
+								case 2:
+									Self = e_parent;
+									break;
+								case 3:
+									final InstructionArgument self2 = generatedFunction.vte_lookup("self");
+									assert self2 instanceof IntegerIA;
+									Self = new OS_SpecialVariable(((IntegerIA) self2).getEntry(), VariableTableType.SELF, generatedFunction);
+									((OS_SpecialVariable) Self).memberInvocation = new MemberInvocation(b, INHERITED);
+									break;
+								default:
+									throw new IllegalStateException();
+								}
+							} else
+								Self = dp.getElement(dp.size()-2); // TODO fix this
+							final @Nullable DeferredMemberFunction dm = deferred_member_function(Self, null, (BaseFunctionDef) procTableEntry.getResolvedElement(), procTableEntry.getFunctionInvocation());
+							dm.externalRef().then(new DoneCallback<BaseGeneratedFunction>() {
+								@Override
+								public void onDone(final BaseGeneratedFunction result) {
+
+								}
+							});
+							dm.typePromise().then(new DoneCallback<GenType>() {
+								@Override
+								public void onDone(final GenType result) {
+									procTableEntry.typeDeferred().resolve(result);
+								}
+							});
 							procTableEntry.typePromise().then(new DoneCallback<GenType>() {
 								@Override
 								public void onDone(final GenType result) {
 									vte.type.setAttached(result);
+									vte.resolveType(result);
+									vte.resolveTypeToClass(result.node);
 								}
 							});
 						}
@@ -1886,6 +1949,111 @@ public class DeduceTypes2 {
 					}
 				}
 			}
+		}
+	}
+
+	static class MemberInvocation {
+		final OS_Element element;
+		final Role role;
+
+		public MemberInvocation(final OS_Element aElement, final Role aRole) {
+			element = aElement;
+			role = aRole;
+		}
+
+		enum Role { DIRECT, INHERITED }
+
+	}
+
+	private ClassStatement class_inherits(final ClassStatement aFirstClass, final OS_Element aInherited) {
+		if (!(aInherited instanceof ClassStatement)) return null;
+
+		final List<TypeName> inh = aFirstClass.classInheritance().tns;
+		for (TypeName typeName : inh) {
+			try {
+				final @NotNull GenType res = resolve_type(new OS_Type(typeName), aFirstClass.getContext()); // is this the right context?
+				if (res.resolved.getClassOf() == aInherited)
+					return (ClassStatement) aInherited;
+			} catch (ResolveError aResolveError) {
+				errSink.reportDiagnostic(aResolveError);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Sets the invocation ({@code genType#ci}) and the node for a GenType
+	 *
+	 * @param aGenType the GenType to modify. doesn;t care about  nonGenericTypeName
+	 */
+	public void genCIForGenType2(final GenType aGenType) {
+		genCI(aGenType, aGenType.nonGenericTypeName);
+		final IInvocation invocation = aGenType.ci;
+		if (invocation instanceof NamespaceInvocation) {
+			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
+			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+				@Override
+				public void onDone(final GeneratedNamespace result) {
+					aGenType.node = result;
+				}
+			});
+		} else if (invocation instanceof ClassInvocation) {
+			final ClassInvocation classInvocation = (ClassInvocation) invocation;
+			classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(final GeneratedClass result) {
+					aGenType.node = result;
+				}
+			});
+		} else
+			throw new IllegalStateException("invalid invocation");
+	}
+
+	public static class OS_SpecialVariable implements OS_Element {
+		private final VariableTableEntry variableTableEntry;
+		private final VariableTableType type;
+		private final BaseGeneratedFunction generatedFunction;
+		public MemberInvocation memberInvocation;
+
+		public OS_SpecialVariable(final VariableTableEntry aVariableTableEntry, final VariableTableType aType, final BaseGeneratedFunction aGeneratedFunction) {
+			variableTableEntry = aVariableTableEntry;
+			type = aType;
+			generatedFunction = aGeneratedFunction;
+		}
+
+		@Override
+		public void visitGen(final ICodeGen visit) {
+			throw new IllegalArgumentException("not implemented");
+		}
+
+		@Override
+		public Context getContext() {
+			return generatedFunction.getFD().getContext();
+		}
+
+		@Override
+		public OS_Element getParent() {
+			return generatedFunction.getFD();
+		}
+
+		@Nullable
+		public IInvocation getInvocation(final DeduceTypes2 aDeduceTypes2) {
+			final @Nullable IInvocation aInvocation;
+			final OS_SpecialVariable specialVariable = this;
+			assert specialVariable.type == VariableTableType.SELF;
+			// first parent is always a function
+			switch (DecideElObjectType.getElObjectType(specialVariable.getParent().getParent())) {
+			case CLASS:
+				final ClassStatement classStatement = (ClassStatement) specialVariable.getParent().getParent();
+				aInvocation = aDeduceTypes2.phase.registerClassInvocation(classStatement, null); // TODO generics
+//				ClassInvocationMake.withGenericPart(classStatement, null, null, this);
+				break;
+			case NAMESPACE:
+				throw new NotImplementedException(); // README ha! implemented in
+			default:
+				throw new IllegalArgumentException("Illegal object type for parent");
+			}
+			return aInvocation;
 		}
 	}
 
@@ -2280,6 +2448,19 @@ public class DeduceTypes2 {
 				aInvocation = phase.registerNamespaceInvocation((NamespaceStatement) aParent);
 		}
 		@Nullable DeferredMember dm = new DeferredMember(aParent, aInvocation, aVariableStatement);
+		phase.addDeferredMember(dm);
+		return dm;
+	}
+
+	private @NotNull DeferredMemberFunction deferred_member_function(OS_Element aParent, @Nullable IInvocation aInvocation, BaseFunctionDef aFunctionDef, final FunctionInvocation aFunctionInvocation) {
+		if (aInvocation == null) {
+			if (aParent instanceof NamespaceStatement)
+				aInvocation = phase.registerNamespaceInvocation((NamespaceStatement) aParent);
+			else if (aParent instanceof OS_SpecialVariable) {
+				aInvocation = ((OS_SpecialVariable) aParent).getInvocation(this);
+			}
+		}
+		DeferredMemberFunction dm = new DeferredMemberFunction(aParent, aInvocation, aFunctionDef, this, aFunctionInvocation);
 		phase.addDeferredMember(dm);
 		return dm;
 	}
