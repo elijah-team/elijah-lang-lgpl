@@ -31,14 +31,14 @@ public class Feb2021 {
 	public void testFunction() {
 		Compilation c = new Compilation(new StdErrSink(), new IO());
 
-		c.feedCmdLine(List_of("test/feb2021/function/"));
+//		c.feedCmdLine(List_of("test/feb2021/function/"));
 	}
 
 	@Test
 	public void testHier() {
 		Compilation c = new Compilation(new StdErrSink(), new IO());
 
-		c.feedCmdLine(List_of("test/feb2021/hier/"));
+//		c.feedCmdLine(List_of("test/feb2021/hier/"));
 	}
 
 }
