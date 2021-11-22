@@ -50,6 +50,7 @@ public class FindClassesInDemoElNormal {
 
 		c.feedCmdLine(args);
 
+		// searches all modules for top-level Main's that are classes (only the first from each module though)
 		final List<ClassStatement> aClassList = c.findClass("Main");
 		Assert.assertEquals(1, aClassList.size());
 
