@@ -1828,13 +1828,12 @@ public class DeduceTypes2 {
 				vte.type.setAttached(attached);
 			}
 			if (vte.type.getAttached() == null && vte.potentialTypes().size() > 0) {
-				final List<TypeTableEntry> pot_List = vte.potentialTypes().stream().
+				final List<TypeTableEntry> attached_list = vte.potentialTypes().stream().
 						filter(x -> x.getAttached() != null).
 						collect(Collectors.toList());
 
-				// TODO choose another heuristic if this fails
-				if (pot_List.size() == 1) {
-					final TypeTableEntry pot = pot_List.get(0);
+				if (attached_list.size() == 1) {
+					final TypeTableEntry pot = attached_list.get(0);
 					vte.type.setAttached(pot.getAttached());
 					genCI(vte.type.genType, null);
 					((ClassInvocation) vte.type.genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
