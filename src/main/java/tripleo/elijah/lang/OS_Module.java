@@ -50,10 +50,10 @@ public class OS_Module implements OS_Element, OS_Container {
 	public @NotNull List<EntryPoint> entryPoints = new ArrayList<EntryPoint>();
 	private IndexingStatement indexingStatement;
 
-	public @org.jetbrains.annotations.Nullable OS_Element findClass(final String className) {
+	public @org.jetbrains.annotations.Nullable OS_Element findClass(final String aClassName) {
 		for (final ModuleItem item : items) {
 			if (item instanceof ClassStatement) {
-				if (((ClassStatement) item).getName().equals(className))
+				if (((ClassStatement) item).getName().equals(aClassName))
 					return item;
 			}
 		}

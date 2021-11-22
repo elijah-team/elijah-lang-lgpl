@@ -372,11 +372,11 @@ public class Compilation {
 
 	boolean showTree = false;
 
-	public List<ClassStatement> findClass(final String string) {
+	public List<ClassStatement> findClass(final String aClassName) {
 		final List<ClassStatement> l = new ArrayList<ClassStatement>();
 		for (final OS_Module module : modules) {
-			if (module.hasClass(string)) {
-				l.add((ClassStatement) module.findClass(string));
+			if (module.hasClass(aClassName)) {
+				l.add((ClassStatement) module.findClass(aClassName));
 			}
 		}
 		return l;
