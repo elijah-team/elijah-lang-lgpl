@@ -241,7 +241,10 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 		variableTableEntry.typePromise().then(new DoneCallback<GenType>() {
 			@Override
 			public void onDone(@NotNull GenType result) {
-				assert result.resolved.getClassOf() == fd.getParent();
+				if (result.resolved.getClassOf() == fd.getParent());
+				else {
+					System.err.println("** Failed assertion");
+				}
 
 				@NotNull E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, fd.getParent()).invoke(variableTableEntry.type.genType.nonGenericTypeName);
 				@Nullable FunctionInvocation fi1 = e_Is_FunctionDef.getFi();
