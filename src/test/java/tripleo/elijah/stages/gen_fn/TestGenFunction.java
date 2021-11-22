@@ -42,7 +42,7 @@ import static tripleo.elijah.util.Helpers.List_of;
  */
 public class TestGenFunction {
 
-	@Test
+//	@Test
 	public void testDemoElNormalFact1Elijah() throws Exception {
 		final StdErrSink eee = new StdErrSink();
 		final Compilation c = new Compilation(eee, new IO());
@@ -211,7 +211,7 @@ public class TestGenFunction {
 		Assert.assertEquals(16, c.errorCount());
 	}
 
-	@Test
+//	@Test
 	public void testGenericA() throws Exception {
 		final StdErrSink errSink = new StdErrSink();
 		final Compilation c = new Compilation(errSink, new IO());
