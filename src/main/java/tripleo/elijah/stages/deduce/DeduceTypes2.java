@@ -3598,7 +3598,11 @@ public class DeduceTypes2 {
 					if (attached1 != null) {
 						switch (attached1.getType()) {
 						case USER_CLASS:
-							ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached1);
+							if (ite.type.getAttached() == null)
+								ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached1);
+							else {
+								LOG.err(String.format("3603 Trying to set %s to %s", ite.type.getAttached(), attached1));
+							}
 							break;
 						case USER:
 							try {
