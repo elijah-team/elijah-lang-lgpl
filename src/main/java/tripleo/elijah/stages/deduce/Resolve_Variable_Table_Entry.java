@@ -136,8 +136,10 @@ class Resolve_Variable_Table_Entry {
 									genCIForGenType2(genType);
 								}
 							}
-						}
-					}
+						} else
+							assert false;
+					} else
+						assert false;
 
 				}
 			} else
