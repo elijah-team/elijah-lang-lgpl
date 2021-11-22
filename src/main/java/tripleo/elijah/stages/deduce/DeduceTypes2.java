@@ -3948,7 +3948,12 @@ public class DeduceTypes2 {
 		}
 
 		public IElementHolder newGenericElementHolderWithType(final OS_Element aElement, final TypeName aTypeName) {
-			return new GenericElementHolderWithType(aElement, new OS_Type(aTypeName), deduceTypes2);
+			final OS_Type typeName;
+			if (aTypeName.isNull())
+				typeName = null;
+			else
+				typeName = new OS_Type(aTypeName);
+			return new GenericElementHolderWithType(aElement, typeName, deduceTypes2);
 		}
 	}
 }
