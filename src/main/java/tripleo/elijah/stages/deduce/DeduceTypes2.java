@@ -1815,6 +1815,23 @@ public class DeduceTypes2 {
 	}
 
 	public void resolve_var_table_entry(@NotNull VariableTableEntry vte, BaseGeneratedFunction generatedFunction, Context ctx) {
+		if (vte.vtt == VariableTableType.TEMP) {
+			final GenType genType = vte.type.genType;
+			int pts = vte.potentialTypes().size();
+			if (genType.typeName != null && genType.typeName == genType.resolved) {
+				try {
+					genType.resolved = resolve_type(genType.typeName, ctx/*genType.typeName.getTypeName().getContext()*/).resolved;
+					genCIForGenType2(genType);
+					vte.resolveType(genType);
+					vte.resolveTypeToClass(genType.node);
+					int y=2;
+				} catch (ResolveError aResolveError) {
+//					aResolveError.printStackTrace();
+					errSink.reportDiagnostic(aResolveError);
+				}
+			}
+		}
+
 		if (vte.getResolvedElement() == null)
 			return;
 		{
@@ -1919,6 +1936,21 @@ public class DeduceTypes2 {
 					}
 				}
 			}
+			{
+				final GenType genType = vte.type.genType;
+				int pts = vte.potentialTypes().size();
+				if (genType.typeName != null && genType.typeName == genType.resolved) {
+					try {
+						genType.resolved = resolve_type(genType.typeName, ctx/*genType.typeName.getTypeName().getContext()*/).resolved;
+						genCIForGenType2(genType);
+						vte.resolveType(genType);
+						vte.resolveTypeToClass(genType.node);
+					} catch (ResolveError aResolveError) {
+//						aResolveError.printStackTrace();
+						errSink.reportDiagnostic(aResolveError);
+					}
+				}
+			}
 			vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(vte.getResolvedElement()));
 			{
 				final GenType genType = vte.type.genType;
@@ -1937,6 +1969,7 @@ public class DeduceTypes2 {
 					//
 					// registerClassInvocation does the job of makeNode, so results should be immediately available
 					//
+					genCIForGenType2(genType); // TODO what is this doing here? huh?
 					if (genType.ci != null) { // TODO we may need this call...
 						((ClassInvocation) genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
 							@Override

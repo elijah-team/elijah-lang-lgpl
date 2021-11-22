@@ -321,6 +321,7 @@ class Resolve_Variable_Table_Entry {
 						tte.genType.resolved = attached;
 					// TODO genCI and all that -- Incremental?? (.increment())
 					vte.resolveType(tte.genType);
+					genCIForGenType2(tte.genType);
 					break;
 			}
 		} else {
