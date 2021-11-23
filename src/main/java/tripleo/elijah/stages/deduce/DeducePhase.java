@@ -216,9 +216,11 @@ public class DeducePhase {
 			LOG.info("197 lgf.size " + p.size());
 		}
 		deduceTypes2.deduceFunctions(lgf);
-		deduceTypes2.deduceClasses(generatedClasses.copy().stream()
-				.filter(c -> c.module() == m)
-				.collect(Collectors.toList()));
+//		deduceTypes2.deduceClasses(generatedClasses.copy().stream()
+//				.filter(c -> c.module() == m)
+//				.collect(Collectors.toList()));
+
+
 		return deduceTypes2;
 	}
 
