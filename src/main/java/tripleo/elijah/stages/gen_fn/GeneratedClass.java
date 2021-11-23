@@ -144,42 +144,42 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 			} else {
 				System.err.println(String.format("108 %s %s", this, varTableEntry.potentialTypes));
 				if (varTableEntry.potentialTypes.size() == 1) {
-					TypeTableEntry varType1 = varTableEntry.potentialTypes.get(0);
-					if (varType1.resolved() == null) {
-						assert varType1.getAttached() != null;
-//						assert varType1.getAttached().getType() == OS_Type.Type.USER_CLASS;
+					TypeTableEntry potentialType = varTableEntry.potentialTypes.get(0);
+					if (potentialType.resolved() == null) {
+						assert potentialType.getAttached() != null;
+//						assert potentialType.getAttached().getType() == OS_Type.Type.USER_CLASS;
 						//
 						// HACK
 						//
-						if (varType1.getAttached().getType() != OS_Type.Type.USER_CLASS) {
-							final TypeName t = varType1.getAttached().getTypeName();
+						if (potentialType.getAttached().getType() != OS_Type.Type.USER_CLASS) {
+							final TypeName t = potentialType.getAttached().getTypeName();
 							if (ci.genericPart != null) {
 								for (Map.Entry<TypeName, OS_Type> typeEntry : ci.genericPart.entrySet()) {
 									if (typeEntry.getKey().equals(t)) {
 										final OS_Type v = typeEntry.getValue();
-										varType1.setAttached(v);
-										assert varType1.getAttached().getType() == OS_Type.Type.USER_CLASS;
+										potentialType.setAttached(v);
+										assert potentialType.getAttached().getType() == OS_Type.Type.USER_CLASS;
 										break;
 									}
 								}
 							}
 						}
 						//
-						if (varType1.getAttached().getType() == OS_Type.Type.USER_CLASS) {
-							ClassInvocation xci = new ClassInvocation(varType1.getAttached().getClassOf(), null);
+						if (potentialType.getAttached().getType() == OS_Type.Type.USER_CLASS) {
+							ClassInvocation xci = new ClassInvocation(potentialType.getAttached().getClassOf(), null);
 							xci = aDeducePhase.registerClassInvocation(xci);
 							@NotNull GenerateFunctions gf = aDeducePhase.generatePhase.getGenerateFunctions(xci.getKlass().getContext().module());
 							WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses);
 							wgc.run(null); // !
-							varType1.resolve(wgc.getResult());
+							potentialType.resolve(wgc.getResult());
 							Result = true;
 						} else {
 							int y=2;
-							System.err.println("177 not a USER_CLASS "+varType1.getAttached());
+							System.err.println("177 not a USER_CLASS "+potentialType.getAttached());
 						}
 					}
-					if (varType1.resolved() != null)
-						varTableEntry.resolve(varType1.resolved());
+					if (potentialType.resolved() != null)
+						varTableEntry.resolve(potentialType.resolved());
 					else
 						System.err.println("114 Can't resolve "+varTableEntry);
 				}
