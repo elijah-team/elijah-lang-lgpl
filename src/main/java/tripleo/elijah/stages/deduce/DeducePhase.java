@@ -220,7 +220,7 @@ public class DeducePhase {
 //				.filter(c -> c.module() == m)
 //				.collect(Collectors.toList()));
 
-		for (GeneratedNode generatedNode : generatedClasses) {
+		for (GeneratedNode generatedNode : generatedClasses.copy()) {
 			if (generatedNode.module() != m) continue;
 
 			if (generatedNode instanceof GeneratedClass) {
