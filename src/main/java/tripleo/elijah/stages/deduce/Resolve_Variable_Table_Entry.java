@@ -95,7 +95,7 @@ class Resolve_Variable_Table_Entry {
 								ite1.setGenType(result);
 							} else {
 //								assert false; // we don't expect this, but note there is no problem if it happens
-//								t.copy(result);
+								t.copy(result);
 							}
 						}
 					});
