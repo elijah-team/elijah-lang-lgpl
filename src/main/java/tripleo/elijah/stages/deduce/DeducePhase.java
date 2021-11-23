@@ -220,6 +220,15 @@ public class DeducePhase {
 //				.filter(c -> c.module() == m)
 //				.collect(Collectors.toList()));
 
+		for (GeneratedNode generatedNode : generatedClasses) {
+			if (generatedNode.module() != m) continue;
+
+			if (generatedNode instanceof GeneratedClass) {
+				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+
+				generatedClass.fixupUserClasses(deduceTypes2, generatedClass.getKlass().getContext());
+			}
+		}
 
 		return deduceTypes2;
 	}
@@ -444,6 +453,7 @@ public class DeducePhase {
 					if (type != null)
 						variable.addPotentialTypes(List_of(type));
 					variable.addPotentialTypes(resolvedVariables.identTableEntry.potentialTypes());
+					variable.updatePotentialTypes(generatedContainer);
 				}
 			}
 		}

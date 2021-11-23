@@ -70,6 +70,16 @@ public interface GeneratedContainer extends GeneratedNode {
 
 		public List<ConnectionPair> connectionPairs = new ArrayList<>();
 
+		public interface UpdatePotentialTypesCB {
+			void call(final @NotNull GeneratedContainer aGeneratedContainer);
+		}
+
+		UpdatePotentialTypesCB updatePotentialTypesCB;
+
+		public void updatePotentialTypes(final @NotNull GeneratedContainer aGeneratedContainer) {
+			updatePotentialTypesCB.call(aGeneratedContainer);
+		}
+
 		public static class ConnectionPair {
 			public final VariableTableEntry vte;
 			final GeneratedConstructor constructor;

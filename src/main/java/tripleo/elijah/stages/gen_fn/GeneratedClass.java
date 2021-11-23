@@ -10,19 +10,14 @@ package tripleo.elijah.stages.gen_fn;
 
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.deduce.ClassInvocation;
-import tripleo.elijah.stages.deduce.DeduceLookupUtils;
-import tripleo.elijah.stages.deduce.DeducePhase;
+import tripleo.elijah.stages.deduce.*;
 import tripleo.elijah.stages.gen_generic.CodeGenerator;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.post_deduce.IPostDeduce;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created 10/29/20 4:26 AM
@@ -167,6 +162,13 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 						//
 						if (potentialType.getAttached().getType() == OS_Type.Type.USER_CLASS) {
 							ClassInvocation xci = new ClassInvocation(potentialType.getAttached().getClassOf(), null);
+							{
+								for (Map.Entry<TypeName, OS_Type> entry : xci.genericPart.entrySet()) {
+									if (entry.getKey().equals(varTableEntry.typeName)) {
+										xci.genericPart.put(entry.getKey(), varTableEntry.varType);
+									}
+								}
+							}
 							xci = aDeducePhase.registerClassInvocation(xci);
 							@NotNull GenerateFunctions gf = aDeducePhase.generatePhase.getGenerateFunctions(xci.getKlass().getContext().module());
 							WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses);
@@ -213,6 +215,104 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 	@Override
 	public Role getRole() {
 		return Role.CLASS;
+	}
+
+	public void fixupUserClasses(final DeduceTypes2 aDeduceTypes2, final Context aContext) {
+		for (VarTableEntry varTableEntry : varTable) {
+			varTableEntry.updatePotentialTypesCB = new VarTableEntry.UpdatePotentialTypesCB() {
+				@Override
+				public void call(final @NotNull GeneratedContainer aGeneratedContainer) {
+					List<GenType> potentialTypes = getPotentialTypes();
+					//
+
+					//
+					// HACK TIME
+					//
+					if (potentialTypes.size() == 2) {
+						final ClassStatement resolvedClass1 = potentialTypes.get(0).resolved.getClassOf();
+						final ClassStatement resolvedClass2 = potentialTypes.get(1).resolved.getClassOf();
+						final OS_Module prelude = resolvedClass1.getContext().module().prelude;
+
+						// TODO might not work when we split up prelude
+						//  Thats why I was testing for package name before
+						if (resolvedClass1.getContext().module() == prelude
+						&& resolvedClass2.getContext().module() == prelude) {
+							// Favor String over ConstString
+							if (resolvedClass1.name().equals("ConstString") && resolvedClass2.name().equals("String")) {
+								potentialTypes.remove(0);
+							} else if (resolvedClass2.name().equals("ConstString") && resolvedClass1.name().equals("String")) {
+								potentialTypes.remove(1);
+							}
+						}
+					}
+
+					if (potentialTypes.size() == 1) {
+						if (ci.genericPart != null) {
+							final OS_Type t = varTableEntry.varType;
+							if (t.getType() == OS_Type.Type.USER) {
+								try {
+									final @NotNull GenType genType = aDeduceTypes2.resolve_type(t, t.getTypeName().getContext());
+									if (genType.resolved instanceof OS_GenericTypeNameType) {
+										final ClassInvocation xxci = ((GeneratedClass) aGeneratedContainer).ci;
+//											xxxci = ci;
+										for (Map.Entry<TypeName, OS_Type> entry : xxci.genericPart.entrySet()) {
+											if (entry.getKey().equals(t.getTypeName())) {
+												varTableEntry.varType = entry.getValue();
+
+											}
+										}
+									}
+								} catch (ResolveError aResolveError) {
+									aResolveError.printStackTrace();
+									assert false;
+								}
+
+								/*{
+									for (Map.Entry<TypeName, OS_Type> typeEntry : ci.genericPart.entrySet()) {
+										if (typeEntry.getKey().equals(t)) {
+											final OS_Type v = typeEntry.getValue();
+
+											TypeTableEntry potentialType2 = varTableEntry.potentialTypes.get(0);
+											if (potentialType2.resolved() == null) {
+												assert potentialType2.getAttached() != null;
+
+												if (potentialType2.getAttached().getType() == OS_Type.Type.USER_CLASS) {
+
+													potentialType2.setAttached(v);
+													assert potentialType2.getAttached().getType() == OS_Type.Type.USER_CLASS;
+													break;
+												}
+											}
+										}
+									}
+								}*/
+							}
+						}
+					}
+
+				}
+
+				@NotNull
+				public List<GenType> getPotentialTypes() {
+					List<GenType> potentialTypes = new ArrayList<>();
+					for (TypeTableEntry potentialType : varTableEntry.potentialTypes) {
+						int y=2;
+						final @NotNull GenType genType;
+						try {
+							genType = aDeduceTypes2.resolve_type(potentialType.getAttached(), aContext);
+							potentialTypes.add(genType);
+						} catch (ResolveError aResolveError) {
+							aResolveError.printStackTrace();
+							assert false; // TODO
+						}
+					}
+					//
+					Set<GenType> set = new HashSet<>(potentialTypes);
+//					final Set<GenType> s = Collections.unmodifiableSet(set);
+					return new ArrayList<>(set);
+				}
+			};
+		}
 	}
 }
 
