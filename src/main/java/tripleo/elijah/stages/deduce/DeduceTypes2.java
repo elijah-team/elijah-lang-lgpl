@@ -2449,7 +2449,7 @@ public class DeduceTypes2 {
 	}
 
 	void found_element_for_ite(BaseGeneratedFunction generatedFunction, @NotNull IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
-		assert y == ite.getResolvedElement();
+//		assert y == ite.getResolvedElement();
 
 		@NotNull Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx, LOG, errSink, new DeduceClient1(this));
 		fefi.action(ite);
@@ -2565,7 +2565,7 @@ public class DeduceTypes2 {
 							e = DeduceLookupUtils._resolveAlias((AliasStatement) e, DeduceTypes2.this);
 					}
 
-					assert e == resolved_element;
+					assert e == resolved_element || /*HACK*/ resolved_element instanceof AliasStatement || resolved_element == null;
 
 //					set_resolved_element_pte(identIA, e, pte);
 					pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
@@ -3066,7 +3066,9 @@ public class DeduceTypes2 {
 							final IdentIA identIA = new IdentIA(idte.getIndex(), generatedFunction);
 							resolveIdentIA_(ctx, identIA, generatedFunction, new NullFoundElement());
 						}
-						@Nullable OS_Type ty = idte.type.getAttached();
+						@Nullable OS_Type ty;
+						if (idte.type == null) ty = null;
+						else ty = idte.type.getAttached();
 						idte.onType(phase, new OnType() {
 							@Override public void typeDeduced(final @NotNull OS_Type ty) {
 								assert ty != null;
@@ -3116,7 +3118,7 @@ public class DeduceTypes2 {
 							@NotNull TypeTableEntry tte3 = generatedFunction.newTypeTableEntry(
 									TypeTableEntry.Type.SPECIFIED, new OS_Type(vs.typeName()), vs.getNameToken());
 							idte.type = tte3;
-							ty = idte.type.getAttached();
+//							ty = idte.type.getAttached();
 						}
 					}
 

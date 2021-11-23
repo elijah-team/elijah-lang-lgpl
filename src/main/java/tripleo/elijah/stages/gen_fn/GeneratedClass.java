@@ -300,7 +300,14 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 						int y=2;
 						final @NotNull GenType genType;
 						try {
-							genType = aDeduceTypes2.resolve_type(potentialType.getAttached(), aContext);
+							final OS_Type attached = potentialType.getAttached();
+							if (attached == null) continue;
+
+							genType = aDeduceTypes2.resolve_type(attached, aContext);
+							if (genType.resolved == null && genType.typeName.getType() == OS_Type.Type.USER_CLASS) {
+								genType.resolved = genType.typeName;
+								genType.typeName = null;
+							}
 							potentialTypes.add(genType);
 						} catch (ResolveError aResolveError) {
 							aResolveError.printStackTrace();
