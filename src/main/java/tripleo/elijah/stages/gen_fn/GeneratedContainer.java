@@ -77,6 +77,7 @@ public interface GeneratedContainer extends GeneratedNode {
 		UpdatePotentialTypesCB updatePotentialTypesCB;
 
 		public void updatePotentialTypes(final @NotNull GeneratedContainer aGeneratedContainer) {
+//			assert aGeneratedContainer == GeneratedContainer.this;
 			updatePotentialTypesCB.call(aGeneratedContainer);
 		}
 
