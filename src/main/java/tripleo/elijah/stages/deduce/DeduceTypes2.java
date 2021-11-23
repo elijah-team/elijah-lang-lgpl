@@ -1779,6 +1779,15 @@ public class DeduceTypes2 {
 			return;
 		if (true || ite.getBacklink() == null) {
 			final @NotNull IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
+			ite.addStatusListener(new BaseTableEntry.StatusListener() {
+				@Override
+				public void onChange(final IElementHolder eh, final BaseTableEntry.Status newStatus) {
+					if (newStatus != BaseTableEntry.Status.KNOWN) return;
+
+					final OS_Element e = eh.getElement();
+					found_element_for_ite(generatedFunction, ite, e, ctx);
+				}
+			});
 			/*resolveIdentIA_(ite.getPC(), identIA, generatedFunction, new FoundElement(phase) {
 
 				final String x = generatedFunction.getIdentIAPathNormal(identIA);
