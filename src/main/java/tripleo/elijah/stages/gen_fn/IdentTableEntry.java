@@ -98,7 +98,8 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	public void setGenType(GenType aGenType) {
 		if (type != null) {
 			type.genType.copy(aGenType);
-		}
+		} else
+			System.err.println("idte-102 Attempting to set a null type");
 	}
 
 	public boolean isResolved() {
