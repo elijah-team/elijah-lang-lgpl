@@ -16,6 +16,8 @@ import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.IdentExpression;
+import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.stages.deduce.DeduceElementIdent;
 import tripleo.elijah.stages.deduce.DeducePath;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
@@ -43,6 +45,7 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	public boolean fefi = false;
 	private GeneratedNode resolvedType;
 	public ProcTableEntry constructable_pte;
+	private DeduceElementIdent dei = new DeduceElementIdent(this);
 
 	public DeduceTypes2.PromiseExpectation<String> resolveExpectation;
 
@@ -60,6 +63,23 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 		});
         setupResolve();
     }
+
+    boolean insideGetResolvedElement = false;
+	@Override
+	public OS_Element getResolvedElement() {
+		if (insideGetResolvedElement)
+			return null;
+		insideGetResolvedElement = true;
+		if (resolved_element == null) {
+			resolved_element = dei.getResolvedElement();
+		}
+		insideGetResolvedElement = false;
+		return resolved_element;
+	}
+
+	public void setDeduceTypes2(final @NotNull DeduceTypes2 aDeduceTypes2, final Context aContext, final @NotNull BaseGeneratedFunction aGeneratedFunction) {
+		dei.setDeduceTypes2(aDeduceTypes2, aContext, aGeneratedFunction);
+	}
 
 	public void addPotentialType(final int instructionIndex, final TypeTableEntry tte) {
 		potentialTypes.put(instructionIndex, tte);

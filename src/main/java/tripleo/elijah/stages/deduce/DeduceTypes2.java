@@ -789,6 +789,10 @@ public class DeduceTypes2 {
 	}
 
 	public void onEnterFunction(final @NotNull BaseGeneratedFunction generatedFunction, final Context aContext) {
+		for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
+			identTableEntry.setDeduceTypes2(this, aContext, generatedFunction);
+		}
+
 		//
 		// resolve all cte expressions
 		//
