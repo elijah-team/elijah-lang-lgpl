@@ -131,13 +131,17 @@ public class DeduceTypes2 {
 			if (!(generatedNode instanceof GeneratedClass)) continue;
 
 			final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
-			for (GeneratedContainer.VarTableEntry entry : generatedClass.varTable) {
-				final OS_Type vt = entry.varType;
-				GenType genType = makeGenTypeFromOSType(vt, generatedClass.ci.genericPart);
-				if (genType != null)
-					entry.resolve(genType.node);
-				int y=2;
-			}
+			deduceOneClass(generatedClass);
+		}
+	}
+
+	public void deduceOneClass(final GeneratedClass aGeneratedClass) {
+		for (GeneratedContainer.VarTableEntry entry : aGeneratedClass.varTable) {
+			final OS_Type vt = entry.varType;
+			GenType genType = makeGenTypeFromOSType(vt, aGeneratedClass.ci.genericPart);
+			if (genType != null)
+				entry.resolve(genType.node);
+			int y=2;
 		}
 	}
 

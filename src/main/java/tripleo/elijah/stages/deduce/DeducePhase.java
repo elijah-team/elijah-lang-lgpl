@@ -227,6 +227,7 @@ public class DeducePhase {
 				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 
 				generatedClass.fixupUserClasses(deduceTypes2, generatedClass.getKlass().getContext());
+				deduceTypes2.deduceOneClass(generatedClass);
 			}
 		}
 
