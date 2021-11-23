@@ -99,7 +99,7 @@ class Found_Element_For_ITE {
 	}
 
 	public void action_FunctionDef(@NotNull IdentTableEntry ite, FunctionDef functionDef) {
-		@NotNull OS_Type attached = new OS_FuncType(functionDef);
+		@NotNull OS_Type attached = functionDef.getOS_Type();
 		if (ite.type == null) {
 			ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 		} else

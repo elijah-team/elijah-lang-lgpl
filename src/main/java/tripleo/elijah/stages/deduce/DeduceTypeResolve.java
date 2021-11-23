@@ -73,7 +73,7 @@ public class DeduceTypeResolve {
 
 						@Override
 						public void visitFunctionDef(final FunctionDef aFunctionDef) {
-							genType.resolved = new OS_FuncType(aFunctionDef);
+							genType.resolved = aFunctionDef.getOS_Type();
 						}
 
 						@Override

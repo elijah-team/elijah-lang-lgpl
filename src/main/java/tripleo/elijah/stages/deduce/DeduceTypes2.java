@@ -2650,7 +2650,7 @@ public class DeduceTypes2 {
 								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
 							}
 							if (best instanceof FunctionDef) {
-								tte.setAttached(new OS_FuncType((FunctionDef) best));
+								tte.setAttached(((FunctionDef) best).getOS_Type());
 								//vte.addPotentialType(instructionIndex, tte);
 							} else if (best instanceof ClassStatement) {
 								tte.setAttached(((ClassStatement) best).getOS_Type());

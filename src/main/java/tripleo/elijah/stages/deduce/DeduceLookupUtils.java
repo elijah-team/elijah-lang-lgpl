@@ -262,7 +262,7 @@ public class DeduceLookupUtils {
 				break;
 			case FUNCTION:
 				final @NotNull FunctionDef functionDef = (FunctionDef) best;
-				R.resolved = new OS_FuncType(functionDef);
+				R.resolved = functionDef.getOS_Type();
 				result = R;
 				break;
 			case FORMAL_ARG_LIST_ITEM:
