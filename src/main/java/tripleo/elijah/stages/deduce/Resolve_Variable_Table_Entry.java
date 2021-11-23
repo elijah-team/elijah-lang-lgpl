@@ -117,36 +117,39 @@ class Resolve_Variable_Table_Entry {
 				final OS_Element el = vte.getResolvedElement();
 				if (el instanceof VariableStatement) {
 					final VariableStatement variableStatement = (VariableStatement) el;
-					final @NotNull IExpression iv = variableStatement.initialValue();
-					if (iv != IExpression.UNASSIGNED) {
-						if (iv instanceof ProcedureCallExpression) {
-							final ProcedureCallExpression procedureCallExpression = (ProcedureCallExpression) iv;
-							final IExpression name_exp = procedureCallExpression.getLeft();
-							assert name_exp instanceof IdentExpression;
-
-							final IdentExpression name2 = (IdentExpression) name_exp;
-							final LookupResultList lrl2 = ((IdentExpression) name_exp).getContext().lookup(name2.getText());
-							final @Nullable OS_Element el2 = lrl2.chooseBest(null);
-
-							if (el2 != null) {
-								if (el2 instanceof ClassStatement) {
-									final ClassStatement classStatement = (ClassStatement) el2;
-									GenType genType = new GenType(classStatement);
-									//deferredMember.typeResolved().resolve(genType);
-									genCIForGenType2(genType);
-								}
-							}
-						} else
-							assert false;
-					} else
-						assert false;
-
+					action_VAR_pot_1_tableEntry_null(variableStatement);
 				}
 			} else
 				throw new NotImplementedException();
 		} catch (ResolveError aResolveError) {
 			errSink.reportDiagnostic(aResolveError);
 		}
+	}
+
+	public void action_VAR_pot_1_tableEntry_null(final VariableStatement aVariableStatement) {
+		final @NotNull IExpression iv = aVariableStatement.initialValue();
+		if (iv != IExpression.UNASSIGNED) {
+			if (iv instanceof ProcedureCallExpression) {
+				final ProcedureCallExpression procedureCallExpression = (ProcedureCallExpression) iv;
+				final IExpression name_exp = procedureCallExpression.getLeft();
+				assert name_exp instanceof IdentExpression;
+
+				final IdentExpression name2 = (IdentExpression) name_exp;
+				final LookupResultList lrl2 = ((IdentExpression) name_exp).getContext().lookup(name2.getText());
+				final @Nullable OS_Element el2 = lrl2.chooseBest(null);
+
+				if (el2 != null) {
+					if (el2 instanceof ClassStatement) {
+						final ClassStatement classStatement = (ClassStatement) el2;
+						GenType genType = new GenType(classStatement);
+						//deferredMember.typeResolved().resolve(genType);
+						genCIForGenType2(genType);
+					}
+				}
+			} else
+				assert false;
+		} else
+			assert false;
 	}
 
 	public void setup_GenType(OS_Element element, @NotNull GenType aGt) {
