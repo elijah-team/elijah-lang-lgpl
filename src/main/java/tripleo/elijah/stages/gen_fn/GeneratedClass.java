@@ -259,7 +259,6 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 										for (Map.Entry<TypeName, OS_Type> entry : xxci.genericPart.entrySet()) {
 											if (entry.getKey().equals(t.getTypeName())) {
 												varTableEntry.varType = entry.getValue();
-
 											}
 										}
 									}
@@ -267,30 +266,9 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 									aResolveError.printStackTrace();
 									assert false;
 								}
-
-								/*{
-									for (Map.Entry<TypeName, OS_Type> typeEntry : ci.genericPart.entrySet()) {
-										if (typeEntry.getKey().equals(t)) {
-											final OS_Type v = typeEntry.getValue();
-
-											TypeTableEntry potentialType2 = varTableEntry.potentialTypes.get(0);
-											if (potentialType2.resolved() == null) {
-												assert potentialType2.getAttached() != null;
-
-												if (potentialType2.getAttached().getType() == OS_Type.Type.USER_CLASS) {
-
-													potentialType2.setAttached(v);
-													assert potentialType2.getAttached().getType() == OS_Type.Type.USER_CLASS;
-													break;
-												}
-											}
-										}
-									}
-								}*/
 							}
 						}
 					}
-
 				}
 
 				@NotNull
