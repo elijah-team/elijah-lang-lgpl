@@ -1775,7 +1775,7 @@ public class DeduceTypes2 {
 			return;
 		if (true || ite.getBacklink() == null) {
 			final @NotNull IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
-			resolveIdentIA_(ite.getPC(), identIA, generatedFunction, new FoundElement(phase) {
+			/*resolveIdentIA_(ite.getPC(), identIA, generatedFunction, new FoundElement(phase) {
 
 				final String x = generatedFunction.getIdentIAPathNormal(identIA);
 
@@ -1790,7 +1790,7 @@ public class DeduceTypes2 {
 					ite.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 					//errSink.reportError("1004 Can't find element for "+ x); // Already reported by 1179
 				}
-			});
+			})*/;
 		}
 	}
 
@@ -2541,7 +2541,14 @@ public class DeduceTypes2 {
 //					LOG.info(String.format("600 %s %s", xx ,e));
 //					LOG.info("601 "+identIA.getEntry().getStatus());
 					final OS_Element resolved_element = identIA.getEntry().getResolvedElement();
+
+					if (e instanceof AliasStatement) {
+						while (e instanceof AliasStatement)
+							e = DeduceLookupUtils._resolveAlias((AliasStatement) e, DeduceTypes2.this);
+					}
+
 					assert e == resolved_element;
+
 //					set_resolved_element_pte(identIA, e, pte);
 					pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
 					pte.onFunctionInvocation(new DoneCallback<FunctionInvocation>() {
@@ -3037,6 +3044,10 @@ public class DeduceTypes2 {
 					} else {
 						final IdentTableEntry idte = generatedFunction.getIdentTableEntryFor(vs.getNameToken());
 						assert idte != null;
+						if (idte.type == null) {
+							final IdentIA identIA = new IdentIA(idte.getIndex(), generatedFunction);
+							resolveIdentIA_(ctx, identIA, generatedFunction, new NullFoundElement());
+						}
 						@Nullable OS_Type ty = idte.type.getAttached();
 						idte.onType(phase, new OnType() {
 							@Override public void typeDeduced(final @NotNull OS_Type ty) {
@@ -3955,6 +3966,21 @@ public class DeduceTypes2 {
 			else
 				typeName = new OS_Type(aTypeName);
 			return new GenericElementHolderWithType(aElement, typeName, deduceTypes2);
+		}
+	}
+
+	private class NullFoundElement extends FoundElement {
+		public NullFoundElement() {
+			super(DeduceTypes2.this.phase);
+		}
+
+		@Override
+		public void foundElement(final OS_Element e) {
+		}
+
+		@Override
+		public void noFoundElement() {
+
 		}
 	}
 }
