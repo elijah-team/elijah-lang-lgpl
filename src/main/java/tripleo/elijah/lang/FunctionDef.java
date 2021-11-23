@@ -104,6 +104,13 @@ public class FunctionDef extends BaseFunctionDef implements Documentable, ClassI
 		return String.format("<Function %s %s %s>", parent, name(), getArgs());
 	}
 
+	private OS_FuncType osType;
+	public OS_FuncType getOS_Type() {
+		if (osType == null)
+			osType = new OS_FuncType(this);
+		return osType;
+	}
+
 }
 
 //
