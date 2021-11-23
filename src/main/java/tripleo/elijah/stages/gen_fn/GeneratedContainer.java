@@ -53,6 +53,7 @@ public interface GeneratedContainer extends GeneratedNode {
 		}
 
 		public void resolve(@NotNull GeneratedNode aResolvedType) {
+			System.out.println(String.format("** [GeneratedContainer 56] resolving VarTableEntry %s to %s", nameToken, aResolvedType.identityString()));
 			_resolvedType = aResolvedType;
 		}
 
