@@ -24,10 +24,9 @@ import java.util.List;
  */
 public class TypeTableEntry {
 	final int index;
-	public final Type lifetime;
-	public final TableEntryIV tableEntry;
-	@Nullable
-	private OS_Type attached;
+	@NotNull public final Type lifetime;
+	@Nullable public final TableEntryIV tableEntry;
+	@Nullable private OS_Type attached;
 	public final GenType genType = new GenType();
 	public final IExpression expression;
 	private final List<OnSetAttached> osacbs = new ArrayList<OnSetAttached>();
@@ -37,10 +36,10 @@ public class TypeTableEntry {
 	}
 
 	public TypeTableEntry(final int index,
-						  final Type lifetime,
+						  @NotNull final Type lifetime,
 						  @Nullable final OS_Type aAttached,
 						  final IExpression expression,
-						  TableEntryIV aTableEntryIV) {
+						  @Nullable final TableEntryIV aTableEntryIV) {
 		this.index = index;
 		this.lifetime = lifetime;
 		if (aAttached == null || (aAttached.getType() == OS_Type.Type.USER && aAttached.getTypeName() == null)) {
@@ -66,7 +65,7 @@ public class TypeTableEntry {
 			break;
 		case USER_CLASS:
 //			ClassStatement c = attached.getClassOf();
-			genType.resolved = aAttached/*attached*/; // c
+			genType.resolved = aAttached; // c
 			break;
 		case UNIT_TYPE:
 			genType.resolved = aAttached;
