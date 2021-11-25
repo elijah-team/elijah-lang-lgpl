@@ -67,12 +67,14 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
     boolean insideGetResolvedElement = false;
 	@Override
 	public OS_Element getResolvedElement() {
+		// short circuit
+		if (resolved_element != null)
+			return resolved_element;
+
 		if (insideGetResolvedElement)
 			return null;
 		insideGetResolvedElement = true;
-		if (resolved_element == null) {
-			resolved_element = dei.getResolvedElement();
-		}
+		resolved_element = dei.getResolvedElement();
 		insideGetResolvedElement = false;
 		return resolved_element;
 	}
