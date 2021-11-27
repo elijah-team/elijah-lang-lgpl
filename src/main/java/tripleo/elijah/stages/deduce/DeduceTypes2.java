@@ -1987,7 +1987,26 @@ public class DeduceTypes2 {
 					//
 					// registerClassInvocation does the job of makeNode, so results should be immediately available
 					//
-					genCIForGenType2(genType); // TODO what is this doing here? huh?
+					short state = 1;
+					if (vte.getCallablePTE() != null) {
+						final @Nullable ProcTableEntry callable_pte = vte.getCallablePTE();
+						if (callable_pte.expression instanceof FuncExpr) {
+							state = 2;
+						}
+					}
+
+					switch (state) {
+					case 1:
+						genCIForGenType2(genType); // TODO what is this doing here? huh?
+						break;
+					case 2:
+						{
+							final FuncExpr fe = (FuncExpr) vte.getCallablePTE().expression;
+							int y=2;
+						}
+						break;
+					}
+
 					if (genType.ci != null) { // TODO we may need this call...
 						((ClassInvocation) genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
 							@Override
