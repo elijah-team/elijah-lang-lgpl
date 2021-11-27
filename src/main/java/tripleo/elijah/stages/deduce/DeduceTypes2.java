@@ -2899,16 +2899,7 @@ public class DeduceTypes2 {
 //		LOG.info("10000 "+vte_ia);
 		if (vte_ia != null) {
 			final @NotNull VariableTableEntry vte1 = generatedFunction.getVarTableEntry(to_int(vte_ia));
-			final Promise<GenType, Void, Void> p = vte1.typePromise();
-			p.done(new DoneCallback<GenType>() {
-				@Override
-				public void onDone(GenType result) {
-//					assert vte != vte1;
-//					aTte.setAttached(result.resolved != null ? result.resolved : result.typeName);
-					aTte.genType.copy(result);
-//					vte.addPotentialType(aInstructionIndex, result); // TODO!!
-				}
-			});
+			final Promise<GenType, Void, Void> p = VTE_TypePromises.do_assign_call_args_ident_vte_promise(aTte, vte1);
 			@NotNull Runnable runnable = new Runnable() {
 				boolean isDone;
 
@@ -3132,46 +3123,7 @@ public class DeduceTypes2 {
 						@NotNull VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(vte_ia));
 
 	//					final @Nullable OS_Type ty2 = vte2.type.attached;
-						vte2.typePromise().done(new DoneCallback<GenType>() {
-							@Override
-							public void onDone(@NotNull GenType result) {
-	//							assert false; // TODO this code is never reached
-								final @Nullable OS_Type ty2 = result.typeName/*.getAttached()*/;
-								assert ty2 != null;
-								@NotNull GenType rtype = null;
-								try {
-									rtype = resolve_type(ty2, ctx);
-								} catch (ResolveError resolveError) {
-	//								resolveError.printStackTrace();
-									errSink.reportError("Cant resolve " + ty2); // TODO print better diagnostic
-									return;
-								}
-								if (rtype.resolved != null && rtype.resolved.getType() == OS_Type.Type.USER_CLASS) {
-									LookupResultList lrl2 = rtype.resolved.getClassOf().getContext().lookup("__getitem__");
-									@Nullable OS_Element best2 = lrl2.chooseBest(null);
-									if (best2 != null) {
-										if (best2 instanceof FunctionDef) {
-											@Nullable FunctionDef fd = (FunctionDef) best2;
-											@Nullable ProcTableEntry pte = null;
-											final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
-											forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
-												@Override
-												public void typeDecided(final @NotNull GenType aType) {
-													assert fd == generatedFunction.getFD();
-													//
-													@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, gt(aType), vte2); // TODO expression?
-													vte2.type = tte1;
-												}
-											});
-										} else {
-											throw new NotImplementedException();
-										}
-									} else {
-										throw new NotImplementedException();
-									}
-								}
-							}
-						});
+						VTE_TypePromises.getItemFali(generatedFunction, ctx, vte2, this);
 	//					vte2.onType(phase, new OnType() {
 	//						@Override public void typeDeduced(final OS_Type ty2) {
 	//						}
@@ -3342,24 +3294,7 @@ public class DeduceTypes2 {
 			final @NotNull IdentExpression identExpression = exp;
 			@Nullable InstructionArgument vte_ia = gf.vte_lookup(identExpression.getText());
 			if (vte_ia != null) {
-				((IntegerIA) vte_ia).getEntry().typePromise().then(new DoneCallback<GenType>() {
-					@Override
-					public void onDone(@NotNull GenType result) {
-						boolean found1 = lookup_name_calls(result.resolved.getClassOf().getContext(), pn, pte);
-						if (found1) {
-							int y=2;
-							System.out.println("3071 "+pte.getStatus());
-							IInvocation invocation = result.ci;
-//							final BaseFunctionDef fd = gf.getFD();
-							final BaseFunctionDef fd = pte.getFunctionInvocation().getFunction();
-							@NotNull FunctionInvocation fi = newFunctionInvocation(fd, pte, invocation, phase);
-							pte.setFunctionInvocation(fi);
-						} else {
-							int y=3;
-							System.out.println("3074");
-						}
-					}
-				});
+				VTE_TypePromises.dunder(pn, (IntegerIA) vte_ia, pte, DeduceTypes2.this);
 				return true;
 			}
 			return false;
@@ -3458,7 +3393,7 @@ public class DeduceTypes2 {
 		ic.action();
 	}
 
-	private boolean lookup_name_calls(final @NotNull Context ctx, final @NotNull String pn, final @NotNull ProcTableEntry pte) {
+	boolean lookup_name_calls(final @NotNull Context ctx, final @NotNull String pn, final @NotNull ProcTableEntry pte) {
 		final LookupResultList lrl = ctx.lookup(pn);
 		final @Nullable OS_Element best = lrl.chooseBest(null); // TODO check arity and arg matching
 		if (best != null) {
@@ -3622,37 +3557,7 @@ public class DeduceTypes2 {
 		private void type_is_null_and_attached_is_null_vte() {
 			//LOG.err("2842 attached == null for "+((VariableTableEntry) bte).type);
 			@NotNull PromiseExpectation<GenType> pe = promiseExpectation((VariableTableEntry) bte, "Null USER type attached resolved");
-			((VariableTableEntry) bte).typePromise().done(new DoneCallback<GenType>() {
-				@Override
-				public void onDone(@NotNull GenType result) {
-					pe.satisfy(result);
-					final OS_Type attached1 = result.resolved != null ? result.resolved : result.typeName;
-					if (attached1 != null) {
-						switch (attached1.getType()) {
-						case USER_CLASS:
-							if (ite.type.getAttached() == null)
-								ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached1);
-							else {
-								LOG.err(String.format("3603 Trying to set %s to %s", ite.type.getAttached(), attached1));
-							}
-							break;
-						case USER:
-							try {
-								@NotNull GenType ty3 = resolve_type(attached1, attached1.getTypeName().getContext());
-								// no expression or TableEntryIV below
-								@NotNull TypeTableEntry tte4 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null);
-								// README trying to keep genType up to date
-								tte4.setAttached(attached1);
-								tte4.setAttached(ty3);
-								ite.type = tte4; // or ty2?
-							} catch (ResolveError aResolveError) {
-								aResolveError.printStackTrace();
-							}
-							break;
-						}
-					}
-				}
-			});
+			VTE_TypePromises.found_parent(pe, generatedFunction, ((VariableTableEntry) bte), ite, DeduceTypes2.this);
 		}
 
 		private void type_is_null_and_attached_is_null_ite(IdentTableEntry ite) {
