@@ -1198,7 +1198,20 @@ public class DeduceTypes2 {
 				return clsinv;
 			} else if (genType.resolved.getType() == OS_Type.Type.FUNCTION) {
 				// TODO what to do here?
-				int y=2;
+				OS_Element ele = genType.resolved.getElement();
+				ClassStatement best = (ClassStatement) ele.getParent();//genType.resolved.getClassOf();
+				@Nullable String constructorName = null; // TODO what to do about this, nothing I guess
+
+				@NotNull List<TypeName> gp = best.getGenericPart();
+				@Nullable ClassInvocation clsinv;
+				if (genType.ci == null) {
+					clsinv = ClassInvocationMake.withGenericPart2(best, constructorName, aGenericTypeName, this, errSink);
+					if (clsinv == null) return null;
+					clsinv = phase.registerClassInvocation(clsinv);
+					genType.ci = clsinv;
+				} else
+					clsinv = (ClassInvocation) genType.ci;
+				return clsinv;
 			} else if (genType.resolved.getType() == OS_Type.Type.FUNC_EXPR) {
 				// TODO what to do here?
 				int y=2;
@@ -3709,13 +3722,34 @@ public class DeduceTypes2 {
 					} else
 						ele2 = ty.getElement();
 
-					@Nullable LookupResultList lrl = null;
+					if (ty instanceof OS_FuncType) {
+						vte.typePromise().then(new DoneCallback<GenType>() {
+							@Override
+							public void onDone(final GenType result) {
+								OS_Element ele3 = result.resolved.getClassOf();
+								@Nullable LookupResultList lrl = null;
 
-					lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext(), DeduceTypes2.this);
-					@Nullable OS_Element best = lrl.chooseBest(null);
-					// README commented out because only firing for dir.listFiles, and we always use `best'
+								try {
+									lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele3.getContext(), DeduceTypes2.this);
+								} catch (ResolveError aResolveError) {
+									aResolveError.printStackTrace();
+									errSink.reportDiagnostic(aResolveError);
+								}
+								@Nullable OS_Element best = lrl.chooseBest(null);
+								// README commented out because only firing for dir.listFiles, and we always use `best'
 //					if (best != ele2) LOG.err(String.format("2824 Divergent for %s, %s and %s", ite, best, ele2));;
-					ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolderWithType(best, ty, DeduceTypes2.this));
+								ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolderWithType(best, ty, DeduceTypes2.this));
+							}
+						});
+					} else {
+						@Nullable LookupResultList lrl = null;
+
+						lrl = DeduceLookupUtils.lookupExpression(ite.getIdent(), ele2.getContext(), DeduceTypes2.this);
+						@Nullable OS_Element best = lrl.chooseBest(null);
+						// README commented out because only firing for dir.listFiles, and we always use `best'
+//					if (best != ele2) LOG.err(String.format("2824 Divergent for %s, %s and %s", ite, best, ele2));;
+						ite.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolderWithType(best, ty, DeduceTypes2.this));
+					}
 				} catch (ResolveError aResolveError) {
 					aResolveError.printStackTrace();
 					errSink.reportDiagnostic(aResolveError);
