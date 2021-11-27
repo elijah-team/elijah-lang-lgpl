@@ -2035,8 +2035,20 @@ public class DeduceTypes2 {
 					aGenType.node = result;
 				}
 			});
-		} else
-			throw new IllegalStateException("invalid invocation");
+		} else {
+			if (aGenType.resolved instanceof OS_FuncExprType) {
+				final OS_FuncExprType funcExprType = (OS_FuncExprType) aGenType.resolved;
+				final @NotNull GenerateFunctions genf = getGenerateFunctions(funcExprType.getElement().getContext().module());
+				final FunctionInvocation fi = new FunctionInvocation((BaseFunctionDef) funcExprType.getElement(),
+						null,
+						null,
+						phase.generatePhase);
+				WlGenerateFunction gen = new WlGenerateFunction(genf, fi);
+				gen.run(null);
+				aGenType.node = gen.getResult();
+			} else
+				throw new IllegalStateException("invalid invocation");
+		}
 	}
 
 	public static class OS_SpecialVariable implements OS_Element {
