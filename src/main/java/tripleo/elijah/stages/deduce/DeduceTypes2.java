@@ -1868,14 +1868,17 @@ public class DeduceTypes2 {
 					final TypeTableEntry pot = attached_list.get(0);
 					vte.type.setAttached(pot.getAttached());
 					genCI(vte.type.genType, null);
-					((ClassInvocation) vte.type.genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
-						@Override
-						public void onDone(final GeneratedClass result) {
-							vte.type.genType.node = result;
-							vte.resolveTypeToClass(result);
-							vte.genType = vte.type.genType; // TODO who knows if this is necessary?
-						}
-					});
+					final ClassInvocation classInvocation = (ClassInvocation) vte.type.genType.ci;
+					if (classInvocation != null) {
+						classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+							@Override
+							public void onDone(final GeneratedClass result) {
+								vte.type.genType.node = result;
+								vte.resolveTypeToClass(result);
+								vte.genType = vte.type.genType; // TODO who knows if this is necessary?
+							}
+						});
+					} // TODO else ??
 				} else {
 					if (vte.potentialTypes().size() == 1) {
 						final TypeTableEntry tte1 = vte.potentialTypes().iterator().next();
