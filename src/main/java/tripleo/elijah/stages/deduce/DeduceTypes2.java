@@ -553,6 +553,21 @@ public class DeduceTypes2 {
 							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
 						} else if (i2 instanceof IdentIA) {
 							@NotNull IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(i2));
+							if (idte.type == null) {
+								final IdentIA identIA = new IdentIA(idte.getIndex(), generatedFunction);
+								resolveIdentIA_(context, identIA, generatedFunction, new FoundElement(phase) {
+
+									@Override
+									public void foundElement(final OS_Element e) {
+										found_element_for_ite(generatedFunction, idte, e, context);
+									}
+
+									@Override
+									public void noFoundElement() {
+										// TODO: log error
+									}
+								});
+							}
 							assert idte.type != null;
 							assert idte.getResolvedElement() != null;
 							vte.addPotentialType(instruction.getIndex(), idte.type);
