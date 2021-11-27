@@ -80,9 +80,11 @@ class Resolve_Ident_IA2 {
 					if (backlink instanceof IntegerIA) {
 						final @NotNull IntegerIA integerIA = (IntegerIA) backlink;
 						@NotNull VariableTableEntry vte = integerIA.getEntry();
+						final DeduceTypes2.PromiseExpectation<GenType> pe = deduceTypes2.promiseExpectation(vte, "TypePromise for vte "+vte);
 						vte.typePromise().then(new DoneCallback<GenType>() {
 							@Override
 							public void onDone(@NotNull GenType result) {
+								pe.satisfy(result);
 								ectx = result.resolved.getClassOf().getContext();
 								ia2_IdentIA((IdentIA) ia2, ectx);
 								foundElement.doFoundElement(el);
