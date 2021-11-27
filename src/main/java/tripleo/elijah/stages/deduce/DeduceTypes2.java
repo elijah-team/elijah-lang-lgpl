@@ -1199,6 +1199,9 @@ public class DeduceTypes2 {
 			} else if (genType.resolved.getType() == OS_Type.Type.FUNCTION) {
 				// TODO what to do here?
 				int y=2;
+			} else if (genType.resolved.getType() == OS_Type.Type.FUNC_EXPR) {
+				// TODO what to do here?
+				int y=2;
 			}
 		}
 		return null;
