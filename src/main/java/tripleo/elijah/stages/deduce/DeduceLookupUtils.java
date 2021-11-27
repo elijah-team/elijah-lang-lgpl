@@ -254,7 +254,17 @@ public class DeduceLookupUtils {
 					R.typeName = new OS_UnknownType(vs);
 //				return deduceExpression(vs.initialValue(), ctx); // infinite recursion
 				} else {
-					R = deduceExpression(aDeduceTypes2, vs.initialValue(), vs.getContext());
+					final IExpression initialValue = vs.initialValue();
+					switch (initialValue.getKind()) {
+					case PROCEDURE_CALL:
+						final Context vsContext = vs.getContext();
+						final ProcedureCallExpression pce = (ProcedureCallExpression) initialValue;
+						R = deduceExpression(aDeduceTypes2, pce, vsContext);
+						break;
+					default:
+						R = deduceExpression(aDeduceTypes2, initialValue, vs.getContext());
+						break;
+					}
 				}
 				if (result == null) {
 					result = R;
