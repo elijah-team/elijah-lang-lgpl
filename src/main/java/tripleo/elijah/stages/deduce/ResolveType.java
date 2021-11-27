@@ -12,20 +12,7 @@ package tripleo.elijah.stages.deduce;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.contexts.ClassContext;
-import tripleo.elijah.lang.AliasStatement;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.IdentExpression;
-import tripleo.elijah.lang.LookupResultList;
-import tripleo.elijah.lang.NormalTypeName;
-import tripleo.elijah.lang.OS_AnyType;
-import tripleo.elijah.lang.OS_Element;
-import tripleo.elijah.lang.OS_GenericTypeNameType;
-import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.lang.OS_Type;
-import tripleo.elijah.lang.Qualident;
-import tripleo.elijah.lang.TypeName;
-import tripleo.elijah.lang.TypeOfTypeName;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.GenType;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
@@ -179,6 +166,9 @@ public class ResolveType {
 		case USER_CLASS:
 			break;
 		case FUNCTION:
+			break;
+		case FUNC_EXPR:
+			R.resolved = type;//((OS_FuncExprType)type).getElement();
 			break;
 		default:
 			throw new IllegalStateException("565 Unexpected value: " + type.getType());

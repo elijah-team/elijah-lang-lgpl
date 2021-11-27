@@ -174,7 +174,20 @@ public class DeduceTypeResolve {
 
 						@Override
 						public void visitIdentExpression(final IdentExpression aIdentExpression) {
-							int y=2;
+							if (eh instanceof GenericElementHolderWithIntegerIA) {
+								final GenericElementHolderWithIntegerIA eh1 = (GenericElementHolderWithIntegerIA) eh;
+								final IntegerIA integerIA = eh1.getIntegerIA();
+								final @NotNull VariableTableEntry variableTableEntry = integerIA.getEntry();
+								variableTableEntry.typeResolvePromise().then(
+										new DoneCallback<GenType>() {
+											@Override
+											public void onDone(final GenType result) {
+												genType.copy(result); // TODO genType = result?? because we want updates...
+											}
+										});
+							} else {
+								int y=2;
+							}
 						}
 
 						@Override

@@ -79,6 +79,10 @@ public class TypeTableEntry {
 			assert genType.resolved == null || genType.resolved == aAttached || /*HACK*/ aAttached.getType() == OS_Type.Type.FUNCTION;
 			genType.resolved = aAttached;
 			break;
+		case FUNC_EXPR:
+			assert genType.resolved == null || genType.resolved == aAttached;// || /*HACK*/ aAttached.getType() == OS_Type.Type.FUNCTION;
+			genType.resolved = aAttached;
+			break;
 		default:
 //			throw new NotImplementedException();
 			System.err.println("73 "+aAttached);

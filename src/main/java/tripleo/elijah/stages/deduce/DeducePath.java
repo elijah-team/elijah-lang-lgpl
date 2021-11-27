@@ -72,7 +72,7 @@ public class DeducePath {
 				el = vte.getResolvedElement();
 				assert el != null;
 				// set this to set resolved_elements of remaining entries
-				vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
+				vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolderWithIntegerIA(el, (IntegerIA) ias.get(aIndex)));
 			} else if (ia2 instanceof IdentIA) {
 				@NotNull IdentTableEntry identTableEntry = ((IdentIA) ia2).getEntry();
 				el = identTableEntry.getResolvedElement();
