@@ -259,6 +259,16 @@ public class DeduceTypeResolve {
 						public void onDone(final GenType result) {
 //							procTableEntry.type.setAttached(result);
 							int y=2;
+							final ClassStatement classStatement = result.resolved.getClassOf();
+
+							assert bte instanceof IdentTableEntry;
+
+							final String text = ((IdentTableEntry) bte).getIdent().getText();
+							final LookupResultList lrl = classStatement.getContext().lookup(text);
+							final @Nullable OS_Element e = lrl.chooseBest(null);
+
+//							procTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(classStatement));
+							((IdentTableEntry) bte).getCallablePTE().setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
 						}
 					});
 				}
