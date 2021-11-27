@@ -2099,6 +2099,9 @@ public class DeduceTypes2 {
 				WlGenerateFunction gen = new WlGenerateFunction(genf, fi);
 				gen.run(null);
 				aGenType.node = gen.getResult();
+			} else if (aGenType.resolved instanceof OS_FuncType) {
+				final OS_FuncType funcType = (OS_FuncType) aGenType.resolved;
+				int y=2;
 			} else
 				throw new IllegalStateException("invalid invocation");
 		}
