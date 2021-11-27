@@ -447,7 +447,8 @@ class Resolve_Ident_IA {
 						action_002_no_resolved_element(pte, y);
 					} else {
 						final OS_Element res = y.getResolvedElement();
-						int yy = 2;
+						final @NotNull IdentTableEntry ite = identIA.getEntry();
+						action_002_1(pte, y, true);
 					}
 				} else
 					throw new IllegalStateException("tableEntry must be ProcTableEntry");
@@ -511,16 +512,22 @@ class Resolve_Ident_IA {
 	}
 
 	private void action_002_1(@NotNull ProcTableEntry pte, @NotNull IdentTableEntry ite) {
+		action_002_1(pte, ite, false);
+	}
+
+	private void action_002_1(@NotNull ProcTableEntry pte, @NotNull IdentTableEntry ite, boolean setClassInvocation) {
 		final OS_Element resolvedElement = ite.getResolvedElement();
 
 		assert resolvedElement != null;
+
+		ClassInvocation ci = null;
 
 		if (pte.getFunctionInvocation() == null) {
 			@NotNull FunctionInvocation fi;
 
 			if (resolvedElement instanceof ClassStatement) {
 				// assuming no constructor name or generic parameters based on function syntax
-				@Nullable ClassInvocation ci = new ClassInvocation((ClassStatement) resolvedElement, null);
+				ci = new ClassInvocation((ClassStatement) resolvedElement, null);
 				ci = phase.registerClassInvocation(ci);
 				fi = new FunctionInvocation(null, pte, ci, phase.generatePhase);
 			} else if (resolvedElement instanceof FunctionDef) {
@@ -528,6 +535,13 @@ class Resolve_Ident_IA {
 				fi = new FunctionInvocation((FunctionDef) resolvedElement, pte, invocation, phase.generatePhase);
 			} else {
 				throw new IllegalStateException();
+			}
+
+			if (setClassInvocation) {
+				if (ci != null) {
+					pte.setClassInvocation(ci);
+				} else
+					System.err.println("542 Null ClassInvocation");
 			}
 
 			pte.setFunctionInvocation(fi);
