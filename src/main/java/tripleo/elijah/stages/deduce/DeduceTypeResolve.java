@@ -169,7 +169,7 @@ public class DeduceTypeResolve {
 
 						@Override
 						public void visitDefFunction(final DefFunctionDef aDefFunctionDef) {
-							int y=2;
+							System.err.println(String.format("** DefFunctionDef %s is %s", aDefFunctionDef.name(), ((StatementWrapper) aDefFunctionDef.getItems().iterator().next()).getExpr()));
 						}
 
 						@Override
