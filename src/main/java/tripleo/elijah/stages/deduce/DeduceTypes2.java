@@ -1800,7 +1800,7 @@ public class DeduceTypes2 {
 		if (ite.getResolvedElement() != null)
 			return;
 		if (true || ite.getBacklink() == null) {
-			final @NotNull IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
+//			final @NotNull IdentIA identIA = new IdentIA(ite.getIndex(), generatedFunction);
 			ite.addStatusListener(new BaseTableEntry.StatusListener() {
 				@Override
 				public void onChange(final IElementHolder eh, final BaseTableEntry.Status newStatus) {
