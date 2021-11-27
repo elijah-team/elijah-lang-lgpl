@@ -86,7 +86,7 @@ public class TestBasic {
 		Assert.assertEquals(13, c.errorCount()); // TODO Error count obviously should be 0
 	}
 
-//	@Test
+	@Test
 	public final void testBasic_listfolders4() throws IOException {
 		String s = "test/basic/listfolders4/listfolders4.ez";
 
