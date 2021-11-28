@@ -2676,6 +2676,8 @@ public class DeduceTypes2 {
 				public void foundElement(OS_Element e) {
 //					LOG.info(String.format("600 %s %s", xx ,e));
 //					LOG.info("601 "+identIA.getEntry().getStatus());
+					found_element_for_ite(generatedFunction, identIA.getEntry(), e, ctx);
+
 					final OS_Element resolved_element = identIA.getEntry().getResolvedElement();
 
 					if (e instanceof AliasStatement) {
