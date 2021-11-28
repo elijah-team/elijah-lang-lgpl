@@ -85,7 +85,16 @@ class Resolve_Ident_IA2 {
 							@Override
 							public void onDone(@NotNull GenType result) {
 								pe.satisfy(result);
-								ectx = result.resolved.getClassOf().getContext();
+								switch (result.resolved.getType()) {
+								case FUNCTION:
+									ectx = result.resolved.getElement().getContext();
+									break;
+								case USER_CLASS:
+									ectx = result.resolved.getClassOf().getContext();
+									break;
+								default:
+									throw new IllegalStateException("Unexpected value: " + result.resolved.getType());
+								}
 								ia2_IdentIA((IdentIA) ia2, ectx);
 								foundElement.doFoundElement(el);
 							}
