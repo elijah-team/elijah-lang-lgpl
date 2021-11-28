@@ -546,6 +546,11 @@ class Resolve_Ident_IA {
 			} else if (resolvedElement instanceof FunctionDef) {
 				final IInvocation invocation = dc.getInvocation((GeneratedFunction) generatedFunction);
 				fi = new FunctionInvocation((FunctionDef) resolvedElement, pte, invocation, phase.generatePhase);
+				if (fi.getFunction().getParent() instanceof ClassStatement) {
+					final ClassStatement classStatement = (ClassStatement) fi.getFunction().getParent();
+					ci = new ClassInvocation(classStatement, null); // TODO generics
+					ci = phase.registerClassInvocation(ci);
+				}
 			} else {
 				throw new IllegalStateException();
 			}
