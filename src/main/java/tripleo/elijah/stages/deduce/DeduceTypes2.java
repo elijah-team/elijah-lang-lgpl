@@ -1329,6 +1329,11 @@ public class DeduceTypes2 {
 					}
 				});
 			} else if (genType.resolved != null) {
+				if (genType.functionInvocation != null) {
+					action_function(genType.functionInvocation, aWorkManager);
+					return;
+				}
+
 				final ClassStatement c = genType.resolved.getClassOf();
 				final @NotNull OS_Module mod = c.getContext().module();
 				final @NotNull GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
