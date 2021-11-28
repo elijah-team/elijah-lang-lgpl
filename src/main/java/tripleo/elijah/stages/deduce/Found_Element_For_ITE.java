@@ -58,7 +58,8 @@ class Found_Element_For_ITE {
 		}
 
 		final String normal_path = generatedFunction.getIdentIAPathNormal(new IdentIA(ite.getIndex(), generatedFunction));
-		ite.resolveExpectation.satisfy(normal_path);
+		if (!ite.resolveExpectation.isSatisfied())
+			ite.resolveExpectation.satisfy(normal_path);
 	}
 
 	public void action_AliasStatement(@NotNull IdentTableEntry ite, @NotNull AliasStatement y) {
