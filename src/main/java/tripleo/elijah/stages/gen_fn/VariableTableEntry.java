@@ -129,6 +129,7 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 		if (typeDeferred.isResolved()) {
 			System.err.println("126 typeDeferred is resolved "+this);
 		}
+		_resolveTypeCalled = aGenType;
 		typeDeferred.resolve(aGenType);
 	}
 
