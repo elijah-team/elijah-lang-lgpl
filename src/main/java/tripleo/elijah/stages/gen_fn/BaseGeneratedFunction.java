@@ -448,7 +448,6 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 		return toString();
 	}
 
-
 	public void resolveTypeDeferred(final GenType aType) {
 		if (typeDeferred.isPending())
 			typeDeferred.resolve(aType);
