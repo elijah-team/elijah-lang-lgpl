@@ -1321,6 +1321,13 @@ public class DeduceTypes2 {
 				ni.resolveDeferred().done(result -> genType.node = result);
 
 				wl.addJob(gen);
+
+				ni.resolvePromise().then(new DoneCallback<GeneratedNamespace>() {
+					@Override
+					public void onDone(final GeneratedNamespace result) {
+						result.dependentTypes().add(genType);
+					}
+				});
 			} else if (genType.resolved != null) {
 				final ClassStatement c = genType.resolved.getClassOf();
 				final @NotNull OS_Module mod = c.getContext().module();
@@ -1345,6 +1352,13 @@ public class DeduceTypes2 {
 				});
 
 				wl.addJob(gen);
+
+				ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(final GeneratedClass result) {
+						result.dependentTypes().add(genType);
+					}
+				});
 			}
 			//
 			aWorkManager.addJobs(wl);
@@ -1361,8 +1375,21 @@ public class DeduceTypes2 {
 					if (ni == null)
 						assert false;
 					mod = ni.getNamespace().getContext().module();
+
+					ni.resolvePromise().then(new DoneCallback<GeneratedNamespace>() {
+						@Override
+						public void onDone(final GeneratedNamespace result) {
+							result.dependentFunctions().add(aDependentFunction);
+						}
+					});
 				} else {
 					mod = ci.getKlass().getContext().module();
+					ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+						@Override
+						public void onDone(final GeneratedClass result) {
+							result.dependentFunctions().add(aDependentFunction);
+						}
+					});
 				}
 				final @NotNull GenerateFunctions gf = getGenerateFunctions(mod);
 				gen = new WlGenerateDefaultCtor(gf, aDependentFunction);
