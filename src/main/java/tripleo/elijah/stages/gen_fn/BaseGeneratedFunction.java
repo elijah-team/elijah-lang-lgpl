@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
+import org.jdeferred2.DoneCallback;
 import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
@@ -448,6 +449,20 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	}
 
 
+	public void resolveTypeDeferred(final GenType aType) {
+		if (typeDeferred.isPending())
+			typeDeferred.resolve(aType);
+		else {
+			final DeduceTypes2.Holder<GenType> holder = new DeduceTypes2.Holder<GenType>();
+			typeDeferred.then(new DoneCallback<GenType>() {
+				@Override
+				public void onDone(final GenType result) {
+					holder.set(result);
+				}
+			});
+			System.err.println(String.format("Trying to resolve function twice 1) %s 2) %s", holder.get().asString(), aType.asString()));
+		}
+	}
 }
 
 //
