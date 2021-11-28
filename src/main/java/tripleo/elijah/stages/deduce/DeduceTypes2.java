@@ -4034,6 +4034,13 @@ public class DeduceTypes2 {
 				typeName = new OS_Type(aTypeName);
 			return new GenericElementHolderWithType(aElement, typeName, deduceTypes2);
 		}
+
+		public void found_element_for_ite(final BaseGeneratedFunction generatedFunction,
+										  final @NotNull IdentTableEntry ite,
+										  final @Nullable OS_Element y,
+										  final Context ctx) {
+			deduceTypes2.found_element_for_ite(generatedFunction, ite, y, ctx);
+		}
 	}
 
 	private class NullFoundElement extends FoundElement {
