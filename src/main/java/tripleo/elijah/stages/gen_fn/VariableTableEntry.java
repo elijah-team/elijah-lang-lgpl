@@ -123,7 +123,7 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	GenType _resolveTypeCalled = null;
 	public void resolveType(final @NotNull GenType aGenType) {
 		if (_resolveTypeCalled != null) { // TODO what a hack
-			assert aGenType == _resolveTypeCalled;
+			assert aGenType.equals(_resolveTypeCalled);
 			return;
 		}
 		if (typeDeferred.isResolved()) {

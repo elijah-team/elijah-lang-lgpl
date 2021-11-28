@@ -35,8 +35,36 @@ public class GenType {
 		resolved = aClassStatement.getOS_Type();
 	}
 
-	public GenType() {
+	@Override
+	public boolean equals(final Object aO) {
+		if (this == aO) return true;
+		if (aO == null || getClass() != aO.getClass()) return false;
 
+		final GenType genType = (GenType) aO;
+
+		if (resolvedn != null ? !resolvedn.equals(genType.resolvedn) : genType.resolvedn != null) return false;
+		if (typeName != null ? !typeName.equals(genType.typeName) : genType.typeName != null) return false;
+		if (nonGenericTypeName != null ? !nonGenericTypeName.equals(genType.nonGenericTypeName) : genType.nonGenericTypeName != null)
+			return false;
+		if (resolved != null ? !resolved.equals(genType.resolved) : genType.resolved != null) return false;
+		if (ci != null ? !ci.equals(genType.ci) : genType.ci != null) return false;
+		if (node != null ? !node.equals(genType.node) : genType.node != null) return false;
+		return functionInvocation != null ? functionInvocation.equals(genType.functionInvocation) : genType.functionInvocation == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = resolvedn != null ? resolvedn.hashCode() : 0;
+		result = 31 * result + (typeName != null ? typeName.hashCode() : 0);
+		result = 31 * result + (nonGenericTypeName != null ? nonGenericTypeName.hashCode() : 0);
+		result = 31 * result + (resolved != null ? resolved.hashCode() : 0);
+		result = 31 * result + (ci != null ? ci.hashCode() : 0);
+		result = 31 * result + (node != null ? node.hashCode() : 0);
+		result = 31 * result + (functionInvocation != null ? functionInvocation.hashCode() : 0);
+		return result;
+	}
+
+	public GenType() {
 	}
 
 	public String asString() {
