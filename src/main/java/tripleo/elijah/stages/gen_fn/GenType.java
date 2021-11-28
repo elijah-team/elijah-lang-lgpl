@@ -12,6 +12,7 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.TypeName;
+import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.deduce.IInvocation;
 
 /**
@@ -24,6 +25,7 @@ public class GenType {
 	public OS_Type resolved;
 	public IInvocation ci;
 	public GeneratedNode node;
+	public FunctionInvocation functionInvocation;
 
 	public GenType(NamespaceStatement aNamespaceStatement) {
 		resolvedn = /*new OS_Type*/(aNamespaceStatement);
