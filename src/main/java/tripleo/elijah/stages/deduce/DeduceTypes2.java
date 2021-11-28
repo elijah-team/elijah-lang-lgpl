@@ -2567,7 +2567,8 @@ public class DeduceTypes2 {
 	}
 
 	void found_element_for_ite(BaseGeneratedFunction generatedFunction, @NotNull IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
-//		assert y == ite.getResolvedElement();
+		if (y != ite.getResolvedElement())
+			System.err.println(String.format("2571 Setting FoundElement for ite %s to %s when it is already %s", ite, y, ite.getResolvedElement()));
 
 		@NotNull Found_Element_For_ITE fefi = new Found_Element_For_ITE(generatedFunction, ctx, LOG, errSink, new DeduceClient1(this));
 		fefi.action(ite);
