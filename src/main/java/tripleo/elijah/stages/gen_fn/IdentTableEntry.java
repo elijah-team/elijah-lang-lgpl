@@ -38,6 +38,7 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
     private final int index;
     private final IdentExpression ident;
 	private final Context pc;
+	public boolean preUpdateStatusListenerAdded;
 	private InstructionArgument backlink;
 	public @NotNull Map<Integer, TypeTableEntry> potentialTypes = new HashMap<Integer, TypeTableEntry>();
 	public TypeTableEntry type;

@@ -153,17 +153,26 @@ class Resolve_Ident_IA {
 				y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
 			} else if (x instanceof IdentIA) {
 				@NotNull IdentTableEntry y = ((IdentIA) x).getEntry();
-				y.addStatusListener(new BaseTableEntry.StatusListener() {
-					@Override
-					public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
-						if (newStatus == BaseTableEntry.Status.KNOWN) {
-//								assert el2 != eh.getElement();
-							y.resolveExpectation.satisfy(normal_path);
+				if (!y.preUpdateStatusListenerAdded) {
+					y.addStatusListener(new BaseTableEntry.StatusListener() {
+						@Override
+						public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
+//							if (_called) return;
+
+							if (newStatus == BaseTableEntry.Status.KNOWN) {
+//								_called = true;
+//								y.preUpdateStatusListenerAdded = true;
+
+//							assert el2 != eh.getElement();
+								y.resolveExpectation.satisfy(normal_path);
+//							dc.found_element_for_ite(generatedFunction, y, eh.getElement(), null); // No context
 //							LOG.info("1424 Found for " + normal_path);
-							foundElement.doFoundElement(eh.getElement());
+								foundElement.doFoundElement(eh.getElement());
+							}
 						}
-					}
-				});
+					});
+					y.preUpdateStatusListenerAdded = true;
+				}
 			}
 		} else {
 //			LOG.info("1431 Found for " + normal_path);
