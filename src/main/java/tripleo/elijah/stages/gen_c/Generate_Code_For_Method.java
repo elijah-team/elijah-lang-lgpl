@@ -708,7 +708,7 @@ public class Generate_Code_For_Method {
 				} else if (type != null) {
 					if (type instanceof OS_GenericTypeNameType) {
 						final OS_GenericTypeNameType genericTypeNameType = (OS_GenericTypeNameType) type;
-						final TypeName tn = ((ClassContext.OS_TypeNameElement) genericTypeNameType.getElement()).getTypeName();
+						final TypeName tn = genericTypeNameType.getRealTypeName();
 
 						final @Nullable Map<TypeName, OS_Type> gp = gf.fi.getClassInvocation().genericPart;
 
