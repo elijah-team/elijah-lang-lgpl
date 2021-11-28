@@ -67,7 +67,7 @@ public class TestGenFunction {
 
 
 		final ElLog.Verbosity verbosity1 = c.gitlabCIVerbosity();
-		c.pipelineLogic = new PipelineLogic(verbosity1);
+		c.pipelineLogic = new PipelineLogic(verbosity1, c);
 		final GeneratePhase generatePhase1 = c.pipelineLogic.generatePhase;//new GeneratePhase();
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
 		DeducePhase dp = c.pipelineLogic.dp;//new DeducePhase(generatePhase1);
@@ -239,13 +239,13 @@ public class TestGenFunction {
 		}
 
 		final ElLog.Verbosity verbosity1 = c.gitlabCIVerbosity();
-		final PipelineLogic pl = new PipelineLogic(verbosity1);
-		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		final PipelineLogic pl = new PipelineLogic(verbosity1, c);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl, c);
 		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
 		final List<GeneratedNode> lgc = new ArrayList<>();
 		gfm.generateAllTopLevelClasses(lgc);
 
-		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity1);
+		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity1, c);
 
 		WorkManager wm = new WorkManager();
 
@@ -282,7 +282,7 @@ public class TestGenFunction {
 			}
 		}
 
-		PipelineLogic pipelineLogic = new PipelineLogic(Compilation.gitlabCIVerbosity());
+		PipelineLogic pipelineLogic = new PipelineLogic(Compilation.gitlabCIVerbosity(), c);
 		GenerateC ggc = new GenerateC(m, eee, c.gitlabCIVerbosity(), pipelineLogic);
 		ggc.generateCode(lgf, wm);
 

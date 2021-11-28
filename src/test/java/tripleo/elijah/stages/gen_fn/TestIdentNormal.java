@@ -42,8 +42,8 @@ public class TestIdentNormal {
 		Context ctx2 = mock(Context.class);
 
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
-		final PipelineLogic pl = new PipelineLogic(verbosity1);
-		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
+		final PipelineLogic pl = new PipelineLogic(verbosity1, comp);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl, comp);
 //		GenerateFunctions generateFunctions = new GenerateFunctions(generatePhase, mod, pl);
 		GenerateFunctions generateFunctions = generatePhase.getGenerateFunctions(mod);
 		GeneratedFunction generatedFunction = new GeneratedFunction(fd);
@@ -76,7 +76,7 @@ public class TestIdentNormal {
 
 		IdentIA identIA = new IdentIA(1, generatedFunction);
 
-		DeducePhase phase = new DeducePhase(generatePhase, pl, verbosity1);
+		DeducePhase phase = new DeducePhase(generatePhase, pl, verbosity1, comp);
 		DeduceTypes2 d2 = new DeduceTypes2(mod, phase);
 
 		final List<InstructionArgument> ss = generatedFunction._getIdentIAPathList(identIA);
@@ -102,9 +102,9 @@ public class TestIdentNormal {
 		Context ctx2 = mock(Context.class);
 
 		final ElLog.Verbosity verbosity1 = new Compilation(new StdErrSink(), new IO()).gitlabCIVerbosity();
-		final PipelineLogic pl = new PipelineLogic(verbosity1);
-		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
-		DeducePhase phase = new DeducePhase(generatePhase, pl, verbosity1);
+		final PipelineLogic pl = new PipelineLogic(verbosity1, comp);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl, comp);
+		DeducePhase phase = new DeducePhase(generatePhase, pl, verbosity1, comp);
 
 		GenerateFunctions generateFunctions = generatePhase.getGenerateFunctions(mod);
 

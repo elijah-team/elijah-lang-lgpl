@@ -32,8 +32,9 @@ public class DeduceTypesTest {
 
 	@Before
 	public void setUp() throws ResolveError {
+		final Compilation compilation = new Compilation(new StdErrSink(), new IO());
 		final OS_Module mod = new OS_Module();
-		mod.parent = new Compilation(new StdErrSink(), new IO());
+		mod.parent = compilation;
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		final ClassStatement cs = new ClassStatement(mod, mctx);
@@ -63,9 +64,9 @@ public class DeduceTypesTest {
 		//
 		//
 		final ElLog.Verbosity verbosity = mod.parent.gitlabCIVerbosity();
-		final PipelineLogic pl = new PipelineLogic(verbosity);
-		final GeneratePhase generatePhase = new GeneratePhase(verbosity, pl);
-		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity);
+		final PipelineLogic pl = new PipelineLogic(verbosity, compilation);
+		final GeneratePhase generatePhase = new GeneratePhase(verbosity, pl, compilation);
+		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity, compilation);
 		DeduceTypes2 d = dp.deduceModule(mod, verbosity);
 //		final DeduceTypes d = new DeduceTypes(mod);
 		this.x = DeduceLookupUtils.deduceExpression(d, x1, fc);

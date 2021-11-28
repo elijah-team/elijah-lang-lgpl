@@ -12,9 +12,7 @@ package tripleo.elijah.stages.gen_c;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 import tripleo.elijah.comp.*;
-import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
@@ -28,7 +26,6 @@ import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 
 import static org.easymock.EasyMock.*;
-import static org.hamcrest.core.IsInstanceOf.any;
 
 public class GetRealTargetNameTest {
 
@@ -73,7 +70,8 @@ public class GetRealTargetNameTest {
 		//
 		//
 
-		PipelineLogic pipelineLogic = new PipelineLogic(ElLog.Verbosity.VERBOSE);
+		Compilation compilation = new Compilation(new StdErrSink(), new IO());
+		PipelineLogic pipelineLogic = new PipelineLogic(ElLog.Verbosity.VERBOSE, compilation);
 		GenerateC c = new GenerateC(mod, new StdErrSink(), ElLog.Verbosity.VERBOSE, pipelineLogic); // TODO do we want silent?
 
 		//
@@ -84,7 +82,7 @@ public class GetRealTargetNameTest {
 		OS_Module mod = new OS_Module(); // hard to mock
 		mod.setParent(comp);
 
-		final DeducePhase phase = new DeducePhase(null, pipelineLogic, null);
+		final DeducePhase phase = new DeducePhase(null, pipelineLogic, null, comp);
 
 		final DeduceTypes2 deduceTypes2 = new DeduceTypes2(mod, phase);
 		final Context ctx = mock(Context.class);
