@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.NamespaceStatement;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.NamespaceInvocation;
+import tripleo.elijah.stages.gen_generic.ICodeRegistrar;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkJob;
 import tripleo.elijah.work.WorkManager;
@@ -29,16 +30,19 @@ public class WlGenerateNamespace implements WorkJob {
 	private final NamespaceStatement namespaceStatement;
 	private final NamespaceInvocation namespaceInvocation;
 	private final DeducePhase.@Nullable GeneratedClasses coll;
+	private final ICodeRegistrar codeRegistrar;
 	private boolean _isDone = false;
 	private GeneratedNamespace Result;
 
 	public WlGenerateNamespace(@NotNull GenerateFunctions aGenerateFunctions,
 							   @NotNull NamespaceInvocation aNamespaceInvocation,
-							   @Nullable DeducePhase.GeneratedClasses aColl) {
+							   @Nullable DeducePhase.GeneratedClasses aColl,
+							   final ICodeRegistrar aCodeRegistrar) {
 		generateFunctions = aGenerateFunctions;
 		namespaceStatement = aNamespaceInvocation.getNamespace();
 		namespaceInvocation = aNamespaceInvocation;
 		coll = aColl;
+		codeRegistrar = aCodeRegistrar;
 	}
 
 	@Override
@@ -47,7 +51,7 @@ public class WlGenerateNamespace implements WorkJob {
 		switch (resolvePromise.state()) {
 		case PENDING:
 			@NotNull GeneratedNamespace ns = generateFunctions.generateNamespace(namespaceStatement);
-			ns.setCode(generateFunctions.module.parent.nextClassCode());
+			codeRegistrar.registerNamespace(ns);
 			if (coll != null)
 				coll.add(ns);
 

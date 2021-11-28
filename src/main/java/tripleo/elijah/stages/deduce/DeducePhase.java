@@ -15,18 +15,19 @@ import com.google.common.collect.Multimap;
 import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
 import tripleo.elijah.stages.deduce.declarations.DeferredMemberFunction;
 import tripleo.elijah.stages.gen_fn.*;
+import tripleo.elijah.stages.gen_generic.ICodeRegistrar;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static tripleo.elijah.util.Helpers.List_of;
 
@@ -37,6 +38,7 @@ public class DeducePhase {
 
 	private final List<FoundElement> foundElements = new ArrayList<FoundElement>();
 	private final Map<IdentTableEntry, OnType> idte_type_callbacks = new HashMap<IdentTableEntry, OnType>();
+	public final ICodeRegistrar codeRegistrar;
 	public @NotNull GeneratedClasses generatedClasses = new GeneratedClasses();
 	public final GeneratePhase generatePhase;
 
@@ -44,12 +46,17 @@ public class DeducePhase {
 
 	private final @NotNull ElLog LOG;
 
-	public DeducePhase(GeneratePhase aGeneratePhase, PipelineLogic aPipelineLogic, ElLog.Verbosity verbosity) {
+	public DeducePhase(final GeneratePhase aGeneratePhase,
+					   final PipelineLogic aPipelineLogic,
+					   final ElLog.Verbosity verbosity,
+					   final Compilation aCompilation) {
 		generatePhase = aGeneratePhase;
 		pipelineLogic = aPipelineLogic;
 		//
 		LOG = new ElLog("(DEDUCE_PHASE)", verbosity, "DeducePhase");
 		pipelineLogic.addLog(LOG);
+		//
+		codeRegistrar = new DefaultCodeRegistrar(aCompilation);
 	}
 
 	public void addFunction(GeneratedFunction generatedFunction, FunctionDef fd) {
@@ -123,7 +130,7 @@ public class DeducePhase {
 			// 3. Generate new GeneratedClass
 			final @NotNull WorkList wl = new WorkList();
 			final @NotNull OS_Module mod = aClassInvocation.getKlass().getContext().module();
-			wl.addJob(new WlGenerateClass(generatePhase.getGenerateFunctions(mod), aClassInvocation, generatedClasses)); // TODO why add now?
+			wl.addJob(new WlGenerateClass(generatePhase.getGenerateFunctions(mod), aClassInvocation, generatedClasses, codeRegistrar)); // TODO why add now?
 			generatePhase.wm.addJobs(wl);
 			generatePhase.wm.drain(); // TODO find a better place to put this
 

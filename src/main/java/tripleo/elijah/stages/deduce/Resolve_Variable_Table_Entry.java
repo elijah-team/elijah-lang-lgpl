@@ -240,8 +240,8 @@ class Resolve_Variable_Table_Entry {
 			assert pte != null;
 			callable_pte = pte;
 			@NotNull FunctionInvocation fi = new FunctionInvocation(fd1, pte, modi, phase.generatePhase);
-			wl.addJob(new WlGenerateNamespace(gen, modi, phase.generatedClasses)); // TODO hope this works (for more than one)
-			final @Nullable WlGenerateFunction wlgf = new WlGenerateFunction(gen, fi);
+			wl.addJob(new WlGenerateNamespace(gen, modi, phase.generatedClasses, phase.codeRegistrar)); // TODO hope this works (for more than one)
+			final @Nullable WlGenerateFunction wlgf = new WlGenerateFunction(gen, fi, phase.codeRegistrar);
 			wl.addJob(wlgf);
 			wm.addJobs(wl);
 			wm.drain(); // TODO here?

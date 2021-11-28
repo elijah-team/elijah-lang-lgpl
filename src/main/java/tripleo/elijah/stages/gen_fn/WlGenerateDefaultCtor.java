@@ -15,6 +15,7 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
+import tripleo.elijah.stages.gen_generic.ICodeRegistrar;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.work.WorkJob;
 import tripleo.elijah.work.WorkManager;
@@ -25,13 +26,17 @@ import tripleo.elijah.work.WorkManager;
 public class WlGenerateDefaultCtor implements WorkJob {
 	private final GenerateFunctions generateFunctions;
 	private final FunctionInvocation functionInvocation;
+	private final ICodeRegistrar codeRegistrar;
 	private boolean _isDone = false;
 	private BaseGeneratedFunction Result;
 
 	@Contract(pure = true)
-	public WlGenerateDefaultCtor(@NotNull GenerateFunctions aGenerateFunctions, FunctionInvocation aFunctionInvocation) {
+	public WlGenerateDefaultCtor(final @NotNull GenerateFunctions aGenerateFunctions,
+								 final FunctionInvocation aFunctionInvocation,
+								 final ICodeRegistrar aCodeRegistrar) {
 		generateFunctions = aGenerateFunctions;
 		functionInvocation = aFunctionInvocation;
+		codeRegistrar = aCodeRegistrar;
 	}
 
 	@Override
@@ -76,7 +81,7 @@ public class WlGenerateDefaultCtor implements WorkJob {
 			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
 				@Override
 				public void onDone(GeneratedClass result) {
-					gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+					codeRegistrar.registerFunction(gf);
 					gf.setClass(result);
 					result.constructors.put(cd, gf);
 				}

@@ -13,6 +13,7 @@ import com.google.common.collect.Collections2;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.entrypoints.ArbitraryFunctionEntryPoint;
 import tripleo.elijah.entrypoints.EntryPoint;
@@ -23,6 +24,7 @@ import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
+import tripleo.elijah.stages.gen_generic.ICodeRegistrar;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
@@ -686,27 +688,55 @@ public class GenerateFunctions {
 
 	public void generateFromEntryPoints(List<EntryPoint> epl, DeducePhase deducePhase) {
 		final WorkList wl = new WorkList();
+
+		final ICodeRegistrar codeRegistrar = new ICodeRegistrar() {
+			Compilation compilation = phase.compilation;
+
+			@Override
+			public void registerNamespace(final GeneratedNamespace aNamespace) {
+				assert false;
+			}
+
+			@Override
+			public void registerClass(final GeneratedClass aClass) {
+				if (MainClassEntryPoint.isMainClass(aClass.getKlass())) {
+					aClass.setCode(100);
+					//compilation.notifyClass(code, aClass);
+				} else
+					aClass.setCode(compilation.nextClassCode());
+			}
+
+			@Override
+			public void registerFunction(final BaseGeneratedFunction aFunction) {
+				if (aFunction.getFD() instanceof FunctionDef &&
+						MainClassEntryPoint.is_main_function_with_no_args((FunctionDef) aFunction.getFD())) {
+					aFunction.setCode(1000);
+					//compilation.notifyFunction(code, aFunction);
+				} else
+					aFunction.setCode(compilation.nextClassCode());
+			}
+		};
+
 		for (EntryPoint entryPoint : epl) {
 			if (entryPoint instanceof MainClassEntryPoint) {
 				final MainClassEntryPoint mcep = (MainClassEntryPoint) entryPoint;
 				@NotNull final ClassStatement cs = mcep.getKlass();
 				final FunctionDef f = mcep.getMainFunction();
 				ClassInvocation ci = deducePhase.registerClassInvocation(cs, null);
-				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses));
+				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses, codeRegistrar));
 				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase.generatePhase);
 //				fi.setPhase(phase);
-				wl.addJob(new WlGenerateFunction(this, fi));
+				wl.addJob(new WlGenerateFunction(this, fi, codeRegistrar));
 			} else if (entryPoint instanceof ArbitraryFunctionEntryPoint) {
 				final ArbitraryFunctionEntryPoint afep = (ArbitraryFunctionEntryPoint) entryPoint;
 
 				final FunctionDef f = afep.getFunction();
 				ClassInvocation ci = new ClassInvocation((ClassStatement) afep.getParent(), null);
 				ci = deducePhase.registerClassInvocation(ci);
-				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses));
+				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses, codeRegistrar));
 				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase.generatePhase);
 //				fi.setPhase(phase);
-				wl.addJob(new WlGenerateFunction(this, fi));
-
+				wl.addJob(new WlGenerateFunction(this, fi, codeRegistrar));
 			}
 		}
 		phase.wm.addJobs(wl);

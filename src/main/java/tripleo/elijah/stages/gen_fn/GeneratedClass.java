@@ -171,7 +171,7 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 							}
 							xci = aDeducePhase.registerClassInvocation(xci);
 							@NotNull GenerateFunctions gf = aDeducePhase.generatePhase.getGenerateFunctions(xci.getKlass().getContext().module());
-							WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses);
+							WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses, aDeducePhase.codeRegistrar);
 							wgc.run(null); // !
 							potentialType.genType.ci = xci; // just for completeness
 							potentialType.resolve(wgc.getResult());

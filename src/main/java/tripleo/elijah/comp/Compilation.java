@@ -27,8 +27,6 @@ import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.stages.deduce.FunctionMapHook;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
-import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijjah.ElijjahLexer;
@@ -160,7 +158,7 @@ public class Compilation {
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
-					pipelineLogic = new PipelineLogic(silent ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE);
+					pipelineLogic = new PipelineLogic(silent ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE, this);
 					final DeducePipeline dpl = new DeducePipeline(this);
 					pipelines.add(dpl);
 					if (stage.equals("O")) {

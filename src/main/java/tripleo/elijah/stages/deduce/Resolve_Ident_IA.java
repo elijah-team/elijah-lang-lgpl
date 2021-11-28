@@ -257,9 +257,9 @@ class Resolve_Ident_IA {
 				final @NotNull OS_Module module = ci.getKlass().getContext().module();
 				final @NotNull GenerateFunctions generateFunctions = dc.getGenerateFunctions(module);
 				if (pte.getFunctionInvocation().getFunction() == ConstructorDef.defaultVirtualCtor)
-					wl.addJob(new WlGenerateDefaultCtor(generateFunctions, fi));
+					wl.addJob(new WlGenerateDefaultCtor(generateFunctions, fi, phase.codeRegistrar));
 				else
-					wl.addJob(new WlGenerateCtor(generateFunctions, fi, null));
+					wl.addJob(new WlGenerateCtor(generateFunctions, fi, null, phase.codeRegistrar));
 				dc.addJobs(wl);
 //				generatedFunction.addDependentType(genType);
 //				generatedFunction.addDependentFunction(fi);

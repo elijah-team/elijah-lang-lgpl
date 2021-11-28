@@ -20,8 +20,6 @@ import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.stages.post_deduce.PostDeduce;
 import tripleo.elijah.work.WorkManager;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,10 +43,10 @@ public class PipelineLogic {
 
 	public boolean postDeduceEnabled = false;
 
-	public PipelineLogic(ElLog.Verbosity aVerbosity) {
+	public PipelineLogic(ElLog.Verbosity aVerbosity, final Compilation aCompilation) {
 		verbosity = aVerbosity;
-		generatePhase = new GeneratePhase(aVerbosity, this);
-		dp = new DeducePhase(generatePhase, this, verbosity);
+		generatePhase = new GeneratePhase(aVerbosity, this, aCompilation);
+		dp = new DeducePhase(generatePhase, this, verbosity, aCompilation);
 	}
 
 	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
@@ -111,7 +109,7 @@ public class PipelineLogic {
 				case FUNCTION: {
 //					GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 					if (coded.getCode() == 0)
-						coded.setCode(mod.parent.nextFunctionCode());
+						dp.codeRegistrar.registerFunction((BaseGeneratedFunction) coded);
 					break;
 				}
 				case CLASS: {
@@ -120,7 +118,7 @@ public class PipelineLogic {
 //						generatedClass.setCode(mod.parent.nextClassCode());
 					for (GeneratedClass generatedClass2 : generatedClass.classMap.values()) {
 						if (generatedClass2.getCode() == 0)
-							generatedClass2.setCode(mod.parent.nextClassCode());
+							dp.codeRegistrar.registerClass(generatedClass2);
 					}
 					for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
 						for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
@@ -136,10 +134,10 @@ public class PipelineLogic {
 				{
 					final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
 					if (coded.getCode() == 0)
-						coded.setCode(mod.parent.nextClassCode());
+						dp.codeRegistrar.registerNamespace((GeneratedNamespace) coded);
 					for (GeneratedClass generatedClass : generatedNamespace.classMap.values()) {
 						if (generatedClass.getCode() == 0)
-							generatedClass.setCode(mod.parent.nextClassCode());
+							dp.codeRegistrar.registerClass((GeneratedClass) coded);
 					}
 					for (GeneratedFunction generatedFunction : generatedNamespace.functionMap.values()) {
 						for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {

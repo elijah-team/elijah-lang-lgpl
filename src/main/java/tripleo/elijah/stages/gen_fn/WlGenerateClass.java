@@ -15,6 +15,7 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
+import tripleo.elijah.stages.gen_generic.ICodeRegistrar;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkJob;
 import tripleo.elijah.work.WorkManager;
@@ -27,16 +28,19 @@ public class WlGenerateClass implements WorkJob {
 	private final GenerateFunctions generateFunctions;
 	private final ClassInvocation classInvocation;
 	private final DeducePhase.GeneratedClasses coll;
+	private final ICodeRegistrar codeRegistrar;
 	private boolean _isDone = false;
 	private GeneratedClass Result;
 
 	public WlGenerateClass(GenerateFunctions aGenerateFunctions,
 						   ClassInvocation aClassInvocation,
-						   DeducePhase.GeneratedClasses coll) {
+						   DeducePhase.GeneratedClasses coll,
+						   final ICodeRegistrar aCodeRegistrar) {
 		classStatement = aClassInvocation.getKlass();
 		generateFunctions = aGenerateFunctions;
 		classInvocation = aClassInvocation;
 		this.coll = coll;
+		codeRegistrar = aCodeRegistrar;
 	}
 
 	@Override
@@ -45,7 +49,7 @@ public class WlGenerateClass implements WorkJob {
 		switch (resolvePromise.state()) {
 		case PENDING:
 			@NotNull GeneratedClass kl = generateFunctions.generateClass(classStatement, classInvocation);
-			kl.setCode(generateFunctions.module.parent.nextClassCode());
+			codeRegistrar.registerClass(kl);
 			if (coll != null)
 				coll.add(kl);
 

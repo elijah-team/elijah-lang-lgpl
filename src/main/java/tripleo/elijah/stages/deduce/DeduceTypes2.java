@@ -42,7 +42,6 @@ import tripleo.elijah.stages.instructions.LabelIA;
 import tripleo.elijah.stages.instructions.ProcIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
 import tripleo.elijah.stages.logging.ElLog;
-import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkJob;
 import tripleo.elijah.work.WorkList;
@@ -794,11 +793,11 @@ public class DeduceTypes2 {
 		}
 		if (genType.node == null) {
 			if (genType.ci instanceof ClassInvocation) {
-				WlGenerateClass gen = new WlGenerateClass(getGenerateFunctions(module), (ClassInvocation) genType.ci, phase.generatedClasses);
+				WlGenerateClass gen = new WlGenerateClass(getGenerateFunctions(module), (ClassInvocation) genType.ci, phase.generatedClasses, phase.codeRegistrar);
 				gen.run(null);
 				genType.node = gen.getResult();
 			} else if (genType.ci instanceof NamespaceInvocation) {
-				WlGenerateNamespace gen = new WlGenerateNamespace(getGenerateFunctions(module), (NamespaceInvocation) genType.ci, phase.generatedClasses);
+				WlGenerateNamespace gen = new WlGenerateNamespace(getGenerateFunctions(module), (NamespaceInvocation) genType.ci, phase.generatedClasses, phase.codeRegistrar);
 				gen.run(null);
 				genType.node = gen.getResult();
 			}
@@ -1337,7 +1336,7 @@ public class DeduceTypes2 {
 				@NotNull OS_Module mod = genType.resolvedn.getContext().module();
 				final @NotNull GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
 				NamespaceInvocation ni = phase.registerNamespaceInvocation(genType.resolvedn);
-				@NotNull WlGenerateNamespace gen = new WlGenerateNamespace(gf, ni, phase.generatedClasses);
+				@NotNull WlGenerateNamespace gen = new WlGenerateNamespace(gf, ni, phase.generatedClasses, phase.codeRegistrar);
 
 				assert genType.ci == null || genType.ci == ni;
 				genType.ci = ni;
@@ -1371,7 +1370,7 @@ public class DeduceTypes2 {
 					assert genType.ci instanceof ClassInvocation;
 					ci = (ClassInvocation) genType.ci;
 				}
-				@Nullable WlGenerateClass gen = new WlGenerateClass(gf, ci, phase.generatedClasses);
+				@Nullable WlGenerateClass gen = new WlGenerateClass(gf, ci, phase.generatedClasses, phase.codeRegistrar);
 
 				ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
 					@Override
@@ -1421,11 +1420,11 @@ public class DeduceTypes2 {
 					});
 				}
 				final @NotNull GenerateFunctions gf = getGenerateFunctions(mod);
-				gen = new WlGenerateDefaultCtor(gf, aDependentFunction);
+				gen = new WlGenerateDefaultCtor(gf, aDependentFunction, phase.codeRegistrar);
 			} else {
 				mod = function.getContext().module();
 				final @NotNull GenerateFunctions gf = getGenerateFunctions(mod);
-				gen = new WlGenerateFunction(gf, aDependentFunction);
+				gen = new WlGenerateFunction(gf, aDependentFunction, phase.codeRegistrar);
 			}
 			wl.addJob(gen);
 			List<BaseGeneratedFunction> coll = new ArrayList<>();
@@ -1689,20 +1688,20 @@ public class DeduceTypes2 {
 			case 1:
 				assert fi.pte.getArgs().size() == 0;
 				// default ctor
-				wl.addJob(new WlGenerateDefaultCtor(phase.generatePhase.getGenerateFunctions(module), fi));
+				wl.addJob(new WlGenerateDefaultCtor(phase.generatePhase.getGenerateFunctions(module), fi, phase.codeRegistrar));
 				break;
 			case 2:
-				wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, null)); // TODO check this
+				wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, null, phase.codeRegistrar)); // TODO check this
 				break;
 			case 3:
 				// README this is a special case to generate constructor
 				// TODO should it be GenerateDefaultCtor? (check args size and ctor-name)
 				final String constructorName = fi.getClassInvocation().getConstructorName();
 				final @NotNull IdentExpression constructorName1 = constructorName != null ? IdentExpression.forString(constructorName) : null;
-				wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, constructorName1));
+				wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, constructorName1, phase.codeRegistrar));
 				break;
 			case 4:
-				wl.addJob(new WlGenerateFunction(phase.generatePhase.getGenerateFunctions(module), fi));
+				wl.addJob(new WlGenerateFunction(phase.generatePhase.getGenerateFunctions(module), fi, phase.codeRegistrar));
 				break;
 			default:
 				throw new NotImplementedException();
@@ -1718,8 +1717,8 @@ public class DeduceTypes2 {
 
 			final NamespaceInvocation nsi = phase.registerNamespaceInvocation(aParent);
 
-			wl.addJob(new WlGenerateNamespace(phase.generatePhase.getGenerateFunctions(module1), nsi, phase.generatedClasses));
-			wl.addJob(new WlGenerateFunction(phase.generatePhase.getGenerateFunctions(module1), fi));
+			wl.addJob(new WlGenerateNamespace(phase.generatePhase.getGenerateFunctions(module1), nsi, phase.generatedClasses, phase.codeRegistrar));
+			wl.addJob(new WlGenerateFunction(phase.generatePhase.getGenerateFunctions(module1), fi, phase.codeRegistrar));
 
 			wm.addJobs(wl);
 		}
@@ -2170,7 +2169,7 @@ public class DeduceTypes2 {
 						null,
 						null,
 						phase.generatePhase);
-				WlGenerateFunction gen = new WlGenerateFunction(genf, fi);
+				WlGenerateFunction gen = new WlGenerateFunction(genf, fi, phase.codeRegistrar);
 				gen.run(null);
 				aGenType.node = gen.getResult();
 			} else if (aGenType.resolved instanceof OS_FuncType) {
