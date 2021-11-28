@@ -39,6 +39,19 @@ public class GenType {
 
 	}
 
+	public String asString() {
+		final StringBuffer sb = new StringBuffer("GenType{");
+		sb.append("resolvedn=").append(resolvedn);
+		sb.append(", typeName=").append(typeName);
+		sb.append(", nonGenericTypeName=").append(nonGenericTypeName);
+		sb.append(", resolved=").append(resolved);
+		sb.append(", ci=").append(ci);
+		sb.append(", node=").append(node);
+		sb.append(", functionInvocation=").append(functionInvocation);
+		sb.append('}');
+		return sb.toString();
+	}
+
 	public void set(OS_Type aType) {
 		switch (aType.getType()) {
 		case USER:
