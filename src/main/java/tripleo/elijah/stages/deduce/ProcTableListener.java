@@ -127,6 +127,14 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 				@NotNull E_Is_FunctionDef e_Is_FunctionDef = new E_Is_FunctionDef(pte, fd, parent).invoke(null);
 				fi = e_Is_FunctionDef.getFi();
 				genType = e_Is_FunctionDef.getGenType();
+				// NOTE genType.ci will likely come out as a ClassInvocation here
+				//  This is incorrect when pte.expression points to a Function(Def)
+				//  It is actually correct, but what I mean is that genType.resolved
+				//  will come out as a USER_CLASS when it should be FUNCTION
+				//
+				//  So we correct it here
+				genType.resolved = fd.getOS_Type();
+				genType.functionInvocation = fi;
 				finish(co, depTracker, fi, genType);
 			}
 		} else {
