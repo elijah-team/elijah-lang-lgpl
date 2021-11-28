@@ -155,12 +155,14 @@ class Resolve_Ident_IA {
 				@NotNull IdentTableEntry y = ((IdentIA) x).getEntry();
 				if (!y.preUpdateStatusListenerAdded) {
 					y.addStatusListener(new BaseTableEntry.StatusListener() {
+						boolean _called;
+
 						@Override
 						public void onChange(IElementHolder eh, BaseTableEntry.Status newStatus) {
-//							if (_called) return;
+							if (_called) return;
 
 							if (newStatus == BaseTableEntry.Status.KNOWN) {
-//								_called = true;
+								_called = true;
 //								y.preUpdateStatusListenerAdded = true;
 
 //							assert el2 != eh.getElement();
