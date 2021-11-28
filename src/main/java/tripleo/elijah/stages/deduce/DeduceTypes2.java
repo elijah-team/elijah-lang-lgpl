@@ -2057,8 +2057,26 @@ public class DeduceTypes2 {
 							@Override
 							public void onDone(GeneratedClass result) {
 								genType.node = result;
-								if (!vte.typePromise().isResolved()) // HACK
-									vte.resolveType(genType);
+								if (!vte.typePromise().isResolved()) { // HACK
+									if (genType.resolved instanceof OS_FuncType) {
+										final OS_FuncType resolved = (OS_FuncType) genType.resolved;
+										result.functionMapDeferred(((FunctionDef) resolved.getElement()), new FunctionMapDeferred() {
+											@Override
+											public void onNotify(final GeneratedFunction aGeneratedFunction) {
+												// TODO check args (hint functionInvocation.pte)
+												//  but against what? (vte *should* have callable_pte)
+												//  if not, then try potential types for a PCE
+												aGeneratedFunction.typePromise().then(new DoneCallback<GenType>() {
+													@Override
+													public void onDone(final GenType result) {
+														vte.resolveType(result);
+													}
+												});
+											}
+										});
+									} else
+										vte.resolveType(genType);
+								}
 							}
 						});
 					}
