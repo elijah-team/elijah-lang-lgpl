@@ -13,11 +13,13 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.FormalArgListItem;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.NormalTypeName;
+import tripleo.elijah.lang.OS_GenericTypeNameType;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.lang.TypeName;
 import tripleo.elijah.stages.deduce.ClassInvocation;
@@ -34,6 +36,7 @@ import tripleo.util.buffer.Buffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 
@@ -703,7 +706,25 @@ public class Generate_Code_For_Method {
 				} else if (type.isUnitType()) {
 					returnType = "void/*Unit*/";
 				} else if (type != null) {
-					returnType = String.format("/*267*/%s*", gc.getTypeName(type));
+					if (type instanceof OS_GenericTypeNameType) {
+						final OS_GenericTypeNameType genericTypeNameType = (OS_GenericTypeNameType) type;
+						final TypeName tn = ((ClassContext.OS_TypeNameElement) genericTypeNameType.getElement()).getTypeName();
+
+						final @Nullable Map<TypeName, OS_Type> gp = gf.fi.getClassInvocation().genericPart;
+
+						OS_Type realType = null;
+
+						for (Map.Entry<TypeName, OS_Type> entry : gp.entrySet()) {
+							if (entry.getKey().equals(tn)) {
+								realType = entry.getValue();
+								break;
+							}
+						}
+
+						assert realType != null;
+						returnType = String.format("/*267*/%s*", gc.getTypeName(realType));
+					} else
+						returnType = String.format("/*267*/%s*", gc.getTypeName(type));
 				} else {
 					throw new IllegalStateException();
 //					LOG.err("656 Shouldn't be here (can't reason about type)");
