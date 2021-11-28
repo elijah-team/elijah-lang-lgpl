@@ -119,6 +119,9 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 					fi = e_Is_FunctionDef.getFi();
 					if (fi != null) { // TODO
 						genType = e_Is_FunctionDef.getGenType();
+						// NOTE read note below
+						genType.resolved = fd.getOS_Type();
+						genType.functionInvocation = fi;
 						finish(co, depTracker, fi, genType);
 					}
 				}
