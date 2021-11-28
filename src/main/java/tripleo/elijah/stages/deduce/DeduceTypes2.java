@@ -1244,7 +1244,7 @@ public class DeduceTypes2 {
 		return ci;
 	}
 
-	final List<FunctionInvocation> functionInvocations = new ArrayList<>();
+	final List<FunctionInvocation> functionInvocations = new ArrayList<>(); // TODO never used!
 
 	@NotNull FunctionInvocation newFunctionInvocation(BaseFunctionDef aFunctionDef, ProcTableEntry aPte, @NotNull IInvocation aInvocation, @NotNull DeducePhase aDeducePhase) {
 		@NotNull FunctionInvocation fi = new FunctionInvocation(aFunctionDef, aPte, aInvocation, aDeducePhase.generatePhase);
