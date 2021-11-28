@@ -153,7 +153,19 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	@Override
 	public void setConstructable(ProcTableEntry aPte) {
 		constructable_pte = aPte;
-		constructableDeferred.resolve(constructable_pte);
+		if (constructableDeferred.isPending())
+			constructableDeferred.resolve(constructable_pte);
+		else {
+			final DeduceTypes2.Holder<ProcTableEntry> holder = new DeduceTypes2.Holder<ProcTableEntry>();
+			constructableDeferred.then(new DoneCallback<ProcTableEntry>() {
+				@Override
+				public void onDone(final ProcTableEntry result) {
+					holder.set(result);
+				}
+			});
+			System.err.println(String.format("Setting constructable_pte twice 1) %s and 2) %s", holder.get(), aPte));
+		}
+
 	}
 
 	@Override
