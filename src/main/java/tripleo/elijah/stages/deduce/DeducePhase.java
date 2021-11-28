@@ -26,7 +26,6 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static tripleo.elijah.util.Helpers.List_of;
 
