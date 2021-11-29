@@ -14,12 +14,17 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.comp.PipelineLogic;
+import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.entrypoints.ArbitraryFunctionEntryPoint;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.entrypoints.MainClassEntryPoint;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
+import tripleo.elijah.slir.SlirAnnotations;
+import tripleo.elijah.slir.SlirClass;
+import tripleo.elijah.slir.SlirFunctionNode;
+import tripleo.elijah.slir.SlirSourceNode;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
@@ -34,6 +39,7 @@ import tripleo.util.range.Range;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 import static tripleo.elijah.util.Helpers.List_of;
@@ -684,13 +690,38 @@ public class GenerateFunctions {
 //		return R;
 //	}
 
-	public void generateFromEntryPoints(List<EntryPoint> epl, DeducePhase deducePhase) {
+	public void generateFromEntryPoints(List<EntryPoint> epl, DeducePhase deducePhase, final SlirSourceNode aSourceNode) {
 		final WorkList wl = new WorkList();
 		for (EntryPoint entryPoint : epl) {
 			if (entryPoint instanceof MainClassEntryPoint) {
 				final MainClassEntryPoint mcep = (MainClassEntryPoint) entryPoint;
+
 				@NotNull final ClassStatement cs = mcep.getKlass();
+				SlirClass slirClass = aSourceNode.addClass(cs.name(), cs);
+				slirClass.annotate(SlirAnnotations.MAIN);
+
 				final FunctionDef f = mcep.getMainFunction();
+				SlirFunctionNode slirFunctionNode = slirClass.addFunction(f.name(), f);
+				slirFunctionNode.annotate(SlirAnnotations.MAIN);
+				slirClass.markUsed(slirFunctionNode);
+				aSourceNode.useFunction(slirFunctionNode);
+
+				{
+					final Map<TypeName, ClassStatement> c = cs.getContext().inheritance();
+
+					for (TypeName typeName : cs.classInheritance().tns) {
+						final ClassStatement superClass = c.get(typeName);
+						(aSourceNode.getRootNode().findFileName(superClass.getContext().module().getFileName())).then(
+							new DoneCallback<SlirSourceNode>() {
+								@Override
+								public void onDone(final SlirSourceNode result) {
+									SlirClass inherited = new SlirClass(result.sourceFile(), superClass.name(), superClass);
+									slirClass.setSuperClass(inherited);
+								}
+							});
+					}
+				}
+
 				ClassInvocation ci = deducePhase.registerClassInvocation(cs, null);
 				wl.addJob(new WlGenerateClass(this, ci, deducePhase.generatedClasses));
 				final FunctionInvocation fi = new FunctionInvocation(f, null, ci, deducePhase.generatePhase);
