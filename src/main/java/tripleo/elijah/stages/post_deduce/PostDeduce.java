@@ -20,10 +20,7 @@ import tripleo.elijah.lang2.SpecialVariables;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
-import tripleo.elijah.stages.gen_c.CClassDecl;
-import tripleo.elijah.stages.gen_c.CReference;
-import tripleo.elijah.stages.gen_c.CtorReference;
-import tripleo.elijah.stages.gen_c.Emit;
+import tripleo.elijah.stages.gen_c.*;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.ConstTableIA;
 import tripleo.elijah.stages.instructions.FnCallArgs;
@@ -391,7 +388,7 @@ public class PostDeduce implements IPostDeduce {
 				sl3.add(Emit.emit("/*669*/")+""+realTargetName);
 			} else if (ia instanceof IdentIA) {
 				final CReference reference = new CReference();
-				reference.getIdentIAPath((IdentIA) ia, gf);
+				reference.getIdentIAPath((IdentIA) ia, gf, Generate_Code_For_Method.AOG.GET, null);
 				String text = reference.build();
 				sl3.add(Emit.emit("/*673*/")+""+text);
 			} else if (ia instanceof ConstTableIA) {
@@ -442,7 +439,7 @@ public class PostDeduce implements IPostDeduce {
 						final FunctionInvocation functionInvocation = pte.getFunctionInvocation();
 						if (functionInvocation == null || functionInvocation.getFunction() == ConstructorDef.defaultVirtualCtor) {
 							PostDeduce.log.warn("444 defaultVirtualCtor or null");
-							reference.getIdentIAPath(ia2, gf);
+							reference.getIdentIAPath(ia2, gf, Generate_Code_For_Method.AOG.GET, null);
 							final List<String> sll = getAssignmentValueArgs(inst, gf);
 							reference.args(sll);
 							String path = reference.build();
@@ -451,7 +448,7 @@ public class PostDeduce implements IPostDeduce {
 							final BaseGeneratedFunction pte_generated = functionInvocation.getGenerated();
 							if (idte.resolvedType() == null && pte_generated != null)
 								idte.resolveTypeToClass(pte_generated);
-							reference.getIdentIAPath(ia2, gf);
+							reference.getIdentIAPath(ia2, gf, Generate_Code_For_Method.AOG.GET, null);
 							final List<String> sll = getAssignmentValueArgs(inst, gf);
 							reference.args(sll);
 							String path = reference.build();
@@ -476,7 +473,7 @@ public class PostDeduce implements IPostDeduce {
 					// TODO Why not expression_num?
 					reference = new CReference();
 					final IdentIA ia2 = (IdentIA) pte.expression_num;
-					reference.getIdentIAPath(ia2, gf);
+					reference.getIdentIAPath(ia2, gf, Generate_Code_For_Method.AOG.GET, null);
 					final List<String> sll = getAssignmentValueArgs(inst, gf);
 					reference.args(sll);
 					String path = reference.build();
@@ -546,7 +543,7 @@ public class PostDeduce implements IPostDeduce {
 						sll.add(String.format("%s is UNKNOWN", path));
 					} else {
 						final CReference reference = new CReference();
-						reference.getIdentIAPath((IdentIA) ia, gf);
+						reference.getIdentIAPath((IdentIA) ia, gf, Generate_Code_For_Method.AOG.GET, null);
 						String path2 = reference.build();                        // return ZP105get_z(vvx.vmy)
 						if (path.equals(path2)) {
 							// should always fail
@@ -595,7 +592,7 @@ public class PostDeduce implements IPostDeduce {
 		public String IdentIA(IdentIA identIA, GeneratedFunction gf) {
 			assert gf == identIA.gf;
 			final CReference reference = new CReference();
-			reference.getIdentIAPath(identIA, gf);
+			reference.getIdentIAPath(identIA, gf, Generate_Code_For_Method.AOG.GET, null);
 			return reference.build();
 		}
 
@@ -725,7 +722,7 @@ public class PostDeduce implements IPostDeduce {
 				throw new IllegalStateException("Invalid InstructionArgument for backlink");
 		}
 		final CReference reference = new CReference();
-		reference.getIdentIAPath(target, gf);
+		reference.getIdentIAPath(target, gf, Generate_Code_For_Method.AOG.GET, null);
 		String path = reference.build();
 		System.out.println("932 "+path);
 		String s = Helpers.String_join("->", ls);

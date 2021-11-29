@@ -21,6 +21,7 @@ import tripleo.elijah.lang.TypeName;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.gen_c.CReference;
 import tripleo.elijah.stages.gen_c.Emit;
+import tripleo.elijah.stages.gen_c.Generate_Code_For_Method;
 import tripleo.elijah.stages.gen_fn.ConstantTableEntry;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedContainerNC;
@@ -30,7 +31,6 @@ import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 import tripleo.elijah.stages.gen_fn.TypeTableEntry;
 import tripleo.elijah.stages.gen_fn.VariableTableEntry;
 import tripleo.elijah.stages.instructions.*;
-import tripleo.elijah.util.BufferTabbedOutputStream;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
@@ -240,7 +240,7 @@ public class Analyze_Code_For_Method {
 			} else {
 				final IdentIA ia2 = (IdentIA) pte.expression_num;
 				reference = new CReference();
-				reference.getIdentIAPath(ia2, gf);
+				reference.getIdentIAPath(ia2, gf, Generate_Code_For_Method.AOG.GET, null);
 				final List<String> sl3 = pd.getArgumentStrings(gf, aInstruction);
 				reference.args(sl3);
 				String path = reference.build();
@@ -277,7 +277,7 @@ public class Analyze_Code_For_Method {
 			} else {
 				final CReference reference = new CReference();
 				final IdentIA ia2 = (IdentIA) pte.expression_num;
-				reference.getIdentIAPath(ia2, gf);
+				reference.getIdentIAPath(ia2, gf, Generate_Code_For_Method.AOG.GET, null);
 				final List<String> sl3 = pd.getArgumentStrings(gf, aInstruction);
 				reference.args(sl3);
 				String path = reference.build();

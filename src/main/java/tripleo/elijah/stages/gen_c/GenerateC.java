@@ -529,11 +529,11 @@ public class GenerateC implements CodeGenerator {
 			final InstructionArgument ia = instruction.getArg(i);
 			if (ia instanceof IntegerIA) {
 //				VariableTableEntry vte = gf.getVarTableEntry(DeduceTypes2.to_int(ia));
-				final String realTargetName = getRealTargetName(gf, (IntegerIA) ia);
+				final String realTargetName = getRealTargetName(gf, (IntegerIA) ia, Generate_Code_For_Method.AOG.GET);
 				sl3.add(Emit.emit("/*669*/")+""+realTargetName);
 			} else if (ia instanceof IdentIA) {
 				final CReference reference = new CReference();
-				reference.getIdentIAPath((IdentIA) ia, gf);
+				reference.getIdentIAPath((IdentIA) ia, gf, Generate_Code_For_Method.AOG.GET, null);
 				String text = reference.build();
 				sl3.add(Emit.emit("/*673*/")+""+text);
 			} else if (ia instanceof ConstTableIA) {
@@ -583,7 +583,7 @@ public class GenerateC implements CodeGenerator {
 						final CReference reference = new CReference();
 						final FunctionInvocation functionInvocation = pte.getFunctionInvocation();
 						if (functionInvocation == null || functionInvocation.getFunction() == ConstructorDef.defaultVirtualCtor) {
-							reference.getIdentIAPath(ia2, gf);
+							reference.getIdentIAPath(ia2, gf, Generate_Code_For_Method.AOG.GET, null);
 							final List<String> sll = getAssignmentValueArgs(inst, gf, LOG);
 							reference.args(sll);
 							String path = reference.build();
@@ -592,7 +592,7 @@ public class GenerateC implements CodeGenerator {
 							final BaseGeneratedFunction pte_generated = functionInvocation.getGenerated();
 							if (idte.resolvedType() == null && pte_generated != null)
 								idte.resolveTypeToClass(pte_generated);
-							reference.getIdentIAPath(ia2, gf);
+							reference.getIdentIAPath(ia2, gf, Generate_Code_For_Method.AOG.GET, null);
 							final List<String> sll = getAssignmentValueArgs(inst, gf, LOG);
 							reference.args(sll);
 							String path = reference.build();
@@ -617,7 +617,7 @@ public class GenerateC implements CodeGenerator {
 					// TODO Why not expression_num?
 					reference = new CReference();
 					final IdentIA ia2 = (IdentIA) pte.expression_num;
-					reference.getIdentIAPath(ia2, gf);
+					reference.getIdentIAPath(ia2, gf, Generate_Code_For_Method.AOG.GET, null);
 					final List<String> sll = getAssignmentValueArgs(inst, gf, LOG);
 					reference.args(sll);
 					String path = reference.build();
@@ -687,7 +687,7 @@ public class GenerateC implements CodeGenerator {
 						sll.add(String.format("%s is UNKNOWN", path));
 					} else {
 						final CReference reference = new CReference();
-						reference.getIdentIAPath((IdentIA) ia, gf);
+						reference.getIdentIAPath((IdentIA) ia, gf, Generate_Code_For_Method.AOG.GET, null);
 						String path2 = reference.build();                        // return ZP105get_z(vvx.vmy)
 						if (path.equals(path2)) {
 							// should always fail
@@ -736,7 +736,7 @@ public class GenerateC implements CodeGenerator {
 		public String IdentIA(IdentIA identIA, BaseGeneratedFunction gf) {
 			assert gf == identIA.gf;
 			final CReference reference = new CReference();
-			reference.getIdentIAPath(identIA, gf);
+			reference.getIdentIAPath(identIA, gf, Generate_Code_For_Method.AOG.GET, null);
 			return reference.build();
 		}
 
@@ -784,7 +784,7 @@ public class GenerateC implements CodeGenerator {
 		return ""+value;
 	}
 
-	String getRealTargetName(final BaseGeneratedFunction gf, final IntegerIA target) {
+	String getRealTargetName(final BaseGeneratedFunction gf, final IntegerIA target, final Generate_Code_For_Method.AOG aog) {
 		final VariableTableEntry varTableEntry = gf.getVarTableEntry(target.getIndex());
 		return getRealTargetName(gf, varTableEntry);
 	}
@@ -830,7 +830,7 @@ public class GenerateC implements CodeGenerator {
 		}
 	}
 
-	String getRealTargetName(final BaseGeneratedFunction gf, final IdentIA target) {
+	String getRealTargetName(final BaseGeneratedFunction gf, final IdentIA target, final Generate_Code_For_Method.AOG aog, final String value) {
 		int state = 0, code = -1;
 		IdentTableEntry identTableEntry = gf.getIdentTableEntry(target.getIndex());
 		LinkedList<String> ls = new LinkedList<String>();
@@ -872,7 +872,7 @@ public class GenerateC implements CodeGenerator {
 		while (backlink != null) {
 			if (backlink instanceof IntegerIA) {
 				IntegerIA integerIA = (IntegerIA) backlink;
-				String realTargetName = getRealTargetName(gf, integerIA);
+				String realTargetName = getRealTargetName(gf, integerIA, Generate_Code_For_Method.AOG.ASSIGN);
 				ls.addFirst(Emit.emit("/*892*/")+realTargetName);
 				backlink = null;
 			} else if (backlink instanceof IdentIA) {
@@ -886,12 +886,12 @@ public class GenerateC implements CodeGenerator {
 				throw new IllegalStateException("Invalid InstructionArgument for backlink");
 		}
 		final CReference reference = new CReference();
-		reference.getIdentIAPath(target, gf);
+		reference.getIdentIAPath(target, gf, aog, value);
 		String path = reference.build();
 		LOG.info("932 "+path);
 		String s = Helpers.String_join("->", ls);
 		LOG.info("933 "+s);
-		if (identTableEntry.getResolvedElement() instanceof ConstructorDef)
+		if (identTableEntry.getResolvedElement() instanceof ConstructorDef || identTableEntry.getResolvedElement() instanceof PropertyStatement || value != null)
 			return path;
 		else
 			return s;

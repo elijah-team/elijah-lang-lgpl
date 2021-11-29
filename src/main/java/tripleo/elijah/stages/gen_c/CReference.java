@@ -36,24 +36,36 @@ public class CReference {
 	List<Reference> refs;
 
 	static class Reference {
-		String text;
-		Ref    type;
+		final String              text;
+		final Ref                 type;
+		final String              value;
 
-		public Reference(String text, Ref type) {
-			this.text = text;
-			this.type = type;
+		public Reference(final String aText, final Ref aType, final String aValue) {
+			text = aText;
+			type = aType;
+			value = aValue;
+		}
+
+		public Reference(final String aText, final Ref aType) {
+			text = aText;
+			type = aType;
+			value = null;
 		}
 	}
 
 	enum Ref {
-		LOCAL, MEMBER, PROPERTY, INLINE_MEMBER, CONSTRUCTOR, DIRECT_MEMBER, FUNCTION
+		LOCAL, MEMBER, PROPERTY_GET, PROPERTY_SET, INLINE_MEMBER, CONSTRUCTOR, DIRECT_MEMBER, FUNCTION
 	}
 
 	void addRef(String text, Ref type) {
 		refs.add(new Reference(text, type));
 	}
 
-	public String getIdentIAPath(final @NotNull IdentIA ia2, BaseGeneratedFunction generatedFunction) {
+	void addRef(String text, Ref type, String aValue) {
+		refs.add(new Reference(text, type, aValue));
+	}
+
+	public String getIdentIAPath(final @NotNull IdentIA ia2, BaseGeneratedFunction generatedFunction, Generate_Code_For_Method.AOG aog, final String aValue) {
 		assert ia2.gf == generatedFunction;
 		final List<InstructionArgument> s = _getIdentIAPathList(ia2);
 		refs = new ArrayList<Reference>(s.size());
@@ -72,6 +84,7 @@ public class CReference {
 				text = "vv" + vte.getName();
 				addRef(vte.getName(), Ref.LOCAL);
 			} else if (ia instanceof IdentIA) {
+				boolean skip = false;
 				final IdentTableEntry idte = ((IdentIA)ia).getEntry();
 				OS_Element resolved_element = idte.getResolvedElement();
 				if (resolved_element != null) {
@@ -98,16 +111,38 @@ public class CReference {
 							else if (resolved1 instanceof GeneratedClass)
 								resolved = resolved1;
 						}
+					} else if (resolved_element instanceof PropertyStatement) {
+						int y=2;
+						GeneratedNode resolved1 = idte.type.resolved();
+						int code;
+						if (resolved1 != null)
+							code = ((GeneratedContainerNC) resolved1).getCode();
+						else
+							code = -1;
+						switch (aog) {
+						case GET:
+							addRef(String.format("ZP%d_get%s(", code, idte.getIdent().getText()), Ref.PROPERTY_GET);
+							skip = true;
+							text = null;
+							break;
+						case ASSIGN:
+							addRef(String.format("ZP%d_set%s(", code, idte.getIdent().getText()), Ref.PROPERTY_SET, aValue);
+							skip = true;
+							text = null;
+							break;
+						}
 					}
-					if (resolved == null) {
-						System.err.println("***88*** resolved is null for "+idte);
-					}
-					if (sSize >= i + 1) {
-						_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction, resolved);
-						text = null;
-					} else {
-						boolean b = _getIdentIAPath_IdentIAHelper(s.get(i + 1), sl, i, sSize, resolved_element, generatedFunction, resolved);
-						if (b) i++;
+					if (!skip) {
+						if (resolved == null) {
+							System.err.println("***88*** resolved is null for "+idte);
+						}
+						if (sSize >= i + 1) {
+							_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction, resolved, aValue);
+							text = null;
+						} else {
+							boolean b = _getIdentIAPath_IdentIAHelper(s.get(i + 1), sl, i, sSize, resolved_element, generatedFunction, resolved, aValue);
+							if (b) i++;
+						}
 					}
 //					addRef(text, Ref.MEMBER);
 				} else {
@@ -174,7 +209,8 @@ public class CReference {
 										  int sSize,
 										  OS_Element resolved_element,
 										  BaseGeneratedFunction generatedFunction,
-										  GeneratedNode aResolved) {
+										  GeneratedNode aResolved,
+										  final String aValue) {
 		boolean b = false;
 		if (resolved_element instanceof ClassStatement) {
 			// Assuming constructor call
@@ -295,7 +331,7 @@ public class CReference {
 				} else {
 //					final String text2 = ((VariableStatement) resolved_element).getName();
 //					text = Emit.emit("/*126*/")+"vm" + text2;
-					addRef(text2, Ref.MEMBER);
+					addRef(text2, Ref.MEMBER, aValue);
 				}
 			}
 		} else if (resolved_element instanceof PropertyStatement) {
@@ -313,7 +349,7 @@ public class CReference {
 //			if (text.equals("")) text = "vsc";
 //			text = String.format("ZP%dget_%s(%s)", code, ((PropertyStatement) resolved_element).name(), text); // TODO Don't know if get or set!
 			String text2 = String.format("ZP%dget_%s", code, ((PropertyStatement) resolved_element).name()); // TODO Don't know if get or set!
-			addRef(text2, Ref.PROPERTY);
+			addRef(text2, Ref.PROPERTY_GET);
 		} else if (resolved_element instanceof AliasStatement) {
 			int y=2;
 			NotImplementedException.raise();
@@ -362,6 +398,11 @@ public class CReference {
 			case MEMBER:
 				text = "->vm" + ref.text;
 				sb.append(text);
+				if (ref.value != null) {
+					sb.append(" = ");
+					sb.append(ref.value);
+					sb.append(";");
+				}
 				break;
 			case INLINE_MEMBER:
 				text = Emit.emit("/*219*/")+".vm" + ref.text;
@@ -390,12 +431,22 @@ public class CReference {
 				sb.append(")");
 				break;
 			}
-			case PROPERTY: {
+			case PROPERTY_GET: {
 				final String s = sb.toString();
 				text = String.format("%s(%s", ref.text, s);
 				sb = new StringBuilder();
 				open = true;
 				if (!s.equals("")) needs_comma = true;
+				sb.append(text);
+				break;
+			}
+			case PROPERTY_SET: {
+				final String s = sb.toString();
+				text = String.format("%s%s, %s);", ref.text, s, ref.value);
+				sb = new StringBuilder();
+				open = false;
+//				if (!s.equals(""))
+				needs_comma = false;
 				sb.append(text);
 				break;
 			}

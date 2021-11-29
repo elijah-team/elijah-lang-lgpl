@@ -2656,6 +2656,10 @@ public class DeduceTypes2 {
 		public @Nullable ClassInvocation registerClassInvocation(final ClassStatement aClassStatement, final String aS) {
 			return dt2.phase.registerClassInvocation(aClassStatement, aS);
 		}
+
+		public void genCIForGenType2(final GenType genType) {
+			dt2.genCIForGenType2(genType);
+		}
 	}
 
 	void found_element_for_ite(BaseGeneratedFunction generatedFunction, @NotNull IdentTableEntry ite, @Nullable OS_Element y, Context ctx) {
@@ -3746,6 +3750,7 @@ public class DeduceTypes2 {
 						tte.setAttached(ty);
 						tte.setAttached(ty2);
 						ite.type = tte;
+						genCIForGenType2(ite.type.genType);
 					}
 				} catch (ResolveError aResolveError) {
 					errSink.reportDiagnostic(aResolveError);

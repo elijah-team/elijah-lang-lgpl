@@ -772,6 +772,44 @@ public class GenerateFunctions {
 			}
 		}
 
+		public void dot(@NotNull BaseGeneratedFunction gf, DotExpression left, IExpression right, Context cctx) {
+			final InstructionArgument simple_left = simplify_expression(left, gf, cctx);
+			final InstructionArgument simple_right = simplify_expression(right, gf, cctx);
+
+/*
+			IExpression left_dot_left_ = left.getLeft();
+			assert left_dot_left_ instanceof IdentExpression;
+			IdentExpression left_dot_left = (IdentExpression) left_dot_left_;
+
+			final InstructionArgument vte_left = gf.vte_lookup(left_dot_left.getText());
+
+			IExpression left_dot_right_ = left.getRight();
+			assert left_dot_right_ instanceof IdentExpression;
+			IdentExpression left_dot_right = (IdentExpression) left_dot_right_;
+
+			final int ident_left;
+			final int ident_lright;
+
+			if (vte_left != null) {
+				ident_lright = gf.addIdentTableEntry(left_dot_right, cctx);
+
+				gf.getIdentTableEntry(ident_lright).setBacklink(vte_left);
+			} else {
+				ident_left = gf.addIdentTableEntry(left_dot_left, cctx);
+				ident_lright = gf.addIdentTableEntry(left_dot_right, cctx);
+
+				gf.getIdentTableEntry(ident_lright).setBacklink(new IdentIA(ident_left, gf));
+			}
+
+			final int ident_right = gf.addIdentTableEntry(right, cctx);
+			final int inst = add_i(gf, InstructionName.AGN, List_of(new IdentIA(ident_lright, gf), new IdentIA(ident_right, gf)), cctx);
+*/
+
+			final int inst2 = add_i(gf, InstructionName.AGN, List_of(simple_left, simple_right), cctx);
+
+			int y=2;
+		}
+
 		public void ident(@NotNull BaseGeneratedFunction gf, IdentExpression left, IdentExpression right, Context cctx) {
 			final InstructionArgument vte_left = gf.vte_lookup(left.getText());
 			final int ident_left;
@@ -867,7 +905,11 @@ public class GenerateFunctions {
 			gia.procedure_call(aStatementWrapper, gf, bbe, (ProcedureCallExpression) right1, cctx);
 			break;
 		case IDENT:
-			gia.ident(gf, (IdentExpression) bbe.getLeft(), (IdentExpression) right1, cctx);
+			if (bbe.getLeft() instanceof IdentExpression) {
+				gia.ident(gf, (IdentExpression) bbe.getLeft(), (IdentExpression) right1, cctx);
+			} else if (bbe.getLeft() instanceof DotExpression) {
+				gia.dot(gf, (DotExpression) bbe.getLeft(), (IdentExpression) right1, cctx);
+			}
 			break;
 		case NUMERIC:
 			gia.numeric(gf, bbe.getLeft(), (NumericExpression) right1, cctx);

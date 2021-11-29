@@ -13,7 +13,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.FormalArgListItem;
@@ -233,18 +232,23 @@ public class Generate_Code_For_Method {
 		tos.incr_tabs();
 	}
 
+	public enum AOG {
+		ASSIGN, GET
+	}
+
 	private void action_AGN(BaseGeneratedFunction gf, Instruction aInstruction) {
 		final InstructionArgument target = aInstruction.getArg(0);
 		final InstructionArgument value  = aInstruction.getArg(1);
 
-		final String realTarget;
+		final String realTarget, s;
 		if (target instanceof IntegerIA) {
-			realTarget = gc.getRealTargetName(gf, (IntegerIA) target);
+			realTarget = gc.getRealTargetName(gf, (IntegerIA) target, AOG.ASSIGN);
+			final String assignmentValue = gc.getAssignmentValue(gf.getSelf(), value, gf);
+			s = String.format(Emit.emit("/*267*/")+"%s = %s;", realTarget, assignmentValue);
 		} else {
-			realTarget = gc.getRealTargetName(gf, (IdentIA) target);
+			final String assignmentValue = gc.getAssignmentValue(gf.getSelf(), value, gf);
+			s = gc.getRealTargetName(gf, (IdentIA) target, AOG.ASSIGN, assignmentValue);
 		}
-		final String assignmentValue = gc.getAssignmentValue(gf.getSelf(), value, gf);
-		String s = String.format(Emit.emit("/*267*/")+"%s = %s;", realTarget, assignmentValue);
 		tos.put_string_ln(s);
 	}
 
@@ -252,7 +256,7 @@ public class Generate_Code_For_Method {
 		final InstructionArgument target = aInstruction.getArg(0);
 		final InstructionArgument value  = aInstruction.getArg(1);
 
-		final String realTarget = gc.getRealTargetName(gf, (IntegerIA) target);
+		final String realTarget = gc.getRealTargetName(gf, (IntegerIA) target, AOG.ASSIGN);
 		final String assignmentValue = gc.getAssignmentValue(gf.getSelf(), value, gf);
 		String s = String.format(Emit.emit("/*278*/")+"%s = %s;", realTarget, assignmentValue);
 		tos.put_string_ln(s);
@@ -272,7 +276,7 @@ public class Generate_Code_For_Method {
 				@Nullable InstructionArgument xx = gf.vte_lookup(text);
 				String xxx;
 				if (xx != null) {
-					xxx = gc.getRealTargetName(gf, (IntegerIA) xx);
+					xxx = gc.getRealTargetName(gf, (IntegerIA) xx, AOG.GET);
 				} else {
 					xxx = text;
 					LOG.err("xxx is null " + text);
@@ -281,7 +285,7 @@ public class Generate_Code_For_Method {
 			} else {
 				final IdentIA ia2 = (IdentIA) pte.expression_num;
 				reference = new CReference();
-				reference.getIdentIAPath(ia2, gf);
+				reference.getIdentIAPath(ia2, gf, AOG.GET, null);
 				final List<String> sl3 = gc.getArgumentStrings(gf, aInstruction);
 				reference.args(sl3);
 				String path = reference.build();
@@ -309,7 +313,7 @@ public class Generate_Code_For_Method {
 				String text = ptex.getText();
 				@Nullable InstructionArgument xx = gf.vte_lookup(text);
 				assert xx != null;
-				String realTargetName = gc.getRealTargetName(gf, (IntegerIA) xx);
+				String realTargetName = gc.getRealTargetName(gf, (IntegerIA) xx, AOG.GET);
 				sb.append(Emit.emit("/*424*/")+realTargetName);
 				sb.append('(');
 				final List<String> sl3 = gc.getArgumentStrings(gf, aInstruction);
@@ -318,7 +322,7 @@ public class Generate_Code_For_Method {
 			} else {
 				final CReference reference = new CReference();
 				final IdentIA ia2 = (IdentIA) pte.expression_num;
-				reference.getIdentIAPath(ia2, gf);
+				reference.getIdentIAPath(ia2, gf, AOG.GET, null);
 				final List<String> sl3 = gc.getArgumentStrings(gf, aInstruction);
 				reference.args(sl3);
 				String path = reference.build();
@@ -382,14 +386,14 @@ public class Generate_Code_For_Method {
 
 		if (rhs instanceof ConstTableIA) {
 			final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
-			final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs, AOG.GET);
 			tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
 			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 		} else {
 			//
 			// TODO need to lookup special __lt__ function
 			//
-			String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs, AOG.GET);
 			tos.put_string_ln(String.format("vsb = %s < %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
 			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 
@@ -409,14 +413,14 @@ public class Generate_Code_For_Method {
 
 		if (rhs instanceof ConstTableIA) {
 			final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
-			final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs, AOG.GET);
 			tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
 			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 		} else {
 			//
 			// TODO need to lookup special __ne__ function ??
 			//
-			String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs, AOG.GET);
 			tos.put_string_ln(String.format("vsb = %s != %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
 			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 
@@ -436,14 +440,14 @@ public class Generate_Code_For_Method {
 
 		if (rhs instanceof ConstTableIA) {
 			final ConstantTableEntry cte = gf.getConstTableEntry(((ConstTableIA) rhs).getIndex());
-			final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			final String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs, AOG.GET);
 			tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
 			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 		} else {
 			//
 			// TODO need to lookup special __eq__ function
 			//
-			String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs);
+			String realTargetName = gc.getRealTargetName(gf, (IntegerIA) lhs, AOG.GET);
 			tos.put_string_ln(String.format("vsb = %s == %s;", realTargetName, gc.getAssignmentValue(gf.getSelf(), rhs, gf)));
 			tos.put_string_ln(String.format("if (!vsb) goto %s;", realTarget.getName()));
 
@@ -462,7 +466,7 @@ public class Generate_Code_For_Method {
 		GeneratedNode testing_type = testing_type__.resolved();
 		final int z = ((GeneratedContainerNC) testing_type).getCode();
 
-		tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, gc.getRealTargetName(gf, testing_var_)));
+		tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, gc.getRealTargetName(gf, testing_var_, AOG.GET)));
 		tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
 	}
 
@@ -470,11 +474,11 @@ public class Generate_Code_For_Method {
 		final IntegerIA  vte_num_ = (IntegerIA) instruction.getArg(0);
 		final IntegerIA vte_type_ = (IntegerIA) instruction.getArg(1);
 		final IntegerIA vte_targ_ = (IntegerIA) instruction.getArg(2);
-		final String target_name = gc.getRealTargetName(gf, vte_num_);
+		final String target_name = gc.getRealTargetName(gf, vte_num_, AOG.GET);
 		final TypeTableEntry target_type_ = gf.getTypeTableEntry(vte_type_.getIndex());
 //		final String target_type = gc.getTypeName(target_type_.getAttached());
 		final String target_type = gc.getTypeName(target_type_.genType.node);
-		final String source_target = gc.getRealTargetName(gf, vte_targ_);
+		final String source_target = gc.getRealTargetName(gf, vte_targ_, AOG.GET);
 
 		tos.put_string_ln(String.format("%s = (%s)%s;", target_name, target_type, source_target));
 	}
@@ -482,7 +486,7 @@ public class Generate_Code_For_Method {
 	private void action_DECL(Instruction instruction, BufferTabbedOutputStream tos, BaseGeneratedFunction gf) {
 		final SymbolIA decl_type = (SymbolIA)  instruction.getArg(0);
 		final IntegerIA  vte_num = (IntegerIA) instruction.getArg(1);
-		final String target_name = gc.getRealTargetName(gf, vte_num);
+		final String target_name = gc.getRealTargetName(gf, vte_num, AOG.GET);
 		final VariableTableEntry vte = gf.getVarTableEntry(vte_num.getIndex());
 
 		final OS_Type x = vte.type.getAttached();
