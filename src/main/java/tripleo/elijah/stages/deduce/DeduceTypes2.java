@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -2413,13 +2414,14 @@ public class DeduceTypes2 {
 								if (el2 instanceof ConstructorDef) {
 									@Nullable GenType type = deducePath.getType(i);
 									if (type.nonGenericTypeName == null) {
-										type.nonGenericTypeName = deducePath.getType(i-1).nonGenericTypeName; // HACK. not guararnteed to work!
+										type.nonGenericTypeName = Objects.requireNonNull(deducePath.getType(i - 1)).nonGenericTypeName; // HACK. not guararnteed to work!
 									}
 									@NotNull OS_Type ty = new OS_Type(type.nonGenericTypeName);
 									implement_construct_type(idte2, ty, s);
 
 									final VariableTableEntry x = (VariableTableEntry) (deducePath.getEntry(i - 1));
 									genCIForGenType2(type);
+									assert x != null;
 									x.resolveTypeToClass(type.node);
 								}
 							} else {
