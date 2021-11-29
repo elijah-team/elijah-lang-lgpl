@@ -572,52 +572,56 @@ public class DeducePhase {
 
 						if (p instanceof DeduceTypes2.OS_SpecialVariable) {
 							final DeduceTypes2.OS_SpecialVariable specialVariable = (DeduceTypes2.OS_SpecialVariable) p;
-							final DeduceTypes2.MemberInvocation mi = specialVariable.memberInvocation;
-
-							switch (mi.role) {
-							case INHERITED:
-								final FunctionInvocation functionInvocation = deferredMemberFunction.functionInvocation();
-								functionInvocation.generatePromise().
-										then(new DoneCallback<BaseGeneratedFunction>() {
-											@Override
-											public void onDone(final BaseGeneratedFunction gf) {
-												deferredMemberFunction.externalRefDeferred().resolve(gf);
-												gf.typePromise().
-														then(new DoneCallback<GenType>() {
-															@Override
-															public void onDone(final GenType result) {
-																deferredMemberFunction.typeResolved().resolve(result);
-															}
-														});
-											}
-										});
-								break;
-							case DIRECT:
-								classInvocation.resolvePromise().
-										then(new DoneCallback<GeneratedClass>() {
-											@Override
-											public void onDone(final GeneratedClass element_generated) {
-												// once again we need GeneratedFunction, not FunctionDef
-												// we seem to have it below, but there can be multiple
-												// specializations of each function
-												final GeneratedFunction gf = element_generated.functionMap.get(deferredMemberFunction.getFunctionDef());
-												deferredMemberFunction.externalRefDeferred().resolve(gf);
-												gf.typePromise().
-														then(new DoneCallback<GenType>() {
-															@Override
-															public void onDone(final GenType result) {
-																deferredMemberFunction.typeResolved().resolve(result);
-															}
-														});
-											}
-										});
-								break;
-							default:
-								throw new IllegalStateException("Unexpected value: " + mi.role);
-							}
+							onSpecialVariable(specialVariable);
 							int y=2;
 						} else
 							throw new IllegalStateException("unknown parent");
+					}
+
+					public void onSpecialVariable(final DeduceTypes2.OS_SpecialVariable aSpecialVariable) {
+						final DeduceTypes2.MemberInvocation mi = aSpecialVariable.memberInvocation;
+
+						switch (mi.role) {
+						case INHERITED:
+							final FunctionInvocation functionInvocation = deferredMemberFunction.functionInvocation();
+							functionInvocation.generatePromise().
+									then(new DoneCallback<BaseGeneratedFunction>() {
+										@Override
+										public void onDone(final BaseGeneratedFunction gf) {
+											deferredMemberFunction.externalRefDeferred().resolve(gf);
+											gf.typePromise().
+													then(new DoneCallback<GenType>() {
+														@Override
+														public void onDone(final GenType result) {
+															deferredMemberFunction.typeResolved().resolve(result);
+														}
+													});
+										}
+									});
+							break;
+						case DIRECT:
+							classInvocation.resolvePromise().
+									then(new DoneCallback<GeneratedClass>() {
+										@Override
+										public void onDone(final GeneratedClass element_generated) {
+											// once again we need GeneratedFunction, not FunctionDef
+											// we seem to have it below, but there can be multiple
+											// specializations of each function
+											final GeneratedFunction gf = element_generated.functionMap.get((FunctionDef) deferredMemberFunction.getFunctionDef());
+											deferredMemberFunction.externalRefDeferred().resolve(gf);
+											gf.typePromise().
+													then(new DoneCallback<GenType>() {
+														@Override
+														public void onDone(final GenType result) {
+															deferredMemberFunction.typeResolved().resolve(result);
+														}
+													});
+										}
+									});
+							break;
+						default:
+							throw new IllegalStateException("Unexpected value: " + mi.role);
+						}
 					}
 				});
 			} else if (parent instanceof NamespaceStatement) {
