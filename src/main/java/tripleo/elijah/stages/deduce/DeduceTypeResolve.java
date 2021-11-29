@@ -249,6 +249,11 @@ public class DeduceTypeResolve {
 					variableTableEntry.typeResolvePromise().done(new DoneCallback<GenType>() {
 						@Override
 						public void onDone(final GenType result) {
+							if (eh instanceof Resolve_Ident_IA.GenericElementHolderWithDC) {
+								final Resolve_Ident_IA.GenericElementHolderWithDC eh1 = (Resolve_Ident_IA.GenericElementHolderWithDC) eh;
+								final DeduceTypes2.DeduceClient3 dc = eh1.getDC();
+								dc.genCIForGenType2(result);
+							}
 							variableTableEntry.type.setAttached(result);
 						}
 					});

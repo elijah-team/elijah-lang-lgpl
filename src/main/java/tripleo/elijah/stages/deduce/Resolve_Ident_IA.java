@@ -182,6 +182,25 @@ class Resolve_Ident_IA {
 		}
 	}
 
+	class GenericElementHolderWithDC implements IElementHolder {
+		private final OS_Element element;
+		private final DeduceTypes2.DeduceClient3 deduceClient3;
+
+		public GenericElementHolderWithDC(final OS_Element aElement, final DeduceTypes2.DeduceClient3 aDeduceClient3) {
+			element = aElement;
+			deduceClient3 = aDeduceClient3;
+		}
+
+		@Override
+		public OS_Element getElement() {
+			return element;
+		}
+
+		public DeduceTypes2.DeduceClient3 getDC() {
+			return deduceClient3;
+		}
+	}
+
 	private void updateStatus(@NotNull List<InstructionArgument> aS) {
 		InstructionArgument x = aS.get(/*aS.size()-1*/0);
 		if (x instanceof IntegerIA) {
@@ -190,7 +209,7 @@ class Resolve_Ident_IA {
 				final VariableStatement vs = (VariableStatement) el;
 				y.setStatus(BaseTableEntry.Status.KNOWN, dc.newGenericElementHolderWithType(el, vs.typeName()));
 			}
-			y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
+			y.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolderWithDC(el, dc));
 		} else if (x instanceof IdentIA) {
 			@NotNull IdentTableEntry y = ((IdentIA) x).getEntry();
 			assert y.getStatus() == BaseTableEntry.Status.KNOWN;

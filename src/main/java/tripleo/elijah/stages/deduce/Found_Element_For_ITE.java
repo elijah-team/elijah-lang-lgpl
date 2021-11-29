@@ -96,6 +96,7 @@ class Found_Element_For_ITE {
 			ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
 		} else
 			ite.type.setAttached(attached);
+		dc.genCIForGenType2(ite.type.genType);
 		int yy = 2;
 	}
 

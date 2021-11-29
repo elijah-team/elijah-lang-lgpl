@@ -4166,6 +4166,10 @@ public class DeduceTypes2 {
 										  final Context ctx) {
 			deduceTypes2.found_element_for_ite(generatedFunction, ite, y, ctx);
 		}
+
+		public void genCIForGenType2(final GenType genType) {
+			deduceTypes2.genCIForGenType2(genType);
+		}
 	}
 
 	private class NullFoundElement extends FoundElement {
