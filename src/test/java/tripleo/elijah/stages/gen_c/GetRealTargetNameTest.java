@@ -103,7 +103,7 @@ public class GetRealTargetNameTest {
 		//
 		//
 
-		String x = c.getRealTargetName(gf, ident_ia);
+		String x = c.getRealTargetName(gf, ident_ia, Generate_Code_For_Method.AOG.GET, null);
 		Assert.assertEquals("vvx->vmfoo", x);
 	}
 }
