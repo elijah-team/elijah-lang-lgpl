@@ -1060,6 +1060,9 @@ public class DeduceTypes2 {
 									}
 								}
 								break;
+							case CONSTRUCTOR:
+								int y=2;
+								break;
 							default:
 								LOG.err(String.format("228 Don't know what to do %s %s", type, el));
 								break;
