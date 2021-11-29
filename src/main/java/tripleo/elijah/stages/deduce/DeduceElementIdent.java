@@ -38,17 +38,20 @@ public class DeduceElementIdent {
 	public OS_Element getResolvedElement() {
 		DeduceTypes2.Holder<OS_Element> holder = new DeduceTypes2.Holder<>();
 		final IdentIA identIA = new IdentIA(identTableEntry.getIndex(), generatedFunction);
-		deduceTypes2.resolveIdentIA_(context, identIA, generatedFunction, new FoundElement(deduceTypes2.phase) {
-			@Override
-			public void foundElement(final OS_Element e) {
-				holder.set(e);
-			}
+		if (deduceTypes2 != null) { // TODO remove this ASAP. Should never happen
+			deduceTypes2.resolveIdentIA_(context, identIA, generatedFunction, new FoundElement(deduceTypes2.phase) {
+				@Override
+				public void foundElement(final OS_Element e) {
+					holder.set(e);
+				}
 
-			@Override
-			public void noFoundElement() {
-				deduceTypes2.LOG.err("DeduceElementIdent: can't resolve element for "+identTableEntry);
-			}
-		});
+				@Override
+				public void noFoundElement() {
+					deduceTypes2.LOG.err("DeduceElementIdent: can't resolve element for "+identTableEntry);
+				}
+			});
+		} else
+			System.err.println("5454 Should never happen. gf is not deduced.");
 		return holder.get();
 	}
 }
