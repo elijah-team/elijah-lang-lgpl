@@ -60,25 +60,8 @@ public class ClassContext extends Context {
 				}
 			}
 		}
-		if (!_didInheritance) {
-			for (final TypeName tn1 : carrier.classInheritance().tns) {
-//				System.out.println("1001 "+tn);
-				final NormalTypeName tn = (NormalTypeName)tn1;
-				final OS_Element best;
-				final LookupResultList tnl = tn.getContext().lookup(tn.getName());
-//	    		System.out.println("1002 "+tnl.results());
-				best = tnl.chooseBest(null);
 
-				if (best != null) {
-					_inheritance.put(tn1, (ClassStatement) best);
-				}
-
-//				System.out.println("1003 "+name+" "+Result.results());
-				_didInheritance = true;
-			}
-		}
-
-		for (Map.Entry<TypeName, ClassStatement> entry : _inheritance.entrySet()) {
+		for (Map.Entry<TypeName, ClassStatement> entry : inheritance().entrySet()) {
 			final ClassStatement best = entry.getValue();
 			final LookupResultList lrl2 = best.getContext().lookup(name);
 			final OS_Element best2 = lrl2.chooseBest(null);
@@ -117,6 +100,27 @@ public class ClassContext extends Context {
 
 	public ClassStatement getCarrier() {
 		return carrier;
+	}
+
+	public Map<TypeName, ClassStatement> inheritance() {
+		if (!_didInheritance) {
+			for (final TypeName tn1 : carrier.classInheritance().tns) {
+//				System.out.println("1001 "+tn);
+				final NormalTypeName tn = (NormalTypeName)tn1;
+				final OS_Element best;
+				final LookupResultList tnl = tn.getContext().lookup(tn.getName());
+//	    		System.out.println("1002 "+tnl.results());
+				best = tnl.chooseBest(null);
+
+				if (best != null) {
+					_inheritance.put(tn1, (ClassStatement) best);
+				}
+
+//				System.out.println("1003 "+name+" "+Result.results());
+				_didInheritance = true;
+			}
+		}
+		return _inheritance;
 	}
 
 	public class OS_TypeNameElement implements OS_Element {
