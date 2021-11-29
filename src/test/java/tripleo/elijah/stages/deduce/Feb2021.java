@@ -27,6 +27,20 @@ public class Feb2021 {
 		c.feedCmdLine(List_of("test/feb2021/property/"));
 	}
 
+	@Test
+	public void testProperty2() {
+		Compilation c = new Compilation(new StdErrSink(), new IO());
+
+		c.feedCmdLine(List_of("test/feb2021/property2/"));
+	}
+
+	@Test
+	public void testProperty3() {
+		Compilation c = new Compilation(new StdErrSink(), new IO());
+
+		c.feedCmdLine(List_of("test/feb2021/property3/"));
+	}
+
 //	@Test
 	public void testFunction() {
 		Compilation c = new Compilation(new StdErrSink(), new IO());
