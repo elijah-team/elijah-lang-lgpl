@@ -22,10 +22,12 @@ import java.util.List;
  */
 public class SlirSourceNode {
 	private final SlirSourceFile sourceFile;
+	private final RootSlirNode _rsn;
 	private final List<SlirElement> nodes = new ArrayList<SlirElement>();
 
-	public SlirSourceNode(final SlirSourceFile aSourceFile) {
+	public SlirSourceNode(final SlirSourceFile aSourceFile, final RootSlirNode aRootSlirNode) {
 		sourceFile = aSourceFile;
+		_rsn = aRootSlirNode;
 	}
 
 	public SlirImportNode addImport(final ImportStatement aImportStatement) {
@@ -60,6 +62,10 @@ public class SlirSourceNode {
 
 	public SlirSourceFile sourceFile() {
 		return sourceFile;
+	}
+
+	public RootSlirNode getRootNode() {
+		return _rsn;
 	}
 }
 
