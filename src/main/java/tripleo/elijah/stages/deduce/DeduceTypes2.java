@@ -2698,6 +2698,32 @@ public class DeduceTypes2 {
 		if (identIA != null){
 //			LOG.info("594 "+identIA.getEntry().getStatus());
 
+			{
+				final @NotNull IdentTableEntry ite = identIA.getEntry();
+				final OS_Element resolved_element = ite.getResolvedElement();
+
+				if (resolved_element != null) {
+					final @NotNull OS_Module mod1 = resolved_element.getContext().module();
+
+					if (mod1 != module) {
+						if (resolved_element instanceof FunctionDef) {
+							final OS_Element parent = resolved_element.getParent();
+							final @Nullable ClassInvocation invocation = phase.registerClassInvocation((ClassStatement) parent, null);
+							final @NotNull FunctionInvocation fi = newFunctionInvocation((FunctionDef) resolved_element, pte, invocation, phase);
+							final DeferredMemberFunction dmf = deferred_member_function(parent, invocation, (FunctionDef) resolved_element, fi);
+
+							dmf.typeResolved().then(new DoneCallback<GenType>() {
+								@Override
+								public void onDone(final GenType result) {
+									System.err.println("2717");
+									pte.typeDeferred().resolve(result);
+								}
+							});
+						}
+					}
+				}
+			}
+
 			resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
 
 				final String xx = generatedFunction.getIdentIAPathNormal(identIA);
