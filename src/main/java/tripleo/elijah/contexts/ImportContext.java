@@ -13,6 +13,8 @@ import tripleo.elijah.lang.*;
 
 import java.util.List;
 
+import static tripleo.elijah.contexts.ImportInfo.ImportType.NAMESPACE;
+
 /**
  * Created 8/15/20 7:09 PM
  */
@@ -30,7 +32,9 @@ public class ImportContext extends Context {
 		alreadySearched.add(this);
 //		System.err.println("2002 "+importStatement.importList());
 		Compilation compilation = compilation();
-		for (final Qualident importStatementItem : carrier.parts()) {
+		final List<Qualident> parts = carrier.parts();
+		for (int i1 = 0; i1 < parts.size(); i1++) {
+			final Qualident importStatementItem = parts.get(i1);
 //			System.err.println("2005 "+importStatementItem);
 			if (compilation.isPackage(importStatementItem.toString())) {
 				final OS_Package aPackage = compilation.getPackage(importStatementItem);
@@ -71,7 +75,14 @@ public class ImportContext extends Context {
 								alreadySearched.add(namespaceContext);
 								LookupResultList xxx = namespaceContext.lookup(name, level, Result, alreadySearched, true);
 								for (LookupResult result : xxx.results()) {
-									Result.add(result.getName(), result.getLevel(), result.getElement(), result.getContext());
+									Result.add(result.getName(),
+											result.getLevel(),
+											result.getElement(),
+											result.getContext(),
+											new ImportInfo(carrier,
+													importStatementItem,
+													i1,
+													NAMESPACE)); // TODO look at this, likely wrong
 								}
 							} else {
 								if (element instanceof OS_Element2) {
