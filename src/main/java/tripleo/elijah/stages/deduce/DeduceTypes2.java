@@ -2468,6 +2468,35 @@ public class DeduceTypes2 {
 					}
 				});
 			}
+
+			if (pte.getClassInvocation() != null) {
+				final ClassInvocation ci = pte.getClassInvocation();
+				if (ci.getConstructorName() != null) {
+					final GenerateFunctions generateFunctions = getGenerateFunctions(ci.getKlass().getContext().module());
+					@Nullable ConstructorDef cc = null;
+					{
+						Collection<ConstructorDef> cs = ci.getKlass().getConstructors();
+						for (@NotNull ConstructorDef c : cs) {
+							if (c.name().equals(constructorName)) {
+								cc = c;
+								break;
+							}
+						}
+					}
+					WlGenerateCtor gen = new WlGenerateCtor(generateFunctions, pte.getFunctionInvocation(), cc.getNameNode());
+					gen.run(null);
+					final GeneratedConstructor gc = gen.getResult();
+					ci.resolveDeferred().then(new DoneCallback<GeneratedClass>() {
+						@Override
+						public void onDone(final GeneratedClass result) {
+							result.addConstructor(gc.cd, gc);
+							final WorkList wl = new WorkList();
+							wl.addJob(new WlDeduceFunction(gen, new ArrayList()));
+							wm.addJobs(wl);
+						}
+					});
+				}
+			}
 		}
 
 		private void _implement_construct_type(@Nullable Constructable co, @Nullable String constructorName, @NotNull NormalTypeName aTyn1) {
