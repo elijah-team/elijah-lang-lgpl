@@ -541,12 +541,15 @@ public class DeducePhase {
 								// call typePromises and externalRefPromisess
 
 								// TODO just getting first element here (without processing of any kind); HACK
-								final GenType ty = gc_vte.connectionPairs.get(0).vte.type.genType;
-								assert ty.resolved != null;
-								gc_vte.varType = ty.resolved; // TODO make sure this is right in all cases
-								if (deferredMember.typeResolved().isPending())
-									deferredMember.typeResolved().resolve(ty);
-								break;
+								final List<GeneratedContainer.VarTableEntry.ConnectionPair> connectionPairs = gc_vte.connectionPairs;
+								if (connectionPairs.size() > 0) {
+									final GenType ty = connectionPairs.get(0).vte.type.genType;
+									assert ty.resolved != null;
+									gc_vte.varType = ty.resolved; // TODO make sure this is right in all cases
+									if (deferredMember.typeResolved().isPending())
+										deferredMember.typeResolved().resolve(ty);
+									break;
+								}
 							}
 						}
 					}
