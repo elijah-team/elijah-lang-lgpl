@@ -31,6 +31,7 @@ public class WlGenerateCtor implements WorkJob {
 	private final FunctionInvocation functionInvocation;
 	private final IdentExpression constructorName;
 	private boolean _isDone = false;
+	private GeneratedConstructor result;
 
 	@Contract(pure = true)
 	public WlGenerateCtor(@NotNull  GenerateFunctions  aGenerateFunctions,
@@ -137,6 +138,8 @@ public class WlGenerateCtor implements WorkJob {
 
 			functionInvocation.generateDeferred().resolve(gf);
 			functionInvocation.setGenerated(gf);
+
+			result = gf;
 		}
 
 		_isDone = true;
@@ -149,6 +152,10 @@ public class WlGenerateCtor implements WorkJob {
 	@Override
 	public boolean isDone() {
 		return _isDone;
+	}
+
+	public GeneratedConstructor getResult() {
+		return result;
 	}
 }
 
