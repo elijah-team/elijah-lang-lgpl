@@ -657,6 +657,9 @@ public class DeduceTypes2 {
 
 						@Override
 						public void foundElement(OS_Element e) {
+							found_element_for_ite(generatedFunction, identIA.getEntry(), e, context);
+//							identIA.getEntry().setCallablePTE(pte); // TODO ??
+
 							pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
 							if (fd instanceof DefFunctionDef) {
 								final IInvocation invocation = getInvocation((GeneratedFunction) generatedFunction);
