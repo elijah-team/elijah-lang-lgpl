@@ -2293,8 +2293,9 @@ public class DeduceTypes2 {
 			@NotNull List<TypeName> gp = best.getGenericPart();
 			@Nullable ClassInvocation clsinv = new ClassInvocation(best, constructorName);
 
-			clsinv = new ClassInvocation(best, constructorName);
 			if (gp.size() > 0) {
+				assert aGenericTypeName != null;
+
 				if (aGenericTypeName instanceof NormalTypeName) {
 					final @NotNull NormalTypeName tn = (NormalTypeName) aGenericTypeName;
 					TypeNameList tngp = tn.getGenericPart();
@@ -3750,7 +3751,15 @@ public class DeduceTypes2 {
 						tte.setAttached(ty);
 						tte.setAttached(ty2);
 						ite.type = tte;
-						genCIForGenType2(ite.type.genType);
+						if (!ty.getTypeName().isNull() && !ty2.isNull() ) {
+							boolean skip = false;
+
+							if (((NormalTypeName) ty.getTypeName()).getGenericPart().size() > 0 && ite.type.genType.nonGenericTypeName == null) {
+								skip = true;
+							}
+							if (!skip)
+								genCIForGenType2(ite.type.genType);
+						}
 					}
 				} catch (ResolveError aResolveError) {
 					errSink.reportDiagnostic(aResolveError);
