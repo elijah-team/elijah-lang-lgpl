@@ -11,6 +11,7 @@ package tripleo.elijah.stages.expand;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.contexts.FunctionContext;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.util.Helpers;

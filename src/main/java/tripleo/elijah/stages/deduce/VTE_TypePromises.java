@@ -13,6 +13,7 @@ import org.jdeferred2.DoneCallback;
 import org.jdeferred2.Promise;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.IntegerIA;

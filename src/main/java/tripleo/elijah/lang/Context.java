@@ -10,6 +10,7 @@ package tripleo.elijah.lang;
 
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.contexts.ModuleContext;
 
 import java.util.ArrayList;

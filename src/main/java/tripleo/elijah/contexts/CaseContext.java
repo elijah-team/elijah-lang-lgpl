@@ -10,7 +10,6 @@ package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.CaseConditional;
 import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.List;

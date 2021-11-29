@@ -13,6 +13,7 @@ import org.jdeferred2.FailCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.diagnostic.Diagnostic;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.*;

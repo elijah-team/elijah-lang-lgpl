@@ -16,7 +16,7 @@ import tripleo.elijah.diagnostic.Diagnostic;
 import tripleo.elijah.diagnostic.Locatable;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.LookupResult;
-import tripleo.elijah.lang.LookupResultList;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.lang.TypeName;
 
 import java.io.PrintStream;

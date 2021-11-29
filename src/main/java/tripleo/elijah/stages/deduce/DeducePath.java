@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.diagnostic.Diagnostic;
 import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.LookupResultList;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.gen_fn.*;
 import tripleo.elijah.stages.instructions.IdentIA;

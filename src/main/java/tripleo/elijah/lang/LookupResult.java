@@ -3,6 +3,8 @@
  */
 package tripleo.elijah.lang;
 
+import tripleo.elijah.contexts.ImportInfo;
+
 /**
  * @author Tripleo
  *
@@ -11,15 +13,25 @@ package tripleo.elijah.lang;
 public class LookupResult {
 
 	private final Context context;
-	private String name;
-	private OS_Element element;
-	private int level;
+	private final String name;
+	private final OS_Element element;
+	private final int level;
+	private final ImportInfo importInfo;
+
+	public LookupResult(final String name, final OS_Element element, final int level, final Context aContext, final ImportInfo aImportInfo) {
+		this.name = name;
+		this.element = element;
+		this.level = level;
+		this.context = aContext;
+		this.importInfo = aImportInfo;
+	}
 
 	public LookupResult(final String name, final OS_Element element, final int level, final Context aContext) {
 		this.name = name;
 		this.element = element;
 		this.level = level;
 		this.context = aContext;
+		this.importInfo = null;
 	}
 
 	public Context getContext() {

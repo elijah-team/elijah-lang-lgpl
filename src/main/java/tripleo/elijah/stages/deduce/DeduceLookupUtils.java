@@ -10,6 +10,7 @@ package tripleo.elijah.stages.deduce;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.stages.gen_fn.GenType;

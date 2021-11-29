@@ -15,6 +15,7 @@ import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.ResolveError;

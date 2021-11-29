@@ -9,7 +9,6 @@
 package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.LookupResultList;
 import tripleo.elijah.lang.MatchConditional;
 
 import java.util.List;

@@ -9,9 +9,8 @@
 package tripleo.elijah.lang;
 
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.lang2.BuiltInTypes;
-
-import java.util.Objects;
 
 /**
  *

@@ -10,7 +10,6 @@ package tripleo.elijah.contexts;
 
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.DefFunctionDef;
-import tripleo.elijah.lang.LookupResultList;
 
 import java.util.List;
 

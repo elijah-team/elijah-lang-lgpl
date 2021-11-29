@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import tripleo.elijah.comp.*;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.DeduceTypes2;

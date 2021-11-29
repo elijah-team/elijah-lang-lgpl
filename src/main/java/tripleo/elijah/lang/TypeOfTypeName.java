@@ -1,9 +1,9 @@
 package tripleo.elijah.lang;
 
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.stages.deduce.DeduceLookupUtils;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.ResolveError;
-import tripleo.elijah.util.NotImplementedException;
 
 import java.io.File;
 

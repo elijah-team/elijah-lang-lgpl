@@ -16,6 +16,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.comp.StdErrSink;
+import tripleo.elijah.contexts.LookupResultList;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_c.CReference;
 import tripleo.elijah.stages.gen_c.Emit;
