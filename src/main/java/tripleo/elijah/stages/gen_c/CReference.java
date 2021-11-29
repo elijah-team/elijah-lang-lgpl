@@ -433,10 +433,11 @@ public class CReference {
 			}
 			case PROPERTY_GET: {
 				final String s = sb.toString();
-				text = String.format("%s(%s", ref.text, s);
+				text = String.format("%s%s)", ref.text, s);
 				sb = new StringBuilder();
-				open = true;
-				if (!s.equals("")) needs_comma = true;
+				open = false;
+//				if (!s.equals(""))
+				needs_comma = false;
 				sb.append(text);
 				break;
 			}
