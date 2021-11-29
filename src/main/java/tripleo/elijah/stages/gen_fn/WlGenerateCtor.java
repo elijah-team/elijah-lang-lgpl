@@ -57,7 +57,7 @@ public class WlGenerateCtor implements WorkJob {
 			assert genClass != null;
 
 			ConstructorDef ccc = null;
-			{
+			if (constructorName != null) {
 				Collection<ConstructorDef> cs = klass.getConstructors();
 				for (@NotNull ConstructorDef c : cs) {
 					if (c.name().equals(constructorName.getText())) {
