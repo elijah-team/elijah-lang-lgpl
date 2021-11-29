@@ -26,6 +26,7 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
+import tripleo.elijah.slir.RootSlirNode;
 import tripleo.elijah.stages.deduce.FunctionMapHook;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
 import tripleo.elijah.stages.logging.ElLog;
@@ -58,6 +59,7 @@ public class Compilation {
 	private final Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
 	private int _packageCode = 1;
 	public final List<CompilerInstructions> cis = new ArrayList<CompilerInstructions>();
+	public RootSlirNode rsn = new RootSlirNode(this);
 
 	//
 	//
