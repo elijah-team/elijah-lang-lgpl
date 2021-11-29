@@ -502,7 +502,7 @@ public class DeduceTypes2 {
 		onRunnables.add(r);
 	}
 
-	public void deduce_generated_constructor(final @NotNull GeneratedFunction generatedFunction) {
+	public void deduce_generated_constructor(final @NotNull GeneratedConstructor generatedFunction) {
 		final @NotNull ConstructorDef fd = (ConstructorDef) generatedFunction.getFD();
 		deduce_generated_function_base(generatedFunction, fd);
 	}
@@ -1350,13 +1350,22 @@ public class DeduceTypes2 {
 					generatedFunction1.deducedAlready= true;
 				}
 			} else if (workJob instanceof WlGenerateDefaultCtor) {
-				final GeneratedFunction generatedFunction1 = (GeneratedFunction) ((WlGenerateDefaultCtor) workJob).getResult();
-				if (!coll.contains(generatedFunction1)) {
-					coll.add(generatedFunction1);
-					if (!generatedFunction1.deducedAlready) {
-						deduce_generated_constructor(generatedFunction1);
+				final GeneratedConstructor generatedConstructor = (GeneratedConstructor) ((WlGenerateDefaultCtor) workJob).getResult();
+				if (!coll.contains(generatedConstructor)) {
+					coll.add(generatedConstructor);
+					if (!generatedConstructor.deducedAlready) {
+						deduce_generated_constructor(generatedConstructor);
 					}
-					generatedFunction1.deducedAlready= true;
+					generatedConstructor.deducedAlready= true;
+				}
+			} else if (workJob instanceof WlGenerateCtor) {
+				final GeneratedConstructor generatedConstructor = ((WlGenerateCtor) workJob).getResult();
+				if (!coll.contains(generatedConstructor)) {
+					coll.add(generatedConstructor);
+					if (!generatedConstructor.deducedAlready) {
+						deduce_generated_constructor(generatedConstructor);
+					}
+					generatedConstructor.deducedAlready= true;
 				}
 			} else
 				throw new NotImplementedException();
