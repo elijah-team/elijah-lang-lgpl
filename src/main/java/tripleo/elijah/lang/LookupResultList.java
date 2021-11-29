@@ -36,6 +36,14 @@ public class LookupResultList {
 		_results.add(new LookupResult(name, element, level, aContext));
 	}
 
+	public void add(final String name, final int level, final OS_Element element, final Context aContext, final ContextInfo aImportInfo) {
+		for (final LookupResult result : _results) {
+			if (result.getElement() == element)
+				return; // TODO hack for bad algorithm
+		}
+		_results.add(new LookupResult(name, element, level, aContext, aImportInfo));
+	}
+
 	@Nullable
 	public OS_Element chooseBest(final List<Predicate<OS_Element>> l) {
 		final List<LookupResult> r;
