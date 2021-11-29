@@ -33,7 +33,7 @@ public class ImportInfo implements ContextInfo {
 	}
 
 	enum ImportType {
-		DIRECT, PACKAGE, MEMBER
+		DIRECT, PACKAGE, MEMBER, NAMESPACE
 	}
 }
 
