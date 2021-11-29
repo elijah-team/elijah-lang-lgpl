@@ -56,22 +56,37 @@ public class WlGenerateCtor implements WorkJob {
 			GeneratedClass genClass = hGenClass.get();
 			assert genClass != null;
 
-			ConstructorDef cd = new ConstructorDef(constructorName, klass, klass.getContext());
-			Scope3 scope3 = new Scope3(cd);
-			cd.scope(scope3);
-			for (GeneratedContainer.VarTableEntry varTableEntry : genClass.varTable) {
-				if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
-					IExpression left = varTableEntry.nameToken;
-					IExpression right = varTableEntry.initialValue;
-
-					IExpression e = ExpressionBuilder.build(left, ExpressionKind.ASSIGNMENT, right);
-					scope3.add(new StatementWrapper(e, cd.getContext(), cd));
-				} else {
-					if (true || getPragma("auto_construct")) {
-						scope3.add(new ConstructStatement(cd, cd.getContext(), varTableEntry.nameToken, null, null));
+			ConstructorDef ccc = null;
+			{
+				Collection<ConstructorDef> cs = klass.getConstructors();
+				for (@NotNull ConstructorDef c : cs) {
+					if (c.name().equals(constructorName.getText())) {
+						ccc = c;
+						break;
 					}
 				}
 			}
+
+			ConstructorDef cd;
+			if (ccc == null) {
+				cd = new ConstructorDef(constructorName, klass, klass.getContext());
+				Scope3 scope3 = new Scope3(cd);
+				cd.scope(scope3);
+				for (GeneratedContainer.VarTableEntry varTableEntry : genClass.varTable) {
+					if (varTableEntry.initialValue != IExpression.UNASSIGNED) {
+						IExpression left = varTableEntry.nameToken;
+						IExpression right = varTableEntry.initialValue;
+
+						IExpression e = ExpressionBuilder.build(left, ExpressionKind.ASSIGNMENT, right);
+						scope3.add(new StatementWrapper(e, cd.getContext(), cd));
+					} else {
+						if (true || getPragma("auto_construct")) {
+							scope3.add(new ConstructStatement(cd, cd.getContext(), varTableEntry.nameToken, null, null));
+						}
+					}
+				}
+			} else
+				cd = ccc;
 
 			OS_Element classStatement_ = cd.getParent();
 			assert classStatement_ instanceof ClassStatement;
