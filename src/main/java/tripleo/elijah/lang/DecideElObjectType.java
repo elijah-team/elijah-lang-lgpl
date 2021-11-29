@@ -24,6 +24,8 @@ public class DecideElObjectType {
 			return ElObjectType.VAR_SEQ;
 		else if (input instanceof VariableStatement)
 			return ElObjectType.VAR;
+		else if (input instanceof ConstructorDef)
+			return ElObjectType.CONSTRUCTOR;
 		else if (input instanceof FunctionDef)
 			return ElObjectType.FUNCTION;
 		else if (input instanceof FormalArgListItem)
