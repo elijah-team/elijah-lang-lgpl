@@ -21,6 +21,9 @@ import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.slir.RootSlirNode;
+import tripleo.elijah.slir.SlirSourceFile;
+import tripleo.elijah.slir.SlirSourceNode;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.FunctionMapHook;
 import tripleo.elijah.stages.gen_c.GenerateC;
@@ -71,7 +74,9 @@ public class TestGenFunction {
 		final GeneratePhase generatePhase1 = c.pipelineLogic.generatePhase;//new GeneratePhase();
 		final GenerateFunctions gfm = generatePhase1.getGenerateFunctions(m);
 		DeducePhase dp = c.pipelineLogic.dp;//new DeducePhase(generatePhase1);
-		gfm.generateFromEntryPoints(m.entryPoints, dp);
+		final SlirSourceFile ssf = new SlirSourceFile(m.getFileName());
+		final SlirSourceNode node = c.rsn.newSourceNode(ssf);
+		gfm.generateFromEntryPoints(m.entryPoints, dp, node);
 
 		final DeducePhase.@NotNull GeneratedClasses lgc = dp.generatedClasses; //new ArrayList<>();
 

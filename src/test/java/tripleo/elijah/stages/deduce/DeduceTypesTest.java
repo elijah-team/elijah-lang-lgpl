@@ -33,7 +33,8 @@ public class DeduceTypesTest {
 	@Before
 	public void setUp() throws ResolveError {
 		final OS_Module mod = new OS_Module();
-		mod.parent = new Compilation(new StdErrSink(), new IO());
+		final Compilation compilation = new Compilation(new StdErrSink(), new IO());
+		mod.parent = compilation;
 		final ModuleContext mctx = new ModuleContext(mod);
 		mod.setContext(mctx);
 		final ClassStatement cs = new ClassStatement(mod, mctx);
@@ -66,7 +67,7 @@ public class DeduceTypesTest {
 		final PipelineLogic pl = new PipelineLogic(verbosity);
 		final GeneratePhase generatePhase = new GeneratePhase(verbosity, pl);
 		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity);
-		DeduceTypes2 d = dp.deduceModule(mod, verbosity);
+		DeduceTypes2 d = dp.deduceModule(mod, verbosity, compilation);
 //		final DeduceTypes d = new DeduceTypes(mod);
 		this.x = DeduceLookupUtils.deduceExpression(d, x1, fc);
 		System.out.println(this.x);
