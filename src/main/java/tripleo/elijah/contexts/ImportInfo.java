@@ -19,8 +19,22 @@ public class ImportInfo implements ContextInfo {
 	ImportStatement importStatement;
 	Qualident importPart;
 	int importPartIndex;
-	// something else
+	ImportType importType;
+	// something else (I think I got it)
 
+	public ImportInfo(final ImportStatement aImportStatement,
+					  final Qualident aImportPart,
+					  final int aImportPartIndex,
+					  final ImportType aImportType) {
+		importStatement = aImportStatement;
+		importPart = aImportPart;
+		importPartIndex = aImportPartIndex;
+		importType = aImportType;
+	}
+
+	enum ImportType {
+		DIRECT, PACKAGE, MEMBER
+	}
 }
 
 //
