@@ -45,12 +45,12 @@ public class LookupResult {
 		return name;
 	}
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
+//	/**
+//	 * @param name the name to set
+//	 */
+//	public void setName(final String name) {
+//		this.name = name;
+//	}
 
 	/**
 	 * @return the element
@@ -59,12 +59,12 @@ public class LookupResult {
 		return element;
 	}
 
-	/**
-	 * @param element the element to set
-	 */
-	public void setElement(final OS_Element element) {
-		this.element = element;
-	}
+//	/**
+//	 * @param element the element to set
+//	 */
+//	public void setElement(final OS_Element element) {
+//		this.element = element;
+//	}
 
 	/**
 	 * @return the level
@@ -73,12 +73,12 @@ public class LookupResult {
 		return level;
 	}
 
-	/**
-	 * @param level the level to set
-	 */
-	public void setLevel(final int level) {
-		this.level = level;
-	}
+//	/**
+//	 * @param level the level to set
+//	 */
+//	public void setLevel(final int level) {
+//		this.level = level;
+//	}
 
 	@Override
 	public String toString() {
