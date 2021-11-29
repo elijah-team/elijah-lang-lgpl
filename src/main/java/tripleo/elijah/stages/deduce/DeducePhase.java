@@ -577,6 +577,20 @@ public class DeducePhase {
 							final DeduceTypes2.OS_SpecialVariable specialVariable = (DeduceTypes2.OS_SpecialVariable) p;
 							onSpecialVariable(specialVariable);
 							int y=2;
+						} else if (p instanceof ClassStatement) {
+							// once again we need GeneratedFunction, not FunctionDef
+							// we seem to have it below, but there can be multiple
+							// specializations of each function
+							final GeneratedFunction gf = result.functionMap.get((FunctionDef) deferredMemberFunction.getFunctionDef());
+							if (gf != null) {
+								deferredMemberFunction.externalRefDeferred().resolve(gf);
+								gf.typePromise().then(new DoneCallback<GenType>() {
+									@Override
+									public void onDone(final GenType result) {
+										deferredMemberFunction.typeResolved().resolve(result);
+									}
+								});
+							}
 						} else
 							throw new IllegalStateException("unknown parent");
 					}
