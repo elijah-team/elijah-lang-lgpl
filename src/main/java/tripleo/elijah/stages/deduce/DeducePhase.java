@@ -562,7 +562,7 @@ public class DeducePhase {
 	public void handleDeferredMemberFunctions() {
 		for (@NotNull final DeferredMemberFunction deferredMemberFunction : deferredMemberFunctions) {
 			int y=2;
-			final OS_Element parent = deferredMemberFunction.getParent().getParent().getParent();
+			final OS_Element parent = deferredMemberFunction.getParent();//.getParent().getParent();
 
 			if (parent instanceof ClassStatement) {
 //				final ClassStatement classStatement = (ClassStatement) deferredMemberFunction.getParent();
