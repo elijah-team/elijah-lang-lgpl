@@ -133,9 +133,6 @@ public class TypeTableEntry {
 
 	public void setAttached(GenType aGenType) {
 		genType.copy(aGenType);
-//		if (aGenType.resolved != null) genType.resolved = aGenType.resolved;
-//		if (aGenType.ci != null) genType.ci = aGenType.ci;
-//		if (aGenType.node != null) genType.node = aGenType.node;
 
 		setAttached(genType.resolved);
 	}
