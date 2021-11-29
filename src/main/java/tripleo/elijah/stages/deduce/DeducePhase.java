@@ -15,9 +15,12 @@ import com.google.common.collect.Multimap;
 import org.jdeferred2.DoneCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.slir.SlirSourceFile;
+import tripleo.elijah.slir.SlirSourceNode;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
 import tripleo.elijah.stages.deduce.declarations.DeferredMemberFunction;
 import tripleo.elijah.stages.gen_fn.*;
@@ -233,11 +236,14 @@ public class DeducePhase {
 		return deduceTypes2;
 	}
 
-	public @NotNull DeduceTypes2 deduceModule(@NotNull OS_Module m, ElLog.Verbosity verbosity) {
+	public @NotNull DeduceTypes2 deduceModule(@NotNull OS_Module m, ElLog.Verbosity verbosity, final Compilation c) {
 		final @NotNull GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
 
 		@NotNull List<EntryPoint> epl = m.entryPoints;
-		gfm.generateFromEntryPoints(epl, this);
+		final SlirSourceFile ssf = new SlirSourceFile(m.getFileName());
+		final SlirSourceNode node = c.rsn.newSourceNode(ssf);
+
+		gfm.generateFromEntryPoints(epl, this, node);
 
 		@NotNull GeneratedClasses lgc = generatedClasses;
 
