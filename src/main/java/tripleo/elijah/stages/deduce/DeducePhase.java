@@ -19,6 +19,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.PipelineLogic;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.slir.RootSlirNode;
 import tripleo.elijah.slir.SlirSourceFile;
 import tripleo.elijah.slir.SlirSourceNode;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
@@ -45,6 +46,7 @@ public class DeducePhase {
 	final PipelineLogic pipelineLogic;
 
 	private final @NotNull ElLog LOG;
+	RootSlirNode rsn;
 
 	public DeducePhase(GeneratePhase aGeneratePhase, PipelineLogic aPipelineLogic, ElLog.Verbosity verbosity) {
 		generatePhase = aGeneratePhase;
@@ -242,6 +244,8 @@ public class DeducePhase {
 		@NotNull List<EntryPoint> epl = m.entryPoints;
 		final SlirSourceFile ssf = new SlirSourceFile(m.getFileName());
 		final SlirSourceNode node = c.rsn.newSourceNode(ssf);
+
+		rsn = c.rsn;
 
 		gfm.generateFromEntryPoints(epl, this, node);
 
