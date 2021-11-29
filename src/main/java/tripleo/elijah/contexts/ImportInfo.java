@@ -15,7 +15,7 @@ import tripleo.elijah.lang.Qualident;
 /**
  * Created 11/28/21 11:44 PM
  */
-public class ImportInfo {
+public class ImportInfo implements ContextInfo {
 	ImportStatement importStatement;
 	Qualident importPart;
 	int importPartIndex;
