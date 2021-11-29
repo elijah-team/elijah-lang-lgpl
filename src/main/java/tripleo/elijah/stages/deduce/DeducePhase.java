@@ -549,6 +549,8 @@ public class DeducePhase {
 									if (deferredMember.typeResolved().isPending())
 										deferredMember.typeResolved().resolve(ty);
 									break;
+								} else {
+									NotImplementedException.raise();
 								}
 							}
 						}
