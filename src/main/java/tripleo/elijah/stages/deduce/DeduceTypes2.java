@@ -3734,7 +3734,7 @@ public class DeduceTypes2 {
 			}
 		}
 
-		/* @ensures ite.type != null */
+		/* @ensures ite.type != null; */
 		private void postOnChange(@NotNull IElementHolder eh) {
 			if (ite.type == null && eh.getElement() instanceof VariableStatement) {
 				@NotNull TypeName typ = ((VariableStatement) eh.getElement()).typeName();
