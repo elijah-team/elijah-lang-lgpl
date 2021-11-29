@@ -3026,6 +3026,8 @@ public class DeduceTypes2 {
 
 		public void satisfy(B aResult) {
 			final String satisfied_already = satisfied ? " already" : "";
+			if (satisfied)
+				assert false;
 			result = aResult;
 			satisfied = true;
 			LOG.info(String.format("Expectation (%s, %d)%s met: %s %s", DeduceTypes2.this, counter, satisfied_already, desc, base.expectationString()));
