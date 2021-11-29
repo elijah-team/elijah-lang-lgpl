@@ -9,9 +9,12 @@
  */
 package tripleo.elijah.slir;
 
+import org.jdeferred2.Promise;
+import org.jdeferred2.impl.DeferredObject;
 import tripleo.elijah.comp.Compilation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,9 +29,24 @@ public class RootSlirNode {
 	}
 
 	public SlirSourceNode newSourceNode(final SlirSourceFile aSourceFile) {
-		final SlirSourceNode sourceNode = new SlirSourceNode(aSourceFile);
+		final SlirSourceNode sourceNode = new SlirSourceNode(aSourceFile, this);
 		sourceNodes.add(sourceNode);
+		if (findFileNames.get(sourceNode.sourceFile().getFilename())!=null)
+			findFileNames.get(sourceNode.sourceFile().getFilename()).resolve(sourceNode);
+			// TODO consider removing, if that makes sense
 		return sourceNode;
+	}
+
+	HashMap<String, DeferredObject<SlirSourceNode, Void, Void>> findFileNames = new HashMap<String, DeferredObject<SlirSourceNode, Void, Void>>();
+	public Promise<SlirSourceNode, Void, Void> findFileName(final String aFileName) {
+//		for (SlirSourceNode sourceNode : sourceNodes) {
+//			if (sourceNode.sourceFile().getFilename().equals(aFileName))
+//				return sourceNode;
+//		}
+//		return null;
+		final DeferredObject<SlirSourceNode, Void, Void> p = new DeferredObject<SlirSourceNode, Void, Void>();
+		findFileNames.put(aFileName, p);
+		return p;
 	}
 }
 
