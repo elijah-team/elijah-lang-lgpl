@@ -47,7 +47,7 @@ public class DeducePipeline implements PipelineMember {
 
 	@Override
 	public void run() {
-		c.pipelineLogic.everythingBeforeGenerate(lgc);
+		c.pipelineLogic.everythingBeforeGenerate(lgc, c.rsn);
 		lgc = c.pipelineLogic.dp.generatedClasses.copy();
 	}
 }

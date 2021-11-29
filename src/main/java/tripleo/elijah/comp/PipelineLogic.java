@@ -11,6 +11,9 @@ package tripleo.elijah.comp;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.lang.OS_Module;
+import tripleo.elijah.slir.RootSlirNode;
+import tripleo.elijah.slir.SlirSourceFile;
+import tripleo.elijah.slir.SlirSourceNode;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.gen_c.GenerateC;
 import tripleo.elijah.stages.gen_fn.*;
@@ -49,9 +52,11 @@ public class PipelineLogic {
 		dp = new DeducePhase(generatePhase, this, verbosity);
 	}
 
-	public void everythingBeforeGenerate(List<GeneratedNode> lgc) {
+	public void everythingBeforeGenerate(List<GeneratedNode> lgc, final RootSlirNode aRsn) {
 		for (OS_Module mod : mods) {
-			run2(mod, mod.entryPoints);
+			final SlirSourceFile ssf = new SlirSourceFile(mod.getFileName());
+			final SlirSourceNode node = aRsn.newSourceNode(ssf);
+			run2(mod, mod.entryPoints, node);
 		}
 //		List<List<EntryPoint>> entryPoints = mods.stream().map(mod -> mod.entryPoints).collect(Collectors.toList());
 		dp.finish();
@@ -91,9 +96,9 @@ public class PipelineLogic {
 		}
 	}
 
-	protected void run2(OS_Module mod, @NotNull List<EntryPoint> epl) {
+	protected void run2(OS_Module mod, @NotNull List<EntryPoint> epl, final SlirSourceNode aSourceNode) {
 		final GenerateFunctions gfm = getGenerateFunctions(mod);
-		gfm.generateFromEntryPoints(epl, dp);
+		gfm.generateFromEntryPoints(epl, dp, aSourceNode);
 
 //		WorkManager wm = new WorkManager();
 //		WorkList wl = new WorkList();
