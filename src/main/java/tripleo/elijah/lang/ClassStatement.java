@@ -94,8 +94,8 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	}
 
 	@Override // OS_Element
-	public Context getContext() {
-		return _a._context;
+	public ClassContext getContext() {
+		return (ClassContext) _a._context;
 	}
 
 	public void setContext(final ClassContext ctx) {
