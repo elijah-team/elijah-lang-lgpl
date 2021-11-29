@@ -2378,11 +2378,12 @@ public class DeduceTypes2 {
 							@NotNull TypeName tn = vs.typeName();
 							@NotNull OS_Type ty = new OS_Type(tn);
 
+							GenType resolved = null;
 							if (idte2.type == null) {
 								// README Don't remember enough about the constructors to select a different one
 								@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, ty);
 								try {
-									@NotNull GenType resolved = resolve_type(ty, tn.getContext());
+									resolved = resolve_type(ty, tn.getContext());
 									LOG.err("892 resolved: "+resolved);
 									tte.setAttached(resolved);
 								} catch (ResolveError aResolveError) {
@@ -2393,6 +2394,18 @@ public class DeduceTypes2 {
 							}
 							// s is constructor name
 							implement_construct_type(idte2, ty, s);
+
+							if (resolved == null) {
+								try {
+									resolved = resolve_type(ty, tn.getContext());
+								} catch (ResolveError aResolveError) {
+									aResolveError.printStackTrace();
+									assert false;
+								}
+							}
+							final VariableTableEntry x = (VariableTableEntry) (deducePath.getEntry(i - 1));
+							x.resolveType(resolved);
+							genCIForGenType2(resolved);
 							return;
 						} else {
 							if (i+1 == deducePath.size()) {
@@ -2404,6 +2417,10 @@ public class DeduceTypes2 {
 									}
 									@NotNull OS_Type ty = new OS_Type(type.nonGenericTypeName);
 									implement_construct_type(idte2, ty, s);
+
+									final VariableTableEntry x = (VariableTableEntry) (deducePath.getEntry(i - 1));
+									genCIForGenType2(type);
+									x.resolveTypeToClass(type.node);
 								}
 							} else {
 								ectx = deducePath.getContext(i);
