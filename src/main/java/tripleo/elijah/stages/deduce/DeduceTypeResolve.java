@@ -268,7 +268,9 @@ public class DeduceTypeResolve {
 							final @Nullable OS_Element e = lrl.chooseBest(null);
 
 //							procTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(classStatement));
-							((IdentTableEntry) bte).getCallablePTE().setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
+							final ProcTableEntry callablePTE = ((IdentTableEntry) bte).getCallablePTE();
+							if (callablePTE != null)
+								callablePTE.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
 						}
 					});
 				}
