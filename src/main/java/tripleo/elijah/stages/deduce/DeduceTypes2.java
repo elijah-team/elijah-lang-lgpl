@@ -3522,14 +3522,19 @@ public class DeduceTypes2 {
 					if (ty2 != null) {
 						final @NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null);
 						// trying to keep genType up to date
-						tte.setAttached(ty);
+
+						if (!ty.getTypeName().isNull())
+							tte.setAttached(ty);
 						tte.setAttached(ty2);
+
 						ite.type = tte;
-						if (!ty.getTypeName().isNull() && !ty2.isNull() ) {
+						if (/*!ty.getTypeName().isNull() &&*/ !ty2.isNull() ) {
 							boolean skip = false;
 
-							if (((NormalTypeName) ty.getTypeName()).getGenericPart().size() > 0 && ite.type.genType.nonGenericTypeName == null) {
-								skip = true;
+							if (!ty.getTypeName().isNull()) {
+								if (((NormalTypeName) ty.getTypeName()).getGenericPart().size() > 0 && ite.type.genType.nonGenericTypeName == null) {
+									skip = true;
+								}
 							}
 							if (!skip)
 								genCIForGenType2(ite.type.genType);
