@@ -115,7 +115,7 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 		if (resolve_var_table_entries_already) return true;
 
 		for (VarTableEntry varTableEntry : varTable) {
-			if (varTableEntry.potentialTypes.size() == 0 && varTableEntry.varType == null) {
+			if (varTableEntry.potentialTypes.size() == 0 && (varTableEntry.varType == null || varTableEntry.typeName.isNull())) {
 				final TypeName tn = varTableEntry.typeName;
 				if (tn != null) {
 					if (tn instanceof NormalTypeName) {
