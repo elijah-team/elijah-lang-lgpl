@@ -9,6 +9,7 @@
  */
 package tripleo.elijah.stages.deduce.declarations;
 
+import org.jdeferred2.DoneCallback;
 import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +52,19 @@ public class DeferredMemberFunction {
 		functionDef = aBaseFunctionDef;
 		deduceTypes2 = aDeduceTypes2;
 		functionInvocation = aFunctionInvocation;
+		//
+		functionInvocation.generatePromise().then(new DoneCallback<BaseGeneratedFunction>() {
+			@Override
+			public void onDone(final BaseGeneratedFunction result) {
+				deduceTypes2.deduceOneFunction((GeneratedFunction) result, deduceTypes2.phase); // !!
+				result.typePromise().then(new DoneCallback<GenType>() {
+					@Override
+					public void onDone(final GenType result) {
+						typePromise.resolve(result);
+					}
+				});
+			}
+		});
 	}
 
 	public @NotNull Promise<GenType, Diagnostic, Void> typePromise() {
