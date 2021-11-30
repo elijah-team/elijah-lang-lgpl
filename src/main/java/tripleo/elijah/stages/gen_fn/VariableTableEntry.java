@@ -11,8 +11,10 @@ package tripleo.elijah.stages.gen_fn;
 import org.jdeferred2.*;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Type;
+import tripleo.elijah.stages.deduce.DeduceLocalVariable;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.instructions.VariableTableType;
 
@@ -175,6 +177,15 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 				"index=" + index +
 				", name='" + name + '\'' +
 				"}";
+	}
+
+	DeduceLocalVariable dlv = new DeduceLocalVariable(this);
+	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseGeneratedFunction aGeneratedFunction) {
+		dlv.setDeduceTypes2(aDeduceTypes2, aContext, aGeneratedFunction);
+	}
+
+	public void resolve_var_table_entry_for_exit_function() {
+		dlv.resolve_var_table_entry_for_exit_function();
 	}
 }
 

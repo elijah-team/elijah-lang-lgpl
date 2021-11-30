@@ -64,7 +64,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.MemberInvocation.Role.IN
 public class DeduceTypes2 {
 	private static final String PHASE = "DeduceTypes2";
 	private final @NotNull OS_Module module;
-	final @NotNull DeducePhase phase;
+	public final @NotNull DeducePhase phase;
 	final ErrSink errSink;
 	public final @NotNull ElLog LOG;
 	@NotNull WorkManager wm = new WorkManager();
@@ -812,6 +812,9 @@ public class DeduceTypes2 {
 	}
 
 	public void onEnterFunction(final @NotNull BaseGeneratedFunction generatedFunction, final Context aContext) {
+		for (VariableTableEntry variableTableEntry : generatedFunction.vte_list) {
+			variableTableEntry.setDeduceTypes2(this, aContext, generatedFunction);
+		}
 		for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 			identTableEntry.setDeduceTypes2(this, aContext, generatedFunction);
 		}
@@ -853,7 +856,7 @@ public class DeduceTypes2 {
 		// resolve var table. moved from `E'
 		//
 		for (@NotNull VariableTableEntry vte : generatedFunction.vte_list) {
-			resolve_var_table_entry(vte, generatedFunction, aContext);
+			vte.resolve_var_table_entry_for_exit_function();
 		}
 		for (@NotNull Runnable runnable : onRunnables) {
 			runnable.run();
@@ -1917,219 +1920,6 @@ public class DeduceTypes2 {
 		}
 	}
 
-	public void resolve_var_table_entry(@NotNull VariableTableEntry vte, BaseGeneratedFunction generatedFunction, Context ctx) {
-		if (vte.vtt == VariableTableType.TEMP) {
-			final GenType genType = vte.type.genType;
-			int pts = vte.potentialTypes().size();
-			if (genType.typeName != null && genType.typeName == genType.resolved) {
-				try {
-					genType.resolved = resolve_type(genType.typeName, ctx/*genType.typeName.getTypeName().getContext()*/).resolved;
-					genCIForGenType2(genType);
-					vte.resolveType(genType);
-					vte.resolveTypeToClass(genType.node);
-					int y=2;
-				} catch (ResolveError aResolveError) {
-//					aResolveError.printStackTrace();
-					errSink.reportDiagnostic(aResolveError);
-				}
-			}
-		}
-
-		if (vte.getResolvedElement() == null)
-			return;
-		{
-			if (vte.type.getAttached() == null && vte.constructable_pte != null) {
-				ClassStatement c = vte.constructable_pte.getFunctionInvocation().getClassInvocation().getKlass();
-				final @NotNull OS_Type attached = c.getOS_Type();
-				// TODO this should have been set somewhere already
-				//  typeName and nonGenericTypeName are not set
-				//  but at this point probably wont be needed
-				vte.type.genType.resolved = attached;
-				vte.type.setAttached(attached);
-			}
-			if (vte.type.getAttached() == null && vte.potentialTypes().size() > 0) {
-				final List<TypeTableEntry> attached_list = vte.potentialTypes().stream().
-						filter(x -> x.getAttached() != null).
-						collect(Collectors.toList());
-
-				if (attached_list.size() == 1) {
-					final TypeTableEntry pot = attached_list.get(0);
-					vte.type.setAttached(pot.getAttached());
-					genCI(vte.type.genType, null);
-					final ClassInvocation classInvocation = (ClassInvocation) vte.type.genType.ci;
-					if (classInvocation != null) {
-						classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
-							@Override
-							public void onDone(final GeneratedClass result) {
-								vte.type.genType.node = result;
-								vte.resolveTypeToClass(result);
-								vte.genType = vte.type.genType; // TODO who knows if this is necessary?
-							}
-						});
-					} // TODO else ??
-				} else {
-					if (vte.potentialTypes().size() == 1) {
-						final TypeTableEntry tte1 = vte.potentialTypes().iterator().next();
-						if (tte1.tableEntry instanceof ProcTableEntry) {
-							final ProcTableEntry procTableEntry = (ProcTableEntry) tte1.tableEntry;
-							// TODO for argument, we need a DeduceExpression (DeduceProcCall) which is bounud to self
-							//  (inherited), so we can extract the invocation
-							final InstructionArgument ia = procTableEntry.expression_num;
-							final DeducePath dp = (((IdentIA) ia).getEntry()).buildDeducePath(generatedFunction);
-							final OS_Element Self;
-							if (dp.size() == 1) {
-								final @Nullable OS_Element e = dp.getElement(0);
-								final OS_Element self_class = generatedFunction.getFD().getParent();
-
-								assert e != null;
-								final OS_Element e_parent = e.getParent();
-
-								short state = 0;
-								ClassStatement b = null;
-
-								if (e_parent == self_class) {
-									state = 1;
-								} else {
-									b = class_inherits((ClassStatement) self_class, e_parent);
-									if (b != null)
-										state = 3;
-									else
-										state = 2;
-								}
-
-								switch (state) {
-								case 1:
-									final InstructionArgument self1 = generatedFunction.vte_lookup("self");
-									assert self1 instanceof IntegerIA;
-									Self = new OS_SpecialVariable(((IntegerIA) self1).getEntry(), VariableTableType.SELF, generatedFunction);
-									break;
-								case 2:
-									Self = e_parent;
-									break;
-								case 3:
-									final InstructionArgument self2 = generatedFunction.vte_lookup("self");
-									assert self2 instanceof IntegerIA;
-									Self = new OS_SpecialVariable(((IntegerIA) self2).getEntry(), VariableTableType.SELF, generatedFunction);
-									((OS_SpecialVariable) Self).memberInvocation = new MemberInvocation(b, INHERITED);
-									break;
-								default:
-									throw new IllegalStateException();
-								}
-							} else
-								Self = dp.getElement(dp.size()-2); // TODO fix this
-							final @Nullable DeferredMemberFunction dm = deferred_member_function(Self, null, (BaseFunctionDef) procTableEntry.getResolvedElement(), procTableEntry.getFunctionInvocation());
-							dm.externalRef().then(new DoneCallback<BaseGeneratedFunction>() {
-								@Override
-								public void onDone(final BaseGeneratedFunction result) {
-
-								}
-							});
-							dm.typePromise().then(new DoneCallback<GenType>() {
-								@Override
-								public void onDone(final GenType result) {
-									procTableEntry.typeDeferred().resolve(result);
-								}
-							});
-							procTableEntry.typePromise().then(new DoneCallback<GenType>() {
-								@Override
-								public void onDone(final GenType result) {
-									vte.type.setAttached(result);
-									vte.resolveType(result);
-									vte.resolveTypeToClass(result.node);
-								}
-							});
-						}
-					}
-				}
-			} else if (vte.type.getAttached() == null && vte.potentialTypes().size() == 0) {
-				int y=2;
-			}
-			{
-				final GenType genType = vte.type.genType;
-				int pts = vte.potentialTypes().size();
-				if (genType.typeName != null && genType.typeName == genType.resolved) {
-					try {
-						genType.resolved = resolve_type(genType.typeName, ctx/*genType.typeName.getTypeName().getContext()*/).resolved;
-						genCIForGenType2(genType);
-						vte.resolveType(genType);
-						vte.resolveTypeToClass(genType.node);
-					} catch (ResolveError aResolveError) {
-//						aResolveError.printStackTrace();
-						errSink.reportDiagnostic(aResolveError);
-					}
-				}
-			}
-			vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(vte.getResolvedElement()));
-			{
-				final GenType genType = vte.type.genType;
-				if (genType.resolved != null && genType.node == null) {
-					if (genType.resolved.getType() != OS_Type.Type.USER_CLASS && genType.resolved.getType() != OS_Type.Type.FUNCTION) {
-						try {
-							genType.resolved = resolve_type(genType.resolved, ctx).resolved;
-						} catch (ResolveError aResolveError) {
-							aResolveError.printStackTrace();
-							assert false;
-						}
-					}
-
-					//genCI(genType, genType.nonGenericTypeName);
-
-					//
-					// registerClassInvocation does the job of makeNode, so results should be immediately available
-					//
-					short state = 1;
-					if (vte.getCallablePTE() != null) {
-						final @Nullable ProcTableEntry callable_pte = vte.getCallablePTE();
-						if (callable_pte.expression instanceof FuncExpr) {
-							state = 2;
-						}
-					}
-
-					switch (state) {
-					case 1:
-						genCIForGenType2(genType); // TODO what is this doing here? huh?
-						break;
-					case 2:
-						{
-							final FuncExpr fe = (FuncExpr) vte.getCallablePTE().expression;
-							int y=2;
-						}
-						break;
-					}
-
-					if (genType.ci != null) { // TODO we may need this call...
-						((ClassInvocation) genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
-							@Override
-							public void onDone(GeneratedClass result) {
-								genType.node = result;
-								if (!vte.typePromise().isResolved()) { // HACK
-									if (genType.resolved instanceof OS_FuncType) {
-										final OS_FuncType resolved = (OS_FuncType) genType.resolved;
-										result.functionMapDeferred(((FunctionDef) resolved.getElement()), new FunctionMapDeferred() {
-											@Override
-											public void onNotify(final GeneratedFunction aGeneratedFunction) {
-												// TODO check args (hint functionInvocation.pte)
-												//  but against what? (vte *should* have callable_pte)
-												//  if not, then try potential types for a PCE
-												aGeneratedFunction.typePromise().then(new DoneCallback<GenType>() {
-													@Override
-													public void onDone(final GenType result) {
-														vte.resolveType(result);
-													}
-												});
-											}
-										});
-									} else
-										vte.resolveType(genType);
-								}
-							}
-						});
-					}
-				}
-			}
-		}
-	}
-
 	static class MemberInvocation {
 		final OS_Element element;
 		final Role role;
@@ -2141,22 +1931,6 @@ public class DeduceTypes2 {
 
 		enum Role { DIRECT, INHERITED }
 
-	}
-
-	private ClassStatement class_inherits(final ClassStatement aFirstClass, final OS_Element aInherited) {
-		if (!(aInherited instanceof ClassStatement)) return null;
-
-		final List<TypeName> inh = aFirstClass.classInheritance().tns;
-		for (TypeName typeName : inh) {
-			try {
-				final @NotNull GenType res = resolve_type(new OS_Type(typeName), aFirstClass.getContext()); // is this the right context?
-				if (res.resolved.getClassOf() == aInherited)
-					return (ClassStatement) aInherited;
-			} catch (ResolveError aResolveError) {
-				errSink.reportDiagnostic(aResolveError);
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -2698,7 +2472,7 @@ public class DeduceTypes2 {
 		return dm;
 	}
 
-	private @NotNull DeferredMemberFunction deferred_member_function(OS_Element aParent, @Nullable IInvocation aInvocation, BaseFunctionDef aFunctionDef, final FunctionInvocation aFunctionInvocation) {
+	@NotNull DeferredMemberFunction deferred_member_function(OS_Element aParent, @Nullable IInvocation aInvocation, BaseFunctionDef aFunctionDef, final FunctionInvocation aFunctionInvocation) {
 		if (aInvocation == null) {
 			if (aParent instanceof NamespaceStatement)
 				aInvocation = phase.registerNamespaceInvocation((NamespaceStatement) aParent);
