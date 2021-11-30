@@ -933,13 +933,6 @@ public class DeduceTypes2 {
 			assign_type_to_idte(ite, generatedFunction, aFd_ctx, aContext);
 		}
 		{
-			// TODO why are we doing this?
-//						Resolve_each_typename ret = new Resolve_each_typename(phase, this, errSink);
-//						for (TypeTableEntry typeTableEntry : generatedFunction.tte_list) {
-//							ret.action(typeTableEntry);
-//						}
-		}
-		{
 			final @NotNull WorkManager workManager = wm;//new WorkManager();
 			@NotNull DeduceTypes2.Dependencies deps = new Dependencies(/*phase, this, errSink*/workManager);
 			deps.subscribeTypes(generatedFunction.dependentTypesSubject());
@@ -1268,69 +1261,6 @@ public class DeduceTypes2 {
 
 	public @NotNull GenerateFunctions getGenerateFunctions(@NotNull OS_Module aModule) {
 		return phase.generatePhase.getGenerateFunctions(aModule);
-	}
-
-	class Resolve_each_typename {
-
-		private final DeducePhase phase;
-		private final DeduceTypes2 dt2;
-		private final ErrSink errSink;
-
-		public Resolve_each_typename(DeducePhase aPhase, DeduceTypes2 aDeduceTypes2, ErrSink aErrSink) {
-			phase = aPhase;
-			dt2 = aDeduceTypes2;
-			errSink = aErrSink;
-		}
-
-		public void action(@NotNull TypeTableEntry typeTableEntry) {
-			@Nullable OS_Type attached = typeTableEntry.getAttached();
-			if (attached == null) return;
-			if (attached.getType() == OS_Type.Type.USER) {
-				action_USER(typeTableEntry, attached);
-			} else if (attached.getType() == OS_Type.Type.USER_CLASS) {
-				action_USER_CLASS(typeTableEntry, attached);
-			}
-		}
-
-		public void action_USER_CLASS(@NotNull TypeTableEntry typeTableEntry, @NotNull OS_Type aAttached) {
-			ClassStatement c = aAttached.getClassOf();
-			assert c != null;
-			phase.onClass(c, new OnClass() {
-				// TODO what about ClassInvocation's?
-				@Override
-				public void classFound(GeneratedClass cc) {
-					typeTableEntry.resolve(cc); // set genType.node
-				}
-			});
-		}
-
-		public void action_USER(@NotNull TypeTableEntry typeTableEntry, @Nullable OS_Type aAttached) {
-			TypeName tn = aAttached.getTypeName();
-			if (tn == null) return; // hack specifically for Result
-			switch (tn.kindOfType()) {
-				case FUNCTION:
-				case GENERIC:
-				case TYPE_OF:
-					return;
-			}
-			try {
-				typeTableEntry.setAttached(dt2.resolve_type(aAttached, aAttached.getTypeName().getContext()));
-				switch (typeTableEntry.getAttached().getType()) {
-				case USER_CLASS:
-					action_USER_CLASS(typeTableEntry, typeTableEntry.getAttached());
-					break;
-				case GENERIC_TYPENAME:
-					LOG.err(String.format("801 Generic Typearg %s for %s", tn, "genericFunction.getFD().getParent()"));
-					break;
-				default:
-					LOG.err("245 typeTableEntry attached wrong type " + typeTableEntry);
-					break;
-				}
-			} catch (ResolveError aResolveError) {
-				LOG.err("288 Failed to resolve type "+ aAttached);
-				errSink.reportDiagnostic(aResolveError);
-			}
-		}
 	}
 
 	class WlDeduceFunction implements WorkJob {
