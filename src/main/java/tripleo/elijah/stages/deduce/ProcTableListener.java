@@ -319,7 +319,6 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 					throw new IllegalStateException("Unknown parent");
 				if (fi != null)
 					pte.setFunctionInvocation(fi);
-				return this;
 			} else {
 				// don't create new objects when alrady populated
 				genType = new GenType();
@@ -327,11 +326,10 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 				genType.resolved = classInvocation.getKlass().getOS_Type();
 				genType.ci = classInvocation;
 				fi = pte.getFunctionInvocation();
-				return this;
 			}
+			return this;
 		}
 	}
-
 }
 
 //
