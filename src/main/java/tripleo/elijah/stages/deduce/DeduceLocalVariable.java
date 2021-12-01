@@ -264,7 +264,7 @@ public class DeduceLocalVariable {
 		}
 	}
 
-	private ClassStatement class_inherits(final ClassStatement aFirstClass, final OS_Element aInherited) {
+	static ClassStatement class_inherits(final ClassStatement aFirstClass, final OS_Element aInherited) {
 		if (!(aInherited instanceof ClassStatement)) return null;
 
 		final Map<TypeName, ClassStatement> inh1 = aFirstClass.getContext().inheritance();

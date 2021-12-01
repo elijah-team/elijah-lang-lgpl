@@ -9,6 +9,8 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
@@ -22,7 +24,8 @@ public class DeduceProcCall {
 	private Context context;
 	private BaseGeneratedFunction generatedFunction;
 
-	public DeduceProcCall(final ProcTableEntry aProcTableEntry) {
+	@Contract(pure = true)
+	public DeduceProcCall(final @NotNull ProcTableEntry aProcTableEntry) {
 		procTableEntry = aProcTableEntry;
 	}
 
