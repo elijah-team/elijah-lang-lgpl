@@ -815,7 +815,9 @@ public class DeduceTypes2 {
 		for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
 			identTableEntry.setDeduceTypes2(this, aContext, generatedFunction);
 		}
-
+		for (ProcTableEntry procTableEntry : generatedFunction.prte_list) {
+			procTableEntry.setDeduceTypes2(this, aContext, generatedFunction);
+		}
 		//
 		// resolve all cte expressions
 		//

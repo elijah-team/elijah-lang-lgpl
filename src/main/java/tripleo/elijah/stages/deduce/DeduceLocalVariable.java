@@ -21,9 +21,8 @@ import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-import static tripleo.elijah.stages.deduce.DeduceLocalVariable.MemberInvocation.Role.INHERITED;
 
 /**
  * Created 11/30/21 1:32 AM
@@ -194,6 +193,7 @@ public class DeduceLocalVariable {
 			final TypeTableEntry tte1 = vte.potentialTypes().iterator().next();
 			if (tte1.tableEntry instanceof ProcTableEntry) {
 				final ProcTableEntry procTableEntry = (ProcTableEntry) tte1.tableEntry;
+				final DeduceProcCall dpc = procTableEntry.deduceProcCall();
 				// TODO for argument, we need a DeduceExpression (DeduceProcCall) which is bounud to self
 				//  (inherited), so we can extract the invocation
 				final InstructionArgument ia = procTableEntry.expression_num;
@@ -232,7 +232,7 @@ public class DeduceLocalVariable {
 						final InstructionArgument self2 = generatedFunction.vte_lookup("self");
 						assert self2 instanceof IntegerIA;
 						Self = new DeduceTypes2.OS_SpecialVariable(((IntegerIA) self2).getEntry(), VariableTableType.SELF, generatedFunction);
-						((DeduceTypes2.OS_SpecialVariable) Self).memberInvocation = new MemberInvocation(b, INHERITED);
+						((DeduceTypes2.OS_SpecialVariable) Self).memberInvocation = new MemberInvocation(b, MemberInvocation.Role.INHERITED);
 						break;
 					default:
 						throw new IllegalStateException();

@@ -13,9 +13,11 @@ import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.deduce.DeduceProcCall;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.instructions.InstructionArgument;
@@ -192,6 +194,15 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 		sb2.append("]");
 		pte_string = sb2.toString();
 		return pte_string;
+	}
+
+	DeduceProcCall dpc = new DeduceProcCall(this);
+	public DeduceProcCall deduceProcCall() {
+		return dpc;
+	}
+
+	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseGeneratedFunction aGeneratedFunction) {
+		dpc.setDeduceTypes2(aDeduceTypes2, aContext, aGeneratedFunction);
 	}
 }
 
