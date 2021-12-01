@@ -292,33 +292,43 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 		/* @ensures genType != null && genType.ci != null; */
 		/* @ ///// ensures fi != null ; */
 		public @NotNull E_Is_FunctionDef invoke(TypeName typeName) {
-			@NotNull ClassInvocation ci;
-			if (parent instanceof NamespaceStatement) {
-				final @NotNull NamespaceStatement namespaceStatement = (NamespaceStatement) parent;
-				genType = new GenType(namespaceStatement);
-				final NamespaceInvocation nsi = dc.registerNamespaceInvocation(namespaceStatement);
-//				pte.setNamespaceInvocation(nsi);
-				genType.ci = nsi;
-				fi = dc.newFunctionInvocation(fd, pte, nsi);
-			} else if (parent instanceof ClassStatement) {
-				final @NotNull ClassStatement classStatement = (ClassStatement) parent;
-				genType = new GenType(classStatement);
-//							ci = new ClassInvocation(classStatement, null);
-//							ci = phase.registerClassInvocation(ci);
-//							genType.ci = ci;
-				ci = dc.genCI(genType, typeName);
-				pte.setClassInvocation(ci);
-				fi = dc.newFunctionInvocation(fd, pte, ci);
-			} else if (parent instanceof FunctionDef) {
-				if (pte.expression_num == null) {
-					// TODO need the instruction to get args from FnCallArgs
-					fi = null;
-				}
-			} else
-				throw new IllegalStateException("Unknown parent");
-			if (fi != null)
-				pte.setFunctionInvocation(fi);
-			return this;
+			if (pte.getClassInvocation() == null && pte.getFunctionInvocation() == null) {
+				@NotNull ClassInvocation ci;
+				if (parent instanceof NamespaceStatement) {
+					final @NotNull NamespaceStatement namespaceStatement = (NamespaceStatement) parent;
+					genType = new GenType(namespaceStatement);
+					final NamespaceInvocation nsi = dc.registerNamespaceInvocation(namespaceStatement);
+	//				pte.setNamespaceInvocation(nsi);
+					genType.ci = nsi;
+					fi = dc.newFunctionInvocation(fd, pte, nsi);
+				} else if (parent instanceof ClassStatement) {
+					final @NotNull ClassStatement classStatement = (ClassStatement) parent;
+					genType = new GenType(classStatement);
+	//							ci = new ClassInvocation(classStatement, null);
+	//							ci = phase.registerClassInvocation(ci);
+	//							genType.ci = ci;
+					ci = dc.genCI(genType, typeName);
+					pte.setClassInvocation(ci);
+					fi = dc.newFunctionInvocation(fd, pte, ci);
+				} else if (parent instanceof FunctionDef) {
+					if (pte.expression_num == null) {
+						// TODO need the instruction to get args from FnCallArgs
+						fi = null;
+					}
+				} else
+					throw new IllegalStateException("Unknown parent");
+				if (fi != null)
+					pte.setFunctionInvocation(fi);
+				return this;
+			} else {
+				// don't create new objects when alrady populated
+				genType = new GenType();
+				final ClassInvocation classInvocation = pte.getClassInvocation();
+				genType.resolved = classInvocation.getKlass().getOS_Type();
+				genType.ci = classInvocation;
+				fi = pte.getFunctionInvocation();
+				return this;
+			}
 		}
 	}
 
