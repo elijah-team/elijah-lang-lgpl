@@ -181,7 +181,12 @@ class Resolve_Variable_Table_Entry {
 				((ClassInvocation)inv).resolveDeferred().then(new DoneCallback<GeneratedClass>() {
 					@Override
 					public void onDone(GeneratedClass result) {
-						aGt.node = result;
+						result.functionMapDeferred(functionDef, new FunctionMapDeferred() {
+							@Override
+							public void onNotify(final GeneratedFunction aGeneratedFunction) {
+								aGt.node = aGeneratedFunction;
+							}
+						});
 					}
 				});
 				break;
@@ -191,7 +196,12 @@ class Resolve_Variable_Table_Entry {
 				((NamespaceInvocation)inv).resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
 					@Override
 					public void onDone(GeneratedNamespace result) {
-						aGt.node = result;
+						result.functionMapDeferred(functionDef, new FunctionMapDeferred() {
+							@Override
+							public void onNotify(final GeneratedFunction aGeneratedFunction) {
+								aGt.node = aGeneratedFunction;
+							}
+						});
 					}
 				});
 				break;
