@@ -23,7 +23,7 @@ import tripleo.elijah.stages.instructions.VariableTableType;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static tripleo.elijah.stages.deduce.DeduceTypes2.MemberInvocation.Role.INHERITED;
+import static tripleo.elijah.stages.deduce.DeduceLocalVariable.MemberInvocation.Role.INHERITED;
 
 /**
  * Created 11/30/21 1:32 AM
@@ -232,7 +232,7 @@ public class DeduceLocalVariable {
 						final InstructionArgument self2 = generatedFunction.vte_lookup("self");
 						assert self2 instanceof IntegerIA;
 						Self = new DeduceTypes2.OS_SpecialVariable(((IntegerIA) self2).getEntry(), VariableTableType.SELF, generatedFunction);
-						((DeduceTypes2.OS_SpecialVariable) Self).memberInvocation = new DeduceTypes2.MemberInvocation(b, INHERITED);
+						((DeduceTypes2.OS_SpecialVariable) Self).memberInvocation = new MemberInvocation(b, INHERITED);
 						break;
 					default:
 						throw new IllegalStateException();
@@ -278,6 +278,19 @@ public class DeduceLocalVariable {
 			}
 		}
 		return null;
+	}
+
+	static class MemberInvocation {
+		final OS_Element element;
+		final Role role;
+
+		public MemberInvocation(final OS_Element aElement, final Role aRole) {
+			element = aElement;
+			role = aRole;
+		}
+
+		enum Role { DIRECT, INHERITED }
+
 	}
 }
 

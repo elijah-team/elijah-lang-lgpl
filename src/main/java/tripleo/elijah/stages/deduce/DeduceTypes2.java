@@ -54,9 +54,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import static tripleo.elijah.stages.deduce.DeduceTypes2.MemberInvocation.Role.INHERITED;
 
 /**
  * Created 9/15/20 12:51 PM
@@ -1850,19 +1847,6 @@ public class DeduceTypes2 {
 		}
 	}
 
-	static class MemberInvocation {
-		final OS_Element element;
-		final Role role;
-
-		public MemberInvocation(final OS_Element aElement, final Role aRole) {
-			element = aElement;
-			role = aRole;
-		}
-
-		enum Role { DIRECT, INHERITED }
-
-	}
-
 	/**
 	 * Sets the invocation ({@code genType#ci}) and the node for a GenType
 	 *
@@ -1910,7 +1894,7 @@ public class DeduceTypes2 {
 		private final VariableTableEntry variableTableEntry;
 		private final VariableTableType type;
 		private final BaseGeneratedFunction generatedFunction;
-		public MemberInvocation memberInvocation;
+		public DeduceLocalVariable.MemberInvocation memberInvocation;
 
 		public OS_SpecialVariable(final VariableTableEntry aVariableTableEntry, final VariableTableType aType, final BaseGeneratedFunction aGeneratedFunction) {
 			variableTableEntry = aVariableTableEntry;

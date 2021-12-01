@@ -598,7 +598,7 @@ public class DeducePhase {
 					}
 
 					public void onSpecialVariable(final DeduceTypes2.OS_SpecialVariable aSpecialVariable) {
-						final DeduceTypes2.MemberInvocation mi = aSpecialVariable.memberInvocation;
+						final DeduceLocalVariable.MemberInvocation mi = aSpecialVariable.memberInvocation;
 
 						switch (mi.role) {
 						case INHERITED:
