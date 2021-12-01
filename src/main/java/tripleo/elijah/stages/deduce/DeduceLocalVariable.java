@@ -267,15 +267,10 @@ public class DeduceLocalVariable {
 	private ClassStatement class_inherits(final ClassStatement aFirstClass, final OS_Element aInherited) {
 		if (!(aInherited instanceof ClassStatement)) return null;
 
-		final List<TypeName> inh = aFirstClass.classInheritance().tns;
-		for (TypeName typeName : inh) {
-			try {
-				final @NotNull GenType res = deduceTypes2.resolve_type(new OS_Type(typeName), aFirstClass.getContext()); // is this the right context?
-				if (res.resolved.getClassOf() == aInherited)
-					return (ClassStatement) aInherited;
-			} catch (ResolveError aResolveError) {
-				deduceTypes2.errSink.reportDiagnostic(aResolveError);
-			}
+		final Map<TypeName, ClassStatement> inh1 = aFirstClass.getContext().inheritance();
+		for (Map.Entry<TypeName, ClassStatement> entry : inh1.entrySet()) {
+			if (entry.getKey().equals(aInherited))
+				return (ClassStatement) aInherited;
 		}
 		return null;
 	}
