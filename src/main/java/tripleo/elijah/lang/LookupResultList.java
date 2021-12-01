@@ -12,6 +12,7 @@
 package tripleo.elijah.lang;
 
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.contexts.ContextInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
