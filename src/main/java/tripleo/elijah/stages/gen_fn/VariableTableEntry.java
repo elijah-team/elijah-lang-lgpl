@@ -108,7 +108,7 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 		return index;
 	}
 
-	private DeferredObject<GenType, Void, Void> typeDeferred = new DeferredObject<GenType, Void, Void>();
+	private DeferredObject2<GenType, Void, Void> typeDeferred = new DeferredObject2<GenType, Void, Void>();
 
 	public Promise<GenType, Void, Void> typePromise() {
 		return typeDeferred.promise();
@@ -125,7 +125,13 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	GenType _resolveTypeCalled = null;
 	public void resolveType(final @NotNull GenType aGenType) {
 		if (_resolveTypeCalled != null) { // TODO what a hack
-			assert aGenType.equals(_resolveTypeCalled);
+			if (_resolveTypeCalled.resolved != null) {
+				//assert aGenType.equals(_resolveTypeCalled);
+			} else {
+				_resolveTypeCalled = aGenType;
+				typeDeferred.reset();
+				typeDeferred.resolve(aGenType);
+			}
 			return;
 		}
 		if (typeDeferred.isResolved()) {
