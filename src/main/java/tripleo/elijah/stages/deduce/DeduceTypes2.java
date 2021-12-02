@@ -3474,8 +3474,12 @@ public class DeduceTypes2 {
 							boolean skip = false;
 
 							if (!ty.getTypeName().isNull()) {
-								if (((NormalTypeName) ty.getTypeName()).getGenericPart().size() > 0 && ite.type.genType.nonGenericTypeName == null) {
-									skip = true;
+								{
+									final TypeNameList gp = ((NormalTypeName) ty.getTypeName()).getGenericPart();
+									if (gp != null)
+										if (gp.size() > 0 && ite.type.genType.nonGenericTypeName == null) {
+											skip = true;
+									}
 								}
 							}
 							if (!skip)
