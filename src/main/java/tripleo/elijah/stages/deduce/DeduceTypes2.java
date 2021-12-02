@@ -948,6 +948,33 @@ public class DeduceTypes2 {
 		// RESOLVE FUNCTION RETURN TYPES
 		//
 		resolve_function_return_type(generatedFunction);
+		{
+			for (VariableTableEntry variableTableEntry : generatedFunction.vte_list) {
+				final @NotNull Collection<TypeTableEntry> pot = variableTableEntry.potentialTypes();
+				int y=2;
+				if (pot.size() == 1 && variableTableEntry.genType.isNull()) {
+					final OS_Type x = pot.iterator().next().getAttached();
+					if (x != null)
+						if (x.getType() == OS_Type.Type.USER_CLASS) {
+							try {
+								final @NotNull GenType yy = resolve_type(x, aFd_ctx);
+								// HACK TIME
+								if (yy.resolved == null && yy.typeName.getType()== OS_Type.Type.USER_CLASS) {
+									yy.resolved = yy.typeName;
+									yy.typeName = null;
+								}
+
+								genCIForGenType2(yy);
+								variableTableEntry.resolveType(yy);
+								variableTableEntry.resolveTypeToClass(yy.node);
+//								variableTableEntry.dlv.type.resolve(yy);
+							} catch (ResolveError aResolveError) {
+								aResolveError.printStackTrace();
+							}
+					}
+				}
+			}
+		}
 		//
 		// LOOKUP FUNCTIONS
 		//
