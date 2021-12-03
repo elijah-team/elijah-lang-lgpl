@@ -196,7 +196,7 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 		return pte_string;
 	}
 
-	DeduceProcCall dpc = new DeduceProcCall(this);
+	public DeduceProcCall dpc = new DeduceProcCall(this);
 	public DeduceProcCall deduceProcCall() {
 		return dpc;
 	}
