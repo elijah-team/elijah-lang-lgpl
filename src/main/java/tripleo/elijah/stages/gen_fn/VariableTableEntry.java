@@ -126,7 +126,10 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	public void resolveType(final @NotNull GenType aGenType) {
 		if (_resolveTypeCalled != null) { // TODO what a hack
 			if (_resolveTypeCalled.resolved != null) {
-				//assert aGenType.equals(_resolveTypeCalled);
+				if (!aGenType.equals(_resolveTypeCalled)) {
+					System.err.println(String.format("** 130 Attempting to replace %s with %s in %s", _resolveTypeCalled.asString(), aGenType.asString(), this));
+//					throw new AssertionError();
+				}
 			} else {
 				_resolveTypeCalled = aGenType;
 				typeDeferred.reset();
