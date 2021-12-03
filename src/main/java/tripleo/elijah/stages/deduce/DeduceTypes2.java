@@ -2309,7 +2309,7 @@ public class DeduceTypes2 {
 			phase.typeDecided((GeneratedFunction) generatedFunction, gt);
 	}
 
-	private GenType resolve_function_return_type_int(final @NotNull BaseGeneratedFunction generatedFunction) {
+	private @Nullable GenType resolve_function_return_type_int(final @NotNull BaseGeneratedFunction generatedFunction) {
 		// TODO what about resolved?
 		@NotNull GenType unitType = new GenType();
 		unitType.typeName = new OS_Type(BuiltInTypes.Unit);
