@@ -311,13 +311,6 @@ public class DeducePhase {
 		});
 	}
 
-//	Map<GeneratedFunction, OS_Type> typeDecideds = new HashMap<GeneratedFunction, OS_Type>();
-
-	public void typeDecided(@NotNull GeneratedFunction gf, final GenType aType) {
-		gf.resolveTypeDeferred(aType);
-//		typeDecideds.put(gf, aType);
-	}
-
 	public void finish() {
 		setGeneratedClassParents();
 		/*

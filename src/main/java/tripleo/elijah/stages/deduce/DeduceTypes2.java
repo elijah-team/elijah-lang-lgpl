@@ -2306,7 +2306,8 @@ public class DeduceTypes2 {
 	void resolve_function_return_type(@NotNull BaseGeneratedFunction generatedFunction) {
 		final GenType gt = resolve_function_return_type_int(generatedFunction);
 		if (gt != null)
-			phase.typeDecided((GeneratedFunction) generatedFunction, gt);
+			//phase.typeDecided((GeneratedFunction) generatedFunction, gt);
+			generatedFunction.resolveTypeDeferred(gt);
 	}
 
 	private @Nullable GenType resolve_function_return_type_int(final @NotNull BaseGeneratedFunction generatedFunction) {
