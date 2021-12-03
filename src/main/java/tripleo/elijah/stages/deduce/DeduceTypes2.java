@@ -2304,22 +2304,31 @@ public class DeduceTypes2 {
 	}
 
 	void resolve_function_return_type(@NotNull BaseGeneratedFunction generatedFunction) {
+		final GenType gt = resolve_function_return_type_int(generatedFunction);
+		if (gt != null)
+			phase.typeDecided((GeneratedFunction) generatedFunction, gt);
+	}
+
+	private GenType resolve_function_return_type_int(final @NotNull BaseGeneratedFunction generatedFunction) {
+		// TODO what about resolved?
+		@NotNull GenType unitType = new GenType();
+		unitType.typeName = new OS_Type(BuiltInTypes.Unit);
+
 		// MODERNIZATION Does this have any affinity with DeferredMember?
 		@Nullable final InstructionArgument vte_index = generatedFunction.vte_lookup("Result");
 		if (vte_index != null) {
 			final @NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(vte_index));
 
 			if (vte.type.getAttached() != null) {
-				phase.typeDecided((GeneratedFunction) generatedFunction, vte.type.genType);
+				vte.resolveType(vte.type.genType);
+				return vte.type.genType;
 			} else {
 				@NotNull Collection<TypeTableEntry> pot1 = vte.potentialTypes();
 				@NotNull ArrayList<TypeTableEntry> pot = new ArrayList<TypeTableEntry>(pot1);
 				if (pot.size() == 1) {
-					phase.typeDecided((GeneratedFunction) generatedFunction, pot.get(0).genType);
+					return pot.get(0).genType;
 				} else if (pot.size() == 0) {
-					@NotNull GenType unitType = new GenType();
-					unitType.typeName = new OS_Type(BuiltInTypes.Unit);
-					phase.typeDecided((GeneratedFunction) generatedFunction, unitType);
+					return unitType;
 				} else {
 					// TODO report some kind of error/diagnostic and/or let ForFunction know...
 					errSink.reportWarning("Can't resolve type of `Result'. potentialTypes > 1 for "+vte);
@@ -2332,11 +2341,10 @@ public class DeduceTypes2 {
 				// if Result is not present, then make function return Unit
 				// TODO May not be correct in all cases, such as when Value is present
 				// but works for current code structure, where Result is a always present
-				@NotNull GenType unitType = new GenType();
-				unitType.typeName = new OS_Type(BuiltInTypes.Unit);
-				phase.typeDecided((GeneratedFunction) generatedFunction, unitType);
+				return unitType;
 			}
 		}
+		return null;
 	}
 
 	static class DeduceClient1 {
