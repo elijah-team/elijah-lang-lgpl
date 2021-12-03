@@ -19,6 +19,7 @@ import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.List;
 import java.util.Map;
@@ -148,11 +149,12 @@ public class DeduceLocalVariable {
 						deduceTypes2.genCIForGenType2(genType); // TODO what is this doing here? huh?
 						break;
 					case 2:
-					{
-						final FuncExpr fe = (FuncExpr) vte.getCallablePTE().expression;
-						int y=2;
-					}
-					break;
+						{
+							final FuncExpr fe = (FuncExpr) vte.getCallablePTE().expression;
+							final DeduceProcCall dpc = vte.getCallablePTE().dpc;
+							int y=2;
+						}
+						break;
 					}
 
 					if (genType.ci != null) { // TODO we may need this call...
@@ -199,7 +201,7 @@ public class DeduceLocalVariable {
 				final InstructionArgument ia = procTableEntry.expression_num;
 				final DeducePath dp = (((IdentIA) ia).getEntry()).buildDeducePath(generatedFunction);
 				final OS_Element Self;
-				if (dp.size() == 1) {
+				if (dp.size() == 1) { //ia.getEntry().backlink == null
 					final @Nullable OS_Element e = dp.getElement(0);
 					final OS_Element self_class = generatedFunction.getFD().getParent();
 
@@ -243,7 +245,7 @@ public class DeduceLocalVariable {
 				dm.externalRef().then(new DoneCallback<BaseGeneratedFunction>() {
 					@Override
 					public void onDone(final BaseGeneratedFunction result) {
-
+						NotImplementedException.raise();
 					}
 				});
 				dm.typePromise().then(new DoneCallback<GenType>() {

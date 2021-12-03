@@ -178,6 +178,7 @@ public class DeduceTypeResolve {
 								final GenericElementHolderWithIntegerIA eh1 = (GenericElementHolderWithIntegerIA) eh;
 								final IntegerIA integerIA = eh1.getIntegerIA();
 								final @NotNull VariableTableEntry variableTableEntry = integerIA.getEntry();
+								assert variableTableEntry == bte;
 								variableTableEntry.typeResolvePromise().then(
 										new DoneCallback<GenType>() {
 											@Override
@@ -186,6 +187,7 @@ public class DeduceTypeResolve {
 											}
 										});
 							} else {
+								final DeduceLocalVariable dlv = ((VariableTableEntry) bte).dlv;
 								int y=2;
 							}
 						}
@@ -202,7 +204,6 @@ public class DeduceTypeResolve {
 
 						@Override
 						public void visitMC1(final MatchConditional.MC1 aMC1) {
-							int y=2;
 							if (aMC1 instanceof MatchConditional.MatchArm_TypeMatch) {
 								final MatchConditional.MatchArm_TypeMatch typeMatch = (MatchConditional.MatchArm_TypeMatch) aMC1;
 								int yy=2;
@@ -284,10 +285,12 @@ public class DeduceTypeResolve {
 							final LookupResultList lrl = classStatement.getContext().lookup(text);
 							final @Nullable OS_Element e = lrl.chooseBest(null);
 
-//							procTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(classStatement));
+//							procTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(classStatement));  // infinite recursion
 							final ProcTableEntry callablePTE = ((IdentTableEntry) bte).getCallablePTE();
-							if (callablePTE != null)
+							if (callablePTE != null && e != null) {
+								assert e instanceof BaseFunctionDef;  // sholud fail for constructor and destructor
 								callablePTE.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(e));
+							}
 						}
 					});
 				}
