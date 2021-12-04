@@ -2321,7 +2321,7 @@ public class DeduceTypes2 {
 			final @NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(to_int(vte_index));
 
 			if (vte.type.getAttached() != null) {
-				vte.resolveType(vte.type.genType);
+				vte.resolveType(vte.type.genType); // TODO doesn't fit pattern of returning and then setting
 				return vte.type.genType;
 			} else {
 				@NotNull Collection<TypeTableEntry> pot1 = vte.potentialTypes();
