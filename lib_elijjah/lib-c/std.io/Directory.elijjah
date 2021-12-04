@@ -3,10 +3,11 @@ package std.io
 import std.collections
 import std.collections.List
 
-class Directory {
+class Directory < File {
 	listFiles() -> List[File] {
 	}
 
+	#[override]
 	isDirectory() -> Boolean {
 		Result = True
 	}
