@@ -164,12 +164,16 @@ public class VTE_TypePromises {
 				boolean found1 = aDeduceTypes2.lookup_name_calls(result.resolved.getClassOf().getContext(), pn, pte);
 				if (found1) {
 					int y=2;
-					System.out.println("3071 "+pte.getStatus());
+//					System.out.println("3071 "+pte.getStatus());
 					IInvocation invocation = result.ci;
 //							final BaseFunctionDef fd = gf.getFD();
 					final BaseFunctionDef fd = pte.getFunctionInvocation().getFunction();
-					@NotNull FunctionInvocation fi = aDeduceTypes2.newFunctionInvocation(fd, pte, invocation, aDeduceTypes2.phase);
-					pte.setFunctionInvocation(fi);
+					if (pte.getFunctionInvocation() == null) {
+						@NotNull FunctionInvocation fi = aDeduceTypes2.newFunctionInvocation(fd, pte, invocation, aDeduceTypes2.phase);
+						pte.setFunctionInvocation(fi);
+					} else
+						System.out.println("175 pte.fi is not null");
+					aIntegerIA.gf.addDependentFunction(pte.getFunctionInvocation()); // TODO is this needed (here)?
 				} else {
 					int y=3;
 					System.out.println("3074");
