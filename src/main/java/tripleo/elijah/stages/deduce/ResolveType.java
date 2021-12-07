@@ -38,6 +38,7 @@ public class ResolveType {
 			resolve_user(type, LOG, dt2, R);
 			break;
 		case USER_CLASS:
+			R.resolved = type;
 			break;
 		case FUNCTION:
 			break;
