@@ -153,6 +153,8 @@ public class DeduceLocalVariable {
 							final FuncExpr fe = (FuncExpr) vte.getCallablePTE().expression;
 							final DeduceProcCall dpc = vte.getCallablePTE().dpc;
 							int y=2;
+//							target = (DeduceFuncExpr) dpc.target;
+//							type.resolve(new GenType() {target.prototype}):
 						}
 						break;
 					}
