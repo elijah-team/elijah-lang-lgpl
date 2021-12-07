@@ -154,7 +154,9 @@ public class DeduceLocalVariable {
 							final DeduceProcCall dpc = vte.getCallablePTE().dpc;
 							int y=2;
 //							target = (DeduceFuncExpr) dpc.target;
-//							type.resolve(new GenType() {target.prototype}):
+//							type.resolve(new GenType() {target.prototype}): // DeduceType??
+							// TODO because we can already represent a function expression,
+							//  the question is can we generatedFunction.lookupExpression(fe) and get the DeduceFuncExpr?
 						}
 						break;
 					}
