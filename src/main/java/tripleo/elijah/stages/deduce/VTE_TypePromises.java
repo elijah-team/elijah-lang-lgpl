@@ -80,8 +80,7 @@ public class VTE_TypePromises {
 		aVariableTableEntry.typePromise().then(new DoneCallback<GenType>() {
 			@Override
 			public void onDone(@NotNull GenType result) {
-				if (result.resolved.getClassOf() == fd.getParent());
-				else {
+				if (result.resolved.getClassOf() != fd.getParent()) {
 					System.err.println("** Failed assertion");
 				}
 
