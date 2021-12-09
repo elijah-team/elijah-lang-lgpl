@@ -66,15 +66,15 @@ public class ResolveType {
 			}
 			if (best == null) {
 				if (tn.asSimpleString().equals("Any"))
-					/*return*/ aR.setResolved(new OS_AnyType()); // TODO not a class
+					/*return*/ aR.resolved = new OS_AnyType(); // TODO not a class
 				throw new ResolveError(tn1, lrl);
 			}
 
 			if (best instanceof ClassContext.OS_TypeNameElement) {
 				/*return*/
-				aR.setResolved(new OS_GenericTypeNameType((ClassContext.OS_TypeNameElement) best)); // TODO not a class
+				aR.resolved = new OS_GenericTypeNameType((ClassContext.OS_TypeNameElement) best); // TODO not a class
 			} else
-				aR.setResolved(((ClassStatement) best).getOS_Type());
+				aR.resolved = ((ClassStatement) best).getOS_Type();
 			break;
 		}
 		case FUNCTION:
@@ -86,7 +86,7 @@ public class ResolveType {
 				final Qualident q = type_of.typeOf();
 				if (q.parts().size() == 1 && q.parts().get(0).equals("self")) {
 					assert type_of.getContext() instanceof ClassContext;
-					aR.setResolved((((ClassContext) type_of.getContext()).getCarrier()).getOS_Type());
+					aR.resolved = ((ClassContext) type_of.getContext()).getCarrier().getOS_Type();
 				}
 				int y=2;
 
@@ -120,7 +120,7 @@ public class ResolveType {
 			if (best == null) {
 				throw new ResolveError(IdentExpression.forString(typeName), lrl);
 			}
-			aR.setResolved(((ClassStatement) best).getOS_Type());
+			aR.resolved = ((ClassStatement) best).getOS_Type();
 			break;
 		}
 		case String_:
@@ -143,7 +143,7 @@ public class ResolveType {
 			if (best == null) {
 				throw new ResolveError(IdentExpression.forString(typeName), lrl);
 			}
-			aR.setResolved(((ClassStatement) best).getOS_Type());
+			aR.resolved = (((ClassStatement) best).getOS_Type());
 			break;
 		}
 		case SystemCharacter:
@@ -166,7 +166,7 @@ public class ResolveType {
 			if (best == null) {
 				throw new ResolveError(IdentExpression.forString(typeName), lrl);
 			}
-			aR.setResolved(((ClassStatement) best).getOS_Type());
+			aR.resolved = ((ClassStatement) best).getOS_Type();
 			break;
 		}
 		case Boolean:
@@ -176,7 +176,7 @@ public class ResolveType {
 				prelude = module;
 			final LookupResultList lrl = prelude.getContext().lookup("Boolean");
 			final @Nullable OS_Element best = lrl.chooseBest(null);
-			aR.setResolved(((ClassStatement) best).getOS_Type()); // TODO might change to Type
+			aR.resolved = ((ClassStatement) best).getOS_Type(); // TODO might change to Type
 			break;
 		}
 		default:
