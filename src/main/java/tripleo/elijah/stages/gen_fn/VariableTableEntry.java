@@ -188,7 +188,7 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 				"}";
 	}
 
-	DeduceLocalVariable dlv = new DeduceLocalVariable(this);
+	public DeduceLocalVariable dlv = new DeduceLocalVariable(this);
 	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseGeneratedFunction aGeneratedFunction) {
 		dlv.setDeduceTypes2(aDeduceTypes2, aContext, aGeneratedFunction);
 	}

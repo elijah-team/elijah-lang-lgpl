@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
  */
 public class DeduceLocalVariable {
 	private final VariableTableEntry variableTableEntry;
+	public DeferredObject2<GenType, Void, Void> type = new DeferredObject2();
 	private DeduceTypes2 deduceTypes2;
 	private Context context;
 	private BaseGeneratedFunction generatedFunction;
