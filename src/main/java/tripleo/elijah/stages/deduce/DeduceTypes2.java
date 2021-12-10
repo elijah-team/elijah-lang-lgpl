@@ -756,25 +756,27 @@ public class DeduceTypes2 {
 		}
 	}
 
-	public void do_assign_normal_ident_deferred(final @NotNull BaseGeneratedFunction generatedFunction, final Context aFd_ctx, final @NotNull IdentTableEntry aIdte2) {
-		if (aIdte2.type == null) {
-			aIdte2.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, aIdte2.getIdent(), aIdte2);
+	public void do_assign_normal_ident_deferred(final @NotNull BaseGeneratedFunction generatedFunction,
+												final @NotNull Context aContext,
+												final @NotNull IdentTableEntry aIdentTableEntry) {
+		if (aIdentTableEntry.type == null) {
+			aIdentTableEntry.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, aIdentTableEntry.getIdent(), aIdentTableEntry);
 		}
-		LookupResultList lrl1 = aFd_ctx.lookup(aIdte2.getIdent().getText());
+		LookupResultList lrl1 = aContext.lookup(aIdentTableEntry.getIdent().getText());
 		@Nullable OS_Element best1 = lrl1.chooseBest(null);
 		if (best1 != null) {
-			aIdte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best1));
+			aIdentTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best1));
 			// TODO check for elements which may contain type information
 			if (best1 instanceof VariableStatement) {
 				final @NotNull VariableStatement vs = (VariableStatement) best1;
-				@NotNull DeferredMember dm = deferred_member(vs.getParent().getParent(), null, vs, aIdte2);
+				@NotNull DeferredMember dm = deferred_member(vs.getParent().getParent(), null, vs, aIdentTableEntry);
 				dm.typePromise().done(new DoneCallback<GenType>() {
-						@Override
-						public void onDone(@NotNull GenType result) {
-							assert result.resolved != null;
-							aIdte2.type.setAttached(result.resolved);
-						}
-					});
+					@Override
+					public void onDone(@NotNull GenType result) {
+						assert result.resolved != null;
+						aIdentTableEntry.type.setAttached(result.resolved);
+					}
+				});
 				GenType genType = new GenType();
 				genType.ci = dm.getInvocation();
 				if (genType.ci instanceof NamespaceInvocation) {
@@ -785,10 +787,11 @@ public class DeduceTypes2 {
 					throw new IllegalStateException();
 				}
 				generatedFunction.addDependentType(genType);
-			}
+			} else
+				throw new NotImplementedException();
 		} else {
-			aIdte2.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-			LOG.err("242 Bad lookup" + aIdte2.getIdent().getText());
+			aIdentTableEntry.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+			LOG.err("242 Bad lookup" + aIdentTableEntry.getIdent().getText());
 		}
 	}
 
