@@ -603,6 +603,16 @@ public class DeduceTypes2 {
 												idte2.type.setAttached(result.resolved);
 											}
 										});
+									GenType genType = new GenType();
+									genType.ci = dm.getInvocation();
+									if (genType.ci instanceof NamespaceInvocation) {
+										genType.resolvedn = ((NamespaceInvocation) genType.ci).getNamespace();
+									} else if (genType.ci instanceof ClassInvocation) {
+										genType.resolved = ((ClassInvocation) genType.ci).getKlass().getOS_Type();
+									} else {
+										throw new IllegalStateException();
+									}
+									generatedFunction.addDependentType(genType);
 								}
 							} else {
 								idte2.setStatus(BaseTableEntry.Status.UNKNOWN, null);

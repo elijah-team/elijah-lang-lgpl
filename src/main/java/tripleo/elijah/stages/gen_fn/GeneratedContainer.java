@@ -9,6 +9,8 @@
 
 package tripleo.elijah.stages.gen_fn;
 
+import org.jdeferred2.DoneCallback;
+import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
@@ -30,6 +32,7 @@ public interface GeneratedContainer extends GeneratedNode {
 		public final IdentExpression nameToken;
 		public final IExpression initialValue;
 		private final OS_Element parent;
+		public DeferredObject<UpdatePotentialTypesCB, Void, Void> updatePotentialTypesCBPromise = new DeferredObject<>();
 		TypeName typeName;
 		public OS_Type varType;
 		List<TypeTableEntry> potentialTypes = new ArrayList<TypeTableEntry>();
@@ -79,7 +82,12 @@ public interface GeneratedContainer extends GeneratedNode {
 
 		public void updatePotentialTypes(final @NotNull GeneratedContainer aGeneratedContainer) {
 //			assert aGeneratedContainer == GeneratedContainer.this;
-			updatePotentialTypesCB.call(aGeneratedContainer);
+			updatePotentialTypesCBPromise.then(new DoneCallback<UpdatePotentialTypesCB>() {
+				@Override
+				public void onDone(final UpdatePotentialTypesCB result) {
+					result.call(aGeneratedContainer);
+				}
+			});
 		}
 
 		public static class ConnectionPair {

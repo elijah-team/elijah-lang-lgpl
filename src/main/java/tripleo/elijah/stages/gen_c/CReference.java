@@ -54,7 +54,7 @@ public class CReference {
 	}
 
 	enum Ref {
-		LOCAL, MEMBER, PROPERTY_GET, PROPERTY_SET, INLINE_MEMBER, CONSTRUCTOR, DIRECT_MEMBER, FUNCTION
+		LOCAL, MEMBER, PROPERTY_GET, PROPERTY_SET, INLINE_MEMBER, CONSTRUCTOR, DIRECT_MEMBER, LITERAL, FUNCTION
 	}
 
 	void addRef(String text, Ref type) {
@@ -148,18 +148,43 @@ public class CReference {
 						}
 					}
 					if (!skip) {
-						if (resolved == null) {
-							System.err.println("***88*** resolved is null for "+idte);
+						short state = 1;
+						if (idte.externalRef != null) {
+							state = 2;
 						}
-						if (sSize >= i + 1) {
-							_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction, resolved, aValue);
-							text = null;
-						} else {
-							boolean b = _getIdentIAPath_IdentIAHelper(s.get(i + 1), sl, i, sSize, resolved_element, generatedFunction, resolved, aValue);
-							if (b) i++;
+						switch (state) {
+						case 1:
+							if (resolved == null) {
+								System.err.println("***88*** resolved is null for "+idte);
+							}
+							if (sSize >= i + 1) {
+								_getIdentIAPath_IdentIAHelper(null, sl, i, sSize, resolved_element, generatedFunction, resolved, aValue);
+								text = null;
+							} else {
+								boolean b = _getIdentIAPath_IdentIAHelper(s.get(i + 1), sl, i, sSize, resolved_element, generatedFunction, resolved, aValue);
+								if (b) i++;
+							}
+							break;
+						case 2:
+							if ((resolved_element instanceof VariableStatement)) {
+								final String text2 = ((VariableStatement) resolved_element).getName();
+
+								final GeneratedNode externalRef = idte.externalRef;
+								if (externalRef instanceof GeneratedNamespace) {
+									final String text3 = String.format("zN%d_instance", ((GeneratedNamespace) externalRef).getCode());
+									addRef(text3, Ref.LITERAL, null);
+								} else if (externalRef instanceof GeneratedClass) {
+									assert false;
+									final String text3 = String.format("zN%d_instance", ((GeneratedClass) externalRef).getCode());
+									addRef(text3, Ref.LITERAL, null);
+								} else
+									throw new IllegalStateException();
+								addRef(text2, Ref.MEMBER, aValue);
+							} else
+								throw new NotImplementedException();
+							break;
 						}
 					}
-//					addRef(text, Ref.MEMBER);
 				} else {
 					if (ia2.getEntry().getStatus() == BaseTableEntry.Status.KNOWN) {
 						assert false;
@@ -339,13 +364,13 @@ public class CReference {
 //				text = Emit.emit("/*124*/")+"vsc->vm" + text2;
 				addRef(text2, Ref.DIRECT_MEMBER);
 			} else {
-				if (resolved_element.getParent().getParent() == generatedFunction.getFD()) {
-//					final String text2 = ((VariableStatement) resolved_element).getName();
-//					text = Emit.emit("/*126*/")+"vv" + text2;
+				final OS_Element parent = resolved_element.getParent().getParent();
+				if (parent == generatedFunction.getFD()) {
 					addRef(text2, Ref.LOCAL);
 				} else {
-//					final String text2 = ((VariableStatement) resolved_element).getName();
-//					text = Emit.emit("/*126*/")+"vm" + text2;
+//					if (parent instanceof NamespaceStatement) {
+//						int y=2;
+//					}
 					addRef(text2, Ref.MEMBER, aValue);
 				}
 			}
@@ -406,6 +431,10 @@ public class CReference {
 		String text = "";
 		for (Reference ref : refs) {
 			switch (ref.type) {
+			case LITERAL:
+				text = ref.text;
+				sb.append(text);
+				break;
 			case LOCAL:
 				text = "vv" + ref.text;
 				sb.append(text);
