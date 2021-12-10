@@ -72,6 +72,17 @@ public class GenerateC implements CodeGenerator {
 	}
 
 	@NotNull
+	public static Collection<GeneratedNode> constructors_to_list_of_generated_nodes(Collection<GeneratedConstructor> aGeneratedConstructors) {
+		return Collections2.transform(aGeneratedConstructors, new Function<GeneratedConstructor, GeneratedNode>() {
+			@org.checkerframework.checker.nullness.qual.Nullable
+			@Override
+			public GeneratedNode apply(@org.checkerframework.checker.nullness.qual.Nullable GeneratedConstructor input) {
+				return input;
+			}
+		});
+	}
+
+	@NotNull
 	public static Collection<GeneratedNode> classes_to_list_of_generated_nodes(Collection<GeneratedClass> aGeneratedClasses) {
 		return Collections2.transform(aGeneratedClasses, new Function<GeneratedClass, GeneratedNode>() {
 			@org.checkerframework.checker.nullness.qual.Nullable
@@ -95,6 +106,12 @@ public class GenerateC implements CodeGenerator {
 			} else if (generatedNode instanceof GeneratedContainerNC) {
 				GeneratedContainerNC containerNC = (GeneratedContainerNC) generatedNode;
 				containerNC.generateCode(this, gr);
+			} else if (generatedNode instanceof GeneratedConstructor) {
+				final GeneratedConstructor generatedConstructor = (GeneratedConstructor) generatedNode;
+				WorkList wl = new WorkList();
+				generate_constructor(generatedConstructor, gr, wl);
+				if (!wl.isEmpty())
+					wm.addJobs(wl);
 			}
 		}
 
@@ -176,7 +193,7 @@ public class GenerateC implements CodeGenerator {
 	}
 
 	public void generate_constructor(GeneratedConstructor aGeneratedConstructor, GenerateResult gr, WorkList wl) {
-		generateCodeForMethod(aGeneratedConstructor, gr, wl);
+		generateCodeForConstructor(aGeneratedConstructor, gr, wl);
 		for (IdentTableEntry identTableEntry : aGeneratedConstructor.idte_list) {
 			if (identTableEntry.isResolved()) {
 				GeneratedNode x = identTableEntry.resolvedType();
@@ -243,28 +260,32 @@ public class GenerateC implements CodeGenerator {
 
 			tosHdr.put_string_ln("");
 			tosHdr.put_string_ln("");
-			// TODO what about named constructors and ctor$0 and "the debug stack"
-			tos.put_string_ln(String.format("%s* ZC%d() {", class_name, class_code));
-			tos.incr_tabs();
-			tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
-			tos.put_string_ln(String.format("R->_tag = %d;", class_code));
-			if (decl.prim) {
-				// TODO consider NULL, and floats and longs, etc
-				if (!decl.prim_decl.equals("bool"))
-					tos.put_string_ln("R->vsv = 0;");
-				else if (decl.prim_decl.equals("bool"))
-					tos.put_string_ln("R->vsv = false;");
-			} else {
-				for (GeneratedClass.VarTableEntry o : x.varTable){
+
+			// TODO remove this block when constructors are added in dependent functions, etc in Deduce
+			{
+				// TODO what about named constructors and ctor$0 and "the debug stack"
+				tos.put_string_ln(String.format("%s* ZC%d() {", class_name, class_code));
+				tos.incr_tabs();
+				tos.put_string_ln(String.format("%s* R = GC_malloc(sizeof(%s));", class_name, class_name));
+				tos.put_string_ln(String.format("R->_tag = %d;", class_code));
+				if (decl.prim) {
+					// TODO consider NULL, and floats and longs, etc
+					if (!decl.prim_decl.equals("bool"))
+						tos.put_string_ln("R->vsv = 0;");
+					else if (decl.prim_decl.equals("bool"))
+						tos.put_string_ln("R->vsv = false;");
+				} else {
+					for (GeneratedClass.VarTableEntry o : x.varTable) {
 //					final String typeName = getTypeNameForVarTableEntry(o);
-					// TODO this should be the result of getDefaultValue for each type
-					tos.put_string_ln(String.format("R->vm%s = 0;", o.nameToken));
+						// TODO this should be the result of getDefaultValue for each type
+						tos.put_string_ln(String.format("R->vm%s = 0;", o.nameToken));
+					}
 				}
+				tos.put_string_ln("return R;");
+				tos.dec_tabs();
+				tos.put_string_ln(String.format("} // class %s%s", decl.prim ? "box " : "", x.getName()));
+				tos.put_string_ln("");
 			}
-			tos.put_string_ln("return R;");
-			tos.dec_tabs();
-			tos.put_string_ln(String.format("} // class %s%s", decl.prim ? "box " : "", x.getName()));
-			tos.put_string_ln("");
 			tos.flush();
 		} finally {
 			tos.close();

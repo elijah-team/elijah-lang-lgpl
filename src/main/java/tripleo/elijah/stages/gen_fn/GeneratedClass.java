@@ -278,14 +278,27 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 						int y=2;
 						final @NotNull GenType genType;
 						try {
-							final OS_Type attached = potentialType.getAttached();
-							if (attached == null) continue;
+							if (potentialType.genType.typeName == null) {
+								final OS_Type attached = potentialType.getAttached();
+								if (attached == null) continue;
 
-							genType = aDeduceTypes2.resolve_type(attached, aContext);
-							if (genType.resolved == null && genType.typeName.getType() == OS_Type.Type.USER_CLASS) {
-								genType.resolved = genType.typeName;
-								genType.typeName = null;
+								genType = aDeduceTypes2.resolve_type(attached, aContext);
+								if (genType.resolved == null && genType.typeName.getType() == OS_Type.Type.USER_CLASS) {
+									genType.resolved = genType.typeName;
+									genType.typeName = null;
+								}
+							} else {
+								if (potentialType.genType.resolved == null && potentialType.genType.resolvedn == null) {
+									final OS_Type attached = potentialType.genType.typeName;
+
+									genType = aDeduceTypes2.resolve_type(attached, aContext);
+								} else
+									genType = potentialType.genType;
 							}
+							final TypeName typeName = genType.typeName.getTypeName();
+							if (typeName instanceof NormalTypeName && ((NormalTypeName) typeName).getGenericPart().size() > 0)
+								genType.nonGenericTypeName = typeName;
+							aDeduceTypes2.genCIForGenType2(genType);
 							potentialTypes.add(genType);
 						} catch (ResolveError aResolveError) {
 							aResolveError.printStackTrace();

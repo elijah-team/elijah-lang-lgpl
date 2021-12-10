@@ -212,6 +212,13 @@ public class PipelineLogic {
 				final GeneratedContainerNC nc = (GeneratedContainerNC) generatedNode;
 
 				nc.generateCode(ggc, gr);
+				if (nc instanceof GeneratedClass) {
+					final GeneratedClass generatedClass = (GeneratedClass) nc;
+
+					final @NotNull Collection<GeneratedNode> gn2 = ggc.constructors_to_list_of_generated_nodes(generatedClass.constructors.values());
+					GenerateResult gr3 = ggc.generateCode(gn2, wm);
+					gr.results().addAll(gr3.results());
+				}
 				final @NotNull Collection<GeneratedNode> gn1 = ggc.functions_to_list_of_generated_nodes(nc.functionMap.values());
 				GenerateResult gr2 = ggc.generateCode(gn1, wm);
 				gr.results().addAll(gr2.results());

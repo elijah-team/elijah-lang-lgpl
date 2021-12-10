@@ -1695,7 +1695,7 @@ public class DeduceTypes2 {
 				wl.addJob(new WlGenerateDefaultCtor(phase.generatePhase.getGenerateFunctions(module), fi));
 				break;
 			case 2:
-				wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, null)); // TODO check this
+				wl.addJob(new WlGenerateCtor(phase.generatePhase.getGenerateFunctions(module), fi, fd2.getNameNode()));
 				break;
 			case 3:
 				// README this is a special case to generate constructor
