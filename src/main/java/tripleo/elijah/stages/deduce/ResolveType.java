@@ -27,7 +27,8 @@ public class ResolveType {
 										 final ElLog LOG,
 										 final DeduceTypes2 dt2) throws ResolveError {
 		@NotNull GenType R = new GenType();
-		R.typeName = type;
+		if (type.getType() != OS_Type.Type.USER_CLASS)
+			R.typeName = type;
 
 		switch (type.getType()) {
 
