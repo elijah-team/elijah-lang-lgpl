@@ -96,8 +96,10 @@ public class WlGenerateCtor implements WorkJob {
 			ConstructorDef c = null;
 			if (constructorName != null) {
 				for (ConstructorDef cc : cs) {
-					if (cc.name().equals(constructorName.getText()))
+					if (cc.name().equals(constructorName.getText())) {
 						c = cc;
+						break;
+					}
 				}
 			} else {
 				// TODO match based on arguments
