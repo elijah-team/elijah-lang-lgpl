@@ -112,24 +112,39 @@ public class CReference {
 								resolved = resolved1;
 						}
 					} else if (resolved_element instanceof PropertyStatement) {
-						int y=2;
+						NotImplementedException.raise();
 						GeneratedNode resolved1 = idte.type.resolved();
 						int code;
 						if (resolved1 != null)
 							code = ((GeneratedContainerNC) resolved1).getCode();
 						else
 							code = -1;
-						switch (aog) {
-						case GET:
+						short state = 0;
+						if (i < sSize-1) {
+							state = 1;
+						} else {
+							switch (aog) {
+							case GET:
+								state =1;
+								break;
+							case ASSIGN:
+								state =2;
+								break;
+							}
+						}
+						switch (state) {
+						case 1:
 							addRef(String.format("ZP%d_get%s(", code, idte.getIdent().getText()), Ref.PROPERTY_GET);
 							skip = true;
 							text = null;
 							break;
-						case ASSIGN:
+						case 2:
 							addRef(String.format("ZP%d_set%s(", code, idte.getIdent().getText()), Ref.PROPERTY_SET, aValue);
 							skip = true;
 							text = null;
 							break;
+						default:
+							throw new IllegalStateException("Unexpected value: " + state);
 						}
 					}
 					if (!skip) {
