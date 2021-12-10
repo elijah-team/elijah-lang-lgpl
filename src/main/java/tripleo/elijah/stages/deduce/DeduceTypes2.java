@@ -535,98 +535,7 @@ public class DeduceTypes2 {
 			case XS:
 				break;
 			case AGN:
-				{ // TODO doesn't account for __assign__
-					final InstructionArgument agn_lhs = instruction.getArg(0);
-					if (agn_lhs instanceof IntegerIA) {
-						final @NotNull IntegerIA arg = (IntegerIA) agn_lhs;
-						final @NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
-						final InstructionArgument i2 = instruction.getArg(1);
-						if (i2 instanceof IntegerIA) {
-							final @NotNull VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(i2));
-							vte.addPotentialType(instruction.getIndex(), vte2.type);
-						} else if (i2 instanceof FnCallArgs) {
-							final @NotNull FnCallArgs fca = (FnCallArgs) i2;
-							do_assign_call(generatedFunction, context, vte, fca, instruction);
-						} else if (i2 instanceof ConstTableIA) {
-							do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
-						} else if (i2 instanceof IdentIA) {
-							@NotNull IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(i2));
-							if (idte.type == null) {
-								final IdentIA identIA = new IdentIA(idte.getIndex(), generatedFunction);
-								resolveIdentIA_(context, identIA, generatedFunction, new FoundElement(phase) {
-
-									@Override
-									public void foundElement(final OS_Element e) {
-										found_element_for_ite(generatedFunction, idte, e, context);
-									}
-
-									@Override
-									public void noFoundElement() {
-										// TODO: log error
-									}
-								});
-							}
-							assert idte.type != null;
-							assert idte.getResolvedElement() != null;
-							vte.addPotentialType(instruction.getIndex(), idte.type);
-						} else if (i2 instanceof ProcIA) {
-							throw new NotImplementedException();
-						} else
-							throw new NotImplementedException();
-					} else if (agn_lhs instanceof IdentIA) {
-						final @NotNull IdentIA arg = (IdentIA) agn_lhs;
-						final @NotNull IdentTableEntry idte = arg.getEntry();
-						final InstructionArgument i2 = instruction.getArg(1);
-						if (i2 instanceof IntegerIA) {
-							final @NotNull VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(i2));
-							idte.addPotentialType(instruction.getIndex(), vte2.type);
-						} else if (i2 instanceof FnCallArgs) {
-							final @NotNull FnCallArgs fca = (FnCallArgs) i2;
-							do_assign_call(generatedFunction, fd_ctx, idte, fca, instruction.getIndex());
-						} else if (i2 instanceof IdentIA) {
-							@NotNull IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(i2));
-							if (idte2.type == null) {
-								idte2.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, idte2.getIdent(), idte2);
-							}
-							LookupResultList lrl1 = fd_ctx.lookup(idte2.getIdent().getText());
-							@Nullable OS_Element best1 = lrl1.chooseBest(null);
-							if (best1 != null) {
-								idte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best1));
-								// TODO check for elements which may contain type information
-								if (best1 instanceof VariableStatement) {
-									final @NotNull VariableStatement vs = (VariableStatement) best1;
-									@NotNull DeferredMember dm = deferred_member(vs.getParent().getParent(), null, vs, idte2);
-									dm.typePromise().done(new DoneCallback<GenType>() {
-											@Override
-											public void onDone(@NotNull GenType result) {
-												assert result.resolved != null;
-												idte2.type.setAttached(result.resolved);
-											}
-										});
-									GenType genType = new GenType();
-									genType.ci = dm.getInvocation();
-									if (genType.ci instanceof NamespaceInvocation) {
-										genType.resolvedn = ((NamespaceInvocation) genType.ci).getNamespace();
-									} else if (genType.ci instanceof ClassInvocation) {
-										genType.resolved = ((ClassInvocation) genType.ci).getKlass().getOS_Type();
-									} else {
-										throw new IllegalStateException();
-									}
-									generatedFunction.addDependentType(genType);
-								}
-							} else {
-								idte2.setStatus(BaseTableEntry.Status.UNKNOWN, null);
-								LOG.err("242 Bad lookup" + idte2.getIdent().getText());
-							}
-							idte.addPotentialType(instruction.getIndex(), idte2.type);
-						} else if (i2 instanceof ConstTableIA) {
-							do_assign_constant(generatedFunction, instruction, idte, (ConstTableIA) i2);
-						} else if (i2 instanceof ProcIA) {
-							throw new NotImplementedException();
-						} else
-							throw new NotImplementedException();
-					}
-				}
+				do_assign_normal(generatedFunction, fd_ctx, instruction, context);
 				break;
 			case AGNK:
 				{
@@ -779,6 +688,107 @@ public class DeduceTypes2 {
 					implement_calls_(generatedFunction, fd_ctx, i2, fn1, instruction.getIndex());
 				}
 			}
+		}
+	}
+
+	public void do_assign_normal(final @NotNull BaseGeneratedFunction generatedFunction, final Context aFd_ctx, final @NotNull Instruction instruction, final Context aContext) {
+		// TODO doesn't account for __assign__
+		final InstructionArgument agn_lhs = instruction.getArg(0);
+		if (agn_lhs instanceof IntegerIA) {
+			final @NotNull IntegerIA arg = (IntegerIA) agn_lhs;
+			final @NotNull VariableTableEntry vte = generatedFunction.getVarTableEntry(arg.getIndex());
+			final InstructionArgument i2 = instruction.getArg(1);
+			if (i2 instanceof IntegerIA) {
+				final @NotNull VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(i2));
+				vte.addPotentialType(instruction.getIndex(), vte2.type);
+			} else if (i2 instanceof FnCallArgs) {
+				final @NotNull FnCallArgs fca = (FnCallArgs) i2;
+				do_assign_call(generatedFunction, aContext, vte, fca, instruction);
+			} else if (i2 instanceof ConstTableIA) {
+				do_assign_constant(generatedFunction, instruction, vte, (ConstTableIA) i2);
+			} else if (i2 instanceof IdentIA) {
+				@NotNull IdentTableEntry idte = generatedFunction.getIdentTableEntry(to_int(i2));
+				if (idte.type == null) {
+					final IdentIA identIA = new IdentIA(idte.getIndex(), generatedFunction);
+					resolveIdentIA_(aContext, identIA, generatedFunction, new FoundElement(phase) {
+
+						@Override
+						public void foundElement(final OS_Element e) {
+							found_element_for_ite(generatedFunction, idte, e, aContext);
+						}
+
+						@Override
+						public void noFoundElement() {
+							// TODO: log error
+						}
+					});
+				}
+				assert idte.type != null;
+				assert idte.getResolvedElement() != null;
+				vte.addPotentialType(instruction.getIndex(), idte.type);
+			} else if (i2 instanceof ProcIA) {
+				throw new NotImplementedException();
+			} else
+				throw new NotImplementedException();
+		} else if (agn_lhs instanceof IdentIA) {
+			final @NotNull IdentIA arg = (IdentIA) agn_lhs;
+			final @NotNull IdentTableEntry idte = arg.getEntry();
+			final InstructionArgument i2 = instruction.getArg(1);
+			if (i2 instanceof IntegerIA) {
+				final @NotNull VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(i2));
+				idte.addPotentialType(instruction.getIndex(), vte2.type);
+			} else if (i2 instanceof FnCallArgs) {
+				final @NotNull FnCallArgs fca = (FnCallArgs) i2;
+				do_assign_call(generatedFunction, aFd_ctx, idte, fca, instruction.getIndex());
+			} else if (i2 instanceof IdentIA) {
+				if (idte.getResolvedElement() instanceof VariableStatement) {
+					do_assign_normal_ident_deferred(generatedFunction, aFd_ctx, idte);
+				}
+				@NotNull IdentTableEntry idte2 = generatedFunction.getIdentTableEntry(to_int(i2));
+				do_assign_normal_ident_deferred(generatedFunction, aFd_ctx, idte2);
+				idte.addPotentialType(instruction.getIndex(), idte2.type);
+			} else if (i2 instanceof ConstTableIA) {
+				do_assign_constant(generatedFunction, instruction, idte, (ConstTableIA) i2);
+			} else if (i2 instanceof ProcIA) {
+				throw new NotImplementedException();
+			} else
+				throw new NotImplementedException();
+		}
+	}
+
+	public void do_assign_normal_ident_deferred(final @NotNull BaseGeneratedFunction generatedFunction, final Context aFd_ctx, final @NotNull IdentTableEntry aIdte2) {
+		if (aIdte2.type == null) {
+			aIdte2.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, aIdte2.getIdent(), aIdte2);
+		}
+		LookupResultList lrl1 = aFd_ctx.lookup(aIdte2.getIdent().getText());
+		@Nullable OS_Element best1 = lrl1.chooseBest(null);
+		if (best1 != null) {
+			aIdte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best1));
+			// TODO check for elements which may contain type information
+			if (best1 instanceof VariableStatement) {
+				final @NotNull VariableStatement vs = (VariableStatement) best1;
+				@NotNull DeferredMember dm = deferred_member(vs.getParent().getParent(), null, vs, aIdte2);
+				dm.typePromise().done(new DoneCallback<GenType>() {
+						@Override
+						public void onDone(@NotNull GenType result) {
+							assert result.resolved != null;
+							aIdte2.type.setAttached(result.resolved);
+						}
+					});
+				GenType genType = new GenType();
+				genType.ci = dm.getInvocation();
+				if (genType.ci instanceof NamespaceInvocation) {
+					genType.resolvedn = ((NamespaceInvocation) genType.ci).getNamespace();
+				} else if (genType.ci instanceof ClassInvocation) {
+					genType.resolved = ((ClassInvocation) genType.ci).getKlass().getOS_Type();
+				} else {
+					throw new IllegalStateException();
+				}
+				generatedFunction.addDependentType(genType);
+			}
+		} else {
+			aIdte2.setStatus(BaseTableEntry.Status.UNKNOWN, null);
+			LOG.err("242 Bad lookup" + aIdte2.getIdent().getText());
 		}
 	}
 
