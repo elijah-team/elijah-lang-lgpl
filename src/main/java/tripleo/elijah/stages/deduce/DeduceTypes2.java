@@ -1623,16 +1623,18 @@ public class DeduceTypes2 {
 			if (fd3 != null) {
 				parent = fd3.getParent();
 				if (parent instanceof ClassStatement) {
-					ci = new ClassInvocation((ClassStatement) parent, null);
-					{
-						final ClassInvocation classInvocation = pte.getClassInvocation();
-						if (classInvocation != null) {
-							Map<TypeName, OS_Type> gp = classInvocation.genericPart;
-							if (gp != null) {
-								int i = 0;
-								for (Map.@NotNull Entry<TypeName, OS_Type> entry : gp.entrySet()) {
-									ci.set(i, entry.getKey(), entry.getValue());
-									i++;
+					if (ci != pte.getClassInvocation()) {
+						ci = new ClassInvocation((ClassStatement) parent, null);
+						{
+							final ClassInvocation classInvocation = pte.getClassInvocation();
+							if (classInvocation != null) {
+								Map<TypeName, OS_Type> gp = classInvocation.genericPart;
+								if (gp != null) {
+									int i = 0;
+									for (Map.@NotNull Entry<TypeName, OS_Type> entry : gp.entrySet()) {
+										ci.set(i, entry.getKey(), entry.getValue());
+										i++;
+									}
 								}
 							}
 						}
