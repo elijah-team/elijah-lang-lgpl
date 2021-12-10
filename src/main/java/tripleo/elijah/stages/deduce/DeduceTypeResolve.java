@@ -194,7 +194,8 @@ public class DeduceTypeResolve {
 
 						@Override
 						public void visitPropertyStatement(final PropertyStatement aPropertyStatement) {
-							int y=2;
+							genType.typeName = new OS_Type(aPropertyStatement.getTypeName());
+							// TODO resolve??
 						}
 
 						@Override
