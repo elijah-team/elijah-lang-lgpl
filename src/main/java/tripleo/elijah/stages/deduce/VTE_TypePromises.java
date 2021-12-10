@@ -195,7 +195,7 @@ public class VTE_TypePromises {
 					switch (attached1.getType()) {
 					case USER_CLASS:
 						if (ite.type.getAttached() == null)
-							ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached1);
+							ite.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, attached1);
 						else {
 							aDeduceTypes2.LOG.err(String.format("3603 Trying to set %s to %s", ite.type.getAttached(), attached1));
 						}

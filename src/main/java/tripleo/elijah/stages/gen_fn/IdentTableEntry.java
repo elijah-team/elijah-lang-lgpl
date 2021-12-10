@@ -15,8 +15,10 @@ import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.Context;
+import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.IdentExpression;
 import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.DeduceElementIdent;
 import tripleo.elijah.stages.deduce.DeducePath;
 import tripleo.elijah.stages.deduce.DeducePhase;
@@ -222,6 +224,14 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 	public void setBacklink(InstructionArgument aBacklink) {
 		backlink = aBacklink;
 		backlinkSet.resolve(backlink);
+	}
+
+	public void makeType(final BaseGeneratedFunction aGeneratedFunction, final TypeTableEntry.Type aType, final OS_Type aOS_Type) {
+		type = aGeneratedFunction.newTypeTableEntry(aType, aOS_Type, getIdent(), this);
+	}
+
+	public void makeType(final BaseGeneratedFunction aGeneratedFunction, final TypeTableEntry.Type aType, final IExpression aExpression) {
+		type = aGeneratedFunction.newTypeTableEntry(aType, null, aExpression, this);
 	}
 }
 

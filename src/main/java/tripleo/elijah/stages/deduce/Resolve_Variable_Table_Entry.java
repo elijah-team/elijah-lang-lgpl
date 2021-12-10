@@ -91,7 +91,7 @@ class Resolve_Variable_Table_Entry {
 						@Override
 						public void onDone(@NotNull GenType result) {
 							if (t == null) {
-								ite1.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved);
+								ite1.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, result.resolved);
 								ite1.setGenType(result);
 							} else {
 //								assert false; // we don't expect this, but note there is no problem if it happens

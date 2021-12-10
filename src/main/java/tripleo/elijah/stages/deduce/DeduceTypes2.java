@@ -760,7 +760,7 @@ public class DeduceTypes2 {
 												final @NotNull Context aContext,
 												final @NotNull IdentTableEntry aIdentTableEntry) {
 		if (aIdentTableEntry.type == null) {
-			aIdentTableEntry.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, aIdentTableEntry.getIdent(), aIdentTableEntry);
+			aIdentTableEntry.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, (OS_Type) null);
 		}
 		LookupResultList lrl1 = aContext.lookup(aIdentTableEntry.getIdent().getText());
 		@Nullable OS_Element best1 = lrl1.chooseBest(null);
@@ -3079,8 +3079,7 @@ public class DeduceTypes2 {
 													assert fd == generatedFunction.getFD();
 													//
 													if (idte.type == null) {
-														@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, gt(aType), idte); // TODO expression?
-														idte.type = tte1;
+														idte.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, gt(aType));  // TODO expression?
 													} else
 														idte.type.setAttached(gt(aType));
 												}

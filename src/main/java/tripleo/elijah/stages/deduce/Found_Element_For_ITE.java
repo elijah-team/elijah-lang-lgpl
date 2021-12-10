@@ -93,7 +93,7 @@ class Found_Element_For_ITE {
 				throw new IllegalStateException("Unexpected value: " + ps.getTypeName().kindOfType());
 		}
 		if (ite.type == null) {
-			ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
+			ite.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, attached);
 		} else
 			ite.type.setAttached(attached);
 		dc.genCIForGenType2(ite.type.genType);
@@ -103,7 +103,7 @@ class Found_Element_For_ITE {
 	public void action_FunctionDef(@NotNull IdentTableEntry ite, FunctionDef functionDef) {
 		@NotNull OS_Type attached = functionDef.getOS_Type();
 		if (ite.type == null) {
-			ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
+			ite.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, attached);
 		} else
 			ite.type.setAttached(attached);
 	}
@@ -111,7 +111,7 @@ class Found_Element_For_ITE {
 	public void action_ClassStatement(@NotNull IdentTableEntry ite, ClassStatement classStatement) {
 		@NotNull OS_Type attached = classStatement.getOS_Type();
 		if (ite.type == null) {
-			ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, attached, null, ite);
+			ite.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, attached);
 		} else
 			ite.type.setAttached(attached);
 	}
@@ -121,7 +121,7 @@ class Found_Element_For_ITE {
 		if (ite.type == null || ite.type.getAttached() == null) {
 			if (!(typeName.isNull())) {
 				if (ite.type == null)
-					ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+					ite.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, vs.initialValue());
 				ite.type.setAttached(new OS_Type(typeName));
 			} else {
 				final OS_Element parent = vs.getParent().getParent();
@@ -140,7 +140,7 @@ class Found_Element_For_ITE {
 									@Override
 									public void onDone(@NotNull GenType result) {
 										if (ite.type == null)
-											ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+											ite.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, vs.initialValue());
 										assert result.resolved != null;
 										if (result.ci == null) {
 											genCIForGenType(result);
@@ -173,7 +173,7 @@ class Found_Element_For_ITE {
 							@Override
 							public void onDone(final GenType result) {
 								if (ite.type == null)
-									ite.type = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, null, vs.initialValue());
+									ite.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, vs.initialValue());
 								assert result.resolved != null;
 								ite.setGenType(result);
 //								ite.resolveTypeToClass(result.node); // TODO setting this has no effect on output
