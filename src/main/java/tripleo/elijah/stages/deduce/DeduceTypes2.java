@@ -183,7 +183,7 @@ public class DeduceTypes2 {
 			ProcessElement.processElement(el, new IElementProcessor() {
 				@Override
 				public void elementIsNull() {
-					int y=2;
+					NotImplementedException.raise();
 				}
 
 				@Override
