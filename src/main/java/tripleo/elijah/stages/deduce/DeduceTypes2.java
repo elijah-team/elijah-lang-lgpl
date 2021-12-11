@@ -769,30 +769,65 @@ public class DeduceTypes2 {
 			// TODO check for elements which may contain type information
 			if (best instanceof VariableStatement) {
 				final @NotNull VariableStatement vs = (VariableStatement) best;
-				@NotNull DeferredMember dm = deferred_member(vs.getParent().getParent(), null, vs, aIdentTableEntry);
-				dm.typePromise().done(new DoneCallback<GenType>() {
-					@Override
-					public void onDone(@NotNull GenType result) {
-						assert result.resolved != null;
-						aIdentTableEntry.type.setAttached(result.resolved);
-					}
-				});
-				GenType genType = new GenType();
-				genType.ci = dm.getInvocation();
-				if (genType.ci instanceof NamespaceInvocation) {
-					genType.resolvedn = ((NamespaceInvocation) genType.ci).getNamespace();
-				} else if (genType.ci instanceof ClassInvocation) {
-					genType.resolved = ((ClassInvocation) genType.ci).getKlass().getOS_Type();
-				} else {
-					throw new IllegalStateException();
-				}
-				generatedFunction.addDependentType(genType);
+				do_assign_normal_ident_deferred_VariableStatement(generatedFunction, aIdentTableEntry, vs);
+			} else if (best instanceof FormalArgListItem) {
+				final FormalArgListItem fali = (FormalArgListItem) best;
+				do_assign_normal_ident_deferred_FALI(generatedFunction, aIdentTableEntry, fali);
 			} else
 				throw new NotImplementedException();
 		} else {
 			aIdentTableEntry.setStatus(BaseTableEntry.Status.UNKNOWN, null);
 			LOG.err("242 Bad lookup" + aIdentTableEntry.getIdent().getText());
 		}
+	}
+
+	private void do_assign_normal_ident_deferred_FALI(final BaseGeneratedFunction generatedFunction, final IdentTableEntry aIdentTableEntry, final FormalArgListItem fali) {
+		GenType genType = new GenType();
+		final IInvocation invocation;
+		if (generatedFunction.fi.getClassInvocation() != null) {
+			invocation = generatedFunction.fi.getClassInvocation();
+			genType.resolved = ((ClassInvocation) invocation).getKlass().getOS_Type();
+		} else {
+			invocation = generatedFunction.fi.getNamespaceInvocation();
+			genType.resolvedn = ((NamespaceInvocation) invocation).getNamespace();
+		}
+		genType.ci = invocation;
+		final @Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(fali.name());
+		assert vte_ia != null;
+		((IntegerIA) vte_ia).getEntry().typeResolvePromise().then(new DoneCallback<GenType>() {
+			@Override
+			public void onDone(final GenType result) {
+				assert result.resolved != null;
+				aIdentTableEntry.type.setAttached(result.resolved);
+			}
+		});
+		generatedFunction.addDependentType(genType);
+	}
+
+	public void do_assign_normal_ident_deferred_VariableStatement(final @NotNull BaseGeneratedFunction generatedFunction, final @NotNull IdentTableEntry aIdentTableEntry, final @NotNull VariableStatement vs) {
+		final IInvocation invocation;
+		if (generatedFunction.fi.getClassInvocation() != null)
+			invocation = generatedFunction.fi.getClassInvocation();
+		else
+			invocation = generatedFunction.fi.getNamespaceInvocation();
+		@NotNull DeferredMember dm = deferred_member(vs.getParent().getParent(), invocation, vs, aIdentTableEntry);
+		dm.typePromise().done(new DoneCallback<GenType>() {
+			@Override
+			public void onDone(@NotNull GenType result) {
+				assert result.resolved != null;
+				aIdentTableEntry.type.setAttached(result.resolved);
+			}
+		});
+		GenType genType = new GenType();
+		genType.ci = dm.getInvocation();
+		if (genType.ci instanceof NamespaceInvocation) {
+			genType.resolvedn = ((NamespaceInvocation) genType.ci).getNamespace();
+		} else if (genType.ci instanceof ClassInvocation) {
+			genType.resolved = ((ClassInvocation) genType.ci).getKlass().getOS_Type();
+		} else {
+			throw new IllegalStateException();
+		}
+		generatedFunction.addDependentType(genType);
 	}
 
 	private void implement_is_a(final @NotNull BaseGeneratedFunction gf, final @NotNull Instruction instruction) {
