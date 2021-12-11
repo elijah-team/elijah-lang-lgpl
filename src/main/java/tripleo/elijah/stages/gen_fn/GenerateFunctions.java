@@ -1540,7 +1540,8 @@ public class GenerateFunctions {
 			theName = null;
 			num = gf.nextTemp();
 		}
-		final VariableTableEntry vte = new VariableTableEntry(gf.vte_list.size(), VariableTableType.TEMP, theName, tte, el);
+		final int vte_index = gf.addVariableTableEntry(theName, VariableTableType.TEMP, tte, el);
+		final @NotNull VariableTableEntry vte = gf.getVarTableEntry(vte_index);
 		vte.tempNum = num;
 		gf.vte_list.add(vte);
 		return vte.getIndex();
