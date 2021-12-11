@@ -362,7 +362,7 @@ public class CReference {
 			if (resolved_element.getParent().getParent() == generatedFunction.getFD().getParent()) {
 				// A direct member value. Doesn't handle when indirect
 //				text = Emit.emit("/*124*/")+"vsc->vm" + text2;
-				addRef(text2, Ref.DIRECT_MEMBER);
+				addRef(text2, Ref.DIRECT_MEMBER, aValue);
 			} else {
 				final OS_Element parent = resolved_element.getParent().getParent();
 				if (parent == generatedFunction.getFD()) {
@@ -455,6 +455,11 @@ public class CReference {
 			case DIRECT_MEMBER:
 				text = Emit.emit("/*124*/")+"vsc->vm" + ref.text;
 				sb.append(text);
+				if (ref.value != null) {
+					sb.append(" = ");
+					sb.append(ref.value);
+					sb.append(";");
+				}
 				break;
 			case FUNCTION: {
 				final String s = sb.toString();
