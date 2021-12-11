@@ -122,9 +122,7 @@ public class Generate_Code_For_Method {
 			final String args_string = gmh.args_string;
 
 			// NOTE getGenClass is always a class or namespace, getParent can be a function
-			GeneratedContainerNC parent = gf.getParent();
-			if (parent == null)
-				parent = (GeneratedContainerNC) gf.getGenClass();
+			GeneratedContainerNC parent = (GeneratedContainerNC) gf.getGenClass();
 
 			assert parent == x;
 
@@ -674,9 +672,7 @@ public class Generate_Code_For_Method {
 
 		String find_header_string(BaseGeneratedFunction gf, ElLog LOG) {
 			// NOTE getGenClass is always a class or namespace, getParent can be a function
-			GeneratedContainerNC parent = gf.getParent();
-			if (parent == null)
-				parent = (GeneratedContainerNC) gf.getGenClass();
+			GeneratedContainerNC parent = (GeneratedContainerNC) gf.getGenClass();
 
 			if (parent instanceof GeneratedClass) {
 				GeneratedClass st = (GeneratedClass) parent;
