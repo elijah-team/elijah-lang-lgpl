@@ -811,7 +811,7 @@ public class GenerateFunctions {
 		}
 
 		public void ident(@NotNull BaseGeneratedFunction gf, IdentExpression left, IdentExpression right, Context cctx) {
-			final InstructionArgument vte_left = gf.vte_lookup(left.getText());
+			final @org.jetbrains.annotations.Nullable InstructionArgument vte_left = gf.vte_lookup(left.getText());
 			final int ident_left;
 			int ident_right;
 			InstructionArgument some_left;
@@ -828,11 +828,13 @@ public class GenerateFunctions {
 			} else {
 				inst = add_i(gf, InstructionName.AGN, List_of(some_left, vte_right), cctx);
 
-				// TODO this will break one day
-				assert vte_left != null;
-				final VariableTableEntry vte = gf.getVarTableEntry(to_int(vte_left));
-				// ^^
-				vte.addPotentialType(inst, gf.getVarTableEntry(to_int(vte_right)).type);
+				if (vte_left != null) {
+					final VariableTableEntry vte = gf.getVarTableEntry(to_int(vte_left));
+					// ^^
+					vte.addPotentialType(inst, gf.getVarTableEntry(to_int(vte_right)).type);
+				} else if (some_left instanceof IdentIA) {
+//					((IdentIA) some_left).getEntry().addPotentialType(inst, unknown_type);
+				}
 			}
 		}
 
