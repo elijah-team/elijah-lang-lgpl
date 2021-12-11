@@ -236,24 +236,7 @@ public class DeduceTypes2 {
 					}
 					genCI(gt, null); // TODO aGenericPart
 					assert gt.ci != null;
-					if (gt.ci instanceof NamespaceInvocation) {
-						final NamespaceInvocation nsi = (NamespaceInvocation) gt.ci;
-						nsi.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
-							@Override
-							public void onDone(final GeneratedNamespace result) {
-								gt.node = result;
-							}
-						});
-					} else if (gt.ci instanceof ClassInvocation) {
-						final ClassInvocation ci = (ClassInvocation) gt.ci;
-						ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
-							@Override
-							public void onDone(final GeneratedClass result) {
-								gt.node = result;
-							}
-						});
-					} else
-						throw new NotImplementedException();
+					genNodeForGenType2(gt);
 				}
 
 				private OS_Element preprocess(final OS_Element el) {
@@ -3876,6 +3859,36 @@ public class DeduceTypes2 {
 				aVte.resolveTypeToClass(result);
 			}
 		});
+	}
+
+	/**
+	 * Sets the node for a GenType, invocation must already be set
+	 *
+	 * @param aGenType the GenType to modify.
+	 */
+	public void genNodeForGenType2(final GenType aGenType) {
+//		assert aGenType.nonGenericTypeName != null;
+
+		final IInvocation invocation = aGenType.ci;
+
+		if (invocation instanceof NamespaceInvocation) {
+			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
+			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+				@Override
+				public void onDone(final GeneratedNamespace result) {
+					aGenType.node = result;
+				}
+			});
+		} else if (invocation instanceof ClassInvocation) {
+			final ClassInvocation classInvocation = (ClassInvocation) invocation;
+			classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(final GeneratedClass result) {
+					aGenType.node = result;
+				}
+			});
+		} else
+			throw new IllegalStateException("invalid invocation");
 	}
 
 	static class DeduceClient2 {
