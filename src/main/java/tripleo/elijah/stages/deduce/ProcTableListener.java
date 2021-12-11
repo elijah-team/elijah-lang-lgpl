@@ -319,6 +319,26 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 					throw new IllegalStateException("Unknown parent");
 				if (fi != null)
 					pte.setFunctionInvocation(fi);
+			} else if (pte.getClassInvocation() == null && pte.getFunctionInvocation() != null) {
+				@NotNull ClassInvocation ci;
+				if (parent instanceof ClassStatement) {
+					final @NotNull ClassStatement classStatement = (ClassStatement) parent;
+					genType = new GenType(classStatement);
+//					ci = new ClassInvocation(classStatement, null);
+//					ci = phase.registerClassInvocation(ci);
+//					genType.ci = ci;
+					ci = dc.genCI(genType, typeName);
+					pte.setClassInvocation(ci);
+					fi = dc.newFunctionInvocation(fd, pte, ci);
+				} else if (parent instanceof NamespaceStatement) {
+					final @NotNull NamespaceStatement namespaceStatement = (NamespaceStatement) parent;
+					genType = new GenType(namespaceStatement);
+					final NamespaceInvocation nsi = dc.registerNamespaceInvocation(namespaceStatement);
+//					pte.setNamespaceInvocation(nsi);
+					genType.ci = nsi;
+					genType.resolvedn = namespaceStatement;
+					fi = dc.newFunctionInvocation(fd, pte, nsi);
+				}
 			} else {
 				// don't create new objects when alrady populated
 				genType = new GenType();
