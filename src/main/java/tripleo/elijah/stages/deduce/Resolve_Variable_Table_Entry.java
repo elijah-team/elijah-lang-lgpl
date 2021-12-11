@@ -328,7 +328,10 @@ class Resolve_Variable_Table_Entry {
 						LOG.err("Can't resolve argument type " + attached);
 						return;
 					}
-					genCIForGenType(tte.genType);
+					if (generatedFunction.fi.getClassInvocation() != null)
+						genNodeForGenType(tte.genType, generatedFunction.fi.getClassInvocation());
+					else
+						genCIForGenType(tte.genType);
 					vte.resolveType(tte.genType);
 					break;
 				case USER_CLASS:
@@ -354,6 +357,37 @@ class Resolve_Variable_Table_Entry {
 
 		deduceTypes2.genCI(aGenType, aGenType.nonGenericTypeName);
 		final IInvocation invocation = aGenType.ci;
+		if (invocation instanceof NamespaceInvocation) {
+			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
+			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+				@Override
+				public void onDone(final GeneratedNamespace result) {
+					aGenType.node = result;
+				}
+			});
+		} else if (invocation instanceof ClassInvocation) {
+			final ClassInvocation classInvocation = (ClassInvocation) invocation;
+			classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+				@Override
+				public void onDone(final GeneratedClass result) {
+					aGenType.node = result;
+				}
+			});
+		} else
+			throw new IllegalStateException("invalid invocation");
+	}
+
+	/**
+	 * Sets the node for a GenType, given an invocation
+	 *
+	 * @param aGenType the GenType to modify. must be set to a nonGenericTypeName that is non-null and generic
+	 */
+	public void genNodeForGenType(final GenType aGenType, IInvocation invocation) {
+		assert aGenType.nonGenericTypeName != null;
+
+//		final IInvocation invocation = aGenType.ci;
+		assert aGenType.ci == null || aGenType.ci == invocation;
+		aGenType.ci = invocation;
 		if (invocation instanceof NamespaceInvocation) {
 			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
 			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
