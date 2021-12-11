@@ -116,11 +116,11 @@ public class CtorReference {
 				sb.append(text);
 				break;
 			case INLINE_MEMBER:
-				text = Emit.emit("/*219*/")+".vm" + ref.text;
+				text = Emit.emit("/*2190*/")+".vm" + ref.text;
 				sb.append(text);
 				break;
 			case DIRECT_MEMBER:
-				text = Emit.emit("/*124*/")+"vsc->vm" + ref.text;
+				text = Emit.emit("/*1240*/")+"vsc->vm" + ref.text;
 				sb.append(text);
 				break;
 			case FUNCTION: {
