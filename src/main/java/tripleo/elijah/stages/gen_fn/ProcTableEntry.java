@@ -45,11 +45,11 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 	private DeferredObject<ProcTableEntry, Void, Void> completeDeferred = new DeferredObject<ProcTableEntry, Void, Void>();
 	private DeferredObject2<FunctionInvocation, Void, Void> onFunctionInvocations = new DeferredObject2<FunctionInvocation, Void, Void>();
 
-	public ProcTableEntry(final int index, final IExpression aExpression, final InstructionArgument expression_num, final List<TypeTableEntry> args) {
-		this.index = index;
-		this.expression = aExpression;
-		this.expression_num = expression_num;
-		this.args = args;
+	public ProcTableEntry(final int aIndex, final IExpression aExpression, final InstructionArgument aExpressionNum, final List<TypeTableEntry> aArgs) {
+		index = aIndex;
+		expression = aExpression;
+		expression_num = aExpressionNum;
+		args = aArgs;
 
 		addStatusListener(new StatusListener() {
 			@Override
@@ -60,10 +60,10 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 			}
 		});
 
-		for (TypeTableEntry tte : args) {
+		for (final TypeTableEntry tte : args) {
 			tte.addSetAttached(new TypeTableEntry.OnSetAttached() {
 				@Override
-				public void onSetAttached(TypeTableEntry aTypeTableEntry) {
+				public void onSetAttached(final TypeTableEntry aTypeTableEntry) {
 					ProcTableEntry.this.onSetAttached();
 				}
 			});
