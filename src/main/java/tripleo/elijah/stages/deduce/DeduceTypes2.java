@@ -763,12 +763,12 @@ public class DeduceTypes2 {
 			aIdentTableEntry.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, (OS_Type) null);
 		}
 		LookupResultList lrl1 = aContext.lookup(aIdentTableEntry.getIdent().getText());
-		@Nullable OS_Element best1 = lrl1.chooseBest(null);
-		if (best1 != null) {
-			aIdentTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best1));
+		@Nullable OS_Element best = lrl1.chooseBest(null);
+		if (best != null) {
+			aIdentTableEntry.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
 			// TODO check for elements which may contain type information
-			if (best1 instanceof VariableStatement) {
-				final @NotNull VariableStatement vs = (VariableStatement) best1;
+			if (best instanceof VariableStatement) {
+				final @NotNull VariableStatement vs = (VariableStatement) best;
 				@NotNull DeferredMember dm = deferred_member(vs.getParent().getParent(), null, vs, aIdentTableEntry);
 				dm.typePromise().done(new DoneCallback<GenType>() {
 					@Override
