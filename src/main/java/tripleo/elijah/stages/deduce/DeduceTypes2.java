@@ -3937,6 +3937,10 @@ public class DeduceTypes2 {
 		public void genCIForGenType2(final GenType genType) {
 			deduceTypes2.genCIForGenType2(genType);
 		}
+
+		public @NotNull FunctionInvocation newFunctionInvocation(final BaseFunctionDef aFunctionDef, final ProcTableEntry aPte, final @NotNull IInvocation aInvocation) {
+			return deduceTypes2.newFunctionInvocation(aFunctionDef, aPte, aInvocation, deduceTypes2.phase);
+		}
 	}
 
 	private class NullFoundElement extends FoundElement {
