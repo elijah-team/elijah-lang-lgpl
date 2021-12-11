@@ -1284,27 +1284,22 @@ public class DeduceTypes2 {
 		private ClassInvocation nonGenericTypeName(final @NotNull GenType genType) {
 			@NotNull NormalTypeName aTyn1 = (NormalTypeName) genType.nonGenericTypeName;
 			@Nullable String constructorName = null; // TODO this comes from nowhere
-			ClassStatement best = genType.resolved.getClassOf();
-			//
-			@NotNull List<TypeName> gp = best.getGenericPart();
-			@Nullable ClassInvocation clsinv = new ClassInvocation(best, constructorName);
-			if (gp.size() > 0) {
-				TypeNameList gp2 = aTyn1.getGenericPart();
-				for (int i = 0; i < gp.size(); i++) {
-					final TypeName typeName = gp2.get(i);
-					@NotNull GenType typeName2;
-					try {
-						typeName2 = resolve_type(new OS_Type(typeName), typeName.getContext());
-						clsinv.set(i, gp.get(i), typeName2.resolved);
-					} catch (ResolveError aResolveError) {
-						aResolveError.printStackTrace();
-						return null;
-					}
-				}
+
+			switch (genType.resolved.getType()) {
+			case GENERIC_TYPENAME:
+				int y=2; // TODO seems to not be necessary
+				assert false;
+				return null;
+			case USER_CLASS:
+				ClassStatement best = genType.resolved.getClassOf();
+				//
+				ClassInvocation clsinv2 = ClassInvocationMake.withGenericPart(best, constructorName, aTyn1, DeduceTypes2.this);
+				clsinv2 = phase.registerClassInvocation(clsinv2);
+				genType.ci = clsinv2;
+				return clsinv2;
+			default:
+				throw new IllegalStateException("Unexpected value: " + genType.resolved.getType());
 			}
-			clsinv = phase.registerClassInvocation(clsinv);
-			genType.ci = clsinv;
-			return clsinv;
 		}
 	}
 
