@@ -86,7 +86,12 @@ public class Generate_Code_For_Method {
 		int class_code = x.getCode();
 
 		assert gf.cd != null;
-		final String constructorName = gf.cd.name();
+		final String constructorName_ = gf.cd.name();
+		final String constructorName;
+		if (constructorName_.equals("<>"))
+			constructorName = "";
+		else
+			constructorName = constructorName_;
 
 		tos.put_string_ln(String.format("%s* ZC%d%s() {", class_name, class_code, constructorName));
 		tos.incr_tabs();
