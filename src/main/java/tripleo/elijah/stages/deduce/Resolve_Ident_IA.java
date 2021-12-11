@@ -373,6 +373,14 @@ class Resolve_Ident_IA {
 //								generatedFunction.addDependentFunction(fi); // README program fails if this is included
 							}
 						}
+						final ProcTableEntry callablePTE = idte.getCallablePTE();
+						assert callablePTE != null;
+						final @NotNull FunctionInvocation fi = dc.newFunctionInvocation((BaseFunctionDef) el, callablePTE, invocation);
+						if (invocation instanceof ClassInvocation) {
+							callablePTE.setClassInvocation((ClassInvocation) invocation);
+						}
+						callablePTE.setFunctionInvocation(fi);
+						generatedFunction.addDependentFunction(fi);
 					} else if (el instanceof ClassStatement) {
 						@NotNull GenType genType = new GenType((ClassStatement) el);
 						generatedFunction.addDependentType(genType);

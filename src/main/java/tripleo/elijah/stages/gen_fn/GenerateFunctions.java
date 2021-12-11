@@ -1077,6 +1077,11 @@ public class GenerateFunctions {
 	public int addProcTableEntry(final IExpression expression, final InstructionArgument expression_num, final List<TypeTableEntry> args, final BaseGeneratedFunction gf) {
 		final ProcTableEntry pte = new ProcTableEntry(gf.prte_list.size(), expression, expression_num, args);
 		gf.prte_list.add(pte);
+		if (expression_num instanceof IdentIA) {
+			final IdentIA identIA = (IdentIA) expression_num;
+			if (identIA.getEntry().getCallablePTE() == null)
+				identIA.getEntry().setCallablePTE(pte);
+		}
 		return pte.index;
 	}
 
