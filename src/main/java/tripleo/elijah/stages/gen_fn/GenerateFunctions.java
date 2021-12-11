@@ -66,6 +66,37 @@ public class GenerateFunctions {
 			final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, parentType, selfIdent);
 			gf.addVariableTableEntry("self", VariableTableType.SELF, tte, null);
 		}
+
+		{
+			final List<FormalArgListItem> fali_args = aConstructorDef.fal().falis;
+			final List<TypeTableEntry> fi_args = aFunctionInvocation.getArgs();
+
+			for (int i = 0; i < fali_args.size(); i++) {
+				final FormalArgListItem fali = fali_args.get(i);
+
+				final TypeTableEntry tte1 = fi_args.get(i);
+				final OS_Type attached = tte1.getAttached();
+
+				// TODO for reference now...
+				final GenType genType = new GenType();
+				final TypeName typeName = fali.typeName();
+				if (typeName != null)
+					genType.typeName = new OS_Type(typeName);
+				genType.resolved = attached;
+
+				final OS_Type attached1;
+				if (attached == null && typeName != null)
+					attached1 = genType.typeName;
+				else
+					attached1 = attached;
+
+				final TypeTableEntry tte = gf.newTypeTableEntry(TypeTableEntry.Type.SPECIFIED, attached1, fali.getNameToken());
+//				assert attached != null; // TODO this fails
+
+				gf.addVariableTableEntry(fali.name(), VariableTableType.ARG, tte, fali);
+			}
+		}
+
 		final Context cctx = aConstructorDef.getContext();
 		final int e1 = add_i(gf, InstructionName.E, null, cctx);
 		for (final FunctionItem item : aConstructorDef.getItems()) {
