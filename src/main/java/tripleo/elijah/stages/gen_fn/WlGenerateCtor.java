@@ -124,7 +124,7 @@ public class WlGenerateCtor implements WorkJob {
 				// add inherit statement, if any
 
 				// add code from c
-				if (c != null) {
+				if (c != null && c != cd) {
 					ArrayList<FunctionItem> is = new ArrayList<>(c.getItems());
 
 					// skip initializers (already present in cd)
