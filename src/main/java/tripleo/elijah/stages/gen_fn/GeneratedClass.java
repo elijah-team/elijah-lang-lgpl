@@ -295,9 +295,11 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 								} else
 									genType = potentialType.genType;
 							}
-							final TypeName typeName = genType.typeName.getTypeName();
-							if (typeName instanceof NormalTypeName && ((NormalTypeName) typeName).getGenericPart().size() > 0)
-								genType.nonGenericTypeName = typeName;
+							if (genType.typeName != null) {
+								final TypeName typeName = genType.typeName.getTypeName();
+								if (typeName instanceof NormalTypeName && ((NormalTypeName) typeName).getGenericPart().size() > 0)
+									genType.nonGenericTypeName = typeName;
+							}
 							aDeduceTypes2.genCIForGenType2(genType);
 							potentialTypes.add(genType);
 						} catch (ResolveError aResolveError) {
