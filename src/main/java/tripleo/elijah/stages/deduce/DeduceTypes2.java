@@ -2501,316 +2501,8 @@ public class DeduceTypes2 {
 								final @NotNull VariableTableEntry vte,
 								final @NotNull FnCallArgs fca,
 								final @NotNull Instruction instruction) {
-		final int instructionIndex = instruction.getIndex();
-		final @NotNull ProcTableEntry pte = generatedFunction.getProcTableEntry(to_int(fca.getArg(0)));
-		@NotNull IdentIA identIA = (IdentIA) pte.expression_num;
-
-		if (vte.getStatus() == BaseTableEntry.Status.UNCHECKED) {
-			pte.typePromise().then(new DoneCallback<GenType>() {
-				@Override
-				public void onDone(GenType result) {
-					vte.resolveType(result);
-				}
-			});
-			if (vte.getResolvedElement() != null) {
-				try {
-					OS_Element el;
-					if (vte.getResolvedElement() instanceof IdentExpression)
-						el = DeduceLookupUtils.lookup((IdentExpression) vte.getResolvedElement(), ctx, this);
-					else
-						el = DeduceLookupUtils.lookup(((VariableStatement) vte.getResolvedElement()).getNameToken(), ctx, this);
-					vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(el));
-				} catch (ResolveError aResolveError) {
-					errSink.reportDiagnostic(aResolveError);
-					return;
-				}
-			}
-		}
-
-		if (identIA != null){
-//			LOG.info("594 "+identIA.getEntry().getStatus());
-
-			{
-				final @NotNull IdentTableEntry ite = identIA.getEntry();
-				final OS_Element resolved_element = ite.getResolvedElement();
-
-				if (resolved_element != null) {
-					final @NotNull OS_Module mod1 = resolved_element.getContext().module();
-
-					if (mod1 != module) {
-						if (resolved_element instanceof FunctionDef) {
-							final OS_Element parent = resolved_element.getParent();
-							final @Nullable ClassInvocation invocation = phase.registerClassInvocation((ClassStatement) parent, null);
-							final @NotNull FunctionInvocation fi = newFunctionInvocation((FunctionDef) resolved_element, pte, invocation, phase);
-							final DeferredMemberFunction dmf = deferred_member_function(parent, invocation, (FunctionDef) resolved_element, fi);
-
-							dmf.typeResolved().then(new DoneCallback<GenType>() {
-								@Override
-								public void onDone(final GenType result) {
-									System.err.println("2717");
-									pte.typeDeferred().resolve(result);
-								}
-							});
-						}
-					}
-				}
-			}
-
-			resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
-
-				final String xx = generatedFunction.getIdentIAPathNormal(identIA);
-
-				@Override
-				public void foundElement(OS_Element e) {
-//					LOG.info(String.format("600 %s %s", xx ,e));
-//					LOG.info("601 "+identIA.getEntry().getStatus());
-					found_element_for_ite(generatedFunction, identIA.getEntry(), e, ctx);
-
-					final OS_Element resolved_element = identIA.getEntry().getResolvedElement();
-
-					if (e instanceof AliasStatement) {
-						while (e instanceof AliasStatement)
-							e = DeduceLookupUtils._resolveAlias((AliasStatement) e, DeduceTypes2.this);
-					}
-
-					assert e == resolved_element || /*HACK*/ resolved_element instanceof AliasStatement || resolved_element == null;
-
-//					set_resolved_element_pte(identIA, e, pte);
-					pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
-					pte.onFunctionInvocation(new DoneCallback<FunctionInvocation>() {
-						@Override
-						public void onDone(@NotNull FunctionInvocation result) {
-							result.generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
-								@Override
-								public void onDone(@NotNull BaseGeneratedFunction bgf) {
-									@NotNull PromiseExpectation<GenType> pe = promiseExpectation(bgf, "Function Result type");
-									bgf.typePromise().then(new DoneCallback<GenType>() {
-										@Override
-										public void onDone(@NotNull GenType result) {
-											pe.satisfy(result);
-											@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, result.resolved); // TODO there has to be a better way
-											tte.genType.copy(result);
-											vte.addPotentialType(instructionIndex, tte);
-										}
-									});
-								}
-							});
-						}
-					});
-				}
-
-				@Override
-				public void noFoundElement() {
-					// TODO create Diagnostic and quit
-					LOG.info("1005 Can't find element for " + xx);
-				}
-			});
-		}
-		List<TypeTableEntry> args = pte.getArgs();
-		for (int i = 0; i < args.size(); i++) {
-			final TypeTableEntry tte = args.get(i); // TODO this looks wrong
-//			LOG.info("770 "+tte);
-			IExpression e = tte.expression;
-			if (e == null) continue;
-			if (e instanceof SubExpression) e = ((SubExpression) e).getExpression();
-			switch (e.getKind()) {
-			case NUMERIC:
-				tte.setAttached(new OS_Type(BuiltInTypes.SystemInteger));
-				//vte.type = tte;
-				break;
-			case CHAR_LITERAL:
-				tte.setAttached(new OS_Type(BuiltInTypes.SystemCharacter));
-				break;
-			case IDENT:
-				do_assign_call_args_ident(generatedFunction, ctx, vte, instructionIndex, pte, i, tte, (IdentExpression) e);
-				break;
-			case PROCEDURE_CALL:
-				{
-					final @NotNull ProcedureCallExpression pce = (ProcedureCallExpression) e;
-					try {
-						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(pce.getLeft(), ctx, this);
-						@Nullable OS_Element best = lrl.chooseBest(null);
-						if (best != null) {
-							while (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
-							}
-							if (best instanceof FunctionDef) {
-								final OS_Element parent = best.getParent();
-								@Nullable IInvocation invocation;
-								if (parent instanceof NamespaceStatement) {
-									invocation = phase.registerNamespaceInvocation((NamespaceStatement) parent);
-								} else if (parent instanceof ClassStatement) {
-									@NotNull ClassInvocation ci = new ClassInvocation((ClassStatement) parent, null);
-									invocation = phase.registerClassInvocation(ci);
-								} else 
-									throw new NotImplementedException(); // TODO implement me
-								
-								forFunction(newFunctionInvocation((FunctionDef) best, pte, invocation, phase), new ForFunction() {
-									@Override
-									public void typeDecided(@NotNull GenType aType) {
-										tte.setAttached(aType);
-//										vte.addPotentialType(instructionIndex, tte);
-									}
-								});
-//								tte.setAttached(new OS_FuncType((FunctionDef) best));
-								
-							} else {
-								final int y=2;
-								throw new NotImplementedException();
-							}
-						} else {
-							final int y=2;
-							throw new NotImplementedException();
-						}
-					} catch (ResolveError aResolveError) {
-//						aResolveError.printStackTrace();
-//						int y=2;
-//						throw new NotImplementedException();
-						errSink.reportDiagnostic(aResolveError);
-						tte.setAttached(new OS_UnknownType(new StatementWrapper(pce.getLeft(), null, null)));
-					}
-				}
-				break;
-			case DOT_EXP:
-				{
-					final @NotNull DotExpression de = (DotExpression) e;
-					try {
-						final LookupResultList lrl = DeduceLookupUtils.lookupExpression(de.getLeft(), ctx, this);
-						@Nullable OS_Element best = lrl.chooseBest(null);
-						if (best != null) {
-							while (best instanceof AliasStatement) {
-								best = DeduceLookupUtils._resolveAlias2((AliasStatement) best, this);
-							}
-							if (best instanceof FunctionDef) {
-								tte.setAttached(((FunctionDef) best).getOS_Type());
-								//vte.addPotentialType(instructionIndex, tte);
-							} else if (best instanceof ClassStatement) {
-								tte.setAttached(((ClassStatement) best).getOS_Type());
-							} else if (best instanceof VariableStatement) {
-								final @NotNull VariableStatement vs = (VariableStatement) best;
-								@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(vs.getName());
-								TypeTableEntry tte1 = ((IntegerIA) vte_ia).getEntry().type;
-								tte.setAttached(tte1.getAttached());
-							} else {
-								final int y=2;
-								LOG.err(best.getClass().getName());
-								throw new NotImplementedException();
-							}
-						} else {
-							final int y=2;
-							throw new NotImplementedException();
-						}
-					} catch (ResolveError aResolveError) {
-						aResolveError.printStackTrace();
-						int y=2;
-						throw new NotImplementedException();
-					}
-				}
-				break;
-			case ADDITION: case MODULO: case SUBTRACTION:
-				int y=2;
-				System.err.println("2363");
-				break;
-			case GET_ITEM:
-				{
-					final @NotNull GetItemExpression gie = (GetItemExpression) e;
-					do_assign_call_GET_ITEM(gie, tte, generatedFunction, ctx);
-					continue;
-				}
-//				break;
-			default:
-				throw new IllegalStateException("Unexpected value: " + e.getKind());
-			}
-		}
-		{
-			if (pte.expression_num == null) {
-				if (fca.expression_to_call.getName() != InstructionName.CALLS) {
-					final String text = ((IdentExpression) pte.expression).getText();
-					final LookupResultList lrl = ctx.lookup(text);
-
-					final @Nullable OS_Element best = lrl.chooseBest(null);
-					if (best != null)
-						pte.setResolvedElement(best); // TODO do we need to add a dependency for class?
-					else {
-						errSink.reportError("Cant resolve "+text);
-					}
-				} else {
-					implement_calls(generatedFunction, ctx.getParent(), instruction.getArg(1), pte, instructionIndex);
-				}
-			} else {
-				final int y=2;
-				resolveIdentIA_(ctx, identIA, generatedFunction, new FoundElement(phase) {
-
-					final String x = generatedFunction.getIdentIAPathNormal(identIA);
-
-					@Override
-					public void foundElement(OS_Element el) {
-						if (pte.getResolvedElement() == null)
-							pte.setResolvedElement(el);
-						if (el instanceof FunctionDef) {
-							@NotNull FunctionDef fd = (FunctionDef) el;
-							final @Nullable IInvocation invocation;
-							if (fd.getParent() == generatedFunction.getFD().getParent()) {
-								invocation = getInvocation((GeneratedFunction) generatedFunction);
-							} else {
-								if (fd.getParent() instanceof NamespaceStatement) {
-									NamespaceInvocation ni = phase.registerNamespaceInvocation((NamespaceStatement) fd.getParent());
-									invocation = ni;
-								} else if (fd.getParent() instanceof ClassStatement) {
-									final @NotNull ClassStatement classStatement = (ClassStatement) fd.getParent();
-									@Nullable ClassInvocation ci = new ClassInvocation(classStatement, null);
-									final @NotNull List<TypeName> genericPart = classStatement.getGenericPart();
-									if (genericPart.size() > 0) {
-										// TODO handle generic parameters somehow (getInvocationFromBacklink?)
-
-									}
-									ci = phase.registerClassInvocation(ci);
-									invocation = ci;
-								} else
-									throw new NotImplementedException();
-							}
-							forFunction(newFunctionInvocation(fd, pte, invocation, phase), new ForFunction() {
-								@Override
-								public void typeDecided(@NotNull GenType aType) {
-									if (!vte.typeDeferred_isPending()) {
-										if (vte.resolvedType() == null) {
-											final @Nullable ClassInvocation ci = genCI(aType, null);
-											vte.type.genTypeCI(ci);
-											ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
-												@Override
-												public void onDone(GeneratedClass result) {
-													vte.resolveTypeToClass(result);
-												}
-											});
-										}
-										LOG.err("2041 type already found "+vte);
-										return; // type already found
-									}
-									// I'm not sure if below is ever called
-									@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, gt(aType), pte.expression, pte);
-									vte.addPotentialType(instructionIndex, tte);
-								}
-							});
-						} else if (el instanceof ClassStatement) {
-							@NotNull ClassStatement kl = (ClassStatement) el;
-							@NotNull OS_Type type = kl.getOS_Type();
-							@NotNull TypeTableEntry tte = generatedFunction.newTypeTableEntry(TypeTableEntry.Type.TRANSIENT, type, pte.expression, pte);
-							vte.addPotentialType(instructionIndex, tte);
-							vte.setConstructable(pte);
-
-							register_and_resolve(vte, kl);
-						} else {
-							LOG.err("7890 "+el.getClass().getName());
-						}
-					}
-
-					@Override
-					public void noFoundElement() {
-						LOG.err("IdentIA path cannot be resolved "+ x);
-					}
-				});
-			}
-		}
+		final DoAssignCall dac = new DoAssignCall(new DeduceClient4(this));
+		dac.do_assign_call(generatedFunction, instruction, vte, fca, ctx);
 	}
 
 	@NotNull PromiseExpectations expectations = new PromiseExpectations();
@@ -3983,6 +3675,121 @@ public class DeduceTypes2 {
 
 		public @NotNull FunctionInvocation newFunctionInvocation(final BaseFunctionDef aFunctionDef, final ProcTableEntry aPte, final @NotNull IInvocation aInvocation) {
 			return deduceTypes2.newFunctionInvocation(aFunctionDef, aPte, aInvocation, deduceTypes2.phase);
+		}
+	}
+
+	class DeduceClient4 {
+		private final DeduceTypes2 deduceTypes2;
+
+		public DeduceClient4(final DeduceTypes2 aDeduceTypes2) {
+			deduceTypes2 = aDeduceTypes2;
+		}
+
+		public OS_Element lookup(final IdentExpression aElement, final Context aContext) throws ResolveError {
+			return DeduceLookupUtils.lookup(aElement, aContext, deduceTypes2);
+		}
+
+		public void reportDiagnostic(final ResolveError aResolveError) {
+			deduceTypes2.errSink.reportDiagnostic(aResolveError);
+		}
+
+		public ClassInvocation registerClassInvocation(final ClassStatement aClassStatement, final String constructorName) {
+			return deduceTypes2.phase.registerClassInvocation(aClassStatement, constructorName);
+		}
+
+		public FunctionInvocation newFunctionInvocation(final FunctionDef aElement, final ProcTableEntry aPte, final @Nullable IInvocation aInvocation) {
+			return deduceTypes2.newFunctionInvocation(aElement, aPte, aInvocation, deduceTypes2.phase);
+		}
+
+		public DeferredMemberFunction deferred_member_function(final OS_Element aParent, final ClassInvocation aInvocation, final FunctionDef aFunctionDef, final FunctionInvocation aFunctionInvocation) {
+			return deduceTypes2.deferred_member_function(aParent, aInvocation, aFunctionDef, aFunctionInvocation);
+		}
+
+		public @NotNull OS_Module getModule() {
+			return module;
+		}
+
+		public @NotNull ElLog getLOG() {
+			return LOG;
+		}
+
+		public DeducePhase getPhase() {
+			return deduceTypes2.phase;
+		}
+
+		public OS_Element _resolveAlias(final AliasStatement aAliasStatement) {
+			return DeduceLookupUtils._resolveAlias(aAliasStatement, deduceTypes2);
+		}
+
+		public void found_element_for_ite(final BaseGeneratedFunction aGeneratedFunction, final IdentTableEntry aEntry, final OS_Element aE, final Context aCtx) {
+			deduceTypes2.found_element_for_ite(aGeneratedFunction, aEntry, aE, aCtx);
+		}
+
+		public <T> PromiseExpectation<T> promiseExpectation(final BaseGeneratedFunction aGeneratedFunction, final String aName) {
+			return deduceTypes2.promiseExpectation(aGeneratedFunction, aName);
+		}
+
+		public void do_assign_call_args_ident(final BaseGeneratedFunction aGeneratedFunction,
+											  final Context aCtx,
+											  final VariableTableEntry aVte,
+											  final int aInstructionIndex,
+											  final ProcTableEntry aPte,
+											  final int aI,
+											  final TypeTableEntry aTte,
+											  final IdentExpression aE) {
+			deduceTypes2.do_assign_call_args_ident(aGeneratedFunction, aCtx, aVte, aInstructionIndex, aPte, aI, aTte, aE);
+		}
+
+		public OS_Element _resolveAlias2(final AliasStatement aAliasStatement) throws ResolveError {
+			return DeduceLookupUtils._resolveAlias2(aAliasStatement, deduceTypes2);
+		}
+
+		public LookupResultList lookupExpression(final IExpression aExpression, final Context aContext) throws ResolveError {
+			return DeduceLookupUtils.lookupExpression(aExpression, aContext, deduceTypes2);
+		}
+
+		public ClassInvocation registerClassInvocation(final ClassInvocation aCi) {
+			return deduceTypes2.phase.registerClassInvocation(aCi);
+		}
+
+		public NamespaceInvocation registerNamespaceInvocation(final NamespaceStatement aNamespaceStatement) {
+			return deduceTypes2.phase.registerNamespaceInvocation(aNamespaceStatement);
+		}
+
+		public void forFunction(final FunctionInvocation aFunctionInvocation, final ForFunction aForFunction) {
+			deduceTypes2.forFunction(aFunctionInvocation, aForFunction);
+		}
+
+		public void do_assign_call_GET_ITEM(final GetItemExpression aGie, final TypeTableEntry aTte, final BaseGeneratedFunction aGeneratedFunction, final Context aCtx) {
+			deduceTypes2.do_assign_call_GET_ITEM(aGie, aTte, aGeneratedFunction, aCtx);
+		}
+
+		public void implement_calls(final BaseGeneratedFunction aGeneratedFunction, final Context aParent, final InstructionArgument aArg, final ProcTableEntry aPte, final int aInstructionIndex) {
+			deduceTypes2.implement_calls(aGeneratedFunction, aParent, aArg, aPte, aInstructionIndex);
+		}
+
+		public void resolveIdentIA_(final Context aCtx, final IdentIA aIdentIA, final BaseGeneratedFunction aGeneratedFunction, final FoundElement aFoundElement) {
+			deduceTypes2.resolveIdentIA_(aCtx, aIdentIA, aGeneratedFunction, aFoundElement);
+		}
+
+		public IInvocation getInvocation(final GeneratedFunction aGeneratedFunction) {
+			return deduceTypes2.getInvocation(aGeneratedFunction);
+		}
+
+		public ClassInvocation genCI(final GenType aType, final TypeName aGenericTypeName) {
+			return deduceTypes2.genCI(aType, aGenericTypeName);
+		}
+
+		public OS_Type gt(final GenType aType) {
+			return deduceTypes2.gt(aType);
+		}
+
+		public void register_and_resolve(final VariableTableEntry aVte, final ClassStatement aClassStatement) {
+			deduceTypes2.register_and_resolve(aVte, aClassStatement);
+		}
+
+		public ErrSink getErrSink() {
+			return deduceTypes2.errSink;
 		}
 	}
 
