@@ -91,6 +91,8 @@ public class DoAssignCall {
 					if (mod1 != module) {
 						if (resolved_element instanceof FunctionDef) {
 							final OS_Element parent = resolved_element.getParent();
+							// TODO we need to get the invocation which is attached to the declanchor of the target of
+							//  the function (pte.dpc), but providion for this is not in the code yet
 							final @Nullable ClassInvocation invocation = dc.registerClassInvocation((ClassStatement) parent, null);
 							final @NotNull FunctionInvocation fi = dc.newFunctionInvocation((FunctionDef) resolved_element, pte, invocation);
 							final DeferredMemberFunction dmf = dc.deferred_member_function(parent, invocation, (FunctionDef) resolved_element, fi);
