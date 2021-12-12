@@ -200,12 +200,11 @@ public class DeduceTypes2 {
 						final OS_Type x = aGenericPart.get(typeNameElement.getTypeName());
 						switch (x.getType()) {
 						case USER_CLASS:
-							final OS_Element best2 = x.getClassOf(); // always a ClassStatement
+							final ClassStatement classStatement1 = x.getClassOf(); // always a ClassStatement
 
-							// TODO test next 4 lines are copies of above
-							if (best2 instanceof ClassStatement) {
-								final ClassStatement classStatement = (ClassStatement) best2;
-								gt.resolved = classStatement.getOS_Type();
+							// TODO test next 4 (3) lines are copies of above
+							if (classStatement1 != null) {
+								gt.resolved = classStatement1.getOS_Type();
 							}
 							break;
 						case USER:
