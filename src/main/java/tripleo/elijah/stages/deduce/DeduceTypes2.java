@@ -2500,8 +2500,8 @@ public class DeduceTypes2 {
 								final @NotNull VariableTableEntry vte,
 								final @NotNull FnCallArgs fca,
 								final @NotNull Instruction instruction) {
-		final DoAssignCall dac = new DoAssignCall(new DeduceClient4(this));
-		dac.do_assign_call(generatedFunction, instruction, vte, fca, ctx);
+		final DoAssignCall dac = new DoAssignCall(new DeduceClient4(this), generatedFunction);
+		dac.do_assign_call(instruction, vte, fca, ctx);
 	}
 
 	@NotNull PromiseExpectations expectations = new PromiseExpectations();
