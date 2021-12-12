@@ -1917,7 +1917,7 @@ public class DeduceTypes2 {
 	/**
 	 * Sets the invocation ({@code genType#ci}) and the node for a GenType
 	 *
-	 * @param aGenType the GenType to modify. doesn;t care about  nonGenericTypeName
+	 * @param aGenType the GenType to modify. doesn't care about  nonGenericTypeName
 	 */
 	public void genCIForGenType2(final GenType aGenType) {
 		genCI(aGenType, aGenType.nonGenericTypeName);
