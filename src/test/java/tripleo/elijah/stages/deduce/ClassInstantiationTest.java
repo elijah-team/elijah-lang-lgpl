@@ -50,6 +50,8 @@ public class ClassInstantiationTest {
 		Compilation c = new Compilation(new StdErrSink(), new IO());
 
 		c.feedCmdLine(List_of(f));
+
+		System.err.println("Errorcount is" + c.errorCount());
 	}
 }
 
