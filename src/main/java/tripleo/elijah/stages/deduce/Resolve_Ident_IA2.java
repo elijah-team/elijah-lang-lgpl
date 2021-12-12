@@ -205,9 +205,9 @@ class Resolve_Ident_IA2 {
 		// Set type to something other than Unknown when found
 		@Nullable ProcTableEntry pte = idte2.getCallablePTE();
 		if (pte == null) {
-			int y=2;
+			assert false;
 		} else {
-			assert pte != null;
+//			assert pte != null;
 			@Nullable FunctionInvocation fi = pte.getFunctionInvocation();
 			if (fi == null) {
 				InstructionArgument bl = idte2.getBacklink();
