@@ -9,7 +9,10 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import org.jdeferred2.DoneCallback;
+import org.jdeferred2.Promise;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
@@ -21,7 +24,10 @@ import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 
 /**
  * Created 12/12/21 12:30 AM
@@ -29,24 +35,25 @@ import java.util.List;
 public class DoAssignCall {
 	private final ElLog LOG;
 	private final DeduceTypes2.DeduceClient4 dc;
+	private final BaseGeneratedFunction generatedFunction;
 	private final OS_Module module;
 	private final ErrSink errSink;
 
-	public DoAssignCall(final DeduceTypes2.DeduceClient4 aDeduceClient4) {
+	public DoAssignCall(final DeduceTypes2.DeduceClient4 aDeduceClient4, final @NotNull BaseGeneratedFunction aGeneratedFunction) {
 		dc = aDeduceClient4;
+		generatedFunction = aGeneratedFunction;
 		//
 		module = dc.getModule();
 		LOG = dc.getLOG();
 		errSink = dc.getErrSink();
 	}
 
-	void do_assign_call(final @NotNull BaseGeneratedFunction generatedFunction,
-						final @NotNull Instruction instruction,
+	void do_assign_call(final @NotNull Instruction instruction,
 						final @NotNull VariableTableEntry vte,
 						final @NotNull FnCallArgs fca,
 						final @NotNull Context ctx) {
 		final int instructionIndex = instruction.getIndex();
-		final @NotNull ProcTableEntry pte = generatedFunction.getProcTableEntry(DeduceTypes2.to_int(fca.getArg(0)));
+		final @NotNull ProcTableEntry pte = ((ProcIA) fca.getArg(0)).getEntry();
 		@NotNull IdentIA identIA = (IdentIA) pte.expression_num;
 
 		if (vte.getStatus() == BaseTableEntry.Status.UNCHECKED) {
@@ -72,7 +79,7 @@ public class DoAssignCall {
 		}
 
 		if (identIA != null) {
-			//			LOG.info("594 "+identIA.getEntry().getStatus());
+//			LOG.info("594 "+identIA.getEntry().getStatus());
 
 			{
 				final @NotNull IdentTableEntry ite = identIA.getEntry();
@@ -106,20 +113,18 @@ public class DoAssignCall {
 
 				@Override
 				public void foundElement(OS_Element e) {
-					//					LOG.info(String.format("600 %s %s", xx ,e));
-					//					LOG.info("601 "+identIA.getEntry().getStatus());
+//					LOG.info(String.format("600 %s %s", xx ,e));
+//					LOG.info("601 "+identIA.getEntry().getStatus());
 					dc.found_element_for_ite(generatedFunction, identIA.getEntry(), e, ctx);
 
 					final OS_Element resolved_element = identIA.getEntry().getResolvedElement();
 
-					if (e instanceof AliasStatement) {
-						while (e instanceof AliasStatement)
-							e = dc._resolveAlias((AliasStatement) e);
-					}
+					while (e instanceof AliasStatement)
+						e = dc._resolveAlias((AliasStatement) e);
 
 					assert e == resolved_element || /*HACK*/ resolved_element instanceof AliasStatement || resolved_element == null;
 
-					//					set_resolved_element_pte(identIA, e, pte);
+//					set_resolved_element_pte(identIA, e, pte);
 					pte.setStatus(BaseTableEntry.Status.KNOWN, new ConstructableElementHolder(e, identIA));
 					pte.onFunctionInvocation(new DoneCallback<FunctionInvocation>() {
 						@Override
@@ -153,7 +158,7 @@ public class DoAssignCall {
 		List<TypeTableEntry> args = pte.getArgs();
 		for (int i = 0; i < args.size(); i++) {
 			final TypeTableEntry tte = args.get(i); // TODO this looks wrong
-			//			LOG.info("770 "+tte);
+//			LOG.info("770 "+tte);
 			IExpression e = tte.expression;
 			if (e == null) continue;
 			if (e instanceof SubExpression) e = ((SubExpression) e).getExpression();
@@ -166,7 +171,7 @@ public class DoAssignCall {
 				tte.setAttached(new OS_Type(BuiltInTypes.SystemCharacter));
 				break;
 			case IDENT:
-				dc.do_assign_call_args_ident(generatedFunction, ctx, vte, instructionIndex, pte, i, tte, (IdentExpression) e);
+				do_assign_call_args_ident(generatedFunction, ctx, vte, instructionIndex, pte, i, tte, (IdentExpression) e);
 				break;
 			case PROCEDURE_CALL: {
 				final @NotNull ProcedureCallExpression pce = (ProcedureCallExpression) e;
@@ -257,7 +262,7 @@ public class DoAssignCall {
 				break;
 			case GET_ITEM: {
 				final @NotNull GetItemExpression gie = (GetItemExpression) e;
-				dc.do_assign_call_GET_ITEM(gie, tte, generatedFunction, ctx);
+				do_assign_call_GET_ITEM(gie, tte, generatedFunction, ctx);
 				continue;
 			}
 //			break;
@@ -353,6 +358,291 @@ public class DoAssignCall {
 					}
 				});
 			}
+		}
+	}
+
+	private void do_assign_call_args_ident(@NotNull BaseGeneratedFunction generatedFunction,
+										   @NotNull Context ctx,
+										   @NotNull VariableTableEntry vte,
+										   int aInstructionIndex,
+										   @NotNull ProcTableEntry aPte,
+										   int aI,
+										   @NotNull TypeTableEntry aTte,
+										   @NotNull IdentExpression aExpression) {
+		final String e_text = aExpression.getText();
+		final @Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(e_text);
+//		LOG.info("10000 "+vte_ia);
+		if (vte_ia != null) {
+			final @NotNull VariableTableEntry vte1 = generatedFunction.getVarTableEntry(to_int(vte_ia));
+			final Promise<GenType, Void, Void> p = VTE_TypePromises.do_assign_call_args_ident_vte_promise(aTte, vte1);
+			@NotNull Runnable runnable = new Runnable() {
+				boolean isDone;
+
+				@Override
+				public void run() {
+					if (isDone) return;
+					final @NotNull List<TypeTableEntry> ll = dc.getPotentialTypesVte((GeneratedFunction) generatedFunction, vte_ia);
+					doLogic(ll);
+					isDone = true;
+				}
+
+				public void doLogic(@NotNull List<TypeTableEntry> potentialTypes) {
+					assert potentialTypes.size() >= 0;
+					switch (potentialTypes.size()) {
+					case 1:
+//							tte.attached = ll.get(0).attached;
+//							vte.addPotentialType(instructionIndex, ll.get(0));
+						if (p.isResolved())
+							LOG.info(String.format("1047 (vte already resolved) %s vte1.type = %s, gf = %s, tte1 = %s %n", vte1.getName(), vte1.type, generatedFunction, potentialTypes.get(0)));
+						else {
+							final OS_Type attached = potentialTypes.get(0).getAttached();
+							if (attached == null) return;
+							switch (attached.getType()) {
+							case USER:
+								vte1.type.setAttached(attached); // !!
+								break;
+							case USER_CLASS:
+								final GenType gt = vte1.genType;
+								gt.resolved = attached;
+								vte1.resolveType(gt);
+								break;
+							default:
+								errSink.reportWarning("Unexpected value: " + attached.getType());
+//										throw new IllegalStateException("Unexpected value: " + attached.getType());
+							}
+						}
+						break;
+					case 0:
+						// README moved up here to elimiate work
+						if (p.isResolved()) {
+							System.out.printf("890-1 Already resolved type: vte1.type = %s, gf = %s %n", vte1.type, generatedFunction);
+							break;
+						}
+						LookupResultList lrl = ctx.lookup(e_text);
+						@Nullable OS_Element best = lrl.chooseBest(null);
+						if (best instanceof FormalArgListItem) {
+							@NotNull final FormalArgListItem fali = (FormalArgListItem) best;
+							final @NotNull OS_Type osType = new OS_Type(fali.typeName());
+							if (!osType.equals(vte.type.getAttached())) {
+								@NotNull TypeTableEntry tte1 = generatedFunction.newTypeTableEntry(
+										TypeTableEntry.Type.SPECIFIED, osType, fali.getNameToken(), vte1);
+									/*if (p.isResolved())
+										System.out.printf("890 Already resolved type: vte1.type = %s, gf = %s, tte1 = %s %n", vte1.type, generatedFunction, tte1);
+									else*/ {
+									final OS_Type attached = tte1.getAttached();
+									switch (attached.getType()) {
+									case USER:
+										vte1.type.setAttached(attached); // !!
+										break;
+									case USER_CLASS:
+										final GenType gt = vte1.genType;
+										gt.resolved = attached;
+										vte1.resolveType(gt);
+										break;
+									default:
+										errSink.reportWarning("2853 Unexpected value: " + attached.getType());
+//												throw new IllegalStateException("Unexpected value: " + attached.getType());
+									}
+								}
+							}
+//								vte.type = tte1;
+//								tte.attached = tte1.attached;
+//								vte.setStatus(BaseTableEntry.Status.KNOWN, best);
+						} else if (best instanceof VariableStatement) {
+							final @NotNull VariableStatement vs = (VariableStatement) best;
+							//
+							assert vs.getName().equals(e_text);
+							//
+							@Nullable InstructionArgument vte2_ia = generatedFunction.vte_lookup(vs.getName());
+							@NotNull VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(vte2_ia));
+							if (p.isResolved())
+								System.out.printf("915 Already resolved type: vte2.type = %s, gf = %s %n", vte1.type, generatedFunction);
+							else {
+								final GenType gt = vte1.genType;
+								final OS_Type attached = vte2.type.getAttached();
+								gt.resolved = attached;
+								vte1.resolveType(gt);
+							}
+//								vte.type = vte2.type;
+//								tte.attached = vte.type.attached;
+							vte.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best));
+							vte2.setStatus(BaseTableEntry.Status.KNOWN, new GenericElementHolder(best)); // TODO ??
+						} else {
+							int y = 2;
+							LOG.err("543 " + best.getClass().getName());
+							throw new NotImplementedException();
+						}
+						break;
+					default:
+						// TODO hopefully this works
+						final @NotNull ArrayList<TypeTableEntry> potentialTypes1 = new ArrayList<TypeTableEntry>(
+								Collections2.filter(potentialTypes, new Predicate<TypeTableEntry>() {
+									@Override
+									public boolean apply(@org.checkerframework.checker.nullness.qual.Nullable TypeTableEntry input) {
+										assert input != null;
+										return input.getAttached() != null;
+									}
+								}));
+						// prevent infinite recursion
+						if (potentialTypes1.size() < potentialTypes.size())
+							doLogic(potentialTypes1);
+						else
+							LOG.info("913 Don't know");
+						break;
+					}
+				}
+			};
+			dc.onFinish(runnable);
+		} else {
+			int ia = generatedFunction.addIdentTableEntry(aExpression, ctx);
+			@NotNull IdentTableEntry idte = generatedFunction.getIdentTableEntry(ia);
+			idte.addPotentialType(aInstructionIndex, aTte); // TODO DotExpression??
+			final int ii = aI;
+			idte.onType(dc.getPhase(), new OnType() {
+				@Override
+				public void typeDeduced(@NotNull OS_Type aType) {
+					aPte.setArgType(ii, aType); // TODO does this belong here or in FunctionInvocation?
+					aTte.setAttached(aType); // since we know that tte.attached is always null here
+				}
+
+				@Override
+				public void noTypeFound() {
+					LOG.err("719 no type found "+generatedFunction.getIdentIAPathNormal(new IdentIA(ia, generatedFunction)));
+				}
+			});
+		}
+	}
+
+	private void do_assign_call_GET_ITEM(@NotNull GetItemExpression gie, TypeTableEntry tte, @NotNull BaseGeneratedFunction generatedFunction, Context ctx) {
+		try {
+			final LookupResultList lrl = dc.lookupExpression(gie.getLeft(), ctx);
+			final @Nullable OS_Element best = lrl.chooseBest(null);
+			if (best != null) {
+				if (best instanceof VariableStatement) { // TODO what about alias?
+					@NotNull VariableStatement vs = (VariableStatement) best;
+					String s = vs.getName();
+					@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(s);
+					if (vte_ia != null) {
+						@NotNull VariableTableEntry vte1 = generatedFunction.getVarTableEntry(to_int(vte_ia));
+						throw new NotImplementedException();
+					} else {
+						final IdentTableEntry idte = generatedFunction.getIdentTableEntryFor(vs.getNameToken());
+						assert idte != null;
+						if (idte.type == null) {
+							final IdentIA identIA = new IdentIA(idte.getIndex(), generatedFunction);
+							dc.resolveIdentIA_(ctx, identIA, generatedFunction, new NullFoundElement());
+						}
+						@Nullable OS_Type ty;
+						if (idte.type == null) ty = null;
+						else ty = idte.type.getAttached();
+						idte.onType(dc.getPhase(), new OnType() {
+							@Override public void typeDeduced(final @NotNull OS_Type ty) {
+								assert ty != null;
+								@NotNull GenType rtype = null;
+								try {
+									rtype = dc.resolve_type(ty, ctx);
+								} catch (ResolveError resolveError) {
+									//								resolveError.printStackTrace();
+									errSink.reportError("Cant resolve " + ty); // TODO print better diagnostic
+									return;
+								}
+								if (rtype.resolved != null && rtype.resolved.getType() == OS_Type.Type.USER_CLASS) {
+									LookupResultList lrl2 = rtype.resolved.getClassOf().getContext().lookup("__getitem__");
+									@Nullable OS_Element best2 = lrl2.chooseBest(null);
+									if (best2 != null) {
+										if (best2 instanceof FunctionDef) {
+											@NotNull FunctionDef fd = (FunctionDef) best2;
+											@Nullable ProcTableEntry pte = null;
+											final IInvocation invocation = dc.getInvocation((GeneratedFunction) generatedFunction);
+											dc.forFunction(dc.newFunctionInvocation(fd, pte, invocation), new ForFunction() {
+												@Override
+												public void typeDecided(final @NotNull GenType aType) {
+													assert fd == generatedFunction.getFD();
+													//
+													if (idte.type == null) {
+														idte.makeType(generatedFunction, TypeTableEntry.Type.TRANSIENT, dc.gt(aType));  // TODO expression?
+													} else
+														idte.type.setAttached(dc.gt(aType));
+												}
+											});
+										} else {
+											throw new NotImplementedException();
+										}
+									} else {
+										throw new NotImplementedException();
+									}
+								}
+							}
+
+							@Override
+							public void noTypeFound() {
+								throw new NotImplementedException();
+							}
+						});
+						if (ty == null) {
+							@NotNull TypeTableEntry tte3 = generatedFunction.newTypeTableEntry(
+									TypeTableEntry.Type.SPECIFIED, new OS_Type(vs.typeName()), vs.getNameToken());
+							idte.type = tte3;
+//							ty = idte.type.getAttached();
+						}
+					}
+
+					//				tte.attached = new OS_FuncType((FunctionDef) best); // TODO: what is this??
+					//vte.addPotentialType(instructionIndex, tte);
+				} else if (best instanceof FormalArgListItem) {
+					final @Nullable FormalArgListItem fali = (FormalArgListItem) best;
+					String s = fali.name();
+					@Nullable InstructionArgument vte_ia = generatedFunction.vte_lookup(s);
+					if (vte_ia != null) {
+						@NotNull VariableTableEntry vte2 = generatedFunction.getVarTableEntry(to_int(vte_ia));
+
+//						final @Nullable OS_Type ty2 = vte2.type.attached;
+						VTE_TypePromises.getItemFali(generatedFunction, ctx, vte2, dc.get());
+//					vte2.onType(phase, new OnType() {
+//						@Override public void typeDeduced(final OS_Type ty2) {
+//						}
+//
+//						@Override
+//						public void noTypeFound() {
+//							throw new NotImplementedException();
+//						}
+//					});
+	/*
+						if (ty2 == null) {
+							@NotNull TypeTableEntry tte3 = generatedFunction.newTypeTableEntry(
+									TypeTableEntry.Type.SPECIFIED, new OS_Type(fali.typeName()), fali.getNameToken());
+							vte2.type = tte3;
+	//						ty2 = vte2.type.attached; // TODO this is final, but why assign anyway?
+						}
+	*/
+					}
+				} else {
+					final int y=2;
+					throw new NotImplementedException();
+				}
+			} else {
+				final int y=2;
+				throw new NotImplementedException();
+			}
+		} catch (ResolveError aResolveError) {
+			aResolveError.printStackTrace();
+			int y=2;
+			throw new NotImplementedException();
+		}
+	}
+
+	class NullFoundElement extends FoundElement {
+		public NullFoundElement() {
+			super(dc.getPhase());
+		}
+
+		@Override
+		public void foundElement(final OS_Element e) {
+		}
+
+		@Override
+		public void noFoundElement() {
+
 		}
 	}
 }
