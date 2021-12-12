@@ -218,6 +218,18 @@ class Resolve_Ident_IA2 {
 					if (vte.constructable_pte != null) {
 						ProcTableEntry cpte = vte.constructable_pte;
 						invocation = cpte.getFunctionInvocation().getClassInvocation();
+					} else if (vte.typeDeferred_isResolved()) {
+						final IInvocation[] ainvocation = new IInvocation[1];
+						vte.typePromise().then(new DoneCallback<GenType>() {
+							@Override
+							public void onDone(final GenType result) {
+								if (result.ci == null) {
+									deduceTypes2.genCIForGenType2(result);
+								}
+								ainvocation[0] = result.ci;
+							}
+						});
+						invocation = ainvocation[0];
 					}
 				} else if (bl instanceof IdentIA) {
 					final @NotNull IdentIA identIA = (IdentIA) bl;
@@ -239,6 +251,10 @@ class Resolve_Ident_IA2 {
 					}
 				}
 
+				if (invocation == null) {
+					int y=2;
+					// assert false;
+				}
 				fi = new FunctionInvocation((BaseFunctionDef) el, pte, invocation, phase.generatePhase);
 				pte.setFunctionInvocation(fi);
 			}

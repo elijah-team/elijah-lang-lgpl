@@ -196,6 +196,10 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	public void resolve_var_table_entry_for_exit_function() {
 		dlv.resolve_var_table_entry_for_exit_function();
 	}
+
+	public boolean typeDeferred_isResolved() {
+		return typeDeferred.isResolved();
+	}
 }
 
 //
