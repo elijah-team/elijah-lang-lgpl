@@ -3696,7 +3696,7 @@ public class DeduceTypes2 {
 			return deduceTypes2.phase.registerClassInvocation(aClassStatement, constructorName);
 		}
 
-		public FunctionInvocation newFunctionInvocation(final FunctionDef aElement, final ProcTableEntry aPte, final @Nullable IInvocation aInvocation) {
+		public FunctionInvocation newFunctionInvocation(final FunctionDef aElement, final ProcTableEntry aPte, final @NotNull IInvocation aInvocation) {
 			return deduceTypes2.newFunctionInvocation(aElement, aPte, aInvocation, deduceTypes2.phase);
 		}
 
