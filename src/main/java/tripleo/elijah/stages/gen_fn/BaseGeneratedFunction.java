@@ -14,6 +14,7 @@ import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.deduce.DeduceElement;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FoundElement;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
@@ -23,8 +24,10 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.range.Range;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 
@@ -461,6 +464,11 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 			});
 			System.err.println(String.format("Trying to resolve function twice 1) %s 2) %s", holder.get().asString(), aType.asString()));
 		}
+	}
+
+	Map<OS_Element, DeduceElement> elements = new HashMap<OS_Element, DeduceElement>();
+	public void addElement(final OS_Element aElement, final DeduceElement aDeduceElement) {
+		elements.put(aElement, aDeduceElement);
 	}
 }
 

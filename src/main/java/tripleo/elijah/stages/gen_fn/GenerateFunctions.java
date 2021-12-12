@@ -21,6 +21,7 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.stages.deduce.ClassInvocation;
+import tripleo.elijah.stages.deduce.DeduceConstructStatement;
 import tripleo.elijah.stages.deduce.DeducePhase;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.instructions.*;
@@ -560,9 +561,26 @@ public class GenerateFunctions {
 			}
 			final int i = addProcTableEntry(left, expression_num, get_args_types(args, gf, cctx), gf);
 			final List<InstructionArgument> l = new ArrayList<InstructionArgument>();
-			l.add(new ProcIA(i, gf));
-			l.addAll(simplify_args(args, gf, cctx));
+			final ProcIA procIA = new ProcIA(i, gf);
+			l.add(procIA);
+			final List<InstructionArgument> args1 = simplify_args(args, gf, cctx);
+			l.addAll(args1);
 			add_i(gf, InstructionName.CONSTRUCT, l, cctx);
+
+			{
+				final DeduceConstructStatement dcs = new DeduceConstructStatement(gf, aConstructStatement);
+
+				dcs.target = expression_num;
+				if (expression_num instanceof  IntegerIA || expression_num instanceof IdentIA && ((IdentIA) expression_num).getEntry().backlink == null) {
+				} else {
+					dcs.toEvaluateTarget = true;
+				}
+
+				dcs.call = procIA;
+				dcs.args = args1;
+
+				gf.addElement(aConstructStatement, dcs);
+			}
 		}
 	}
 
