@@ -233,37 +233,6 @@ public class DeducePhase {
 		return deduceTypes2;
 	}
 
-	public @NotNull DeduceTypes2 deduceModule(@NotNull OS_Module m, ElLog.Verbosity verbosity) {
-		final @NotNull GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
-
-		@NotNull List<EntryPoint> epl = m.entryPoints;
-		gfm.generateFromEntryPoints(epl, this);
-
-		@NotNull GeneratedClasses lgc = generatedClasses;
-
-		final @NotNull List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
-		for (GeneratedNode lgci : lgc) {
-			if (lgci instanceof GeneratedClass) {
-				final @NotNull Collection<GeneratedFunction> generatedFunctions = ((GeneratedClass) lgci).functionMap.values();
-				for (@NotNull GeneratedFunction generatedFunction : generatedFunctions) {
-					generatedFunction.setClass(lgci);
-				}
-				lgf.addAll(generatedFunctions);
-			}
-			if (lgci instanceof GeneratedNamespace) {
-				final @NotNull Collection<GeneratedFunction> generatedFunctions = ((GeneratedNamespace) lgci).functionMap.values();
-				for (@NotNull GeneratedFunction generatedFunction : generatedFunctions) {
-					generatedFunction.setClass(lgci);
-				}
-				lgf.addAll(generatedFunctions);
-			}
-		}
-
-//		generatedClasses = lgc;
-
-		return deduceModule(m, lgf, verbosity);
-	}
-
 	/**
 	 * Use this when you have already called generateAllTopLevelClasses
 	 * @param m the module
