@@ -404,7 +404,7 @@ public class DeducePhase {
 	}
 
 	public void handleResolvedVariables() {
-		for (GeneratedNode generatedNode : generatedClasses) {
+		for (GeneratedNode generatedNode : generatedClasses.copy()) {
 			if (generatedNode instanceof GeneratedContainer) {
 				final @NotNull GeneratedContainer generatedContainer = (GeneratedContainer) generatedNode;
 				Collection<ResolvedVariables> x = resolved_variables.get(generatedContainer.getElement());
