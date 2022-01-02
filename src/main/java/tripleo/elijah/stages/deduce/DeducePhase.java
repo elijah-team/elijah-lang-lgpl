@@ -233,38 +233,6 @@ public class DeducePhase {
 		return deduceTypes2;
 	}
 
-	/**
-	 * Use this when you have already called generateAllTopLevelClasses
-	 * @param m the module
-	 * @param lgc the result of generateAllTopLevelClasses
-	 * @param _unused is unused
-	 * @param verbosity
-	 */
-	public void deduceModule(@NotNull OS_Module m, @NotNull Iterable<GeneratedNode> lgc, boolean _unused, ElLog.Verbosity verbosity) {
-		final @NotNull List<GeneratedNode> lgf = new ArrayList<GeneratedNode>();
-
-		for (@NotNull GeneratedNode lgci : lgc) {
-			if (lgci.module() != m) continue;
-
-			if (lgci instanceof GeneratedClass) {
-				final @NotNull Collection<GeneratedFunction> generatedFunctions = ((GeneratedClass) lgci).functionMap.values();
-				for (@NotNull GeneratedFunction generatedFunction : generatedFunctions) {
-//					generatedFunction.setClass(lgci); // TODO delete when done
-					assert generatedFunction.getGenClass() == lgci;
-				}
-				lgf.addAll(generatedFunctions);
-			} else if (lgci instanceof GeneratedNamespace) {
-				final @NotNull Collection<GeneratedFunction> generatedFunctions = ((GeneratedNamespace) lgci).functionMap.values();
-				for (@NotNull GeneratedFunction generatedFunction : generatedFunctions) {
-					generatedFunction.setClass(lgci);
-				}
-				lgf.addAll(generatedFunctions);
-			}
-		}
-
-		deduceModule(m, lgf, verbosity);
-	}
-
 	public void forFunction(DeduceTypes2 deduceTypes2, @NotNull FunctionInvocation fi, @NotNull ForFunction forFunction) {
 //		LOG.err("272 forFunction\n\t"+fi.getFunction()+"\n\t"+fi.pte);
 		fi.generateDeferred().promise().then(new DoneCallback<BaseGeneratedFunction>() {

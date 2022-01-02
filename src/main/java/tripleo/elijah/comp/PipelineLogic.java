@@ -180,7 +180,7 @@ public class PipelineLogic {
 				throw new IllegalStateException("node is not coded");
 		}
 
-		dp.deduceModule(mod, lgc, true, getVerbosity());
+		dp.deduceModule(mod, lgc, getVerbosity());
 
 		resolveCheck(lgc);
 
