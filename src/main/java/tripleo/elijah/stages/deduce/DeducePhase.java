@@ -26,6 +26,7 @@ import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static tripleo.elijah.util.Helpers.List_of;
 
@@ -506,88 +507,150 @@ public class DeducePhase {
 		}
 	}
 
+	static class DeferredMemberFunctionParentIsClassStatement {
+		private final DeferredMemberFunction deferredMemberFunction;
+		private final IInvocation invocation;
+		private final OS_Element parent;
+
+		public DeferredMemberFunctionParentIsClassStatement(final DeferredMemberFunction aDeferredMemberFunction, final IInvocation aInvocation) {
+			deferredMemberFunction = aDeferredMemberFunction;
+			invocation = aInvocation;
+			parent = deferredMemberFunction.getParent();//.getParent().getParent();
+		}
+
+		static class GetFunctionMapClass implements Function<GeneratedNode, Map<FunctionDef, GeneratedFunction>> {
+			@Override
+			public Map<FunctionDef, GeneratedFunction> apply(final GeneratedNode aClass) {
+				return ((GeneratedClass) aClass).functionMap;
+			}
+		}
+
+		static class GetFunctionMapNamespace implements Function<GeneratedNode, Map<FunctionDef, GeneratedFunction>> {
+			@Override
+			public Map<FunctionDef, GeneratedFunction> apply(final GeneratedNode aNamespace) {
+				return ((GeneratedNamespace) aNamespace).functionMap;
+			}
+		}
+
+		<T extends GeneratedNode> void defaultAction(final T result) {
+			final OS_Element p = deferredMemberFunction.getParent();
+
+			if (p instanceof DeduceTypes2.OS_SpecialVariable) {
+				final DeduceTypes2.OS_SpecialVariable specialVariable = (DeduceTypes2.OS_SpecialVariable) p;
+				onSpecialVariable(specialVariable);
+				int y = 2;
+			} else if (p instanceof ClassStatement) {
+				final Function<GeneratedNode, Map<FunctionDef, GeneratedFunction>> x = getFunctionMap(result);
+
+				// once again we need GeneratedFunction, not FunctionDef
+				// we seem to have it below, but there can be multiple
+				// specializations of each function
+
+				final GeneratedFunction gf = x.apply(result).get((FunctionDef) deferredMemberFunction.getFunctionDef());
+				if (gf != null) {
+					deferredMemberFunction.externalRefDeferred().resolve(gf);
+					gf.typePromise().then(new DoneCallback<GenType>() {
+						@Override
+						public void onDone(final GenType result) {
+							deferredMemberFunction.typeResolved().resolve(result);
+						}
+					});
+				}
+			} else
+				throw new IllegalStateException("unknown parent");
+		}
+
+		@NotNull
+		private <T extends GeneratedNode> Function<GeneratedNode, Map<FunctionDef, GeneratedFunction>> getFunctionMap(final T result) {
+			final Function<GeneratedNode, Map<FunctionDef, GeneratedFunction>> x;
+			if (result instanceof GeneratedNamespace)
+				x = new GetFunctionMapNamespace();
+			else if (result instanceof GeneratedClass)
+				x = new GetFunctionMapClass();
+			else
+				throw new NotImplementedException();
+			return x;
+		}
+
+		void action() {
+			if (invocation instanceof ClassInvocation)
+				((ClassInvocation) invocation).resolvePromise().then(new DoneCallback<GeneratedClass>() {
+					@Override
+					public void onDone(final GeneratedClass result) {
+						defaultAction(result);
+					}
+				});
+			else if (invocation instanceof NamespaceInvocation)
+				((NamespaceInvocation) invocation).resolvePromise().then(new DoneCallback<GeneratedNamespace>() {
+					@Override
+					public void onDone(final GeneratedNamespace result) {
+						defaultAction(result);
+					}
+				});
+		}
+
+		public void onSpecialVariable(final DeduceTypes2.OS_SpecialVariable aSpecialVariable) {
+			final DeduceLocalVariable.MemberInvocation mi = aSpecialVariable.memberInvocation;
+
+			switch (mi.role) {
+			case INHERITED:
+				final FunctionInvocation functionInvocation = deferredMemberFunction.functionInvocation();
+				functionInvocation.generatePromise().
+						then(new DoneCallback<BaseGeneratedFunction>() {
+							@Override
+							public void onDone(final BaseGeneratedFunction gf) {
+								deferredMemberFunction.externalRefDeferred().resolve(gf);
+								gf.typePromise().
+										then(new DoneCallback<GenType>() {
+											@Override
+											public void onDone(final GenType result) {
+												deferredMemberFunction.typeResolved().resolve(result);
+											}
+										});
+							}
+						});
+				break;
+			case DIRECT:
+				if (invocation instanceof NamespaceInvocation)
+					assert false;
+				else {
+					final ClassInvocation classInvocation = (ClassInvocation) invocation;
+					classInvocation.resolvePromise().
+							then(new DoneCallback<GeneratedClass>() {
+								@Override
+								public void onDone(final GeneratedClass element_generated) {
+									// once again we need GeneratedFunction, not FunctionDef
+									// we seem to have it below, but there can be multiple
+									// specializations of each function
+									final GeneratedFunction gf = element_generated.functionMap.get((FunctionDef) deferredMemberFunction.getFunctionDef());
+									deferredMemberFunction.externalRefDeferred().resolve(gf);
+									gf.typePromise().
+											then(new DoneCallback<GenType>() {
+												@Override
+												public void onDone(final GenType result) {
+													deferredMemberFunction.typeResolved().resolve(result);
+												}
+											});
+								}
+							});
+				}
+				break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + mi.role);
+			}
+		}
+	}
+
 	public void handleDeferredMemberFunctions() {
 		for (@NotNull final DeferredMemberFunction deferredMemberFunction : deferredMemberFunctions) {
 			int y=2;
 			final OS_Element parent = deferredMemberFunction.getParent();//.getParent().getParent();
 
 			if (parent instanceof ClassStatement) {
-//				final ClassStatement classStatement = (ClassStatement) deferredMemberFunction.getParent();
-				final ClassInvocation classInvocation = (ClassInvocation) deferredMemberFunction.getInvocation();
-				classInvocation.resolvePromise().
-						then(new DoneCallback<GeneratedClass>() {
-					@Override
-					public void onDone(final GeneratedClass result) {
-						final OS_Element p = deferredMemberFunction.getParent();
+				final IInvocation invocation = deferredMemberFunction.getInvocation();
 
-						if (p instanceof DeduceTypes2.OS_SpecialVariable) {
-							final DeduceTypes2.OS_SpecialVariable specialVariable = (DeduceTypes2.OS_SpecialVariable) p;
-							onSpecialVariable(specialVariable);
-							int y=2;
-						} else if (p instanceof ClassStatement) {
-							// once again we need GeneratedFunction, not FunctionDef
-							// we seem to have it below, but there can be multiple
-							// specializations of each function
-							final GeneratedFunction gf = result.functionMap.get((FunctionDef) deferredMemberFunction.getFunctionDef());
-							if (gf != null) {
-								deferredMemberFunction.externalRefDeferred().resolve(gf);
-								gf.typePromise().then(new DoneCallback<GenType>() {
-									@Override
-									public void onDone(final GenType result) {
-										deferredMemberFunction.typeResolved().resolve(result);
-									}
-								});
-							}
-						} else
-							throw new IllegalStateException("unknown parent");
-					}
-
-					public void onSpecialVariable(final DeduceTypes2.OS_SpecialVariable aSpecialVariable) {
-						final DeduceLocalVariable.MemberInvocation mi = aSpecialVariable.memberInvocation;
-
-						switch (mi.role) {
-						case INHERITED:
-							final FunctionInvocation functionInvocation = deferredMemberFunction.functionInvocation();
-							functionInvocation.generatePromise().
-									then(new DoneCallback<BaseGeneratedFunction>() {
-										@Override
-										public void onDone(final BaseGeneratedFunction gf) {
-											deferredMemberFunction.externalRefDeferred().resolve(gf);
-											gf.typePromise().
-													then(new DoneCallback<GenType>() {
-														@Override
-														public void onDone(final GenType result) {
-															deferredMemberFunction.typeResolved().resolve(result);
-														}
-													});
-										}
-									});
-							break;
-						case DIRECT:
-							classInvocation.resolvePromise().
-									then(new DoneCallback<GeneratedClass>() {
-										@Override
-										public void onDone(final GeneratedClass element_generated) {
-											// once again we need GeneratedFunction, not FunctionDef
-											// we seem to have it below, but there can be multiple
-											// specializations of each function
-											final GeneratedFunction gf = element_generated.functionMap.get((FunctionDef) deferredMemberFunction.getFunctionDef());
-											deferredMemberFunction.externalRefDeferred().resolve(gf);
-											gf.typePromise().
-													then(new DoneCallback<GenType>() {
-														@Override
-														public void onDone(final GenType result) {
-															deferredMemberFunction.typeResolved().resolve(result);
-														}
-													});
-										}
-									});
-							break;
-						default:
-							throw new IllegalStateException("Unexpected value: " + mi.role);
-						}
-					}
-				});
+				final DeferredMemberFunctionParentIsClassStatement dmfpic = new DeferredMemberFunctionParentIsClassStatement(deferredMemberFunction, invocation);
+				dmfpic.action();
 			} else if (parent instanceof NamespaceStatement) {
 //				final ClassStatement classStatement = (ClassStatement) deferredMemberFunction.getParent();
 				final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) deferredMemberFunction.getInvocation();
