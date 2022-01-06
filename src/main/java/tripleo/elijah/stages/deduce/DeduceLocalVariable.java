@@ -276,7 +276,7 @@ public class DeduceLocalVariable {
 
 		final Map<TypeName, ClassStatement> inh1 = aFirstClass.getContext().inheritance();
 		for (Map.Entry<TypeName, ClassStatement> entry : inh1.entrySet()) {
-			if (entry.getKey().equals(aInherited))
+			if (entry.getValue().equals(aInherited))
 				return (ClassStatement) aInherited;
 		}
 		return null;
