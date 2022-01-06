@@ -11,6 +11,7 @@ package tripleo.elijah.stages.deduce;
 
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.lang.ConstructStatement;
+import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.ProcIA;
@@ -31,6 +32,17 @@ public class DeduceConstructStatement implements DeduceElement {
 	public DeduceConstructStatement(final @NotNull BaseGeneratedFunction aGeneratedFunction, final ConstructStatement aConstructStatement) {
 		generatedFunction = aGeneratedFunction;
 		constructStatement = aConstructStatement;
+	}
+
+	@Override
+	public OS_Element element() {
+		return constructStatement;
+	}
+
+	@Override
+	public DeclAnchor declAnchor() {
+		// TODO should this be the VariableStatement used to declare the type?
+		return null;
 	}
 }
 
