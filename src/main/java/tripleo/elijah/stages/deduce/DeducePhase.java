@@ -85,8 +85,9 @@ public class DeducePhase {
 	}
 
 	class RegisterClassInvocation {
-		public @NotNull ClassInvocation registerClassInvocation(@NotNull ClassInvocation aClassInvocation) {
+		// TODO this class is a mess
 
+		public @NotNull ClassInvocation registerClassInvocation(@NotNull ClassInvocation aClassInvocation) {
 			// 1. select which to return
 			ClassStatement c = aClassInvocation.getKlass();
 			Collection<ClassInvocation> cis = classInvocationMultimap.get(c);
@@ -98,8 +99,22 @@ public class DeducePhase {
 
 				boolean i = equivalentGenericPart(aClassInvocation, ci);
 				if (i) {
-					return ci;
-//					return part2(ci, false);
+					if (aClassInvocation instanceof DerivedClassInvocation) {
+						if (ci instanceof DerivedClassInvocation)
+							continue;
+
+						/*if (ci.resolvePromise().isResolved())*/ {
+							ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+								@Override
+								public void onDone(final GeneratedClass result) {
+									aClassInvocation.resolveDeferred().resolve(result);
+								}
+							});
+							return aClassInvocation;
+						}
+					} else
+						return ci;
+//						return part2(ci, false);
 				}
 			}
 
