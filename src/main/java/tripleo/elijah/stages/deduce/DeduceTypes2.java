@@ -2141,7 +2141,7 @@ public class DeduceTypes2 {
 								idte2.type = tte;
 							}
 							// s is constructor name
-							implement_construct_type(idte2, ty, s);
+							implement_construct_type(idte2, ty, s, null);
 
 							if (resolved == null) {
 								try {
@@ -2164,7 +2164,7 @@ public class DeduceTypes2 {
 										type.nonGenericTypeName = Objects.requireNonNull(deducePath.getType(i - 1)).nonGenericTypeName; // HACK. not guararnteed to work!
 									}
 									@NotNull OS_Type ty = new OS_Type(type.nonGenericTypeName);
-									implement_construct_type(idte2, ty, s);
+									implement_construct_type(idte2, ty, s, type);
 
 									final VariableTableEntry x = (VariableTableEntry) (deducePath.getEntry(i - 1));
 									genCIForGenType2(type);
@@ -2188,22 +2188,25 @@ public class DeduceTypes2 {
 			final @Nullable OS_Type attached = vte.type.getAttached();
 //			assert attached != null; // TODO will fail when empty variable expression
 			if (attached != null && attached.getType() == OS_Type.Type.USER) {
-				implement_construct_type(vte, attached, null);
+				implement_construct_type(vte, attached, null, vte.type.genType);
 			} else {
 				final OS_Type ty2 = vte.type.genType.typeName;
 				assert ty2 != null;
-				implement_construct_type(vte, ty2, null);
+				implement_construct_type(vte, ty2, null, vte.type.genType);
 			}
 		}
 
-		private void implement_construct_type(@Nullable Constructable co, @NotNull OS_Type aTy, String constructorName) {
+		private void implement_construct_type(final @Nullable Constructable co,
+											  final @NotNull OS_Type aTy,
+											  final @Nullable String constructorName,
+											  final @Nullable GenType aGenType) {
 			if (aTy.getType() != OS_Type.Type.USER)
 				throw new IllegalStateException("must be USER type");
 
 			TypeName tyn = aTy.getTypeName();
 			if (tyn instanceof NormalTypeName) {
 				final @NotNull NormalTypeName tyn1 = (NormalTypeName) tyn;
-				_implement_construct_type(co, constructorName, (NormalTypeName) tyn);
+				_implement_construct_type(co, constructorName, (NormalTypeName) tyn, aGenType);
 			}
 
 			if (co != null) {
@@ -2248,13 +2251,50 @@ public class DeduceTypes2 {
 			}
 		}
 
-		private void _implement_construct_type(@Nullable Constructable co, @Nullable String constructorName, @NotNull NormalTypeName aTyn1) {
-			String s = aTyn1.getName();
-			LookupResultList lrl = aTyn1.getContext().lookup(s);
-			@Nullable OS_Element best = lrl.chooseBest(null);
-			assert best instanceof ClassStatement;
-			ClassInvocation clsinv = ClassInvocationMake.withGenericPart((ClassStatement) best, constructorName, aTyn1, DeduceTypes2.this);
-			clsinv = phase.registerClassInvocation(clsinv);
+		class ICH {
+			private final GenType genType;
+
+			public ICH(final GenType aGenType) {
+				genType = aGenType;
+			}
+
+			ClassStatement lookupTypeName(final NormalTypeName normalTypeName, final String typeName) {
+				final OS_Element best;
+				if (genType != null && genType.resolved != null) {
+					best = genType.resolved.getClassOf();
+				} else {
+					LookupResultList lrl = normalTypeName.getContext().lookup(typeName);
+					best = lrl.chooseBest(null);
+				}
+				assert best instanceof ClassStatement;
+				return (ClassStatement) best;
+			}
+
+			@NotNull
+			ClassInvocation getClassInvocation(final @Nullable String constructorName,
+											   final @NotNull NormalTypeName aTyn1,
+											   final @Nullable GenType aGenType,
+											   final @NotNull ClassStatement aBest) {
+				final ClassInvocation clsinv;
+				if (aGenType != null && aGenType.ci != null) {
+					assert aGenType.ci instanceof ClassInvocation;
+					clsinv = (ClassInvocation) aGenType.ci;
+				} else {
+					ClassInvocation clsinv2 = ClassInvocationMake.withGenericPart(aBest, constructorName, aTyn1, DeduceTypes2.this);
+					clsinv = phase.registerClassInvocation(clsinv2);
+				}
+				return clsinv;
+			}
+		}
+
+		private void _implement_construct_type(final @Nullable Constructable co,
+											   final @Nullable String constructorName,
+											   final @NotNull NormalTypeName aTyn1,
+											   final @Nullable GenType aGenType) {
+			final String s = aTyn1.getName();
+			final ICH ich = new ICH(aGenType);
+			final ClassStatement best = ich.lookupTypeName(aTyn1, s);
+			final ClassInvocation clsinv = ich.getClassInvocation(constructorName, aTyn1, aGenType, best);
 			if (co != null) {
 				genTypeCI_and_ResolveTypeToClass(co, clsinv);
 			}
@@ -2264,7 +2304,7 @@ public class DeduceTypes2 {
 			{
 				@Nullable ConstructorDef cc = null;
 				if (constructorName != null) {
-					Collection<ConstructorDef> cs = ((ClassStatement) best).getConstructors();
+					Collection<ConstructorDef> cs = best.getConstructors();
 					for (@NotNull ConstructorDef c : cs) {
 						if (c.name().equals(constructorName)) {
 							cc = c;
@@ -2277,7 +2317,7 @@ public class DeduceTypes2 {
 					// TODO is cc ever null (default_constructor)
 					if (cc == null) {
 						//assert pte.getArgs().size() == 0;
-						for (ClassItem item : ((ClassStatement) best).getItems()) {
+						for (ClassItem item : best.getItems()) {
 							if (item instanceof ConstructorDef) {
 								final ConstructorDef constructorDef = (ConstructorDef) item;
 								if (constructorDef.getArgs().size() == pte.getArgs().size()) {
