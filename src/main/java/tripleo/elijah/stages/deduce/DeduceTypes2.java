@@ -604,7 +604,7 @@ public class DeduceTypes2 {
 			case NOP:
 				break;
 			case CONSTRUCT:
-				implement_construct(generatedFunction, instruction);
+				implement_construct(generatedFunction, instruction, context);
 				break;
 			default:
 				throw new IllegalStateException("Unexpected value: " + instruction.getName());
@@ -2077,17 +2077,21 @@ public class DeduceTypes2 {
 			assert expression instanceof IntegerIA || expression instanceof IdentIA;
 		}
 
-		public void action() {
+		DeduceConstructStatement dcs;
+
+		public void action(final Context aContext) {
+			dcs = (DeduceConstructStatement) instruction.deduceElement;
+
 			if (expression instanceof IntegerIA) {
 				action_IntegerIA();
 			} else if (expression instanceof IdentIA) {
-				action_IdentIA();
+				action_IdentIA(aContext);
 			} else {
 				throw new IllegalStateException("this.expression is of the wrong type");
 			}
 		}
 
-		public void action_IdentIA() {
+		public void action_IdentIA(final Context aContext) {
 			@NotNull IdentTableEntry idte = ((IdentIA)expression).getEntry();
 			DeducePath deducePath = idte.buildDeducePath(generatedFunction);
 			{
