@@ -565,7 +565,7 @@ public class GenerateFunctions {
 			l.add(procIA);
 			final List<InstructionArgument> args1 = simplify_args(args, gf, cctx);
 			l.addAll(args1);
-			add_i(gf, InstructionName.CONSTRUCT, l, cctx);
+			final int instruction_number = add_i(gf, InstructionName.CONSTRUCT, l, cctx);
 
 			{
 				final DeduceConstructStatement dcs = new DeduceConstructStatement(gf, aConstructStatement);
@@ -580,6 +580,9 @@ public class GenerateFunctions {
 				dcs.args = args1;
 
 				gf.addElement(aConstructStatement, dcs);
+
+				final Instruction instruction = gf.getInstruction(instruction_number);
+				instruction.deduceElement = dcs;
 			}
 		}
 	}
