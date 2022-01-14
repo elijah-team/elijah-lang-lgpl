@@ -12,11 +12,7 @@ package tripleo.elijah.stages.deduce;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.Context;
-import tripleo.elijah.lang.FormalArgListItem;
-import tripleo.elijah.lang.LookupResultList;
-import tripleo.elijah.lang.OS_Element;
+import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
@@ -25,6 +21,7 @@ import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
 import tripleo.elijah.stages.instructions.VariableTableType;
+import tripleo.elijah.util.NotImplementedException;
 
 import java.util.stream.Collectors;
 
@@ -85,8 +82,17 @@ public class DeduceProcCall {
 				final OS_Element resolved_element = bl.getResolvedElement();
 				if (resolved_element instanceof FormalArgListItem) {
 					target = new DeclTarget(resolved_element, generatedFunction.getFD(), DeclAnchor.AnchorType.PARAMS);
-				} else
-					target = new DeclTarget(resolved_element, resolved_element.getParent(), DeclAnchor.AnchorType.MEMBER);
+				} else {
+					if (resolved_element instanceof VariableStatement) {
+						final OS_Element parent = resolved_element.getParent().getParent();
+						if (parent == generatedFunction.getFD()) {
+							target = new DeclTarget(resolved_element, parent, DeclAnchor.AnchorType.VAR);
+						} else
+							throw new NotImplementedException();
+					} else {
+						target = new DeclTarget(resolved_element, resolved_element.getParent(), DeclAnchor.AnchorType.MEMBER);
+					}
+				}
 			}
 			int y=2;
 		}
@@ -102,15 +108,23 @@ public class DeduceProcCall {
 						  final @NotNull DeclAnchor.AnchorType aAnchorType) {
 			element = aBest;
 			anchor = new DeclAnchor(aDeclAnchor, aAnchorType);
-			IInvocation declaredInvocation = generatedFunction.fi.getClassInvocation();
-			if (declaredInvocation == null)
-				declaredInvocation = generatedFunction.fi.getNamespaceInvocation();
 			final IInvocation invocation;
-			if (aAnchorType == DeclAnchor.AnchorType.INHERITED) {
-				assert declaredInvocation instanceof ClassInvocation;
-				invocation = new DerivedClassInvocation((ClassStatement) aDeclAnchor, (ClassInvocation) declaredInvocation);
+			if (aAnchorType != DeclAnchor.AnchorType.VAR) {
+				IInvocation declaredInvocation = generatedFunction.fi.getClassInvocation();
+				if (declaredInvocation == null) {
+					declaredInvocation = generatedFunction.fi.getNamespaceInvocation();
+				}
+				if (aAnchorType == DeclAnchor.AnchorType.INHERITED) {
+					assert declaredInvocation instanceof ClassInvocation;
+					invocation = new DerivedClassInvocation((ClassStatement) aDeclAnchor, (ClassInvocation) declaredInvocation);
+				} else {
+					invocation = declaredInvocation;
+				}
 			} else {
-				invocation = declaredInvocation;
+				final NormalTypeName normalTypeName = (NormalTypeName) ((VariableStatement) element).typeName();
+				final LookupResultList lrl = normalTypeName.getContext().lookup(normalTypeName.getName());
+				final ClassStatement classStatement = (ClassStatement) lrl.chooseBest(null);
+				invocation = DeduceTypes2.ClassInvocationMake.withGenericPart(classStatement, null, normalTypeName, deduceTypes2);
 			}
 			anchor.setInvocation(invocation);
 		}
