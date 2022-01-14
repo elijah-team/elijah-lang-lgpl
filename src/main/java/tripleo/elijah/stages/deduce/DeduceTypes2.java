@@ -2094,6 +2094,12 @@ public class DeduceTypes2 {
 		public void action_IdentIA(final Context aContext) {
 			@NotNull IdentTableEntry idte = ((IdentIA)expression).getEntry();
 			DeducePath deducePath = idte.buildDeducePath(generatedFunction);
+
+			final DeduceProcCall dpc = new DeduceProcCall(pte);
+			dpc.setDeduceTypes2(DeduceTypes2.this, aContext, generatedFunction);
+			final @Nullable DeduceElement target = dpc.target();
+			int y=2;
+
 			{
 				@Nullable OS_Element el3;
 				@Nullable Context ectx = generatedFunction.getFD().getContext();
