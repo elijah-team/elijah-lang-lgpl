@@ -2362,9 +2362,9 @@ public class DeduceTypes2 {
 		}
 	}
 
-	void implement_construct(BaseGeneratedFunction generatedFunction, Instruction instruction) {
+	void implement_construct(BaseGeneratedFunction generatedFunction, Instruction instruction, final Context aContext) {
 		final @NotNull Implement_construct ic = newImplement_construct(generatedFunction, instruction);
-		ic.action();
+		ic.action(aContext);
 	}
 
 	@NotNull
