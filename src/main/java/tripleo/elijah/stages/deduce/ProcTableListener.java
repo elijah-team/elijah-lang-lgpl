@@ -121,7 +121,7 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 						genType = e_Is_FunctionDef.getGenType();
 						// NOTE read note below
 						genType.resolved = fd.getOS_Type();
-						genType.functionInvocation = fi;
+						genType.functionInvocation = fi; // DeduceTypes2.Dependencies#action_type
 						finish(co, depTracker, fi, genType);
 					}
 				}
@@ -137,7 +137,7 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 				//
 				//  So we correct it here
 				genType.resolved = fd.getOS_Type();
-				genType.functionInvocation = fi;
+				genType.functionInvocation = fi; // DeduceTypes2.Dependencies#action_type
 				finish(co, depTracker, fi, genType);
 			}
 		} else {
