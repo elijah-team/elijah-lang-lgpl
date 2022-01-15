@@ -426,6 +426,7 @@ class Resolve_Ident_IA {
 				idte.resolveExpectation.satisfy(normal_path);
 		} else if (idte.getStatus() == BaseTableEntry.Status.KNOWN) {
 			final String normal_path = generatedFunction.getIdentIAPathNormal(identIA);
+ 			assert idte.resolveExpectation.isSatisfied();
  			if (!idte.resolveExpectation.isSatisfied())
 				idte.resolveExpectation.satisfy(normal_path);
 
