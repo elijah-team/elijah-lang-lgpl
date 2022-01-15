@@ -2209,11 +2209,11 @@ public class DeduceTypes2 {
 				_implement_construct_type(co, constructorName, (NormalTypeName) tyn, aGenType);
 			}
 
+			final ClassInvocation classInvocation = pte.getClassInvocation();
 			if (co != null) {
 				co.setConstructable(pte);
-				ClassInvocation clsinv = pte.getClassInvocation();
-				assert clsinv != null;
-				clsinv.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+				assert classInvocation != null;
+				classInvocation.resolvePromise().done(new DoneCallback<GeneratedClass>() {
 					@Override
 					public void onDone(GeneratedClass result) {
 						co.resolveTypeToClass(result);
@@ -2221,13 +2221,13 @@ public class DeduceTypes2 {
 				});
 			}
 
-			if (pte.getClassInvocation() != null) {
-				final ClassInvocation ci = pte.getClassInvocation();
-				if (ci.getConstructorName() != null) {
-					final GenerateFunctions generateFunctions = getGenerateFunctions(ci.getKlass().getContext().module());
+			if (classInvocation != null) {
+				if (classInvocation.getConstructorName() != null) {
+					final ClassStatement classStatement = classInvocation.getKlass();
+					final GenerateFunctions generateFunctions = getGenerateFunctions(classStatement.getContext().module());
 					@Nullable ConstructorDef cc = null;
 					{
-						Collection<ConstructorDef> cs = ci.getKlass().getConstructors();
+						Collection<ConstructorDef> cs = classStatement.getConstructors();
 						for (@NotNull ConstructorDef c : cs) {
 							if (c.name().equals(constructorName)) {
 								cc = c;
@@ -2238,7 +2238,7 @@ public class DeduceTypes2 {
 					WlGenerateCtor gen = new WlGenerateCtor(generateFunctions, pte.getFunctionInvocation(), cc.getNameNode());
 					gen.run(null);
 					final GeneratedConstructor gc = gen.getResult();
-					ci.resolveDeferred().then(new DoneCallback<GeneratedClass>() {
+					classInvocation.resolveDeferred().then(new DoneCallback<GeneratedClass>() {
 						@Override
 						public void onDone(final GeneratedClass result) {
 							result.addConstructor(gc.cd, gc);
