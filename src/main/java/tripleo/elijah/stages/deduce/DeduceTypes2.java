@@ -2084,10 +2084,12 @@ public class DeduceTypes2 {
 									implement_construct_type(idte2, ty, s, type);
 
 									final VariableTableEntry x = (VariableTableEntry) (deducePath.getEntry(i - 1));
-									genCIForGenType2(type);
+									if (type.ci == null && type.node == null)
+										genCIForGenType2(type);
 									assert x != null;
 									x.resolveTypeToClass(type.node);
-								}
+								} else
+									throw new NotImplementedException();
 							} else {
 								ectx = deducePath.getContext(i);
 							}
