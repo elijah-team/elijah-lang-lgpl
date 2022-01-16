@@ -113,7 +113,8 @@ public class DeduceProcCall {
 
 		public DeclTarget(final @NotNull OS_Element aBest,
 						  final @NotNull OS_Element aDeclAnchor,
-						  final @NotNull DeclAnchor.AnchorType aAnchorType, final ErrSink errSink) {
+						  final @NotNull DeclAnchor.AnchorType aAnchorType,
+						  final @NotNull ErrSink errSink) {
 			element = aBest;
 			anchor = new DeclAnchor(aDeclAnchor, aAnchorType);
 			final IInvocation invocation;
