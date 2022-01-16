@@ -98,7 +98,10 @@ public class DeduceProcCall {
 						} else
 							throw new NotImplementedException();
 					} else {
-						target = new DeclTarget(resolved_element, resolved_element.getParent(), DeclAnchor.AnchorType.MEMBER, errSink);
+						if (resolved_element instanceof IdentExpression)
+							target = new DeclTarget(resolved_element, resolved_element, DeclAnchor.AnchorType.MEMBER, errSink);
+						else
+							target = new DeclTarget(resolved_element, resolved_element.getParent(), DeclAnchor.AnchorType.MEMBER, errSink);
 					}
 				}
 			}
