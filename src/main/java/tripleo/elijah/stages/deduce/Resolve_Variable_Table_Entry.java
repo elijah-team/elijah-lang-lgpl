@@ -355,7 +355,7 @@ class Resolve_Variable_Table_Entry {
 	public void genCIForGenType(final GenType aGenType) {
 		assert aGenType.nonGenericTypeName != null ;//&& ((NormalTypeName) aGenType.nonGenericTypeName).getGenericPart().size() > 0;
 
-		aGenType.genCI(aGenType, aGenType.nonGenericTypeName, deduceTypes2, deduceTypes2.errSink, deduceTypes2.phase);
+		aGenType.genCI(aGenType.nonGenericTypeName, deduceTypes2, deduceTypes2.errSink, deduceTypes2.phase);
 		final IInvocation invocation = aGenType.ci;
 		if (invocation instanceof NamespaceInvocation) {
 			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
@@ -414,7 +414,7 @@ class Resolve_Variable_Table_Entry {
 	 * @param aGenType the GenType to modify. doesn;t care about  nonGenericTypeName
 	 */
 	public void genCIForGenType2(final GenType aGenType) {
-		aGenType.genCI(aGenType, aGenType.nonGenericTypeName, deduceTypes2, deduceTypes2.errSink, deduceTypes2.phase);
+		aGenType.genCI(aGenType.nonGenericTypeName, deduceTypes2, deduceTypes2.errSink, deduceTypes2.phase);
 		final IInvocation invocation = aGenType.ci;
 		if (invocation instanceof NamespaceInvocation) {
 			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;

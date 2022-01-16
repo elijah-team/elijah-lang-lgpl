@@ -46,7 +46,7 @@ public class GenType {
 		typeName = aAttached;
 		resolved = aOS_type;
 		if (aB) {
-			ci = genCI(this, aTypeName, deduceTypes2, errSink, phase);
+			ci = genCI(aTypeName, deduceTypes2, errSink, phase);
 		}
 	}
 
@@ -126,13 +126,12 @@ public class GenType {
 		return true;
 	}
 
-	public ClassInvocation genCI(final @NotNull GenType genType,
-								 final TypeName aGenericTypeName,
+	public ClassInvocation genCI(final TypeName aGenericTypeName,
 								 final DeduceTypes2 deduceTypes2,
 								 final ErrSink errSink,
 								 final DeducePhase phase) {
 		SetGenCI sgci = new SetGenCI();
-		final ClassInvocation ci = sgci.call(genType, aGenericTypeName, deduceTypes2, errSink, phase);
+		final ClassInvocation ci = sgci.call(this, aGenericTypeName, deduceTypes2, errSink, phase);
 		return ci;
 	}
 
