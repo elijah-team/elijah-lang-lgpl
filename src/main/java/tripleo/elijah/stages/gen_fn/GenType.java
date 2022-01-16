@@ -164,7 +164,7 @@ public class GenType {
 			@NotNull List<TypeName> gp = best.getGenericPart();
 			@Nullable ClassInvocation clsinv;
 			if (genType.ci == null) {
-				clsinv = DeduceTypes2.ClassInvocationMake.withGenericPart2(best, constructorName, aGenericTypeName, deduceTypes2, errSink);
+				clsinv = DeduceTypes2.ClassInvocationMake.withGenericPart(best, constructorName, (NormalTypeName) aGenericTypeName, deduceTypes2, errSink);
 				if (clsinv == null) return null;
 				clsinv = phase.registerClassInvocation(clsinv);
 				genType.ci = clsinv;
@@ -181,7 +181,7 @@ public class GenType {
 			@NotNull List<TypeName> gp = best.getGenericPart();
 			@Nullable ClassInvocation clsinv;
 			if (genType.ci == null) {
-				clsinv = DeduceTypes2.ClassInvocationMake.withGenericPart2(best, constructorName, aGenericTypeName, deduceTypes2, errSink);
+				clsinv = DeduceTypes2.ClassInvocationMake.withGenericPart(best, constructorName, (NormalTypeName) aGenericTypeName, deduceTypes2, errSink);
 				if (clsinv == null) return null;
 				clsinv = phase.registerClassInvocation(clsinv);
 				genType.ci = clsinv;

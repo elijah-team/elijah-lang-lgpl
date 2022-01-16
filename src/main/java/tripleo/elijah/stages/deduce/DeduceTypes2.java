@@ -1938,36 +1938,6 @@ public class DeduceTypes2 {
 			}
 			return clsinv;
 		}
-
-		public static ClassInvocation withGenericPart2(ClassStatement best,
-													   String constructorName,
-													   TypeName aGenericTypeName,
-													   DeduceTypes2 dt2,
-													   ErrSink errSink) {
-			@NotNull GenericPart genericPart = new GenericPart(best, aGenericTypeName);
-
-			@Nullable ClassInvocation clsinv = new ClassInvocation(best, constructorName);
-
-			if (genericPart.hasGenericPart()) {
-				final @NotNull List<TypeName> gp = best.getGenericPart();
-				final @NotNull TypeNameList tngp = genericPart.getGenericPartFromTypeName();
-
-				for (int i = 0; i < gp.size(); i++) {
-					final TypeName typeName = tngp.get(i);
-					@NotNull GenType typeName2;
-					try {
-						typeName2 = dt2.resolve_type(new OS_Type(typeName), typeName.getContext());
-						// TODO transition to GenType
-						clsinv.set(i, gp.get(i), typeName2.resolved);
-					} catch (ResolveError aResolveError) {
-//						aResolveError.printStackTrace();
-						errSink.reportDiagnostic(aResolveError);
-						return null;
-					}
-				}
-			}
-			return clsinv;
-		}
 	}
 
 	static class GenericPart {
