@@ -1950,6 +1950,7 @@ public class DeduceTypes2 {
 			genericTypeName = aGenericTypeName;
 		}
 
+		@Contract(pure = true)
 		public boolean hasGenericPart() {
 			return classStatement.getGenericPart().size() > 0;
 		}
@@ -1962,6 +1963,7 @@ public class DeduceTypes2 {
 			return (NormalTypeName) genericTypeName;
 		}
 
+		@Contract(pure = true)
 		public TypeNameList getGenericPartFromTypeName() {
 			final NormalTypeName ntn = getGenericTypeName();
 			return ntn.getGenericPart();
@@ -2590,7 +2592,8 @@ public class DeduceTypes2 {
 			}
 		}
 		{
-			final LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
+			final String s = ((IdentExpression) pte.expression).getText();
+			final LookupResultList lrl = ctx.lookup(s);
 			final @Nullable OS_Element best = lrl.chooseBest(null);
 			if (best != null) {
 				pte.setResolvedElement(best);
