@@ -2001,20 +2001,26 @@ public class DeduceTypes2 {
 		public static ClassInvocation withGenericPart(ClassStatement best,
 													  String constructorName,
 													  NormalTypeName aTyn1,
-													  DeduceTypes2 dt2) {
-			@NotNull List<TypeName> gp = best.getGenericPart();
+													  DeduceTypes2 dt2,
+													  final ErrSink aErrSink) {
+			@NotNull GenericPart genericPart = new GenericPart(best, aTyn1);
+
 			@Nullable ClassInvocation clsinv = new ClassInvocation(best, constructorName);
-			if (gp.size() > 0) {
-				TypeNameList gp2 = aTyn1.getGenericPart();
+
+			if (genericPart.hasGenericPart()) {
+				final @NotNull List<TypeName> gp = best.getGenericPart();
+				final @NotNull TypeNameList gp2 = genericPart.getGenericPartFromTypeName();
+
 				for (int i = 0; i < gp.size(); i++) {
 					final TypeName typeName = gp2.get(i);
 					@NotNull GenType typeName2;
 					try {
-						// TODO transition to GenType
 						typeName2 = dt2.resolve_type(new OS_Type(typeName), typeName.getContext());
+						// TODO transition to GenType
 						clsinv.set(i, gp.get(i), typeName2.resolved);
 					} catch (ResolveError aResolveError) {
-						aResolveError.printStackTrace();
+//						aResolveError.printStackTrace();
+						aErrSink.reportDiagnostic(aResolveError);
 					}
 				}
 			}
@@ -2026,30 +2032,57 @@ public class DeduceTypes2 {
 													   TypeName aGenericTypeName,
 													   DeduceTypes2 dt2,
 													   ErrSink errSink) {
-			@NotNull List<TypeName> gp = best.getGenericPart();
+			@NotNull GenericPart genericPart = new GenericPart(best, aGenericTypeName);
+
 			@Nullable ClassInvocation clsinv = new ClassInvocation(best, constructorName);
 
-			if (gp.size() > 0) {
-				assert aGenericTypeName != null;
+			if (genericPart.hasGenericPart()) {
+				final @NotNull List<TypeName> gp = best.getGenericPart();
+				final @NotNull TypeNameList tngp = genericPart.getGenericPartFromTypeName();
 
-				if (aGenericTypeName instanceof NormalTypeName) {
-					final @NotNull NormalTypeName tn = (NormalTypeName) aGenericTypeName;
-					TypeNameList tngp = tn.getGenericPart();
-					for (int i = 0; i < gp.size(); i++) {
-						final TypeName typeName = tngp.get(i);
-						@NotNull GenType typeName2;
-						try {
-							typeName2 = dt2.resolve_type(new OS_Type(typeName), typeName.getContext());
-							clsinv.set(i, gp.get(i), typeName2.resolved);
-						} catch (ResolveError aResolveError) {
-//							aResolveError.printStackTrace();
-							errSink.reportDiagnostic(aResolveError);
-							return null;
-						}
+				for (int i = 0; i < gp.size(); i++) {
+					final TypeName typeName = tngp.get(i);
+					@NotNull GenType typeName2;
+					try {
+						typeName2 = dt2.resolve_type(new OS_Type(typeName), typeName.getContext());
+						// TODO transition to GenType
+						clsinv.set(i, gp.get(i), typeName2.resolved);
+					} catch (ResolveError aResolveError) {
+//						aResolveError.printStackTrace();
+						errSink.reportDiagnostic(aResolveError);
+						return null;
 					}
 				}
 			}
 			return clsinv;
+		}
+	}
+
+	static class GenericPart {
+		private final ClassStatement classStatement;
+		private final TypeName genericTypeName;
+
+		@Contract(pure = true)
+		public GenericPart(final ClassStatement aClassStatement, final TypeName aGenericTypeName) {
+			classStatement = aClassStatement;
+			genericTypeName = aGenericTypeName;
+		}
+
+		public boolean hasGenericPart() {
+			return classStatement.getGenericPart().size() > 0;
+		}
+
+		@Contract(pure = true)
+		private NormalTypeName getGenericTypeName() {
+			assert genericTypeName != null;
+			assert genericTypeName instanceof NormalTypeName;
+
+			return (NormalTypeName) genericTypeName;
+		}
+
+		public TypeNameList getGenericPartFromTypeName() {
+			final NormalTypeName ntn = getGenericTypeName();
+			return ntn.getGenericPart();
 		}
 	}
 
