@@ -8,12 +8,13 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
-import tripleo.elijah.lang.ClassStatement;
-import tripleo.elijah.lang.NamespaceStatement;
-import tripleo.elijah.lang.OS_Type;
-import tripleo.elijah.lang.TypeName;
-import tripleo.elijah.stages.deduce.FunctionInvocation;
-import tripleo.elijah.stages.deduce.IInvocation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.comp.ErrSink;
+import tripleo.elijah.lang.*;
+import tripleo.elijah.stages.deduce.*;
+
+import java.util.List;
 
 /**
  * Created 5/31/21 1:32 PM
@@ -33,6 +34,20 @@ public class GenType {
 
 	public GenType(ClassStatement aClassStatement) {
 		resolved = aClassStatement.getOS_Type();
+	}
+
+	public GenType(final OS_Type aAttached,
+				   final OS_Type aOS_type,
+				   final boolean aB,
+				   final TypeName aTypeName,
+				   final DeduceTypes2 deduceTypes2,
+				   final ErrSink errSink,
+				   final DeducePhase phase) {
+		typeName = aAttached;
+		resolved = aOS_type;
+		if (aB) {
+			ci = genCI(this, aTypeName, deduceTypes2, errSink, phase);
+		}
 	}
 
 	@Override
@@ -109,6 +124,94 @@ public class GenType {
 		if (ci != null) return false;
 		if (node != null) return false;
 		return true;
+	}
+
+	public ClassInvocation genCI(final @NotNull GenType genType,
+								 final TypeName aGenericTypeName,
+								 final DeduceTypes2 deduceTypes2,
+								 final ErrSink errSink,
+								 final DeducePhase phase) {
+		SetGenCI sgci = new SetGenCI();
+		final ClassInvocation ci = sgci.call(genType, aGenericTypeName, deduceTypes2, errSink, phase);
+		return ci;
+	}
+
+	static class SetGenCI {
+
+		public ClassInvocation call(@NotNull GenType genType, TypeName aGenericTypeName, final DeduceTypes2 deduceTypes2, final ErrSink errSink, final DeducePhase phase) {
+			if (genType.nonGenericTypeName != null) {
+				return nonGenericTypeName(genType, deduceTypes2, errSink, phase);
+			}
+			if (genType.resolved != null) {
+				if (genType.resolved.getType() == OS_Type.Type.USER_CLASS) {
+					return resolvedUserClass(genType, aGenericTypeName, phase, deduceTypes2, errSink);
+				} else if (genType.resolved.getType() == OS_Type.Type.FUNCTION) {
+					return resolvedFunction(genType, aGenericTypeName, deduceTypes2, errSink, phase);
+				} else if (genType.resolved.getType() == OS_Type.Type.FUNC_EXPR) {
+					// TODO what to do here?
+					int y=2;
+				}
+			}
+			return null;
+		}
+
+		@Nullable
+		private ClassInvocation resolvedFunction(final @NotNull GenType genType, final TypeName aGenericTypeName, final DeduceTypes2 deduceTypes2, final ErrSink errSink, final DeducePhase phase) {
+			// TODO what to do here?
+			OS_Element ele = genType.resolved.getElement();
+			ClassStatement best = (ClassStatement) ele.getParent();//genType.resolved.getClassOf();
+			@Nullable String constructorName = null; // TODO what to do about this, nothing I guess
+
+			@NotNull List<TypeName> gp = best.getGenericPart();
+			@Nullable ClassInvocation clsinv;
+			if (genType.ci == null) {
+				clsinv = DeduceTypes2.ClassInvocationMake.withGenericPart2(best, constructorName, aGenericTypeName, deduceTypes2, errSink);
+				if (clsinv == null) return null;
+				clsinv = phase.registerClassInvocation(clsinv);
+				genType.ci = clsinv;
+			} else
+				clsinv = (ClassInvocation) genType.ci;
+			return clsinv;
+		}
+
+		@Nullable
+		private ClassInvocation resolvedUserClass(final @NotNull GenType genType, final TypeName aGenericTypeName, final DeducePhase phase, final DeduceTypes2 deduceTypes2, final ErrSink errSink) {
+			ClassStatement best = genType.resolved.getClassOf();
+			@Nullable String constructorName = null; // TODO what to do about this, nothing I guess
+
+			@NotNull List<TypeName> gp = best.getGenericPart();
+			@Nullable ClassInvocation clsinv;
+			if (genType.ci == null) {
+				clsinv = DeduceTypes2.ClassInvocationMake.withGenericPart2(best, constructorName, aGenericTypeName, deduceTypes2, errSink);
+				if (clsinv == null) return null;
+				clsinv = phase.registerClassInvocation(clsinv);
+				genType.ci = clsinv;
+			} else
+				clsinv = (ClassInvocation) genType.ci;
+			return clsinv;
+		}
+
+		@Nullable
+		private ClassInvocation nonGenericTypeName(final @NotNull GenType genType, final DeduceTypes2 deduceTypes2, final ErrSink errSink, final DeducePhase phase) {
+			@NotNull NormalTypeName aTyn1 = (NormalTypeName) genType.nonGenericTypeName;
+			@Nullable String constructorName = null; // TODO this comes from nowhere
+
+			switch (genType.resolved.getType()) {
+			case GENERIC_TYPENAME:
+				int y=2; // TODO seems to not be necessary
+				assert false;
+				return null;
+			case USER_CLASS:
+				ClassStatement best = genType.resolved.getClassOf();
+				//
+				ClassInvocation clsinv2 = DeduceTypes2.ClassInvocationMake.withGenericPart(best, constructorName, aTyn1, deduceTypes2, errSink);
+				clsinv2 = phase.registerClassInvocation(clsinv2);
+				genType.ci = clsinv2;
+				return clsinv2;
+			default:
+				throw new IllegalStateException("Unexpected value: " + genType.resolved.getType());
+			}
+		}
 	}
 }
 
