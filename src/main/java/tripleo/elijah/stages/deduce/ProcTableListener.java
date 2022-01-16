@@ -249,7 +249,6 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 				System.err.println("247 genType is null");
 
 			if (/*aGenType == null &&*/ aFi.getFunction() instanceof ConstructorDef) {
-				// README Assume constructor
 				final @NotNull ClassStatement c = aFi.getClassInvocation().getKlass();
 				final @NotNull GenType genType2 = new GenType(c);
 				depTracker.addDependentType(genType2);
