@@ -241,7 +241,7 @@ class Resolve_Ident_IA2 {
 						assert attached1.getType() == OS_Type.Type.USER_CLASS;
 						invocation = phase.registerClassInvocation(attached1.getClassOf(), null); // TODO will fail one day
 						// TODO dont know if next line is right
-						final ClassInvocation invocation2 = DeduceTypes2.ClassInvocationMake.withGenericPart(attached1.getClassOf(), null, (NormalTypeName) tte.genType.nonGenericTypeName, deduceTypes2);
+						final ClassInvocation invocation2 = DeduceTypes2.ClassInvocationMake.withGenericPart(attached1.getClassOf(), null, (NormalTypeName) tte.genType.nonGenericTypeName, deduceTypes2, errSink);
 						int y=2;
 					}
 				} else if (bl instanceof ProcIA) {

@@ -13,6 +13,7 @@ import org.jdeferred2.Promise;
 import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.Context;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.OS_Type;
@@ -201,8 +202,8 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 		return dpc;
 	}
 
-	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseGeneratedFunction aGeneratedFunction) {
-		dpc.setDeduceTypes2(aDeduceTypes2, aContext, aGeneratedFunction);
+	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseGeneratedFunction aGeneratedFunction, final ErrSink aErrSink) {
+		dpc.setDeduceTypes2(aDeduceTypes2, aContext, aGeneratedFunction, aErrSink);
 	}
 }
 

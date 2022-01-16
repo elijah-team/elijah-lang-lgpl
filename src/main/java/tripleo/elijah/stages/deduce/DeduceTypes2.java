@@ -838,7 +838,7 @@ public class DeduceTypes2 {
 			identTableEntry.setDeduceTypes2(this, aContext, generatedFunction);
 		}
 		for (ProcTableEntry procTableEntry : generatedFunction.prte_list) {
-			procTableEntry.setDeduceTypes2(this, aContext, generatedFunction);
+			procTableEntry.setDeduceTypes2(this, aContext, generatedFunction, errSink);
 		}
 		//
 		// resolve all cte expressions
@@ -1274,7 +1274,7 @@ public class DeduceTypes2 {
 			case USER_CLASS:
 				ClassStatement best = genType.resolved.getClassOf();
 				//
-				ClassInvocation clsinv2 = ClassInvocationMake.withGenericPart(best, constructorName, aTyn1, DeduceTypes2.this);
+				ClassInvocation clsinv2 = ClassInvocationMake.withGenericPart(best, constructorName, aTyn1, DeduceTypes2.this, errSink);
 				clsinv2 = phase.registerClassInvocation(clsinv2);
 				genType.ci = clsinv2;
 				return clsinv2;
@@ -2096,7 +2096,7 @@ public class DeduceTypes2 {
 			DeducePath deducePath = idte.buildDeducePath(generatedFunction);
 
 			final DeduceProcCall dpc = new DeduceProcCall(pte);
-			dpc.setDeduceTypes2(DeduceTypes2.this, aContext, generatedFunction);
+			dpc.setDeduceTypes2(DeduceTypes2.this, aContext, generatedFunction, errSink);
 			final @Nullable DeduceElement target = dpc.target();
 			int y=2;
 
@@ -2280,7 +2280,7 @@ public class DeduceTypes2 {
 					assert aGenType.ci instanceof ClassInvocation;
 					clsinv = (ClassInvocation) aGenType.ci;
 				} else {
-					ClassInvocation clsinv2 = ClassInvocationMake.withGenericPart(aBest, constructorName, aTyn1, DeduceTypes2.this);
+					ClassInvocation clsinv2 = ClassInvocationMake.withGenericPart(aBest, constructorName, aTyn1, DeduceTypes2.this, errSink);
 					clsinv = phase.registerClassInvocation(clsinv2);
 				}
 				return clsinv;

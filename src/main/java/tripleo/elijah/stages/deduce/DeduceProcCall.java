@@ -12,6 +12,7 @@ package tripleo.elijah.stages.deduce;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
@@ -33,16 +34,21 @@ public class DeduceProcCall {
 	private DeduceTypes2 deduceTypes2;
 	private Context context;
 	private BaseGeneratedFunction generatedFunction;
+	private ErrSink errSink;
 
 	@Contract(pure = true)
 	public DeduceProcCall(final @NotNull ProcTableEntry aProcTableEntry) {
 		procTableEntry = aProcTableEntry;
 	}
 
-	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseGeneratedFunction aGeneratedFunction) {
+	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2,
+								final Context aContext,
+								final BaseGeneratedFunction aGeneratedFunction,
+								final ErrSink aErrSink) {
 		deduceTypes2 = aDeduceTypes2;
 		context = aContext;
 		generatedFunction = aGeneratedFunction;
+		errSink = aErrSink;
 	}
 
 	DeduceElement target;
@@ -71,7 +77,7 @@ public class DeduceProcCall {
 					anchorType = DeclAnchor.AnchorType.MEMBER;
 					declAnchor = self;
 				}
-				target = new DeclTarget(best, declAnchor, anchorType);
+				target = new DeclTarget(best, declAnchor, anchorType, errSink);
 			} catch (ResolveError aResolveError) {
 				return null; // TODO
 			}
@@ -81,16 +87,16 @@ public class DeduceProcCall {
 				final @NotNull VariableTableEntry bl = ((IntegerIA) bl_).getEntry();
 				final OS_Element resolved_element = bl.getResolvedElement();
 				if (resolved_element instanceof FormalArgListItem) {
-					target = new DeclTarget(resolved_element, generatedFunction.getFD(), DeclAnchor.AnchorType.PARAMS);
+					target = new DeclTarget(resolved_element, generatedFunction.getFD(), DeclAnchor.AnchorType.PARAMS, errSink);
 				} else {
 					if (resolved_element instanceof VariableStatement) {
 						final OS_Element parent = resolved_element.getParent().getParent();
 						if (parent == generatedFunction.getFD()) {
-							target = new DeclTarget(resolved_element, parent, DeclAnchor.AnchorType.VAR);
+							target = new DeclTarget(resolved_element, parent, DeclAnchor.AnchorType.VAR, errSink);
 						} else
 							throw new NotImplementedException();
 					} else {
-						target = new DeclTarget(resolved_element, resolved_element.getParent(), DeclAnchor.AnchorType.MEMBER);
+						target = new DeclTarget(resolved_element, resolved_element.getParent(), DeclAnchor.AnchorType.MEMBER, errSink);
 					}
 				}
 			}
@@ -105,7 +111,7 @@ public class DeduceProcCall {
 
 		public DeclTarget(final @NotNull OS_Element aBest,
 						  final @NotNull OS_Element aDeclAnchor,
-						  final @NotNull DeclAnchor.AnchorType aAnchorType) {
+						  final @NotNull DeclAnchor.AnchorType aAnchorType, final ErrSink errSink) {
 			element = aBest;
 			anchor = new DeclAnchor(aDeclAnchor, aAnchorType);
 			final IInvocation invocation;
@@ -124,7 +130,7 @@ public class DeduceProcCall {
 				final NormalTypeName normalTypeName = (NormalTypeName) ((VariableStatement) element).typeName();
 				final LookupResultList lrl = normalTypeName.getContext().lookup(normalTypeName.getName());
 				final ClassStatement classStatement = (ClassStatement) lrl.chooseBest(null);
-				invocation = DeduceTypes2.ClassInvocationMake.withGenericPart(classStatement, null, normalTypeName, deduceTypes2);
+				invocation = DeduceTypes2.ClassInvocationMake.withGenericPart(classStatement, null, normalTypeName, deduceTypes2, errSink);
 			}
 			anchor.setInvocation(invocation);
 		}
