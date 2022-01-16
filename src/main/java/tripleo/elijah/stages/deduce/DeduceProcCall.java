@@ -62,11 +62,13 @@ public class DeduceProcCall {
 				final LookupResultList lrl = DeduceLookupUtils.lookupExpression(t.getIdent(), context, deduceTypes2);
 				final @Nullable OS_Element best = lrl.chooseBest(null);
 				assert best != null;
-				final ClassStatement self = (ClassStatement) generatedFunction.vte_list.stream().
+				final OS_Type attached = generatedFunction.vte_list.stream().
 						filter(x -> x.vtt == VariableTableType.SELF).
 						collect(Collectors.toList()).
 						get(0).
-						type.getAttached().getClassOf();
+						type.getAttached();
+				assert attached != null;
+				final ClassStatement self = attached.getClassOf();
 				final ClassStatement inherits = DeduceLocalVariable.class_inherits(self, best.getParent());
 				DeclAnchor.AnchorType anchorType;
 				OS_Element declAnchor;
