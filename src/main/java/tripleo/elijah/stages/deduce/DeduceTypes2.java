@@ -2073,7 +2073,7 @@ public class DeduceTypes2 {
 							genCIForGenType2(resolved);
 							return;
 						} else {
-							if (i+1 == deducePath.size()) {
+							if (i+1 == deducePath.size() && deducePath.size() > 1) {
 								assert el3 == el2;
 								if (el2 instanceof ConstructorDef) {
 									@Nullable GenType type = deducePath.getType(i);
