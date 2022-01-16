@@ -2710,9 +2710,36 @@ public class DeduceTypes2 {
 		{
 			final LookupResultList lrl = ctx.lookup(((IdentExpression)pte.expression).getText());
 			final @Nullable OS_Element best = lrl.chooseBest(null);
-			if (best != null)
-				pte.setResolvedElement(best); // TODO do we need to add a dependency for class?
-			else
+			if (best != null) {
+				pte.setResolvedElement(best);
+
+				// TODO do we need to add a dependency for class, etc?
+				if (false) {
+					if (best instanceof ConstructorDef) {
+						// TODO Dont know how to handle this
+						int y=2;
+					} else if (best instanceof FunctionDef || best instanceof DefFunctionDef) {
+						final OS_Element parent = best.getParent();
+						IInvocation invocation;
+						if (parent instanceof NamespaceStatement) {
+							invocation = new NamespaceInvocation((NamespaceStatement) parent);
+						} else if (parent instanceof ClassStatement) {
+							invocation = new ClassInvocation((ClassStatement) parent, null);
+						} else
+							throw new NotImplementedException();
+
+						FunctionInvocation fi = newFunctionInvocation((BaseFunctionDef) best, pte, invocation, phase);
+						generatedFunction.addDependentFunction(fi);
+					} else if (best instanceof ClassStatement) {
+						GenType genType = new GenType();
+						genType.resolved = new OS_Type((ClassStatement) best);
+						// ci, typeName, node
+	//					genType.
+						genCI(genType, null);
+						generatedFunction.addDependentType(genType);
+					}
+				}
+			} else
 				throw new NotImplementedException();
 		}
 	}
