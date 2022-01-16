@@ -2064,7 +2064,8 @@ public class DeduceTypes2 {
 								try {
 									resolved = resolve_type(ty, tn.getContext());
 								} catch (ResolveError aResolveError) {
-									aResolveError.printStackTrace();
+									errSink.reportDiagnostic(aResolveError);
+//									aResolveError.printStackTrace();
 									assert false;
 								}
 							}
