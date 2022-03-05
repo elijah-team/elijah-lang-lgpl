@@ -85,6 +85,32 @@ public class DeducePhase {
 		deferredMemberFunctions.add(aDeferredMemberFunction);
 	}
 
+	private final ExecutorService classGenerator = Executors.newCachedThreadPool();
+
+	public Promise<ClassDefinition, Diagnostic, Void> generateClass(final GenerateFunctions gf, final ClassInvocation ci) {
+		@Nullable WlGenerateClass gen = new WlGenerateClass(gf, ci, generatedClasses);
+		ClassDefinition cds[] = new ClassDefinition[1];
+		final DeferredObject<ClassDefinition, Diagnostic, Void> ret = new DeferredObject<>();
+
+		classGenerator.submit(new Runnable() {
+			@Override
+			public void run()  {
+				gen.run(null);
+				final ClassDefinition cd = new ClassDefinition(ci);
+				final GeneratedClass genclass = gen.getResult();
+				if (genclass != null) {
+					cd.setNode(genclass);
+					cds[0] = cd;
+					ret.resolve(cd);
+				} else {
+					ret.reject(new CouldntGenerateClass(cd, gf, ci));
+				}
+			}
+		});
+
+		return ret;
+	}
+
 	class RegisterClassInvocation {
 		// TODO this class is a mess
 

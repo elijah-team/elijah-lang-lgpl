@@ -14,16 +14,19 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.subjects.Subject;
 import org.jdeferred2.DoneCallback;
+import org.jdeferred2.Promise;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.contexts.ClassContext;
+import tripleo.elijah.diagnostic.Diagnostic;
 import tripleo.elijah.gen.ICodeGen;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
 import tripleo.elijah.lang2.SpecialVariables;
+import tripleo.elijah.nextgen.ClassDefinition;
 import tripleo.elijah.stages.deduce.declarations.DeferredMember;
 import tripleo.elijah.stages.deduce.declarations.DeferredMemberFunction;
 import tripleo.elijah.stages.gen_fn.*;
@@ -1325,19 +1328,15 @@ public class DeduceTypes2 {
 				}
 				@Nullable WlGenerateClass gen = new WlGenerateClass(gf, ci, phase.generatedClasses);
 
-				ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
-					@Override
-					public void onDone(final GeneratedClass result) {
-						genType.node = result;
-					}
-				});
+				final Promise<ClassDefinition, Diagnostic, Void> pcd = phase.generateClass(gf, ci);
 
-				wl.addJob(gen);
-
-				ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+				pcd.then(new DoneCallback<ClassDefinition>() {
 					@Override
-					public void onDone(final GeneratedClass result) {
-						result.dependentTypes().add(genType);
+					public void onDone(final ClassDefinition result) {
+						final GeneratedClass genclass = result.getNode();
+
+						genType.node = genclass;
+						genclass.dependentTypes().add(genType);
 					}
 				});
 			}
