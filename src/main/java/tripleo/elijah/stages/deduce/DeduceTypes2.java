@@ -960,6 +960,8 @@ public class DeduceTypes2 {
 //						for (@NotNull FunctionInvocation dependentFunction : generatedFunction.dependentFunctions()) {
 //							deps.action_function(dependentFunction, workManager);
 //						}
+			int x = workManager.totalSize();
+
 			workManager.drain();
 		}
 		//
