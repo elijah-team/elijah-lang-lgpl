@@ -32,7 +32,7 @@ public class WorkManager {
 				WorkList workList = workListIterator.next();
 //			for (WorkList workList :jobs) {
 				if (!workList.isDone()) {
-					for (WorkJob w : workList.jobs) {
+					for (WorkJob w : workList.getJobs()) {
 						if (!w.isDone())
 							return w;
 					}
