@@ -186,21 +186,29 @@ public class CReference {
 						}
 					}
 				} else {
-					if (ia2.getEntry().getStatus() == BaseTableEntry.Status.KNOWN) {
+					switch (ia2.getEntry().getStatus()) {
+					case KNOWN:
 						assert false;
-					} else {
+						break;
+					case UNCHECKED:
+						assert false;
+						break;
+					case UNKNOWN:
 						final String path = generatedFunction.getIdentIAPathNormal(ia2);
 						final String text1 = idte.getIdent().getText();
 //						assert false;
-						// TODO make tests pass but I dont like this (should throw an exception: not enough information)
+						// TODO make tests pass but I dont like this (should emit a dummy function or placeholder)
 						if (sl.size() == 0) {
-							text = Emit.emit("/*149*/") + text1; // TODO check if it belongs somewhere else
+							text = Emit.emit("/*149*/") + text1; // TODO check if it belongs somewhere else (what does this mean?)
 						} else {
 							text = Emit.emit("/*152*/") + "vm" + text1;
 						}
-						System.err.println("119 "+idte.getIdent()+" "+idte.getStatus());
+						System.err.println("119 " + idte.getIdent() + " " + idte.getStatus());
 						String text2 = (Emit.emit("/*114*/") + String.format("%s is UNKNOWN", text1));
 						addRef(text2, Ref.MEMBER);
+						break;
+					default:
+						throw new IllegalStateException("Unexpected value: " + ia2.getEntry().getStatus());
 					}
 				}
 			} else if (ia instanceof ProcIA) {
