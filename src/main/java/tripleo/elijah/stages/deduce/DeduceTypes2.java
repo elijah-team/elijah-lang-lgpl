@@ -1286,7 +1286,7 @@ public class DeduceTypes2 {
 			wm = aWm;
 		}
 
-		public void action_type(@NotNull GenType genType, @NotNull WorkManager aWorkManager) {
+		public void action_type(@NotNull GenType genType) {
 			// TODO work this out further
 			if (genType.resolvedn != null) {
 				@NotNull OS_Module mod = genType.resolvedn.getContext().module();
@@ -1309,7 +1309,7 @@ public class DeduceTypes2 {
 				});
 			} else if (genType.resolved != null) {
 				if (genType.functionInvocation != null) {
-					action_function(genType.functionInvocation, aWorkManager);
+					action_function(genType.functionInvocation);
 					return;
 				}
 
@@ -1341,10 +1341,10 @@ public class DeduceTypes2 {
 				});
 			}
 			//
-			aWorkManager.addJobs(wl);
+			wm.addJobs(wl);
 		}
 
-		public void action_function(@NotNull FunctionInvocation aDependentFunction, @NotNull WorkManager aWorkManager) {
+		public void action_function(@NotNull FunctionInvocation aDependentFunction) {
 			final BaseFunctionDef function = aDependentFunction.getFunction();
 			WorkJob gen;
 			final @NotNull OS_Module mod;
@@ -1381,7 +1381,7 @@ public class DeduceTypes2 {
 			wl.addJob(gen);
 			List<BaseGeneratedFunction> coll = new ArrayList<>();
 			wl.addJob(new WlDeduceFunction(gen, coll));
-			aWorkManager.addJobs(wl);
+			wm.addJobs(wl);
 		}
 
 		public void subscribeTypes(final Subject<GenType> aDependentTypesSubject) {
@@ -1393,7 +1393,7 @@ public class DeduceTypes2 {
 
 				@Override
 				public void onNext(final GenType aGenType) {
-					action_type(aGenType, wm);
+					action_type(aGenType);
 				}
 
 				@Override
@@ -1417,7 +1417,7 @@ public class DeduceTypes2 {
 
 				@Override
 				public void onNext(@NonNull final FunctionInvocation aFunctionInvocation) {
-					action_function(aFunctionInvocation, wm);
+					action_function(aFunctionInvocation);
 				}
 
 				@Override
