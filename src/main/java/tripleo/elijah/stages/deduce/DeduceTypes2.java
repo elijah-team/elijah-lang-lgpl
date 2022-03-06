@@ -1325,7 +1325,6 @@ public class DeduceTypes2 {
 					assert genType.ci instanceof ClassInvocation;
 					ci = (ClassInvocation) genType.ci;
 				}
-				@Nullable WlGenerateClass gen = new WlGenerateClass(gf, ci, phase.generatedClasses);
 
 				final Promise<ClassDefinition, Diagnostic, Void> pcd = phase.generateClass(gf, ci);
 
