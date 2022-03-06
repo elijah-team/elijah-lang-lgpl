@@ -1287,7 +1287,7 @@ public class DeduceTypes2 {
 		}
 
 		public void action_type(@NotNull GenType genType) {
-			// TODO work this out further
+			// TODO work this out further, maybe like a Deepin flavor
 			if (genType.resolvedn != null) {
 				@NotNull OS_Module mod = genType.resolvedn.getContext().module();
 				final @NotNull GenerateFunctions gf = phase.generatePhase.getGenerateFunctions(mod);
