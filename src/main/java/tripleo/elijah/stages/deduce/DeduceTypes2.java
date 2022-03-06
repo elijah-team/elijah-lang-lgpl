@@ -1297,13 +1297,12 @@ public class DeduceTypes2 {
 				assert genType.ci == null || genType.ci == ni;
 				genType.ci = ni;
 
-				ni.resolveDeferred().done(result -> genType.node = result);
-
 				wl.addJob(gen);
 
 				ni.resolvePromise().then(new DoneCallback<GeneratedNamespace>() {
 					@Override
 					public void onDone(final GeneratedNamespace result) {
+						genType.node = result;
 						result.dependentTypes().add(genType);
 					}
 				});
