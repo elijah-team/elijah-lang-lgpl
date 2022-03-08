@@ -42,6 +42,7 @@ public class Feb2021 {
 	}
 
 //	@Test
+	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public void testFunction() {
 		Compilation c = new Compilation(new StdErrSink(), new IO());
 
@@ -49,6 +50,7 @@ public class Feb2021 {
 	}
 
 //	@Test
+	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public void testHier() {
 		Compilation c = new Compilation(new StdErrSink(), new IO());
 

@@ -47,6 +47,7 @@ public class TestBasic {
 	}
 
 //	@Test
+	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public final void testBasic() throws IOException {
 		final List<String> ez_files = Files.readLines(new File("test/basic/ez_files.txt"), Charsets.UTF_8);
 		final Map<Integer, Integer> errorCount = new HashMap<Integer, Integer>();
@@ -72,6 +73,7 @@ public class TestBasic {
 	}
 
 //	@Test
+	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public final void testBasic_listfolders3() throws IOException {
 		String s = "test/basic/listfolders3/listfolders3.ez";
 

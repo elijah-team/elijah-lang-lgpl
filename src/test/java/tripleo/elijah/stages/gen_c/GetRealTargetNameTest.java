@@ -40,6 +40,7 @@ public class GetRealTargetNameTest {
 	}
 
 //	@Test // too complicated
+	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public void testManualXDotFoo() {
 		IdentExpression x_ident = Helpers.string_to_ident("x");
 		@NotNull IdentExpression foo_ident = Helpers.string_to_ident("foo");

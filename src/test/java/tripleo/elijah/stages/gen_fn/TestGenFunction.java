@@ -43,6 +43,7 @@ import static tripleo.elijah.util.Helpers.List_of;
 public class TestGenFunction {
 
 //	@Test
+	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public void testDemoElNormalFact1Elijah() throws Exception {
 		final StdErrSink eee = new StdErrSink();
 		final Compilation c = new Compilation(eee, new IO());
@@ -212,6 +213,7 @@ public class TestGenFunction {
 	}
 
 //	@Test
+	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public void testGenericA() throws Exception {
 		final StdErrSink errSink = new StdErrSink();
 		final Compilation c = new Compilation(errSink, new IO());
@@ -222,6 +224,7 @@ public class TestGenFunction {
 	}
 
 //	@Test // ignore because of generateAllTopLevelClasses
+	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public void testBasic1Backlink1Elijah() throws Exception {
 		final StdErrSink eee = new StdErrSink();
 		final Compilation c = new Compilation(eee, new IO());
