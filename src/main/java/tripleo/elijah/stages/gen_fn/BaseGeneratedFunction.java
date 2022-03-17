@@ -20,6 +20,7 @@ import tripleo.elijah.stages.deduce.FoundElement;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
+import tripleo.elijah.util.Holder;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.util.range.Range;
 
@@ -455,7 +456,7 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 		if (typeDeferred.isPending())
 			typeDeferred.resolve(aType);
 		else {
-			final DeduceTypes2.Holder<GenType> holder = new DeduceTypes2.Holder<GenType>();
+			final Holder<GenType> holder = new Holder<GenType>();
 			typeDeferred.then(new DoneCallback<GenType>() {
 				@Override
 				public void onDone(final GenType result) {

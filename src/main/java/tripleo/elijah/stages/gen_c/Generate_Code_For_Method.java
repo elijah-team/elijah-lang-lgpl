@@ -21,6 +21,7 @@ import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.BufferTabbedOutputStream;
 import tripleo.elijah.util.Helpers;
+import tripleo.elijah.util.Holder;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 import tripleo.util.buffer.Buffer;
@@ -30,7 +31,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static tripleo.elijah.lang.ClassTypes.*;
 import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 
 /**

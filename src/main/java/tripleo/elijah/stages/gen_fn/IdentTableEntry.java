@@ -27,6 +27,7 @@ import tripleo.elijah.stages.deduce.OnType;
 import tripleo.elijah.stages.instructions.IdentIA;
 import tripleo.elijah.stages.instructions.InstructionArgument;
 import tripleo.elijah.stages.instructions.IntegerIA;
+import tripleo.elijah.util.Holder;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -161,7 +162,7 @@ public class IdentTableEntry extends BaseTableEntry1 implements Constructable, T
 		if (constructableDeferred.isPending())
 			constructableDeferred.resolve(constructable_pte);
 		else {
-			final DeduceTypes2.Holder<ProcTableEntry> holder = new DeduceTypes2.Holder<ProcTableEntry>();
+			final Holder<ProcTableEntry> holder = new Holder<ProcTableEntry>();
 			constructableDeferred.then(new DoneCallback<ProcTableEntry>() {
 				@Override
 				public void onDone(final ProcTableEntry result) {

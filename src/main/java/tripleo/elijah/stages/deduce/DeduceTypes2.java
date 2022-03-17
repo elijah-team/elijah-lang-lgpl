@@ -2831,18 +2831,6 @@ public class DeduceTypes2 {
 		ria.action();
 	}
 
-	public static class Holder<T> {
-		private T el;
-
-		public void set(T el) {
-			this.el = el;
-		}
-
-		public T get() {
-			return el;
-		}
-	}
-
 
 	public void resolveIdentIA2_(@NotNull final Context ctx,
 								 @Nullable IdentIA identIA,

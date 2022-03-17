@@ -15,6 +15,7 @@ import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.instructions.IdentIA;
+import tripleo.elijah.util.Holder;
 
 /**
  * Created 11/22/21 8:23 PM
@@ -36,7 +37,7 @@ public class DeduceElementIdent {
 	}
 
 	public OS_Element getResolvedElement() {
-		DeduceTypes2.Holder<OS_Element> holder = new DeduceTypes2.Holder<>();
+		Holder<OS_Element> holder = new Holder<>();
 		final IdentIA identIA = new IdentIA(identTableEntry.getIndex(), generatedFunction);
 		if (deduceTypes2 != null) { // TODO remove this ASAP. Should never happen
 			deduceTypes2.resolveIdentIA_(context, identIA, generatedFunction, new FoundElement(deduceTypes2.phase) {
