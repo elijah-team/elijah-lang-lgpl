@@ -123,8 +123,13 @@ public class ClassContext extends Context {
 		return _inheritance;
 	}
 
+	/**
+	 * An Element that only holds a {@link TypeName}.
+	 *
+	 * NOTE: It seems to be connected to {@link ClassContext}
+	 */
 	public class OS_TypeNameElement implements OS_Element {
-		private TypeName typeName;
+		private final TypeName typeName;
 
 		public TypeName getTypeName() {
 			return typeName;
