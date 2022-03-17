@@ -27,7 +27,7 @@ import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.entrypoints.EntryPoint;
 import tripleo.elijah.entrypoints.MainClassEntryPoint;
-import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.lang2.ElElementVisitor;
 import tripleo.elijah.util.NotImplementedException;
 
 import java.util.ArrayList;
@@ -132,7 +132,7 @@ public class OS_Module implements OS_Element, OS_Container {
 //	}
 
 	@Override
-	public void visitGen(final @NotNull ICodeGen visit) {
+	public void visitGen(final @NotNull ElElementVisitor visit) {
 		visit.addModule(this); // visitModule
 	}
 

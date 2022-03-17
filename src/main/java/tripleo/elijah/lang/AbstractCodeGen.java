@@ -10,12 +10,12 @@
 package tripleo.elijah.lang;
 
 import tripleo.elijah.contexts.ClassContext;
-import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.lang2.ElElementVisitor;
 
 /**
  * Created 11/18/21 1:02 PM
  */
-public class AbstractCodeGen implements ICodeGen {
+public class AbstractCodeGen implements ElElementVisitor {
 	@Override
 	public void addClass(final ClassStatement klass) {
 		defaultAction(klass);

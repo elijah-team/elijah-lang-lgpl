@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.diagnostic.Diagnostic;
-import tripleo.elijah.gen.ICodeGen;
+import tripleo.elijah.lang2.ElElementVisitor;
 import tripleo.elijah.lang.*;
 import tripleo.elijah.lang2.BuiltInTypes;
 import tripleo.elijah.lang2.SpecialFunctions;
@@ -1862,7 +1862,7 @@ public class DeduceTypes2 {
 		}
 
 		@Override
-		public void visitGen(final ICodeGen visit) {
+		public void visitGen(final ElElementVisitor visit) {
 			throw new IllegalArgumentException("not implemented");
 		}
 
