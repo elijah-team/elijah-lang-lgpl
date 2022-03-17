@@ -41,19 +41,30 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 
 	public ClassStatement(final OS_Element parentElement, final Context parentContext) {
 		parent = parentElement; // setParent
-		if (parentElement instanceof OS_Module) {
+
+		@NotNull final ElObjectType x = DecideElObjectType.getElObjectType(parentElement);
+		switch (x) {
+		case MODULE:
 			final OS_Module module = (OS_Module) parentElement;
 			//
 			this.setPackageName(module.pullPackageName());
 			_packageName.addElement(this);
 			module.add(this);
-		} else if (parentElement instanceof FunctionDef) {
+			break;
+		case FUNCTION:
 			// do nothing
-		} else if (parentElement instanceof OS_Container) {
-			((OS_Container) parentElement).add(this);
-		} else {
-			throw new IllegalStateException(String.format("Cant add ClassStatement to %s", parentElement));
+			break;
+		default:
+			// we kind of fail the switch test here because OS_Container is not an OS_Element,
+			// so we have to test explicitly, messing up the pretty flow we had.
+			// hey sh*t happens.
+			if (parentElement instanceof OS_Container) {
+				((OS_Container) parentElement).add(this);
+			} else {
+				throw new IllegalStateException(String.format("Cant add ClassStatement to %s", parentElement));
+			}
 		}
+
 		setContext(new ClassContext(parentContext, this));
 	}
 
