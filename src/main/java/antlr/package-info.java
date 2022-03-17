@@ -1,3 +1,0 @@
-//@SuppressWarnings("rawtypes")
-package antlr;
-
