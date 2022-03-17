@@ -12,7 +12,6 @@ import tripleo.elijah.contexts.FuncExprContext;
 import tripleo.elijah.lang2.ElElementVisitor;
 import tripleo.elijah.util.NotImplementedException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
