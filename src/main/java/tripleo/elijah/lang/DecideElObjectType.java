@@ -30,6 +30,8 @@ public class DecideElObjectType {
 			return ElObjectType.FUNCTION;
 		else if (input instanceof FormalArgListItem)
 			return ElObjectType.FORMAL_ARG_LIST_ITEM;
+		else if (input instanceof OS_Module)
+			return ElObjectType.MODULE;
 		return ElObjectType.UNKNOWN;
 	}
 
