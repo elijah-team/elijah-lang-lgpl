@@ -13,13 +13,12 @@
  */
 package tripleo.elijah.lang;
 
-import antlr.Token;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.contexts.FunctionContext;
 import tripleo.elijah.lang2.ElElementVisitor;
 
 // TODO FunctionDef is not a Container is it?
-public class FunctionDef extends BaseFunctionDef implements Documentable, ClassItem, OS_Container, OS_Element2 {
+public class FunctionDef extends BaseFunctionDef implements Documentable, ClassItem, OS_Element2 {
 
 	private TypeName _returnType = null;
 
