@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,9 +47,7 @@ public class Helpers {
 	@NotNull
 	public static <E> List<E> List_of(@NotNull final E... e1) {
 		final List<E> r = new ArrayList<E>();
-		for (final E e : e1) {
-			r.add(e);
-		}
+		Collections.addAll(r, e1);
 		return r;
 	}
 
