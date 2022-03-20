@@ -191,7 +191,10 @@ public class CReference {
 						assert false;
 						break;
 					case UNCHECKED:
-						assert false;
+						final String path2 = generatedFunction.getIdentIAPathNormal(ia2);
+						final String text3 = String.format("<<UNCHECKED ia2: %s>>", path2/*idte.getIdent().getText()*/);
+						text = text3;
+//						assert false;
 						break;
 					case UNKNOWN:
 						final String path = generatedFunction.getIdentIAPathNormal(ia2);
