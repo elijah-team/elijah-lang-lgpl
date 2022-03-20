@@ -12,6 +12,7 @@ import antlr.CommonToken;
 import antlr.Token;
 //import com.thoughtworks.xstream.XStream;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.codec.digest.MessageDigestAlgorithms;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
@@ -28,8 +29,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
 
 /**
  * Created 9/10/20 3:44 PM
@@ -134,7 +133,7 @@ public class Helpers {
 	}
 
 	public static String getHashForFilename(final String aFilename, final ErrSink aErrSink) throws IOException {
-		String hdigest = new DigestUtils(SHA_256).digestAsHex(new File(aFilename));
+		String hdigest = new DigestUtils(MessageDigestAlgorithms.SHA_256).digestAsHex(new File(aFilename));
 		return hdigest;
 	}
 
