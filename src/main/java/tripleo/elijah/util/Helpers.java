@@ -136,6 +136,7 @@ public class Helpers {
 		return hdigest;
 	}
 
+	// TODO this method is just ugly
 	@Nullable
 	public static String getHashForFilenameJava(String aFilename, ErrSink aErrSink) throws IOException {
 		final File file = new File(aFilename);
