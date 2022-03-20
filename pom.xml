@@ -180,24 +180,22 @@
     </distributionManagement>
 
     <build>
-        <!--
         <plugins>
-        <plugin>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-maven-plugin</artifactId>
-            <version>4.7.1</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>antlr4</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-        </plugins>
-        -->
+            <!--
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>4.7.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
 
-        <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -217,204 +215,204 @@
                     </execution>
                 </executions>
             </plugin>
-        <!--
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-site-plugin</artifactId>
-            <version>3.7.1</version>
-        </plugin>
-        -->
-        <!-- Setup Javadoc jar -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-                <groups>
-                    <group>
-                        <title>User packages</title>
-                        <packages>tripleo.elijah:tripleo.elijah.diagnostic:tripleo.elijah.lang2:tripleo.elijah.util
-                        </packages>
-                    </group>
-                    <group>
-                        <title>Implementation packages</title>
-                        <packages>
-                            tripleo.elijah.util:
-                            tripleo.util:tripleo.util.io:
-                            tripleo.elijjah:tripleo.elijah:
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
+            -->
+            <!-- Setup Javadoc jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <groups>
+                        <group>
+                            <title>User packages</title>
+                            <packages>tripleo.elijah:tripleo.elijah.diagnostic:tripleo.elijah.lang2:tripleo.elijah.util
+                            </packages>
+                        </group>
+                        <group>
+                            <title>Implementation packages</title>
+                            <packages>
+                                tripleo.elijah.util:
+                                tripleo.util:tripleo.util.io:
+                                tripleo.elijjah:tripleo.elijah:
 
-                            tripleo.elijah.lang:tripleo.elijah.lang.imports:tripleo.elijah.lang.builder:
+                                tripleo.elijah.lang:tripleo.elijah.lang.imports:tripleo.elijah.lang.builder:
 
-                            tripleo.elijah.nextgen:tripleo.elijah.nextgen.composable:tripleo.elijah.nextgen.diagnostic:
+                                tripleo.elijah.nextgen:tripleo.elijah.nextgen.composable:tripleo.elijah.nextgen.diagnostic:
 
-                            tripleo.elijah.ci:
-                            tripleo.elijah.slir:
-                            tripleo.elijah.contexts:
-                            tripleo.elijah.stages:
-                            tripleo.elijah.stages.expand:
-                            tripleo.elijah.stages.deduce:tripleo.elijah.stages.deduce.declarations:
-                            tripleo.elijah.stages.translate:
-                            tripleo.elijah.stages.instructions:
-                            tripleo.elijah.stages.gen_fn:tripleo.elijah.stages.gen_c:tripleo.elijah.stages.gen_generic:
-                            tripleo.elijah.stages.logging:
-                            tripleo.elijah.stages.generate:
-                            tripleo.elijah.stages.post_deduce:
+                                tripleo.elijah.ci:
+                                tripleo.elijah.slir:
+                                tripleo.elijah.contexts:
+                                tripleo.elijah.stages:
+                                tripleo.elijah.stages.expand:
+                                tripleo.elijah.stages.deduce:tripleo.elijah.stages.deduce.declarations:
+                                tripleo.elijah.stages.translate:
+                                tripleo.elijah.stages.instructions:
+                                tripleo.elijah.stages.gen_fn:tripleo.elijah.stages.gen_c:tripleo.elijah.stages.gen_generic:
+                                tripleo.elijah.stages.logging:
+                                tripleo.elijah.stages.generate:
+                                tripleo.elijah.stages.post_deduce:
 
-                            tripleo.elijah.work:
+                                tripleo.elijah.work:
 
-                            tripleo.elijah.diagnostic:
-                            tripleo.elijah.comp:
-                            tripleo.elijah.comp.functionality:tripleo.elijah.comp.functionality.f202:
-                            tripleo.elijah.entrypoints:
+                                tripleo.elijah.diagnostic:
+                                tripleo.elijah.comp:
+                                tripleo.elijah.comp.functionality:tripleo.elijah.comp.functionality.f202:
+                                tripleo.elijah.entrypoints:
 
-                            tripleo.elijah.lang2
-                         </packages>
-                    </group>
-                </groups>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>attach-javadocs</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>jar</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+                                tripleo.elijah.lang2
+                            </packages>
+                        </group>
+                    </groups>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>3.0.0</version>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.0.0-M5</version>
-        </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+            </plugin>
 
-        <!-- To use the plugin goals in your POM or parent POM -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-            <version>3.0.0-M5</version>
-        </plugin>
+            <!-- To use the plugin goals in your POM or parent POM -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.0.0-M5</version>
+            </plugin>
 
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.0</version>
-            <configuration>
-                <!--
-                                    <outputDirectory>/absolute/path/to/the/output/directory</outputDirectory>
-                                    <finalName>filename-of-generated-jar-file</finalName>
-                -->
-                <attach>true</attach>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>package</id>
-                    <goals>
-                        <goal>jar</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <!--
+                                        <outputDirectory>/absolute/path/to/the/output/directory</outputDirectory>
+                                        <finalName>filename-of-generated-jar-file</finalName>
+                    -->
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>package</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
 
-        <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>${jacoco.version}</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>prepare-agent</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>jacoco-report</id>
-                    <phase>test</phase>
-                    <goals>
-                        <goal>report</goal>
-                    </goals>
-                </execution>
-                <!-- Add this checking -->
-                <execution>
-                    <id>jacoco-check</id>
-                    <goals>
-                        <goal>check</goal>
-                    </goals>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <!-- Add this checking -->
+                    <execution>
+                        <id>jacoco-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>PACKAGE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.4</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                </plugin>
+                <!-- Setup site with reflow maven skin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${maven-site-plugin.version}</version>
                     <configuration>
-                        <rules>
-                            <rule>
-                                <element>PACKAGE</element>
-                                <limits>
-                                    <limit>
-                                        <counter>LINE</counter>
-                                        <value>COVEREDRATIO</value>
-                                        <minimum>0.4</minimum>
-                                    </limit>
-                                </limits>
-                            </rule>
-                        </rules>
+                        <skipDeploy>true</skipDeploy>
                     </configuration>
-                </execution>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.joda.external</groupId>
+                            <artifactId>reflow-velocity-tools</artifactId>
+                            <version>1.2</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
 
-            </executions>
-        </plugin>
+            </plugins>
 
+        </pluginManagement>
+    </build>
 
-    </plugins>
-
-    <pluginManagement>
+    <reporting>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.0.0-M5</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
-            <!-- Setup site with reflow maven skin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>${maven-site-plugin.version}</version>
-                <configuration>
-                    <skipDeploy>true</skipDeploy>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.joda.external</groupId>
-                        <artifactId>reflow-velocity-tools</artifactId>
-                        <version>1.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
         </plugins>
-
-    </pluginManagement>
-</build>
-
-<reporting>
-<plugins>
-    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>3.0.0-M5</version>
-    </plugin>
-    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${maven-javadoc-plugin.version}</version>
-        <reportSets>
-            <reportSet>
-                <reports>
-                    <report>javadoc</report>
-                </reports>
-            </reportSet>
-        </reportSets>
-    </plugin>
-</plugins>
-</reporting>
-        </project>
+    </reporting>
+</project>
