@@ -373,6 +373,7 @@
                     <version>${maven-javadoc-plugin.version}</version>
                 </plugin>
                 <!-- Setup site with reflow maven skin -->
+<!--
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
@@ -382,13 +383,13 @@
                     </configuration>
                     <dependencies>
                         <dependency>
-                            <groupId>org.joda.external</groupId>
+                            <groupId>tripleo.elijah</groupId>
                             <artifactId>reflow-velocity-tools</artifactId>
                             <version>1.2</version>
                         </dependency>
                     </dependencies>
                 </plugin>
-
+-->
             </plugins>
 
         </pluginManagement>
