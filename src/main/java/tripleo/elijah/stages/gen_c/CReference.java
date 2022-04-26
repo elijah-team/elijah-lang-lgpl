@@ -58,6 +58,7 @@ public class CReference {
 	}
 
 	enum Ref {
+		// https://www.baeldung.com/a-guide-to-java-enums
 		LOCAL {
 			@Override
 			public void buildHelper(final Reference ref, final BuildState sb) {
