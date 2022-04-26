@@ -471,6 +471,23 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	public void addElement(final OS_Element aElement, final DeduceElement aDeduceElement) {
 		elements.put(aElement, aDeduceElement);
 	}
+
+	public String getFunctionName() {
+		// TODO change to abstract with override??
+		if (this instanceof GeneratedConstructor) {
+			int y = 2;
+			final IdentExpression constructorName = this.getFD().getNameNode();
+			final String constructorNameText;
+			if (constructorName == ConstructorDef.emptyConstructorName) {
+				constructorNameText = "";
+			} else {
+				constructorNameText = constructorName.getText();
+			}
+			return constructorNameText;
+		} else {
+			return getFD().getNameNode().getText();
+		}
+	}
 }
 
 //

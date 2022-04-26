@@ -335,29 +335,25 @@ public class CReference {
 	}
 
 	public String getIdentIAPath_Proc(ProcTableEntry aPrte) {
-		String text;
+		final String text;
 		final BaseGeneratedFunction generated = aPrte.getFunctionInvocation().getGenerated();
 
 		if (generated == null)
 			throw new IllegalStateException();
 
+		final GeneratedContainerNC genClass = (GeneratedContainerNC) generated.getGenClass();
+
 		if (generated instanceof GeneratedConstructor) {
 			int y = 2;
-			final GeneratedContainerNC genClass = (GeneratedContainerNC) generated.getGenClass();
-			final IdentExpression constructorName = generated.getFD().getNameNode();
-			final String constructorNameText;
-			if (constructorName == ConstructorDef.emptyConstructorName) {
-				constructorNameText = "";
-			} else {
-				constructorNameText = constructorName.getText();
-			}
+			final String constructorNameText = generated.getFunctionName();
+
 			text = String.format("ZC%d%s", genClass.getCode(), constructorNameText);
 			addRef(text, Ref.CONSTRUCTOR);
 		} else {
-			final GeneratedContainerNC genClass = (GeneratedContainerNC) generated.getGenClass();
-			text = String.format("Z%d%s", genClass.getCode(), generated.getFD().getNameNode().getText());
+			text = String.format("Z%d%s", genClass.getCode(), generated.getFunctionName());
 			addRef(text, Ref.FUNCTION);
 		}
+
 		return text;
 	}
 
@@ -576,15 +572,20 @@ public class CReference {
 //			sl.add(text);
 		}
 //		return Helpers.String_join("->", sl);
+
+		final StringBuilder sb = st.sb;
+
 		if (st.needs_comma && args != null && args.size() > 0)
-			st.sb.append(", ");
+			sb.append(", ");
+
 		if (st.open) {
 			if (args != null) {
-				st.sb.append(Helpers.String_join(", ", args));
+				sb.append(Helpers.String_join(", ", args));
 			}
-			st.sb.append(")");
+			sb.append(")");
 		}
-		return st.sb.toString();
+
+		return sb.toString();
 	}
 
 	/**
