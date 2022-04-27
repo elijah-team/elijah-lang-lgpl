@@ -18,23 +18,20 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.jetbrains.annotations.NotNull;
-import tripleo.elijah.Out;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.comp.functionality.f202.F202;
+import tripleo.elijah.comp.queries.QueryEzFileToModule;
+import tripleo.elijah.comp.queries.QueryEzFileToModuleParams;
+import tripleo.elijah.comp.queries.QuerySourceFileToModule;
+import tripleo.elijah.comp.queries.QuerySourceFileToModuleParams;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
 import tripleo.elijah.lang.Qualident;
 import tripleo.elijah.stages.deduce.FunctionMapHook;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
-import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
-import tripleo.elijjah.ElijjahLexer;
-import tripleo.elijjah.ElijjahParser;
-import tripleo.elijjah.EzLexer;
-import tripleo.elijjah.EzParser;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -47,12 +44,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import static tripleo.elijah.nextgen.query.Mode.SUCCESS;
+
 public class Compilation {
 
-	private final int _compilationNumber;
-	private IO io;
-	private ErrSink eee;
-	public final List<OS_Module> modules = new ArrayList<OS_Module>();
+	private final int             _compilationNumber;
+	private       IO              io;
+	private final ErrSink         eee;
+	public final  List<OS_Module> modules = new ArrayList<OS_Module>();
 	private final Map<String, OS_Module> fn2m = new HashMap<String, OS_Module>();
 	private final Map<String, CompilerInstructions> fn2ci = new HashMap<String, CompilerInstructions>();
 	private final Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
@@ -62,8 +61,8 @@ public class Compilation {
 	//
 	//
 	//
-	public PipelineLogic pipelineLogic;
-	private Pipeline pipelines = new Pipeline();
+	public        PipelineLogic pipelineLogic;
+	private final Pipeline      pipelines = new Pipeline();
 	//
 	//
 	//
@@ -317,7 +316,17 @@ public class Compilation {
 		}
 		final InputStream s = io.readFile(file);
 		try {
-			final OS_Module R = parseFile_(f, s, do_out);
+			final Operation<OS_Module> om = parseFile_(f, s, do_out);
+			if (om.mode() != SUCCESS) {
+				final Exception e = om.failure();
+				assert e != null;
+
+				System.err.println(("parser exception: " + e));
+				e.printStackTrace(System.err);
+				s.close();
+				return null;
+			}
+			final OS_Module R = (OS_Module) om.success();
 			fn2m.put(absolutePath, R);
 			s.close();
 			return R;
@@ -335,7 +344,17 @@ public class Compilation {
 			return fn2ci.get(absolutePath);
 		}
 		try {
-			final CompilerInstructions R = parseEzFile_(f, s);
+			final Operation<CompilerInstructions> cio = parseEzFile_(f, s);
+			if (cio.mode() != SUCCESS) {
+				final Exception e = cio.failure();
+				assert e != null;
+
+				System.err.println(("parser exception: " + e));
+				e.printStackTrace(System.err);
+				s.close();
+				return null;
+			}
+			final CompilerInstructions R = cio.success();
 			R.setFilename(file.toString());
 			fn2ci.put(absolutePath, R);
 			s.close();
@@ -348,26 +367,14 @@ public class Compilation {
 		}
 	}
 
-	private OS_Module parseFile_(final String f, final InputStream s, final boolean do_out) throws RecognitionException, TokenStreamException {
-		final ElijjahLexer lexer = new ElijjahLexer(s);
-		lexer.setFilename(f);
-		final ElijjahParser parser = new ElijjahParser(lexer);
-		parser.out = new Out(f, this, do_out);
-		parser.setFilename(f);
-		parser.program();
-		final OS_Module module = parser.out.module();
-		parser.out = null;
-		return module;
+	private Operation<OS_Module> parseFile_(final String f, final InputStream s, final boolean do_out) throws RecognitionException, TokenStreamException {
+		final QuerySourceFileToModuleParams qp = new QuerySourceFileToModuleParams(s, f, do_out);
+		return new QuerySourceFileToModule(qp, this).calculate();
 	}
 
-	private CompilerInstructions parseEzFile_(final String f, final InputStream s) throws RecognitionException, TokenStreamException {
-		final EzLexer lexer = new EzLexer(s);
-		lexer.setFilename(f);
-		final EzParser parser = new EzParser(lexer);
-		parser.setFilename(f);
-		parser.program();
-		final CompilerInstructions instructions = parser.ci;
-		return instructions;
+	private Operation<CompilerInstructions> parseEzFile_(final String f, final InputStream s) throws RecognitionException, TokenStreamException {
+		final QueryEzFileToModuleParams qp = new QueryEzFileToModuleParams(f, s);
+		return new QueryEzFileToModule(qp).calculate();
 	}
 
 	boolean showTree = false;
