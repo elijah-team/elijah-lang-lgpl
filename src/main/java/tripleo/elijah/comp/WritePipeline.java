@@ -39,7 +39,7 @@ import java.util.Map;
  * Created 8/21/21 10:19 PM
  */
 public class WritePipeline implements PipelineMember {
-	private final Compilation c;
+	private final Compilation    c;
 	private final GenerateResult gr;
 
 	final OutputStrategy os;

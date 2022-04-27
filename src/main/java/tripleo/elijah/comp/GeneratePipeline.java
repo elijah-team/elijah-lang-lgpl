@@ -12,7 +12,7 @@ package tripleo.elijah.comp;
  * Created 8/21/21 10:16 PM
  */
 public class GeneratePipeline implements PipelineMember {
-	private final Compilation c;
+	private final Compilation    c;
 	private final DeducePipeline dpl;
 
 	public GeneratePipeline(Compilation aCompilation, DeducePipeline aDpl) {
