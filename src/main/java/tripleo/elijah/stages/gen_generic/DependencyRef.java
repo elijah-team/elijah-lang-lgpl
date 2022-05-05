@@ -6,19 +6,13 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  *
  */
-package tripleo.elijah.lang.builder;
+
+package tripleo.elijah.stages.gen_generic;
 
 /**
- * Created 12/23/20 12:16 AM
+ * Created 9/13/21 4:00 AM
  */
-public class DestructorDefScope extends BaseScope {
-//	private List<ElBuilder> _items = new ArrayList<ElBuilder>();
-
-//	@Override
-//	public Iterable<ElBuilder> items() {
-//		return _items;
-//	}
-
+public interface DependencyRef {
 }
 
 //

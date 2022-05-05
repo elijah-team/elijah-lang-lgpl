@@ -6,12 +6,21 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  *
  */
-package tripleo.elijah.lang.builder;
+package tripleo.elijah.lang;
 
 /**
- * Created 12/23/20 12:03 AM
+ * Created 8/23/21 2:37 AM
  */
-public class LoopScope extends BaseScope2 {
+public class FunctionBodyEmpty extends FunctionBody {
+	@Override
+	public void setAbstract(boolean aAbstract) {
+
+	}
+
+	@Override
+	public boolean getAbstract() {
+		return true;
+	}
 }
 
 //

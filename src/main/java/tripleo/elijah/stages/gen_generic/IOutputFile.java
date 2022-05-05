@@ -6,17 +6,22 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  *
  */
-package tripleo.elijah.lang.builder;
+
+package tripleo.elijah.stages.gen_generic;
+
+import tripleo.util.buffer.Buffer;
+
+import java.util.List;
 
 /**
- * Created 12/23/20 5:06 AM
+ * Created 9/13/21 11:12 PM
  */
-public class WithStatementScope extends BaseScope {
-//	@Override
-//	public Iterable<ElBuilder> items() {
-//		return bs;
-//	}
+public interface IOutputFile {
+	void putDependencies(List<DependencyRef> aDependencies);
 
+	void putBuffer(Buffer aBuffer);
+
+	String getOutput();
 }
 
 //

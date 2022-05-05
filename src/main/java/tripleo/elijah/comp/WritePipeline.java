@@ -10,7 +10,14 @@ package tripleo.elijah.comp;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.ci.CompilerInstructions;
+import tripleo.elijah.stages.gen_c.CDependencyRef;
+import tripleo.elijah.stages.gen_c.OutputFileC;
+import tripleo.elijah.stages.gen_generic.Dependency;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.generate.ElSystem;
@@ -32,7 +39,9 @@ import java.io.PrintStream;
 import java.io.Writer;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +56,9 @@ public class WritePipeline implements PipelineMember {
 
 	private final File file_prefix;
 
+	private final Multimap<String, Buffer> mmb;
+	final Multimap<CompilerInstructions, String> lsp_outputs;
+
 	public WritePipeline(Compilation aCompilation, GenerateResult aGr) {
 		c = aCompilation;
 		gr = aGr;
@@ -56,17 +68,73 @@ public class WritePipeline implements PipelineMember {
 		os = new OutputStrategy();
 		os.per(OutputStrategy.Per.PER_CLASS); // TODO this needs to be configured per lsp
 
+		mmb = ArrayListMultimap.create();
+		lsp_outputs = ArrayListMultimap.create();
+
 		sys = new ElSystem();
 		sys.verbose = false; // TODO flag? ie CompilationOptions
 		sys.setCompilation(c);
 		sys.setOutputStrategy(os);
+/*
+		sys.generateOutputs(gr);
+*/
+		gr.subscribeCompletedItems(new Observer<GenerateResultItem>() {
+			Multimap<Dependency, GenerateResultItem> gris = ArrayListMultimap.create();
+
+			@Override
+			public void onSubscribe(@NonNull Disposable d) {
+
+			}
+
+			final List<GenerateResultItem> abs = new ArrayList<>();
+
+			@Override
+			public void onNext(@NonNull GenerateResultItem ab) {
+				abs.add(ab);
+
+				final Dependency dependency = ab.getDependency();
+				if (dependency.getRef() == null) {
+					gris.put(dependency, ab);
+				} else {
+					final String output = ((CDependencyRef) dependency.getRef()).getHeaderFile();
+					mmb.put(output, ab.buffer);
+					lsp_outputs.put(ab.lsp.getInstructions(), output);
+					for (GenerateResultItem generateResultItem : gris.get(dependency)) {
+						final String output1 = generateResultItem.output;
+						mmb.put(output1, generateResultItem.buffer);
+						lsp_outputs.put(generateResultItem.lsp.getInstructions(), output1);
+					}
+					gris.removeAll(dependency);
+				}
+			}
+
+			@Override
+			public void onError(@NonNull Throwable e) {
+
+			}
+
+			@Override
+			public void onComplete() {
+				try {
+//					write_files_helper(mmb);
+					write_files_helper2(abs);
+				} catch (IOException aE) {
+					c.getErrSink().exception(aE);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void run() throws Exception {
 		sys.generateOutputs(gr);
 
-		write_files();
+		file_prefix.mkdirs();
+		// TODO flag?
+		write_inputs();
+
+//		write_files();
+
 		// TODO flag?
 		write_buffers();
 	}
@@ -75,17 +143,20 @@ public class WritePipeline implements PipelineMember {
 		Multimap<String, Buffer> mb = ArrayListMultimap.create();
 
 		for (GenerateResultItem ab : gr.results()) {
-			mb.put(ab.output, ab.buffer);
+			mb.put(((CDependencyRef)ab.getDependency().getRef()).getHeaderFile(), ab.buffer); // TODO see above
 		}
 
-		file_prefix.mkdirs();
-		String prefix = file_prefix.toString();
+		assert mmb.equals(mb);
 
-		// TODO flag?
-		write_inputs(file_prefix);
+		write_files_helper(mb);
+	}
+
+	private void write_files_helper(Multimap<String, Buffer> mb) throws IOException {
+		String prefix = file_prefix.toString();
 
 		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
 			final String key = entry.getKey();
+			assert key != null;
 			Path path = FileSystems.getDefault().getPath(prefix, key);
 //			BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
 
@@ -101,7 +172,26 @@ public class WritePipeline implements PipelineMember {
 		}
 	}
 
-	private void write_inputs(File file_prefix) throws IOException {
+	private void write_files_helper2(List<GenerateResultItem> abs) throws IOException {
+		String prefix = file_prefix.toString();
+
+		for (Map.Entry<String, OutputFileC> entry : gr.outputFiles.entrySet()) {
+			final String key = entry.getKey();
+			assert key != null;
+			Path path = FileSystems.getDefault().getPath(prefix, key);
+
+			path.getParent().toFile().mkdirs();
+
+			// TODO functionality
+			System.out.println("201a Writing path: "+path);
+			CharSink x = c.getIO().openWrite(path);
+			x.accept(entry.getValue().getOutput());
+
+			((FileCharSink)x).close();
+		}
+	}
+
+	private void write_inputs() throws IOException {
 		final String fn1 = new File(file_prefix, "inputs.txt").toString();
 
 		DefaultBuffer buf = new DefaultBuffer("");
@@ -143,7 +233,6 @@ public class WritePipeline implements PipelineMember {
 		PrintStream db_stream = new PrintStream(new File(file_prefix, "buffers.txt"));
 		PipelineLogic.debug_buffers(gr, db_stream);
 	}
-
 }
 
 //

@@ -45,4 +45,18 @@ public class DestructorDef extends BaseFunctionDef {
 	public void postConstruct() {
 
 	}
+
+	@Override
+	public void setHeader(FunctionHeader aFunctionHeader) {
+		setFal(aFunctionHeader.getFal());
+//		set(aFunctionHeader.getModifier());
+		assert aFunctionHeader.getModifier() == null;
+		setName(aFunctionHeader.getName());
+//		setReturnType(aFunctionHeader.getReturnType());
+		assert aFunctionHeader.getReturnType() == null;
+	}
 }
+
+//
+//
+//

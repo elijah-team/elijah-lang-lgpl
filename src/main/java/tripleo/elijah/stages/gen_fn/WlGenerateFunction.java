@@ -62,7 +62,7 @@ public class WlGenerateFunction implements WorkJob {
 					@Override
 					public void onDone(GeneratedNamespace result) {
 						if (result.getFunction(functionDef) == null) {
-							gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+							gf.setCode(generateFunctions.module.getCompilation().nextFunctionCode());
 							result.addFunction(functionDef, gf);
 						}
 						gf.setClass(result);
@@ -74,7 +74,7 @@ public class WlGenerateFunction implements WorkJob {
 					@Override
 					public void onDone(GeneratedClass result) {
 						if (result.getFunction(functionDef) == null) {
-							gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+							gf.setCode(generateFunctions.module.getCompilation().nextFunctionCode());
 							result.addFunction(functionDef, gf);
 						}
 						gf.setClass(result);

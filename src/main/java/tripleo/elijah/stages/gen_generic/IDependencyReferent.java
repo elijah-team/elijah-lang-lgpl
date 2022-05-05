@@ -6,20 +6,13 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  *
  */
-package tripleo.elijah.lang.builder;
 
-import tripleo.elijah.lang.IExpression;
+package tripleo.elijah.stages.gen_generic;
 
 /**
- * Created 12/23/20 3:57 AM
+ * Created 9/13/21 7:21 AM
  */
-public abstract class BaseFunctionDefScope extends BaseScope {
-	@Override
-	public abstract void statementWrapper(IExpression expr);
-
-	@Override
-	public abstract void yield(IExpression expr);
-
+public interface IDependencyReferent {
 }
 
 //

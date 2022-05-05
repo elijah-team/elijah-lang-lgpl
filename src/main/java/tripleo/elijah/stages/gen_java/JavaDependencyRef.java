@@ -6,19 +6,18 @@
  * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
  *
  */
-package tripleo.elijah.lang.builder;
+package tripleo.elijah.stages.gen_java;
 
-import tripleo.elijah.lang.IExpression;
+import tripleo.elijah.stages.gen_generic.DependencyRef;
 
 /**
- * Created 5/8/21 6:13 AM
+ * Created 9/13/21 4:26 AM
  */
-public class BaseScope2 extends BaseScope {
-	@Override
-	public void statementWrapper(IExpression expr) {
-		StatementWrapperBuilder swb = new StatementWrapperBuilder(expr);
-		bs.add(swb);
-	}
+public class JavaDependencyRef implements DependencyRef {
+	private String packageName;
+	private String className;
+	private String fieldName; // for static fields
+
 }
 
 //

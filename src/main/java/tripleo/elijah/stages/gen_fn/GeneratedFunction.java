@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.BaseFunctionDef;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
+import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 
 /**
@@ -67,6 +68,11 @@ public class GeneratedFunction extends BaseGeneratedFunction implements GNCoded 
 	@Override
 	public Role getRole() {
 		return Role.FUNCTION;
+	}
+
+	@Override
+	public OS_Module module() {
+        return getFD().getContext().module();
 	}
 }
 

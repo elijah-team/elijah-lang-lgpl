@@ -25,6 +25,7 @@ import tripleo.elijah.comp.queries.QueryEzFileToModule;
 import tripleo.elijah.comp.queries.QueryEzFileToModuleParams;
 import tripleo.elijah.comp.queries.QuerySourceFileToModule;
 import tripleo.elijah.comp.queries.QuerySourceFileToModuleParams;
+import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
@@ -36,6 +37,7 @@ import tripleo.elijah.util.Helpers;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -57,6 +59,8 @@ public class Compilation {
 	private final Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
 	private int _packageCode = 1;
 	public final List<CompilerInstructions> cis = new ArrayList<CompilerInstructions>();
+
+	CompilerInstructions rootCI;
 
 	//
 	//
@@ -148,7 +152,8 @@ public class Compilation {
 					}
 				}
 
-				System.err.println("130 GEN_LANG: "+cis.get(0).genLang());
+				rootCI = cis.get(0);
+				System.err.println("130 GEN_LANG: "+ rootCI.genLang());
 				findStdLib("c"); // TODO find a better place for this
 
 				for (final CompilerInstructions ci : cis) {
@@ -167,6 +172,9 @@ public class Compilation {
 						pipelines.add(gpl);
 						final WritePipeline wpl = new WritePipeline(this, pipelineLogic.gr);
 						pipelines.add(wpl);
+
+						final WriteMesonPipeline wmpl = new WriteMesonPipeline(this, pipelineLogic.gr, wpl);
+						pipelines.add(wmpl);
 					} else
 						assert stage.equals("D");
 
@@ -364,6 +372,93 @@ public class Compilation {
 			e.printStackTrace(System.err);
 			s.close();
 			return null;
+		}
+	}
+
+	public static class ModuleBuilder {
+//		private final Compilation compilation;
+		private final OS_Module mod;
+		private boolean _addToCompilation = false;
+		private String _fn = null;
+
+		public ModuleBuilder(Compilation aCompilation) {
+//			compilation = aCompilation;
+			mod = new OS_Module();
+			mod.setParent(aCompilation);
+		}
+
+		public ModuleBuilder setContext() {
+			final ModuleContext mctx = new ModuleContext(mod);
+			mod.setContext(mctx);
+			return this;
+		}
+
+		public OS_Module build() {
+			if (_addToCompilation) {
+				if (_fn == null) throw new IllegalStateException("Filename not set in ModuleBuilder");
+				mod.getCompilation().addModule(mod, _fn);
+			}
+			return mod;
+		}
+
+		public ModuleBuilder withPrelude(String aPrelude) {
+			mod.prelude = mod.getCompilation().findPrelude("c");
+			return this;
+		}
+
+		public ModuleBuilder withFileName(String aFn) {
+			_fn = aFn;
+			mod.setFileName(aFn);
+			return this;
+		}
+
+		public ModuleBuilder addToCompilation() {
+			_addToCompilation = true;
+			return this;
+		}
+	}
+
+	public ModuleBuilder moduleBuilder() {
+		return new ModuleBuilder(this);
+	}
+
+	public static class QueryElijahModuleForString {
+		private Exception exc;
+		private OS_Module mod;
+
+		void parseString(String sourceText, String filename, Compilation compilation) {
+			ElijjahParser parser = null;
+			boolean do_out = false;
+			final StringReader stringReader = new StringReader(sourceText);
+			try {
+				final ElijjahLexer lexer = new ElijjahLexer(stringReader);
+				lexer.setFilename(filename);
+				parser = new ElijjahParser(lexer);
+				parser.out = new Out(filename, compilation, do_out);
+				parser.setFilename(filename);
+				try {
+					parser.program();
+				} catch (RecognitionException aE) {
+					exc = aE;
+					return;
+				} catch (TokenStreamException aE) {
+					exc = aE;
+					return;
+				}
+				mod = parser.out.module();
+			} finally {
+				if (parser != null)
+					parser.out = null;
+				stringReader.close();
+			}
+		}
+
+		OS_Module getResult() {
+			return mod;
+		}
+
+		Exception getError() {
+			return exc;
 		}
 	}
 
