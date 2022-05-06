@@ -50,7 +50,7 @@ program
 	;
 indexingStatement returns [IndexingStatement idx]
 		{ExpressionList el=null;idx=null;IndexingItem item;}
-	: "indexing" 				{idx=new IndexingStatement();}
+	: "indexing" 				{idx=new IndexingStatement(out.module());}
 		(i1:IDENT
 		 TOK_COLON 			    
 		 el=expressionList		{item=new IndexingItem(i1, el);idx.add(item);})*
