@@ -4,10 +4,15 @@
 
 import antlr.TokenBuffer;
 import antlr.TokenStreamException;
+import antlr.TokenStreamIOException;
+import antlr.ANTLRException;
+import antlr.LLkParser;
 import antlr.Token;
 import antlr.TokenStream;
 import antlr.RecognitionException;
 import antlr.NoViableAltException;
+import antlr.MismatchedTokenException;
+import antlr.SemanticException;
 import antlr.ParserSharedInputState;
 import antlr.collections.impl.BitSet;
 
@@ -111,7 +116,7 @@ public ElijjahParser(ParserSharedInputState state) {
 				case LITERAL_import:
 				case LITERAL_alias:
 				{
-					programStatement(pc, out.module());
+					programStatement(/*pc,*/ out.module());
 					opt_semi();
 					break;
 				}
@@ -146,7 +151,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		try {      // for error handling
 			match(LITERAL_indexing);
 			if ( inputState.guessing==0 ) {
-				idx=new IndexingStatement();
+				idx=new IndexingStatement(out.module());
 			}
 			{
 			_loop7:
@@ -245,7 +250,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	}
 	
 	public final void programStatement(
-		ProgramClosure pc, OS_Element cont
+		/*ProgramClosure pc,*/ OS_Element cont
 	) throws RecognitionException, TokenStreamException {
 		
 		ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();AliasStatement als=null;
@@ -562,7 +567,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	public final void class_modifier(
 		ClassHeader ch
 	) throws RecognitionException, TokenStreamException {
-
+		
 		
 		try {      // for error handling
 			{
@@ -680,7 +685,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	public final void class_inheritance(
 		ClassHeader ch
 	) throws RecognitionException, TokenStreamException {
-
+		
 		
 		try {      // for error handling
 			switch ( LA(1)) {
@@ -753,7 +758,7 @@ public ElijjahParser(ParserSharedInputState state) {
 	public final void classInheritanceRuby(
 		ClassInheritance ci
 	) throws RecognitionException, TokenStreamException {
-
+		
 		
 		try {      // for error handling
 			match(LT_);
@@ -773,7 +778,7 @@ public ElijjahParser(ParserSharedInputState state) {
 		OS_Element parent, Context cctx, List<AnnotationClause> as
 	) throws RecognitionException, TokenStreamException {
 		ClassStatement cls;
-
+		
 		cls=null;ClassContext ctx=null;IdentExpression i1=null;TypeNameList tnl=null;
 				ClassHeader ch=null;
 		
@@ -945,7 +950,7 @@ public ElijjahParser(ParserSharedInputState state) {
 							else {
 								break _loop28;
 							}
-
+							
 						} while (true);
 						}
 					}
@@ -956,7 +961,7 @@ public ElijjahParser(ParserSharedInputState state) {
 						}
 					}
 					else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
-						programStatement(cr.XXX(), cr);
+						programStatement(/*cr.XXX(),*/ cr);
 					}
 				else {
 					break _loop29;
@@ -1274,7 +1279,7 @@ inputState.guessing--;
 				else {
 					if ( _cnt34>=1 ) { break _loop34; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
-
+				
 				_cnt34++;
 			} while (true);
 			}
@@ -1290,21 +1295,21 @@ inputState.guessing--;
 		}
 		return a;
 	}
-
+	
 	public final BaseFunctionDef  function_definition(
 		OS_Element parent, Context ctx, List<AnnotationClause> as
 	) throws RecognitionException, TokenStreamException {
 		BaseFunctionDef fd;
-
+		
 		fd=null;
-
+		
 		try {      // for error handling
 			switch ( LA(1)) {
 			case LITERAL_def:
 			{
 				fd=def_function_definition(parent, ctx, as);
 				if ( inputState.guessing==0 ) {
-					fd.setType(BaseFunctionDef.Species.DEF_FUN);
+					fd.setSpecies(BaseFunctionDef.Species.DEF_FUN);
 				}
 				break;
 			}
@@ -1312,7 +1317,7 @@ inputState.guessing--;
 			{
 				fd=normal_function_definition(parent, ctx, as);
 				if ( inputState.guessing==0 ) {
-					fd.setType(BaseFunctionDef.Species.REG_FUN);
+					fd.setSpecies(BaseFunctionDef.Species.REG_FUN);
 				}
 				break;
 			}
@@ -1320,17 +1325,6 @@ inputState.guessing--;
 			{
 				throw new NoViableAltException(LT(1), getFilename());
 			}
-			}
-			}
-			if ( inputState.guessing==0 ) {
-				ctx=(FunctionContext)fd.getContext();cur=ctx;
-			}
-			sco=functionScope(fd);
-			if ( inputState.guessing==0 ) {
-				fd.scope(sco);
-			}
-			if ( inputState.guessing==0 ) {
-				fd.setSpecies(FunctionDef.Species.REG_FUN);fd.postConstruct();cur=ctx.getParent();
 			}
 		}
 		catch (RecognitionException ex) {
@@ -1905,13 +1899,13 @@ inputState.guessing--;
 								else {
 									break _loop71;
 								}
-
+								
 							} while (true);
 							}
 							fd=function_definition(cr, cr.getContext(), as);
 						}
 						else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
-							programStatement(cr.XXX(), cr);
+							programStatement(/*cr.XXX(),*/ cr);
 						}
 					else {
 						throw new NoViableAltException(LT(1), getFilename());
@@ -2422,7 +2416,7 @@ inputState.guessing--;
 		}
 		return sc;
 	}
-
+	
 	public final void statement(
 		StatementClosure cr, OS_Element aParent
 	) throws RecognitionException, TokenStreamException {
@@ -2608,9 +2602,9 @@ inputState.guessing--;
 	public final void varStmt_i(
 		VariableStatement vs
 	) throws RecognitionException, TokenStreamException {
-
+		
 		TypeName tn=null;IdentExpression i=null;
-
+		
 		try {      // for error handling
 			i=ident();
 			if ( inputState.guessing==0 ) {
@@ -2671,14 +2665,14 @@ inputState.guessing--;
 			}
 		}
 	}
-
+	
 	public final Scope3  functionScope(
 		FunctionDef parent
 	) throws RecognitionException, TokenStreamException {
 		Scope3 sc;
-
+		
 		sc=new Scope3(parent);ClassStatement cls=null;
-
+		
 		try {      // for error handling
 			match(LCURLY);
 			docstrings(sc);
@@ -2777,7 +2771,7 @@ inputState.guessing--;
 							else {
 								throw new NoViableAltException(LT(1), getFilename());
 							}
-
+							
 							}
 							break;
 						}
@@ -2801,7 +2795,7 @@ inputState.guessing--;
 					else {
 						break _loop93;
 					}
-
+					
 				} while (true);
 				}
 				break;
@@ -2872,7 +2866,7 @@ inputState.guessing--;
 				else {
 					break _loop97;
 				}
-
+				
 			} while (true);
 			}
 			match(RCURLY);
@@ -2906,7 +2900,7 @@ inputState.guessing--;
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
 			}
-
+			
 			}
 			expr=expression();
 			if ( inputState.guessing==0 ) {
@@ -2962,7 +2956,7 @@ inputState.guessing--;
 				else {
 					break _loop101;
 				}
-
+				
 			} while (true);
 			}
 			{
@@ -2978,12 +2972,12 @@ inputState.guessing--;
 			}
 		}
 	}
-
+	
 	public final Postcondition  postcondition() throws RecognitionException, TokenStreamException {
 		Postcondition postc;
-
+		
 		postc = new Postcondition();IdentExpression id=null;
-
+		
 		try {      // for error handling
 			{
 			if ((LA(1)==IDENT) && (LA(2)==TOK_COLON)) {
@@ -2998,7 +2992,7 @@ inputState.guessing--;
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
 			}
-
+			
 			}
 			expr=expression();
 			if ( inputState.guessing==0 ) {
@@ -3015,14 +3009,14 @@ inputState.guessing--;
 		}
 		return postc;
 	}
-
+	
 	public final DefFunctionDef  def_function_definition(
 		OS_Element parent, Context ctx, List<AnnotationClause> as
 	) throws RecognitionException, TokenStreamException {
 		DefFunctionDef fd;
-
+		
 		fd=null;FunctionHeader fh=null;IExpression fb=null;
-
+		
 		try {      // for error handling
 			match(LITERAL_def);
 			fh=function_header();
@@ -3039,7 +3033,7 @@ inputState.guessing--;
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
 			}
-
+			
 			}
 			if ( inputState.guessing==0 ) {
 				fd.setAnnotations(as);fd.setHeader(fh);fd.setBody(fb);cur=ctx.getParent();
@@ -3060,9 +3054,9 @@ inputState.guessing--;
 		OS_Element parent, Context ctx, List<AnnotationClause> as
 	) throws RecognitionException, TokenStreamException {
 		FunctionDef fd;
-
+		
 		fd=null;FunctionHeader fh=null;FunctionBody fb=null;
-
+		
 		try {      // for error handling
 			fh=function_header();
 			if ( inputState.guessing==0 ) {
@@ -3083,10 +3077,10 @@ inputState.guessing--;
 		}
 		return fd;
 	}
-
+	
 	public final FunctionHeader  function_header() throws RecognitionException, TokenStreamException {
 		FunctionHeader fh;
-
+		
 		fh=new FunctionHeader();IdentExpression i1=null;FormalArgList fal=null;TypeName tn=null;
 		
 		try {      // for error handling
@@ -3260,12 +3254,12 @@ inputState.guessing--;
 		}
 		return fb;
 	}
-
+	
 	public final TypeName  typeName2() throws RecognitionException, TokenStreamException {
 		TypeName cr;
-
+		
 		cr=null;
-
+		
 		try {      // for error handling
 			switch ( LA(1)) {
 			case LITERAL_generic:
@@ -3317,9 +3311,9 @@ inputState.guessing--;
 		OS_Element parent
 	) throws RecognitionException, TokenStreamException {
 		FunctionBody fb;
-
+		
 		fb=new FunctionBody();Scope3 sc=new Scope3(parent);ClassStatement cls=null;fb.scope3=sc;
-
+		
 		try {      // for error handling
 			match(LCURLY);
 			docstrings(sc);
@@ -3606,7 +3600,7 @@ inputState.guessing--;
 		}
 		return pc;
 	}
-
+	
 	public final void varStmt_i3(
 		VariableStatement vs
 	) throws RecognitionException, TokenStreamException {
@@ -3706,13 +3700,13 @@ inputState.guessing--;
 			}
 		}
 	}
-
+	
 	public final void typeAlias2(
 		TypeAliasBuilder tab
 	) throws RecognitionException, TokenStreamException {
-
+		
 		Qualident q=null;IdentExpression i=null;
-
+		
 		try {      // for error handling
 			match(LITERAL_type);
 			match(LITERAL_alias);
@@ -4498,7 +4492,7 @@ inputState.guessing--;
 		QualidentList qal;
 		
 		Qualident qid;qal=new QualidentList();
-
+		
 		try {      // for error handling
 			qid=qualident();
 			if ( inputState.guessing==0 ) {
