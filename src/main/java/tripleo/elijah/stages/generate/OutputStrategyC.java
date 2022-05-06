@@ -217,15 +217,6 @@ public class OutputStrategyC {
 		}
 	}
 
-	public String nameForConstructor(final GeneratedConstructor generatedConstructor, final GenerateResult.TY aTy) {
-		GeneratedNode c = generatedConstructor.getGenClass();
-		if (c == null) c = generatedConstructor.getParent(); // TODO fixme
-		if (c instanceof GeneratedClass)
-			return nameForClass((GeneratedClass) c, aTy);
-		else if (c instanceof GeneratedNamespace)
-			return nameForNamespace((GeneratedNamespace) c, aTy);
-		return null;
-	}
 }
 
 //
