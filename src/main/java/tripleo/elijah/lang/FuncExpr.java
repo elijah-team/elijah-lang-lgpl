@@ -59,6 +59,11 @@ public class FuncExpr extends BaseFunctionDef implements IExpression, OS_Element
 		// nop
 	}
 
+	@Override
+	public void setHeader(final FunctionHeader aFunctionHeader) {
+		throw new NotImplementedException();
+	}
+
 	// region arglist
 
 	@Override
