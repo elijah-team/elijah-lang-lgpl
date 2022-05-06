@@ -44,7 +44,7 @@ program
 	  )?
 	  (
 	    "package" xy=qualident opt_semi 	{pkg=pc.defaultPackageName(xy);cur=new PackageContext(cur, pkg);pkg.setContext((PackageContext) cur);}
-	  | programStatement[pc, out.module()] opt_semi
+	  | programStatement[/*pc,*/ out.module()] opt_semi
 	  )*
 	  EOF {out.module().postConstruct();out.FinishModule();}
 	;
@@ -130,7 +130,7 @@ classScope[ClassStatement cr]
     | varStmt[cr.statementClosure(), cr]
     | "type" IDENT BECOMES IDENT ( BOR IDENT)*
     | tal=typeAlias[cr]     {cr.add(tal);}
-    | programStatement[cr.XXX(), cr]
+    | programStatement[/*cr.XXX(),*/ cr]
     | propertyStatement[cr.prop()]
     | acs=accessNotation {cr.addAccess(acs);}
     )*
@@ -239,7 +239,7 @@ namespaceScope[NamespaceStatement cr]
     		fd=function_definition[cr, cr.getContext(), as]
 		| varStmt[cr.statementClosure(), cr]
 		| tal=typeAlias[cr]						{cr.add(tal);}
-		| programStatement[cr.XXX(), cr]
+		| programStatement[/*cr.XXX(),*/ cr]
 		| acs=accessNotation 					{cr.addAccess(acs);}
 		)
 		opt_semi
@@ -391,7 +391,7 @@ function_body_mandatory [OS_Element parent] returns [FunctionBody fb]
 	  RCURLY
 	;
 
-programStatement[ProgramClosure pc, OS_Element cont]
+programStatement[/*ProgramClosure pc,*/ OS_Element cont]
 		{ImportStatement imp=null;AnnotationClause a=null;List<AnnotationClause> as=new ArrayList<AnnotationClause>();AliasStatement als=null;}
     : imp=importStatement[cont]
 	| (a=annotation_clause      {as.add(a);})*
