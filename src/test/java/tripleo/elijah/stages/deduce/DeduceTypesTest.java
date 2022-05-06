@@ -62,11 +62,11 @@ public class DeduceTypesTest {
 		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
 		//
-		mod.prelude = mod.parent.findPrelude("c");
+		mod.prelude = mod.getCompilation().findPrelude("c");
 		//
 		//
 		//
-		final ElLog.Verbosity verbosity = mod.parent.gitlabCIVerbosity();
+		final ElLog.Verbosity verbosity = mod.getCompilation().gitlabCIVerbosity();
 		final PipelineLogic pl = new PipelineLogic(verbosity);
 		final GeneratePhase generatePhase = new GeneratePhase(verbosity, pl);
 		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity);

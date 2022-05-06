@@ -211,7 +211,7 @@ public class TypeOfTypeNameTest {
 		final String typeNameString = "SystemInteger";
 
 		OS_Module mod = new OS_Module();
-		mod.parent = mock(Compilation.class);
+		mod.setParent(mock(Compilation.class));
 		Context mod_ctx = mod.getContext();
 
 		ClassStatement st_af = new ClassStatement(mod, mod_ctx);
