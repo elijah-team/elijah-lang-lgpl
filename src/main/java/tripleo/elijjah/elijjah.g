@@ -342,8 +342,8 @@ functionDef[FunctionDef fd]
 */
 function_definition [OS_Element parent, Context ctx, List<AnnotationClause> as] returns [BaseFunctionDef fd]
 		{fd=null;}
-	: fd=def_function_definition[parent, ctx, as]		{fd.setType(BaseFunctionDef.Species.DEF_FUN);}
-	| fd=normal_function_definition[parent, ctx, as]	{fd.setType(BaseFunctionDef.Species.REG_FUN);}
+	: fd=def_function_definition[parent, ctx, as]		{fd.setSpecies(BaseFunctionDef.Species.DEF_FUN);}
+	| fd=normal_function_definition[parent, ctx, as]	{fd.setSpecies(BaseFunctionDef.Species.REG_FUN);}
 	;
 normal_function_definition [OS_Element parent, Context ctx, List<AnnotationClause> as] returns [FunctionDef fd]
 		{fd=null;FunctionHeader fh=null;FunctionBody fb=null;}
