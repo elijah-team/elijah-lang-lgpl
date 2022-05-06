@@ -75,7 +75,7 @@ public class WlGenerateNamespace implements WorkJob {
 	}
 
 	public GeneratedNode getResult() {
-		return Result;
+		return result;
 	}
 }
 
