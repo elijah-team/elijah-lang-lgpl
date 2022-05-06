@@ -13,6 +13,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.lang2.ElElementVisitor;
@@ -228,20 +229,28 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 			return hdr.genericPart.p;
 	}
 
-	public Collection<ConstructorDef> getConstructors() {
-		Collection<ClassItem> x = Collections2.filter(items, new Predicate<ClassItem>() {
+	private static final class __GetConstructorsHelper {
+		static final Predicate<ClassItem>                selectForConstructors      = new Predicate<ClassItem>() {
+			@Contract(value = "null -> false", pure = true)
 			@Override
 			public boolean apply(@Nullable ClassItem input) {
 				return input instanceof ConstructorDef;
 			}
-		});
-		return Collections2.transform(x, new Function<ClassItem, ConstructorDef>() {
+		};
+		static final Function<ClassItem, ConstructorDef> castClassItemToConstructor = new Function<ClassItem, ConstructorDef>() {
+			@Contract(value = "_ -> param1", pure = true)
 			@Nullable
 			@Override
 			public ConstructorDef apply(@Nullable ClassItem input) {
 				return (ConstructorDef) input;
 			}
-		});
+		};
+	}
+
+	public Collection<ConstructorDef> getConstructors() {
+		final Collection<ClassItem>      x = Collections2.filter(items, __GetConstructorsHelper.selectForConstructors);
+		final Collection<ConstructorDef> y = Collections2.transform(x,  __GetConstructorsHelper.castClassItemToConstructor);
+		return y;
 	}
 
 	@Override
