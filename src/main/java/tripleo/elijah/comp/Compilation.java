@@ -37,7 +37,6 @@ import tripleo.elijah.util.Helpers;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -66,7 +65,7 @@ public class Compilation {
 	//
 	//
 	public        PipelineLogic pipelineLogic;
-	private final Pipeline      pipelines = new Pipeline();
+	final Pipeline      pipelines = new Pipeline();
 	//
 	//
 	//
@@ -161,33 +160,46 @@ public class Compilation {
 				}
 
 				//
+				final ICompilationAccess ca = new DefaultCompilationAccess(this);
+				final ProcessRecord pr = new ProcessRecord(ca);
+				final RuntimeProcesses rt = StageToRuntime.get(stage, ca, pr);
+
+				rt.run();
+				rt.postProcess(pr, ca);
+
+/*
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
-					pipelineLogic = new PipelineLogic(silent ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE);
-					final DeducePipeline dpl = new DeducePipeline(this);
-					pipelines.add(dpl);
-					if (stage.equals("O")) {
-						final GeneratePipeline gpl = new GeneratePipeline(this, dpl);
-						pipelines.add(gpl);
-						final WritePipeline wpl = new WritePipeline(this, pipelineLogic.gr);
-						pipelines.add(wpl);
-
-						final WriteMesonPipeline wmpl = new WriteMesonPipeline(this, pipelineLogic.gr, wpl);
-						pipelines.add(wmpl);
-					} else
-						assert stage.equals("D");
+					rt.part1();
+					rt.part2();
 
 					pipelines.run();
 
 					writeLogs(silent, pipelineLogic.elLogs);
 				}
+*/
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
 			}
 		} catch (final Exception e) {
 			errSink.exception(e);
 			throw e;
+		}
+	}
+
+	static class StageToRuntime {
+		public static @NotNull RuntimeProcesses get(final @NotNull String stage, final @NotNull ICompilationAccess aCa, final ProcessRecord aPr) {
+			final RuntimeProcesses rtp = new RuntimeProcesses(aCa.getCompilation());
+
+			if (stage.equals("E"))
+				rtp.add(new EmptyProcess(aCa, aPr));
+			if (stage.equals("O"))
+				rtp.add(new OStageProcess(aCa, aPr));
+			if (stage.equals("D"))
+				rtp.add(new DStageProcess(aCa, aPr));
+
+			return rtp;
 		}
 	}
 
@@ -200,7 +212,7 @@ public class Compilation {
 		return System.getenv("GITLAB_CI") != null;
 	}
 
-	private void writeLogs(boolean aSilent, List<ElLog> aLogs) {
+	void writeLogs(boolean aSilent, List<ElLog> aLogs) {
 		Multimap<String, ElLog> logMap = ArrayListMultimap.create();
 		if (true || aSilent) {
 			for (ElLog deduceLog : aLogs) {
@@ -422,46 +434,6 @@ public class Compilation {
 		return new ModuleBuilder(this);
 	}
 
-	public static class QueryElijahModuleForString {
-		private Exception exc;
-		private OS_Module mod;
-
-		void parseString(String sourceText, String filename, Compilation compilation) {
-			ElijjahParser parser = null;
-			boolean do_out = false;
-			final StringReader stringReader = new StringReader(sourceText);
-			try {
-				final ElijjahLexer lexer = new ElijjahLexer(stringReader);
-				lexer.setFilename(filename);
-				parser = new ElijjahParser(lexer);
-				parser.out = new Out(filename, compilation, do_out);
-				parser.setFilename(filename);
-				try {
-					parser.program();
-				} catch (RecognitionException aE) {
-					exc = aE;
-					return;
-				} catch (TokenStreamException aE) {
-					exc = aE;
-					return;
-				}
-				mod = parser.out.module();
-			} finally {
-				if (parser != null)
-					parser.out = null;
-				stringReader.close();
-			}
-		}
-
-		OS_Module getResult() {
-			return mod;
-		}
-
-		Exception getError() {
-			return exc;
-		}
-	}
-
 	private Operation<OS_Module> parseFile_(final String f, final InputStream s, final boolean do_out) throws RecognitionException, TokenStreamException {
 		final QuerySourceFileToModuleParams qp = new QuerySourceFileToModuleParams(s, f, do_out);
 		return new QuerySourceFileToModule(qp, this).calculate();
@@ -524,13 +496,6 @@ public class Compilation {
 		fn2m.put(fn, module);
 	}
 
-    public OS_Module fileNameToModule(final String fileName) {
-        if (fn2m.containsKey(fileName)) {
-            return fn2m.get(fileName);
-        }
-        return null;
-    }
-
 	// endregion
 
     //
@@ -592,6 +557,7 @@ public class Compilation {
 	public void addFunctionMapHook(FunctionMapHook aFunctionMapHook) {
 		pipelineLogic.dp.addFunctionMapHook(aFunctionMapHook);
 	}
+
 }
 
 //

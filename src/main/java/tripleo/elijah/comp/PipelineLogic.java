@@ -71,7 +71,7 @@ public class PipelineLogic {
 		final WorkManager wm = new WorkManager();
 		// README use any errSink, they should all be the same
 		for (OS_Module mod : mods) {
-			final GenerateC generateC = new GenerateC(mod, mod.parent.getErrSink(), verbosity, this);
+			final GenerateC generateC = new GenerateC(mod, mod.getCompilation().getErrSink(), verbosity, this);
 			final GenerateResult ggr = run3(mod, lgc, wm, generateC);
 			wm.drain();
 			gr.results().addAll(ggr.results());
