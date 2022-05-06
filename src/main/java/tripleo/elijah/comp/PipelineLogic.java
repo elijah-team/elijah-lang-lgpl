@@ -35,7 +35,6 @@ public class PipelineLogic {
 
 	public GenerateResult gr = new GenerateResult();
 	public List<ElLog> elLogs = new LinkedList<ElLog>();
-	public boolean verbose = true;
 
 	private final ElLog.Verbosity verbosity;
 
@@ -195,7 +194,7 @@ public class PipelineLogic {
 				throw new IllegalStateException("node is not coded");
 		}
 
-		dp.deduceModule(mod, lgc, getVerbosity());
+		dp.deduceModule(mod, lgc, verbosity);
 
 		resolveCheck(lgc);
 
@@ -288,9 +287,11 @@ public class PipelineLogic {
 		}
 	}
 
+/*
 	public ElLog.Verbosity getVerbosity() {
-		return verbose ? ElLog.Verbosity.VERBOSE : ElLog.Verbosity.SILENT;
+		return verbosity; // ? ElLog.Verbosity.VERBOSE : ElLog.Verbosity.SILENT;
 	}
+*/
 
 	public void addLog(ElLog aLog) {
 		elLogs.add(aLog);
