@@ -11,6 +11,7 @@ package tripleo.elijah;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
@@ -72,7 +73,8 @@ public class TestBasic {
 		Assert.assertEquals(9, (int)errorCount.get(2)); // TODO Error count obviously should be 0
 	}
 
-//	@Test
+	@Ignore
+	@Test
 	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public final void testBasic_listfolders3() throws IOException {
 		String s = "test/basic/listfolders3/listfolders3.ez";
