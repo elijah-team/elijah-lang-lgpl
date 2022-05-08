@@ -152,6 +152,8 @@ class DStageProcess implements RuntimeProcess {
 	public DStageProcess(final ICompilationAccess aCa, final ProcessRecord aPr) {
 		ca = aCa;
 		pr = aPr;
+
+		prim.pr = pr;
 	}
 
 	@Override
@@ -189,6 +191,8 @@ class OStageProcess implements RuntimeProcess {
 	OStageProcess(final ICompilationAccess aCa, final ProcessRecord aPr) {
 		ca = aCa;
 		pr = aPr;
+
+		prim.pr = pr;
 	}
 
 	@Override
