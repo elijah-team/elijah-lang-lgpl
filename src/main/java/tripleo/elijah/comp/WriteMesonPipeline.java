@@ -48,7 +48,7 @@ public class WriteMesonPipeline implements PipelineMember {
 	}
 
 	public void write_makefiles() throws IOException {
-		Multimap<CompilerInstructions, String> lsp_outputs = writePipeline.lsp_outputs; // TODO move this
+		Multimap<CompilerInstructions, String> lsp_outputs = writePipeline.getLspOutputs(); // TODO move this
 
 		List<String> dep_dirs = new LinkedList<String>();
 
