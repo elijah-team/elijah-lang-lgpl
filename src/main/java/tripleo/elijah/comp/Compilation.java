@@ -212,19 +212,6 @@ public class Compilation {
 		return System.getenv("GITLAB_CI") != null;
 	}
 
-	void writeLogs(boolean aSilent, List<ElLog> aLogs) {
-		Multimap<String, ElLog> logMap = ArrayListMultimap.create();
-		if (true || aSilent) {
-			for (ElLog deduceLog : aLogs) {
-				logMap.put(deduceLog.getFileName(), deduceLog);
-			}
-			for (Map.Entry<String, Collection<ElLog>> stringCollectionEntry : logMap.asMap().entrySet()) {
-				final F202 f202 = new F202(getErrSink(), this);
-				f202.processLogs(stringCollectionEntry.getValue());
-			}
-		}
-	}
-
 	private List<CompilerInstructions> searchEzFiles(final File directory) {
 		final List<CompilerInstructions> R = new ArrayList<CompilerInstructions>();
 		final FilenameFilter filter = new FilenameFilter() {
