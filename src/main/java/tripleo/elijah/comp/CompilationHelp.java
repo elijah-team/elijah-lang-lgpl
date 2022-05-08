@@ -104,7 +104,11 @@ abstract class ODPrim {
 		final DeducePipeline dpl = new DeducePipeline(ca.getCompilation());
 		ca.addPipeline(dpl);
 
-		pr = new ProcessRecord(ca);
+//--		ca.setPipelineLogic(new PipelineLogic(ca.testSilence()));
+		//if (pr.dpl == null) {  // TODO fix this
+		//	pr.dpl = new DeducePipeline(ca.getCompilation());
+			ca.addPipeline(pr.dpl);
+		//}
 	}
 
 	void part2_O(final ICompilationAccess ca) {
