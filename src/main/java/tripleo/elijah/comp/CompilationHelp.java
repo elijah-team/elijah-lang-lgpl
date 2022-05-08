@@ -54,6 +54,7 @@ class RuntimeProcesses {
 
 	public void run() {
 		for (RuntimeProcess runtimeProcess : processes) {
+			System.err.println("***** RuntimeProcess named " + runtimeProcess);
 			runtimeProcess.run(comp);
 		}
 	}

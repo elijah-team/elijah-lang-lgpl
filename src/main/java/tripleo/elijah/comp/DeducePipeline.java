@@ -24,6 +24,8 @@ public class DeducePipeline implements PipelineMember {
 	List<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
 
 	public DeducePipeline(Compilation aCompilation) {
+		System.err.println("***** Hit DeducePipeline constructor");
+
 		c = aCompilation;
 
 		for (final OS_Module module : c.modules) {
