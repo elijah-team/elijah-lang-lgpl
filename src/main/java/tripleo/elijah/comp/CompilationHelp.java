@@ -94,7 +94,7 @@ final class EmptyProcess implements RuntimeProcess {
 }
 
 abstract class ODPrim {
-	private ProcessRecord pr;
+	ProcessRecord pr;
 
 	//public void setPr(final ProcessRecord aPr) {
 	//	pr = aPr;
