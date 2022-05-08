@@ -38,7 +38,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,23 +48,23 @@ import static tripleo.elijah.nextgen.query.Mode.SUCCESS;
 
 public class Compilation {
 
-	private final int             _compilationNumber;
-	private       IO              io;
-	private final ErrSink         eee;
-	public final  List<OS_Module> modules = new ArrayList<OS_Module>();
-	private final Map<String, OS_Module> fn2m = new HashMap<String, OS_Module>();
-	private final Map<String, CompilerInstructions> fn2ci = new HashMap<String, CompilerInstructions>();
-	private final Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
-	private int _packageCode = 1;
-	public final List<CompilerInstructions> cis = new ArrayList<CompilerInstructions>();
+	private final int                               _compilationNumber;
+	private       IO                                io;
+	private final ErrSink                           eee;
+	public final  List<OS_Module>                   modules      = new ArrayList<OS_Module>();
+	private final Map<String, OS_Module>            fn2m         = new HashMap<String, OS_Module>();
+	private final Map<String, CompilerInstructions> fn2ci        = new HashMap<String, CompilerInstructions>();
+	private final Map<String, OS_Package>           _packages    = new HashMap<String, OS_Package>();
+	private       int                               _packageCode = 1;
+	public final  List<CompilerInstructions>        cis          = new ArrayList<CompilerInstructions>();
 
 	CompilerInstructions rootCI;
 
 	//
 	//
 	//
-	public        PipelineLogic pipelineLogic;
-	final Pipeline      pipelines = new Pipeline();
+	public PipelineLogic pipelineLogic;
+	final  Pipeline      pipelines = new Pipeline();
 	//
 	//
 	//
