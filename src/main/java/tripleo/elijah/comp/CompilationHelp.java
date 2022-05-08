@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.comp;
 
+import com.google.common.base.Preconditions;
 import tripleo.elijah.stages.logging.ElLog;
 
 import java.util.ArrayList;
@@ -100,9 +101,8 @@ abstract class ODPrim {
 	//}
 
 	void part1(final ICompilationAccess ca) {
-		ca.setPipelineLogic(new PipelineLogic(ca.testSilence()));
-		final DeducePipeline dpl = new DeducePipeline(ca.getCompilation());
-		ca.addPipeline(dpl);
+		Preconditions.checkNotNull(pr);
+//		assert pr != null;
 
 //--		ca.setPipelineLogic(new PipelineLogic(ca.testSilence()));
 		//if (pr.dpl == null) {  // TODO fix this
@@ -112,7 +112,8 @@ abstract class ODPrim {
 	}
 
 	void part2_O(final ICompilationAccess ca) {
-		assert pr != null;
+		Preconditions.checkNotNull(pr);
+		//assert pr != null;
 
 		final Compilation comp = ca.getCompilation();
 
@@ -134,8 +135,7 @@ abstract class ODPrim {
 
 		if (stage.equals("O")) {
 			part2_O(ca);
-		}
-		if (stage.equals("D")) {
+		} else if (stage.equals("D")) {
 			part2_D(ca);
 		} else {
 			throw new IllegalStateException("invalid state");
