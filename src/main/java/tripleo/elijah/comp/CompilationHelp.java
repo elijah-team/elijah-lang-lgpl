@@ -168,17 +168,18 @@ class DStageProcess implements RuntimeProcess {
 }
 
 class ProcessRecord {
-	final         DeducePipeline     dpl;
-	final         PipelineLogic      pipelineLogic;
-	final         String             stage;
-	private final ICompilationAccess ca;
+	final DeducePipeline dpl;
+	final PipelineLogic  pipelineLogic;
+	final String         stage;
 
-	public ProcessRecord(final ICompilationAccess aCompilationAccess) {
-		ca = aCompilationAccess;
+	public ProcessRecord(final ICompilationAccess ca) {
+		final Compilation compilation = ca.getCompilation();
 
-		dpl           = new DeducePipeline(ca.getCompilation());
-		pipelineLogic = ca.getCompilation().pipelineLogic;
-		stage         = ca.getCompilation().stage;
+		pipelineLogic = new PipelineLogic(ca.testSilence());
+		ca.setPipelineLogic(pipelineLogic);
+
+		dpl           = new DeducePipeline(compilation);
+		stage         = compilation.stage;
 	}
 }
 
