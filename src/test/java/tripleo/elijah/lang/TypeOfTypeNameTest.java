@@ -23,6 +23,7 @@ import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 
 import static org.easymock.EasyMock.*;
+import static tripleo.elijah.util.Helpers.List_of;
 
 public class TypeOfTypeNameTest {
 
@@ -210,13 +211,17 @@ public class TypeOfTypeNameTest {
 		final String typeNameString = "SystemInteger";
 
 		OS_Module mod = new OS_Module();
-		mod.parent = mock(Compilation.class);
+		mod.setParent(mock(Compilation.class));
 		Context mod_ctx = mod.getContext();
 
 		ClassStatement st_af = new ClassStatement(mod, mod_ctx);
-		st_af.setName(IdentExpression.forString("AbstractFactory"));
+		ClassHeader ch = new ClassHeader(false, List_of());
+		ch.setName(IdentExpression.forString("AbstractFactory"));
+		st_af.setHeader(ch);
 		ClassStatement sysint = new ClassStatement(mod, mod_ctx);
-		sysint.setName(IdentExpression.forString("SystemInteger"));
+		ClassHeader ch2 = new ClassHeader(false, List_of());
+		ch2.setName(IdentExpression.forString("SystemInteger"));
+		sysint.setHeader(ch2);
 
 		VariableSequence vs = new VariableSequence(st_af.getContext());
 		VariableStatement var_y = vs.next();

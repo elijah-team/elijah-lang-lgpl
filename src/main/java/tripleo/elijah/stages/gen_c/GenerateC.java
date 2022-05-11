@@ -292,10 +292,10 @@ public class GenerateC implements CodeGenerator {
 			tosHdr.close();
 			Buffer buf = tos.getBuffer();
 //			LOG.info(buf.getText());
-			gr.addClass(GenerateResult.TY.IMPL, x, buf);
+			gr.addClass(GenerateResult.TY.IMPL, x, buf, x.module().getLsp());
 			Buffer buf2 = tosHdr.getBuffer();
 //			LOG.info(buf2.getText());
-			gr.addClass(GenerateResult.TY.HEADER, x, buf2);
+			gr.addClass(GenerateResult.TY.HEADER, x, buf2, x.module().getLsp());
 		}
 		x.generatedAlready = true;
 	}
@@ -372,10 +372,10 @@ public class GenerateC implements CodeGenerator {
 			if (x.varTable.size() > 0) { // TODO should we let this through?
 				Buffer buf = tos.getBuffer();
 //				LOG.info(buf.getText());
-				gr.addNamespace(GenerateResult.TY.IMPL, x, buf);
+				gr.addNamespace(GenerateResult.TY.IMPL, x, buf, x.module().getLsp());
 				Buffer buf2 = tosHdr.getBuffer();
 //				LOG.info(buf2.getText());
-				gr.addNamespace(GenerateResult.TY.HEADER, x, buf2);
+				gr.addNamespace(GenerateResult.TY.HEADER, x, buf2, x.module().getLsp());
 			}
 		}
 		x.generatedAlready = true;

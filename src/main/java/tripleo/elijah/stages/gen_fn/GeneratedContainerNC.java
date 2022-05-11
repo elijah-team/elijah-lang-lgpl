@@ -17,7 +17,9 @@ import tripleo.elijah.lang.FunctionDef;
 import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.deduce.FunctionMapDeferred;
 import tripleo.elijah.stages.gen_generic.CodeGenerator;
+import tripleo.elijah.stages.gen_generic.Dependency;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
+import tripleo.elijah.stages.gen_generic.IDependencyReferent;
 import tripleo.elijah.stages.post_deduce.IPostDeduce;
 
 import java.util.ArrayList;
@@ -29,9 +31,10 @@ import java.util.Map;
 /**
  * Created 3/16/21 10:45 AM
  */
-public abstract class GeneratedContainerNC extends AbstractDependencyTracker implements GeneratedContainer {
+public abstract class GeneratedContainerNC extends AbstractDependencyTracker implements GeneratedContainer, IDependencyReferent {
 	public boolean generatedAlready = false;
 	private int code = 0;
+	private final Dependency dependency = new Dependency(this);
 
 	public Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
 	public Map<ClassStatement, GeneratedClass> classMap = new HashMap<ClassStatement, GeneratedClass>();
@@ -95,6 +98,10 @@ public abstract class GeneratedContainerNC extends AbstractDependencyTracker imp
 	Multimap<FunctionDef, FunctionMapDeferred> functionMapDeferreds = ArrayListMultimap.create();
 	public void functionMapDeferred(final FunctionDef aFunctionDef, final FunctionMapDeferred aFunctionMapDeferred) {
 		functionMapDeferreds.put(aFunctionDef, aFunctionMapDeferred);
+	}
+
+	public Dependency getDependency() {
+		return dependency;
 	}
 }
 

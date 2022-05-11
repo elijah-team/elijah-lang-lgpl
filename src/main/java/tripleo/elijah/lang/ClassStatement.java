@@ -13,6 +13,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.contexts.ClassContext;
 import tripleo.elijah.lang2.ElElementVisitor;
@@ -31,13 +32,16 @@ import java.util.List;
  */
 public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements ClassItem, ModuleItem, StatementItem, FunctionItem, OS_Element, OS_Element2, Documentable, OS_Container {
 
-	private final OS_Element parent;
-	ClassInheritance _inh = new ClassInheritance(); // remove final for ClassBuilder
-	private ClassTypes _type;
-	private TypeNameList genericPart;
-
 	static final List<TypeName> emptyTypeNameList = ImmutableList.<TypeName>of();
 	private OS_Type osType;
+
+	private final OS_Element parent;
+
+	private ClassHeader hdr;
+
+	public void setHeader(ClassHeader aCh) {
+		hdr = aCh;
+	}
 
 	public ClassStatement(final OS_Element parentElement, final Context parentContext) {
 		parent = parentElement; // setParent
@@ -126,35 +130,37 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	}
 
 	public void setType(final ClassTypes aType) {
-		_type = aType;
+//		_type = aType;
+		throw new NotImplementedException();
 	}
 
 	public ClassTypes getType() {
-		return _type;
+		return hdr.type;
 	}
 
 	public void postConstruct() {
-		assert nameToken != null;
+		assert hdr.nameToken != null;
 		int destructor_count = 0;
 		for (ClassItem item : items) {
 			if (item instanceof DestructorDef)
 				destructor_count++;
 		}
-		assert destructor_count == 0 || destructor_count ==1;
+		assert destructor_count == 0 || destructor_count == 1;
 	}
 
 	// region inheritance
 
 	public IdentExpression getNameNode() {
-		return nameToken;
+		return hdr.nameToken;
 	}
 
 	public void setInheritance(ClassInheritance inh) {
-		_inh = inh;
+//		_inh = inh;
+		throw new NotImplementedException();
 	}
 
 	public ClassInheritance classInheritance() {
-		return _inh;
+		return hdr.inh;
 	}
 
 	// endregion
@@ -162,6 +168,8 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	// region annotations
 
 	public Iterable<AnnotationPart> annotationIterable() {
+		List<AnnotationClause> annotations = hdr.annos;
+
 		List<AnnotationPart> aps = new ArrayList<AnnotationPart>();
 		if (annotations == null) return aps;
 		for (AnnotationClause annotationClause : annotations) {
@@ -210,31 +218,47 @@ public class ClassStatement extends _CommonNC/*ProgramClosure*/ implements Class
 	// endregion
 
 	public void setGenericPart(TypeNameList genericPart) {
-		this.genericPart = genericPart;
+//		this.genericPart = genericPart;
+		throw new NotImplementedException();
 	}
 
 	public @NotNull List<TypeName> getGenericPart() {
-		if (genericPart == null)
+		if (hdr.genericPart == null)
 			return emptyTypeNameList;
 		else
-			return genericPart.p;
+			return hdr.genericPart.p;
 	}
 
-	public Collection<ConstructorDef> getConstructors() {
-		Collection<ClassItem> x = Collections2.filter(items, new Predicate<ClassItem>() {
+	private static final class __GetConstructorsHelper {
+		static final Predicate<ClassItem>                selectForConstructors      = new Predicate<ClassItem>() {
+			@Contract(value = "null -> false", pure = true)
 			@Override
 			public boolean apply(@Nullable ClassItem input) {
 				return input instanceof ConstructorDef;
 			}
-		});
-		return Collections2.transform(x, new Function<ClassItem, ConstructorDef>() {
+		};
+		static final Function<ClassItem, ConstructorDef> castClassItemToConstructor = new Function<ClassItem, ConstructorDef>() {
+			@Contract(value = "_ -> param1", pure = true)
 			@Nullable
 			@Override
 			public ConstructorDef apply(@Nullable ClassItem input) {
 				return (ConstructorDef) input;
 			}
-		});
+		};
 	}
+
+	public Collection<ConstructorDef> getConstructors() {
+		final Collection<ClassItem>      x = Collections2.filter(items, __GetConstructorsHelper.selectForConstructors);
+		final Collection<ConstructorDef> y = Collections2.transform(x,  __GetConstructorsHelper.castClassItemToConstructor);
+		return y;
+	}
+
+	@Override
+	public String getName() {
+		if (hdr.nameToken == null) throw new IllegalStateException("null name");
+		return hdr.nameToken.getText();
+	}
+
 
 	public OS_Type getOS_Type() {
 		if (osType == null)

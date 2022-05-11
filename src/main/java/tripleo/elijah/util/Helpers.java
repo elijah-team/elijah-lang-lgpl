@@ -139,26 +139,43 @@ public class Helpers {
 	// TODO this method is just ugly
 	@Nullable
 	public static String getHashForFilenameJava(String aFilename, ErrSink aErrSink) throws IOException {
+		final MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException aE) {
+			aErrSink.exception(aE);
+			return null;
+		}
+
 		final File file = new File(aFilename);
 		long size = file.length();
-		byte[] ba = new byte[(int)size];  // README Counting on reasonable sizes here
+		byte[] ba = new byte[64 * 1024];  // README Counting on reasonable sizes here
 		FileInputStream bb = null;
 		try {
 			bb = new FileInputStream(file);
-			bb.read(ba);
 
-			try {
-				String hh = getHash(ba);
-				return hh;
-			} catch (NoSuchAlgorithmException aE) {
-				aErrSink.exception(aE);
-//				aE.printStackTrace();
+			int n = 0, m = 0;
+
+			while (n != -1) {
+				n = bb.read(ba);
+				m+=n;
+				md.update(ba);
 			}
+
+			assert m == size-1;
+
+			byte[] hashBytes = md.digest();
+
+			StringBuilder sb = new StringBuilder();
+			for (byte b : hashBytes) {
+				sb.append(String.format("%02x", b));
+			}
+
+			return sb.toString();
 		} finally {
 			if (bb != null)
 				bb.close();
 		}
-		return null;
 	}
 }
 

@@ -44,7 +44,7 @@ public class OS_Module implements OS_Element, OS_Container {
 	public @NotNull Attached _a = new Attached();
 	public OS_Module prelude;
 
-	public Compilation parent;
+	private Compilation parent;
 	private LibraryStatementPart lsp;
 	private String _fileName;
 	public @NotNull List<EntryPoint> entryPoints = new ArrayList<EntryPoint>();
@@ -167,11 +167,13 @@ public class OS_Module implements OS_Element, OS_Container {
 	@NotNull public OS_Package pullPackageName() {
 		if (packageNames_q.empty())
 			return OS_Package.default_package;
+		// Dont know if this is correct behavior
 		return parent.makePackage(packageNames_q.peek());
 	}
 
-	public void pushPackageName(final Qualident xyz) {
-		packageNames_q.push(xyz);
+	public OS_Package pushPackageNamed(final Qualident aPackageName) {
+		packageNames_q.push(aPackageName);
+		return parent.makePackage(aPackageName);
 	}
 
 	/**
@@ -297,10 +299,6 @@ public class OS_Module implements OS_Element, OS_Container {
 		items.remove(cls);
 	}
 
-	public void addIndexingStatement(IndexingStatement indexingStatement) {
-		this.indexingStatement = indexingStatement;
-	}
-
 	public boolean isPrelude() {
 		return prelude == this;
 	}
@@ -315,6 +313,10 @@ public class OS_Module implements OS_Element, OS_Container {
 
 	public Compilation getCompilation() {
 		return parent;
+	}
+
+	public void setIndexingStatement(final IndexingStatement i) {
+		indexingStatement = i;
 	}
 }
 

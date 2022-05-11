@@ -147,7 +147,7 @@ public class WlGenerateCtor implements WorkJob {
 			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
 				@Override
 				public void onDone(GeneratedClass result) {
-					gf.setCode(generateFunctions.module.parent.nextFunctionCode());
+					gf.setCode(generateFunctions.module.getCompilation().nextFunctionCode());
 					gf.setClass(result);
 					result.constructors.put(cd, gf);
 				}

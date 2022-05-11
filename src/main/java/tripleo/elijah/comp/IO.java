@@ -9,7 +9,7 @@
 package tripleo.elijah.comp;
 
 import org.jetbrains.annotations.NotNull;
-import tripleo.util.io.CharSink;
+import tripleo.util.io.DisposableCharSink;
 import tripleo.util.io.CharSource;
 import tripleo.util.io.FileCharSink;
 
@@ -43,7 +43,7 @@ public class IO {
 		return null;
 	}
 
-	public CharSink openWrite(final Path p) throws IOException {
+	public DisposableCharSink openWrite(final Path p) throws IOException {
 		record(FileOption.WRITE, p);				
 		return new FileCharSink(Files.newOutputStream(p));
 	}

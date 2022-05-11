@@ -25,6 +25,7 @@ import tripleo.elijah.comp.queries.QueryEzFileToModule;
 import tripleo.elijah.comp.queries.QueryEzFileToModuleParams;
 import tripleo.elijah.comp.queries.QuerySourceFileToModule;
 import tripleo.elijah.comp.queries.QuerySourceFileToModuleParams;
+import tripleo.elijah.contexts.ModuleContext;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
@@ -37,7 +38,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,21 +48,23 @@ import static tripleo.elijah.nextgen.query.Mode.SUCCESS;
 
 public class Compilation {
 
-	private final int             _compilationNumber;
-	private       IO              io;
-	private final ErrSink         eee;
-	public final  List<OS_Module> modules = new ArrayList<OS_Module>();
-	private final Map<String, OS_Module> fn2m = new HashMap<String, OS_Module>();
-	private final Map<String, CompilerInstructions> fn2ci = new HashMap<String, CompilerInstructions>();
-	private final Map<String, OS_Package> _packages = new HashMap<String, OS_Package>();
-	private int _packageCode = 1;
-	public final List<CompilerInstructions> cis = new ArrayList<CompilerInstructions>();
+	private final int                               _compilationNumber;
+	private       IO                                io;
+	private final ErrSink                           eee;
+	public final  List<OS_Module>                   modules      = new ArrayList<OS_Module>();
+	private final Map<String, OS_Module>            fn2m         = new HashMap<String, OS_Module>();
+	private final Map<String, CompilerInstructions> fn2ci        = new HashMap<String, CompilerInstructions>();
+	private final Map<String, OS_Package>           _packages    = new HashMap<String, OS_Package>();
+	private       int                               _packageCode = 1;
+	public final  List<CompilerInstructions>        cis          = new ArrayList<CompilerInstructions>();
+
+	CompilerInstructions rootCI;
 
 	//
 	//
 	//
-	public        PipelineLogic pipelineLogic;
-	private final Pipeline      pipelines = new Pipeline();
+	public PipelineLogic pipelineLogic;
+	final  Pipeline      pipelines = new Pipeline();
 	//
 	//
 	//
@@ -148,7 +150,8 @@ public class Compilation {
 					}
 				}
 
-				System.err.println("130 GEN_LANG: "+cis.get(0).genLang());
+				rootCI = cis.get(0);
+				System.err.println("130 GEN_LANG: "+ rootCI.genLang());
 				findStdLib("c"); // TODO find a better place for this
 
 				for (final CompilerInstructions ci : cis) {
@@ -156,30 +159,46 @@ public class Compilation {
 				}
 
 				//
+				final ICompilationAccess ca = new DefaultCompilationAccess(this);
+				final ProcessRecord pr = new ProcessRecord(ca);
+				final RuntimeProcesses rt = StageToRuntime.get(stage, ca, pr);
+
+				rt.run();
+				rt.postProcess(pr, ca);
+
+/*
 				if (stage.equals("E")) {
 					// do nothing. job over
 				} else {
-					pipelineLogic = new PipelineLogic(silent ? ElLog.Verbosity.SILENT : ElLog.Verbosity.VERBOSE);
-					final DeducePipeline dpl = new DeducePipeline(this);
-					pipelines.add(dpl);
-					if (stage.equals("O")) {
-						final GeneratePipeline gpl = new GeneratePipeline(this, dpl);
-						pipelines.add(gpl);
-						final WritePipeline wpl = new WritePipeline(this, pipelineLogic.gr);
-						pipelines.add(wpl);
-					} else
-						assert stage.equals("D");
+					rt.part1();
+					rt.part2();
 
 					pipelines.run();
 
 					writeLogs(silent, pipelineLogic.elLogs);
 				}
+*/
 			} else {
 				System.err.println("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
 			}
 		} catch (final Exception e) {
 			errSink.exception(e);
 			throw e;
+		}
+	}
+
+	static class StageToRuntime {
+		public static @NotNull RuntimeProcesses get(final @NotNull String stage, final @NotNull ICompilationAccess aCa, final ProcessRecord aPr) {
+			final RuntimeProcesses rtp = new RuntimeProcesses(aCa.getCompilation());
+
+			if (stage.equals("E"))
+				rtp.add(new EmptyProcess(aCa, aPr));
+			if (stage.equals("O"))
+				rtp.add(new OStageProcess(aCa, aPr));
+			if (stage.equals("D"))
+				rtp.add(new DStageProcess(aCa, aPr));
+
+			return rtp;
 		}
 	}
 
@@ -190,19 +209,6 @@ public class Compilation {
 
 	public static boolean isGitlab_ci() {
 		return System.getenv("GITLAB_CI") != null;
-	}
-
-	private void writeLogs(boolean aSilent, List<ElLog> aLogs) {
-		Multimap<String, ElLog> logMap = ArrayListMultimap.create();
-		if (true || aSilent) {
-			for (ElLog deduceLog : aLogs) {
-				logMap.put(deduceLog.getFileName(), deduceLog);
-			}
-			for (Map.Entry<String, Collection<ElLog>> stringCollectionEntry : logMap.asMap().entrySet()) {
-				final F202 f202 = new F202(getErrSink(), this);
-				f202.processLogs(stringCollectionEntry.getValue());
-			}
-		}
 	}
 
 	private List<CompilerInstructions> searchEzFiles(final File directory) {
@@ -367,6 +373,53 @@ public class Compilation {
 		}
 	}
 
+	public static class ModuleBuilder {
+//		private final Compilation compilation;
+		private final OS_Module mod;
+		private boolean _addToCompilation = false;
+		private String _fn = null;
+
+		public ModuleBuilder(Compilation aCompilation) {
+//			compilation = aCompilation;
+			mod = new OS_Module();
+			mod.setParent(aCompilation);
+		}
+
+		public ModuleBuilder setContext() {
+			final ModuleContext mctx = new ModuleContext(mod);
+			mod.setContext(mctx);
+			return this;
+		}
+
+		public OS_Module build() {
+			if (_addToCompilation) {
+				if (_fn == null) throw new IllegalStateException("Filename not set in ModuleBuilder");
+				mod.getCompilation().addModule(mod, _fn);
+			}
+			return mod;
+		}
+
+		public ModuleBuilder withPrelude(String aPrelude) {
+			mod.prelude = mod.getCompilation().findPrelude("c");
+			return this;
+		}
+
+		public ModuleBuilder withFileName(String aFn) {
+			_fn = aFn;
+			mod.setFileName(aFn);
+			return this;
+		}
+
+		public ModuleBuilder addToCompilation() {
+			_addToCompilation = true;
+			return this;
+		}
+	}
+
+	public ModuleBuilder moduleBuilder() {
+		return new ModuleBuilder(this);
+	}
+
 	private Operation<OS_Module> parseFile_(final String f, final InputStream s, final boolean do_out) throws RecognitionException, TokenStreamException {
 		final QuerySourceFileToModuleParams qp = new QuerySourceFileToModuleParams(s, f, do_out);
 		return new QuerySourceFileToModule(qp, this).calculate();
@@ -429,13 +482,6 @@ public class Compilation {
 		fn2m.put(fn, module);
 	}
 
-    public OS_Module fileNameToModule(final String fileName) {
-        if (fn2m.containsKey(fileName)) {
-            return fn2m.get(fileName);
-        }
-        return null;
-    }
-
 	// endregion
 
     //
@@ -497,6 +543,7 @@ public class Compilation {
 	public void addFunctionMapHook(FunctionMapHook aFunctionMapHook) {
 		pipelineLogic.dp.addFunctionMapHook(aFunctionMapHook);
 	}
+
 }
 
 //

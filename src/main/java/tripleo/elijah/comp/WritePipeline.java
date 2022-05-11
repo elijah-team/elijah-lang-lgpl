@@ -8,9 +8,19 @@
  */
 package tripleo.elijah.comp;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.ci.CompilerInstructions;
+import tripleo.elijah.stages.gen_c.CDependencyRef;
+import tripleo.elijah.stages.gen_c.OutputFileC;
+import tripleo.elijah.stages.gen_generic.Dependency;
+import tripleo.elijah.stages.gen_generic.DependencyRef;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.generate.ElSystem;
@@ -20,6 +30,7 @@ import tripleo.util.buffer.Buffer;
 import tripleo.util.buffer.DefaultBuffer;
 import tripleo.util.buffer.TextBuffer;
 import tripleo.util.io.CharSink;
+import tripleo.util.io.DisposableCharSink;
 import tripleo.util.io.FileCharSink;
 
 import java.io.BufferedWriter;
@@ -32,41 +43,70 @@ import java.io.PrintStream;
 import java.io.Writer;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created 8/21/21 10:19 PM
  */
 public class WritePipeline implements PipelineMember {
-	private final Compilation    c;
-	private final GenerateResult gr;
+	private final CompletedItemsHandler cih;
 
-	final OutputStrategy os;
-	final ElSystem sys;
-
-	private final File file_prefix;
+	private final WritePipelineSharedState st;
 
 	public WritePipeline(Compilation aCompilation, GenerateResult aGr) {
-		c = aCompilation;
-		gr = aGr;
+		st = new WritePipelineSharedState();
 
-		file_prefix = new File("COMP", c.getCompilationNumberString());
+		// given
+		st.c  = aCompilation;
+		st.gr = aGr;
 
-		os = new OutputStrategy();
-		os.per(OutputStrategy.Per.PER_CLASS); // TODO this needs to be configured per lsp
+		// computed
+		st.file_prefix = new File("COMP", st.c.getCompilationNumberString());
 
-		sys = new ElSystem();
-		sys.verbose = false; // TODO flag? ie CompilationOptions
-		sys.setCompilation(c);
-		sys.setOutputStrategy(os);
+		// created
+		// TODO should we be doing this? see below comment
+		st.os = new OutputStrategy();
+		st.os.per(OutputStrategy.Per.PER_CLASS); // TODO this needs to be configured per lsp
+
+		// state
+		st.mmb         = ArrayListMultimap.create();
+		st.lsp_outputs = ArrayListMultimap.create();
+
+		// ??
+		st.sys         = new ElSystem();
+		st.sys.verbose = false; // TODO flag? ie CompilationOptions
+		st.sys.setCompilation(st.c);
+		st.sys.setOutputStrategy(st.os);
+/*
+		sys.generateOutputs(gr);
+*/
+
+		cih = new CompletedItemsHandler(st);
+
+		st.gr.subscribeCompletedItems(cih.observer());
+	}
+
+	public Multimap<CompilerInstructions, String> getLspOutputs() {
+		Preconditions.checkNotNull(st);
+		Preconditions.checkNotNull(st.lsp_outputs);
+
+		return st.lsp_outputs;
 	}
 
 	@Override
 	public void run() throws Exception {
-		sys.generateOutputs(gr);
+		st.sys.generateOutputs(st.gr);
 
-		write_files();
+		boolean made = st.file_prefix.mkdirs();
+
+		// TODO flag?
+		write_inputs();
+
+//		write_files();
+
 		// TODO flag?
 		write_buffers();
 	}
@@ -74,35 +114,38 @@ public class WritePipeline implements PipelineMember {
 	public void write_files() throws IOException {
 		Multimap<String, Buffer> mb = ArrayListMultimap.create();
 
-		for (GenerateResultItem ab : gr.results()) {
-			mb.put(ab.output, ab.buffer);
+		for (GenerateResultItem ab : st.gr.results()) {
+			mb.put(((CDependencyRef) ab.getDependency().getRef()).getHeaderFile(), ab.buffer); // TODO see above
 		}
 
-		file_prefix.mkdirs();
-		String prefix = file_prefix.toString();
+		assert st.mmb.equals(mb);
 
-		// TODO flag?
-		write_inputs(file_prefix);
+		write_files_helper(mb);
+	}
+
+	private void write_files_helper(Multimap<String, Buffer> mb) throws IOException {
+		String prefix = st.file_prefix.toString();
 
 		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
 			final String key = entry.getKey();
+			assert key != null;
 			Path path = FileSystems.getDefault().getPath(prefix, key);
 //			BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
 
 			path.getParent().toFile().mkdirs();
 
 			// TODO functionality
-			System.out.println("201 Writing path: "+path);
-			CharSink x = c.getIO().openWrite(path);
+			System.out.println("201 Writing path: " + path);
+			CharSink x = st.c.getIO().openWrite(path);
 			for (Buffer buffer : entry.getValue()) {
 				x.accept(buffer.getText());
 			}
-			((FileCharSink)x).close();
+			((FileCharSink) x).close();
 		}
 	}
 
-	private void write_inputs(File file_prefix) throws IOException {
-		final String fn1 = new File(file_prefix, "inputs.txt").toString();
+	private void write_inputs() throws IOException {
+		final String fn1 = new File(st.file_prefix, "inputs.txt").toString();
 
 		DefaultBuffer buf = new DefaultBuffer("");
 //			FileBackedBuffer buf = new FileBackedBuffer(fn1);
@@ -117,10 +160,10 @@ public class WritePipeline implements PipelineMember {
 //
 //				append_hash(buf, fn);
 //			}
-		for (File file : c.getIO().recordedreads) {
+		for (File file : st.c.getIO().recordedreads) {
 			final String fn = file.toString();
 
-			append_hash(buf, fn, c.getErrSink());
+			append_hash(buf, fn, st.c.getErrSink());
 		}
 		String s = buf.getText();
 		Writer w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fn1, true)));
@@ -138,12 +181,122 @@ public class WritePipeline implements PipelineMember {
 	}
 
 	public void write_buffers() throws FileNotFoundException {
-		file_prefix.mkdirs();
+		st.file_prefix.mkdirs();
 
-		PrintStream db_stream = new PrintStream(new File(file_prefix, "buffers.txt"));
-		PipelineLogic.debug_buffers(gr, db_stream);
+		PrintStream db_stream = new PrintStream(new File(st.file_prefix, "buffers.txt"));
+		PipelineLogic.debug_buffers(st.gr, db_stream);
 	}
 
+	/**
+	 * Really a record, but state is not all set at once
+	 */
+	private final static class WritePipelineSharedState {
+		/*final*/ OutputStrategy os;
+		/*final*/ ElSystem       sys;
+		/*final*/ Multimap<CompilerInstructions, String> lsp_outputs;
+		private /*final*/ Compilation    c;
+		private /*final*/ GenerateResult gr;
+		private /*final*/ File file_prefix;
+		private /*final*/ Multimap<String, Buffer> mmb;
+	}
+
+	private static class CompletedItemsHandler {
+		//private final Compilation c;
+		//private final Multimap<String, Buffer> mmb;
+		//private final Multimap<CompilerInstructions, String> lsp_outputs;
+		//private final GenerateResult gr;
+		//private final File file_prefix;
+
+		// region state
+		final Multimap<Dependency, GenerateResultItem> gris = ArrayListMultimap.create();
+		// README debugging purposes
+		final List<GenerateResultItem> abs = new ArrayList<>();
+		private final WritePipelineSharedState     sharedState;
+		private       Observer<GenerateResultItem> observer;
+
+		public CompletedItemsHandler(final WritePipelineSharedState aSharedState) {
+			sharedState = aSharedState;
+		}
+
+		// endregion state
+
+		public void addItem(final @NotNull GenerateResultItem ab) {
+			// README debugging purposes
+			abs.add(ab);
+
+			final Dependency dependency = ab.getDependency();
+
+			// README debugging purposes
+			final DependencyRef dependencyRef = dependency.getRef();
+
+			if (dependencyRef == null) {
+				gris.put(dependency, ab);
+			} else {
+				final String output = ((CDependencyRef) dependency.getRef()).getHeaderFile();
+				sharedState.mmb.put(output, ab.buffer);
+				sharedState.lsp_outputs.put(ab.lsp.getInstructions(), output);
+				for (GenerateResultItem generateResultItem : gris.get(dependency)) {
+					final String output1 = generateResultItem.output;
+					sharedState.mmb.put(output1, generateResultItem.buffer);
+					sharedState.lsp_outputs.put(generateResultItem.lsp.getInstructions(), output1);
+				}
+				gris.removeAll(dependency);
+			}
+		}
+
+		public void completeSequence() {
+			try {
+//				write_files_helper(mmb);
+				String prefix = sharedState.file_prefix.toString();
+
+				for (Map.Entry<String, OutputFileC> entry : sharedState.gr.outputFiles.entrySet()) {
+					final String key = entry.getKey();
+					assert key != null;
+
+					final Path path = FileSystems.getDefault().getPath(prefix, key);
+
+					boolean made = path.getParent().toFile().mkdirs();
+
+					// TODO functionality
+					System.out.println("201a Writing path: " + path);
+					try (DisposableCharSink x = sharedState.c.getIO().openWrite(path)) {
+						x.accept(entry.getValue().getOutput());
+
+						//((FileCharSink) x).close();
+						//x.dispose(); // README close automatically because of try-with-resources
+					}
+				}
+			} catch (Exception aE) {
+				sharedState.c.getErrSink().exception(aE);
+			}
+		}
+
+		public Observer<GenerateResultItem> observer() {
+			if (observer == null) {
+				observer = new Observer<GenerateResultItem>() {
+					@Override
+					public void onSubscribe(@NonNull Disposable d) {
+					}
+
+					@Override
+					public void onNext(@NonNull GenerateResultItem ab) {
+						addItem(ab);
+					}
+
+					@Override
+					public void onError(@NonNull Throwable e) {
+					}
+
+					@Override
+					public void onComplete() {
+						completeSequence();
+					}
+				};
+			}
+
+			return observer;
+		}
+	}
 }
 
 //

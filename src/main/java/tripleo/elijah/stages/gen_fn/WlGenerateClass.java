@@ -45,7 +45,7 @@ public class WlGenerateClass implements WorkJob {
 		switch (resolvePromise.state()) {
 		case PENDING:
 			@NotNull GeneratedClass kl = generateFunctions.generateClass(classStatement, classInvocation);
-			kl.setCode(generateFunctions.module.parent.nextClassCode());
+			kl.setCode(generateFunctions.module.getCompilation().nextClassCode());
 			if (coll != null)
 				coll.add(kl);
 
