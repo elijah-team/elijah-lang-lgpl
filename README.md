@@ -1,6 +1,8 @@
 Elijjah
 ========
 
+> https://github.com/elijah-team/elijah-lang-lgpl/tree/stable
+
 Certainly
 ----------
 
