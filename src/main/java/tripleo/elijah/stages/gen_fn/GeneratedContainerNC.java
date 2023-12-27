@@ -18,7 +18,6 @@ import tripleo.elijah.lang.VariableStatement;
 import tripleo.elijah.stages.deduce.FunctionMapDeferred;
 import tripleo.elijah.stages.gen_generic.CodeGenerator;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
-import tripleo.elijah.stages.post_deduce.IPostDeduce;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -89,8 +88,6 @@ public abstract class GeneratedContainerNC extends AbstractDependencyTracker imp
 	}
 
 	public abstract void generateCode(CodeGenerator aGgc, GenerateResult aGr);
-
-	public abstract void analyzeNode(IPostDeduce aPostDeduce);
 
 	Multimap<FunctionDef, FunctionMapDeferred> functionMapDeferreds = ArrayListMultimap.create();
 	public void functionMapDeferred(final FunctionDef aFunctionDef, final FunctionMapDeferred aFunctionMapDeferred) {

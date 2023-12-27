@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <version>0.0.8-SNAPSHOT</version>
     <name>eljc-v1</name>
-    <url>http://gitlab.com/elijah-team/elijah-lang/</url>
+    <url>http://github.com/elijah-team/elijah-lang-lgpl/</url>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -196,6 +196,7 @@
             </plugin>
             -->
 
+<!--
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -215,70 +216,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
-            </plugin>
-            -->
-            <!-- Setup Javadoc jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <groups>
-                        <group>
-                            <title>User packages</title>
-                            <packages>tripleo.elijah:tripleo.elijah.diagnostic:tripleo.elijah.lang2:tripleo.elijah.util
-                            </packages>
-                        </group>
-                        <group>
-                            <title>Implementation packages</title>
-                            <packages>
-                                tripleo.elijah.util:
-                                tripleo.util:tripleo.util.io:
-                                tripleo.elijjah:tripleo.elijah:
-
-                                tripleo.elijah.lang:tripleo.elijah.lang.imports:tripleo.elijah.lang.builder:
-
-                                tripleo.elijah.nextgen:tripleo.elijah.nextgen.composable:tripleo.elijah.nextgen.diagnostic:
-
-                                tripleo.elijah.ci:
-                                tripleo.elijah.slir:
-                                tripleo.elijah.contexts:
-                                tripleo.elijah.stages:
-                                tripleo.elijah.stages.expand:
-                                tripleo.elijah.stages.deduce:tripleo.elijah.stages.deduce.declarations:
-                                tripleo.elijah.stages.translate:
-                                tripleo.elijah.stages.instructions:
-                                tripleo.elijah.stages.gen_fn:tripleo.elijah.stages.gen_c:tripleo.elijah.stages.gen_generic:
-                                tripleo.elijah.stages.logging:
-                                tripleo.elijah.stages.generate:
-                                tripleo.elijah.stages.post_deduce:
-
-                                tripleo.elijah.work:
-
-                                tripleo.elijah.diagnostic:
-                                tripleo.elijah.comp:
-                                tripleo.elijah.comp.functionality:tripleo.elijah.comp.functionality.f202:
-                                tripleo.elijah.entrypoints:
-
-                                tripleo.elijah.lang2
-                            </packages>
-                        </group>
-                    </groups>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -361,38 +299,7 @@
 
                 </executions>
             </plugin>
-
-
         </plugins>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${maven-javadoc-plugin.version}</version>
-                </plugin>
-                <!-- Setup site with reflow maven skin -->
-<!--
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>${maven-site-plugin.version}</version>
-                    <configuration>
-                        <skipDeploy>true</skipDeploy>
-                    </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>tripleo.elijah</groupId>
-                            <artifactId>reflow-velocity-tools</artifactId>
-                            <version>1.2</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
--->
-            </plugins>
-
-        </pluginManagement>
     </build>
 
     <reporting>
