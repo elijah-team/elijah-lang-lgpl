@@ -12,12 +12,12 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <jacoco.version>0.8.6</jacoco.version>
         <downloadSources>true</downloadSources>
-        <guava.version>29.0-jre</guava.version>
         <buffers.version>0.0.3</buffers.version>
         <range.version>0.0.3b</range.version>
         <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
         <maven-javadoc-plugin.version>3.0.0-M1</maven-javadoc-plugin.version>
         <jdeferred.version>2.0.0</jdeferred.version>
+        <guava.version>33.0.0-jre</guava.version>
     </properties>
 
     <dependencies>
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -157,7 +157,13 @@
     <repositories>
         <repository>
             <id>gitlab-maven</id>
-            <url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
+            <url>https://gitlab.com/api/v4/projects/10309690/packages/maven</url>
+        </repository>
+        <repository>
+            <id>gitlab-maven-elijah-core-api</id>
+            <url>
+                https://gitlab.com/api/v4/projects/52599914/packages/maven
+            </url>
         </repository>
         <repository>
             <id>gitlab-maven-buffers</id>
@@ -195,28 +201,6 @@
                 </executions>
             </plugin>
             -->
-
-<!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/main/java-compiler-gen/</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
--->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
