@@ -4,9 +4,14 @@ theme:
   palette:
     scheme: preference
   font: false
-repo_url: https://gitlab.com/elijah-team/elijah-lang/
+repo_url: https://github.com/elijah-team/elijah-lang-lgpl/
 repo_name: elijah-team/elijah-lang
 plugins:
   - git-revision-date-localized
 markdown_extensions:
   - def_list
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
