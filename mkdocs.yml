@@ -5,9 +5,9 @@ theme:
     scheme: preference
   font: false
 repo_url: https://github.com/elijah-team/elijah-lang-lgpl/
-repo_name: elijah-team/elijah-lang
-plugins:
-  - git-revision-date-localized
+repo_name: elijah-team/elijah-lang-lgpl
+#plugins:
+#  - git-revision-date-localized
 markdown_extensions:
   - def_list
   - pymdownx.superfences:
