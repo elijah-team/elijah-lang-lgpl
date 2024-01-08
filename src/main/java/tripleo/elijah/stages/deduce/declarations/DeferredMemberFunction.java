@@ -19,10 +19,9 @@ import tripleo.elijah.lang.*;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
 import tripleo.elijah.stages.deduce.IInvocation;
-import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
+import tripleo.elijah.stages.gen_fn.BaseEvaFunction;
 import tripleo.elijah.stages.gen_fn.GenType;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
 
 /**
  * Created 11/21/21 6:32 AM
@@ -38,7 +37,7 @@ public class DeferredMemberFunction {
 	private IInvocation invocation;
 	private final BaseFunctionDef functionDef;
 	private final DeferredObject<GenType, Diagnostic, Void> typePromise = new DeferredObject<GenType, Diagnostic, Void>();
-	private final DeferredObject<BaseGeneratedFunction, Void, Void> externalRef = new DeferredObject<BaseGeneratedFunction, Void, Void>();
+	private final DeferredObject<BaseEvaFunction, Void, Void> externalRef = new DeferredObject<BaseEvaFunction, Void, Void>();
 	private final DeduceTypes2 deduceTypes2;
 	private final FunctionInvocation functionInvocation;
 
@@ -53,9 +52,9 @@ public class DeferredMemberFunction {
 		deduceTypes2 = aDeduceTypes2;
 		functionInvocation = aFunctionInvocation;
 		//
-		functionInvocation.generatePromise().then(new DoneCallback<BaseGeneratedFunction>() {
+		functionInvocation.generatePromise().then(new DoneCallback<BaseEvaFunction>() {
 			@Override
-			public void onDone(final BaseGeneratedFunction result) {
+			public void onDone(final BaseEvaFunction result) {
 				deduceTypes2.deduceOneFunction((GeneratedFunction) result, deduceTypes2.phase); // !!
 				result.typePromise().then(new DoneCallback<GenType>() {
 					@Override
@@ -94,11 +93,11 @@ public class DeferredMemberFunction {
 		return typePromise;
 	}
 
-	public Promise<BaseGeneratedFunction, Void, Void> externalRef() {
+	public Promise<BaseEvaFunction, Void, Void> externalRef() {
 		return externalRef.promise();
 	}
 
-	public @NotNull DeferredObject<BaseGeneratedFunction, Void, Void> externalRefDeferred() {
+	public @NotNull DeferredObject<BaseEvaFunction, Void, Void> externalRefDeferred() {
 		return externalRef;
 	}
 

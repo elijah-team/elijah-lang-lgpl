@@ -8,7 +8,7 @@
  */
 package tripleo.elijah.stages.gen_generic;
 
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.EvaNode;
 import tripleo.util.buffer.Buffer;
 
 /**
@@ -18,10 +18,10 @@ public class GenerateResultItem {
 	public final int counter;
 	public final GenerateResult.TY ty;
 	public final Buffer buffer;
-	public final GeneratedNode node;
+	public final EvaNode node;
 	public String output;
 
-	public GenerateResultItem(GenerateResult.TY aTy, Buffer aBuffer, GeneratedNode aNode, int aCounter) {
+	public GenerateResultItem(GenerateResult.TY aTy, Buffer aBuffer, EvaNode aNode, int aCounter) {
 		ty = aTy;
 		buffer = aBuffer;
 		node = aNode;

@@ -24,12 +24,12 @@ import tripleo.elijah.stages.logging.ElLog;
  */
 public class ProcTableListener implements BaseTableEntry.StatusListener {
 	private final ProcTableEntry pte;
-	private final BaseGeneratedFunction generatedFunction;
+	private final BaseEvaFunction generatedFunction;
 
 	private final DeduceTypes2.@NotNull DeduceClient2 dc;
 	private final @NotNull ElLog LOG;
 
-	public ProcTableListener(ProcTableEntry pte, BaseGeneratedFunction generatedFunction, DeduceTypes2.@NotNull DeduceClient2 dc) {
+	public ProcTableListener(ProcTableEntry pte, BaseEvaFunction generatedFunction, DeduceTypes2.@NotNull DeduceClient2 dc) {
 		this.pte = pte;
 		this.generatedFunction = generatedFunction;
 		this.dc = dc;
@@ -74,9 +74,9 @@ public class ProcTableListener implements BaseTableEntry.StatusListener {
 
 			if (co != null) {
 				co.setConstructable(pte);
-				ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+				ci.resolvePromise().done(new DoneCallback<EvaClass>() {
 					@Override
-					public void onDone(GeneratedClass result) {
+					public void onDone(EvaClass result) {
 						co.resolveTypeToClass(result);
 					}
 				});

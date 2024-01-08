@@ -35,11 +35,11 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 public class DoAssignCall {
 	private final ElLog LOG;
 	private final DeduceTypes2.DeduceClient4 dc;
-	private final BaseGeneratedFunction generatedFunction;
+	private final BaseEvaFunction generatedFunction;
 	private final OS_Module module;
 	private final ErrSink errSink;
 
-	public DoAssignCall(final DeduceTypes2.DeduceClient4 aDeduceClient4, final @NotNull BaseGeneratedFunction aGeneratedFunction) {
+	public DoAssignCall(final DeduceTypes2.DeduceClient4 aDeduceClient4, final @NotNull BaseEvaFunction aGeneratedFunction) {
 		dc = aDeduceClient4;
 		generatedFunction = aGeneratedFunction;
 		//
@@ -136,9 +136,9 @@ public class DoAssignCall {
 					pte.onFunctionInvocation(new DoneCallback<FunctionInvocation>() {
 						@Override
 						public void onDone(@NotNull FunctionInvocation result) {
-							result.generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
+							result.generateDeferred().done(new DoneCallback<BaseEvaFunction>() {
 								@Override
-								public void onDone(@NotNull BaseGeneratedFunction bgf) {
+								public void onDone(@NotNull BaseEvaFunction bgf) {
 									@NotNull DeduceTypes2.PromiseExpectation<GenType> pe = dc.promiseExpectation(bgf, "Function Result type");
 									bgf.typePromise().then(new DoneCallback<GenType>() {
 										@Override
@@ -331,9 +331,9 @@ public class DoAssignCall {
 										if (vte.resolvedType() == null) {
 											final @Nullable ClassInvocation ci = dc.genCI(aType, null);
 											vte.type.genTypeCI(ci);
-											ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+											ci.resolvePromise().then(new DoneCallback<EvaClass>() {
 												@Override
-												public void onDone(GeneratedClass result) {
+												public void onDone(EvaClass result) {
 													vte.resolveTypeToClass(result);
 												}
 											});
@@ -368,7 +368,7 @@ public class DoAssignCall {
 		}
 	}
 
-	private void do_assign_call_args_ident(@NotNull BaseGeneratedFunction generatedFunction,
+	private void do_assign_call_args_ident(@NotNull BaseEvaFunction generatedFunction,
 										   @NotNull Context ctx,
 										   @NotNull VariableTableEntry vte,
 										   int aInstructionIndex,
@@ -520,7 +520,7 @@ public class DoAssignCall {
 		}
 	}
 
-	private void do_assign_call_GET_ITEM(@NotNull GetItemExpression gie, TypeTableEntry tte, @NotNull BaseGeneratedFunction generatedFunction, Context ctx) {
+	private void do_assign_call_GET_ITEM(@NotNull GetItemExpression gie, TypeTableEntry tte, @NotNull BaseEvaFunction generatedFunction, Context ctx) {
 		try {
 			final LookupResultList lrl = dc.lookupExpression(gie.getLeft(), ctx);
 			final @Nullable OS_Element best = lrl.chooseBest(null);

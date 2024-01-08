@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.lang.*;
-import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
+import tripleo.elijah.stages.gen_fn.BaseEvaFunction;
 import tripleo.elijah.stages.gen_fn.IdentTableEntry;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
 import tripleo.elijah.stages.gen_fn.VariableTableEntry;
@@ -33,7 +33,7 @@ public class DeduceProcCall {
 	private final ProcTableEntry procTableEntry;
 	private DeduceTypes2 deduceTypes2;
 	private Context context;
-	private BaseGeneratedFunction generatedFunction;
+	private BaseEvaFunction generatedFunction;
 	private ErrSink errSink;
 
 	@Contract(pure = true)
@@ -43,7 +43,7 @@ public class DeduceProcCall {
 
 	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2,
 								final Context aContext,
-								final BaseGeneratedFunction aGeneratedFunction,
+								final BaseEvaFunction aGeneratedFunction,
 								final ErrSink aErrSink) {
 		deduceTypes2 = aDeduceTypes2;
 		context = aContext;

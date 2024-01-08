@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.BaseFunctionDef;
 import tripleo.elijah.lang.ConstructorDef;
 import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
+import tripleo.elijah.stages.gen_fn.BaseEvaFunction;
 import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.ProcTableEntry;
@@ -36,8 +36,8 @@ public class FunctionInvocation {
 	public final ProcTableEntry pte;
 	private ClassInvocation classInvocation;
 	private NamespaceInvocation namespaceInvocation;
-	private final DeferredObject<BaseGeneratedFunction, Void, Void> generateDeferred = new DeferredObject<tripleo.elijah.stages.gen_fn.BaseGeneratedFunction, Void, Void>();
-	private @Nullable BaseGeneratedFunction _generated = null;
+	private final DeferredObject<BaseEvaFunction, Void, Void> generateDeferred = new DeferredObject<BaseEvaFunction, Void, Void>();
+	private @Nullable BaseEvaFunction _generated = null;
 
 	public FunctionInvocation(BaseFunctionDef aFunctionDef, ProcTableEntry aProcTableEntry, @NotNull IInvocation invocation, GeneratePhase phase) {
 		this.fd = aFunctionDef;
@@ -80,7 +80,7 @@ public class FunctionInvocation {
 //					namespaceInvocation = aPhase.registerNamespaceInvocation(namespaceInvocation.getNamespace());
 					@NotNull WlGenerateNamespace wlgn = new WlGenerateNamespace(generatePhase.getGenerateFunctions(module),
 							namespaceInvocation,
-							aPhase.generatedClasses);
+							aPhase.EvaClasses);
 					wlgn.run(null);
 					int y=2;
 				}
@@ -92,7 +92,7 @@ public class FunctionInvocation {
 //		}
 	}
 
-	public @Nullable BaseGeneratedFunction getGenerated() {
+	public @Nullable BaseEvaFunction getGenerated() {
 		return _generated;
 	}
 
@@ -116,15 +116,15 @@ public class FunctionInvocation {
 		namespaceInvocation = aNamespaceInvocation;
 	}
 
-	public @NotNull DeferredObject<BaseGeneratedFunction, Void, Void> generateDeferred() {
+	public @NotNull DeferredObject<BaseEvaFunction, Void, Void> generateDeferred() {
 		return generateDeferred;
 	}
 
-	public Promise<BaseGeneratedFunction, Void, Void> generatePromise() {
+	public Promise<BaseEvaFunction, Void, Void> generatePromise() {
 		return generateDeferred.promise();
 	}
 
-	public void setGenerated(BaseGeneratedFunction aGeneratedFunction) {
+	public void setGenerated(BaseEvaFunction aGeneratedFunction) {
 		_generated = aGeneratedFunction;
 	}
 

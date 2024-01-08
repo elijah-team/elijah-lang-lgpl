@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created 2/28/21 3:23 AM
  */
-public interface GeneratedContainer extends GeneratedNode {
+public interface GeneratedContainer extends EvaNode {
 	OS_Element getElement();
 
 	VarTableEntry getVariable(String aVarName);
@@ -36,7 +36,7 @@ public interface GeneratedContainer extends GeneratedNode {
 		TypeName typeName;
 		public OS_Type varType;
 		List<TypeTableEntry> potentialTypes = new ArrayList<TypeTableEntry>();
-		private GeneratedNode _resolvedType;
+		private EvaNode _resolvedType;
 
 		public VarTableEntry(final VariableStatement aVs,
 							 final @NotNull IdentExpression aNameToken,
@@ -55,12 +55,12 @@ public interface GeneratedContainer extends GeneratedNode {
 			potentialTypes.addAll(aPotentialTypes);
 		}
 
-		public void resolve(@NotNull GeneratedNode aResolvedType) {
+		public void resolve(@NotNull EvaNode aResolvedType) {
 			System.out.println(String.format("** [GeneratedContainer 56] resolving VarTableEntry %s to %s", nameToken, aResolvedType.identityString()));
 			_resolvedType = aResolvedType;
 		}
 
-		public @Nullable GeneratedNode resolvedType() {
+		public @Nullable EvaNode resolvedType() {
 			return _resolvedType;
 		}
 

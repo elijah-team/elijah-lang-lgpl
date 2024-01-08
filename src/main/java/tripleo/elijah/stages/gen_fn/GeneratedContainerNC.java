@@ -33,7 +33,7 @@ public abstract class GeneratedContainerNC extends AbstractDependencyTracker imp
 	private int code = 0;
 
 	public Map<FunctionDef, GeneratedFunction> functionMap = new HashMap<FunctionDef, GeneratedFunction>();
-	public Map<ClassStatement, GeneratedClass> classMap = new HashMap<ClassStatement, GeneratedClass>();
+	public Map<ClassStatement, EvaClass> classMap = new HashMap<ClassStatement, EvaClass>();
 
 	public List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();
 
@@ -52,8 +52,8 @@ public abstract class GeneratedContainerNC extends AbstractDependencyTracker imp
 		return null;
 	}
 
-	public void addClass(ClassStatement aClassStatement, GeneratedClass aGeneratedClass) {
-		classMap.put(aClassStatement, aGeneratedClass);
+	public void addClass(ClassStatement aClassStatement, EvaClass aEvaClass) {
+		classMap.put(aClassStatement, aEvaClass);
 	}
 
 	public void addFunction(FunctionDef functionDef, GeneratedFunction generatedFunction) {

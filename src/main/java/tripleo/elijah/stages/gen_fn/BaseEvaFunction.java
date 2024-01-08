@@ -35,7 +35,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 /**
  * Created 9/10/20 2:57 PM
  */
-public abstract class BaseGeneratedFunction extends AbstractDependencyTracker implements GeneratedNode, DeduceTypes2.ExpectationBase {
+public abstract class BaseEvaFunction extends AbstractDependencyTracker implements EvaNode, DeduceTypes2.ExpectationBase {
 	public boolean deducedAlready;
 	public FunctionInvocation fi;
 	private int code = 0;
@@ -50,7 +50,7 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	public @NotNull List<IdentTableEntry> idte_list = new ArrayList<IdentTableEntry>();
 	private int label_count = 0;
 	private int _nextTemp = 0;
-	private GeneratedNode genClass;
+	private EvaNode genClass;
 	private GeneratedContainerNC parent;
 	private DeferredObject<GenType, Void, Void> typeDeferred = new DeferredObject<GenType, Void, Void>();
 
@@ -103,9 +103,9 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	/**
 	 * Returns a string that represents the path encoded by ia2.
 	 * Does not transform the string into target language (ie C).
-	 * Called from {@link DeduceTypes2#do_assign_call(BaseGeneratedFunction, Context, IdentTableEntry, FnCallArgs, int)}
+	 * Called from {@link DeduceTypes2#do_assign_call(BaseEvaFunction, Context, IdentTableEntry, FnCallArgs, int)}
 	 * or {@link DeduceTypes2#deduce_generated_function(GeneratedFunction)}
-	 * or {@link DeduceTypes2#resolveIdentIA_(Context, IdentIA, BaseGeneratedFunction, FoundElement)}
+	 * or {@link DeduceTypes2#resolveIdentIA_(Context, IdentIA, BaseEvaFunction, FoundElement)}
 	 *
 	 * @param ia2 the path
 	 * @return a string that represents the path encoded by ia2
@@ -428,12 +428,12 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 		return parent;
 	}
 
-	public void setClass(@NotNull GeneratedNode aNode) {
-		assert aNode instanceof GeneratedClass || aNode instanceof GeneratedNamespace;
+	public void setClass(@NotNull EvaNode aNode) {
+		assert aNode instanceof EvaClass || aNode instanceof EvaNamespace;
 		genClass = aNode;
 	}
 
-	public GeneratedNode getGenClass() {
+	public EvaNode getGenClass() {
 		return genClass;
 	}
 

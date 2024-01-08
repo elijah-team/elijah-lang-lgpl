@@ -8,19 +8,16 @@
  */
 package tripleo.elijah.stages.gen_fn;
 
-import org.jdeferred2.Promise;
-import org.jdeferred2.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.BaseFunctionDef;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.FunctionDef;
-import tripleo.elijah.lang.OS_Type;
 
 /**
  * Created 6/27/21 9:40 AM
  */
-public class GeneratedFunction extends BaseGeneratedFunction implements GNCoded {
+public class GeneratedFunction extends BaseEvaFunction implements GNCoded {
 	public final @Nullable FunctionDef fd;
 
 	public GeneratedFunction(final @Nullable FunctionDef functionDef) {

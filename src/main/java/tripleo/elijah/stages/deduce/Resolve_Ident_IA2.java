@@ -34,7 +34,7 @@ class Resolve_Ident_IA2 {
 	private final DeduceTypes2 deduceTypes2;
 	private final ErrSink errSink;
 	private final DeducePhase phase;
-	private final @NotNull BaseGeneratedFunction generatedFunction;
+	private final @NotNull BaseEvaFunction generatedFunction;
 	private final @NotNull FoundElement foundElement;
 	
 	private final @NotNull ElLog LOG;
@@ -42,7 +42,7 @@ class Resolve_Ident_IA2 {
 	public Resolve_Ident_IA2(final DeduceTypes2 aDeduceTypes2,
 							 ErrSink aErrSink,
 							 DeducePhase aPhase,
-							 @NotNull BaseGeneratedFunction aGeneratedFunction,
+							 @NotNull BaseEvaFunction aGeneratedFunction,
 							 @NotNull FoundElement aFoundElement) {
 		deduceTypes2 = aDeduceTypes2;
 		errSink = aErrSink;
@@ -262,9 +262,9 @@ class Resolve_Ident_IA2 {
 				pte.setFunctionInvocation(fi);
 			}
 
-			pte.getFunctionInvocation().generatePromise().then(new DoneCallback<BaseGeneratedFunction>() {
+			pte.getFunctionInvocation().generatePromise().then(new DoneCallback<BaseEvaFunction>() {
 				@Override
-				public void onDone(@NotNull BaseGeneratedFunction result) {
+				public void onDone(@NotNull BaseEvaFunction result) {
 					result.typePromise().then(new DoneCallback<GenType>() {
 						@Override
 						public void onDone(GenType result) {
@@ -419,9 +419,9 @@ class Resolve_Ident_IA2 {
 		if (te instanceof ProcTableEntry) {
 			final @NotNull ProcTableEntry procTableEntry = (ProcTableEntry) te;
 			// This is how it should be done, with an Incremental
-			procTableEntry.getFunctionInvocation().generateDeferred().done(new DoneCallback<BaseGeneratedFunction>() {
+			procTableEntry.getFunctionInvocation().generateDeferred().done(new DoneCallback<BaseEvaFunction>() {
 				@Override
-				public void onDone(@NotNull BaseGeneratedFunction result) {
+				public void onDone(@NotNull BaseEvaFunction result) {
 					result.typePromise().then(new DoneCallback<GenType>() {
 						@Override
 						public void onDone(GenType result) {

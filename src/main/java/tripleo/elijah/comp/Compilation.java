@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.ci.CompilerInstructions;
 import tripleo.elijah.ci.LibraryStatementPart;
 import tripleo.elijah.comp.functionality.f202.F202;
+import tripleo.elijah.comp.nextgen.*;
 import tripleo.elijah.comp.queries.QueryEzFileToModule;
 import tripleo.elijah.comp.queries.QueryEzFileToModuleParams;
 import tripleo.elijah.comp.queries.QuerySourceFileToModule;
@@ -44,7 +45,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-import static tripleo.elijah.nextgen.query.Mode.SUCCESS;
+import static tripleo.elijah.util.Mode.SUCCESS;
 
 public class Compilation {
 
@@ -63,6 +64,8 @@ public class Compilation {
 	//
 	public        PipelineLogic pipelineLogic;
 	private final Pipeline      pipelines = new Pipeline();
+	private CP_Paths _paths;
+	private Finally _finally;
 	//
 	//
 	//
@@ -71,6 +74,7 @@ public class Compilation {
 		this.eee = eee;
 		this.io  = io;
 		this._compilationNumber = new Random().nextInt(Integer.MAX_VALUE);
+		this._paths = new CP_Paths(this);
 	}
 
 	public void feedCmdLine(final List<String> args) {
@@ -496,6 +500,17 @@ public class Compilation {
 
 	public void addFunctionMapHook(FunctionMapHook aFunctionMapHook) {
 		pipelineLogic.dp.addFunctionMapHook(aFunctionMapHook);
+	}
+
+	public CP_Paths paths() {
+		return _paths;
+	}
+
+	public Finally reports() {
+		if (_finally == null) {
+			_finally = new Finally();
+		}
+		return _finally;
 	}
 }
 

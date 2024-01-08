@@ -74,15 +74,15 @@ public class TestGenFunction {
 		DeducePhase dp = c.pipelineLogic.dp;//new DeducePhase(generatePhase1);
 		gfm.generateFromEntryPoints(m.entryPoints, dp);
 
-		final DeducePhase.@NotNull GeneratedClasses lgc = dp.generatedClasses; //new ArrayList<>();
+		final DeducePhase.@NotNull EvaClasses lgc = dp.EvaClasses; //new ArrayList<>();
 
 /*
-		List<GeneratedNode> lgf = new ArrayList<>();
-		for (GeneratedNode generatedNode : lgc) {
-			if (generatedNode instanceof GeneratedClass)
-				lgf.addAll(((GeneratedClass) generatedNode).functionMap.values());
-			if (generatedNode instanceof GeneratedNamespace)
-				lgf.addAll(((GeneratedNamespace) generatedNode).functionMap.values());
+		List<EvaNode> lgf = new ArrayList<>();
+		for (EvaNode EvaNode : lgc) {
+			if (EvaNode instanceof EvaClass)
+				lgf.addAll(((EvaClass) EvaNode).functionMap.values());
+			if (EvaNode instanceof EvaNamespace)
+				lgf.addAll(((EvaNamespace) EvaNode).functionMap.values());
 			// TODO enum
 		}
 */
@@ -245,23 +245,23 @@ public class TestGenFunction {
 		final PipelineLogic pl = new PipelineLogic(verbosity1);
 		final GeneratePhase generatePhase = new GeneratePhase(verbosity1, pl);
 		final GenerateFunctions gfm = generatePhase.getGenerateFunctions(m);
-		final List<GeneratedNode> lgc = new ArrayList<>();
+		final List<EvaNode> lgc = new ArrayList<>();
 		gfm.generateAllTopLevelClasses(lgc);
 
 		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity1);
 
 		WorkManager wm = new WorkManager();
 
-		List<GeneratedNode> lgf = new ArrayList<>();
-		for (GeneratedNode generatedNode : lgc) {
-			if (generatedNode instanceof GeneratedClass)
-				lgf.addAll(((GeneratedClass) generatedNode).functionMap.values());
-			if (generatedNode instanceof GeneratedNamespace)
-				lgf.addAll(((GeneratedNamespace) generatedNode).functionMap.values());
+		List<EvaNode> lgf = new ArrayList<>();
+		for (EvaNode EvaNode : lgc) {
+			if (EvaNode instanceof EvaClass)
+				lgf.addAll(((EvaClass) EvaNode).functionMap.values());
+			if (EvaNode instanceof EvaNamespace)
+				lgf.addAll(((EvaNamespace) EvaNode).functionMap.values());
 			// TODO enum
 		}
 
-		for (final GeneratedNode gn : lgf) {
+		for (final EvaNode gn : lgf) {
 			if (gn instanceof GeneratedFunction) {
 				GeneratedFunction gf = (GeneratedFunction) gn;
 				for (final Instruction instruction : gf.instructions()) {
@@ -274,7 +274,7 @@ public class TestGenFunction {
 		dp.finish();
 //		new DeduceTypes2(m).deduceFunctions(lgf);
 
-		for (final GeneratedNode gn : lgf) {
+		for (final EvaNode gn : lgf) {
 			if (gn instanceof GeneratedFunction) {
 				GeneratedFunction gf = (GeneratedFunction) gn;
 				System.out.println("----------------------------------------------------------");
@@ -291,9 +291,9 @@ public class TestGenFunction {
 
 		GenerateResult gr = new GenerateResult();
 
-		for (GeneratedNode generatedNode : lgc) {
-			if (generatedNode instanceof GeneratedClass) {
-				ggc.generate_class((GeneratedClass) generatedNode, gr);
+		for (EvaNode EvaNode : lgc) {
+			if (EvaNode instanceof EvaClass) {
+				ggc.generate_class((EvaClass) EvaNode, gr);
 			} else {
 				System.out.println(lgc.getClass().getName());
 			}

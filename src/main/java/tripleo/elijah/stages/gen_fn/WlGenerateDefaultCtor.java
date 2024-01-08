@@ -25,7 +25,7 @@ public class WlGenerateDefaultCtor implements WorkJob {
 	private final GenerateFunctions generateFunctions;
 	private final FunctionInvocation functionInvocation;
 	private boolean _isDone = false;
-	private BaseGeneratedFunction Result;
+	private BaseEvaFunction Result;
 
 	@Contract(pure = true)
 	public WlGenerateDefaultCtor(@NotNull GenerateFunctions aGenerateFunctions, FunctionInvocation aFunctionInvocation) {
@@ -37,14 +37,14 @@ public class WlGenerateDefaultCtor implements WorkJob {
 	public void run(WorkManager aWorkManager) {
 		if (functionInvocation.generateDeferred().isPending()) {
 			final ClassStatement klass = functionInvocation.getClassInvocation().getKlass();
-			Holder<GeneratedClass> hGenClass = new Holder<>();
-			functionInvocation.getClassInvocation().resolvePromise().then(new DoneCallback<GeneratedClass>() {
+			Holder<EvaClass> hGenClass = new Holder<>();
+			functionInvocation.getClassInvocation().resolvePromise().then(new DoneCallback<EvaClass>() {
 				@Override
-				public void onDone(GeneratedClass result) {
+				public void onDone(EvaClass result) {
 					hGenClass.set(result);
 				}
 			});
-			GeneratedClass genClass = hGenClass.get();
+			EvaClass genClass = hGenClass.get();
 			assert genClass != null;
 
 			ConstructorDef cd = new ConstructorDef(null, klass, klass.getContext());
@@ -72,9 +72,9 @@ public class WlGenerateDefaultCtor implements WorkJob {
 //		lgf.add(gf);
 
 			final ClassInvocation ci = functionInvocation.getClassInvocation();
-			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+			ci.resolvePromise().done(new DoneCallback<EvaClass>() {
 				@Override
-				public void onDone(GeneratedClass result) {
+				public void onDone(EvaClass result) {
 					gf.setCode(generateFunctions.module.parent.nextFunctionCode());
 					gf.setClass(result);
 					result.constructors.put(cd, gf);
@@ -85,9 +85,9 @@ public class WlGenerateDefaultCtor implements WorkJob {
 			functionInvocation.setGenerated(gf);
 			Result = gf;
 		} else {
-			functionInvocation.generatePromise().then(new DoneCallback<BaseGeneratedFunction>() {
+			functionInvocation.generatePromise().then(new DoneCallback<BaseEvaFunction>() {
 				@Override
-				public void onDone(final BaseGeneratedFunction result) {
+				public void onDone(final BaseEvaFunction result) {
 					Result = result;
 				}
 			});
@@ -105,7 +105,7 @@ public class WlGenerateDefaultCtor implements WorkJob {
 		return _isDone;
 	}
 
-	public BaseGeneratedFunction getResult() {
+	public BaseEvaFunction getResult() {
 		return Result;
 	}
 }

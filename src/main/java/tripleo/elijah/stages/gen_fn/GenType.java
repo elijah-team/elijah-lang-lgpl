@@ -25,7 +25,7 @@ public class GenType {
 	public TypeName nonGenericTypeName;
 	public OS_Type resolved;
 	public IInvocation ci;
-	public GeneratedNode node;
+	public EvaNode node;
 	public FunctionInvocation functionInvocation;
 
 	public GenType(NamespaceStatement aNamespaceStatement) {

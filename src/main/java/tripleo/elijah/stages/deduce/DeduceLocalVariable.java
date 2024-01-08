@@ -33,13 +33,13 @@ public class DeduceLocalVariable {
 	public DeferredObject2<GenType, Void, Void> type = new DeferredObject2();
 	private DeduceTypes2 deduceTypes2;
 	private Context context;
-	private BaseGeneratedFunction generatedFunction;
+	private BaseEvaFunction generatedFunction;
 
 	public DeduceLocalVariable(final VariableTableEntry aVariableTableEntry) {
 		variableTableEntry = aVariableTableEntry;
 	}
 
-	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseGeneratedFunction aGeneratedFunction) {
+	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseEvaFunction aGeneratedFunction) {
 		deduceTypes2 = aDeduceTypes2;
 		context = aContext;
 		generatedFunction = aGeneratedFunction;
@@ -89,9 +89,9 @@ public class DeduceLocalVariable {
 					vte.type.genType.genCI(null, deduceTypes2, deduceTypes2.errSink, deduceTypes2.phase);
 					final ClassInvocation classInvocation = (ClassInvocation) vte.type.genType.ci;
 					if (classInvocation != null) {
-						classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+						classInvocation.resolvePromise().then(new DoneCallback<EvaClass>() {
 							@Override
-							public void onDone(final GeneratedClass result) {
+							public void onDone(final EvaClass result) {
 								vte.type.genType.node = result;
 								vte.resolveTypeToClass(result);
 								vte.genType = vte.type.genType; // TODO who knows if this is necessary?
@@ -163,9 +163,9 @@ public class DeduceLocalVariable {
 					}
 
 					if (genType.ci != null) { // TODO we may need this call...
-						((ClassInvocation) genType.ci).resolvePromise().then(new DoneCallback<GeneratedClass>() {
+						((ClassInvocation) genType.ci).resolvePromise().then(new DoneCallback<EvaClass>() {
 							@Override
-							public void onDone(GeneratedClass result) {
+							public void onDone(EvaClass result) {
 								genType.node = result;
 								if (!vte.typePromise().isResolved()) { // HACK
 									if (genType.resolved instanceof OS_FuncType) {
@@ -195,7 +195,7 @@ public class DeduceLocalVariable {
 		}
 	}
 
-	public void resolve_var_table_entry_potential_types_1(final @NotNull VariableTableEntry vte, final BaseGeneratedFunction generatedFunction) {
+	public void resolve_var_table_entry_potential_types_1(final @NotNull VariableTableEntry vte, final BaseEvaFunction generatedFunction) {
 		if (vte.potentialTypes().size() == 1) {
 			final TypeTableEntry tte1 = vte.potentialTypes().iterator().next();
 			if (tte1.tableEntry instanceof ProcTableEntry) {
@@ -247,9 +247,9 @@ public class DeduceLocalVariable {
 				} else
 					Self = dp.getElement(dp.size()-2); // TODO fix this
 				final @Nullable DeferredMemberFunction dm = deduceTypes2.deferred_member_function(Self, null, (BaseFunctionDef) procTableEntry.getResolvedElement(), procTableEntry.getFunctionInvocation());
-				dm.externalRef().then(new DoneCallback<BaseGeneratedFunction>() {
+				dm.externalRef().then(new DoneCallback<BaseEvaFunction>() {
 					@Override
-					public void onDone(final BaseGeneratedFunction result) {
+					public void onDone(final BaseEvaFunction result) {
 						NotImplementedException.raise();
 					}
 				});

@@ -9,11 +9,11 @@
 package tripleo.elijah.stages.generate;
 
 import tripleo.elijah.comp.Compilation;
-import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.EvaClass;
 import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.EvaNamespace;
+import tripleo.elijah.stages.gen_fn.EvaNode;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 
@@ -46,21 +46,21 @@ public class ElSystem {
 		}
 	}
 
-	String generateOutputs_Internal(GeneratedNode node, GenerateResult.TY ty, OutputStrategyC outputStrategyC) {
+	String generateOutputs_Internal(EvaNode node, GenerateResult.TY ty, OutputStrategyC outputStrategyC) {
 		String s, ss;
-		if (node instanceof GeneratedNamespace) {
-			final GeneratedNamespace generatedNamespace = (GeneratedNamespace) node;
-			s = outputStrategyC.nameForNamespace(generatedNamespace, ty);
-//			System.out.println("41 "+generatedNamespace+" "+s);
-			for (GeneratedFunction gf : generatedNamespace.functionMap.values()) {
+		if (node instanceof EvaNamespace) {
+			final EvaNamespace EvaNamespace = (EvaNamespace) node;
+			s = outputStrategyC.nameForNamespace(EvaNamespace, ty);
+//			System.out.println("41 "+EvaNamespace+" "+s);
+			for (GeneratedFunction gf : EvaNamespace.functionMap.values()) {
 				ss = generateOutputs_Internal(gf, ty, outputStrategyC);
 				gfm_map.put(gf, ss);
 			}
-		} else if (node instanceof GeneratedClass) {
-			final GeneratedClass generatedClass = (GeneratedClass) node;
-			s = outputStrategyC.nameForClass(generatedClass, ty);
-//			System.out.println("48 "+generatedClass+" "+s);
-			for (GeneratedFunction gf : generatedClass.functionMap.values()) {
+		} else if (node instanceof EvaClass) {
+			final EvaClass EvaClass = (EvaClass) node;
+			s = outputStrategyC.nameForClass(EvaClass, ty);
+//			System.out.println("48 "+EvaClass+" "+s);
+			for (GeneratedFunction gf : EvaClass.functionMap.values()) {
 				ss = generateOutputs_Internal(gf, ty, outputStrategyC);
 				gfm_map.put(gf, ss);
 			}

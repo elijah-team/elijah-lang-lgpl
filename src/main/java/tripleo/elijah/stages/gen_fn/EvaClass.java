@@ -21,14 +21,14 @@ import java.util.*;
 /**
  * Created 10/29/20 4:26 AM
  */
-public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
+public class EvaClass extends GeneratedContainerNC implements GNCoded {
 	private final OS_Module module;
 	private final ClassStatement klass;
 	public Map<ConstructorDef, GeneratedConstructor> constructors = new HashMap<ConstructorDef, GeneratedConstructor>();
 	public ClassInvocation ci;
 	private boolean resolve_var_table_entries_already = false;
 
-	public GeneratedClass(ClassStatement klass, OS_Module module) {
+	public EvaClass(ClassStatement klass, OS_Module module) {
 		this.klass = klass;
 		this.module = module;
 	}
@@ -170,7 +170,7 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 							}
 							xci = aDeducePhase.registerClassInvocation(xci);
 							@NotNull GenerateFunctions gf = aDeducePhase.generatePhase.getGenerateFunctions(xci.getKlass().getContext().module());
-							WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.generatedClasses);
+							WlGenerateClass wgc = new WlGenerateClass(gf, xci, aDeducePhase.EvaClasses);
 							wgc.run(null); // !
 							potentialType.genType.ci = xci; // just for completeness
 							potentialType.resolve(wgc.getResult());
@@ -248,7 +248,7 @@ public class GeneratedClass extends GeneratedContainerNC implements GNCoded {
 								try {
 									final @NotNull GenType genType = aDeduceTypes2.resolve_type(t, t.getTypeName().getContext());
 									if (genType.resolved instanceof OS_GenericTypeNameType) {
-										final ClassInvocation xxci = ((GeneratedClass) aGeneratedContainer).ci;
+										final ClassInvocation xxci = ((EvaClass) aGeneratedContainer).ci;
 //											xxxci = ci;
 										for (Map.Entry<TypeName, OS_Type> entry : xxci.genericPart.entrySet()) {
 											if (entry.getKey().equals(t.getTypeName())) {

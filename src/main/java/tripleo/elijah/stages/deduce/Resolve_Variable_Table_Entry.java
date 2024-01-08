@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * Created 9/5/21 2:54 AM
  */
 class Resolve_Variable_Table_Entry {
-	private final BaseGeneratedFunction generatedFunction;
+	private final BaseEvaFunction generatedFunction;
 	private final Context ctx;
 
 	private final DeduceTypes2 deduceTypes2;
@@ -36,7 +36,7 @@ class Resolve_Variable_Table_Entry {
 	private final @NotNull DeducePhase phase;
 	private final ErrSink errSink;
 
-	public Resolve_Variable_Table_Entry(BaseGeneratedFunction aGeneratedFunction, Context aCtx, DeduceTypes2 aDeduceTypes2) {
+	public Resolve_Variable_Table_Entry(BaseEvaFunction aGeneratedFunction, Context aCtx, DeduceTypes2 aDeduceTypes2) {
 		generatedFunction = aGeneratedFunction;
 		ctx = aCtx;
 		deduceTypes2 = aDeduceTypes2;
@@ -178,9 +178,9 @@ class Resolve_Variable_Table_Entry {
 			case CLASS:
 				aGt.resolved = ((ClassStatement) parent).getOS_Type();
 				inv = phase.registerClassInvocation((ClassStatement) parent, null);
-				((ClassInvocation)inv).resolveDeferred().then(new DoneCallback<GeneratedClass>() {
+				((ClassInvocation)inv).resolveDeferred().then(new DoneCallback<EvaClass>() {
 					@Override
-					public void onDone(GeneratedClass result) {
+					public void onDone(EvaClass result) {
 						result.functionMapDeferred(functionDef, new FunctionMapDeferred() {
 							@Override
 							public void onNotify(final GeneratedFunction aGeneratedFunction) {
@@ -193,9 +193,9 @@ class Resolve_Variable_Table_Entry {
 			case NAMESPACE:
 				aGt.resolvedn = (NamespaceStatement) parent;
 				inv = phase.registerNamespaceInvocation((NamespaceStatement) parent);
-				((NamespaceInvocation)inv).resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+				((NamespaceInvocation)inv).resolveDeferred().then(new DoneCallback<EvaNamespace>() {
 					@Override
-					public void onDone(GeneratedNamespace result) {
+					public void onDone(EvaNamespace result) {
 						result.functionMapDeferred(functionDef, new FunctionMapDeferred() {
 							@Override
 							public void onNotify(final GeneratedFunction aGeneratedFunction) {
@@ -250,7 +250,7 @@ class Resolve_Variable_Table_Entry {
 			assert pte != null;
 			callable_pte = pte;
 			@NotNull FunctionInvocation fi = new FunctionInvocation(fd1, pte, modi, phase.generatePhase);
-			wl.addJob(new WlGenerateNamespace(gen, modi, phase.generatedClasses)); // TODO hope this works (for more than one)
+			wl.addJob(new WlGenerateNamespace(gen, modi, phase.EvaClasses)); // TODO hope this works (for more than one)
 			final @Nullable WlGenerateFunction wlgf = new WlGenerateFunction(gen, fi);
 			wl.addJob(wlgf);
 			wm.addJobs(wl);
@@ -280,7 +280,7 @@ class Resolve_Variable_Table_Entry {
 			vte.setCallablePTE(callable_pte);
 	}
 
-	private @Nullable ProcTableEntry findProcTableEntry(@NotNull BaseGeneratedFunction aGeneratedFunction, IExpression aExpression) {
+	private @Nullable ProcTableEntry findProcTableEntry(@NotNull BaseEvaFunction aGeneratedFunction, IExpression aExpression) {
 		for (@NotNull ProcTableEntry procTableEntry : aGeneratedFunction.prte_list) {
 			if (procTableEntry.expression == aExpression)
 				return procTableEntry;
@@ -359,17 +359,17 @@ class Resolve_Variable_Table_Entry {
 		final IInvocation invocation = aGenType.ci;
 		if (invocation instanceof NamespaceInvocation) {
 			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
-			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+			namespaceInvocation.resolveDeferred().then(new DoneCallback<EvaNamespace>() {
 				@Override
-				public void onDone(final GeneratedNamespace result) {
+				public void onDone(final EvaNamespace result) {
 					aGenType.node = result;
 				}
 			});
 		} else if (invocation instanceof ClassInvocation) {
 			final ClassInvocation classInvocation = (ClassInvocation) invocation;
-			classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+			classInvocation.resolvePromise().then(new DoneCallback<EvaClass>() {
 				@Override
-				public void onDone(final GeneratedClass result) {
+				public void onDone(final EvaClass result) {
 					aGenType.node = result;
 				}
 			});
@@ -390,17 +390,17 @@ class Resolve_Variable_Table_Entry {
 		aGenType.ci = invocation;
 		if (invocation instanceof NamespaceInvocation) {
 			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
-			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+			namespaceInvocation.resolveDeferred().then(new DoneCallback<EvaNamespace>() {
 				@Override
-				public void onDone(final GeneratedNamespace result) {
+				public void onDone(final EvaNamespace result) {
 					aGenType.node = result;
 				}
 			});
 		} else if (invocation instanceof ClassInvocation) {
 			final ClassInvocation classInvocation = (ClassInvocation) invocation;
-			classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+			classInvocation.resolvePromise().then(new DoneCallback<EvaClass>() {
 				@Override
-				public void onDone(final GeneratedClass result) {
+				public void onDone(final EvaClass result) {
 					aGenType.node = result;
 				}
 			});
@@ -418,17 +418,17 @@ class Resolve_Variable_Table_Entry {
 		final IInvocation invocation = aGenType.ci;
 		if (invocation instanceof NamespaceInvocation) {
 			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
-			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+			namespaceInvocation.resolveDeferred().then(new DoneCallback<EvaNamespace>() {
 				@Override
-				public void onDone(final GeneratedNamespace result) {
+				public void onDone(final EvaNamespace result) {
 					aGenType.node = result;
 				}
 			});
 		} else if (invocation instanceof ClassInvocation) {
 			final ClassInvocation classInvocation = (ClassInvocation) invocation;
-			classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+			classInvocation.resolvePromise().then(new DoneCallback<EvaClass>() {
 				@Override
-				public void onDone(final GeneratedClass result) {
+				public void onDone(final EvaClass result) {
 					aGenType.node = result;
 				}
 			});

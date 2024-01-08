@@ -1,9 +1,9 @@
 package tripleo.elijah.comp;
 
-import tripleo.elijah.nextgen.query.Mode;
+import tripleo.elijah.util.*;
 
-import static tripleo.elijah.nextgen.query.Mode.FAILURE;
-import static tripleo.elijah.nextgen.query.Mode.SUCCESS;
+import static tripleo.elijah.util.Mode.FAILURE;
+import static tripleo.elijah.util.Mode.SUCCESS;
 
 /**
  * An emulation of Rust's Result type

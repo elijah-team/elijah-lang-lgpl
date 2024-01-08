@@ -19,11 +19,11 @@ import tripleo.elijah.lang.NamespaceTypes;
 import tripleo.elijah.lang.OS_Element;
 import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Package;
-import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.EvaClass;
 import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.EvaNamespace;
+import tripleo.elijah.stages.gen_fn.EvaNode;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 
 import java.io.File;
@@ -38,8 +38,8 @@ public class OutputStrategyC {
 		this.outputStrategy = outputStrategy;
 	}
 
-	public String nameForNamespace(GeneratedNamespace generatedNamespace, GenerateResult.TY aTy) {
-		if (generatedNamespace.module().isPrelude()) {
+	public String nameForNamespace(EvaNamespace EvaNamespace, GenerateResult.TY aTy) {
+		if (EvaNamespace.module().isPrelude()) {
 			// We are dealing with the Prelude
 			StringBuilder sb = new StringBuilder();
 			sb.append("/Prelude/");
@@ -48,25 +48,25 @@ public class OutputStrategyC {
 			return sb.toString();
 		}
 		String filename;
-		if (generatedNamespace.getNamespaceStatement().getKind() == NamespaceTypes.MODULE) {
-			final String moduleFileName = generatedNamespace.module().getFileName();
+		if (EvaNamespace.getNamespaceStatement().getKind() == NamespaceTypes.MODULE) {
+			final String moduleFileName = EvaNamespace.module().getFileName();
 			File moduleFile = new File(moduleFileName);
 			filename = moduleFile.getName();
 			filename = strip_elijah_extension(filename);
 		} else
-			filename = generatedNamespace.getName();
+			filename = EvaNamespace.getName();
 		StringBuilder sb = new StringBuilder();
 		sb.append("/");
-		final LibraryStatementPart lsp = generatedNamespace.module().getLsp();
+		final LibraryStatementPart lsp = EvaNamespace.module().getLsp();
 		if (lsp == null)
 			sb.append("___________________");
 		else
 			sb.append(lsp.getInstructions().getName());
 		sb.append("/");
-		OS_Package pkg = generatedNamespace.getNamespaceStatement().getPackageName();
+		OS_Package pkg = EvaNamespace.getNamespaceStatement().getPackageName();
 		if (pkg != OS_Package.default_package) {
 			if (pkg == null)
-				pkg = findPackage(generatedNamespace.getNamespaceStatement());
+				pkg = findPackage(EvaNamespace.getNamespaceStatement());
 			sb.append(pkg.getName());
 			sb.append("/");
 		}
@@ -112,17 +112,17 @@ public class OutputStrategyC {
 	}
 
 	public String nameForFunction(GeneratedFunction generatedFunction, GenerateResult.TY aTy) {
-		GeneratedNode c = generatedFunction.getGenClass();
+		EvaNode c = generatedFunction.getGenClass();
 		if (c == null) c = generatedFunction.getParent(); // TODO fixme
-		if (c instanceof GeneratedClass)
-			return nameForClass((GeneratedClass) c, aTy);
-		else if (c instanceof GeneratedNamespace)
-			return nameForNamespace((GeneratedNamespace) c, aTy);
+		if (c instanceof EvaClass)
+			return nameForClass((EvaClass) c, aTy);
+		else if (c instanceof EvaNamespace)
+			return nameForNamespace((EvaNamespace) c, aTy);
 		return null;
 	}
 
-	public String nameForClass(GeneratedClass generatedClass, GenerateResult.TY aTy) {
-		if (generatedClass.module().isPrelude()) {
+	public String nameForClass(EvaClass EvaClass, GenerateResult.TY aTy) {
+		if (EvaClass.module().isPrelude()) {
 			// We are dealing with the Prelude
 			StringBuilder sb = new StringBuilder();
 			sb.append("/Prelude/");
@@ -132,33 +132,33 @@ public class OutputStrategyC {
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("/");
-		final LibraryStatementPart lsp = generatedClass.module().getLsp();
+		final LibraryStatementPart lsp = EvaClass.module().getLsp();
 		if (lsp == null)
 			sb.append("______________");
 		else
-//			sb.append(generatedClass.module.lsp.getName());
+//			sb.append(EvaClass.module.lsp.getName());
 			sb.append(lsp.getInstructions().getName());
 		sb.append("/");
-		OS_Package pkg = generatedClass.getKlass().getPackageName();
+		OS_Package pkg = EvaClass.getKlass().getPackageName();
 		if (pkg != OS_Package.default_package) {
 			if (pkg == null)
-				pkg = findPackage(generatedClass.getKlass());
+				pkg = findPackage(EvaClass.getKlass());
 			sb.append(pkg.getName());
 			sb.append("/");
 		}
 		switch (outputStrategy.per()) {
 		case PER_CLASS:
 			{
-				if (generatedClass.isGeneric())
-					sb.append(generatedClass.getNumberedName());
+				if (EvaClass.isGeneric())
+					sb.append(EvaClass.getNumberedName());
 				else
-					sb.append(generatedClass.getName());
+					sb.append(EvaClass.getName());
 			}
 			break;
 		case PER_MODULE:
 			{
-//					mod = generatedClass.getKlass().getContext().module();
-				OS_Module mod = generatedClass.module();
+//					mod = EvaClass.getKlass().getContext().module();
+				OS_Module mod = EvaClass.module();
 				File f = new File(mod.getFileName());
 				String ff = f.getName();
 				int y=2;
@@ -169,7 +169,7 @@ public class OutputStrategyC {
 			break;
 		case PER_PACKAGE:
 			{
-				final OS_Package pkg2 = generatedClass.getKlass().getPackageName();
+				final OS_Package pkg2 = EvaClass.getKlass().getPackageName();
 				String pkgName;
 				if (pkg2 != OS_Package.default_package) {
 					pkgName = "$default_package";
@@ -208,12 +208,12 @@ public class OutputStrategyC {
 	}
 
 	public String nameForConstructor(final GeneratedConstructor generatedConstructor, final GenerateResult.TY aTy) {
-		GeneratedNode c = generatedConstructor.getGenClass();
+		EvaNode c = generatedConstructor.getGenClass();
 		if (c == null) c = generatedConstructor.getParent(); // TODO fixme
-		if (c instanceof GeneratedClass)
-			return nameForClass((GeneratedClass) c, aTy);
-		else if (c instanceof GeneratedNamespace)
-			return nameForNamespace((GeneratedNamespace) c, aTy);
+		if (c instanceof EvaClass)
+			return nameForClass((EvaClass) c, aTy);
+		else if (c instanceof EvaNamespace)
+			return nameForNamespace((EvaNamespace) c, aTy);
 		return null;
 	}
 }

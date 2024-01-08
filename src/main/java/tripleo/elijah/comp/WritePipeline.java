@@ -11,6 +11,7 @@ package tripleo.elijah.comp;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.jetbrains.annotations.Nullable;
+import tripleo.elijah.comp.functionality.f203.*;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 import tripleo.elijah.stages.generate.ElSystem;
@@ -30,7 +31,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Writer;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
@@ -52,6 +52,7 @@ public class WritePipeline implements PipelineMember {
 		gr = aGr;
 
 		file_prefix = new File("COMP", c.getCompilationNumberString());
+		final F203 f203 = new F203(c.getErrSink(), c);
 
 		os = new OutputStrategy();
 		os.per(OutputStrategy.Per.PER_CLASS); // TODO this needs to be configured per lsp
@@ -86,7 +87,8 @@ public class WritePipeline implements PipelineMember {
 
 		for (Map.Entry<String, Collection<Buffer>> entry : mb.asMap().entrySet()) {
 			final String key = entry.getKey();
-			Path path = FileSystems.getDefault().getPath(prefix, key);
+			final String requestedFileName = prefix;
+			Path path = Q.makePath(requestedFileName, key);
 //			BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
 
 			path.getParent().toFile().mkdirs();
@@ -120,7 +122,7 @@ public class WritePipeline implements PipelineMember {
 		for (File file : c.getIO().recordedreads) {
 			final String fn = file.toString();
 
-			append_hash(buf, fn, c.getErrSink());
+			append_hash(buf, fn);
 		}
 		String s = buf.getText();
 		Writer w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fn1, true)));
@@ -128,8 +130,8 @@ public class WritePipeline implements PipelineMember {
 		w.close();
 	}
 
-	private void append_hash(TextBuffer aBuf, String aFilename, ErrSink errSink) throws IOException {
-		@Nullable final String hh = Helpers.getHashForFilename(aFilename, errSink);
+	private void append_hash(TextBuffer aBuf, String aFilename) throws IOException {
+		@Nullable final String hh = Helpers.getHashForFilename(aFilename);
 		if (hh != null) {
 			aBuf.append(hh);
 			aBuf.append(" ");

@@ -28,13 +28,13 @@ public class WlGenerateNamespace implements WorkJob {
 	private final GenerateFunctions generateFunctions;
 	private final NamespaceStatement namespaceStatement;
 	private final NamespaceInvocation namespaceInvocation;
-	private final DeducePhase.@Nullable GeneratedClasses coll;
+	private final DeducePhase.@Nullable EvaClasses coll;
 	private boolean _isDone = false;
-	private GeneratedNamespace Result;
+	private EvaNamespace Result;
 
 	public WlGenerateNamespace(@NotNull GenerateFunctions aGenerateFunctions,
 							   @NotNull NamespaceInvocation aNamespaceInvocation,
-							   @Nullable DeducePhase.GeneratedClasses aColl) {
+							   @Nullable DeducePhase.EvaClasses aColl) {
 		generateFunctions = aGenerateFunctions;
 		namespaceStatement = aNamespaceInvocation.getNamespace();
 		namespaceInvocation = aNamespaceInvocation;
@@ -43,10 +43,10 @@ public class WlGenerateNamespace implements WorkJob {
 
 	@Override
 	public void run(WorkManager aWorkManager) {
-		final DeferredObject<GeneratedNamespace, Void, Void> resolvePromise = namespaceInvocation.resolveDeferred();
+		final DeferredObject<EvaNamespace, Void, Void> resolvePromise = namespaceInvocation.resolveDeferred();
 		switch (resolvePromise.state()) {
 		case PENDING:
-			@NotNull GeneratedNamespace ns = generateFunctions.generateNamespace(namespaceStatement);
+			@NotNull EvaNamespace ns = generateFunctions.generateNamespace(namespaceStatement);
 			ns.setCode(generateFunctions.module.parent.nextClassCode());
 			if (coll != null)
 				coll.add(ns);
@@ -55,9 +55,9 @@ public class WlGenerateNamespace implements WorkJob {
 			Result = ns;
 			break;
 		case RESOLVED:
-			resolvePromise.then(new DoneCallback<GeneratedNamespace>() {
+			resolvePromise.then(new DoneCallback<EvaNamespace>() {
 				@Override
-				public void onDone(GeneratedNamespace result) {
+				public void onDone(EvaNamespace result) {
 					Result = result;
 				}
 			});
@@ -74,7 +74,7 @@ public class WlGenerateNamespace implements WorkJob {
 		return _isDone;
 	}
 
-	public GeneratedNode getResult() {
+	public EvaNode getResult() {
 		return Result;
 	}
 }

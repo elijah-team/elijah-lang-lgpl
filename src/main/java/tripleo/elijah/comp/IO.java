@@ -9,9 +9,7 @@
 package tripleo.elijah.comp;
 
 import org.jetbrains.annotations.NotNull;
-import tripleo.util.io.CharSink;
-import tripleo.util.io.CharSource;
-import tripleo.util.io.FileCharSink;
+import tripleo.util.io.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +25,7 @@ public class IO {
 
 	// exists, delete, isType ....
 
-	final List<File> recordedreads  = new ArrayList<File>();
+	public final List<File> recordedreads  = new ArrayList<File>();
 	final List<File> recordedwrites = new ArrayList<File>();
 	
 	public boolean recordedRead(final File file) {
@@ -43,7 +41,7 @@ public class IO {
 		return null;
 	}
 
-	public CharSink openWrite(final Path p) throws IOException {
+	public DisposableCharSink openWrite(final Path p) throws IOException {
 		record(FileOption.WRITE, p);				
 		return new FileCharSink(Files.newOutputStream(p));
 	}

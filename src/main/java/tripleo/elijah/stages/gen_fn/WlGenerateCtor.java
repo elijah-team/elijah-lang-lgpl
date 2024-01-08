@@ -46,14 +46,14 @@ public class WlGenerateCtor implements WorkJob {
 	public void run(WorkManager aWorkManager) {
 		if (functionInvocation.generateDeferred().isPending()) {
 			final ClassStatement klass = functionInvocation.getClassInvocation().getKlass();
-			Holder<GeneratedClass> hGenClass = new Holder<>();
-			functionInvocation.getClassInvocation().resolvePromise().then(new DoneCallback<GeneratedClass>() {
+			Holder<EvaClass> hGenClass = new Holder<>();
+			functionInvocation.getClassInvocation().resolvePromise().then(new DoneCallback<EvaClass>() {
 				@Override
-				public void onDone(GeneratedClass result) {
+				public void onDone(EvaClass result) {
 					hGenClass.set(result);
 				}
 			});
-			GeneratedClass genClass = hGenClass.get();
+			EvaClass genClass = hGenClass.get();
 			assert genClass != null;
 
 			ConstructorDef ccc = null;
@@ -105,7 +105,7 @@ public class WlGenerateCtor implements WorkJob {
 				// TODO match based on arguments
 				ProcTableEntry pte = functionInvocation.pte;
 				List<TypeTableEntry> args = pte.getArgs();
-				// isResolved -> GeneratedNode, etc or getAttached -> OS_Element
+				// isResolved -> EvaNode, etc or getAttached -> OS_Element
 				for (ConstructorDef cc : cs) {
 					Collection<FormalArgListItem> cc_args = cc.getArgs();
 					if (cc_args.size() == args.size()) {
@@ -144,9 +144,9 @@ public class WlGenerateCtor implements WorkJob {
 //		lgf.add(gf);
 
 			final ClassInvocation ci = functionInvocation.getClassInvocation();
-			ci.resolvePromise().done(new DoneCallback<GeneratedClass>() {
+			ci.resolvePromise().done(new DoneCallback<EvaClass>() {
 				@Override
-				public void onDone(GeneratedClass result) {
+				public void onDone(EvaClass result) {
 					gf.setCode(generateFunctions.module.parent.nextFunctionCode());
 					gf.setClass(result);
 					result.constructors.put(cd, gf);

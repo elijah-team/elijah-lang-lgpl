@@ -24,13 +24,13 @@ import tripleo.elijah.stages.logging.ElLog;
  */
 class Found_Element_For_ITE {
 
-	private final BaseGeneratedFunction generatedFunction;
+	private final BaseEvaFunction generatedFunction;
 	private final Context ctx;
 	private final ElLog LOG;
 	private final ErrSink errSink;
 	private final DeduceTypes2.DeduceClient1 dc;
 
-	public Found_Element_For_ITE(BaseGeneratedFunction aGeneratedFunction, Context aCtx, ElLog aLOG, ErrSink aErrSink, DeduceTypes2.DeduceClient1 aDeduceClient1) {
+	public Found_Element_For_ITE(BaseEvaFunction aGeneratedFunction, Context aCtx, ElLog aLOG, ErrSink aErrSink, DeduceTypes2.DeduceClient1 aDeduceClient1) {
 		generatedFunction = aGeneratedFunction;
 		ctx = aCtx;
 		LOG = aLOG;
@@ -210,17 +210,17 @@ class Found_Element_For_ITE {
 		final IInvocation invocation = aGenType.ci;
 		if (invocation instanceof NamespaceInvocation) {
 			final NamespaceInvocation namespaceInvocation = (NamespaceInvocation) invocation;
-			namespaceInvocation.resolveDeferred().then(new DoneCallback<GeneratedNamespace>() {
+			namespaceInvocation.resolveDeferred().then(new DoneCallback<EvaNamespace>() {
 				@Override
-				public void onDone(final GeneratedNamespace result) {
+				public void onDone(final EvaNamespace result) {
 					aGenType.node = result;
 				}
 			});
 		} else if (invocation instanceof ClassInvocation) {
 			final ClassInvocation classInvocation = (ClassInvocation) invocation;
-			classInvocation.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+			classInvocation.resolvePromise().then(new DoneCallback<EvaClass>() {
 				@Override
-				public void onDone(final GeneratedClass result) {
+				public void onDone(final EvaClass result) {
 					aGenType.node = result;
 				}
 			});

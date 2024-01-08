@@ -15,7 +15,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.MessageDigestAlgorithms;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tripleo.elijah.comp.ErrSink;
+import tripleo.elijah.comp.*;
 import tripleo.elijah.lang.DotExpression;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.IdentExpression;
@@ -131,7 +131,7 @@ public class Helpers {
 		return sb.toString();
 	}
 
-	public static String getHashForFilename(final String aFilename, final ErrSink aErrSink) throws IOException {
+	public static String getHashForFilename(final String aFilename) throws IOException {
 		String hdigest = new DigestUtils(MessageDigestAlgorithms.SHA_256).digestAsHex(new File(aFilename));
 		return hdigest;
 	}
@@ -159,6 +159,14 @@ public class Helpers {
 				bb.close();
 		}
 		return null;
+	}
+
+	public static Operation<String> getHashForFilename2(final String aFn) {
+		try {
+			return Operation.success(getHashForFilename(aFn));
+		} catch (IOException aE) {
+			return Operation.failure(aE);
+		}
 	}
 }
 

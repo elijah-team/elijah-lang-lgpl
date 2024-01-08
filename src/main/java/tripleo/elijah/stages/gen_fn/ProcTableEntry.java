@@ -202,7 +202,7 @@ public class ProcTableEntry extends BaseTableEntry implements TableEntryIV {
 		return dpc;
 	}
 
-	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseGeneratedFunction aGeneratedFunction, final ErrSink aErrSink) {
+	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseEvaFunction aGeneratedFunction, final ErrSink aErrSink) {
 		dpc.setDeduceTypes2(aDeduceTypes2, aContext, aGeneratedFunction, aErrSink);
 	}
 }

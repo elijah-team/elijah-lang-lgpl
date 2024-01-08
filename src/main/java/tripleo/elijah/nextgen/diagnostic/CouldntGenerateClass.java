@@ -24,41 +24,25 @@ import java.util.List;
  * Created 3/5/22 4:55 PM
  */
 public class CouldntGenerateClass implements Diagnostic {
-	private final ClassDefinition classDefinition;
+	private final ClassDefinition   classDefinition;
+	private final ClassInvocation   classInvocation;
 	private final GenerateFunctions generateFunctions;
-	private final ClassInvocation classInvocation;
 
 	public CouldntGenerateClass(final ClassDefinition aClassDefinition,
 								final GenerateFunctions aGenerateFunctions,
 								final ClassInvocation aClassInvocation) {
-		classDefinition = aClassDefinition;
+		classDefinition   = aClassDefinition;
 		generateFunctions = aGenerateFunctions;
-		classInvocation = aClassInvocation;
+		classInvocation   = aClassInvocation;
 	}
 
 	@Override
-	public String code() {
+	public @NotNull String code() {
 		return "E2000";
 	}
 
-	@Override
-	public Severity severity() {
-		return Severity.ERROR;
-	}
-
-	@Override
-	public @NotNull Locatable primary() {
-		return null;
-	}
-
-	@Override
-	public @NotNull List<Locatable> secondary() {
-		return null;
-	}
-
-	@Override
-	public void report(final PrintStream stream) {
-		NotImplementedException.raise();
+	public ClassDefinition getClassDefinition() {
+		return classDefinition;
 	}
 
 	public ClassInvocation getClassInvocation() {
@@ -69,8 +53,24 @@ public class CouldntGenerateClass implements Diagnostic {
 		return generateFunctions;
 	}
 
-	public ClassDefinition getClassDefinition() {
-		return classDefinition;
+	@Override
+	public @NotNull Locatable primary() {
+		return null;
+	}
+
+	@Override
+	public void report(final PrintStream stream) {
+		NotImplementedException.raise();
+	}
+
+	@Override
+	public @NotNull List<Locatable> secondary() {
+		return null;
+	}
+
+	@Override
+	public @NotNull Severity severity() {
+		return Severity.ERROR;
 	}
 }
 

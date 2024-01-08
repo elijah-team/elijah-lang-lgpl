@@ -32,7 +32,7 @@ import java.util.List;
 class Resolve_Ident_IA {
 	private final @NotNull Context context;
 	private final @NotNull IdentIA identIA;
-	private final BaseGeneratedFunction generatedFunction;
+	private final BaseEvaFunction generatedFunction;
 	private final @NotNull FoundElement foundElement;
 	private final @NotNull ErrSink errSink;
 
@@ -45,7 +45,7 @@ class Resolve_Ident_IA {
 	public Resolve_Ident_IA(final @NotNull DeduceTypes2.DeduceClient3 aDeduceClient3,
 							final @NotNull Context aContext,
 							final @NotNull IdentIA aIdentIA,
-							final BaseGeneratedFunction aGeneratedFunction,
+							final BaseEvaFunction aGeneratedFunction,
 							final @NotNull FoundElement aFoundElement,
 							final @NotNull ErrSink aErrSink) {
 		dc = aDeduceClient3;
@@ -266,9 +266,9 @@ class Resolve_Ident_IA {
 			if (fi.getFunction() instanceof ConstructorDef) {
 				@NotNull GenType genType = new GenType(ci.getKlass());
 				genType.ci = ci;
-				ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+				ci.resolvePromise().then(new DoneCallback<EvaClass>() {
 					@Override
-					public void onDone(GeneratedClass result) {
+					public void onDone(EvaClass result) {
 						genType.node = result;
 					}
 				});
@@ -309,9 +309,9 @@ class Resolve_Ident_IA {
 		if (fi.getFunction() instanceof ConstructorDef) {
 			@NotNull GenType genType = new GenType(ci.getKlass());
 			genType.ci = ci;
-			ci.resolvePromise().then(new DoneCallback<GeneratedClass>() {
+			ci.resolvePromise().then(new DoneCallback<EvaClass>() {
 				@Override
-				public void onDone(GeneratedClass result) {
+				public void onDone(EvaClass result) {
 					genType.node = result;
 				}
 			});

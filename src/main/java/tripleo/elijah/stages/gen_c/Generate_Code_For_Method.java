@@ -21,7 +21,6 @@ import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.BufferTabbedOutputStream;
 import tripleo.elijah.util.Helpers;
-import tripleo.elijah.util.Holder;
 import tripleo.elijah.util.NotImplementedException;
 import tripleo.elijah.work.WorkList;
 import tripleo.util.buffer.Buffer;
@@ -49,7 +48,7 @@ public class Generate_Code_For_Method {
 	final BufferTabbedOutputStream tosHdr = new BufferTabbedOutputStream();
 	final BufferTabbedOutputStream tos = new BufferTabbedOutputStream();
 
-	void generateCodeForMethod(BaseGeneratedFunction gf, GenerateResult gr, WorkList aWorkList) {
+	void generateCodeForMethod(BaseEvaFunction gf, GenerateResult gr, WorkList aWorkList) {
 		Generate_Method_Header gmh = new Generate_Method_Header(gf, gc, LOG);
 
 		tos.put_string_ln(String.format("%s {", gmh.header_string));
@@ -71,7 +70,7 @@ public class Generate_Code_For_Method {
 
 	void generateCodeForConstructor(GeneratedConstructor gf, GenerateResult gr, WorkList aWorkList) {
 		// TODO this code is only correct for classes and not meant for namespaces
-		final GeneratedClass x = (GeneratedClass) gf.getGenClass();
+		final EvaClass x = (EvaClass) gf.getGenClass();
 		switch (x.getKlass().getType()) {
 		// Don't generate class definition for these three
 		case INTERFACE:
@@ -104,7 +103,7 @@ public class Generate_Code_For_Method {
 			else if (decl.prim_decl.equals("bool"))
 				tos.put_string_ln("R->vsv = false;");
 		} else {
-			for (GeneratedClass.VarTableEntry o : x.varTable){
+			for (EvaClass.VarTableEntry o : x.varTable){
 //					final String typeName = getTypeNameForVarTableEntry(o);
 				// TODO this should be the result of getDefaultValue for each type
 				tos.put_string_ln(String.format("R->vm%s = 0;", o.nameToken));
@@ -131,14 +130,14 @@ public class Generate_Code_For_Method {
 
 			assert parent == x;
 
-			if (parent instanceof GeneratedClass) {
+			if (parent instanceof EvaClass) {
 				final String name = String.format("ZC%d%s", class_code, constructorName);
 //				LOG.info("138 class_name >> " + class_name);
 				header_string = String.format("%s* %s(%s)", class_name, name, args_string);
-			} else if (parent instanceof GeneratedNamespace) {
+			} else if (parent instanceof EvaNamespace) {
 				// TODO see note above
 				final String name = String.format("ZNC%d", class_code);
-//				GeneratedNamespace st = (GeneratedNamespace) parent;
+//				EvaNamespace st = (EvaNamespace) parent;
 //				LOG.info(String.format("143 (namespace) %s -> %s", st.getName(), class_name));
 //				final String if_args = args_string.length() == 0 ? "" : ", ";
 				// TODO vsi for namespace instance??
@@ -167,7 +166,7 @@ public class Generate_Code_For_Method {
 
 	boolean is_constructor = false, is_unit_type = false;
 
-	private void action_invariant(final BaseGeneratedFunction gf, final Generate_Method_Header aGmh) {
+	private void action_invariant(final BaseEvaFunction gf, final Generate_Method_Header aGmh) {
 		tos.incr_tabs();
 		//
 		@NotNull List<Instruction> instructions = gf.instructions();
@@ -271,7 +270,7 @@ public class Generate_Code_For_Method {
 			}
 	}
 
-	private void action_E(BaseGeneratedFunction gf, Generate_Method_Header aGmh) {
+	private void action_E(BaseEvaFunction gf, Generate_Method_Header aGmh) {
 		tos.put_string_ln("bool vsb;");
 		int state = 0;
 
@@ -299,7 +298,7 @@ public class Generate_Code_For_Method {
 				// TODO don't know what this is for now
 				// Assuming ctor
 				is_constructor = true;
-				final GeneratedNode genClass = gf.getGenClass();
+				final EvaNode genClass = gf.getGenClass();
 				String ty2 = gc.getTypeNameForGenClass(genClass);
 				tos.put_string_ln(String.format("%s vsr;", ty2));
 				break;
@@ -316,7 +315,7 @@ public class Generate_Code_For_Method {
 		ASSIGN, GET
 	}
 
-	private void action_AGN(BaseGeneratedFunction gf, Instruction aInstruction) {
+	private void action_AGN(BaseEvaFunction gf, Instruction aInstruction) {
 		final InstructionArgument target = aInstruction.getArg(0);
 		final InstructionArgument value  = aInstruction.getArg(1);
 
@@ -332,7 +331,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(s);
 	}
 
-	private void action_AGNK(BaseGeneratedFunction gf, Instruction aInstruction) {
+	private void action_AGNK(BaseEvaFunction gf, Instruction aInstruction) {
 		final InstructionArgument target = aInstruction.getArg(0);
 		final InstructionArgument value  = aInstruction.getArg(1);
 
@@ -342,7 +341,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(s);
 	}
 
-	private void action_CALLS(BaseGeneratedFunction gf, Instruction aInstruction) {
+	private void action_CALLS(BaseEvaFunction gf, Instruction aInstruction) {
 		final StringBuilder sb = new StringBuilder();
 		final InstructionArgument x = aInstruction.getArg(0);
 		assert x instanceof ProcIA;
@@ -381,7 +380,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(sb.toString());
 	}
 
-	private void action_CALL(BaseGeneratedFunction gf, Instruction aInstruction) {
+	private void action_CALL(BaseEvaFunction gf, Instruction aInstruction) {
 		final StringBuilder sb = new StringBuilder();
 // 					LOG.err("9000 "+inst.getName());
 		final InstructionArgument x = aInstruction.getArg(0);
@@ -413,7 +412,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(sb.toString());
 	}
 
-	private void action_CONSTRUCT(BaseGeneratedFunction gf, Instruction aInstruction) {
+	private void action_CONSTRUCT(BaseEvaFunction gf, Instruction aInstruction) {
 		final InstructionArgument _arg0 = aInstruction.getArg(0);
 		assert _arg0 instanceof ProcIA;
 		final ProcTableEntry pte = gf.getProcTableEntry(((ProcIA) _arg0).getIndex());
@@ -454,7 +453,7 @@ public class Generate_Code_For_Method {
 		final int y=2;
 	}
 
-	private void action_JL(BaseGeneratedFunction gf, Instruction aInstruction) {
+	private void action_JL(BaseEvaFunction gf, Instruction aInstruction) {
 		final InstructionArgument lhs    = aInstruction.getArg(0);
 		final InstructionArgument rhs    = aInstruction.getArg(1);
 		final InstructionArgument target = aInstruction.getArg(2);
@@ -481,7 +480,7 @@ public class Generate_Code_For_Method {
 		}
 	}
 
-	private void action_JNE(BaseGeneratedFunction gf, Instruction aInstruction) {
+	private void action_JNE(BaseEvaFunction gf, Instruction aInstruction) {
 		final InstructionArgument lhs    = aInstruction.getArg(0);
 		final InstructionArgument rhs    = aInstruction.getArg(1);
 		final InstructionArgument target = aInstruction.getArg(2);
@@ -508,7 +507,7 @@ public class Generate_Code_For_Method {
 		}
 	}
 
-	private void action_JE(BaseGeneratedFunction gf, Instruction aInstruction) {
+	private void action_JE(BaseEvaFunction gf, Instruction aInstruction) {
 		final InstructionArgument lhs    = aInstruction.getArg(0);
 		final InstructionArgument rhs    = aInstruction.getArg(1);
 		final InstructionArgument target = aInstruction.getArg(2);
@@ -535,7 +534,7 @@ public class Generate_Code_For_Method {
 		}
 	}
 
-	private void action_IS_A(Instruction instruction, BufferTabbedOutputStream tos, BaseGeneratedFunction gf) {
+	private void action_IS_A(Instruction instruction, BufferTabbedOutputStream tos, BaseEvaFunction gf) {
 		final IntegerIA testing_var_  = (IntegerIA) instruction.getArg(0);
 		final IntegerIA testing_type_ = (IntegerIA) instruction.getArg(1);
 		final Label target_label      = ((LabelIA) instruction.getArg(2)).label;
@@ -543,14 +542,14 @@ public class Generate_Code_For_Method {
 		final VariableTableEntry testing_var    = gf.getVarTableEntry(testing_var_.getIndex());
 		final TypeTableEntry     testing_type__ = gf.getTypeTableEntry(testing_type_.getIndex());
 
-		GeneratedNode testing_type = testing_type__.resolved();
+		EvaNode testing_type = testing_type__.resolved();
 		final int z = ((GeneratedContainerNC) testing_type).getCode();
 
 		tos.put_string_ln(String.format("vsb = ZS%d_is_a(%s);", z, gc.getRealTargetName(gf, testing_var_, AOG.GET)));
 		tos.put_string_ln(String.format("if (!vsb) goto %s;", target_label.getName()));
 	}
 
-	private void action_CAST(Instruction instruction, BufferTabbedOutputStream tos, BaseGeneratedFunction gf) {
+	private void action_CAST(Instruction instruction, BufferTabbedOutputStream tos, BaseEvaFunction gf) {
 		final IntegerIA  vte_num_ = (IntegerIA) instruction.getArg(0);
 		final IntegerIA vte_type_ = (IntegerIA) instruction.getArg(1);
 		final IntegerIA vte_targ_ = (IntegerIA) instruction.getArg(2);
@@ -563,7 +562,7 @@ public class Generate_Code_For_Method {
 		tos.put_string_ln(String.format("%s = (%s)%s;", target_name, target_type, source_target));
 	}
 
-	private void action_DECL(Instruction instruction, BufferTabbedOutputStream tos, BaseGeneratedFunction gf) {
+	private void action_DECL(Instruction instruction, BufferTabbedOutputStream tos, BaseEvaFunction gf) {
 		final SymbolIA decl_type = (SymbolIA)  instruction.getArg(0);
 		final IntegerIA  vte_num = (IntegerIA) instruction.getArg(1);
 		final String target_name = gc.getRealTargetName(gf, vte_num, AOG.GET);
@@ -579,9 +578,9 @@ public class Generate_Code_For_Method {
 			return;
 		}
 
-		final GeneratedNode res = vte.resolvedType();
-		if (res instanceof GeneratedClass) {
-			final String z = gc.getTypeName((GeneratedClass) res);
+		final EvaNode res = vte.resolvedType();
+		if (res instanceof EvaClass) {
+			final String z = gc.getTypeName((EvaClass) res);
 			tos.put_string_ln(String.format("%s* %s;", z, target_name));
 			return;
 		}
@@ -634,7 +633,7 @@ public class Generate_Code_For_Method {
 		if (pt.size() == 1) {
 			final TypeTableEntry ty = pt.get(0);
 			if (ty.genType.node != null) {
-				GeneratedNode node = ty.genType.node;
+				EvaNode node = ty.genType.node;
 				if (node instanceof GeneratedFunction) {
 					int y=2;
 //					((GeneratedFunction)node).typeDeferred()
@@ -666,7 +665,7 @@ public class Generate_Code_For_Method {
 		OS_Type type;
 		TypeTableEntry tte;
 
-		public Generate_Method_Header(BaseGeneratedFunction gf, @NotNull GenerateC aGenerateC, ElLog LOG) {
+		public Generate_Method_Header(BaseEvaFunction gf, @NotNull GenerateC aGenerateC, ElLog LOG) {
 			gc            = aGenerateC;
 			name          = gf.getFD().name();
 			//
@@ -675,18 +674,18 @@ public class Generate_Code_For_Method {
 			header_string = find_header_string(gf, LOG);
 		}
 
-		String find_header_string(BaseGeneratedFunction gf, ElLog LOG) {
+		String find_header_string(BaseEvaFunction gf, ElLog LOG) {
 			// NOTE getGenClass is always a class or namespace, getParent can be a function
 			GeneratedContainerNC parent = (GeneratedContainerNC) gf.getGenClass();
 
-			if (parent instanceof GeneratedClass) {
-				GeneratedClass st = (GeneratedClass) parent;
+			if (parent instanceof EvaClass) {
+				EvaClass st = (EvaClass) parent;
 				final String class_name = gc.getTypeName(st);
 //				LOG.info("234 class_name >> " + class_name);
 				final String if_args = args_string.length() == 0 ? "" : ", ";
 				return String.format("%s %s%s(%s* vsc%s%s)", return_type, class_name, name, class_name, if_args, args_string);
-			} else if (parent instanceof GeneratedNamespace) {
-				GeneratedNamespace st = (GeneratedNamespace) parent;
+			} else if (parent instanceof EvaNamespace) {
+				EvaNamespace st = (EvaNamespace) parent;
 				final String class_name = gc.getTypeName(st);
 				LOG.info(String.format("240 (namespace) %s -> %s", st.getName(), class_name));
 				final String if_args = args_string.length() == 0 ? "" : ", ";
@@ -698,7 +697,7 @@ public class Generate_Code_For_Method {
 			}
 		}
 
-		String find_args_string(BaseGeneratedFunction gf) {
+		String find_args_string(BaseEvaFunction gf) {
 			final String args;
 			if (false) {
 				args = Helpers.String_join(", ", Collections2.transform(gf.getFD().fal().falis, new Function<FormalArgListItem, String>() {
@@ -729,7 +728,7 @@ public class Generate_Code_For_Method {
 			return args;
 		}
 
-		@NotNull String find_return_type(BaseGeneratedFunction gf, ElLog LOG) {
+		@NotNull String find_return_type(BaseEvaFunction gf, ElLog LOG) {
 			String returnType = null;
 			if (gf instanceof GeneratedConstructor) {
 				@Nullable InstructionArgument result_index = gf.vte_lookup("self");
@@ -738,7 +737,7 @@ public class Generate_Code_For_Method {
 
 				// Get it from resolved
 				tte = gf.getTypeTableEntry(((IntegerIA) result_index).getIndex());
-				GeneratedNode res = tte.resolved();
+				EvaNode res = tte.resolved();
 				if (res instanceof GeneratedContainerNC) {
 					final GeneratedContainerNC nc = (GeneratedContainerNC) res;
 					int code = nc.getCode();
@@ -772,7 +771,7 @@ public class Generate_Code_For_Method {
 
 				// Get it from resolved
 				tte = gf.getTypeTableEntry(((IntegerIA) result_index).getIndex());
-				GeneratedNode res = tte.resolved();
+				EvaNode res = tte.resolved();
 				if (res instanceof GeneratedContainerNC) {
 					final GeneratedContainerNC nc = (GeneratedContainerNC) res;
 					int code = nc.getCode();

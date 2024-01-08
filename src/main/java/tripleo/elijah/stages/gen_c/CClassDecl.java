@@ -13,7 +13,7 @@ import tripleo.elijah.lang.AnnotationWalker;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.IExpression;
 import tripleo.elijah.lang.StringExpression;
-import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.EvaClass;
 import tripleo.elijah.util.Helpers;
 
 import java.util.ArrayList;
@@ -22,12 +22,12 @@ import java.util.ArrayList;
  * Created 12/24/20 7:42 AM
  */
 public class CClassDecl {
-	private final GeneratedClass generatedClass;
+	private final EvaClass EvaClass;
 	public String prim_decl;
 	public boolean prim = false;
 
-	public CClassDecl(GeneratedClass generatedClass) {
-		this.generatedClass = generatedClass;
+	public CClassDecl(EvaClass EvaClass) {
+		this.EvaClass = EvaClass;
 	}
 
 	public void setDecl(String str) {
@@ -39,7 +39,7 @@ public class CClassDecl {
 	}
 
 	public void evaluatePrimitive() {
-		ClassStatement xx = generatedClass.getKlass();
+		ClassStatement xx = EvaClass.getKlass();
 		xx.walkAnnotations(new AnnotationWalker() {
 			@Override
 			public void annotation(AnnotationPart anno) {

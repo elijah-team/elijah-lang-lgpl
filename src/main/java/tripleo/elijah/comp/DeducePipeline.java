@@ -9,7 +9,7 @@
 package tripleo.elijah.comp;
 
 import tripleo.elijah.lang.OS_Module;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.EvaNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class DeducePipeline implements PipelineMember {
 	private final Compilation c;
-	List<GeneratedNode> lgc = new ArrayList<GeneratedNode>();
+	List<EvaNode> lgc = new ArrayList<EvaNode>();
 
 	public DeducePipeline(Compilation aCompilation) {
 		c = aCompilation;
@@ -48,7 +48,7 @@ public class DeducePipeline implements PipelineMember {
 	@Override
 	public void run() {
 		c.pipelineLogic.everythingBeforeGenerate(lgc);
-		lgc = c.pipelineLogic.dp.generatedClasses.copy();
+		lgc = c.pipelineLogic.dp.EvaClasses.copy();
 	}
 }
 

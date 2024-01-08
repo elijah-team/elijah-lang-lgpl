@@ -34,7 +34,7 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	public int tempNum = -1;
 	public ProcTableEntry constructable_pte;
 	public GenType genType = new GenType();
-	private GeneratedNode _resolvedType;
+	private EvaNode _resolvedType;
 
 	public VariableTableEntry(final int aIndex, final VariableTableType aVtt, final String aName, final TypeTableEntry aTTE, final OS_Element el) {
 		this.index = aIndex;
@@ -145,13 +145,13 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	}
 
 	@Override
-	public void resolveTypeToClass(GeneratedNode aNode) {
+	public void resolveTypeToClass(EvaNode aNode) {
 		_resolvedType = aNode;
 		genType.node = aNode;
 		type.resolve(aNode); // TODO maybe this obviates above
 	}
 
-	public GeneratedNode resolvedType() {
+	public EvaNode resolvedType() {
 		return _resolvedType;
 	}
 
@@ -189,7 +189,7 @@ public class VariableTableEntry extends BaseTableEntry1 implements Constructable
 	}
 
 	public DeduceLocalVariable dlv = new DeduceLocalVariable(this);
-	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseGeneratedFunction aGeneratedFunction) {
+	public void setDeduceTypes2(final DeduceTypes2 aDeduceTypes2, final Context aContext, final BaseEvaFunction aGeneratedFunction) {
 		dlv.setDeduceTypes2(aDeduceTypes2, aContext, aGeneratedFunction);
 	}
 

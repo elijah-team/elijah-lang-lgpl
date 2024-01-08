@@ -8,11 +8,11 @@
  */
 package tripleo.elijah.stages.gen_generic;
 
-import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
-import tripleo.elijah.stages.gen_fn.GeneratedClass;
+import tripleo.elijah.stages.gen_fn.BaseEvaFunction;
+import tripleo.elijah.stages.gen_fn.EvaClass;
 import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
-import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
-import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_fn.EvaNamespace;
+import tripleo.elijah.stages.gen_fn.EvaNode;
 import tripleo.util.buffer.Buffer;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class GenerateResult {
 
 	final List<GenerateResultItem> res = new ArrayList<GenerateResultItem>();
 
-	public void add(Buffer b, GeneratedNode n, TY ty) {
+	public void add(Buffer b, EvaNode n, TY ty) {
 		res.add(new GenerateResultItem(ty, b, n, ++bufferCounter));
 	}
 
@@ -34,7 +34,7 @@ public class GenerateResult {
 		return res;
 	}
 
-	public void addFunction(BaseGeneratedFunction aGeneratedFunction, Buffer aBuffer, TY aTY) {
+	public void addFunction(BaseEvaFunction aGeneratedFunction, Buffer aBuffer, TY aTY) {
 		add(aBuffer, aGeneratedFunction, aTY);
 	}
 
@@ -46,11 +46,11 @@ public class GenerateResult {
 		HEADER, IMPL, PRIVATE_HEADER
 	}
 
-	public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf) {
+	public void addClass(TY ty, EvaClass aClass, Buffer aBuf) {
 		add(aBuf, aClass, ty);
 	}
 
-	public void addNamespace(TY ty, GeneratedNamespace aNamespace, Buffer aBuf) {
+	public void addNamespace(TY ty, EvaNamespace aNamespace, Buffer aBuf) {
 		add(aBuf, aNamespace, ty);
 	}
 
