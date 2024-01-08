@@ -52,14 +52,14 @@ public class CP_SubFile {
 			parent    = aParent;
 			childName = aChildName;
 			op        = null;
-			parent.getPathPromise().then(p -> _pathPromise.resolve(Path.of(p.toString(), childName)));
+			parent.getPathPromise().then(p -> _pathPromise.resolve(Q.makePath(p.toString(), childName)));
 		}
 
 		public CP_Path1(final _CP_RootPath aParent, final String aFile) {
 			parent    = null; //new CP_Path1(aParent, aFile);
 			op        = aParent;
 			childName = aFile;
-			op.getPathPromise().then(p -> _pathPromise.resolve(Path.of(p.toString(), childName)));
+			op.getPathPromise().then(p -> _pathPromise.resolve(Q.makePath(p.toString(), childName)));
 		}
 
 		@Override
@@ -153,9 +153,9 @@ public class CP_SubFile {
 		private String getString(final @NotNull String parentName) {
 			String result;
 			if (true || x == null) {
-				result = Path.of(parentName, childName).toFile().toString();
+				result = Q.makePath(parentName, childName).toFile().toString();
 			} else {
-				result = Path.of(parentName, childName, x).toFile().toString();
+				result = Q.makePath(parentName, childName, x).toFile().toString();
 			}
 			return result;
 		}
