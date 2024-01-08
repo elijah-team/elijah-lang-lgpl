@@ -214,8 +214,8 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>src/main/elijah-nextgen-outputstatement/src/main/java</source>
-                                <source>src/main/tripleo-small/src/main/java</source>
+                                <source>elijah-nextgen-outputstatement/src/main/java</source>
+                                <source>tripleo-small/src/main/java</source>
                             </sources>
                         </configuration>
                     </execution>
