@@ -1,13 +1,10 @@
 # The Elijah Programming Language
 
-master/main: [![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/master/graph/badge.svg?token=WATHC960NB)](https://codecov.io/gl/elijah-team/elijah-lang)
+master/main:
 
-genericA: [![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/genericA/graph/badge.svg?token=WATHC960NB)](https://app.codecov.io/gl/elijah-team/elijah-lang/branch/genericA)
+genericA: 
 
-pull-model: [![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/pull-model/graph/badge.svg?token=WATHC960NB)](https://app.codecov.io/gl/elijah-team/elijah-lang/branch/pull-model)
-
-[![license](https://img.shields.io/gitlab/license/elijah-team/elijah-lang.svg)](LICENSE)
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+pull-model: 
 
 ## Table of Contents
 
@@ -112,11 +109,7 @@ Small note: If editing the Readme, please conform to the [standard-readme](https
 
 [LGPL 3](LICENSE)
 
-## Contact
+## Compliance
 
-oluoluolu+elijah \(at\) gmail.com
-[@tripleo_sw Twitter](https://twitter.com/tripleo_sw)
+FIPS did not return my calls.
 
-[google group](https://groups.google.com/forum/#!forum/elijjah)
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgitlab.com%2Felijah-team%2Felijah-lang.svg?type=large)](https://app.fossa.com/projects/git%2Bgitlab.com%2Felijah-team%2Felijah-lang?ref=badge_large)
