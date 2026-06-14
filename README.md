@@ -1,13 +1,12 @@
 # The Elijah Programming Language
 
-master/main: [![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/master/graph/badge.svg?token=WATHC960NB)](https://codecov.io/gl/elijah-team/elijah-lang)
+master/main: [codecov](ht tps://codecov.io/gl/elijah-team/elijah-lang/branch/master/graph/badge.svg?token=WATHC960NB)](https://codecov.io/gl/elijah-team/elijah-lang)
 
-genericA: [![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/genericA/graph/badge.svg?token=WATHC960NB)](https://app.codecov.io/gl/elijah-team/elijah-lang/branch/genericA)
+genericA: [codecov](ht tps://codecov.io/gl/elijah-team/elijah-lang/branch/genericA/graph/badge.svg?token=WATHC960NB)](https://app.codecov.io/gl/elijah-team/elijah-lang/branch/genericA)
 
-pull-model: [![codecov](https://codecov.io/gl/elijah-team/elijah-lang/branch/pull-model/graph/badge.svg?token=WATHC960NB)](https://app.codecov.io/gl/elijah-team/elijah-lang/branch/pull-model)
+pull-model: [codecov](ht tps://codecov.io/gl/elijah-team/elijah-lang/branch/pull-model/graph/badge.svg?token=WATHC960NB)](https://app.codecov.io/gl/elijah-team/elijah-lang/branch/pull-model)
 
-[![license](https://img.shields.io/gitlab/license/elijah-team/elijah-lang.svg)](LICENSE)
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+[license](htt ps://img.shields.io/gitlab/license/elijah-team/elijah-lang.svg)](LICENSE)
 
 ## Table of Contents
 
@@ -99,20 +98,10 @@ All of this is a work in progress and your support would be appreciated.
 
 See [the contributing file](CONTRIBUTING.md)!
 
-PRs accepted.
-
-Small note: If editing the Readme, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
+PRs accepted, kind of.
 
 ## License
 
 **Elijjah** is free software intended for use on all systems, including GNU/Linux.
 
 [LGPL 3](LICENSE)
-
-## Contact
-
-oluoluolu+elijah \(at\) gmail.com
-[@tripleo_sw Twitter](https://twitter.com/tripleo_sw)
-
-[google group](https://groups.google.com/forum/#!forum/elijjah)
-
