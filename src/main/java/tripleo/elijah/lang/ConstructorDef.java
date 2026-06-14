@@ -63,6 +63,15 @@ public class ConstructorDef extends BaseFunctionDef {
 		return String.format("<Constructor %s %s %s>", parent, name(), getArgs());
 	}
 
+	@Override
+	public void setHeader(FunctionHeader aFunctionHeader) {
+		setFal(aFunctionHeader.getFal());
+//		set(aFunctionHeader.getModifier());
+		assert aFunctionHeader.getModifier() == null;
+		setName(aFunctionHeader.getName());
+//		setReturnType(aFunctionHeader.getReturnType());
+		assert aFunctionHeader.getReturnType() == null;
+	}
 
 }
 

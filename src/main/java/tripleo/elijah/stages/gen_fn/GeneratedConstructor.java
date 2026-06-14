@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import tripleo.elijah.lang.BaseFunctionDef;
 import tripleo.elijah.lang.ClassStatement;
 import tripleo.elijah.lang.ConstructorDef;
+import tripleo.elijah.lang.OS_Module;
 import tripleo.elijah.lang.OS_Type;
 import tripleo.elijah.stages.deduce.ClassInvocation;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
@@ -69,6 +70,11 @@ public class GeneratedConstructor extends BaseGeneratedFunction {
 	@Override
 	public String identityString() {
 		return ""+cd;
+	}
+
+	@Override
+	public OS_Module module() {
+		return cd.getContext().module();
 	}
 
 

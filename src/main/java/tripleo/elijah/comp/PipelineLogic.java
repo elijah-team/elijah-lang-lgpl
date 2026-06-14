@@ -35,7 +35,6 @@ public class PipelineLogic {
 
 	public GenerateResult gr = new GenerateResult();
 	public List<ElLog> elLogs = new LinkedList<ElLog>();
-	public boolean verbose = true;
 
 	private final ElLog.Verbosity verbosity;
 
@@ -60,7 +59,7 @@ public class PipelineLogic {
 
 		if (postDeduceEnabled) {
 			for (OS_Module mod : mods) {
-				PostDeduce pd = new PostDeduce(mod.parent.getErrSink(), dp);
+				PostDeduce pd = new PostDeduce(mod.getCompilation().getErrSink(), dp);
 				pd.analyze();
 			}
 		}
@@ -72,7 +71,7 @@ public class PipelineLogic {
 		final WorkManager wm = new WorkManager();
 		// README use any errSink, they should all be the same
 		for (OS_Module mod : mods) {
-			final GenerateC generateC = new GenerateC(mod, mod.parent.getErrSink(), verbosity, this);
+			final GenerateC generateC = new GenerateC(mod, mod.getCompilation().getErrSink(), verbosity, this);
 			final GenerateResult ggr = run3(mod, lgc, wm, generateC);
 			wm.drain();
 			gr.results().addAll(ggr.results());
@@ -109,16 +108,16 @@ public class PipelineLogic {
 				case FUNCTION: {
 //					GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
 					if (coded.getCode() == 0)
-						coded.setCode(mod.parent.nextFunctionCode());
+						coded.setCode(mod.getCompilation().nextFunctionCode());
 					break;
 				}
 				case CLASS: {
 					final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
 //					if (generatedClass.getCode() == 0)
-//						generatedClass.setCode(mod.parent.nextClassCode());
+//						generatedClass.setCode(mod.getCompilation().nextClassCode());
 					for (GeneratedClass generatedClass2 : generatedClass.classMap.values()) {
 						if (generatedClass2.getCode() == 0)
-							generatedClass2.setCode(mod.parent.nextClassCode());
+							generatedClass2.setCode(mod.getCompilation().nextClassCode());
 					}
 					for (GeneratedFunction generatedFunction : generatedClass.functionMap.values()) {
 						for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
@@ -134,10 +133,10 @@ public class PipelineLogic {
 				{
 					final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
 					if (coded.getCode() == 0)
-						coded.setCode(mod.parent.nextClassCode());
+						coded.setCode(mod.getCompilation().nextClassCode());
 					for (GeneratedClass generatedClass : generatedNamespace.classMap.values()) {
 						if (generatedClass.getCode() == 0)
-							generatedClass.setCode(mod.parent.nextClassCode());
+							generatedClass.setCode(mod.getCompilation().nextClassCode());
 					}
 					for (GeneratedFunction generatedFunction : generatedNamespace.functionMap.values()) {
 						for (IdentTableEntry identTableEntry : generatedFunction.idte_list) {
@@ -159,17 +158,32 @@ public class PipelineLogic {
 		}
 
 		for (final GeneratedNode generatedNode : resolved_nodes) {
+/*
+			if (generatedNode instanceof GeneratedFunction) {
+				GeneratedFunction generatedFunction = (GeneratedFunction) generatedNode;
+				if (generatedFunction.getCode() == 0)
+					generatedFunction.setCode(mod.getCompilation().nextFunctionCode());
+			} else if (generatedNode instanceof GeneratedClass) {
+				final GeneratedClass generatedClass = (GeneratedClass) generatedNode;
+				if (generatedClass.getCode() == 0)
+					generatedClass.setCode(mod.getCompilation().nextClassCode());
+			} else if (generatedNode instanceof GeneratedNamespace) {
+				final GeneratedNamespace generatedNamespace = (GeneratedNamespace) generatedNode;
+				if (generatedNamespace.getCode() == 0)
+					generatedNamespace.setCode(mod.getCompilation().nextClassCode());
+			}
+*/
 			if (generatedNode instanceof GNCoded) {
 				final GNCoded coded = (GNCoded) generatedNode;
 				final int code;
 				if (coded.getCode() == 0) {
 					switch (coded.getRole()) {
 					case FUNCTION:
-						code = (mod.parent.nextFunctionCode());
+						code = (mod.getCompilation().nextFunctionCode());
 						break;
 					case NAMESPACE:
 					case CLASS:
-						code = mod.parent.nextClassCode();
+						code = mod.getCompilation().nextClassCode();
 						break;
 					default:
 						throw new IllegalStateException("Invalid coded role");
@@ -180,7 +194,7 @@ public class PipelineLogic {
 				throw new IllegalStateException("node is not coded");
 		}
 
-		dp.deduceModule(mod, lgc, getVerbosity());
+		dp.deduceModule(mod, lgc, verbosity);
 
 		resolveCheck(lgc);
 
@@ -273,9 +287,11 @@ public class PipelineLogic {
 		}
 	}
 
+/*
 	public ElLog.Verbosity getVerbosity() {
-		return verbose ? ElLog.Verbosity.VERBOSE : ElLog.Verbosity.SILENT;
+		return verbosity; // ? ElLog.Verbosity.VERBOSE : ElLog.Verbosity.SILENT;
 	}
+*/
 
 	public void addLog(ElLog aLog) {
 		elLogs.add(aLog);

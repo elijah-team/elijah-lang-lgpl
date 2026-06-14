@@ -697,6 +697,24 @@ public class DeducePhase {
 				});
 			}
 		}
+
+		for (GeneratedNode generatedNode : generatedClasses) {
+			if (generatedNode instanceof GeneratedContainerNC) {
+				final GeneratedContainerNC nc = (GeneratedContainerNC) generatedNode;
+				nc.noteDependencies(nc.getDependency()); // TODO is this right?
+
+				for (GeneratedFunction generatedFunction : nc.functionMap.values()) {
+					generatedFunction.noteDependencies(nc.getDependency());
+				}
+				if (nc instanceof GeneratedClass) {
+					final GeneratedClass generatedClass = (GeneratedClass) nc;
+
+					for (GeneratedConstructor generatedConstructor : generatedClass.constructors.values()) {
+						generatedConstructor.noteDependencies(nc.getDependency());
+					}
+				}
+			}
+		}
 	}
 
 	private void sanityChecks() {

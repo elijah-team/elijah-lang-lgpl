@@ -193,6 +193,12 @@ public abstract class BaseFunctionDef implements Documentable, ClassItem, OS_Con
 		access_note = aNotation;
 	}
 
+	public void setAnnotations(List<AnnotationClause> aAnnotationClauses) {
+		annotations = aAnnotationClauses;
+	}
+
+	public abstract void setHeader(FunctionHeader aFunctionHeader);
+
 	public enum Species {
 		REG_FUN,
 		DEF_FUN,

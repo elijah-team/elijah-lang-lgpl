@@ -8,6 +8,7 @@
  */
 package tripleo.elijah.stages.deduce;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.IO;
@@ -41,7 +42,8 @@ public class Feb2021 {
 		c.feedCmdLine(List_of("test/feb2021/property3/"));
 	}
 
-//	@Test
+	@Ignore
+	@Test
 	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public void testFunction() {
 		Compilation c = new Compilation(new StdErrSink(), new IO());
@@ -49,7 +51,8 @@ public class Feb2021 {
 		c.feedCmdLine(List_of("test/feb2021/function/"));
 	}
 
-//	@Test
+	@Ignore
+	@Test
 	@SuppressWarnings("JUnit3StyleTestMethodInJUnit4Class")
 	public void testHier() {
 		Compilation c = new Compilation(new StdErrSink(), new IO());

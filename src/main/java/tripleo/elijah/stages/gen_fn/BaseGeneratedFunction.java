@@ -18,6 +18,8 @@ import tripleo.elijah.stages.deduce.DeduceElement;
 import tripleo.elijah.stages.deduce.DeduceTypes2;
 import tripleo.elijah.stages.deduce.FoundElement;
 import tripleo.elijah.stages.deduce.FunctionInvocation;
+import tripleo.elijah.stages.gen_generic.Dependency;
+import tripleo.elijah.stages.gen_generic.IDependencyReferent;
 import tripleo.elijah.stages.instructions.*;
 import tripleo.elijah.util.Helpers;
 import tripleo.elijah.util.Holder;
@@ -35,7 +37,7 @@ import static tripleo.elijah.stages.deduce.DeduceTypes2.to_int;
 /**
  * Created 9/10/20 2:57 PM
  */
-public abstract class BaseGeneratedFunction extends AbstractDependencyTracker implements GeneratedNode, DeduceTypes2.ExpectationBase {
+public abstract class BaseGeneratedFunction extends AbstractDependencyTracker implements GeneratedNode, DeduceTypes2.ExpectationBase, IDependencyReferent {
 	public boolean deducedAlready;
 	public FunctionInvocation fi;
 	private int code = 0;
@@ -53,6 +55,7 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 	private GeneratedNode genClass;
 	private GeneratedContainerNC parent;
 	private DeferredObject<GenType, Void, Void> typeDeferred = new DeferredObject<GenType, Void, Void>();
+	private final Dependency dependency = new Dependency(this);
 
 	public static void printTables(GeneratedFunction gf) {
 		System.out.println("VariableTable ");
@@ -406,12 +409,6 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 		return vte.getIndex();
 	}
 
-    @Override
-    public OS_Module module() {
-		throw new NotImplementedException();
-//        return fd.getContext().module();
-    }
-
 	public int getCode() {
 		return code;
 	}
@@ -487,6 +484,10 @@ public abstract class BaseGeneratedFunction extends AbstractDependencyTracker im
 		} else {
 			return getFD().getNameNode().getText();
 		}
+	}
+
+	public Dependency getDependency() {
+		return dependency;
 	}
 }
 

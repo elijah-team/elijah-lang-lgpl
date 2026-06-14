@@ -15,12 +15,11 @@ import java.util.List;
  * Created 8/21/21 10:09 PM
  */
 public class Pipeline {
-	List<PipelineMember> pls = new ArrayList<>();
+	private List<PipelineMember> pls = new ArrayList<>();
 
 	public void add(PipelineMember aPipelineMember) {
 		pls.add(aPipelineMember);
 	}
-
 
 	public void run() throws Exception {
 		for (PipelineMember pl : pls) {

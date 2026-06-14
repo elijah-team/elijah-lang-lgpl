@@ -9,11 +9,14 @@
 package tripleo.elijah.stages.generate;
 
 import tripleo.elijah.comp.Compilation;
+import tripleo.elijah.stages.gen_c.OutputFileC;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
 import tripleo.elijah.stages.gen_fn.GeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedNamespace;
 import tripleo.elijah.stages.gen_fn.GeneratedNode;
+import tripleo.elijah.stages.gen_c.CDependencyRef;
+import tripleo.elijah.stages.gen_generic.Dependency;
 import tripleo.elijah.stages.gen_generic.GenerateResult;
 import tripleo.elijah.stages.gen_generic.GenerateResultItem;
 
@@ -33,27 +36,65 @@ public class ElSystem {
 		final OutputStrategyC outputStrategyC = new OutputStrategyC(this.outputStrategy);
 
 		for (GenerateResultItem ab : gr.results()) {
-			String s = generateOutputs_Internal(ab.node, ab.ty, outputStrategyC);
-			assert s != null;
-			ab.output = s;
+			String filename = getFilenameForNode(ab.node, ab.ty, outputStrategyC);
+			assert filename != null;
+			ab.output = filename;
+			final Dependency dependency1 = ab.getDependency();
+			if (ab.ty == GenerateResult.TY.HEADER)
+				dependency1.setRef(new CDependencyRef(filename));
+			for (Dependency dependency : dependency1.getNotedDeps()) {
+				if (dependency.referent != null) {
+					String filename1 = getFilenameForNode((GeneratedNode) dependency.referent, GenerateResult.TY.HEADER, outputStrategyC);
+					dependency.setRef(new CDependencyRef(filename1));
+				} else {
+					int y=2;
+				}
+			}
+			gr.completeItem(ab);
 		}
 
 		if (verbose) {
 			for (GenerateResultItem ab : gr.results()) {
 				if (ab.node instanceof GeneratedFunction) continue;
-				System.out.println("** "+ab.node+" "+ab.output);
+				System.out.println("** "+ab.node+" "+ ab.output/*((CDependencyRef)ab.getDependency().getRef()).getHeaderFile()*/);
 			}
 		}
+
+		Map<String, OutputFileC> outputFiles = new HashMap<>();
+
+		for (GenerateResultItem ab : gr.results()) {
+			OutputFileC outputFileC = new OutputFileC(ab.output);
+			outputFiles.put(ab.output, outputFileC);
+		}
+
+		for (GenerateResultItem ab : gr.results()) {
+			final OutputFileC outputFileC = outputFiles.get(ab.output);
+			outputFileC.putDependencies(ab.getDependency().getNotedDeps/*dependencies*/());
+		}
+
+		for (GenerateResultItem ab : gr.results()) {
+			final OutputFileC outputFileC = outputFiles.get(ab.output);
+			outputFileC.putBuffer(ab.buffer);
+		}
+
+		for (GenerateResultItem ab : gr.results()) {
+			final OutputFileC outputFileC = outputFiles.get(ab.output);
+			ab.outputFile = outputFileC;
+		}
+
+		gr.outputFiles = outputFiles;
+
+		gr.signalDone();
 	}
 
-	String generateOutputs_Internal(GeneratedNode node, GenerateResult.TY ty, OutputStrategyC outputStrategyC) {
+	String getFilenameForNode(GeneratedNode node, GenerateResult.TY ty, OutputStrategyC outputStrategyC) {
 		String s, ss;
 		if (node instanceof GeneratedNamespace) {
 			final GeneratedNamespace generatedNamespace = (GeneratedNamespace) node;
 			s = outputStrategyC.nameForNamespace(generatedNamespace, ty);
 //			System.out.println("41 "+generatedNamespace+" "+s);
 			for (GeneratedFunction gf : generatedNamespace.functionMap.values()) {
-				ss = generateOutputs_Internal(gf, ty, outputStrategyC);
+				ss = getFilenameForNode(gf, ty, outputStrategyC);
 				gfm_map.put(gf, ss);
 			}
 		} else if (node instanceof GeneratedClass) {
@@ -61,7 +102,7 @@ public class ElSystem {
 			s = outputStrategyC.nameForClass(generatedClass, ty);
 //			System.out.println("48 "+generatedClass+" "+s);
 			for (GeneratedFunction gf : generatedClass.functionMap.values()) {
-				ss = generateOutputs_Internal(gf, ty, outputStrategyC);
+				ss = getFilenameForNode(gf, ty, outputStrategyC);
 				gfm_map.put(gf, ss);
 			}
 		} else if (node instanceof GeneratedFunction) {
@@ -77,12 +118,12 @@ public class ElSystem {
 		return s;
 	}
 
-	public void setOutputStrategy(OutputStrategy outputStrategy) {
-		this.outputStrategy = outputStrategy;
+	public void setOutputStrategy(OutputStrategy aOutputStrategy) {
+		outputStrategy = aOutputStrategy;
 	}
 
-	public void setCompilation(Compilation compilation) {
-		this.compilation = compilation;
+	public void setCompilation(Compilation aCompilation) {
+		compilation = aCompilation;
 	}
 }
 

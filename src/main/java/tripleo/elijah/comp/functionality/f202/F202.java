@@ -8,6 +8,8 @@
  */
 package tripleo.elijah.comp.functionality.f202;
 
+import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
 import tripleo.elijah.comp.Compilation;
 import tripleo.elijah.comp.ErrSink;
 import tripleo.elijah.stages.logging.ElLog;
@@ -34,8 +36,9 @@ public class F202 {
 		pre = new DefaultProgressBehavior();
 	}
 
-	public void processLogs(Collection<ElLog> aElLogs) {
-		if (aElLogs.size() == 0) return; // TODO progress message? should be impossible anyway
+	public void processLogs(@NotNull Collection<ElLog> aElLogs) {
+		//if (aElLogs.size() == 0) return; // TODO progress message? should be impossible anyway
+		Preconditions.checkArgument(aElLogs.size() > 0);
 
 		ElLog firstLog = aElLogs.iterator().next();
 

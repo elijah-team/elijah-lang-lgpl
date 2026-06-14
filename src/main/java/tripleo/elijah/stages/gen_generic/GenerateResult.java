@@ -8,6 +8,12 @@
  */
 package tripleo.elijah.stages.gen_generic;
 
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.Subject;
+import org.jetbrains.annotations.NotNull;
+import tripleo.elijah.ci.LibraryStatementPart;
+import tripleo.elijah.stages.gen_c.OutputFileC;
 import tripleo.elijah.stages.gen_fn.BaseGeneratedFunction;
 import tripleo.elijah.stages.gen_fn.GeneratedClass;
 import tripleo.elijah.stages.gen_fn.GeneratedConstructor;
@@ -17,43 +23,65 @@ import tripleo.util.buffer.Buffer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created 4/27/21 1:11 AM
  */
 public class GenerateResult {
+	public Map<String, OutputFileC> outputFiles;
+
 	private int bufferCounter = 0;
 
 	final List<GenerateResultItem> res = new ArrayList<GenerateResultItem>();
-
-	public void add(Buffer b, GeneratedNode n, TY ty) {
-		res.add(new GenerateResultItem(ty, b, n, ++bufferCounter));
-	}
 
 	public List<GenerateResultItem> results() {
 		return res;
 	}
 
-	public void addFunction(BaseGeneratedFunction aGeneratedFunction, Buffer aBuffer, TY aTY) {
-		add(aBuffer, aGeneratedFunction, aTY);
+	public void add(Buffer b, GeneratedNode n, TY ty, LibraryStatementPart aLsp, @NotNull Dependency d) {
+		final GenerateResultItem item = new GenerateResultItem(ty, b, n, aLsp, d, ++bufferCounter);
+		res.add(item);
+//		items.onNext(item);
 	}
 
-	public void addConstructor(GeneratedConstructor aGeneratedFunction, Buffer aBuffer, TY aTY) {
-		addFunction(aGeneratedFunction, aBuffer, aTY);
+	public void addFunction(BaseGeneratedFunction aGeneratedFunction, Buffer aBuffer, TY aTY, LibraryStatementPart aLsp) {
+		add(aBuffer, aGeneratedFunction, aTY, aLsp, aGeneratedFunction.getDependency());
+	}
+
+	public void addConstructor(GeneratedConstructor aGeneratedConstructor, Buffer aBuffer, TY aTY, LibraryStatementPart aLsp) {
+		addFunction(aGeneratedConstructor, aBuffer, aTY, aLsp);
+	}
+
+	public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf, LibraryStatementPart aLsp) {
+		add(aBuf, aClass, ty, aLsp, aClass.getDependency());
+	}
+
+	public void addNamespace(TY ty, GeneratedNamespace aNamespace, Buffer aBuf, LibraryStatementPart aLsp) {
+		add(aBuf, aNamespace, ty, aLsp, aNamespace.getDependency());
 	}
 
 	public enum TY {
 		HEADER, IMPL, PRIVATE_HEADER
 	}
 
-	public void addClass(TY ty, GeneratedClass aClass, Buffer aBuf) {
-		add(aBuf, aClass, ty);
+	// region REACTIVE
+
+	private final Subject<GenerateResultItem> completedItems = ReplaySubject.<GenerateResultItem>create();
+
+	public void subscribeCompletedItems(Observer<GenerateResultItem> aGenerateResultItemObserver) {
+		completedItems.subscribe(aGenerateResultItemObserver);
 	}
 
-	public void addNamespace(TY ty, GeneratedNamespace aNamespace, Buffer aBuf) {
-		add(aBuf, aNamespace, ty);
+	public void completeItem(GenerateResultItem aGenerateResultItem) {
+		completedItems.onNext(aGenerateResultItem);
 	}
 
+	public void signalDone() {
+		completedItems.onComplete();
+	}
+
+	// endregion
 }
 
 //

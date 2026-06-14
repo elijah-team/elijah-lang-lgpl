@@ -12,11 +12,12 @@ package tripleo.elijah.util;
 public class NotImplementedException extends RuntimeException {
 public NotImplementedException() {
 	final int y=2;
+	System.err.println("Should not be here");
 }
 
 public static void raise() {
 	final int y=2;
-	
+	System.err.println("Should not be here");
 }
 }
 

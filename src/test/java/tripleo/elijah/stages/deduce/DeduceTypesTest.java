@@ -23,6 +23,8 @@ import tripleo.elijah.stages.gen_fn.GeneratePhase;
 import tripleo.elijah.stages.logging.ElLog;
 import tripleo.elijah.util.Helpers;
 
+import static tripleo.elijah.util.Helpers.List_of;
+
 /**
  * Useless tests. We really want to know if a TypeName will resolve to the same types
  */
@@ -32,12 +34,14 @@ public class DeduceTypesTest {
 
 	@Before
 	public void setUp() throws ResolveError {
-		final OS_Module mod = new OS_Module();
-		mod.parent = new Compilation(new StdErrSink(), new IO());
-		final ModuleContext mctx = new ModuleContext(mod);
-		mod.setContext(mctx);
-		final ClassStatement cs = new ClassStatement(mod, mctx);
-		cs.setName(Helpers.string_to_ident("Test"));
+		final Compilation c = new Compilation(new StdErrSink(), new IO());
+		final OS_Module mod = c.moduleBuilder()
+					.setContext()
+					.build();
+		final ClassStatement cs = new ClassStatement(mod, mod.getContext());
+		final ClassHeader ch = new ClassHeader(false, List_of());
+		ch.setName(Helpers.string_to_ident("Test"));
+		cs.setHeader(ch);
 		final FunctionDef fd = cs.funcDef();
 		fd.setName(Helpers.string_to_ident("test"));
 		Scope3 scope3 = new Scope3(fd);
@@ -58,11 +62,11 @@ public class DeduceTypesTest {
 		final IdentExpression x1 = Helpers.string_to_ident("x");
 		x1.setContext(fc);
 		//
-		mod.prelude = mod.parent.findPrelude("c");
+		mod.prelude = mod.getCompilation().findPrelude("c");
 		//
 		//
 		//
-		final ElLog.Verbosity verbosity = mod.parent.gitlabCIVerbosity();
+		final ElLog.Verbosity verbosity = mod.getCompilation().gitlabCIVerbosity();
 		final PipelineLogic pl = new PipelineLogic(verbosity);
 		final GeneratePhase generatePhase = new GeneratePhase(verbosity, pl);
 		DeducePhase dp = new DeducePhase(generatePhase, pl, verbosity);

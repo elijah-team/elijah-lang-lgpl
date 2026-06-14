@@ -92,6 +92,18 @@ public class DefFunctionDef extends BaseFunctionDef {
 		if (getItems().size() != 1)
 			throw new IllegalStateException("Too many items"); // TODO convert to diagnostic?
 	}
+
+	@Override
+	public void setHeader(FunctionHeader aFunctionHeader) {
+		setFal(aFunctionHeader.getFal());
+//		set(aFunctionHeader.getModifier()); // TODO
+		setName(aFunctionHeader.getName());
+		setReturnType(aFunctionHeader.getReturnType());
+	}
+
+	public void setBody(IExpression aExpression) {
+		setExpr(aExpression);
+	}
 }
 
 //

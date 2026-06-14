@@ -11,7 +11,6 @@ package tripleo.elijah.lang;
 
 import antlr.Token;
 import org.jetbrains.annotations.Contract;
-import tripleo.elijah.contexts.IfConditionalContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +72,7 @@ public final class AbstractStatementClosure implements StatementClosure, Stateme
 
 	@Override
  	public IfConditional ifConditional(final OS_Element aParent, final Context cur) {
-		ifex=new IfConditional(aParent);
-		ifex.setContext(new IfConditionalContext(cur, ifex));
+		ifex=new IfConditional(aParent, cur);
 		add(ifex);
 		return ifex;
 	}

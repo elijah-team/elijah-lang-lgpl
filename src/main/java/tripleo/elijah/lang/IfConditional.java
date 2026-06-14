@@ -37,7 +37,12 @@ public class IfConditional implements StatementItem, FunctionItem, OS_Element {
 		this._ctx = new IfConditionalContext(ifExpression._ctx, this, true);
 		this._parent = ifExpression._parent;
 	}
-	
+
+	public IfConditional(OS_Element aParent, Context aContext) {
+		this._parent = aParent;
+		setContext(new IfConditionalContext(aContext, this));
+	}
+
 	@Override
 	public void visitGen(final ElElementVisitor visit) {
 		visit.visitIfConditional(this);
