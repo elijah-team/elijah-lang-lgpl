@@ -10,8 +10,8 @@ repo_name: elijah-team/elijah-lang-lgpl
 #  - git-revision-date-localized
 markdown_extensions:
   - def_list
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+#  - pymdownx.superfences:
+#      custom_fences:
+#        - name: mermaid
+#          class: mermaid
+#          format: !!python/name:pymdownx.superfences.fence_code_format
