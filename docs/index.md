@@ -17,8 +17,8 @@ Definitely
 - It will feature a REPL and a graphical environment as well,
   along the lines Smalltalk/Tunes Slate.
 
-xx
----
+Something about genera
+-----------------------
 
 It is free software intended for use on all systems, including GNU/Linux.
 
